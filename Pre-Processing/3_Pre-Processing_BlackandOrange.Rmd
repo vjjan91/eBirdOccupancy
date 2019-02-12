@@ -371,7 +371,26 @@ rm(t,s)
 ```
 
 
+#### subsampling the dataset to retain only 10 visits / sampling events to a given site
+```{r}
+
+## Sort data for every unique locality_id and in descending order of effort
+## And keep only top 10 rows based on the highest amount of total_duration
+## Does this make sense Pratik?
+
+trial <- bar.all %>% group_by(locality_id) %>% arrange(desc(total_duration)) %>% top_n(10, total_duration)
+
+## Looks like the above is not keeping only 10 rows, but more than 10 combinations of locality_id and total_duration
+
+## Next step is to match remaining sampling event identifiers with covariates obtained above for probability of detection
+
+
+```
+
+
+
 #### Creating vectors that look at mean effort in terms of time and distance
+#### let's work on this after we talk about it. I am not sure if this is necessary since
 ```{r}
 # Calculate time spent and distance covered at a site across all years 
 # @Pratik: This needs to be re-run (getting errors)
