@@ -14,3 +14,5 @@ ebd*.txt
 *.html
 *.Rhistory
 .Rproj.user
+
+*.csv

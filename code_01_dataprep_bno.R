@@ -145,7 +145,7 @@ alt.hills = raster::mask(cr, as(hills, "Spatial"))
 
 #'load evi layers
 EVI.all = raster::stack("EVI/MOD13Q1_EVI_AllYears.tif")
-x11();raster::plot(EVI.all)
+#x11();raster::plot(EVI.all)
 #'scale later
 #'EVI.all = EVI.all*0.0001
 names(EVI.all) = paste("evi", month.abb, sep = ".")
@@ -210,3 +210,6 @@ dataCovar = dataCovar %>% #take dataCovar, and join to
                 funs(./n)) %>% #get the mean of each locality
         `names<-`(c("locality_id", "meanSampleTime", "meanSampleDist", "meanNObservers", "totalVisits"))
   )
+
+#### export to csv ####
+write_csv(dataCovar, path = "data/dataCovars.csv")
