@@ -330,6 +330,7 @@ rm(env,env2,env3,env4)
 dataOccuFin <- cbind(env5,dataOccu[1:18],dataOccu[55:ncol(dataOccu)])
 dataOccuFin <- as.data.frame(dataOccuFin)
 
+## Having issues with the line below, not able to write it
 write_csv(dataOccuFin,"E:\\Occupancy Modeling\\Scripts\\Occupancy Scripts\\DataForOccupancyMod.csv")
 
 
