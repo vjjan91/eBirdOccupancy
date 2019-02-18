@@ -9,8 +9,10 @@ ebd*.txt
 # Session Data files
 *.RData
 
-*.Rproj
 /.Rproj.user
 
 *.html
 *.Rhistory
+.Rproj.user
+
+*.csv
