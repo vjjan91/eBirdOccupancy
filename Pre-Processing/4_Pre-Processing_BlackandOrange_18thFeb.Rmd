@@ -278,6 +278,7 @@ dataSubsample = dataCovar %>%
 # Converting presences and absences from logical to boolean
 dataSubsample$pres_abs <- lapply(dataSubsample$pres_abs, as.numeric)
 
+# Below two lines are wrong! - E-mail sent by VR to PG on what needs to be done
 # Obtaining a dataframe for occupancy modeling
 dataOccu <-  dataSubsample %>% group_by(group = sampling_event_identifier) %>% spread(group,pres_abs)
 
@@ -330,59 +331,12 @@ rm(env,env2,env3,env4)
 dataOccuFin <- cbind(env5,dataOccu[1:18],dataOccu[55:ncol(dataOccu)])
 dataOccuFin <- as.data.frame(dataOccuFin)
 
-## Having issues with the line below, not able to write it
-write_csv(dataOccuFin,"E:\\Occupancy Modeling\\Scripts\\Occupancy Scripts\\DataForOccupancyMod.csv")
+write_csv(dataOccuFin,"J:\\Occupancy Modeling\\Scripts\\Occupancy Scripts\\DataForOccupancyMod.csv")
 
-
-
-```
-
-
-#### Preparing a dataset to model probability of detection
-```{r}
-# Preparing respective covariates which include:
-# Time - Duration in Minutes, Distance -in kilometres, Number of observers, Julian Date, Time Observation Started
-
-# Time
-t <- dat[,c(1,2)]
-s <- t %>% group_by(group = sampling_event_identifier) %>% spread(group,total_duration)
-bar.time <- s
-rm(t,s)
-
-# Distance
-t <- dat[,c(1,3)]
-s <- t %>% group_by(group = sampling_event_identifier) %>% spread(group,total_dist)
-bar.dist <- s
-rm(t,s)
-
-# Number of Observers
-# Take the mean of multiple numbers of observers
-dat$num_observers <- sapply(dat$num_observers, function(x) mean(scan(text = x, what = numeric(), sep = ","), na.rm=T))
-
-t <- dat[,c(1,14)]
-s <- t %>% group_by(group = sampling_event_identifier) %>% spread(group,num_observers)
-bar.num_obs <- s
-rm(t,s)
-
-# Julian Date
-# To extract the julian date, we use the package lubridate
-library(lubridate)
-jul.date <- as.Date(dat$observation_date)
-dat$jul.date <- yday(jul.date)
-
-t <- dat[,c(1,17)]
-s <- t %>% group_by(group = sampling_event_identifier) %>% spread(group,jul.date)
-bar.jul.date <- s
-rm(t,s)
-
-# Start times
-t <- dat[,c(1,5)]
-s <- t %>% group_by(group = sampling_event_identifier) %>% spread(group,time_obs_start)
-bar.starttime <- s
-rm(t,s)
-
+data
 
 ```
+
 
 
 
