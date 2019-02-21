@@ -39,18 +39,18 @@ f_in_ebd <- file.path("E:\\Occupancy Modeling\\Data\\ebd_IN_relMay-2018.txt")
 f_in_sampling <- file.path("E:\\Occupancy Modeling\\Data\\ebd_sampling_relMay-2018.txt")
 ```
 
-#### Adding necessary filters 
+#### Adding necessary filters
 #### NOTE: This code has been run previously and data can be loaded directly
 ```{r}
-ebd_filters <- auk_ebd(f_in_ebd, f_in_sampling) %>% 
+ebd_filters <- auk_ebd(f_in_ebd, f_in_sampling) %>%
   auk_species(c("Anthus nilghiriensis","Montecincla cachinnans","Montecincla fairbanki",
               "Sholicola albiventris","Sholicola major","Culicicapa ceylonensis",
             "Pomatorhinus horsfieldii","Ficedula nigrorufa","Pycnonotus jocosus",
             "Iole indica","Hemipus picatus","Saxicola caprata","Eumyias albicaudatus",
-            "Rhopocichla atriceps")) %>% 
+            "Rhopocichla atriceps")) %>%
   auk_country(country = "IN") %>%
   auk_state(c("IN-KL","IN-TN", "IN-KA")) %>% # Restricting geography to TamilNadu, Kerala & Karnataka
-  auk_date(c("2000-01-01", "2018-09-17")) %>% 
+  auk_date(c("2000-01-01", "2018-09-17")) %>%
   auk_complete()
 ebd_filters # Now the filters have been set
 ```
@@ -61,8 +61,8 @@ f_out_ebd <- "E:\\Occupancy Modeling\\Data\\ebd_Filtered_May2018.txt"
 f_out_sampling <- "E:\\Occupancy Modeling\\Data\\ebd_sampling_Filtered_May2018.txt"
 
 # Below code need not be run if it has been filtered once already and the above path leads to
-# the right dataset 
-# ebd_filtered <- auk_filter(ebd_filters, file = f_out_ebd, 
+# the right dataset
+# ebd_filtered <- auk_filter(ebd_filters, file = f_out_ebd,
 #                           file_sampling = f_out_sampling)
 
 ```
@@ -92,7 +92,7 @@ columnsOfInterest = c("checklist_id","scientific_name","observation_count","loca
 
 speciesOfInterest = c("Ficedula nigrorufa") ## Add more when there are more species
 
-data = list(ebd, new_zf) %>% 
+data = list(ebd, new_zf) %>%
   map(function(x){
     x %>% select(one_of(columnsOfInterest)) %>% filter(scientific_name %in% speciesOfInterest)
      # filter(scientific_name %in% speciesOfInterest)
@@ -114,24 +114,24 @@ library(sf)
 hills = st_read("E:\\Occupancy Modeling\\Data\\Shapefiles\\Nil_Ana_Pal.shp")
 
 #'get data spatial coordinates
-dataLocs = data %>% 
+dataLocs = data %>%
   map(function(x){
     select(x, longitude, latitude)}) %>% 
-  bind_rows() %>% 
-  distinct() %>% 
-      st_as_sf(coords = c("longitude", "latitude")) %>% 
-      st_set_crs(4326) %>% 
+  bind_rows() %>%
+  distinct() %>%
+      st_as_sf(coords = c("longitude", "latitude")) %>%
+      st_set_crs(4326) %>%
   st_intersection(hills)
 
 #'filter data by dataLocs
-dataLocs = mutate(dataLocs, spatialKeep = T) %>% 
+dataLocs = mutate(dataLocs, spatialKeep = T) %>%
   dropGeometry()
 
 #'bind to data and then filter
-data = data %>% 
+data = data %>%
   map(function(x){
-    left_join(x, dataLocs, by = c("longitude" = "X", "latitude" = "Y")) %>% 
-      filter(spatialKeep == T) %>% 
+    left_join(x, dataLocs, by = c("longitude" = "X", "latitude" = "Y")) %>%
+      filter(spatialKeep == T) %>%
       select(-Id, -spatialKeep)
   })
 
@@ -154,14 +154,14 @@ data = map(data, function(x) filter(x, duration_minutes > 0))
 #'then, sum relevant variables
 #'then, join by Sampling event identifier to df of largely constant vars, such as locality
 dataGrouped = map(data, function(x){
-    x %>% group_by(sampling_event_identifier) %>% 
+    x %>% group_by(sampling_event_identifier) %>%
       summarise_at(vars(duration_minutes, effort_distance_km, effort_area_ha), funs(sum.no.na))
-  }) %>% 
-  map2(data %>% 
+  }) %>%
+  map2(data %>%
          map(function(x){select(x, sampling_event_identifier, time_observations_started, locality, locality_type, locality_id, observer_id, observation_date, scientific_name, observation_count, protocol_type, number_observers, longitude, latitude)}), left_join)
 
 # Removing Observations from checklists that cite duration in minutes < 240 min and distance < 5 km or area < 500 ha; and converting data structure to factor etc. where necessary
-dataGrouped = bind_rows(dataGrouped) %>% 
+dataGrouped = bind_rows(dataGrouped) %>%
   filter(duration_minutes <= 240, effort_distance_km <= 5, effort_area_ha <= 500)
 
 # Creating a new column of Presences and Absences, where all values greater than 1 are marked 1 and less than 1 as 0
@@ -170,7 +170,7 @@ dataGrouped = mutate(dataGrouped, pres_abs = observation_count >= 1)
 ```
 
 
-#### Creating a dataset for every year and across all years 
+#### Creating a dataset for every year and across all years
 ```{r}
 
 #### load covariates from raster files ####
@@ -233,11 +233,11 @@ landscapeData = map(landscapeRasters, function(x){
 names(landscapeData) = c("elevation","Bio","evi","slope","aspect")
 
 #'bind into dataframe
-landscapeData = map(landscapeData, as_data_frame) %>% bind_cols() %>% 
+landscapeData = map(landscapeData, as_data_frame) %>% bind_cols() %>%
   `names<-`(c("elevation", names(Clim),paste("evi", month.abb, sep = "."), "slope", "aspect"))
 
 #'drop geometry of datalocs and then bind to landscape data
-landscapeData = dataLocs %>% dropGeometry() %>% 
+landscapeData = dataLocs %>% dropGeometry() %>%
   bind_cols(landscapeData)
 
 #'join with ebird data
@@ -257,7 +257,7 @@ dataCovar$jul.date <- yday(jul.date)
 #### mean time, distance and number of observers per locality and totalVisits to each localtion
 
 dataCovar = dataCovar %>% #take dataCovar, and join to
-  left_join(dataCovar %>% 
+  left_join(dataCovar %>%
       group_by(locality_id) %>% #data covar grouped by locality_id
       summarise_at(vars(duration_minutes, effort_distance_km, number_observers),
                    funs(sum.no.na)) %>% # with summed duration, distance, obs numbers
@@ -270,9 +270,9 @@ dataCovar = dataCovar %>% #take dataCovar, and join to
 ### Subsampling (based on Morgan Tingley's suggestion, to retain only 10 visits or sampling )
 ### subset 10 random obs per locality per species ####
 #'split into list by species, locality id, and sample 10 if > 10 samples found
-dataSubsample = dataCovar %>% 
-  plyr::dlply(c("scientific_name", "locality_id")) %>% 
-  map_if(function(x) nrow(x) > 10, function(x) sample_n(x, 10)) %>% 
+dataSubsample = dataCovar %>%
+  plyr::dlply(c("scientific_name", "locality_id")) %>%
+  map_if(function(x) nrow(x) > 10, function(x) sample_n(x, 10)) %>%
   bind_rows()
 
 # Converting presences and absences from logical to boolean
@@ -336,8 +336,3 @@ write_csv(dataOccuFin,"J:\\Occupancy Modeling\\Scripts\\Occupancy Scripts\\DataF
 data
 
 ```
-
-
-
-
-

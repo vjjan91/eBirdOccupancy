@@ -8,6 +8,7 @@ library(auk)
 #'custom sum function
 sum.no.na = function(x){sum(x, na.rm = T)}
 #'custom drop geometry function
+#'important note: retains coordinates but renamed to X and Y (long, lat)
 dropGeometry = function(x){
   x %>% bind_cols(data.frame(st_coordinates(.))) %>% `st_geometry<-`(NULL) %>% unclass() %>% as.data.frame()
 }
@@ -17,7 +18,7 @@ f_in_ebd <- file.path("ebd_Filtered_May2018.txt")
 f_in_sampling <- file.path("ebd_sampling_Filtered_May2018.txt")
 
 #'run filters using auk packages
-ebd_filters = auk_ebd(f_in_ebd, f_in_sampling) %>% 
+ebd_filters = auk_ebd(f_in_ebd, f_in_sampling) %>%
   auk_species(c("Anthus nilghiriensis",
                 "Montecincla cachinnans",
                 "Montecincla fairbanki",
@@ -31,10 +32,10 @@ ebd_filters = auk_ebd(f_in_ebd, f_in_sampling) %>%
                 "Hemipus picatus",
                 "Saxicola caprata",
                 "Eumyias albicaudatus",
-                "Rhopocichla atriceps")) %>% 
+                "Rhopocichla atriceps")) %>%
   auk_country(country = "IN") %>%
   auk_state(c("IN-KL","IN-TN", "IN-KA")) %>% # Restricting geography to TamilNadu, Kerala & Karnataka
-  auk_date(c("2000-01-01", "2018-09-17")) %>% 
+  auk_date(c("2000-01-01", "2018-09-17")) %>%
   auk_complete()
 
 #'check filters
@@ -48,8 +49,8 @@ f_out_ebd <- "ebd_Filtered_May2018.txt"
 f_out_sampling <- "ebd_sampling_Filtered_May2018.txt"
 
 # Below code need not be run if it has been filtered once already and the above path leads to
-# the right dataset 
-# ebd_filtered <- auk_filter(ebd_filters, file = f_out_ebd, 
+# the right dataset
+# ebd_filtered <- auk_filter(ebd_filters, file = f_out_ebd,
 #                           file_sampling = f_out_sampling)
 
 #### read the ebird data in ####
@@ -62,16 +63,16 @@ new_zf <- collapse_zerofill(zf) # Creates a new zero-filled dataframe with a 0 m
 #   glimpse(zf)
 
 #### remove old data ####
-rm(data, ebd_filters, ebd_subset, zf, zf_subset)
+#rm(data, ebd_filters, ebd_subset, zf, zf_subset)
 
 #### subset data, choose black and orange flycatcher ####
 columnsOfInterest = c("checklist_id","scientific_name","observation_count","locality","locality_id","locality_type","latitude","longitude","observation_date","time_observations_started","observer_id","sampling_event_identifier","protocol_type","duration_minutes","effort_distance_km","effort_area_ha","number_observers","species_observed","reviewed")
 
 #speciesOfInterest = c("Ficedula nigrorufa","Sholicola major")
 
-data = list(ebd, new_zf) %>% 
+data = list(ebd, new_zf) %>%
   map(function(x){
-    x %>% select(one_of(columnsOfInterest)) #%>% 
+    x %>% select(one_of(columnsOfInterest)) #%>%
      # filter(scientific_name %in% speciesOfInterest)
     # %>% dlply("scientific_name")
     #'this above for when there are more species
@@ -86,24 +87,24 @@ library(sf)
 hills = st_read("hillsShapefile/Nil_Ana_Pal.shp")
 
 #'get data spatial coordinates
-dataLocs = data %>% 
+dataLocs = data %>%
   map(function(x){
-    select(x, longitude, latitude)}) %>% 
-  bind_rows() %>% 
-  distinct() %>% 
-      st_as_sf(coords = c("longitude", "latitude")) %>% 
-      st_set_crs(4326) %>% 
+    select(x, longitude, latitude)}) %>%
+  bind_rows() %>%
+  distinct() %>%
+      st_as_sf(coords = c("longitude", "latitude")) %>%
+      st_set_crs(4326) %>%
   st_intersection(hills)
 
 #'filter data by dataLocs
-dataLocs = mutate(dataLocs, spatialKeep = T) %>% 
+dataLocs = mutate(dataLocs, spatialKeep = T) %>%
   dropGeometry()
 
 #'bind to data and then filter
-data = data %>% 
+data = data %>%
   map(function(x){
-    left_join(x, dataLocs, by = c("longitude" = "X", "latitude" = "Y")) %>% 
-      filter(spatialKeep == T) %>% 
+    left_join(x, dataLocs, by = c("longitude" = "X", "latitude" = "Y")) %>%
+      filter(spatialKeep == T) %>%
       select(-Id, -spatialKeep)
   })
 
@@ -112,7 +113,7 @@ data = data %>%
 #save(data, file = "data.temp.rdata")
 
 #load("data.temp.rdata")
-  
+
 #'in the first set, replace X, for presences, with 1
 data[[1]] = data[[1]] %>% mutate(observation_count = ifelse(observation_count == "X", "1", observation_count))
 
@@ -120,22 +121,29 @@ data[[1]] = data[[1]] %>% mutate(observation_count = ifelse(observation_count ==
 data = map(data, function(x) filter(x, duration_minutes > 0))
 
 #'group data by site and sampling event identifier
-#'then, sum relevant variables
-#'then, join by SEI to df of largely constant vars, such as locality
+#'then, summarise relevant variables as the sum
 dataGrouped = map(data, function(x){
-    x %>% group_by(sampling_event_identifier) %>% 
+    x %>% group_by(sampling_event_identifier) %>%
       summarise_at(vars(duration_minutes, effort_distance_km, effort_area_ha), funs(sum.no.na))
-  }) %>% 
-  map2(data %>% 
-         map(function(x){select(x, sampling_event_identifier, time_observations_started, locality, locality_type, locality_id, observer_id, observation_date, scientific_name, observation_count, protocol_type, number_observers, longitude, latitude)}), left_join)
-
+  })
 #'bind rows combining data frames, and filter
-dataGrouped = bind_rows(dataGrouped) %>% 
+dataGrouped = bind_rows(dataGrouped) %>%
   filter(duration_minutes <= 240, effort_distance_km <= 5, effort_area_ha <= 500)
+
+#'get data identifiers, such as sampling identifier etc
+dataConstants = data %>% 
+  bind_rows() %>% 
+  select(sampling_event_identifier, time_observations_started, locality, locality_type, locality_id, observer_id, observation_date, scientific_name, observation_count, protocol_type, number_observers, longitude, latitude)
+
+#'join the summarised data with the identifiers, using sampling_event_identifier as the key
+dataGrouped = left_join(dataGrouped, dataConstants, by = "sampling_event_identifier")
 
 #'assign present or not
 dataGrouped = mutate(dataGrouped, pres_abs = observation_count >= 1)
-  
+
+#'check class of dataGrouped, make sure not sf
+class(dataGrouped)
+
 #### load covariates from raster files ####
 #'load elevation and crop to hills size, then mask by hills
 #' sf
@@ -184,11 +192,11 @@ landscapeData = map(landscapeRasters, function(x){
 names(landscapeData) = c("elevation","evi","slope","aspect")
 
 #'bind into dataframe
-landscapeData = map(landscapeData, as_data_frame) %>% bind_cols() %>% 
+landscapeData = map(landscapeData, as_data_frame) %>% bind_cols() %>%
   `names<-`(c("elevation", paste("evi", month.abb, sep = "."), "slope", "aspect"))
 
 #'drop geometry of datalocs and then bind to landscape data
-landscapeData = dataLocs %>% dropGeometry() %>% 
+landscapeData = dataLocs %>% dropGeometry() %>%
   bind_cols(landscapeData)
 
 #'join with ebird data
@@ -198,18 +206,40 @@ dataCovar = left_join(dataGrouped, landscapeData, by = c("longitude" = "X", "lat
 rm(alt, alt.hills, aspect, cr, EVI.all, EVI.yearly, EVI.all.resam, slope)
 gc()
 
-#### mean time, distance, and number of observers ####
+#### test for dataCovar class ####
+#'is dataCovar a dataframe?
+#'is dataCovar an sf? if so, manually drop geometry
+assertthat::assert_that(!"sf" %in% class(dataCovar))
 
-dataCovar = dataCovar %>% #take dataCovar, and join to
-  left_join(dataCovar %>% 
-      group_by(locality_id) %>% #data covar grouped by locality_id
-      summarise_at(vars(duration_minutes, effort_distance_km, number_observers),
-                   funs(sum.no.na)) %>% #with summed duration, distance, obs numbers
-      left_join(count(dataCovar, locality_id)) %>% #which is joined to number of visits
-      mutate_at(vars(duration_minutes, effort_distance_km, number_observers),
-                funs(./n)) %>% #get the mean of each locality
-        `names<-`(c("locality_id", "meanSampleTime", "meanSampleDist", "meanNObservers", "totalVisits"))
-  )
+#### mean time, distance, and number of observers ####
+#'first count number of visits to each locality
+localityCount = count(dataCovar, locality_id)
+
+#'summarise duration, distance, observers, and julian date as the sum
+dataSummary = dataCovar %>%
+  #'first get julian date
+  mutate(jul.date = lubridate::yday(as.Date(observation_date))) %>% 
+  group_by(locality_id) %>% 
+  summarise_at(vars(duration_minutes, effort_distance_km, number_observers, jul.date),
+               funs(sum.no.na))
+
+#'transform dataSummary to be a join of locality count and dataSummary
+#'then divide locality wise summarised sums by number of visits for the mean
+dataSummary = left_join(dataSummary, localityCount, by = "locality_id") %>% 
+  mutate_at(vars(duration_minutes, effort_distance_km, number_observers, jul.date),
+            funs(./n)) %>% 
+  #'rename variables to avoid confusion
+  rename(mean_duration = duration_minutes, mean_distance = effort_distance_km, 
+         mean_observers = number_observers, mean_date = jul.date) %>% 
+  #'remove n, which is the same as number of visits
+  select(-n)
+
+#'join mean values to dataCovar
+dataCovar = left_join(dataCovar, dataSummary, by = "locality_id")
+
+#'check again if dataCovar is a dataframe and not sf
+assertthat::assert_that(is.data.frame(dataCovar))
+assertthat::assert_that(!"sf" %in% class(dataCovar))
 
 #### export to csv ####
 write_csv(dataCovar, path = "data/dataCovars.csv")
