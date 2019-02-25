@@ -247,27 +247,52 @@ dataCovar = left_join(dataGrouped, landscapeData, by = c("longitude" = "X", "lat
 rm(alt, Clim, pro, alt.hills, aspect, cr, EVI.all, EVI.yearly, EVI.all.resam, slope)
 gc()
 
+#### test for dataCovar class ####
+#'is dataCovar a dataframe?
+#'is dataCovar an sf? if so, manually drop geometry
+assertthat::assert_that(!"sf" %in% class(dataCovar))
 
-# Julian Date
-# To extract the julian date, we use the package lubridate
-library(lubridate)
-jul.date <- as.Date(dataCovar$observation_date)
-dataCovar$jul.date <- yday(jul.date)
+#### Obtain the mean time, mean number of observers, total visits for each locality_id
+#### Also obtain the julian date of your sampling event
 
-#### mean time, distance and number of observers per locality and totalVisits to each localtion
+#'first count number of visits to each locality
+localityCount = count(dataCovar, locality_id)
 
-dataCovar = dataCovar %>% #take dataCovar, and join to
-  left_join(dataCovar %>%
-      group_by(locality_id) %>% #data covar grouped by locality_id
-      summarise_at(vars(duration_minutes, effort_distance_km, number_observers),
-                   funs(sum.no.na)) %>% # with summed duration, distance, obs numbers
-      left_join(count(dataCovar, locality_id)) %>% #which is joined to number of visits
-      mutate_at(vars(duration_minutes, effort_distance_km, number_observers),
-                funs(./n)) %>% #get the mean of each locality
-        `names<-`(c("locality_id", "meanSampleTime", "meanSampleDist", "meanNObservers", "totalVisits"))
-  )
+#'summarise duration, distance, observers and julian date
+dataSummary = dataCovar %>%
+  #'first get julian date
+  mutate(jul.date = lubridate::yday(as.Date(observation_date))) %>% 
+  group_by(locality_id) %>% 
+  summarise_at(vars(duration_minutes, effort_distance_km, number_observers, jul.date),
+               funs(sum.no.na))
 
+#'transform dataSummary to be a join of locality count and dataSummary
+#'then divide locality wise summarised sums by number of visits for the mean
+dataSummary = left_join(dataSummary, localityCount, by = "locality_id") %>% 
+  mutate_at(vars(duration_minutes, effort_distance_km, number_observers, jul.date),
+            funs(./n)) %>% 
+  #'rename variables to avoid confusion
+  rename(mean_duration = duration_minutes, mean_distance = effort_distance_km, 
+         mean_observers = number_observers, mean_date = jul.date) %>% 
+  #'remove n, which is the same as number of visits
+  select(-n)
+
+#'join mean values to dataCovar
+dataCovar = left_join(dataCovar, dataSummary, by = "locality_id")
+
+#'check again if dataCovar is a dataframe and not sf
+assertthat::assert_that(is.data.frame(dataCovar))
+assertthat::assert_that(!"sf" %in% class(dataCovar))
+
+## Note, Mean Julian date might not be a useful predictor, but it has been kept for now
+
+```
+
+
+#### Subsampling to keep only 10 random visits to a site
+```{r}
 ### Subsampling (based on Morgan Tingley's suggestion, to retain only 10 visits or sampling )
+
 ### subset 10 random obs per locality per species ####
 #'split into list by species, locality id, and sample 10 if > 10 samples found
 dataSubsample = dataCovar %>%
@@ -278,12 +303,50 @@ dataSubsample = dataCovar %>%
 # Converting presences and absences from logical to boolean
 dataSubsample$pres_abs <- lapply(dataSubsample$pres_abs, as.numeric)
 
-# Below two lines are wrong! - E-mail sent by VR to PG on what needs to be done
-# Obtaining a dataframe for occupancy modeling
-dataOccu <-  dataSubsample %>% group_by(group = sampling_event_identifier) %>% spread(group,pres_abs)
+
+```
+
+
+### Creating a dataframe for occupancy modeling with 0s and 1s and predictor information filled for each locality_id
+```{r}
+# Keep only necessary columns
+dataSelected = select(dataSubsample, scientific_name, sampling_event_identifier, locality_id, jul.date,
+                    duration_minutes, effort_distance_km, number_observers,
+                    time_observations_started, pres_abs) %>% 
+  filter(scientific_name == "Ficedula nigrorufa")
+
+#'split into list by species
+dataBySpecies = dataSelected %>% 
+  plyr::dlply("scientific_name")
+
+#'for each species, gather values 
+dataGathered = dataBySpecies %>% 
+  map(function(x) x %>% gather(variable, value, -locality_id, -sampling_event_identifier))
+
+#'split by variable
+dataGathered = map(dataGathered, function(x){
+  plyr::dlply(x, "variable")})
+
+#'check that there are 14 species, each as a list element
+assertthat::assert_that(length(dataGathered) == 14)
+
+
+## THE last part is not doing what is needed Pratik. I have left you comments on the code and sent you an email.
+
+#### spread data over localities by visit ####
+#'each date is taken to be a single visit
+#'yet this need not be the case - two or more visits could have occurred on the same date
+#'especially in heavily sampled areas.
+#'taking the mean of the visits for such cases
+dataSpread = dataGathered %>% 
+  map(function(x){
+    map(x, function(y) {spread(y, sampling_event_identifier, value, drop = F)})
+  })
+
 
 
 ```
+
 
 
 #### Carrying out Exploratory Data analyses for the covariate data extracted
