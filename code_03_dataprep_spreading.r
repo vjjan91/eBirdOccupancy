@@ -11,7 +11,7 @@
 library(tidyverse); library(readr)
 
 #'load all data
-data = read_csv("data/dataCovars.csv")
+data = read_csv("data/dataRand10.csv")
 #'get a julian day for each day
 data = mutate(data, jul.date = lubridate::yday(as.Date(observation_date)))
 
@@ -40,7 +40,7 @@ assertthat::assert_that(length(dataGathered) == 14)
 #'yet this need not be the case - two or more visits could have occurred on the same date
 #'especially in heavily sampled areas.
 #'taking the mean of the visits for such cases
-dataSpread = dataGathered %>% 
-  map(function(x){
-    map(x, function(y) {spread(y, sampling_event_identifier, value, drop = F)})
-  })
+dataSpread = dataGathered[[1]] %>% 
+  #map(function(x){
+    map(function(y) {spread(y, sampling_event_identifier, value, drop = F)})
+ # })
