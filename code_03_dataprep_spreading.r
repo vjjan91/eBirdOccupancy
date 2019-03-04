@@ -24,9 +24,16 @@ dataSelected = select(data, scientific_name, sampling_event_identifier, locality
 dataBySpecies = dataSelected %>% 
   plyr::dlply("scientific_name")
 
-#'for each species, gather values 
+#'for each species, gather values, and assign a visit id 
 dataGathered = dataBySpecies %>% 
-  map(function(x) x %>% gather(variable, value, -locality_id, -sampling_event_identifier))
+  map(function(x) {
+    x %>% 
+      gather(variable, value, -locality_id, -sampling_event_identifier, -scientific_name) %>% 
+      ungroup() %>% 
+      group_by(locality_id, variable) %>% 
+      mutate(visit = 1:length(value)) %>% 
+      select(-sampling_event_identifier) #'removing sampling event identifier now
+  })
 
 #'split by variable
 dataGathered = map(dataGathered, function(x){
@@ -40,7 +47,10 @@ assertthat::assert_that(length(dataGathered) == 14)
 #'yet this need not be the case - two or more visits could have occurred on the same date
 #'especially in heavily sampled areas.
 #'taking the mean of the visits for such cases
-dataSpread = dataGathered[[1]] %>% 
-  #map(function(x){
-    map(function(y) {spread(y, sampling_event_identifier, value, drop = F)})
- # })
+#'
+#'NB: TESTING WITH ONLY 100 ROWS
+dataSpread = dataGathered %>% 
+  unclass() %>% 
+  map(function(x){
+    map(x, function(y) {spread(y %>% sample_n(1e2), visit, value, drop = F)})
+  })
