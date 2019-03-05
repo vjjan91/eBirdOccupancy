@@ -40,7 +40,7 @@ dataGathered = map(dataGathered, function(x){
   plyr::dlply(x, "variable")})
 
 #'check that there are 14 species, each as a list element
-assertthat::assert_that(length(dataGathered) == 14)
+#assertthat::assert_that(length(dataGathered) == 14)
 
 #### spread data over localities by visit ####
 #'each date is taken to be a single visit
@@ -48,9 +48,9 @@ assertthat::assert_that(length(dataGathered) == 14)
 #'especially in heavily sampled areas.
 #'taking the mean of the visits for such cases
 #'
-#'NB: TESTING WITH ONLY 100 ROWS
+#'NB: NO LONGER TESTING, WILL RESULT IN A LARGE DATAFRAME
 dataSpread = dataGathered %>% 
   unclass() %>% 
   map(function(x){
-    map(x, function(y) {spread(y %>% sample_n(1e2), visit, value, drop = F)})
+    map(x, function(y) {spread(y, visit, value, drop = F)})
   })
