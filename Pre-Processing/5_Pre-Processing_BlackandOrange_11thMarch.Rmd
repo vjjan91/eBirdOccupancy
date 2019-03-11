@@ -1,0 +1,416 @@
+---
+output: html_notebook
+---
+### Script to pre-process eBird data for Occupancy Modeling
+Note: Current Data was filtered only for TamilNadu, Karnataka and Kerala to restrict myself to Nilgiris, Anamalais and Palani Hills
+Follows instructions from : Matthew Strickay (rOpenSci)
+Link: https://ropensci.org/blog/2018/08/07/auk/
+
+#### Installing auk from CRAN or use the Github versiontools fom Cornell Lab of Ornithology
+```{r}
+devtools::install_github("CornellLabOfOrnithology/auk")
+
+```
+
+#### Five tasks that need to be performed:
+#### Cleaning, Filtering, Importing, Pre-processing, Zero-filling
+```{r}
+library(auk)
+library(raster)
+library(tidyverse)
+library(sf)
+library(readr)
+
+```
+
+#### Loading custom functions (Pratik)
+```{r}
+#'custom sum function
+sum.no.na = function(x){sum(x, na.rm = T)}
+#'custom drop geometry function
+dropGeometry = function(x){
+  x %>% bind_cols(data.frame(st_coordinates(.))) %>% `st_geometry<-`(NULL) %>% unclass() %>% as.data.frame()
+}
+```
+
+#### Define the paths to ebd and sampling event files
+```{r}
+f_in_ebd <- file.path("D:\\Occupancy Modeling\\Data\\ebd_IN_relMay-2018.txt")
+f_in_sampling <- file.path("D:\\Occupancy Modeling\\Data\\ebd_sampling_relMay-2018.txt")
+```
+
+#### Adding necessary filters
+#### NOTE: This code has been run previously and data can be loaded directly
+```{r}
+ebd_filters <- auk_ebd(f_in_ebd, f_in_sampling) %>%
+  auk_species(c("Anthus nilghiriensis","Montecincla cachinnans","Montecincla fairbanki",
+              "Sholicola albiventris","Sholicola major","Culicicapa ceylonensis",
+            "Pomatorhinus horsfieldii","Ficedula nigrorufa","Pycnonotus jocosus",
+            "Iole indica","Hemipus picatus","Saxicola caprata","Eumyias albicaudatus",
+            "Rhopocichla atriceps")) %>%
+  auk_country(country = "IN") %>%
+  auk_state(c("IN-KL","IN-TN", "IN-KA")) %>% # Restricting geography to TamilNadu, Kerala & Karnataka
+  auk_date(c("2000-01-01", "2018-09-17")) %>%
+  auk_complete()
+ebd_filters # Now the filters have been set
+```
+
+#### Perform the actual filtering
+```{r}
+f_out_ebd <- "D:\\Occupancy Modeling\\Data\\ebd_Filtered_May2018.txt"
+f_out_sampling <- "D:\\Occupancy Modeling\\Data\\ebd_sampling_Filtered_May2018.txt"
+
+# Below code need not be run if it has been filtered once already and the above path leads to
+# the right dataset
+# ebd_filtered <- auk_filter(ebd_filters, file = f_out_ebd,
+#                           file_sampling = f_out_sampling)
+
+```
+
+#### Now that the dataframe has been reduced, let's take a glimpse at the data
+```{r}
+ebd <- read_ebd(f_out_ebd)
+glimpse(ebd)
+```
+
+#### Zero-filling
+```{r}
+zf <- auk_zerofill(f_out_ebd, f_out_sampling)
+new_zf <- collapse_zerofill(zf) # Creates a new zero-filled dataframe with a 0 marked for each checklist when the bird was not observed
+glimpse(zf)
+```
+
+#### Remove large datasets that will not be needed further on
+```{r}
+rm(ebd_filters, zf)
+```
+
+#### Let us play around with data for the Black and Orange Flycatcher (Ficedula nigrorufa)
+```{r}
+#### Subset data and choose only the Black and orange flycatcher for now ####
+columnsOfInterest = c("checklist_id","scientific_name","observation_count","locality","locality_id","locality_type","latitude","longitude","observation_date","time_observations_started","observer_id","sampling_event_identifier","protocol_type","duration_minutes","effort_distance_km","effort_area_ha","number_observers","species_observed","reviewed")
+
+speciesOfInterest = c("Ficedula nigrorufa") ## Add more when there are more species
+
+data = list(ebd, new_zf) %>%
+  map(function(x){
+    x %>% select(one_of(columnsOfInterest)) %>% filter(scientific_name %in% speciesOfInterest)
+     # filter(scientific_name %in% speciesOfInterest)
+    # %>% dlply("scientific_name")
+    #'this above for when there are more species
+  })
+
+```
+
+#### Load shapefiles that are extended contours of Nilgiris, Anaimalais and Palanis and filter the presences and absences, after converting them to spatial objects
+```{r}
+
+#'check presence and absence in absences df, remove essentially the presences df
+data[[2]] = data[[2]] %>% filter(species_observed == F)
+
+#### filter spatially ####
+#'load shapefiles of hill ranges
+library(sf)
+hills = st_read("D:\\Occupancy Modeling\\Data\\Shapefiles\\Nil_Ana_Pal.shp")
+
+#'get data spatial coordinates
+dataLocs = data %>%
+  map(function(x){
+    select(x, longitude, latitude)}) %>% 
+  bind_rows() %>%
+  distinct() %>%
+      st_as_sf(coords = c("longitude", "latitude")) %>%
+      st_set_crs(4326) %>%
+  st_intersection(hills)
+
+#'filter data by dataLocs
+dataLocs = mutate(dataLocs, spatialKeep = T) %>%
+  dropGeometry()
+
+#'bind to data and then filter
+data = data %>%
+  map(function(x){
+    left_join(x, dataLocs, by = c("longitude" = "X", "latitude" = "Y")) %>%
+      filter(spatialKeep == T) %>%
+      select(-Id, -spatialKeep)
+  })
+
+```
+
+
+#### Pre-processing the presences and absences of the Black and Orange Flycatcher
+```{r}
+# A combination of locality_id, observation data, observer id and start time will be used to group the data
+# This was suggested by Morgan Tingley on 29th Jan (meeting with VR)
+# One can readily use the sampling event identifier that is offered through the eBird dataset
+
+# Replacing the X with 1, with the logic being that if an individual was heard, we assume the presence of atleast 1
+data[[1]] = data[[1]] %>% mutate(observation_count = ifelse(observation_count == "X", "1", observation_count))
+
+#'remove records where duration is 0
+data = map(data, function(x) filter(x, duration_minutes > 0))
+
+#'group data by site and sampling event identifier
+#'then, sum relevant variables
+#'then, join by Sampling event identifier to df of largely constant vars, such as locality
+dataGrouped = map(data, function(x){
+    x %>% group_by(sampling_event_identifier) %>%
+      summarise_at(vars(duration_minutes, effort_distance_km, effort_area_ha), funs(sum.no.na))
+  }) %>%
+  map2(data %>%
+         map(function(x){select(x, sampling_event_identifier, time_observations_started, locality, locality_type, locality_id, observer_id, observation_date, scientific_name, observation_count, protocol_type, number_observers, longitude, latitude)}), left_join)
+
+# Removing Observations from checklists that cite duration in minutes < 240 min and distance < 5 km or area < 500 ha; and converting data structure to factor etc. where necessary
+dataGrouped = bind_rows(dataGrouped) %>%
+  filter(duration_minutes <= 240, effort_distance_km <= 5, effort_area_ha <= 500)
+
+# Creating a new column of Presences and Absences, where all values greater than 1 are marked 1 and less than 1 as 0
+dataGrouped = mutate(dataGrouped, pres_abs = observation_count >= 1)
+
+```
+
+
+#### Creating a dataset for every year and across all years
+```{r}
+
+#### load covariates from raster files ####
+#'load elevation and crop to hills size, then mask by hills
+#' sf
+alt = raster::raster("D:\\Occupancy Modeling\\Data\\Elevation\\alt")
+cr = raster::crop(alt, raster::extent(as(hills, "Spatial")))
+alt.hills = raster::mask(cr, as(hills, "Spatial"))
+
+# load evi layers
+EVI.all = raster::stack("D:\\Occupancy Modeling\\Data\\EVI\\MOD13Q1_EVI_AllYears.tif")
+#'scale later
+#'EVI.all = EVI.all*0.0001
+names(EVI.all) = paste("evi", month.abb, sep = ".")
+
+#'load 5 year evi change(?) this is currently 6 years
+evifiles = list.files("D:\\Occupancy Modeling\\Data\\EVI\\", pattern = "_201", full.names = T)
+evifiles = evifiles[as.numeric(stringi::stri_sub(evifiles, -8, -5)) >= 2013]
+
+#'make stack
+EVI.yearly = raster::stack(as.list(evifiles))
+#'scale stack later
+#EVI.yearly = EVI.yearly*0.0001
+
+## Load Bioclim layers
+Bio <- list.files("D:\\MasterThesis\\Absence Approach\\Data\\CHELSA_Data\\", pattern=".tif$", full.names=T)
+
+Clim <- stack()
+for (i in 1:length(Bio)){
+  a <- raster(Bio[[i]])
+  crs(a) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
+  # pro <- projectRaster(a, alt.WG) # Projection can be done later
+  pro <- crop(a, extent(alt.hills))
+  pro <- mask(pro, alt.hills)
+  Clim <- stack(Clim, pro)
+}
+
+#'resample to elevation resolution
+EVI.all.resam <-  raster::resample(EVI.all, alt.hills, method ="bilinear")
+EVI.yearly.resam <- raster::resample(EVI.yearly, alt.hills, method="bilinear")
+
+#'get slope and aspect
+slope <- raster::terrain(alt.hills, opt = 'slope', unit='degrees', neighbors = 8)
+aspect <- raster::terrain(alt.hills, opt='aspect', unit='degrees', neighbors = 8)
+
+##### Extracting values from the above rasters
+
+#'make raster list
+landscapeRasters = list(alt.hills, Clim, EVI.all.resam, slope, aspect)
+
+#'make dataLocs sf again
+dataLocs = st_as_sf(dataLocs, coords = c("X", "Y")) %>% st_set_crs(4326)
+
+#'map extract across the list
+landscapeData = map(landscapeRasters, function(x){
+  raster::extract(x, dataLocs)
+})
+
+#'set names
+names(landscapeData) = c("elevation","Bio","evi","slope","aspect")
+
+#'bind into dataframe
+landscapeData = map(landscapeData, as_data_frame) %>% bind_cols() %>%
+  `names<-`(c("elevation", names(Clim),paste("evi", month.abb, sep = "."), "slope", "aspect"))
+
+#'drop geometry of datalocs and then bind to landscape data
+landscapeData = dataLocs %>% dropGeometry() %>%
+  bind_cols(landscapeData)
+
+#'join with ebird data
+dataCovar = left_join(dataGrouped, landscapeData, by = c("longitude" = "X", "latitude" = "Y"))
+
+#'remove rasters
+rm(alt, Clim, pro, alt.hills, aspect, cr, EVI.all, EVI.yearly, EVI.all.resam, slope)
+gc()
+
+#### test for dataCovar class ####
+#'is dataCovar a dataframe?
+#'is dataCovar an sf? if so, manually drop geometry
+assertthat::assert_that(!"sf" %in% class(dataCovar))
+
+#### Obtain the mean time, mean number of observers, total visits for each locality_id
+#### Also obtain the julian date of your sampling event
+
+#'first count number of visits to each locality
+localityCount = count(dataCovar, locality_id)
+
+#'summarise duration, distance, observers and julian date
+dataSummary = dataCovar %>%
+  #'first get julian date
+  mutate(jul.date = lubridate::yday(as.Date(observation_date))) %>% 
+  group_by(locality_id) %>% 
+  summarise_at(vars(duration_minutes, effort_distance_km, number_observers, jul.date),
+               funs(sum.no.na))
+
+#'transform dataSummary to be a join of locality count and dataSummary
+#'then divide locality wise summarised sums by number of visits for the mean
+dataSummary = left_join(dataSummary, localityCount, by = "locality_id") %>% 
+  mutate_at(vars(duration_minutes, effort_distance_km, number_observers, jul.date),
+            funs(./n)) %>% 
+  #'rename variables to avoid confusion
+  rename(mean_duration = duration_minutes, mean_distance = effort_distance_km, 
+         mean_observers = number_observers, mean_date = jul.date) %>% 
+  #'remove n, which is the same as number of visits
+  select(-n)
+
+#'join mean values to dataCovar
+dataCovar = left_join(dataCovar, dataSummary, by = "locality_id")
+
+#'check again if dataCovar is a dataframe and not sf
+assertthat::assert_that(is.data.frame(dataCovar))
+assertthat::assert_that(!"sf" %in% class(dataCovar))
+
+## Note, Mean Julian date might not be a useful predictor, but it has been kept for now
+
+```
+
+
+#### Subsampling to keep only 10 random visits to a site
+```{r}
+### Subsampling (based on Morgan Tingley's suggestion, to retain only 10 visits or sampling )
+
+### Subset 10 random obs per locality per species ####
+### Split into list by species, locality id, and sample 10 if > 10 samples found
+### Sampling without replacement now explicitly mentioned in the code
+
+dataSubsample = dataCovar %>% 
+  plyr::dlply(c("scientific_name", "locality_id")) %>% 
+  map_if(function(x) nrow(x) > 10, function(x) sample_n(x, 10, replace = FALSE)) %>% 
+  bind_rows()
+
+# Converting presences and absences from logical to boolean
+dataSubsample$pres_abs <- lapply(dataSubsample$pres_abs, as.numeric)
+
+
+```
+
+
+### Creating a dataframe for occupancy modeling with 0s and 1s and predictor information filled for each locality_id
+```{r}
+
+#'get a julian day for each day
+dataSubsample = mutate(dataSubsample, jul.date = lubridate::yday(as.Date(observation_date)))
+
+# Keep only necessary columns
+dataSelected = select(dataSubsample, scientific_name, sampling_event_identifier, locality_id, jul.date,
+                    duration_minutes, effort_distance_km, number_observers,
+                    time_observations_started, pres_abs) %>% 
+  filter(scientific_name == "Ficedula nigrorufa")
+
+#'split into list by species
+dataBySpecies = dataSelected %>% 
+  plyr::dlply("scientific_name")
+
+#'for each species, gather values, and assign a visit id 
+dataGathered = dataBySpecies %>% 
+  map(function(x) {
+    x %>% 
+      gather(variable, value, -locality_id, -sampling_event_identifier, -scientific_name) %>% 
+      ungroup() %>% 
+      group_by(locality_id, variable) %>% 
+      mutate(visit = 1:length(value)) %>% 
+      select(-sampling_event_identifier) #'removing sampling event identifier now
+  })
+
+
+#'split by variable
+dataGathered = map(dataGathered, function(x){
+  plyr::dlply(x, "variable")})
+
+#'check that there are 14 species, each as a list element
+# assertthat::assert_that(length(dataGathered) == 14)
+
+#### spread data over localities by visit ####
+#'each date is taken to be a single visit
+#'yet this need not be the case - two or more visits could have occurred on the same date
+#'especially in heavily sampled areas.
+#'taking the mean of the visits for such cases
+dataSpread = dataGathered %>% 
+  unclass() %>% 
+  map(function(x){
+    map(x, function(y) {spread(y, visit, value, drop = F)})
+  })
+
+```
+
+### The above works great
+### Leaving comments here for Pratik:
+1. Need to get multiple dataframes for each variable so that they can be called in separately using the occupancy code.
+2. I need to get a dataframe that matches the locality ID for the pres_abs dataframe you created above, with the 
+locality id for the DataCovar that contains all covariates. Basically, I need to run the EDA that will be done below for the 5825 unique localities only. Does that make sense? 
+
+
+#### Carrying out Exploratory Data analyses for the covariate data extracted
+```{r}
+# Load the necessary libraries and scripts to assess correlations
+library(ecodist)
+
+# Load Dean Urban's script to remove check for correlations where r > 0.7
+source("E:\\Occupancy Modeling\\Scripts\\Pre-Processing Scripts\\screen_cor.R")
+
+# Subset only covariates to look for correlations
+env <- dataOccu[19:54]
+colnames(env)
+
+# Testing for correlations
+env <-  as.data.frame(env)
+screen.cor(env)
+
+# Removing Bio13, Bio12, Bio15, Bio16 as they are highly correlated with Interannual_Precip
+env2 <- env[,c(-5,-6,-8,-9)]
+screen.cor(env2)
+
+# Removing Bio1, Bio10, Bio11, Bio19, Bio3,Bio5,Bio6,Bio7,Bio8,Bio9 as they are highly correlated with Elevation
+colnames(env2)
+env3 <- env2[,c(-2,-3,-4,-8,-10,-12,-13,-14,-15,-16)]
+screen.cor(env3)
+
+# Removing Bio14,Bio2, Feb_EVI, May_EVI, Sep_EVI, Nov_EVI
+colnames(env3)
+env4 <- env3[,c(-2,-5,-10,-13,-17,-19)]
+screen.cor(env4)
+
+# Removing Mar_EVI, Jun_EVI, Aug_EVI, Dec_EVI, Apr_EVI
+colnames(env4)
+env5 <- env4[,c(-8,-10,-12,-14,-9)]
+screen.cor(env5)
+
+# Look at correlations among the leftover environmental variables
+library(psych)
+pairs.panels(env5)
+rm(env,env2,env3,env4)
+
+# Add env5 back to the list of observations
+
+dataOccuFin <- cbind(env5,dataOccu[1:18],dataOccu[55:ncol(dataOccu)])
+dataOccuFin <- as.data.frame(dataOccuFin)
+
+write_csv(dataOccuFin,"J:\\Occupancy Modeling\\Scripts\\Occupancy Scripts\\DataForOccupancyMod.csv")
+
+data
+
+```
