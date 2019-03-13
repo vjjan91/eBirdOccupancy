@@ -1,9 +1,5 @@
 #### dataprep round 4 ####
-#'in this round, I write a function where:
-#'1. I call each dataframe showing 10 random values of 6 variables for each locality
-#'this is done for each species separately
-#'
-#'2. I get another function to get the environmental
+#'in this round, get the environmental
 #'covariates of locality ids for each species
 #'
 
