@@ -35,8 +35,8 @@ dropGeometry = function(x){
 
 #### Define the paths to ebd and sampling event files
 ```{r}
-f_in_ebd <- file.path("E:\\Occupancy Modeling\\Data\\ebd_IN_relMay-2018.txt")
-f_in_sampling <- file.path("E:\\Occupancy Modeling\\Data\\ebd_sampling_relMay-2018.txt")
+f_in_ebd <- file.path("D:\\Occupancy Modeling\\Data\\ebd_IN_relMay-2018.txt")
+f_in_sampling <- file.path("D:\\Occupancy Modeling\\Data\\ebd_sampling_relMay-2018.txt")
 ```
 
 #### Adding necessary filters
@@ -57,8 +57,8 @@ ebd_filters # Now the filters have been set
 
 #### Perform the actual filtering
 ```{r}
-f_out_ebd <- "E:\\Occupancy Modeling\\Data\\ebd_Filtered_May2018.txt"
-f_out_sampling <- "E:\\Occupancy Modeling\\Data\\ebd_sampling_Filtered_May2018.txt"
+f_out_ebd <- "D:\\Occupancy Modeling\\Data\\ebd_Filtered_May2018.txt"
+f_out_sampling <- "D:\\Occupancy Modeling\\Data\\ebd_sampling_Filtered_May2018.txt"
 
 # Below code need not be run if it has been filtered once already and the above path leads to
 # the right dataset
@@ -87,7 +87,7 @@ rm(ebd_filters, zf)
 
 #### Let us play around with data for the Black and Orange Flycatcher (Ficedula nigrorufa)
 ```{r}
-#### subset data, choose black and orange flycatcher ####
+#### Subset data and choose only the Black and orange flycatcher for now ####
 columnsOfInterest = c("checklist_id","scientific_name","observation_count","locality","locality_id","locality_type","latitude","longitude","observation_date","time_observations_started","observer_id","sampling_event_identifier","protocol_type","duration_minutes","effort_distance_km","effort_area_ha","number_observers","species_observed","reviewed")
 
 speciesOfInterest = c("Ficedula nigrorufa") ## Add more when there are more species
@@ -111,7 +111,7 @@ data[[2]] = data[[2]] %>% filter(species_observed == F)
 #### filter spatially ####
 #'load shapefiles of hill ranges
 library(sf)
-hills = st_read("E:\\Occupancy Modeling\\Data\\Shapefiles\\Nil_Ana_Pal.shp")
+hills = st_read("D:\\Occupancy Modeling\\Data\\Shapefiles\\Nil_Ana_Pal.shp")
 
 #'get data spatial coordinates
 dataLocs = data %>%
@@ -176,18 +176,18 @@ dataGrouped = mutate(dataGrouped, pres_abs = observation_count >= 1)
 #### load covariates from raster files ####
 #'load elevation and crop to hills size, then mask by hills
 #' sf
-alt = raster::raster("E:\\Occupancy Modeling\\Data\\Elevation\\alt")
+alt = raster::raster("D:\\Occupancy Modeling\\Data\\Elevation\\alt")
 cr = raster::crop(alt, raster::extent(as(hills, "Spatial")))
 alt.hills = raster::mask(cr, as(hills, "Spatial"))
 
 # load evi layers
-EVI.all = raster::stack("E:\\Occupancy Modeling\\Data\\EVI\\MOD13Q1_EVI_AllYears.tif")
+EVI.all = raster::stack("D:\\Occupancy Modeling\\Data\\EVI\\MOD13Q1_EVI_AllYears.tif")
 #'scale later
 #'EVI.all = EVI.all*0.0001
 names(EVI.all) = paste("evi", month.abb, sep = ".")
 
 #'load 5 year evi change(?) this is currently 6 years
-evifiles = list.files("E:\\Occupancy Modeling\\Data\\EVI\\", pattern = "_201", full.names = T)
+evifiles = list.files("D:\\Occupancy Modeling\\Data\\EVI\\", pattern = "_201", full.names = T)
 evifiles = evifiles[as.numeric(stringi::stri_sub(evifiles, -8, -5)) >= 2013]
 
 #'make stack
@@ -196,7 +196,7 @@ EVI.yearly = raster::stack(as.list(evifiles))
 #EVI.yearly = EVI.yearly*0.0001
 
 ## Load Bioclim layers
-Bio <- list.files("E:\\MasterThesis\\Absence Approach\\Data\\CHELSA_Data\\", pattern=".tif$", full.names=T)
+Bio <- list.files("D:\\MasterThesis\\Absence Approach\\Data\\CHELSA_Data\\", pattern=".tif$", full.names=T)
 
 Clim <- stack()
 for (i in 1:length(Bio)){
@@ -293,11 +293,13 @@ assertthat::assert_that(!"sf" %in% class(dataCovar))
 ```{r}
 ### Subsampling (based on Morgan Tingley's suggestion, to retain only 10 visits or sampling )
 
-### subset 10 random obs per locality per species ####
-#'split into list by species, locality id, and sample 10 if > 10 samples found
-dataSubsample = dataCovar %>%
-  plyr::dlply(c("scientific_name", "locality_id")) %>%
-  map_if(function(x) nrow(x) > 10, function(x) sample_n(x, 10)) %>%
+### Subset 10 random obs per locality per species ####
+### Split into list by species, locality id, and sample 10 if > 10 samples found
+### Sampling without replacement now explicitly mentioned in the code
+
+dataSubsample = dataCovar %>% 
+  plyr::dlply(c("scientific_name", "locality_id")) %>% 
+  map_if(function(x) nrow(x) > 10, function(x) sample_n(x, 10, replace = FALSE)) %>% 
   bind_rows()
 
 # Converting presences and absences from logical to boolean
@@ -309,6 +311,10 @@ dataSubsample$pres_abs <- lapply(dataSubsample$pres_abs, as.numeric)
 
 ### Creating a dataframe for occupancy modeling with 0s and 1s and predictor information filled for each locality_id
 ```{r}
+
+#'get a julian day for each day
+dataSubsample = mutate(dataSubsample, jul.date = lubridate::yday(as.Date(observation_date)))
+
 # Keep only necessary columns
 dataSelected = select(dataSubsample, scientific_name, sampling_event_identifier, locality_id, jul.date,
                     duration_minutes, effort_distance_km, number_observers,
@@ -319,19 +325,24 @@ dataSelected = select(dataSubsample, scientific_name, sampling_event_identifier,
 dataBySpecies = dataSelected %>% 
   plyr::dlply("scientific_name")
 
-#'for each species, gather values 
+#'for each species, gather values, and assign a visit id 
 dataGathered = dataBySpecies %>% 
-  map(function(x) x %>% gather(variable, value, -locality_id, -sampling_event_identifier))
+  map(function(x) {
+    x %>% 
+      gather(variable, value, -locality_id, -sampling_event_identifier, -scientific_name) %>% 
+      ungroup() %>% 
+      group_by(locality_id, variable) %>% 
+      mutate(visit = 1:length(value)) %>% 
+      select(-sampling_event_identifier) #'removing sampling event identifier now
+  })
+
 
 #'split by variable
 dataGathered = map(dataGathered, function(x){
   plyr::dlply(x, "variable")})
 
 #'check that there are 14 species, each as a list element
-assertthat::assert_that(length(dataGathered) == 14)
-
-
-## THE last part is not doing what is needed Pratik. I have left you comments on the code and sent you an email.
+# assertthat::assert_that(length(dataGathered) == 14)
 
 #### spread data over localities by visit ####
 #'each date is taken to be a single visit
@@ -339,14 +350,18 @@ assertthat::assert_that(length(dataGathered) == 14)
 #'especially in heavily sampled areas.
 #'taking the mean of the visits for such cases
 dataSpread = dataGathered %>% 
+  unclass() %>% 
   map(function(x){
-    map(x, function(y) {spread(y, sampling_event_identifier, value, drop = F)})
+    map(x, function(y) {spread(y, visit, value, drop = F)})
   })
-
-
 
 ```
 
+### The above works great
+### Leaving comments here for Pratik:
+1. Need to get multiple dataframes for each variable so that they can be called in separately using the occupancy code.
+2. I need to get a dataframe that matches the locality ID for the pres_abs dataframe you created above, with the 
+locality id for the DataCovar that contains all covariates. Basically, I need to run the EDA that will be done below for the 5825 unique localities only. Does that make sense? 
 
 
 #### Carrying out Exploratory Data analyses for the covariate data extracted
