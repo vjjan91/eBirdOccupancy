@@ -15,7 +15,7 @@ data = read_csv("data/dataRand10.csv")
 #'get a julian day for each day
 data = mutate(data, jul.date = lubridate::yday(as.Date(observation_date)))
 
-#'keep the useful columns
+#'keep the useful columns, filter only black and orange flycatcher
 dataSelected = select(data, scientific_name, sampling_event_identifier, locality_id, jul.date,
                     duration_minutes, effort_distance_km, number_observers,
                     time_observations_started, pres_abs) %>% 
@@ -54,3 +54,6 @@ dataSpread = dataGathered %>%
   map(function(x){
     map(x, function(y) {spread(y, visit, value, drop = F)})
   })
+
+#### save as rdata for next phase ####
+save(dataSpread, file = "dataSpread.rdata")

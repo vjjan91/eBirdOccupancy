@@ -8,6 +8,7 @@ ebd*.txt
 
 # Session Data files
 *.RData
+*.rdata
 
 /.Rproj.user
 
