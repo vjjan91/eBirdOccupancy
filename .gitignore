@@ -6,6 +6,11 @@ EVI/
 hillsShapefile/
 ebd*.txt
 
+*.tif*
+*.shp
+*.dbf
+*.shx
+
 # Session Data files
 *.RData
 *.rdata
