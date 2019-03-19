@@ -11,7 +11,8 @@ library(tidyverse); library(readr); library(sf)
 data = read_csv("data/dataCovars.csv")
 #'isolate unique coord - locality triads
 dataLocs = data %>% 
-  distinct(longitude, latitude, locality_id, locality, locality_type)
+  distinct(longitude, latitude, locality_id, locality, locality_type, elevation) %>% 
+  filter(!is.na(elevation))
 
 #### filter data ####
 
@@ -22,15 +23,58 @@ localityCount = count(dataLocs, locality)
 dataLocsMultiN = left_join(dataLocs, localityCount, by = "locality") %>% 
   filter(n >= 5)
 
-#'split by locality
-dataLocsMultiN = plyr::dlply(dataLocsMultiN, "locality")
+#### Kmeans clsutering prior to KDE ####
+centres = 20
+#'do a simple k-means clustering with 20 centres
+localityKmeans = kmeans(x = dataLocs[,c("longitude", "latitude")], centers = centres)
 
-#### draw 95% kde ####
-#'load ks
-library(ks)
+#'assign a cluster to each point
+dataLocs$cluster = localityKmeans[["cluster"]]
 
-a = as.matrix(dataLocs[,c("longitude","latitude")])
-b = kmeans(a, centers = 20)
+#### prep for KDE ####
+#'split by cluster
+dataLocsMultiN = plyr::dlply(dataLocs, "cluster")
 
-#'source raster_to_df function
-source("")
+#### draw 95% kde for each ####
+#'load ks and scales
+library(ks); library(scales)
+#'get the H.pi method working
+#'
+#'first make an empty list
+localityKde = list()
+#'run in loop:
+#'1. first, the kde function for 90% kdes
+#'2. then the contourLines function
+#'3. then convert to polygon
+#'4. convert the entire list to spatial polygons
+library(sp)
+for (i in 1:length(dataLocsMultiN)) {
+  
+  x = dataLocsMultiN[[i]]
+  #'get the positions matrix
+  pos = x[,c("longitude", "latitude")]
+  #'get the plugin H
+  H.pi = Hpi(x = pos)
+  #'get the KDE
+  clusterKDE = kde(pos, H = H.pi, compute.cont = T)
+  #'draw contour lines
+  contLines = contourLines(clusterKDE$eval.points[[1]], clusterKDE$eval.points[[2]], 
+                           clusterKDE$estimate, level = contourLevels(clusterKDE, 0.1))
+  #'convert each to polygon
+  contPoly = lapply(contLines, function(y) Polygon(y[-1]))
+  #'make polygons
+  contPolyN = Polygons(contPoly, paste("cluster", i, sep = "_"))
+  #'make spatial polygon
+  localityKde[[i]] = contPolyN
+}
+
+#'make full spatial polygons object
+clusterPolygons = SpatialPolygons(localityKde, 1:centres)
+
+#### make sf object and save as shapefile ####
+#'make sf
+library(sf)
+clusterPolgonsSf = st_as_sfc(clusterPolygons)
+#'write to shapefile
+st_write(clusterPolgonsSf, dsn = "data/clusterPolygons", layer = "clusterPolygons", driver = "ESRI Shapefile", delete_dsn = TRUE)
+
