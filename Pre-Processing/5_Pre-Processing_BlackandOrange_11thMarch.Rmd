@@ -357,11 +357,52 @@ dataSpread = dataGathered %>%
 
 ```
 
-### The above works great
-### Leaving comments here for Pratik:
-1. Need to get multiple dataframes for each variable so that they can be called in separately using the occupancy code.
-2. I need to get a dataframe that matches the locality ID for the pres_abs dataframe you created above, with the 
-locality id for the DataCovar that contains all covariates. Basically, I need to run the EDA that will be done below for the 5825 unique localities only. Does that make sense? 
+
+#### Matching the environmental covariates with the locality ID for the dataframes created above
+```{r}
+fieldsToKeep = c("locality", "locality_type","locality_id",
+                 "longitude", "latitude", "elevation",
+                 "CHELSA_bio1_1979.2013_V1_1", "CHELSA_bio10_1979.2013_V1_1","CHELSA_bio11_1979.2013_V1_1",            "CHELSA_bio12_1979.2013_V1_1", "CHELSA_bio13_1979.2013_V1_1" , "CHELSA_bio14_1979.2013_V1_1",           
+"CHELSA_bio15_1979.2013_V1_1", "CHELSA_bio16_1979.2013_V1_1", "CHELSA_bio17_1979.2013_V1_1",            "CHELSA_bio18_1979.2013_V1_1", "CHELSA_bio19_1979.2013_V1_1","CHELSA_bio2_1979.2013_V1_1",            
+"CHELSA_bio3_1979.2013_V1_1", "CHELSA_bio4_1979.2013_V1_1", "CHELSA_bio5_1979.2013_V1_1",             "CHELSA_bio6_1979.2013_V1_1", "CHELSA_bio7_1979.2013_V1_1", "CHELSA_bio8_1979.2013_V1_1",            
+"CHELSA_bio9_1979.2013_V1_1", "CHELSA_prec_interannual_1979.2013_V1_1","CHELSA_temp_interannual_1979.2013_V1_1",
+                 "evi.Jan", "evi.Feb", "evi.Mar", "evi.Apr",
+                 "evi.May", "evi.Jun", "evi.Jul", "evi.Aug",
+                 "evi.Sep", "evi.Oct", "evi.Nov", "evi.Dec",
+                 "slope", "aspect")
+
+#'keep the fields specified
+dataCovarFields = distinct(dataCovar, locality_id, .keep_all = T) %>% 
+  select(fieldsToKeep)
+
+#### join with presence and absence data ####
+
+#'if a standalone dataframe without the presence data is required, do this
+dataCovarFields = dataCovarFields %>% 
+  filter(locality_id %in% dataSpread[["Ficedula nigrorufa"]][["pres_abs"]]$locality_id)
+
+#'join with dataframe of presences and absences
+#'if a combined dataframe is the objective, do this
+# Below was not run for now
+
+dataPresAbsCovars = dataSpread[["Ficedula nigrorufa"]][["pres_abs"]] %>% 
+  left_join(dataCovar, by = "locality_id")
+
+#### calling dataframes for functions ####
+#'in general, list elements with names can be called by this notation
+#'list[[first_level_name]][[second_level_name]]
+#'
+#'in this case, see the calling of black-and-orange flycatcher presence data
+#'from the 2 level list dataSpread above
+#'1. level one is the species
+#'2. level two are the variables
+#'
+#'for a full list of all species (14 elements long), each of the
+#'14 elements will have N nested sub-elements, where N is the
+#'number of variables, such as presence_absence, number-of-observers etc.
+
+
+```
 
 
 #### Carrying out Exploratory Data analyses for the covariate data extracted
@@ -370,10 +411,10 @@ locality id for the DataCovar that contains all covariates. Basically, I need to
 library(ecodist)
 
 # Load Dean Urban's script to remove check for correlations where r > 0.7
-source("E:\\Occupancy Modeling\\Scripts\\Pre-Processing Scripts\\screen_cor.R")
+source("D:\\Occupancy Modeling\\Scripts\\Pre-Processing Scripts\\screen_cor.R")
 
 # Subset only covariates to look for correlations
-env <- dataOccu[19:54]
+env <- dataCovarFields[6:41]
 colnames(env)
 
 # Testing for correlations
@@ -406,11 +447,10 @@ rm(env,env2,env3,env4)
 
 # Add env5 back to the list of observations
 
-dataOccuFin <- cbind(env5,dataOccu[1:18],dataOccu[55:ncol(dataOccu)])
-dataOccuFin <- as.data.frame(dataOccuFin)
+dataCovarFinal <- cbind(dataCovarFields[1:5],env5)
 
-write_csv(dataOccuFin,"J:\\Occupancy Modeling\\Scripts\\Occupancy Scripts\\DataForOccupancyMod.csv")
+dataCovarFinal <- as.data.frame(dataCovarFinal)
+write_csv(dataCovarFinal,"D:\\Occupancy Modeling\\Scripts\\Occupancy Scripts\\dataCovarFinal.csv")
 
-data
 
 ```
