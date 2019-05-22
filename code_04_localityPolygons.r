@@ -10,8 +10,8 @@ library(tidyverse); library(readr); library(sf)
 #'load data
 data = read_csv("data/dataCovars.csv")
 #'isolate unique coord - locality triads
-dataLocs = data %>% 
-  distinct(longitude, latitude, locality_id, locality, locality_type, elevation) %>% 
+dataLocs = data %>%
+  distinct(longitude, latitude, locality_id, locality, locality_type, elevation) %>%
   filter(!is.na(elevation))
 
 #### filter data ####
@@ -20,7 +20,7 @@ dataLocs = data %>%
 localityCount = count(dataLocs, locality)
 #' quite some "localities" are simply coordinate pairs
 #' keep localities with 5 or more points
-dataLocsMultiN = left_join(dataLocs, localityCount, by = "locality") %>% 
+dataLocsMultiN = left_join(dataLocs, localityCount, by = "locality") %>%
   filter(n >= 5)
 
 #### Kmeans clsutering prior to KDE ####
@@ -49,7 +49,7 @@ localityKde = list()
 #'4. convert the entire list to spatial polygons
 library(sp)
 for (i in 1:length(dataLocsMultiN)) {
-  
+
   x = dataLocsMultiN[[i]]
   #'get the positions matrix
   pos = x[,c("longitude", "latitude")]
@@ -58,7 +58,7 @@ for (i in 1:length(dataLocsMultiN)) {
   #'get the KDE
   clusterKDE = kde(pos, H = H.pi, compute.cont = T)
   #'draw contour lines
-  contLines = contourLines(clusterKDE$eval.points[[1]], clusterKDE$eval.points[[2]], 
+  contLines = contourLines(clusterKDE$eval.points[[1]], clusterKDE$eval.points[[2]],
                            clusterKDE$estimate, level = contourLevels(clusterKDE, 0.1))
   #'convert each to polygon
   contPoly = lapply(contLines, function(y) Polygon(y[-1]))
@@ -77,4 +77,3 @@ library(sf)
 clusterPolgonsSf = st_as_sfc(clusterPolygons)
 #'write to shapefile
 st_write(clusterPolgonsSf, dsn = "data/clusterPolygons", layer = "clusterPolygons", driver = "ESRI Shapefile", delete_dsn = TRUE)
-
