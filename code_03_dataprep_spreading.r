@@ -19,7 +19,8 @@ data = mutate(data, jul.date = lubridate::yday(as.Date(observation_date)))
 dataSelected = select(data, scientific_name, sampling_event_identifier, locality_id, jul.date,
                     duration_minutes, effort_distance_km, number_observers,
                     time_observations_started, pres_abs) %>% 
-  filter(scientific_name == "Ficedula nigrorufa")
+  filter(scientific_name == "Ficedula nigrorufa") # comment out this filter to process all species
+
 #'split into list by species
 dataBySpecies = dataSelected %>% 
   plyr::dlply("scientific_name")
