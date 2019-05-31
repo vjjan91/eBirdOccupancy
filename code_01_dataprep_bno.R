@@ -182,7 +182,7 @@ evifiles = evifiles[as.numeric(stringi::stri_sub(evifiles, -8, -5)) >= 2013]
 # make stack
 EVI.yearly = raster::stack(as.list(evifiles))
 # scale stack later
-#EVI.yearly = EVI.yearly*0.0001
+# EVI.yearly = EVI.yearly*0.0001
 
 # resample to elevation resolution
 EVI.all.resam <-  raster::resample(EVI.all, alt.hills,method ="bilinear")
@@ -239,6 +239,11 @@ dataSummary = dataCovar %>%
   group_by(locality_id) %>% 
   summarise_at(vars(duration_minutes, effort_distance_km, number_observers, jul.date),
                funs(sum.no.na))
+
+
+#### here, the question is how to handle time of day and observer expertise ####
+# should we use the mean, max, etc?
+
 
 # transform dataSummary to be a join of locality count and dataSummary
 # then divide locality wise summarised sums by number of visits for the mean
