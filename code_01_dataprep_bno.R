@@ -1,23 +1,23 @@
 ####prep data####
 
 #### load data from raw files ####
-#'load libs
+# load libs
 library(tidyverse); library(readr); library(sf)
 library(auk)
 
-#'custom sum function
+# custom sum function
 sum.no.na = function(x){sum(x, na.rm = T)}
-#'custom drop geometry function
-#'important note: retains coordinates but renamed to X and Y (long, lat)
+# custom drop geometry function
+# important note: retains coordinates but renamed to X and Y (long, lat)
 dropGeometry = function(x){
   x %>% bind_cols(data.frame(st_coordinates(.))) %>% `st_geometry<-`(NULL) %>% unclass() %>% as.data.frame()
 }
 
-#'set file paths for auk functions
+# set file paths for auk functions
 f_in_ebd <- file.path("ebd_Filtered_May2018.txt")
 f_in_sampling <- file.path("ebd_sampling_Filtered_May2018.txt")
 
-#'run filters using auk packages
+# run filters using auk packages
 ebd_filters = auk_ebd(f_in_ebd, f_in_sampling) %>%
   auk_species(c("Anthus nilghiriensis",
                 "Montecincla cachinnans",
@@ -38,12 +38,12 @@ ebd_filters = auk_ebd(f_in_ebd, f_in_sampling) %>%
   auk_date(c("2000-01-01", "2018-09-17")) %>%
   auk_complete()
 
-#'check filters
+# check filters
 ebd_filters
 
-#'run filters and write
-#'NB: this is already done, skip this step
-#'
+# run filters and write
+# NB: this is already done, skip this step
+# 
 
 f_out_ebd <- "data/eBirdDataWG_filtered.txt"
 f_out_sampling <- "data/eBirdSamplingDataWG_filtered.txt"
@@ -51,10 +51,10 @@ f_out_sampling <- "data/eBirdSamplingDataWG_filtered.txt"
 # Below code need not be run if it has been filtered once already and the above path leads to
 # the right dataset
 ebd_filtered <- auk_filter(ebd_filters, file = f_out_ebd,
-                          file_sampling = f_out_sampling)
+                           file_sampling = f_out_sampling)
 
 #### read the ebird data in ####
-ebd <- read_ebd(f_out_ebd, sep = ",")
+ebd <- read_ebd(f_out_ebd)
 #glimpse(ebd)
 
 #### fill zeroes ####
@@ -73,34 +73,41 @@ columnsOfInterest = c("checklist_id","scientific_name","observation_count","loca
 data = list(ebd, new_zf) %>%
   map(function(x){
     x %>% select(one_of(columnsOfInterest)) #%>%
-     # filter(scientific_name %in% speciesOfInterest)
+    # filter(scientific_name %in% speciesOfInterest)
     # %>% dlply("scientific_name")
-    #'this above for when there are more species
+    # this above for when there are more species
   })
 
-#'check presence and absence in absences df, remove essentially the presences df
+# remoe zerofills to save working memory
+rm(zf, new_zf); gc()
+
+# check presence and absence in absences df, remove essentially the presences df
 data[[2]] = data[[2]] %>% filter(species_observed == F)
 
 #### filter spatially ####
-#'load shapefiles of hill ranges
+# load shapefiles of hill ranges
 library(sf)
 hills = st_read("hillsShapefile/Nil_Ana_Pal.shp")
 
-#'get data spatial coordinates
+# write a prelim filter by bounding box
+box <- st_bbox(wg)
+
+# get data spatial coordinates
 dataLocs = data %>%
   map(function(x){
-    select(x, longitude, latitude)}) %>%
+    select(x, longitude, latitude) %>% 
+      filter(between(longitude, box["xmin"], box["xmax"]) & between(latitude, box["ymin"], box["ymax"]))}) %>%
   bind_rows() %>%
   distinct() %>%
-      st_as_sf(coords = c("longitude", "latitude")) %>%
-      st_set_crs(4326) %>%
+  st_as_sf(coords = c("longitude", "latitude")) %>%
+  st_set_crs(4326) %>%
   st_intersection(hills)
 
-#'filter data by dataLocs
+# filter data by dataLocs
 dataLocs = mutate(dataLocs, spatialKeep = T) %>%
   dropGeometry()
 
-#'bind to data and then filter
+# bind to data and then filter
 data = data %>%
   map(function(x){
     left_join(x, dataLocs, by = c("longitude" = "X", "latitude" = "Y")) %>%
@@ -109,135 +116,145 @@ data = data %>%
   })
 
 #### presence and absence ####
-#'save a temp data file
-#save(data, file = "data.temp.rdata")
+# save a temp data file
+save(data, file = "data.temp.rdata")
 
 #load("data.temp.rdata")
 
-#'in the first set, replace X, for presences, with 1
-data[[1]] = data[[1]] %>% mutate(observation_count = ifelse(observation_count == "X", "1", observation_count))
+# in the first set, replace X, for presences, with 1
+data[[1]] = data[[1]] %>% 
+  mutate(observation_count = ifelse(observation_count == "X", "1", observation_count))
 
-#'remove records where duration is 0
+# remove records where duration is 0
 data = map(data, function(x) filter(x, duration_minutes > 0))
 
-#'group data by site and sampling event identifier
-#'then, summarise relevant variables as the sum
+# group data by site and sampling event identifier
+# then, summarise relevant variables as the sum
 dataGrouped = map(data, function(x){
-    x %>% group_by(sampling_event_identifier) %>%
-      summarise_at(vars(duration_minutes, effort_distance_km, effort_area_ha), funs(sum.no.na))
-  })
-#'bind rows combining data frames, and filter
+  x %>% group_by(sampling_event_identifier) %>%
+    summarise_at(vars(duration_minutes, effort_distance_km, effort_area_ha), funs(sum.no.na))
+})
+
+# bind rows combining data frames, and filter
 dataGrouped = bind_rows(dataGrouped) %>%
   filter(duration_minutes <= 240, effort_distance_km <= 5, effort_area_ha <= 500)
 
-#'get data identifiers, such as sampling identifier etc
+# get data identifiers, such as sampling identifier etc
 dataConstants = data %>% 
   bind_rows() %>% 
   select(sampling_event_identifier, time_observations_started, locality, locality_type, locality_id, observer_id, observation_date, scientific_name, observation_count, protocol_type, number_observers, longitude, latitude)
 
-#'join the summarised data with the identifiers, using sampling_event_identifier as the key
+# join the summarised data with the identifiers, using sampling_event_identifier as the key
 dataGrouped = left_join(dataGrouped, dataConstants, by = "sampling_event_identifier")
 
-#'assign present or not
-dataGrouped = mutate(dataGrouped, pres_abs = observation_count >= 1)
+# assign present or not, and get time in decimal hours since midnight
+library(lubridate)
+time_to_decimal <- function(x) {
+  x <- hms(x, quiet = TRUE)
+  hour(x) + minute(x) / 60 + second(x) / 3600
+}
+# will cause issues if using time obs started as a linear effect and not quadratic
+dataGrouped = mutate(dataGrouped, 
+                     pres_abs = observation_count >= 1,
+                     decimalTime = time_to_decimal(time_observations_started))
 
-#'check class of dataGrouped, make sure not sf
+# check class of dataGrouped, make sure not sf
 class(dataGrouped)
 
 #### load covariates from raster files ####
-#'load elevation and crop to hills size, then mask by hills
-#' sf
+# load elevation and crop to hills size, then mask by hills
+#  sf
 alt = raster::raster("Elevation/alt/")
 cr = raster::crop(alt, raster::extent(as(hills, "Spatial")))
 alt.hills = raster::mask(cr, as(hills, "Spatial"))
 
-#'load evi layers
+# load evi layers
 EVI.all = raster::stack("EVI/MOD13Q1_EVI_AllYears.tif")
 #x11();raster::plot(EVI.all)
-#'scale later
-#'EVI.all = EVI.all*0.0001
+# scale later
+# EVI.all = EVI.all*0.0001
 names(EVI.all) = paste("evi", month.abb, sep = ".")
 
-#'load 5 year evi change(?) this is currently 6 years
+# load 5 year evi change(?) this is currently 6 years
 evifiles = list.files("EVI", pattern = "_201", full.names = T)
 evifiles = evifiles[as.numeric(stringi::stri_sub(evifiles, -8, -5)) >= 2013]
 
-#'make stack
+# make stack
 EVI.yearly = raster::stack(as.list(evifiles))
-#'scale stack later
+# scale stack later
 #EVI.yearly = EVI.yearly*0.0001
 
-#'resample to elevation resolution
+# resample to elevation resolution
 EVI.all.resam <-  raster::resample(EVI.all, alt.hills,method ="bilinear")
 EVI.yearly.resam <- raster::resample(EVI.yearly, alt.hills, method="bilinear")
 
-#'get slope and aspect
+# get slope and aspect
 slope <- raster::terrain(alt.hills, opt = 'slope', unit='degrees', neighbors = 8)
 aspect <- raster::terrain(alt.hills, opt='aspect', unit='degrees', neighbors = 8)
 
 
 #### extracting raster values #####
-#'make raster list
+# make raster list
 landscapeRasters = list(alt.hills, EVI.all.resam, slope, aspect)
 
-#'make dataLocs sf again
+# make dataLocs sf again
 dataLocs = st_as_sf(dataLocs, coords = c("X", "Y")) %>% st_set_crs(4326)
 
-#'map extract across the list
+# map extract across the list
 landscapeData = map(landscapeRasters, function(x){
   raster::extract(x, dataLocs)
 })
 
-#'set names
+# set names
 names(landscapeData) = c("elevation","evi","slope","aspect")
 
-#'bind into dataframe
+# bind into dataframe
 landscapeData = map(landscapeData, as_data_frame) %>% bind_cols() %>%
   `names<-`(c("elevation", paste("evi", month.abb, sep = "."), "slope", "aspect"))
 
-#'drop geometry of datalocs and then bind to landscape data
+# drop geometry of datalocs and then bind to landscape data
 landscapeData = dataLocs %>% dropGeometry() %>%
   bind_cols(landscapeData)
 
-#'join with ebird data
+# join with ebird data
 dataCovar = left_join(dataGrouped, landscapeData, by = c("longitude" = "X", "latitude" = "Y"))
 
-#'remove rasters
+# remove rasters
 rm(alt, alt.hills, aspect, cr, EVI.all, EVI.yearly, EVI.all.resam, slope)
 gc()
 
 #### test for dataCovar class ####
-#'is dataCovar a dataframe?
-#'is dataCovar an sf? if so, manually drop geometry
+# is dataCovar a dataframe?
+# is dataCovar an sf? if so, manually drop geometry
 assertthat::assert_that(!"sf" %in% class(dataCovar))
 
 #### mean time, distance, and number of observers ####
-#'first count number of visits to each locality
+# first count number of visits to each locality
 localityCount = count(dataCovar, locality_id)
 
-#'summarise duration, distance, observers, and julian date as the sum
+# summarise duration, distance, observers, and julian date as the sum
 dataSummary = dataCovar %>%
-  #'first get julian date
+  # first get julian date
   mutate(jul.date = lubridate::yday(as.Date(observation_date))) %>% 
   group_by(locality_id) %>% 
   summarise_at(vars(duration_minutes, effort_distance_km, number_observers, jul.date),
                funs(sum.no.na))
 
-#'transform dataSummary to be a join of locality count and dataSummary
-#'then divide locality wise summarised sums by number of visits for the mean
+# transform dataSummary to be a join of locality count and dataSummary
+# then divide locality wise summarised sums by number of visits for the mean
 dataSummary = left_join(dataSummary, localityCount, by = "locality_id") %>% 
   mutate_at(vars(duration_minutes, effort_distance_km, number_observers, jul.date),
             funs(./n)) %>% 
-  #'rename variables to avoid confusion
+  # rename variables to avoid confusion
   rename(mean_duration = duration_minutes, mean_distance = effort_distance_km, 
          mean_observers = number_observers, mean_date = jul.date) %>% 
-  #'remove n, which is the same as number of visits
+  # remove n, which is the same as number of visits
   select(-n)
 
-#'join mean values to dataCovar
+# join mean values to dataCovar
 dataCovar = left_join(dataCovar, dataSummary, by = "locality_id")
 
-#'check again if dataCovar is a dataframe and not sf
+# check again if dataCovar is a dataframe and not sf
 assertthat::assert_that(is.data.frame(dataCovar))
 assertthat::assert_that(!"sf" %in% class(dataCovar))
 
