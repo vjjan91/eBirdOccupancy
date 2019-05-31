@@ -14,11 +14,11 @@ dropGeometry = function(x){
 }
 
 #'set file paths for auk functions
-f_in_ebd <- file.path("data/eBirdDataWG.csv")
-f_in_sampling <- file.path("data/eBirdSamplingDataWG.csv")
+f_in_ebd <- file.path("ebd_Filtered_May2018.txt")
+f_in_sampling <- file.path("ebd_sampling_Filtered_May2018.txt")
 
 #'run filters using auk packages
-ebd_filters = auk_ebd(f_in_ebd, f_in_sampling,sep = ",") %>%
+ebd_filters = auk_ebd(f_in_ebd, f_in_sampling) %>%
   auk_species(c("Anthus nilghiriensis",
                 "Montecincla cachinnans",
                 "Montecincla fairbanki",
@@ -45,16 +45,16 @@ ebd_filters
 #'NB: this is already done, skip this step
 #'
 
-f_out_ebd <- "data/eBirdDataWG_filtered.csv"
-f_out_sampling <- "data/eBirdSamplingDataWG_filtered.csv"
+f_out_ebd <- "data/eBirdDataWG_filtered.txt"
+f_out_sampling <- "data/eBirdSamplingDataWG_filtered.txt"
 
 # Below code need not be run if it has been filtered once already and the above path leads to
 # the right dataset
 ebd_filtered <- auk_filter(ebd_filters, file = f_out_ebd,
-                          file_sampling = f_out_sampling, sep = ",", overwrite = FALSE)
+                          file_sampling = f_out_sampling)
 
 #### read the ebird data in ####
-ebd <- read_ebd(f_out_ebd)
+ebd <- read_ebd(f_out_ebd, sep = ",")
 #glimpse(ebd)
 
 #### fill zeroes ####
