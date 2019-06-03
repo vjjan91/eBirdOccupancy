@@ -14,44 +14,44 @@ dropGeometry = function(x){
 }
 
 # set file paths for auk functions
-f_in_ebd <- file.path("ebd_Filtered_May2018.txt")
-f_in_sampling <- file.path("ebd_sampling_Filtered_May2018.txt")
-
-# run filters using auk packages
-ebd_filters = auk_ebd(f_in_ebd, f_in_sampling) %>%
-  auk_species(c("Anthus nilghiriensis",
-                "Montecincla cachinnans",
-                "Montecincla fairbanki",
-                "Sholicola albiventris",
-                "Sholicola major",
-                "Culicicapa ceylonensis",
-                "Pomatorhinus horsfieldii",
-                "Ficedula nigrorufa",
-                "Pycnonotus jocosus",
-                "Iole indica",
-                "Hemipus picatus",
-                "Saxicola caprata",
-                "Eumyias albicaudatus",
-                "Rhopocichla atriceps")) %>%
-  auk_country(country = "IN") %>%
-  auk_state(c("IN-KL","IN-TN", "IN-KA")) %>% # Restricting geography to TamilNadu, Kerala & Karnataka
-  auk_date(c("2000-01-01", "2018-09-17")) %>%
-  auk_complete()
-
-# check filters
-ebd_filters
-
-# run filters and write
-# NB: this is already done, skip this step
+# f_in_ebd <- file.path("ebd_Filtered_May2018.txt")
+# f_in_sampling <- file.path("ebd_sampling_Filtered_May2018.txt")
 # 
-
+# # run filters using auk packages
+# ebd_filters = auk_ebd(f_in_ebd, f_in_sampling) %>%
+#   auk_species(c("Anthus nilghiriensis",
+#                 "Montecincla cachinnans",
+#                 "Montecincla fairbanki",
+#                 "Sholicola albiventris",
+#                 "Sholicola major",
+#                 "Culicicapa ceylonensis",
+#                 "Pomatorhinus horsfieldii",
+#                 "Ficedula nigrorufa",
+#                 "Pycnonotus jocosus",
+#                 "Iole indica",
+#                 "Hemipus picatus",
+#                 "Saxicola caprata",
+#                 "Eumyias albicaudatus",
+#                 "Rhopocichla atriceps")) %>%
+#   auk_country(country = "IN") %>%
+#   auk_state(c("IN-KL","IN-TN", "IN-KA")) %>% # Restricting geography to TamilNadu, Kerala & Karnataka
+#   auk_date(c("2000-01-01", "2018-09-17")) %>%
+#   auk_complete()
+# 
+# # check filters
+# ebd_filters
+# 
+# # run filters and write
+# # NB: this is already done, skip this step
+# # 
+# 
 f_out_ebd <- "data/eBirdDataWG_filtered.txt"
 f_out_sampling <- "data/eBirdSamplingDataWG_filtered.txt"
-
-# Below code need not be run if it has been filtered once already and the above path leads to
-# the right dataset
-ebd_filtered <- auk_filter(ebd_filters, file = f_out_ebd,
-                           file_sampling = f_out_sampling)
+# 
+# # Below code need not be run if it has been filtered once already and the above path leads to
+# # the right dataset
+# ebd_filtered <- auk_filter(ebd_filters, file = f_out_ebd,
+#                            file_sampling = f_out_sampling)
 
 #### read the ebird data in ####
 ebd <- read_ebd(f_out_ebd)
@@ -90,7 +90,7 @@ library(sf)
 hills = st_read("hillsShapefile/Nil_Ana_Pal.shp")
 
 # write a prelim filter by bounding box
-box <- st_bbox(wg)
+box <- st_bbox(hills)
 
 # get data spatial coordinates
 dataLocs = data %>%
@@ -239,11 +239,6 @@ dataSummary = dataCovar %>%
   group_by(locality_id) %>% 
   summarise_at(vars(duration_minutes, effort_distance_km, number_observers, jul.date),
                funs(sum.no.na))
-
-
-#### here, the question is how to handle time of day and observer expertise ####
-# should we use the mean, max, etc?
-
 
 # transform dataSummary to be a join of locality count and dataSummary
 # then divide locality wise summarised sums by number of visits for the mean
