@@ -44,7 +44,8 @@ ebdNspChk <- ebd[, .(samplingEffort = max(duration_minutes),
                      julianDate = first(yday(as.POSIXct(observation_date))),
                      latitude = first(latitude),
                      longitude = first(longitude),
-                     observer = first(observer_id)),
+                     observer = first(observer_id),
+                     .N),
                  by = list(checklist_id, sampling_event_identifier)]
 
 # remove ebird data
