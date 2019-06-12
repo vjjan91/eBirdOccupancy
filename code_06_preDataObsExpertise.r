@@ -12,7 +12,7 @@ library(stringr)
 
 # read in shapefile of wg to subset by bounding box
 library(sf)
-wg <- st_read("hillsShapefile/Nil_Ana_Pal.shp")
+wg <- st_read("hillsShapefile/WG.shp")
 box <- st_bbox(wg)
 
 # read in data with fread
