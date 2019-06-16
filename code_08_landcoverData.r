@@ -1,5 +1,10 @@
 #### code to explore land cover data ####
 
-library(raster)
 
-landcover <- raster("Classified Image_3rdJune2019_WG.tif")
+# suspended here and moved to code06
+
+# library(raster)
+# 
+# # read in glob cover
+# landcover <- raster("data/glob_cover_wghats.tif")
+
