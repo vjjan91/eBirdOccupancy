@@ -68,7 +68,7 @@ fwrite(ebdNchk, file = "data/eBirdNchecklistObserver.csv")
 
 #### hbaitat type as landcover ####
 # read in raster
-landcover <- raster::raster("Classified Image_3rdJune2019_WG.tif")
+landcover <- raster::raster("data/glob_cover_wghats.tif")
 
 # get for unique points
 landcoverVec <- raster::extract(x = landcover, y = as.matrix(ebdNspChk[,c("longitude","latitude")]))
