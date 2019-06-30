@@ -37,9 +37,9 @@ gc()
 ebd[,checklist_id := ifelse(group_identifier == "", sampling_event_identifier, group_identifier),]
 
 # n checklists per observer
-ebdNchk <- ebd[,.(nChk = length(unique(checklist_id)), 
+ebdNchk <- ebd[,year:=year(observation_date)][,.(nChk = length(unique(checklist_id)), 
                   nSei = length(unique(sampling_event_identifier))), 
-               by= list(observer_id)]
+               by= list(observer_id, year)]
 
 # get decimal time function
 library(lubridate)
