@@ -2,7 +2,7 @@
 
 # load libs and data
 library(data.table)
-
+library(tidyverse)
 ebdNspChk <- fread("data/eBirdChecklistSpecies.csv")
 
 # remove NAs - leaves around 210k points
@@ -21,7 +21,7 @@ ebdNspSum <- ebdNspChk[,.(totalEff = sum(samplingEffort),
                           totalDist = sum(samplingDistance),
                           startTime = min(decimalTime),
                           meanDate = mean(julianDate),
-                          nSp = sum(N),
+                          nSp = max(N), # if a checklist consists of more than one SEI, take the max of the two
                           land = as.factor(first(landcover)),
                           nLand = length(unique(landcover)),
                           obs = first(observer)), by=checklist_id]
