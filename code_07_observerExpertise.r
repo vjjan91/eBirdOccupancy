@@ -60,34 +60,47 @@ summary(modNspecies$gam)
 
 # use predict method
 setDT(ebdNspSum)
-ebdNspSum[,predval:=predict(modNspecies$gam, type = "response", terms = c("totalEff"))]
+ebdNspSum[,predval:=predict(modNspecies$mer, type = "response")]
 # round the effort to 10 min intervals
-ebdNspSum[,roundHour:=plyr::round_any(totalEff/60, 0.5, f = floor)]
+ebdNspSum[,roundHour:=plyr::round_any(totalEff, 10, f = floor)]
 
 # summarise the empval, predval grouped by observer and round10min
 pltData <- ebdNspSum[,.(prednspMean = mean(predval, na.rm = T),
              prednspSD = sd(predval, na.rm = T)),
           by=list(obs, roundHour)]
 
-{# plot and examine in base R plots
+# get emp data mean and sd
+pltDataEmp <- ebdNspSum[,roundHour:=plyr::round_any(totalEff, 30, f = floor)
+                        ][,.(empnspMean = mean(nSp),
+                             empnspSd = sd(nSp)), by=list(roundHour)]
+
+# plot and examine in base R plots
 setDF(pltData)
 
 # filter for 10 data points or more
 pltData <- pltData %>% filter(obs %in% obscount$obs)  
-
-# get limits
-xlims = c(0, 15); ylims = c(0, 10)
-# set up plot
-plot(0, xlim = xlims, ylim = ylims, type = "n", 
-     xlab = "total effort (mins)", ylab = "N species")
 # nest data
 pltData <- tidyr::nest(pltData, -obs)
-# plot in a loop
-for(i in 1:nrow(pltData)){
-  df = pltData$data[[i]]
-  lines(df$roundHour, df$prednspMean, col=alpha(rgb(0,0,0), 0.1))
-}
 
+# get limits
+xlims = c(0, 600); ylims = c(0, 100)
+# set up plot
+{pdf(file = "figs/figNspTime.pdf", width = 6, height = 6)
+  plot(0, xlim = xlims, ylim = ylims, type = "n", 
+       xlab = "total effort (mins)", ylab = "N species")
+  # plot in a loop
+  for(i in 1:nrow(pltData)){
+    df = pltData$data[[i]]
+    lines(df$roundHour, df$prednspMean, col=alpha(rgb(0,0,0), 0.01))
+  }
+  
+  # add emp data points
+  points(pltDataEmp$empnspMean~pltDataEmp$roundHour, col = 1)
+  
+  # add error bars
+  arrows(pltDataEmp$roundHour, pltDataEmp$empnspMean+pltDataEmp$empnspSd, pltDataEmp$roundHour, pltDataEmp$empnspMean-pltDataEmp$empnspSd, col = 1, code=3, angle = 90, length = 0.05)
+  dev.off()
+  
 }
 
 #### get observer scores as n species at 1 hour ####
