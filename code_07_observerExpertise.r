@@ -26,26 +26,13 @@ ebdNspSum <- ebdNspChk[,.(totalEff = sum(samplingEffort),
                           nLand = length(unique(landcover)),
                           obs = first(observer)), by=checklist_id]
 
+# count data points  
+obscount <- count(ebdNspSum, obs) %>% filter(n >= 10)
+# remove obs not in obscount
+ebdNspSum <- ebdNspSum[obs %in% obscount$obs,]
+
 # get frequency of nlandcovers sampled
 dplyr::count(ebdNspSum, nLand)
-
-
-
-# plot data to explore
-library(ggplot2)
-library(dplyr); library(tidyr)
-
-ebdNspChk %>% 
-  filter(samplingEffort <= 60 * 10,
-         samplingDistance <= 25) %>%  #assumed km
-  select_if(is.numeric) %>% 
-  gather(variable, value) %>% 
-  ggplot()+
-  geom_histogram(aes(x = value))+
-  facet_wrap(~variable, scales = "free_x")
-
-ggsave(filename = "figHistCovars.png", device = png(), height = 6, width = 6); dev.off()
-
 
 #### modelling species in checklist ####
 # summarise the data
