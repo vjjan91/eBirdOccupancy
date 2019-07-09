@@ -37,7 +37,7 @@ dplyr::count(ebdNspSum, nLand)
 #### modelling species in checklist ####
 # summarise the data
 
-library(tibble)
+#library(tibble)
 ebdNspSum <- as_tibble(setDF(ebdNspSum))
 ebdNspSum$obs <- as.factor(ebdNspSum$obs)
 
@@ -50,8 +50,6 @@ modNspecies <- gamm4(nSp ~ s(log(totalEff), k = 5) +
                      random = ~(1|obs), 
                      data = ebdNspSum, family = "poisson")
 
-summary(modNspecies$mer)
-
 # save model object
 save(modNspecies, file = "tempExpertiseData.rdata")
 
@@ -62,7 +60,7 @@ summary(modNspecies$gam)
 
 # use predict method
 setDT(ebdNspSum)
-ebdNspSum[,predval:=predict(modNspecies$gam)]
+ebdNspSum[,predval:=predict(modNspecies$gam, type = "response", terms = c("totalEff"))]
 # round the effort to 10 min intervals
 ebdNspSum[,roundHour:=plyr::round_any(totalEff/60, 0.5, f = floor)]
 
@@ -78,7 +76,7 @@ setDF(pltData)
 pltData <- pltData %>% filter(obs %in% obscount$obs)  
 
 # get limits
-xlims = c(0, 5); ylims = c(0, 100)
+xlims = c(0, 15); ylims = c(0, 10)
 # set up plot
 plot(0, xlim = xlims, ylim = ylims, type = "n", 
      xlab = "total effort (mins)", ylab = "N species")
