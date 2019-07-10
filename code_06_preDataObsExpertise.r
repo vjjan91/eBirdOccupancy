@@ -48,19 +48,48 @@ time_to_decimal <- function(x) {
   hour(x) + minute(x) / 60 + second(x) / 3600
 }
 
-# get species per checklist and SEI (each SEI is a different location)
+#### count unique species per checklist ####
+# this is necessary since checklists can have more than one
+# sampling events with overlapping species
+
+# create a nested structure with unique species per checklist and SEI
+ebdSpSum <- ebd %>% 
+  select(checklist_id, sampling_event_identifier, scientific_name) %>% 
+  nest(-checklist_id, -sampling_event_identifier)
+
+# pull the vector of species names from the resulting nested data frame
+ebdSpSum <- ebdSpSum %>% 
+  group_by(checklist_id) %>% 
+  mutate(species = map(data, function(z){
+    pull(z, scientific_name)
+  })) %>% 
+  select(-data)
+
+# grouping by checklist, get the set union of the various associated
+# SEI species lists
+ebdSpSum <- ebdSpSum %>% 
+  group_by(checklist_id) %>% 
+  summarise(speciesTot = list(reduce(species, union)),
+            nSp = map_int(speciesTot, length))
+
+# get species per checklist
+# there's some doubt how to handle the SEIs which can actually be
+# very different events
 ebdNspChk <- ebd[, .(samplingEffort = max(duration_minutes),
                      samplingDistance = max(effort_distance_km),
                      decimalTime = first(time_to_decimal(time_observations_started)),
                      julianDate = first(yday(as.POSIXct(observation_date))),
                      latitude = first(latitude),
                      longitude = first(longitude),
-                     observer = first(observer_id),
-                     .N),
-                 by = list(checklist_id, sampling_event_identifier)]
+                     observer = first(observer_id)),
+                 by = list(checklist_id)]
 
 # remove ebird data
 rm(ebd); gc()
+
+# combine the checklist parameters and the species counts
+setDT(ebdSpSum %>% select(checklist_id, nSp))
+ebdNspChk <- merge(ebdSpSum, ebdSpSum, by = "checklist_id", all = FALSE)
 
 # write data to file
 fwrite(ebdNspChk, file = "data/eBirdChecklistSpecies.csv")
