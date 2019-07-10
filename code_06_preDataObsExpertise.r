@@ -75,8 +75,9 @@ ebdSpSum <- ebdSpSum %>%
 # get species per checklist
 # there's some doubt how to handle the SEIs which can actually be
 # very different events
-ebdNspChk <- ebd[, .(samplingEffort = max(duration_minutes),
-                     samplingDistance = max(effort_distance_km),
+# here, we handle the effort and distance by summing across SEIs
+ebdNspChk <- ebd[, .(samplingEffort = sum(duration_minutes, na.rm = T),
+                     samplingDistance = sum(effort_distance_km, na.rm = T),
                      decimalTime = first(time_to_decimal(time_observations_started)),
                      julianDate = first(yday(as.POSIXct(observation_date))),
                      latitude = first(latitude),
