@@ -5,9 +5,6 @@ library(data.table)
 library(tidyverse)
 ebdNspChk <- fread("data/eBirdChecklistSpecies.csv")
 
-# remove NAs - leaves around 210k points
-ebdNspChk <- na.omit(ebdNspChk)
-
 # makde factor
 ebdNspChk[,landcover:=as.factor(landcover)]
 
