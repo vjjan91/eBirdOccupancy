@@ -59,7 +59,7 @@ ebdSpSum <- ebd %>%
 
 # pull the vector of species names from the resulting nested data frame
 ebdSpSum <- ebdSpSum %>% 
-  group_by(checklist_id) %>% 
+  # group_by(checklist_id) %>% 
   mutate(species = map(data, function(z){
     pull(z, scientific_name)
   })) %>% 
