@@ -8,7 +8,7 @@ rm(list = ls()); gc()
 
 # load libs
 library(data.table)
-library(stringr)
+library(tidyverse)
 
 # read in shapefile of wg to subset by bounding box
 library(sf)
