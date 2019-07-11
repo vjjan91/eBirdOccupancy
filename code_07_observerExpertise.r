@@ -32,7 +32,7 @@ ebdChkSummary <- ebdChkSummary %>%
 library(gamm4)
 
 # drop NAs to avoid errors
-modNspecies <- gamm4(nSp ~ s(log(samplingEffort), k = 5) + 
+modNspecies <- gamm4(nSp ~ s(log(duration), k = 5) + 
                        s(decimalTime, bs = "cc") +
                        s(julianDate, bs = "cc") + 
                        landcover, 
@@ -84,15 +84,12 @@ xlims = c(0, 600); ylims = c(0, 100)
   }
   
   # add emp data points
-  points(pltDataEmp$empnspMean~pltDataEmp$roundHour, col = 1)
+  points(pltDataEmp$empnspMean~pltDataEmp$roundHour, col = 2)
   
   # add error bars
-  arrows(pltDataEmp$roundHour, pltDataEmp$empnspMean+pltDataEmp$empnspSd, pltDataEmp$roundHour, pltDataEmp$empnspMean-pltDataEmp$empnspSd, col = 1, code=3, angle = 90, length = 0.05)
+  arrows(pltDataEmp$roundHour, pltDataEmp$empnspMean+pltDataEmp$empnspSd, pltDataEmp$roundHour, pltDataEmp$empnspMean-pltDataEmp$empnspSd, col = 2, code=3, angle = 90, length = 0.05)
   dev.off()
   
 }
 
-#### get observer scores as n species at 1 hour ####
-ebdNspPred <- ebdChkSummary %>% 
-  mutate(totalEff = 60) %>% 
-  distinct(obs, checklist_id, totalEff, startTime, meanDate, land, nLand)
+# end here, not done
