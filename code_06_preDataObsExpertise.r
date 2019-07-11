@@ -72,7 +72,7 @@ ebdSpSum <- ebdSpSum %>%
   summarise(speciesTot = list(reduce(species, union)),
             nSp = map_int(speciesTot, length))
 
-# write to file
+# write to file and link with checklsit id later
 fwrite(ebdSpSum %>% select(checklist_id, nSp), file = "data/dataChecklistSpecies.csv")
 
 fwrite(ebdSpSum %>% select(checklist_id, speciesTot) %>% unnest(),
@@ -82,24 +82,30 @@ fwrite(ebdSpSum %>% select(checklist_id, speciesTot) %>% unnest(),
 # there's some doubt how to handle the SEIs which can actually be
 # very different events
 # here, we handle the effort and distance by summing across SEIs
-ebdNspChk <- ebd[, .(samplingEffort = sum(duration_minutes, na.rm = T),
+
+# 1. add new columns
+ebd[,`:=`(decimalTime = time_to_decimal(time_observations_started),
+          julianDate = yday(as.POSIXct(observation_date)))]
+
+# 2. get the summed effort and distance for each checklist and observer
+# and the start lat and long
+ebdEffChk <- setDT(ebd)[, .(samplingEffort = sum(duration_minutes, na.rm = T),
                      samplingDistance = sum(effort_distance_km, na.rm = T),
-                     decimalTime = first(time_to_decimal(time_observations_started)),
-                     julianDate = first(yday(as.POSIXct(observation_date))),
-                     latitude = first(latitude),
                      longitude = first(longitude),
-                     observer = first(observer_id)),
+                     latitude = first(latitude),
+                     observer = first(observer_id),
+                     decimalTime = first(decimalTime),
+                     julianDate = first(julianDate)),
                  by = list(checklist_id)]
+
+
+# 3. join to covariates
+ebdChkSummary <- inner_join(ebdChkSummary, ebdEffChk)
 
 # remove ebird data
 rm(ebd); gc()
 
-# combine the checklist parameters and the species counts
-setDT(ebdSpSum %>% select(checklist_id, nSp))
-ebdNspChk <- merge(ebdSpSum, ebdSpSum, all = FALSE)
-
-# write data to file
-fwrite(ebdNspChk, file = "data/eBirdChecklistSpecies.csv")
+# write some data to file
 fwrite(ebdNchk, file = "data/eBirdNchecklistObserver.csv")
 
 #### hbaitat type as landcover ####
@@ -107,8 +113,11 @@ fwrite(ebdNchk, file = "data/eBirdNchecklistObserver.csv")
 landcover <- raster::raster("data/glob_cover_wghats.tif")
 
 # get for unique points
-landcoverVec <- raster::extract(x = landcover, y = as.matrix(ebdNspChk[,c("longitude","latitude")]))
+landcoverVec <- raster::extract(x = landcover, y = as.matrix(ebdChkSummary[,c("longitude","latitude")]))
 
 # assign to df and overwrite
-ebdNspChk[,landcover:= landcoverVec]
-fwrite(ebdNspChk, file = "data/eBirdChecklistSpecies.csv")
+setDT(ebdChkSummary)[,landcover:= landcoverVec]
+
+fwrite(ebdChkSummary, file = "data/eBirdChecklistVars.csv")
+
+# end here
