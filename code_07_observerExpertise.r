@@ -7,21 +7,20 @@ library(data.table)
 library(tidyverse)
 # read checklist covars
 ebdChkSummary <- fread("data/eBirdChecklistVars.csv")
-# read checklist species counts
-ebdChkNsp <- fread("data/dataChecklistSpecies.csv")
 
-# join and remove NAs
-ebdChkSummary <- merge(ebdChkSummary, ebdChkNsp, by = "checklist_id",
-                       all = FALSE, no.dups = T) %>% 
-  setDF()
+# change names
+setnames(ebdChkSummary, c("sei", "observer", "duration", "distance",
+                          "longitude", "latitude", "decimalTime",
+                          "julianDate", "nSp", "landcover"))
 
 # count data points per observer 
 obscount <- count(ebdChkSummary, observer) %>% filter(n >= 10)
 
-# make factor and remove obs not in obscount
+# make factor variables and remove obs not in obscount
+# also remove 0 durations
 ebdChkSummary <- ebdChkSummary %>% 
   filter(observer %in% obscount$observer, 
-         samplingEffort > 0) %>% 
+         duration > 0) %>% 
   mutate(landcover = as.factor(landcover),
          observer = as.factor(observer)) %>% 
   drop_na() # remove NAs, avoids errors later
