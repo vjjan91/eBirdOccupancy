@@ -34,9 +34,16 @@ ebd[,checklist_id := ifelse(group_identifier == "",
                             sampling_event_identifier, group_identifier),]
 
 # n checklists per observer
-ebdNchk <- ebd[,year:=year(observation_date)][,.(nChk = length(unique(checklist_id)), 
+ebdNchk <- ebd[,year:=year(observation_date)
+               ][,.(nChk = length(unique(checklist_id)), 
                   nSei = length(unique(sampling_event_identifier))), 
                by= list(observer_id, year)]
+
+# print as confirmation that SEIs are checklists
+{pdf(file = "figs/figNchkVsNsei.pdf")
+  plot(ebdNchk$nChk, ebdNchk$nSei); abline(a = 0, b=1)
+  dev.off()
+}
 
 # get decimal time function
 library(lubridate)
@@ -45,40 +52,17 @@ time_to_decimal <- function(x) {
   hour(x) + minute(x) / 60 + second(x) / 3600
 }
 
-#### count unique species per checklist ####
+#### count species per SEI per observer ####
 # this is necessary since checklists can have more than one
 # sampling events with overlapping species
+# to solve this, especially in group checklists, simply run the analysis
+# at the SEI level
 
-# create a nested structure with unique species per checklist and SEI
-ebdSpSum <- ebd %>% 
-  select(checklist_id, sampling_event_identifier, scientific_name) %>% 
-  nest(-checklist_id, -sampling_event_identifier)
-
-# pull the vector of species names from the resulting nested data frame
-ebdSpSum <- ebdSpSum %>% 
-  # group_by(checklist_id) %>% 
-  mutate(species = map(data, function(z){
-    z$scientific_name
-  })) %>% 
-  select(-data)
-
-# grouping by checklist, get the set union of the various associated
-# SEI species lists
-ebdSpSum <- ebdSpSum %>% 
-  group_by(checklist_id) %>% 
-  summarise(speciesTot = list(reduce(species, union)),
-            nSp = map_int(speciesTot, length))
+# count the number of records of SEI and observer combinations
+ebdSpSum <- ebd[,.N, by = list(sampling_event_identifier, observer_id)]
 
 # write to file and link with checklsit id later
-fwrite(ebdSpSum %>% select(checklist_id, nSp), file = "data/dataChecklistSpecies.csv")
-
-fwrite(ebdSpSum %>% select(checklist_id, speciesTot) %>% unnest(),
-       file = "data/dataChecklistSpeciesDetail.csv")
-
-# get species per checklist
-# there's some doubt how to handle the SEIs which can actually be
-# very different events
-# here, we handle the effort and distance by summing across SEIs
+fwrite(ebdSpSum, file = "data/dataChecklistSpecies.csv")
 
 # 1. add new columns of decimal time and julian date
 ebd[,`:=`(decimalTime = time_to_decimal(time_observations_started),
