@@ -70,18 +70,17 @@ ebd[,`:=`(decimalTime = time_to_decimal(time_observations_started),
 
 # 2. get the summed effort and distance for each checklist
 # and the first of all other variables
-ebdEffChk <- setDT(ebd)[, .(samplingEffort = sum(duration_minutes, na.rm = T),
-                     samplingDistance = sum(effort_distance_km, na.rm = T),
-                     longitude = first(longitude),
-                     latitude = first(latitude),
-                     observer = first(observer_id),
-                     decimalTime = first(decimalTime),
-                     julianDate = first(julianDate)),
-                 by = list(checklist_id)]
+ebdEffChk <- setDF(ebd) %>% 
+  distinct(sampling_event_identifier, observer_id,
+           duration_minutes, effort_distance_km, longitude, latitude,
+           decimalTime, julianDate) %>% 
+  # drop rows with NAs in cols used in the model
+  drop_na(sampling_event_identifier, observer_id,
+          duration_minutes, decimalTime, julianDate)
 
 
 # 3. join to covariates
-ebdChkSummary <- inner_join(ebdChkSummary, ebdEffChk)
+ebdChkSummary <- inner_join(ebdEffChk, ebdSpSum)
 
 # remove ebird data
 rm(ebd); gc()
