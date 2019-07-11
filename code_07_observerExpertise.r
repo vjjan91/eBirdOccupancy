@@ -1,51 +1,44 @@
 #### code to explore observer expertise ####
 
+rm(list = ls()); gc()
+
 # load libs and data
 library(data.table)
 library(tidyverse)
-ebdNspChk <- fread("data/eBirdChecklistSpecies.csv")
+# read checklist covars
+ebdChkSummary <- fread("data/eBirdChecklistVars.csv")
+# read checklist species counts
+ebdChkNsp <- fread("data/dataChecklistSpecies.csv")
 
-# makde factor
-ebdNspChk[,landcover:=as.factor(landcover)]
+# join and remove NAs
+ebdChkSummary <- merge(ebdChkSummary, ebdChkNsp, by = "checklist_id",
+                       all = FALSE, no.dups = T) %>% 
+  setDF()
 
-# summarise
-# choosing covariates from Kelling et al. 2015
-# covariates reflect different classes of peredictors
-# 1. variability in the species richness (time of year and habitat)
-# 2. variability in species habits (time of day and effort)
-# 3. observer effect (obsever id)
-ebdNspSum <- ebdNspChk[,.(totalEff = sum(samplingEffort),
-                          totalDist = sum(samplingDistance),
-                          startTime = min(decimalTime),
-                          meanDate = mean(julianDate),
-                          nSp = max(N), # if a checklist consists of more than one SEI, take the max of the two
-                          land = as.factor(first(landcover)),
-                          nLand = length(unique(landcover)),
-                          obs = first(observer)), by=checklist_id]
+# count data points per observer 
+obscount <- count(ebdChkSummary, observer) %>% filter(n >= 10)
 
-# count data points  
-obscount <- count(ebdNspSum, obs) %>% filter(n >= 10)
-# remove obs not in obscount
-ebdNspSum <- ebdNspSum[obs %in% obscount$obs,]
-
-# get frequency of nlandcovers sampled
-dplyr::count(ebdNspSum, nLand)
+# make factor and remove obs not in obscount
+ebdChkSummary <- ebdChkSummary %>% 
+  filter(observer %in% obscount$observer, 
+         samplingEffort > 0) %>% 
+  mutate(landcover = as.factor(landcover),
+         observer = as.factor(observer)) %>% 
+  drop_na() # remove NAs, avoids errors later
 
 #### modelling species in checklist ####
 # summarise the data
 
-#library(tibble)
-ebdNspSum <- as_tibble(setDF(ebdNspSum))
-ebdNspSum$obs <- as.factor(ebdNspSum$obs)
-
 # construct a scam
 library(gamm4)
 
-modNspecies <- gamm4(nSp ~ s(log(totalEff), k = 5) + 
-                       s(startTime, bs = "cc") +
-                       s(meanDate, bs = "cc") + land, 
-                     random = ~(1|obs), 
-                     data = ebdNspSum, family = "poisson")
+# drop NAs to avoid errors
+modNspecies <- gamm4(nSp ~ s(log(samplingEffort), k = 5) + 
+                       s(decimalTime, bs = "cc") +
+                       s(julianDate, bs = "cc") + 
+                       landcover, 
+                     random = ~(1|observer), 
+                     data = ebdChkSummary, family = "poisson")
 
 # save model object
 save(modNspecies, file = "tempExpertiseData.rdata")
@@ -56,18 +49,18 @@ load("data/tempExpertiseData.rdata")
 summary(modNspecies$gam)
 
 # use predict method
-setDT(ebdNspSum)
-ebdNspSum[,predval:=predict(modNspecies$mer, type = "response")]
+setDT(ebdChkSummary)
+ebdChkSummary[,predval:=predict(modNspecies$mer, type = "response")]
 # round the effort to 10 min intervals
-ebdNspSum[,roundHour:=plyr::round_any(totalEff, 10, f = floor)]
+ebdChkSummary[,roundHour:=plyr::round_any(totalEff, 10, f = floor)]
 
 # summarise the empval, predval grouped by observer and round10min
-pltData <- ebdNspSum[,.(prednspMean = mean(predval, na.rm = T),
+pltData <- ebdChkSummary[,.(prednspMean = mean(predval, na.rm = T),
              prednspSD = sd(predval, na.rm = T)),
           by=list(obs, roundHour)]
 
 # get emp data mean and sd
-pltDataEmp <- ebdNspSum[,roundHour:=plyr::round_any(totalEff, 30, f = floor)
+pltDataEmp <- ebdChkSummary[,roundHour:=plyr::round_any(totalEff, 30, f = floor)
                         ][,.(empnspMean = mean(nSp),
                              empnspSd = sd(nSp)), by=list(roundHour)]
 
@@ -101,6 +94,6 @@ xlims = c(0, 600); ylims = c(0, 100)
 }
 
 #### get observer scores as n species at 1 hour ####
-ebdNspPred <- ebdNspSum %>% 
+ebdNspPred <- ebdChkSummary %>% 
   mutate(totalEff = 60) %>% 
   distinct(obs, checklist_id, totalEff, startTime, meanDate, land, nLand)
