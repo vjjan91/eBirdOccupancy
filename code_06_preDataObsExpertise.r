@@ -12,14 +12,10 @@ library(tidyverse)
 
 # read in shapefile of wg to subset by bounding box
 library(sf)
-wg <- st_read("hillsShapefile/WG.shp")
-box <- st_bbox(wg)
+wg <- st_read("hillsShapefile/WG.shp"); box <- st_bbox(wg)
 
-# read in data with fread
-ebd = fread("ebd_Filtered_May2018.txt")
-
-#### write subset to file ####
-ebd <- ebd[between(LONGITUDE, box["xmin"], box["xmax"]) & between(LATITUDE, box["ymin"], box["ymax"]),]
+# read in data and subset
+ebd = fread("ebd_Filtered_May2018.txt")[between(LONGITUDE, box["xmin"], box["xmax"]) & between(LATITUDE, box["ymin"], box["ymax"]),]
 
 # make new column names
 newNames <- str_replace_all(colnames(ebd), " ", "_") %>%
@@ -34,7 +30,8 @@ ebd <- dplyr::select(ebd, dplyr::one_of(columnsOfInterest))
 gc()
 
 # get the checklist id as SEI or group id
-ebd[,checklist_id := ifelse(group_identifier == "", sampling_event_identifier, group_identifier),]
+ebd[,checklist_id := ifelse(group_identifier == "", 
+                            sampling_event_identifier, group_identifier),]
 
 # n checklists per observer
 ebdNchk <- ebd[,year:=year(observation_date)][,.(nChk = length(unique(checklist_id)), 
@@ -83,12 +80,12 @@ fwrite(ebdSpSum %>% select(checklist_id, speciesTot) %>% unnest(),
 # very different events
 # here, we handle the effort and distance by summing across SEIs
 
-# 1. add new columns
+# 1. add new columns of decimal time and julian date
 ebd[,`:=`(decimalTime = time_to_decimal(time_observations_started),
           julianDate = yday(as.POSIXct(observation_date)))]
 
-# 2. get the summed effort and distance for each checklist and observer
-# and the start lat and long
+# 2. get the summed effort and distance for each checklist
+# and the first of all other variables
 ebdEffChk <- setDT(ebd)[, .(samplingEffort = sum(duration_minutes, na.rm = T),
                      samplingDistance = sum(effort_distance_km, na.rm = T),
                      longitude = first(longitude),
@@ -105,10 +102,13 @@ ebdChkSummary <- inner_join(ebdChkSummary, ebdEffChk)
 # remove ebird data
 rm(ebd); gc()
 
-# write some data to file
+# write number of checklists per observer to file
 fwrite(ebdNchk, file = "data/eBirdNchecklistObserver.csv")
 
-#### hbaitat type as landcover ####
+#### get landcover ####
+# here, we read in the landcover raster and assign a landcover value
+# to each checklist. checklists might consist of one or more landcovers
+# in some cases, but we assign only one based on the first coord pair
 # read in raster
 landcover <- raster::raster("data/glob_cover_wghats.tif")
 
