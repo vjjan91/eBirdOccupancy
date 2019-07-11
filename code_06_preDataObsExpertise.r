@@ -61,7 +61,7 @@ ebdSpSum <- ebd %>%
 ebdSpSum <- ebdSpSum %>% 
   # group_by(checklist_id) %>% 
   mutate(species = map(data, function(z){
-    pull(z, scientific_name)
+    z$scientific_name
   })) %>% 
   select(-data)
 
@@ -71,6 +71,12 @@ ebdSpSum <- ebdSpSum %>%
   group_by(checklist_id) %>% 
   summarise(speciesTot = list(reduce(species, union)),
             nSp = map_int(speciesTot, length))
+
+# write to file
+fwrite(ebdSpSum %>% select(checklist_id, nSp), file = "data/dataChecklistSpecies.csv")
+
+fwrite(ebdSpSum %>% select(checklist_id, speciesTot) %>% unnest(),
+       file = "data/dataChecklistSpeciesDetail.csv")
 
 # get species per checklist
 # there's some doubt how to handle the SEIs which can actually be
@@ -90,7 +96,7 @@ rm(ebd); gc()
 
 # combine the checklist parameters and the species counts
 setDT(ebdSpSum %>% select(checklist_id, nSp))
-ebdNspChk <- merge(ebdSpSum, ebdSpSum, by = "checklist_id", all = FALSE)
+ebdNspChk <- merge(ebdSpSum, ebdSpSum, all = FALSE)
 
 # write data to file
 fwrite(ebdNspChk, file = "data/eBirdChecklistSpecies.csv")
