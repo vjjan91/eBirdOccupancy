@@ -40,26 +40,26 @@ modNspecies <- gamm4(nSp ~ s(log(duration), k = 5) +
                      data = ebdChkSummary, family = "poisson")
 
 # save model object
-save(modNspecies, file = "tempExpertiseData.rdata")
+save(modNspecies, file = "data/modExpertiseData.rdata")
 
 #### load model object and fit a curve ####
 load("data/tempExpertiseData.rdata")
 
-summary(modNspecies$gam)
+summary(modNspecies$mer)
 
 # use predict method
 setDT(ebdChkSummary)
 ebdChkSummary[,predval:=predict(modNspecies$mer, type = "response")]
 # round the effort to 10 min intervals
-ebdChkSummary[,roundHour:=plyr::round_any(totalEff, 10, f = floor)]
+ebdChkSummary[,roundHour:=plyr::round_any(duration, 30, f = floor)]
 
 # summarise the empval, predval grouped by observer and round10min
 pltData <- ebdChkSummary[,.(prednspMean = mean(predval, na.rm = T),
              prednspSD = sd(predval, na.rm = T)),
-          by=list(obs, roundHour)]
+          by=list(observer, roundHour)]
 
 # get emp data mean and sd
-pltDataEmp <- ebdChkSummary[,roundHour:=plyr::round_any(totalEff, 30, f = floor)
+pltDataEmp <- ebdChkSummary[,roundHour:=plyr::round_any(duration, 30, f = floor)
                         ][,.(empnspMean = mean(nSp),
                              empnspSd = sd(nSp)), by=list(roundHour)]
 
@@ -67,12 +67,12 @@ pltDataEmp <- ebdChkSummary[,roundHour:=plyr::round_any(totalEff, 30, f = floor)
 setDF(pltData)
 
 # filter for 10 data points or more
-pltData <- pltData %>% filter(obs %in% obscount$obs)  
+pltData <- pltData %>% filter(observer %in% obscount$observer)  
 # nest data
-pltData <- tidyr::nest(pltData, -obs)
+pltData <- tidyr::nest(pltData, -observer)
 
 # get limits
-xlims = c(0, 600); ylims = c(0, 100)
+xlims = c(0, 300); ylims = c(0, 100)
 # set up plot
 {pdf(file = "figs/figNspTime.pdf", width = 6, height = 6)
   plot(0, xlim = xlims, ylim = ylims, type = "n", 
@@ -80,7 +80,7 @@ xlims = c(0, 600); ylims = c(0, 100)
   # plot in a loop
   for(i in 1:nrow(pltData)){
     df = pltData$data[[i]]
-    lines(df$roundHour, df$prednspMean, col=alpha(rgb(0,0,0), 0.01))
+    lines(df$roundHour, df$prednspMean, col=alpha(rgb(0,0,0), 0.05))
   }
   
   # add emp data points
