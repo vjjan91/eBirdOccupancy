@@ -84,10 +84,11 @@ xlims = c(0, 660); ylims = c(0, 60)
   }
   
   # add emp data points
-  points(pltDataEmp$empnspMean~pltDataEmp$roundHour, col = 2)
+  points(pltDataEmp$roundHour, pltDataEmp$empnspMean, col = 2)
+  abline(v = 60, lty = 2, col = 2)
   
   # add error bars
-  arrows(pltDataEmp$roundHour, pltDataEmp$empnspMean+pltDataEmp$empnspSd, pltDataEmp$roundHour, pltDataEmp$empnspMean-pltDataEmp$empnspSd, col = 2, code=3, angle = 90, length = 0.05)
+  #arrows(pltDataEmp$roundHour, pltDataEmp$empnspMean+pltDataEmp$empnspSd, pltDataEmp$roundHour, pltDataEmp$empnspMean-pltDataEmp$empnspSd, col = 2, code=3, angle = 90, length = 0.05)
   dev.off()
   
 }
@@ -100,8 +101,24 @@ ebdPredict <- setDF(ebdChkSummary) %>%
   distinct()
 
 # get predicted value at 60 mins
-ebdPredict$predNsp <- predict(modNspecies$gam, type = "response", 
+ebdPredict$predNsp <- predict(modNspecies$mer, type = "response", 
                               newdata = ebdPredict, allow.new.levels = T)
 
+# summarise over observers
+ebdObsScore <- ebdPredict %>% 
+  group_by(observer) %>% 
+  summarise_at(vars(predNsp), list(~mean(.))) %>% 
+  mutate(normScore = scales::rescale(predNsp))
 
-# end here, not done
+# save observer scores
+fwrite(ebdObsScore, file = "data/dataObserverScore.csv")
+
+# plot figure
+{pdf(file = "figs/figObsScoreDist.pdf", width = 6, height = 6)
+  print(ggplot(ebdObsScore)+
+    stat_density(aes(x = normScore), geom = "line")+
+    theme_classic())
+  dev.off()
+}
+#
+# end here
