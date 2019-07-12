@@ -43,7 +43,7 @@ modNspecies <- gamm4(nSp ~ s(log(duration), k = 5) +
 save(modNspecies, file = "data/modExpertiseData.rdata")
 
 #### load model object and fit a curve ####
-load("data/tempExpertiseData.rdata")
+load("data/modExpertiseData.rdata")
 
 summary(modNspecies$mer)
 
@@ -91,5 +91,16 @@ xlims = c(0, 300); ylims = c(0, 100)
   dev.off()
   
 }
+
+#### predict observer scores ####
+# run predict on new data with obs id, mean duration
+ebdPredict <- setDF(ebdChkSummary) %>% 
+  mutate(duration = 60) %>%
+  select(observer, duration, decimalTime, julianDate, nSp, landcover) %>% 
+  distinct()
+
+
+predict(modNspecies$mer, newdata = ebdPredict, type = "response", allow.new.levels = T)
+
 
 # end here, not done
