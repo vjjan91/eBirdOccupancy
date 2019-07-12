@@ -49,7 +49,7 @@ summary(modNspecies$mer)
 
 # use predict method
 setDT(ebdChkSummary)
-ebdChkSummary[,predval:=predict(modNspecies$mer, type = "response")]
+ebdChkSummary[,predval:=predict(modNspecies$gam, type = "response")]
 # round the effort to 10 min intervals
 ebdChkSummary[,roundHour:=plyr::round_any(duration, 30, f = floor)]
 
@@ -72,7 +72,7 @@ pltData <- pltData %>% filter(observer %in% obscount$observer)
 pltData <- tidyr::nest(pltData, -observer)
 
 # get limits
-xlims = c(0, 300); ylims = c(0, 100)
+xlims = c(0, 660); ylims = c(0, 60)
 # set up plot
 {pdf(file = "figs/figNspTime.pdf", width = 6, height = 6)
   plot(0, xlim = xlims, ylim = ylims, type = "n", 
@@ -80,7 +80,7 @@ xlims = c(0, 300); ylims = c(0, 100)
   # plot in a loop
   for(i in 1:nrow(pltData)){
     df = pltData$data[[i]]
-    lines(df$roundHour, df$prednspMean, col=alpha(rgb(0,0,0), 0.05))
+    lines(df$roundHour, df$prednspMean, col=alpha(rgb(0,0,0), 0.01))
   }
   
   # add emp data points
@@ -99,8 +99,9 @@ ebdPredict <- setDF(ebdChkSummary) %>%
   select(observer, duration, decimalTime, julianDate, nSp, landcover) %>% 
   distinct()
 
-
-predict(modNspecies$mer, newdata = ebdPredict, type = "response", allow.new.levels = T)
+# get predicted value at 60 mins
+ebdPredict$predNsp <- predict(modNspecies$gam, type = "response", 
+                              newdata = ebdPredict, allow.new.levels = T)
 
 
 # end here, not done
