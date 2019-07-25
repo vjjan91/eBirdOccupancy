@@ -8,7 +8,6 @@ rm(list = ls()); gc()
 
 # load libs
 library(data.table)
-library(tidyverse)
 
 # read in shapefile of wg to subset by bounding box
 library(sf)
@@ -18,6 +17,7 @@ wg <- st_read("hillsShapefile/WG.shp"); box <- st_bbox(wg)
 ebd = fread("ebd_Filtered_May2018.txt")[between(LONGITUDE, box["xmin"], box["xmax"]) & between(LATITUDE, box["ymin"], box["ymax"]),]
 
 # make new column names
+library(magrittr); library(stringr)
 newNames <- str_replace_all(colnames(ebd), " ", "_") %>%
   str_to_lower()
 setnames(ebd, newNames)
@@ -70,17 +70,39 @@ ebd[,`:=`(decimalTime = time_to_decimal(time_observations_started),
 
 # 2. get the summed effort and distance for each checklist
 # and the first of all other variables
+library(dplyr)
 ebdEffChk <- setDF(ebd) %>% 
   distinct(sampling_event_identifier, observer_id,
            duration_minutes, effort_distance_km, longitude, latitude,
-           decimalTime, julianDate) %>% 
+           decimalTime, julianDate, number_observers) %>% 
   # drop rows with NAs in cols used in the model
-  drop_na(sampling_event_identifier, observer_id,
+  tidyr::drop_na(sampling_event_identifier, observer_id,
           duration_minutes, decimalTime, julianDate)
 
+# count groups larger than 10
+count(ebdEffChk, number_observers > 10)
 
-# 3. join to covariates
-ebdChkSummary <- inner_join(ebdEffChk, ebdSpSum)
+# 3. join to covariates and remove large groups (> 10)
+ebdChkSummary <- inner_join(ebdEffChk, ebdSpSum)#
+
+# plot relationship between species and observers
+tempdata <- setDT(ebdChkSummary)[,roundobs:=plyr::round_any(number_observers, 5)
+                                 ][,.(mean = mean(N),
+                                    sd = sd(N)), by = roundobs]
+
+# plot and check
+ggplot(tempdata)+
+  geom_pointrange(aes(x = roundobs, y = mean, ymin=mean-sd, ymax=mean+sd),
+                  col = "grey40")+
+  xlim(0, 200)+
+  geom_hline(yintercept = 30, col = 2)+
+  theme_light()+labs(x = "osbervers", y = "species seen")
+
+ggsave(filename = "figs/figNspVsObs.pdf", height = 6, width = 6, device = "pdf")
+
+# remove only groups greater than 50 obs
+ebdChkSummary <- ebdChkSummary %>% 
+  filter(number_observers <= 50, !is.na(number_observers))
 
 # remove ebird data
 rm(ebd); gc()
