@@ -72,7 +72,7 @@ pltData <- pltData %>% filter(observer %in% obscount$observer)
 pltData <- tidyr::nest(pltData, -observer)
 
 # get limits
-xlims = c(0, 660); ylims = c(0, 60)
+xlims = c(0, 660); ylims = c(0, 100)
 # set up plot
 {pdf(file = "figs/figNspTime.pdf", width = 6, height = 6)
   plot(0, xlim = xlims, ylim = ylims, type = "n", 
@@ -80,7 +80,7 @@ xlims = c(0, 660); ylims = c(0, 60)
   # plot in a loop
   for(i in 1:nrow(pltData)){
     df = pltData$data[[i]]
-    lines(df$roundHour, df$prednspMean, col=alpha(rgb(0,0,0), 0.01))
+    lines(df$roundHour, df$prednspMean, col=scales::alpha(rgb(0,0,0), 0.05))
   }
   
   # add emp data points
@@ -96,9 +96,7 @@ xlims = c(0, 660); ylims = c(0, 60)
 #### predict observer scores ####
 # run predict on new data with obs id, mean duration
 ebdPredict <- setDF(ebdChkSummary) %>% 
-  mutate(duration = 60) %>%
-  select(observer, duration, decimalTime, julianDate, nSp, landcover) %>% 
-  distinct()
+  mutate(duration = 60)
 
 # get predicted value at 60 mins
 ebdPredict$predNsp <- predict(modNspecies$mer, type = "response", 
