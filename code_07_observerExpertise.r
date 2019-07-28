@@ -5,6 +5,10 @@ rm(list = ls()); gc()
 # load libs and data
 library(data.table)
 library(magrittr); library(dplyr); library(tidyr)
+
+# get ci func
+ci <- function(x){qnorm(0.975)*sd(x, na.rm = T)/sqrt(length(x))}
+
 # read checklist covars
 ebdChkSummary <- fread("data/eBirdChecklistVars.csv")[,roundobs:=NULL]
 
@@ -42,7 +46,7 @@ modNspecies <- gamm4(nSp ~ s(log(duration), k = 5) +
 # save model object
 save(modNspecies, file = "data/modExpertiseData.rdata")
 
-#### load model object and fit a curve ####
+#### load model object and get ranef scores ####
 load("data/modExpertiseData.rdata")
 
 summary(modNspecies$mer)
@@ -56,76 +60,22 @@ setnames(obsRanef, c("observer", "ranefScore"))
 # scale ranefscore between 0 and 1
 obsRanef[,ranefScore:=scales::rescale(ranefScore)]
 
-# use predict method
-setDT(ebdChkSummary)
-ebdChkSummary[,predval:=predict(modNspecies$gam, type = "response")]
-# round the effort to 10 min intervals
-ebdChkSummary[,roundHour:=plyr::round_any(duration, 30, f = floor)]
+#### plot diagnostics ####
+# how many species on average per obs score?
 
-# summarise the empval, predval grouped by observer and round10min
-pltData <- ebdChkSummary[,.(prednspMean = mean(predval, na.rm = T),
-             prednspSD = sd(predval, na.rm = T)),
-          by=list(observer, roundHour)]
+# attach score to chksummary
+ebdChkSummary <- setDT(ebdChkSummary)[obsRanef, on=.(observer)]
 
-# get emp data mean and sd
-pltDataEmp <- ebdChkSummary[,roundHour:=plyr::round_any(duration, 30, f = floor)
-                        ][,.(empnspMean = mean(nSp),
-                             empnspSd = sd(nSp)), by=list(roundHour)]
+# get plot
+ebdObsScore <- ebdChkSummary[,.(meanSp = mean(nSp, na.rm = T),
+                 ciSp = ci(nSp)) ,by=list(observer, ranefScore)]
+library(ggplot2)
+ggplot(ebdSpScore)+
+  geom_point(aes(ranefScore, meanSp), 
+                 #     ymin = meanSp-ciSp, ymax = meanSp + ciSp),
+                  size = 0.5, alpha = 0.2)
 
-# plot and examine in base R plots
-setDF(pltData)
+# export observer ranef score
+fwrite(ebdObsScore, file = "data/dataObsRanefScore.csv")
 
-# filter for 10 data points or more
-pltData <- pltData %>% filter(observer %in% obscount$observer)  
-# nest data
-pltData <- tidyr::nest(pltData, -observer)
-
-# get limits
-xlims = c(0, 660); ylims = c(0, 100)
-# set up plot
-{pdf(file = "figs/figNspTime.pdf", width = 6, height = 6)
-  plot(0, xlim = xlims, ylim = ylims, type = "n", 
-       xlab = "total effort (mins)", ylab = "N species")
-  # plot in a loop
-  for(i in 1:nrow(pltData)){
-    df = pltData$data[[i]]
-    lines(df$roundHour, df$prednspMean, col=scales::alpha(rgb(0,0,0), 0.05))
-  }
-  
-  # add emp data points
-  points(pltDataEmp$roundHour, pltDataEmp$empnspMean, col = 2)
-  abline(v = 60, lty = 2, col = 2)
-  
-  # add error bars
-  #arrows(pltDataEmp$roundHour, pltDataEmp$empnspMean+pltDataEmp$empnspSd, pltDataEmp$roundHour, pltDataEmp$empnspMean-pltDataEmp$empnspSd, col = 2, code=3, angle = 90, length = 0.05)
-  dev.off()
-  
-}
-
-#### predict observer scores ####
-# run predict on new data with obs id, mean duration
-ebdPredict <- setDF(ebdChkSummary) %>% 
-  mutate(duration = 60)
-
-# get predicted value at 60 mins
-ebdPredict$predNsp <- predict(modNspecies$mer, type = "response", 
-                              newdata = ebdPredict, allow.new.levels = T)
-
-# summarise over observers
-ebdObsScore <- ebdPredict %>% 
-  group_by(observer) %>% 
-  summarise_at(vars(predNsp), list(~mean(.))) %>% 
-  mutate(normScore = scales::rescale(predNsp))
-
-# save observer scores
-fwrite(ebdObsScore, file = "data/dataObserverScore.csv")
-
-# plot figure
-{pdf(file = "figs/figObsScoreDist.pdf", width = 6, height = 6)
-  print(ggplot(ebdObsScore)+
-    stat_density(aes(x = normScore), geom = "line")+
-    theme_classic())
-  dev.off()
-}
-#
 # end here
