@@ -1,5 +1,7 @@
 #### code to look at which observers see species we want ####
 
+rm(list = ls()); gc()
+
 # get species of interest list
 soi <- c("Anthus nilghiriensis",
                   "Montecincla cachinnans",
@@ -63,28 +65,30 @@ ebdNlSum <- ebdNlSum[,.(nchk = length(unique(sampling_event_identifier))),
 setnames(ebdNlSum, c("observer", "nchk"))
 
 # add species seen and expertise score
-obsScore <- fread("data/dataObserverScore.csv")
+obsRanefScore <- fread("data/dataObsRanefScore.csv")
 dataSoi <- dataSoi[ebdNlSum, on = .(observer =observer)
-                   ][obsScore, on=.(observer = observer)]
+                   ][obsRanefScore, on=.(observer = observer)]
 dataSoi <- na.omit(dataSoi)
 
 # make plot data
 pltdata <- dataSoi[,.(meanSoi = mean(soiSeen),
                       ciSoi = 1.96*sd(soiSeen)/sqrt(length(soiSeen))),
-                   by= .(plyr::round_any(normScore, 0.02))]
+                   by= .(plyr::round_any(ranefScore, 0.02))]
 
-setnames(pltdata, c("roundScore","meanSoi","ciSoi"))
+setnames(pltdata, c("ranefScore","meanSoi","ciSoi"))
 
 # plot soiSeen ~ obsScore
 ggplot(pltdata)+
-  geom_pointrange(aes(roundScore, meanSoi, ymin = meanSoi - ciSoi,
+  geom_pointrange(aes(ranefScore, meanSoi, ymin = meanSoi - ciSoi,
                       ymax = meanSoi+ciSoi),
                   col = "grey40")+
   theme_classic()+
   ylim(0, 10)+ xlim(0.2, 0.8)+
-  labs(x = 'normalised explorer score',
+  labs(x = 'ranef explorer score',
        y = "# species of interest seen")
 
 ggsave("figs/figSoiSeenVsScore.png", width = 6, height = 6,
        units = "in", dpi = 150)
 dev.off()
+
+# ends here
