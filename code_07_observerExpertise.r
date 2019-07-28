@@ -4,14 +4,14 @@ rm(list = ls()); gc()
 
 # load libs and data
 library(data.table)
-library(tidyverse)
+library(magrittr); library(dplyr); library(tidyr)
 # read checklist covars
-ebdChkSummary <- fread("data/eBirdChecklistVars.csv")
+ebdChkSummary <- fread("data/eBirdChecklistVars.csv")[,roundobs:=NULL]
 
 # change names
 setnames(ebdChkSummary, c("sei", "observer", "duration", "distance",
                           "longitude", "latitude", "decimalTime",
-                          "julianDate", "nSp", "landcover"))
+                          "julianDate", "nObs", "nSp", "landcover"))
 
 # count data points per observer 
 obscount <- count(ebdChkSummary, observer) %>% filter(n >= 10)
@@ -46,6 +46,15 @@ save(modNspecies, file = "data/modExpertiseData.rdata")
 load("data/modExpertiseData.rdata")
 
 summary(modNspecies$mer)
+
+# get the ranef coefficients as a measure of observer score
+obsRanef <- lme4::ranef(modNspecies$mer)[[1]]
+# make datatable
+setDT(obsRanef, keep.rownames = T)[]
+# set names
+setnames(obsRanef, c("observer", "ranefScore"))
+# scale ranefscore between 0 and 1
+obsRanef[,ranefScore:=scales::rescale(ranefScore)]
 
 # use predict method
 setDT(ebdChkSummary)
