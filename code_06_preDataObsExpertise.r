@@ -72,7 +72,9 @@ ebd[,`:=`(decimalTime = time_to_decimal(time_observations_started),
 # and the first of all other variables
 library(dplyr)
 ebdEffChk <- setDF(ebd) %>% 
+  mutate(year = year(observation_date)) %>% 
   distinct(sampling_event_identifier, observer_id,
+           year,
            duration_minutes, effort_distance_km, longitude, latitude,
            decimalTime, julianDate, number_observers) %>% 
   # drop rows with NAs in cols used in the model
