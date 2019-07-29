@@ -55,6 +55,7 @@ land <- st_transform(land, 32643) %>% st_crop(bbox)
 
 # plot data
 source("ggThemeEbird.r")
+
 plotYearScore <- 
   ggplot(wg)+
   geom_sf(data = land, fill = "grey90", col = "transparent")+
@@ -155,3 +156,19 @@ plotObsKde <- ggplot(polys %>% dplyr::filter(year >= 2013))+
 # export plot
 ggsave(plotObsKde, filename = "figs/figObsKde.png", 
        height = 7, width = 6, device = png(), dpi = 300); dev.off()
+
+#### plot observer area vs ranef score ####
+ranefscore <- fread("data/dataObsRanefScore.csv")[
+  setDT(polydata), on = .(observer)
+]
+
+# plot data
+plotObsScoreArea <- 
+  ggplot(ranefscore)+
+  geom_point(aes(ranefScore, area))+
+  geom_smooth(aes(ranefScore, area))+
+  scale_y_log10()+
+  themeEbird()
+
+ggsave(plotObsScoreArea, filename = "figs/figObsScoreArea.png", 
+       height = 6, width = 6, device = png(), dpi = 300); dev.off()
