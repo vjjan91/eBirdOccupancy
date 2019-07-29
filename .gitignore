@@ -29,3 +29,9 @@ rsconnect/
 =======
 *.csv
 >>>>>>> 6386cde094606219151c7d9ba7fea2e6d423267e
+
+# any zip or shapefile
+*.zip
+*.shp
+*.prj
+*.cpg
