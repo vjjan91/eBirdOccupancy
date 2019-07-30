@@ -10,10 +10,10 @@ library(magrittr); library(dplyr); library(tidyr)
 ci <- function(x){qnorm(0.975)*sd(x, na.rm = T)/sqrt(length(x))}
 
 # read checklist covars
-ebdChkSummary <- fread("data/eBirdChecklistVars.csv")[,roundobs:=NULL]
+ebdChkSummary <- fread("data/eBirdChecklistVars.csv")
 
 # change names
-setnames(ebdChkSummary, c("sei", "observer", "duration", "distance",
+setnames(ebdChkSummary, c("sei", "observer","year", "duration", "distance",
                           "longitude", "latitude", "decimalTime",
                           "julianDate", "nObs", "nSp", "landcover"))
 
@@ -29,22 +29,26 @@ ebdChkSummary <- ebdChkSummary %>%
          observer = as.factor(observer)) %>% 
   drop_na() # remove NAs, avoids errors later
 
-#### modelling species in checklist ####
-# summarise the data
-
-# construct a scam
-library(gamm4)
-
-# drop NAs to avoid errors
-modNspecies <- gamm4(nSp ~ s(log(duration), k = 5) + 
-                       s(decimalTime, bs = "cc") +
-                       s(julianDate, bs = "cc") + 
-                       landcover, 
-                     random = ~(1|observer), 
-                     data = ebdChkSummary, family = "poisson")
-
 # save model object
 save(modNspecies, file = "data/modExpertiseData.rdata")
+
+#### repeatability model for observers ####
+library(scales)
+# cosine transform the decimal time and julian date
+ebdChkSummary <- setDT(ebdChkSummary)[,`:=`(timeTrans = 1 - cos(12.5*decimalTime/max(decimalTime)),
+                           dateTrans = cos(6.25*julianDate/max(julianDate)))
+                     ][,`:=`(timeTrans = rescale(timeTrans, to = c(0,6)),
+                             dateTrans = rescale(dateTrans, to = c(0,6)))]
+
+# get a subset
+ebdChkSummary <- ebdChkSummary[year >= 2013,] %>% sample_n(1e4)
+
+
+# uses a subset of data
+library(rptR)
+modObsRep <- rpt(nSp ~ log(duration) + timeTrans + dateTrans + landcover +
+                   (1|observer), grname = "observer", data = ebdChkSummary, nboot = 100, npermut = 0, datatype = "Poisson")
+
 
 #### load model object and get ranef scores ####
 load("data/modExpertiseData.rdata")

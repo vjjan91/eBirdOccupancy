@@ -4,16 +4,12 @@
 library(data.table)
 
 # read checklist covars
-ebdChkSummary <- fread("data/eBirdChecklistVars.csv")[,roundobs:=NULL]
-setDF(ebdChkSummary)
+ebdChkSummary <- fread("data/eBirdChecklistVars.csv")
 
 # change names
 setnames(ebdChkSummary, c("sei", "observer", "year", "duration", "distance",
                           "longitude", "latitude", "decimalTime",
                           "julianDate", "nObs", "nSp", "landcover"))
-
-# convert to nest columns and get sf kdes for each
-library(tidyverse)
 
 # read observer score and join to summary
 scores <- fread("data/dataObsRanefScore.csv")

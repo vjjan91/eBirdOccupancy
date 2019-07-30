@@ -14,7 +14,7 @@ library(sf)
 wg <- st_read("hillsShapefile/WG.shp"); box <- st_bbox(wg)
 
 # read in data and subset
-ebd = fread("ebd_Filtered_May2018.txt")[between(LONGITUDE, box["xmin"], box["xmax"]) & between(LATITUDE, box["ymin"], box["ymax"]),]
+ebd = fread("ebd_Filtered_May2018.txt")[between(LONGITUDE, box["xmin"], box["xmax"]) & between(LATITUDE, box["ymin"], box["ymax"]),][year(OBSERVATION_DATE) >= 2013,]
 
 # make new column names
 library(magrittr); library(stringr)
@@ -38,12 +38,6 @@ ebdNchk <- ebd[,year:=year(observation_date)
                ][,.(nChk = length(unique(checklist_id)), 
                   nSei = length(unique(sampling_event_identifier))), 
                by= list(observer_id, year)]
-
-# print as confirmation that SEIs are checklists
-{pdf(file = "figs/figNchkVsNsei.pdf")
-  plot(ebdNchk$nChk, ebdNchk$nSei); abline(a = 0, b=1)
-  dev.off()
-}
 
 # get decimal time function
 library(lubridate)
@@ -81,28 +75,13 @@ ebdEffChk <- setDF(ebd) %>%
   tidyr::drop_na(sampling_event_identifier, observer_id,
           duration_minutes, decimalTime, julianDate)
 
-# count groups larger than 10
-count(ebdEffChk, number_observers > 10)
-
 # 3. join to covariates and remove large groups (> 10)
 ebdChkSummary <- inner_join(ebdEffChk, ebdSpSum)#
 
-# plot relationship between species and observers
-tempdata <- setDT(ebdChkSummary)[,roundobs:=plyr::round_any(number_observers, 5)
-                                 ][,.(mean = mean(N),
-                                    sd = sd(N)), by = roundobs]
+# count groups larger than 10
+count(ebdEffChk, number_observers > 10)
 
-# plot and check
-ggplot(tempdata)+
-  geom_pointrange(aes(x = roundobs, y = mean, ymin=mean-sd, ymax=mean+sd),
-                  col = "grey40")+
-  xlim(0, 200)+
-  geom_hline(yintercept = 30, col = 2)+
-  theme_light()+labs(x = "osbervers", y = "species seen")
-
-ggsave(filename = "figs/figNspVsObs.pdf", height = 6, width = 6, device = "pdf")
-
-# remove only groups greater than 50 obs
+# remove only groups greater than 10 obs
 ebdChkSummary <- ebdChkSummary %>% 
   filter(number_observers <= 50, !is.na(number_observers))
 
