@@ -9,12 +9,14 @@ rm(list = ls()); gc()
 # load libs
 library(data.table)
 
+#### load data and subset ####
+
 # read in shapefile of wg to subset by bounding box
 library(sf)
 wg <- st_read("hillsShapefile/WG.shp"); box <- st_bbox(wg)
 
 # read in data and subset
-ebd = fread("ebd_Filtered_May2018.txt")[between(LONGITUDE, box["xmin"], box["xmax"]) & between(LATITUDE, box["ymin"], box["ymax"]),][year(OBSERVATION_DATE) >= 2013,]
+ebd = fread("ebd_Filtered_May2018.txt")[between(LONGITUDE, box["xmin"], box["xmax"]) & between(LATITUDE, box["ymin"], box["ymax"]),][year(`OBSERVATION DATE`) >= 2013,]
 
 # make new column names
 library(magrittr); library(stringr)
@@ -53,7 +55,26 @@ time_to_decimal <- function(x) {
 # at the SEI level
 
 # count the number of records of SEI and observer combinations
-ebdSpSum <- ebd[,.N, by = list(sampling_event_identifier, observer_id)]
+# count number of species of the focal species seen per sei per observer
+# get species of interest list
+soi <- c("Anthus nilghiriensis",
+         "Montecincla cachinnans",
+         "Montecincla fairbanki",
+         "Sholicola albiventris",
+         "Sholicola major",
+         "Culicicapa ceylonensis",
+         "Pomatorhinus horsfieldii",
+         "Ficedula nigrorufa",
+         "Pycnonotus jocosus",
+         "Iole indica",
+         "Hemipus picatus",
+         "Saxicola caprata",
+         "Eumyias albicaudatus",
+         "Rhopocichla atriceps")
+
+ebdSpSum <- ebd[,.(nSp = .N,
+                   totSoiSeen = length(intersect(scientific_name, soi))), 
+                by = list(sampling_event_identifier, observer_id)]
 
 # write to file and link with checklsit id later
 fwrite(ebdSpSum, file = "data/dataChecklistSpecies.csv")
@@ -87,9 +108,6 @@ ebdChkSummary <- ebdChkSummary %>%
 
 # remove ebird data
 rm(ebd); gc()
-
-# write number of checklists per observer to file
-fwrite(ebdNchk, file = "data/eBirdNchecklistObserver.csv")
 
 #### get landcover ####
 # here, we read in the landcover raster and assign a landcover value
