@@ -15,7 +15,7 @@ ebdChkSummary <- fread("data/eBirdChecklistVars.csv")
 # change names
 setnames(ebdChkSummary, c("sei", "observer","year", "duration", "distance",
                           "longitude", "latitude", "decimalTime",
-                          "julianDate", "nObs", "nSp", "landcover"))
+                          "julianDate", "nObs", "nSp", "nSoi", "landcover"))
 
 # count data points per observer 
 obscount <- count(ebdChkSummary, observer) %>% filter(n >= 10)
