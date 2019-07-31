@@ -34,15 +34,18 @@ library(scales)
 
 # cosine transform the decimal time and julian date
 ebdChkSummary <- setDT(ebdChkSummary)[duration <= 300,
-                                        ][,`:=`(timeTrans = 1 - cos(12.5*decimalTime/max(decimalTime)),
-                                                dateTrans = cos(6.25*julianDate/max(julianDate)))
-                                          ][,`:=`(timeTrans = rescale(timeTrans, to = c(0,6)),
-                                                  dateTrans = rescale(dateTrans, to = c(0,6)))]
+              ][,`:=`(timeTrans = 1 - cos(12.5*decimalTime/max(decimalTime)),
+                dateTrans = cos(6.25*julianDate/max(julianDate)))
+              ][,`:=`(timeTrans = rescale(timeTrans, to = c(0,6)),
+              dateTrans = rescale(dateTrans, to = c(0,6)))]
 
 # uses either a subset or all data
 library(rptR)
-modObsRep <- rpt(nSp ~ log(duration) + timeTrans + dateTrans + landcover + (1|year)+
-                   (1|observer), grname = c("observer"), data = ebdChkSummary, nboot = 10, npermut = 0, datatype = "Poisson")
+modObsRep <- rpt(log(nSp) ~ log(duration) + timeTrans + dateTrans + landcover + 
+                   (1|year)+
+                   (1|observer), 
+                 grname = c("observer"), 
+                 data = ebdChkSummary, nboot = 100, npermut = 0, datatype = "Gaussian")
 
 # examine observer repeatability
 modObsRep
@@ -64,24 +67,7 @@ setnames(obsRanef, c("observer", "rptrScore"))
 # scale ranefscore between 0 and 1
 obsRanef[,rptrScore:=scales::rescale(rptrScore)]
 
-#### soi seen per expertise ####
-# how many soi on average per obs score?
-
-# attach score to chksummary
-ebdChkSummary <- setDT(ebdChkSummary)[obsRanef, on=.(observer)]
-
-# get plot
-ebdObsScore <- ebdChkSummary[,roundscore := plyr::round_any(rptrScore, 0.05)
-                             ][,.(meanSoi = mean(nSoi, na.rm = T),
-                 ciSoi = ci(nSoi)), by=list(roundscore)]
-library(ggplot2)
-ggplot(ebdObsScore)+
-  geom_pointrange(aes(roundscore, meanSoi, ymin=meanSoi-ciSoi, ymax=meanSoi+ciSoi), 
-                 #     ymin = meanSp-ciSp, ymax = meanSp + ciSp),
-                  size = 0.5, col = "grey40")#+
-#  scale_y_sqrt()
-
 # export observer ranef score
-fwrite(ebdObsScore, file = "data/dataObsRptrScore.csv")
+fwrite(obsRanef, file = "data/dataObsRptrScore.csv")
 
 # end here
