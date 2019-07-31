@@ -31,6 +31,11 @@ ebdChkSummary <- ebdChkSummary %>%
 
 #### repeatability model for observers ####
 library(scales)
+
+# get nilgiris shapefile bbox and subset data
+library(sf)
+hills <- st_read("hillsShapefile/Nil_Ana_Pal.shp") %>% st_bbox()
+
 # cosine transform the decimal time and julian date
 ebdChkSummary <- setDT(ebdChkSummary)[between(longitude, hills["xmin"], hills["xmax"]) & between(latitude, hills["ymin"], hills["ymax"]),
                                       ][duration <= 300,
@@ -64,21 +69,22 @@ setnames(obsRanef, c("observer", "rptrScore"))
 # scale ranefscore between 0 and 1
 obsRanef[,rptrScore:=scales::rescale(rptrScore)]
 
-#### plot diagnostics ####
-# how many species on average per obs score?
+#### soi seen per expertise ####
+# how many soi on average per obs score?
 
 # attach score to chksummary
 ebdChkSummary <- setDT(ebdChkSummary)[obsRanef, on=.(observer)]
 
 # get plot
-ebdObsScore <- ebdChkSummary[,.(meanSp = mean(nSp, na.rm = T),
-                 ciSp = ci(nSp)), by=list(observer, rptrScore)]
+ebdObsScore <- ebdChkSummary[,roundscore := plyr::round_any(rptrScore, 0.05)
+                             ][,.(meanSoi = mean(nSoi, na.rm = T),
+                 ciSoi = ci(nSoi)), by=list(roundscore)]
 library(ggplot2)
 ggplot(ebdObsScore)+
-  geom_point(aes(rptrScore, meanSp), 
+  geom_pointrange(aes(roundscore, meanSoi, ymin=meanSoi-ciSoi, ymax=meanSoi+ciSoi), 
                  #     ymin = meanSp-ciSp, ymax = meanSp + ciSp),
-                  size = 0.5, alpha = 0.2)+
-  scale_y_sqrt()
+                  size = 0.5, col = "grey40")#+
+#  scale_y_sqrt()
 
 # export observer ranef score
 fwrite(ebdObsScore, file = "data/dataObsRptrScore.csv")
