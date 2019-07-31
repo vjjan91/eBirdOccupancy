@@ -11,9 +11,9 @@ library(data.table)
 
 #### load data and subset ####
 
-# read in shapefile of wg to subset by bounding box
+# read in shapefile of nilgiris to subset by bounding box
 library(sf)
-wg <- st_read("hillsShapefile/WG.shp"); box <- st_bbox(wg)
+wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp"); box <- st_bbox(wg)
 
 # read in data and subset
 ebd = fread("ebd_Filtered_May2018.txt")[between(LONGITUDE, box["xmin"], box["xmax"]) & between(LATITUDE, box["ymin"], box["ymax"]),][year(`OBSERVATION DATE`) >= 2013,]
@@ -117,7 +117,7 @@ rm(ebd); gc()
 # to each checklist. checklists might consist of one or more landcovers
 # in some cases, but we assign only one based on the first coord pair
 # read in raster
-landcover <- raster::raster("data/glob_cover_wghats.tif")
+landcover <- raster::raster("data/spatial/glob_cover_wghats.tif")
 
 # get for unique points
 landcoverVec <- raster::extract(x = landcover, y = as.matrix(ebdChkSummary[,c("longitude","latitude")]))
