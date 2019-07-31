@@ -94,7 +94,10 @@ ebdEffChk <- setDF(ebd) %>%
            decimalTime, julianDate, number_observers) %>% 
   # drop rows with NAs in cols used in the model
   tidyr::drop_na(sampling_event_identifier, observer_id,
-          duration_minutes, decimalTime, julianDate)
+          duration_minutes, decimalTime, julianDate) %>% 
+  
+  # drop years below 2013
+  filter(year >= 2013)
 
 # 3. join to covariates and remove large groups (> 10)
 ebdChkSummary <- inner_join(ebdEffChk, ebdSpSum)#
