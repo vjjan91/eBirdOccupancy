@@ -16,18 +16,21 @@ library(sf)
 wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp"); box <- st_bbox(wg)
 
 # read in data and subset
-ebd = fread("ebd_Filtered_May2018.txt")[between(LONGITUDE, box["xmin"], box["xmax"]) & between(LATITUDE, box["ymin"], box["ymax"]),][year(`OBSERVATION DATE`) >= 2013,]
+# ebd = fread("ebd_Filtered_May2018.txt")[between(LONGITUDE, box["xmin"], box["xmax"]) & between(LATITUDE, box["ymin"], box["ymax"]),][year(`OBSERVATION DATE`) >= 2013,]
+# 
+# # make new column names
+# library(magrittr); library(stringr)
+# newNames <- str_replace_all(colnames(ebd), " ", "_") %>%
+#   str_to_lower()
+# setnames(ebd, newNames)
+# 
+# # keep useful columns
+# columnsOfInterest <- c("checklist_id","scientific_name","observation_count","locality","locality_id","locality_type","latitude","longitude","observation_date","time_observations_started","observer_id","sampling_event_identifier","protocol_type","duration_minutes","effort_distance_km","effort_area_ha","number_observers","species_observed","reviewed","state_code", "group_identifier")
+# 
+# ebd <- dplyr::select(ebd, dplyr::one_of(columnsOfInterest))
 
-# make new column names
-library(magrittr); library(stringr)
-newNames <- str_replace_all(colnames(ebd), " ", "_") %>%
-  str_to_lower()
-setnames(ebd, newNames)
-
-# keep useful columns
-columnsOfInterest <- c("checklist_id","scientific_name","observation_count","locality","locality_id","locality_type","latitude","longitude","observation_date","time_observations_started","observer_id","sampling_event_identifier","protocol_type","duration_minutes","effort_distance_km","effort_area_ha","number_observers","species_observed","reviewed","state_code", "group_identifier")
-
-ebd <- dplyr::select(ebd, dplyr::one_of(columnsOfInterest))
+# read in data
+ebd <- fread("data/dataForUse.csv")
 
 gc()
 
@@ -82,6 +85,9 @@ fwrite(ebdSpSum, file = "data/dataChecklistSpecies.csv")
 # 1. add new columns of decimal time and julian date
 ebd[,`:=`(decimalTime = time_to_decimal(time_observations_started),
           julianDate = yday(as.POSIXct(observation_date)))]
+
+# write useful data to file
+fwrite(ebd, "data/dataForUse.csv")
 
 # 2. get the summed effort and distance for each checklist
 # and the first of all other variables
