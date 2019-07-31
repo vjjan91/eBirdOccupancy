@@ -77,7 +77,9 @@ plotSoiScore <-
   geom_tile(aes(x = year, y = roundscore, fill = prop))+
   facet_wrap(~scientific_name)+
   scale_fill_viridis_c(option = "C", direction = -1, 
-                       name = "proportion seen")+
+                       name = "proportion seen",
+                      values = c(0.1, 1), na.value = "grey80",
+                      breaks = seq(0.1, 0.8, 0.2))+
   scale_x_continuous(breaks = c(2013:2018))+
   coord_cartesian(expand = F)+
   themeEbird()+
