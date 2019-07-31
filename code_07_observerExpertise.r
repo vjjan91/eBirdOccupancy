@@ -32,19 +32,17 @@ ebdChkSummary <- ebdChkSummary %>%
 #### repeatability model for observers ####
 library(scales)
 # cosine transform the decimal time and julian date
-ebdChkSummary <- setDT(ebdChkSummary)[,`:=`(timeTrans = 1 - cos(12.5*decimalTime/max(decimalTime)),
-                           dateTrans = cos(6.25*julianDate/max(julianDate)))
-                     ][,`:=`(timeTrans = rescale(timeTrans, to = c(0,6)),
-                             dateTrans = rescale(dateTrans, to = c(0,6)))]
+ebdChkSummary <- setDT(ebdChkSummary)[between(longitude, hills["xmin"], hills["xmax"]) & between(latitude, hills["ymin"], hills["ymax"]),
+                                      ][duration <= 300,
+                                        ][,`:=`(timeTrans = 1 - cos(12.5*decimalTime/max(decimalTime)),
+                                                dateTrans = cos(6.25*julianDate/max(julianDate)))
+                                          ][,`:=`(timeTrans = rescale(timeTrans, to = c(0,6)),
+                                                  dateTrans = rescale(dateTrans, to = c(0,6)))]
 
-# get a subset
-ebdChkSummary <- ebdChkSummary[year >= 2013,] %>% sample_n(1e4)
-
-
-# uses a subset of data
+# uses either a subset or all data
 library(rptR)
-modObsRep <- rpt(nSp ~ log(duration) + timeTrans + dateTrans + landcover +
-                   (1|observer), grname = c("observer"), data = ebdChkSummary, nboot = 10, npermut = 0, datatype = "Gaussian")
+modObsRep <- rpt(nSp ~ log(duration) + timeTrans + dateTrans + landcover + (1|year)+
+                   (1|observer), grname = c("observer"), data = ebdChkSummary, nboot = 10, npermut = 0, datatype = "Poisson")
 
 # examine observer repeatability
 modObsRep
