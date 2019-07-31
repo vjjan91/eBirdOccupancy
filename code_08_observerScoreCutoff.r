@@ -2,22 +2,6 @@
 
 rm(list = ls()); gc()
 
-# get species of interest list
-soi <- c("Anthus nilghiriensis",
-                  "Montecincla cachinnans",
-                  "Montecincla fairbanki",
-                  "Sholicola albiventris",
-                  "Sholicola major",
-                  "Culicicapa ceylonensis",
-                  "Pomatorhinus horsfieldii",
-                  "Ficedula nigrorufa",
-                  "Pycnonotus jocosus",
-                  "Iole indica",
-                  "Hemipus picatus",
-                  "Saxicola caprata",
-                  "Eumyias albicaudatus",
-                  "Rhopocichla atriceps")
-
 # get nilgiri checklists
 library(data.table)
 library(tidyverse)
@@ -27,7 +11,7 @@ library(sf)
 wg <- st_read("hillsShapefile/WG.shp"); box <- st_bbox(wg)
 
 # read in data and subset
-ebd = fread("ebd_Filtered_May2018.txt")[between(LONGITUDE, box["xmin"], box["xmax"]) & between(LATITUDE, box["ymin"], box["ymax"]),]
+ebd = fread("ebd_Filtered_May2018.txt")[between(LONGITUDE, box["xmin"], box["xmax"]) & between(LATITUDE, box["ymin"], box["ymax"]),][year(`OBSERVATION DATE`) >= 2013,]
 
 # make new column names
 newNames <- str_replace_all(colnames(ebd), " ", "_") %>%
@@ -45,12 +29,6 @@ gc()
 ebd[,checklist_id := ifelse(group_identifier == "", 
                             sampling_event_identifier, group_identifier),]
 
-# get number of species of interest seen per SEI
-dataSoi <- ebd[,.(totSoiSeen = length(intersect(scientific_name, soi))), 
-               by=list(observer_id)]
-
-setnames(dataSoi, c("observer", "soiSeen"))
-
 #### count obs within nilgiris ####
 # load nilgiris
 nl <- st_read("hillsShapefile/Nil_Ana_Pal.shp"); box <- st_bbox(nl)
@@ -65,9 +43,9 @@ ebdNlSum <- ebdNlSum[,.(nchk = length(unique(sampling_event_identifier))),
 setnames(ebdNlSum, c("observer", "nchk"))
 
 # add species seen and expertise score
-obsRanefScore <- fread("data/dataObsRanefScore.csv")
+obsRptrScore <- fread("data/dataObsRptrScore.csv")
 dataSoi <- dataSoi[ebdNlSum, on = .(observer =observer)
-                   ][obsRanefScore, on=.(observer = observer)]
+                   ][obsRptrScore, on=.(observer = observer)]
 dataSoi <- na.omit(dataSoi)
 
 # make plot data
