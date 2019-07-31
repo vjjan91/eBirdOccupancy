@@ -27,18 +27,13 @@ ebdChkSummary <- ebdChkSummary %>%
          duration > 0) %>% 
   mutate(landcover = as.factor(landcover),
          observer = as.factor(observer)) %>% 
-  drop_na() # remove NAs, avoids errors later
+  tidyr::drop_na() # remove NAs, avoids errors later
 
 #### repeatability model for observers ####
 library(scales)
 
-# get nilgiris shapefile bbox and subset data
-library(sf)
-hills <- st_read("hillsShapefile/Nil_Ana_Pal.shp") %>% st_bbox()
-
 # cosine transform the decimal time and julian date
-ebdChkSummary <- setDT(ebdChkSummary)[between(longitude, hills["xmin"], hills["xmax"]) & between(latitude, hills["ymin"], hills["ymax"]),
-                                      ][duration <= 300,
+ebdChkSummary <- setDT(ebdChkSummary)[duration <= 300,
                                         ][,`:=`(timeTrans = 1 - cos(12.5*decimalTime/max(decimalTime)),
                                                 dateTrans = cos(6.25*julianDate/max(julianDate)))
                                           ][,`:=`(timeTrans = rescale(timeTrans, to = c(0,6)),
