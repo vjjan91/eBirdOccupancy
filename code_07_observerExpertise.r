@@ -29,9 +29,6 @@ ebdChkSummary <- ebdChkSummary %>%
          observer = as.factor(observer)) %>% 
   drop_na() # remove NAs, avoids errors later
 
-# save model object
-save(modNspecies, file = "data/modExpertiseData.rdata")
-
 #### repeatability model for observers ####
 library(scales)
 # cosine transform the decimal time and julian date
@@ -47,22 +44,27 @@ ebdChkSummary <- ebdChkSummary[year >= 2013,] %>% sample_n(1e4)
 # uses a subset of data
 library(rptR)
 modObsRep <- rpt(nSp ~ log(duration) + timeTrans + dateTrans + landcover +
-                   (1|observer), grname = "observer", data = ebdChkSummary, nboot = 100, npermut = 0, datatype = "Poisson")
+                   (1|observer), grname = c("observer"), data = ebdChkSummary, nboot = 10, npermut = 0, datatype = "Gaussian")
 
+# examine observer repeatability
+modObsRep
+
+# save model object
+save(modObsRep, file = "data/modObsRepeat.rdata")
 
 #### load model object and get ranef scores ####
-load("data/modExpertiseData.rdata")
-
-summary(modNspecies$mer)
+load("data/modObsRepeat.rdata")
 
 # get the ranef coefficients as a measure of observer score
-obsRanef <- lme4::ranef(modNspecies$mer)[[1]]
+obsRanef <- lme4::ranef(modObsRep$mod)[[1]]
+
 # make datatable
 setDT(obsRanef, keep.rownames = T)[]
 # set names
-setnames(obsRanef, c("observer", "ranefScore"))
+setnames(obsRanef, c("observer", "rptrScore"))
+
 # scale ranefscore between 0 and 1
-obsRanef[,ranefScore:=scales::rescale(ranefScore)]
+obsRanef[,rptrScore:=scales::rescale(rptrScore)]
 
 #### plot diagnostics ####
 # how many species on average per obs score?
@@ -72,14 +74,15 @@ ebdChkSummary <- setDT(ebdChkSummary)[obsRanef, on=.(observer)]
 
 # get plot
 ebdObsScore <- ebdChkSummary[,.(meanSp = mean(nSp, na.rm = T),
-                 ciSp = ci(nSp)) ,by=list(observer, ranefScore)]
+                 ciSp = ci(nSp)), by=list(observer, rptrScore)]
 library(ggplot2)
-ggplot(ebdSpScore)+
-  geom_point(aes(ranefScore, meanSp), 
+ggplot(ebdObsScore)+
+  geom_point(aes(rptrScore, meanSp), 
                  #     ymin = meanSp-ciSp, ymax = meanSp + ciSp),
-                  size = 0.5, alpha = 0.2)
+                  size = 0.5, alpha = 0.2)+
+  scale_y_sqrt()
 
 # export observer ranef score
-fwrite(ebdObsScore, file = "data/dataObsRanefScore.csv")
+fwrite(ebdObsScore, file = "data/dataObsRptrScore.csv")
 
 # end here
