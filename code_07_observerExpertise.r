@@ -67,6 +67,16 @@ setnames(obsRanef, c("observer", "rptrScore"))
 # scale ranefscore between 0 and 1
 obsRanef[,rptrScore:=scales::rescale(rptrScore)]
 
+# plot histogram and remove outliers
+hist(obsRanef$rptrScore)
+count(obsRanef, rptrScore < 0.5)
+
+# remove score below 0.5 and rescale
+obsRanef <- obsRanef[rptrScore >= 0.5,
+         ][,rptrScore:=rescale(rptrScore)]
+# hist again
+hist(obsRanef$rptrScore)
+
 # export observer ranef score
 fwrite(obsRanef, file = "data/dataObsRptrScore.csv")
 
