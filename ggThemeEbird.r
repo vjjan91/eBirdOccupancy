@@ -12,7 +12,7 @@ themeEbird <- function(base_size=10) {
             axis.title.y = element_text(angle=90,vjust = 4),
             axis.title.x = element_text(vjust = -2),
             axis.text.x = element_text(vjust = 1),
-            axis.text.y = element_text(angle=90, vjust = 2, hjust = 0.5),
+            # axis.text.y = element_text(angle=0, hjust = 0),
             axis.ticks = element_line(size = 0.3),
             axis.ticks.length = unit(0.2, "cm"),
             panel.grid.major = element_blank(),
