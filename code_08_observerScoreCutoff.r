@@ -10,13 +10,19 @@ library(tidyverse)
 # get ranef score data
 ranefscore <- fread("data/dataObsRptrScore.csv")
 
+# plot ranef score dist
+plotScoreDist <- ggplot(ranefscore)+
+  geom_histogram(aes(rptrScore), fill = "white", col = 1)+
+  themeEbird()+
+  labs(x = "observer score", y = "count", title = "distribution of observer scores")
+
+# export
+ggsave(plotScoreDist, filename = "figs/figScoreDist.png", width = 8, height = 8, device = png(), dpi = 300); dev.off()
+
 # read in nilgiris data
 ebd <- fread("data/dataForUse.csv")
-# keep cols of interest
-ebd <- setDF(ebd) %>% as_tibble() %>%
-  mutate(year = year(observation_date)) %>% 
-  select(observer = observer_id, year, 
-         sei = sampling_event_identifier, scientific_name)
+# add year
+ebd[,year:=year(observation_date)]
 
 # get soi names
 soi <- c("Anthus nilghiriensis",
