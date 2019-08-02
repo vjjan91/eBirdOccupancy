@@ -9,11 +9,13 @@ ebdChkSummary <- fread("data/eBirdChecklistVars.csv")
 # change names
 setnames(ebdChkSummary, c("sei", "observer", "year", "duration", "distance",
                           "longitude", "latitude", "decimalTime",
-                          "julianDate", "nObs", "nSp", "landcover"))
+                          "julianDate", "nObs", "nSp", "nSoi", "landcover"))
 
 # read observer score and join to summary
-scores <- fread("data/dataObsRanefScore.csv")
-ebdChkSummary <- inner_join(ebdChkSummary, scores)
+scores <- fread("data/dataObsRptrScore.csv")
+ebdChkSummary <- merge(ebdChkSummary, scores,
+                       by.x = "observer", by.y = "observer",
+                       all = FALSE, no.dups = TRUE)
 
 #### summarise spatial data ####
 
@@ -29,15 +31,15 @@ data <- cbind(data, st_coordinates(data))
 data <- st_drop_geometry(data)
 
 # use a 50000m grid to summarise average obs score per year
-dataSum <- setDT(data)[,`:=`(xround = plyr::round_any(X, 2.5e4),
-                             yround = plyr::round_any(Y, 2.5e4))
-                       ][,.(avgscore = mean(ranefScore, na.rm = T),
-                            sdscore = sd(ranefScore, na.rm = T),
+dataSum <- setDT(data)[,`:=`(xround = plyr::round_any(X, 1e4),
+                             yround = plyr::round_any(Y, 1e4))
+                       ][,.(avgscore = mean(rptrScore, na.rm = T),
+                            sdscore = sd(rptrScore, na.rm = T),
                             nobs = .N), 
                          by=list(year, xround, yround)]
 
 # add wg shapefile and india coastline
-wg <- st_read("data/spatial/hillsShapefile/WG.shp") %>% 
+wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>% 
   st_transform(32643)
 # get bbox
 bbox <- st_bbox(wg) %>% st_as_sfc() %>% st_buffer(50*1e3) %>% st_bbox()
@@ -52,23 +54,24 @@ land <- st_transform(land, 32643) %>% st_crop(bbox)
 # plot data
 source("ggThemeEbird.r")
 
-plotYearScore <- 
+plotYearScore <-
   ggplot(wg)+
-  geom_sf(data = land, fill = "grey90", col = "transparent")+
-  geom_tile(data = dataSum %>% filter(year >= 2007), 
+  geom_sf(data = land, fill = "grey99", col = "transparent")+
+  geom_tile(data = dataSum %>% dplyr::filter(year >= 2007),
             aes(xround, yround, fill = avgscore))+
   geom_sf(fill = "transparent", col = "grey80", lwd = 0.1)+
   
-  scale_fill_viridis_c(option = "A", na.value = "dodgerblue", 
-                       direction = -1, values = c(0.5, 1))+
+  scale_fill_viridis_c(option = "C", direction = -1)+
   scale_alpha_continuous(range = c(1, 0))+
-  facet_wrap(~year, ncol = 6)+
+  facet_wrap(~year, ncol = 3)+
   
   coord_sf(xlim=c(bbox["xmin"], bbox["xmax"]),
            ylim=c(bbox["ymin"], bbox["ymax"]), expand = F)+
   
-  themeEbirdMap()+
-  labs(x = "longitude", y = "latitude")
+  themeEbird()+
+  theme(panel.background = element_rect(fill = "lightblue"),
+        legend.position = "top")+
+  labs(x = "longitude", y = "latitude", fill="mean observer score")
 
 # export plot
 ggsave(plotYearScore, filename = "figs/figObsScorePerYear.png", 
