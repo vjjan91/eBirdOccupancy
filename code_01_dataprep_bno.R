@@ -13,38 +13,31 @@ dropGeometry = function(x){
   x %>% bind_cols(data.frame(st_coordinates(.))) %>% `st_geometry<-`(NULL) %>% unclass() %>% as.data.frame()
 }
 
-# set file paths for auk functions
-# f_in_ebd <- file.path("ebd_Filtered_May2018.txt")
-# f_in_sampling <- file.path("ebd_sampling_Filtered_May2018.txt")
-# 
-# # run filters using auk packages
-# ebd_filters = auk_ebd(f_in_ebd, f_in_sampling) %>%
-#   auk_species(c("Anthus nilghiriensis",
-#                 "Montecincla cachinnans",
-#                 "Montecincla fairbanki",
-#                 "Sholicola albiventris",
-#                 "Sholicola major",
-#                 "Culicicapa ceylonensis",
-#                 "Pomatorhinus horsfieldii",
-#                 "Ficedula nigrorufa",
-#                 "Pycnonotus jocosus",
-#                 "Iole indica",
-#                 "Hemipus picatus",
-#                 "Saxicola caprata",
-#                 "Eumyias albicaudatus",
-#                 "Rhopocichla atriceps")) %>%
-#   auk_country(country = "IN") %>%
-#   auk_state(c("IN-KL","IN-TN", "IN-KA")) %>% # Restricting geography to TamilNadu, Kerala & Karnataka
-#   auk_date(c("2000-01-01", "2018-09-17")) %>%
-#   auk_complete()
-# 
-# # check filters
-# ebd_filters
-# 
-# # run filters and write
-# # NB: this is already done, skip this step
-# # 
-# 
+# add species of interest
+specieslist = read_csv("data/specieslistExtended.csv")
+
+# set species of interest
+speciesOfInterest = specieslist$sciName
+
+# #set file paths for auk functions
+f_in_ebd <- file.path("ebd_Filtered_Jun2019-002.txt")
+f_in_sampling <- file.path("ebd_sampling_Filtered_Jun2019.txt")
+
+# run filters using auk packages
+ebd_filters = auk_ebd(f_in_ebd, f_in_sampling) %>%
+  auk_species(speciesOfInterest) %>%
+  auk_country(country = "IN") %>%
+  auk_state(c("IN-KL","IN-TN", "IN-KA")) %>% # Restricting geography to TamilNadu, Kerala & Karnataka
+  auk_date(c("2000-01-01", "2018-09-17")) %>%
+  auk_complete()
+
+# check filters
+ebd_filters
+
+# run filters and write
+# NB: this is already done, skip this step
+#
+
 f_out_ebd <- "data/eBirdDataWG_filtered.txt"
 f_out_sampling <- "data/eBirdSamplingDataWG_filtered.txt"
 # 
@@ -68,7 +61,7 @@ new_zf <- collapse_zerofill(zf) # Creates a new zero-filled dataframe with a 0 m
 #### subset data, choose black and orange flycatcher ####
 columnsOfInterest = c("checklist_id","scientific_name","observation_count","locality","locality_id","locality_type","latitude","longitude","observation_date","time_observations_started","observer_id","sampling_event_identifier","protocol_type","duration_minutes","effort_distance_km","effort_area_ha","number_observers","species_observed","reviewed")
 
-#speciesOfInterest = c("Ficedula nigrorufa","Sholicola major")
+# speciesOfInterest = c("Ficedula nigrorufa","Sholicola major")
 
 data = list(ebd, new_zf) %>%
   map(function(x){
