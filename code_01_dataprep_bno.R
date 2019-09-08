@@ -38,20 +38,20 @@ ebd_filters
 # NB: this is already done, skip this step
 #
 
-f_out_ebd <- "data/eBirdDataWG_filtered.txt"
-f_out_sampling <- "data/eBirdSamplingDataWG_filtered.txt"
+# f_out_ebd <- "data/eBirdDataWG_filtered.txt"
+# f_out_sampling <- "data/eBirdSamplingDataWG_filtered.txt"
 # 
 # # Below code need not be run if it has been filtered once already and the above path leads to
 # # the right dataset
 # ebd_filtered <- auk_filter(ebd_filters, file = f_out_ebd,
-#                            file_sampling = f_out_sampling)
+#                            file_sampling = f_out_sampling, overwrite = TRUE)
 
 #### read the ebird data in ####
-ebd <- read_ebd(f_out_ebd)
+ebd <- read_ebd(f_in_ebd)
 #glimpse(ebd)
 
 #### fill zeroes ####
-zf <- auk_zerofill(f_out_ebd, f_out_sampling)
+zf <- auk_zerofill(f_in_ebd, f_in_sampling)
 new_zf <- collapse_zerofill(zf) # Creates a new zero-filled dataframe with a 0 marked for each checklist when the bird was not observed
 #   glimpse(zf)
 
