@@ -59,3 +59,5 @@ dataSpread = dataGathered %>%
 
 #### save as rdata for next phase ####
 save(dataSpread, file = "dataSpread.rdata")
+
+# end here
