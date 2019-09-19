@@ -216,6 +216,13 @@ landscapeData = dataLocs %>% dropGeometry() %>%
 # join with ebird data
 dataCovar = left_join(dataGrouped, landscapeData, by = c("longitude" = "X", "latitude" = "Y"))
 
+#### adding observer score ####
+# read in obs score
+expertiseScore = fread("data/dataObsRptrScore.csv")
+
+# add to dataCovar
+dataCovar = left_join(dataCovar, expertiseScore, by = c("observer_id" = "observer"))
+
 # remove rasters
 rm(alt, alt.hills, aspect, cr, EVI.all, EVI.yearly, EVI.all.resam, slope)
 gc()
