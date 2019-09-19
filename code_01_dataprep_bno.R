@@ -28,7 +28,7 @@ ebd_filters = auk_ebd(f_in_ebd, f_in_sampling) %>%
   auk_species(speciesOfInterest) %>%
   auk_country(country = "IN") %>%
   auk_state(c("IN-KL","IN-TN", "IN-KA")) %>% # Restricting geography to TamilNadu, Kerala & Karnataka
-  auk_date(c("2013-01-01", "2018-09-17")) %>%
+  auk_date(c("2018-01-01", "2018-09-17")) %>%
   auk_complete()
 
 # check filters
@@ -47,11 +47,11 @@ ebd_filtered <- auk_filter(ebd_filters, file = f_out_ebd,
                            file_sampling = f_out_sampling, overwrite = TRUE)
 
 #### read the ebird data in ####
-ebd <- read_ebd(f_in_ebd)
+ebd <- read_ebd(f_out_ebd)
 #glimpse(ebd)
 
 #### fill zeroes ####
-zf <- auk_zerofill(f_in_ebd, f_in_sampling)
+zf <- auk_zerofill(f_out_ebd, f_out_sampling)
 new_zf <- collapse_zerofill(zf) # Creates a new zero-filled dataframe with a 0 marked for each checklist when the bird was not observed
 #   glimpse(zf)
 
@@ -125,7 +125,7 @@ data = map(data, function(x) filter(x, duration_minutes > 0))
 # then, summarise relevant variables as the sum
 dataGrouped = map(data, function(x){
   x %>% group_by(sampling_event_identifier) %>%
-    summarise_at(vars(duration_minutes, effort_distance_km, effort_area_ha), funs(sum.no.na))
+    summarise_at(vars(duration_minutes, effort_distance_km, effort_area_ha), lst(sum.no.na))
 })
 
 # bind rows combining data frames, and filter
