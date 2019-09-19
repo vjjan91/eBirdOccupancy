@@ -20,7 +20,7 @@ specieslist = read_csv("data/specieslistExtended.csv")
 speciesOfInterest = specieslist$sciName
 
 # #set file paths for auk functions
-f_in_ebd <- file.path("ebd_Filtered_Jun2019-002.txt")
+f_in_ebd <- file.path("ebd_Filtered_Jun2019.txt")
 f_in_sampling <- file.path("ebd_sampling_Filtered_Jun2019.txt")
 
 # run filters using auk packages
@@ -28,7 +28,7 @@ ebd_filters = auk_ebd(f_in_ebd, f_in_sampling) %>%
   auk_species(speciesOfInterest) %>%
   auk_country(country = "IN") %>%
   auk_state(c("IN-KL","IN-TN", "IN-KA")) %>% # Restricting geography to TamilNadu, Kerala & Karnataka
-  auk_date(c("2000-01-01", "2018-09-17")) %>%
+  auk_date(c("2013-01-01", "2018-09-17")) %>%
   auk_complete()
 
 # check filters
@@ -38,13 +38,13 @@ ebd_filters
 # NB: this is already done, skip this step
 #
 
-# f_out_ebd <- "data/eBirdDataWG_filtered.txt"
-# f_out_sampling <- "data/eBirdSamplingDataWG_filtered.txt"
-# 
-# # Below code need not be run if it has been filtered once already and the above path leads to
-# # the right dataset
-# ebd_filtered <- auk_filter(ebd_filters, file = f_out_ebd,
-#                            file_sampling = f_out_sampling, overwrite = TRUE)
+f_out_ebd <- "data/eBirdDataWG_filtered.txt"
+f_out_sampling <- "data/eBirdSamplingDataWG_filtered.txt"
+
+# Below code need not be run if it has been filtered once already and the above path leads to
+# the right dataset
+ebd_filtered <- auk_filter(ebd_filters, file = f_out_ebd,
+                           file_sampling = f_out_sampling, overwrite = TRUE)
 
 #### read the ebird data in ####
 ebd <- read_ebd(f_in_ebd)
