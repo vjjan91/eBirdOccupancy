@@ -242,7 +242,7 @@ dataSummary = dataCovar %>%
   mutate(jul.date = lubridate::yday(as.Date(observation_date))) %>% 
   group_by(locality_id) %>% 
   summarise_at(vars(duration_minutes, effort_distance_km, number_observers, jul.date),
-               funs(sum.no.na))
+               list(sum.no.na))
 
 # transform dataSummary to be a join of locality count and dataSummary
 # then divide locality wise summarised sums by number of visits for the mean
@@ -264,3 +264,5 @@ assertthat::assert_that(!"sf" %in% class(dataCovar))
 
 #### export to csv ####
 write_csv(dataCovar, path = "data/dataCovars.csv")
+
+# ends here
