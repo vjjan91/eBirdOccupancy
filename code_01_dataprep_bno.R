@@ -1,5 +1,7 @@
 ####prep data####
 
+rm(list = ls()); gc()
+
 #### load data from raw files ####
 # load libs
 library(tidyverse); library(readr); library(sf)
@@ -28,7 +30,7 @@ ebd_filters = auk_ebd(f_in_ebd, f_in_sampling) %>%
   auk_species(speciesOfInterest) %>%
   auk_country(country = "IN") %>%
   auk_state(c("IN-KL","IN-TN", "IN-KA")) %>% # Restricting geography to TamilNadu, Kerala & Karnataka
-  auk_date(c("2018-01-01", "2018-09-17")) %>%
+  auk_date(c("2013-01-01", "2018-12-31")) %>%
   auk_complete()
 
 # check filters
