@@ -140,6 +140,10 @@ dataConstants = data %>%
 # join the summarised data with the identifiers, using sampling_event_identifier as the key
 dataGrouped = left_join(dataGrouped, dataConstants, by = "sampling_event_identifier")
 
+# remove checklists or seis with more than 10 obervers
+count(dataGrouped, number_observers > 10) # count how many have 10+ obs
+dataGrouped = filter(dataGrouped, number_observers <= 10)
+
 # assign present or not, and get time in decimal hours since midnight
 library(lubridate)
 time_to_decimal <- function(x) {
