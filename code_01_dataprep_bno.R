@@ -63,8 +63,6 @@ new_zf <- collapse_zerofill(zf) # Creates a new zero-filled dataframe with a 0 m
 #### subset data, choose black and orange flycatcher ####
 columnsOfInterest = c("checklist_id","scientific_name","observation_count","locality","locality_id","locality_type","latitude","longitude","observation_date","time_observations_started","observer_id","sampling_event_identifier","protocol_type","duration_minutes","effort_distance_km","effort_area_ha","number_observers","species_observed","reviewed")
 
-# speciesOfInterest = c("Ficedula nigrorufa","Sholicola major")
-
 data = list(ebd, new_zf) %>%
   map(function(x){
     x %>% select(one_of(columnsOfInterest)) #%>%
