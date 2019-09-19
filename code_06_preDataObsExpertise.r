@@ -114,7 +114,7 @@ rm(ebd); gc()
 # to each checklist. checklists might consist of one or more landcovers
 # in some cases, but we assign only one based on the first coord pair
 # read in raster
-landcover <- raster::raster("data/spatial/glob_cover_wghats.tif")
+landcover <- raster::raster("data/landUseClassification/Classified Image_31stAug_WGS84_Ghats.tif")
 
 # get for unique points
 landcoverVec <- raster::extract(x = landcover, y = as.matrix(ebdChkSummary[,c("longitude","latitude")]))
