@@ -161,19 +161,19 @@ class(dataGrouped)
 #### load covariates from raster files ####
 # load elevation and crop to hills size, then mask by hills
 #  sf
-alt = raster::raster("Elevation/alt/")
+alt = raster::raster("data/spatial/Elevation/alt")
 cr = raster::crop(alt, raster::extent(as(hills, "Spatial")))
 alt.hills = raster::mask(cr, as(hills, "Spatial"))
 
 # load evi layers
-EVI.all = raster::stack("EVI/MOD13Q1_EVI_AllYears.tif")
+EVI.all = raster::stack("data/spatial/EVI/MOD13Q1_EVI_AllYears.tif")
 #x11();raster::plot(EVI.all)
 # scale later
 # EVI.all = EVI.all*0.0001
 names(EVI.all) = paste("evi", month.abb, sep = ".")
 
 # load 5 year evi change(?) this is currently 6 years
-evifiles = list.files("EVI", pattern = "_201", full.names = T)
+evifiles = list.files("data/spatial/EVI", pattern = "_201", full.names = T)
 evifiles = evifiles[as.numeric(stringi::stri_sub(evifiles, -8, -5)) >= 2013]
 
 # make stack
