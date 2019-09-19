@@ -80,7 +80,7 @@ data[[2]] = data[[2]] %>% filter(species_observed == F)
 #### filter spatially ####
 # load shapefiles of hill ranges
 library(sf)
-hills = st_read("hillsShapefile/Nil_Ana_Pal.shp")
+hills = st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp")
 
 # write a prelim filter by bounding box
 box <- st_bbox(hills)
