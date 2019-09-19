@@ -16,21 +16,21 @@ library(sf)
 wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp"); box <- st_bbox(wg)
 
 # read in data and subset
-# ebd = fread("ebd_Filtered_May2018.txt")[between(LONGITUDE, box["xmin"], box["xmax"]) & between(LATITUDE, box["ymin"], box["ymax"]),][year(`OBSERVATION DATE`) >= 2013,]
-# 
-# # make new column names
-# library(magrittr); library(stringr)
-# newNames <- str_replace_all(colnames(ebd), " ", "_") %>%
-#   str_to_lower()
-# setnames(ebd, newNames)
-# 
-# # keep useful columns
-# columnsOfInterest <- c("checklist_id","scientific_name","observation_count","locality","locality_id","locality_type","latitude","longitude","observation_date","time_observations_started","observer_id","sampling_event_identifier","protocol_type","duration_minutes","effort_distance_km","effort_area_ha","number_observers","species_observed","reviewed","state_code", "group_identifier")
-# 
-# ebd <- dplyr::select(ebd, dplyr::one_of(columnsOfInterest))
+ebd = fread("ebd_Filtered_Jun2019.txt")[between(LONGITUDE, box["xmin"], box["xmax"]) & between(LATITUDE, box["ymin"], box["ymax"]),][year(`OBSERVATION DATE`) >= 2013,]
 
-# read in data
-ebd <- fread("data/dataForUse.csv")
+# make new column names
+library(magrittr); library(stringr)
+newNames <- str_replace_all(colnames(ebd), " ", "_") %>%
+  str_to_lower()
+setnames(ebd, newNames)
+
+# keep useful columns
+columnsOfInterest <- c("checklist_id","scientific_name","observation_count","locality","locality_id","locality_type","latitude","longitude","observation_date","time_observations_started","observer_id","sampling_event_identifier","protocol_type","duration_minutes","effort_distance_km","effort_area_ha","number_observers","species_observed","reviewed","state_code", "group_identifier")
+
+ebd <- dplyr::select(ebd, dplyr::one_of(columnsOfInterest))
+
+# # read in data
+# ebd <- fread("data/dataForUse.csv")
 
 gc()
 
