@@ -53,6 +53,16 @@ modObsRep
 # save model object
 save(modObsRep, file = "data/modObsRepeat.rdata")
 
+#### write model output to file ####
+# make dir if absent
+if(!dir.exists("data/modOutput")){
+  dir.create("data/modOutput")
+}
+
+# write model output to text file
+{writeLines(R.utils::captureOutput(list(Sys.time(), summary(modObsRep))), 
+            con = "data/modOutput/modOutExpertise.txt")}
+
 #### load model object and get ranef scores ####
 load("data/modObsRepeat.rdata")
 
