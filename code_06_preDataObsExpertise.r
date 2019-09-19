@@ -60,20 +60,11 @@ time_to_decimal <- function(x) {
 # count the number of records of SEI and observer combinations
 # count number of species of the focal species seen per sei per observer
 # get species of interest list
-soi <- c("Anthus nilghiriensis",
-         "Montecincla cachinnans",
-         "Montecincla fairbanki",
-         "Sholicola albiventris",
-         "Sholicola major",
-         "Culicicapa ceylonensis",
-         "Pomatorhinus horsfieldii",
-         "Ficedula nigrorufa",
-         "Pycnonotus jocosus",
-         "Iole indica",
-         "Hemipus picatus",
-         "Saxicola caprata",
-         "Eumyias albicaudatus",
-         "Rhopocichla atriceps")
+# add species of interest
+specieslist = fread("data/specieslistExtended.csv")
+
+# set species of interest
+soi = specieslist$sciName
 
 ebdSpSum <- ebd[,.(nSp = .N,
                    totSoiSeen = length(intersect(scientific_name, soi))), 
