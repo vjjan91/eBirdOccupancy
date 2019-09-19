@@ -125,7 +125,7 @@ data = map(data, function(x) filter(x, duration_minutes > 0))
 # then, summarise relevant variables as the sum
 dataGrouped = map(data, function(x){
   x %>% group_by(sampling_event_identifier) %>%
-    summarise_at(vars(duration_minutes, effort_distance_km, effort_area_ha), lst(sum.no.na))
+    summarise_at(vars(duration_minutes, effort_distance_km, effort_area_ha), list(sum.no.na))
 })
 
 # bind rows combining data frames, and filter
