@@ -274,7 +274,7 @@ dataSummary = dataCovar %>%
 # then divide locality wise summarised sums by number of visits for the mean
 dataSummary = left_join(dataSummary, localityCount, by = "locality_id") %>% 
   mutate_at(vars(duration_minutes, effort_distance_km, number_observers, jul.date),
-            funs(./n)) %>% 
+            list(~(./n))) %>% 
   # rename variables to avoid confusion
   rename(mean_duration = duration_minutes, mean_distance = effort_distance_km, 
          mean_observers = number_observers, mean_date = jul.date) %>% 
