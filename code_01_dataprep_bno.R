@@ -217,11 +217,37 @@ landscapeData = dataLocs %>% dropGeometry() %>%
 dataCovar = left_join(dataGrouped, landscapeData, by = c("longitude" = "X", "latitude" = "Y"))
 
 #### adding observer score ####
-# read in obs score
-expertiseScore = fread("data/dataObsRptrScore.csv")
+# read in obs score and extract numbers
+expertiseScore = read_csv("data/dataObsRptrScore.csv") %>% 
+  mutate(numObserver = str_extract(observer, "\\d+")) %>% 
+  select(-observer)
+
+# group seis consist of multiple observers
+# in this case, seis need to have the highest expertise observer score
+# as the associated covariate
+
+# get unique observers per sei
+library(stringr)
+dataSeiScore = distinct(dataCovar, sampling_event_identifier, observer_id) %>% 
+  # make list column of observers
+  mutate(observers = str_split(observer_id, ",")) %>% 
+  unnest() %>% 
+  # add numeric observer id
+  mutate(numObserver = str_extract(observers, "\\d+")) %>% 
+  # now get distinct sei and observer id numeric
+  distinct(sampling_event_identifier, numObserver)
+
+# now add expertise score to sei
+dataSeiScore = left_join(dataSeiScore, expertiseScore) %>% 
+  # get max expertise score per sei
+  group_by(sampling_event_identifier) %>% 
+  summarise(expertise = max(rptrScore))
 
 # add to dataCovar
-dataCovar = left_join(dataCovar, expertiseScore, by = c("observer_id" = "observer"))
+dataCovar = left_join(dataCovar, dataSeiScore, by = "sampling_event_identifier")
+
+# remove data without expertise score
+dataCovar = filter(dataCovar, !is.na(expertise))
 
 # remove rasters
 rm(alt, alt.hills, aspect, cr, EVI.all, EVI.yearly, EVI.all.resam, slope)
