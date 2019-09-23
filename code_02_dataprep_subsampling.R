@@ -1,10 +1,13 @@
 #### dataprep round 2 ####
 
+rm(list = ls()); gc()
+
 #'load libs
 library(tidyverse); library(readr)
 
 #'load csv from data folder
-data = read_csv("data/dataCovars.csv")
+data = read_csv("data/dataCovars.csv") #%>%
+#  filter(!is.na(rptrScore))
 
 #### subset 10 random obs per locality per species ####
 #'split into list by species, locality id, and sample 10 if > 10 samples found
