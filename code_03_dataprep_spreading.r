@@ -19,8 +19,9 @@ data = mutate(data, jul.date = lubridate::yday(as.Date(observation_date)))
 dataSelected = select(data, scientific_name, sampling_event_identifier, locality_id, jul.date,
                     duration_minutes, effort_distance_km, number_observers,
                     time_observations_started, pres_abs,
-                    expertise = rptrScore) #%>% 
+                    expertise) %>% 
   # filter(scientific_name == "Ficedula nigrorufa") # comment out this filter to process all species
+  filter(!is.na(expertise))
 
 #'split into list by species
 dataBySpecies = dataSelected %>% 
@@ -60,4 +61,4 @@ dataSpread = dataGathered %>%
 #### save as rdata for next phase ####
 save(dataSpread, file = "dataSpread.rdata")
 
-# end here
+# end here2
