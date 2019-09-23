@@ -21,7 +21,7 @@ specieslist = read_csv("data/specieslistExtended.csv")
 # set species of interest
 speciesOfInterest = specieslist$sciName
 
-# #set file paths for auk functions
+#set file paths for auk functions
 f_in_ebd <- file.path("ebd_Filtered_Jun2019.txt")
 f_in_sampling <- file.path("ebd_sampling_Filtered_Jun2019.txt")
 
@@ -45,8 +45,8 @@ f_out_sampling <- "data/eBirdSamplingDataWG_filtered.txt"
 
 # Below code need not be run if it has been filtered once already and the above path leads to
 # the right dataset
-ebd_filtered <- auk_filter(ebd_filters, file = f_out_ebd,
-                           file_sampling = f_out_sampling, overwrite = TRUE)
+# ebd_filtered <- auk_filter(ebd_filters, file = f_out_ebd,
+#                            file_sampling = f_out_sampling, overwrite = TRUE)
 
 #### read the ebird data in ####
 ebd <- read_ebd(f_out_ebd)
