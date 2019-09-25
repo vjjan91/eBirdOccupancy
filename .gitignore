@@ -35,3 +35,6 @@ rsconnect/
 *.prj
 *.cpg
 *ini
+
+# pdf files
+*.pdf
