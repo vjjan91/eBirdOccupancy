@@ -38,3 +38,4 @@ rsconnect/
 
 # pdf files
 *.pdf
+*.xl*
