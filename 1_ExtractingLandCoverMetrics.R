@@ -3,7 +3,7 @@
 ### Loading the land cover rasters (resampled at diferent resolutions)
 
 library(raster)
-rast_10m <- raster("C:\\Users\\vr235\\Downloads\\Reprojected Image_UTM43N_31stAug_Ghats.tif")
+rast_10m <- raster("data/landUseClassification/Reprojected Image_UTM43N_31stAug_Ghats.tif")
 plot(rast_10m)
 rast_10m
 
@@ -25,7 +25,9 @@ neighborhood_radius <- 500* ceiling(max(res(rast_10m))) / 2
 # Load eBird data prepared by PG so far
 # Loading the dataset containing 10 random observations made to a site file
 
-dat <- read.csv("K:\\Chapter 2_Occupancy Modeling\\Data\\dataRand10.csv",header=T)
+library(data.table)
+dat <- fread("data/dataRand10.csv",header=T)
+setDF(dat)
 head(dat)
 
 # Creating a buffer around every unique localityID, latitude and longitude
@@ -45,7 +47,13 @@ ebird_buff <- dat %>%
 ## Now we will extract landcover data for every unique locality
 library(velox) # Much faster than raster in terms of extracting data
 
+# what is this function supposed to do?
 calculate_pland <- function(regions,lc) {
+  
+  # include asserts for argument type
+  # an assert looks as follows and breaks the code execution if FALSE
+  # assertthat::assert_that("classname" %in% class(regions), msg = "regions has wrong class")
+  
   # create a lookup table to get locality_id from row number
   locs <- st_set_geometry(regions, NULL) %>% 
     mutate(id = row_number())
