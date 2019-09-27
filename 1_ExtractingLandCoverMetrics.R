@@ -69,12 +69,17 @@ calculate_pland <- function(regions,lc) {
 }
 
 # Extracting landcover 
-library(purrr)
+# library(purrr)
 library(tidyr)
 
+# extract values as a vector
+lcvals = calculate_pland(ebird_buff, lc=rast_10m)
+
+# not sure why ebird_buff is expected to have a list column
+# suspect it should simply be a dataframe
 lc_extract <- ebird_buff %>% 
-  mutate(pland = map_df(data, calculate_pland, lc=rast_10m)) %>% 
-  select(pland) %>% 
-  unnest(cols = pland)
+  mutate(pland = lcvals)# %>% 
+  # select(pland) %>% 
+  # unnest(cols = pland)
 
 
