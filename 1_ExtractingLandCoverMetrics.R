@@ -4,8 +4,8 @@
 
 library(raster)
 rast_10m <- raster("data/landUseClassification/Reprojected Image_UTM43N_31stAug_Ghats.tif")
-plot(rast_10m)
-rast_10m
+# plot(rast_10m)
+# rast_10m
 
 ## From Matthew-strimas - eBird code 
 
@@ -26,7 +26,8 @@ neighborhood_radius <- 500* ceiling(max(res(rast_10m))) / 2
 # Loading the dataset containing 10 random observations made to a site file
 
 library(data.table)
-dat <- fread("data/dataRand10.csv",header=T)
+# reading 1e3 rows
+dat <- fread("data/dataRand10.csv",header=T, nrows = 1e2)
 setDF(dat)
 head(dat)
 
@@ -47,33 +48,21 @@ ebird_buff <- dat %>%
 ## Now we will extract landcover data for every unique locality
 library(velox) # Much faster than raster in terms of extracting data
 
-# what is this function supposed to do?
-calculate_pland <- function(regions,lc) {
-  
-  # include asserts for argument type
-  # an assert looks as follows and breaks the code execution if FALSE
-  # assertthat::assert_that("classname" %in% class(regions), msg = "regions has wrong class")
-  
-  # create a lookup table to get locality_id from row number
-  locs <- st_set_geometry(regions, NULL) %>% 
-    mutate(id = row_number())
-  
-  # extract using velox
-  lc_vlx <- velox(lc)
-  lc_vlx$extract(regions, df = TRUE) %>% 
-    # velox doesn't properly name columns, fix that
-    set_names(c("id", "landcover")) %>% 
-    # join to lookup table to get locality_id
-    inner_join(locs, ., by = "id") %>% 
-    select(-id)
+# make velox object
+lc_velox = velox(rast_10m)
+
+# make ebird buff spatial sp from sf
+ebird_buff_sp = as(ebird_buff, "Spatial")
+
+# write function to aggregate as mode
+funcMode <- function(x, na.rm = T) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
 }
 
-# Extracting landcover 
-# library(purrr)
-library(tidyr)
-
-# extract values as a vector
-lcvals = calculate_pland(ebird_buff, lc=rast_10m)
+# extract values from velox
+lcvals = lc_velox$extract(sp = ebird_buff_sp,
+                          fun = funcMode)
 
 # not sure why ebird_buff is expected to have a list column
 # suspect it should simply be a dataframe
