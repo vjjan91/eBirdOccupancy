@@ -46,15 +46,22 @@ save(envdataDf, file = "data/chelsa/chelsaVariograms.rdata")
 
 # plot variograms in a list
 {
-  png(filename = "figs/figChelsaVgrams.png", height = 800, width = 800*1.5,
+  png(filename = "figs/figChelsaVgrams.png", height = 800, width = 800*2,
       res = 150);
-  par(mfrow = c(2,3))
-  map2(envdataDf$vgram, envdataDf$variable, function(d1, d2){
+  par(mfrow = c(2,5))
+  
+  datanames = map_chr(envdata, names)
+  
+  map2(envdata, datanames, function(d1, d2){
+    plot(d1, col = viridis::plasma(30),
+         main = d2)
+  })
+  
+  map(envdataDf$vgram, function(d1){
     plot(d1$dist, d1$gamma, pch = 16, 
          type = "b", 
          xlab = "pairwise distance (degrees)",
-         ylab = "semivariance",
-         main = d2)
+         ylab = "semivariance")
   })
   dev.off()
 }
