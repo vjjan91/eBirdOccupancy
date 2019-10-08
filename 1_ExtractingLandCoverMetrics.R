@@ -60,6 +60,24 @@ funcMode <- function(x, na.rm = T) {
   ux[which.max(tabulate(match(x, ux)))]
 }
 
+# write a function 
+funcPland <- function(x, na.rm = T){
+  # tabulate values
+  a = table(x)
+  # make matrix
+  a = as.matrix(a)
+  # add values as rownames
+  a = cbind(as.numeric(rownames(a)), a)
+  # add proportions columns
+  a = cbind(a, a[,2]/sum(a[,2]))
+  # make vector of proportions
+  v = a[,3]
+  # add names
+  names(v) = as.character(a[,1])
+  # return named vector
+  return(v)
+}
+
 # extract values from velox
 lcvals = lc_velox$extract(sp = ebird_buff_sp,
                           fun = funcMode)
