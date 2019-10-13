@@ -10,7 +10,6 @@ ebd*.txt
 *.shp
 *.dbf
 *.shx
-*.txt
 
 # Session Data files
 *.RData
