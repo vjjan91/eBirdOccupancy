@@ -20,14 +20,14 @@ rast_10m <- raster("data/spatial/landcover100m.tif")
 ### NOTE: Might want to find a measure of landscape configuration as well?? ##
 
 # Setting a radius of 2.5km * 2.5 km as suggested above
-
-neighborhood_radius <- 500* ceiling(max(res(rast_10m))) / 2
+# THIS HAS BEEN CHANGED TO SUIT THE EXAMPLE
+neighborhood_radius <- 50 * ceiling(max(res(rast_10m))) / 2
 
 # Load eBird data prepared by PG so far
 # Loading the dataset containing 10 random observations made to a site file
 
 library(data.table)
-# reading 1e3 rows
+# reading 1e2 rows --- THIS IS AN EXAMPLE, REMOVE NROWS FOR FULL DATA
 dat <- fread("data/dataRand10.csv",header=T, nrows = 1e2)
 setDF(dat)
 head(dat)
@@ -52,42 +52,33 @@ library(velox) # Much faster than raster in terms of extracting data
 # make velox object
 lc_velox = velox(rast_10m)
 
-# make ebird buff spatial sp from sf
-ebird_buff_sp = as(ebird_buff, "Spatial")
-
-# write function to aggregate as mode
-funcMode <- function(x, na.rm = T) {
-  ux <- unique(x)
-  ux[which.max(tabulate(match(x, ux)))]
-}
-
-# write a function 
-funcPland <- function(x, na.rm = T){
-  # tabulate values
-  a = table(x)
-  # make matrix
-  a = as.matrix(a)
-  # add values as rownames
-  a = cbind(as.numeric(rownames(a)), a)
-  # add proportions columns
-  a = cbind(a, a[,2]/sum(a[,2]))
-  # make vector of proportions
-  v = a[,3]
-  # add names
-  names(v) = as.character(a[,1])
-  # return named vector
-  return(v)
-}
-
 # extract values from velox
-lcvals = lc_velox$extract(sp = ebird_buff_sp,
-                          fun = funcMode)
+lcvals = lc_velox$extract(sp = ebird_buff, df=T)
+names(lcvals) = c("id", "lc")
 
-# not sure why ebird_buff is expected to have a list column
-# suspect it should simply be a dataframe
-lc_extract <- ebird_buff %>% 
-  mutate(pland = lcvals)# %>% 
-  # select(pland) %>% 
-  # unnest(cols = pland)
+# get spread proportions
+library(glue); library(stringr)
+lc_prop = count(lcvals, id, lc) %>% 
+  group_by(id) %>%
+  mutate(lc = glue('lc_{str_pad(lc, 2, pad = "0")}'), 
+    prop = n/sum(n)) %>% 
+  dplyr::select(-n) %>% 
+  tidyr::pivot_wider(names_from = lc, 
+                     values_from = prop)
+  
+# link back to rand10 via ebird buff using coordinate id
+# drop geometry and assign id column
+ebird_buff <- ebird_buff %>% 
+  st_drop_geometry() %>% 
+  mutate(id = 1:nrow(.)) %>% 
+  # merge on id
+  left_join(lc_prop, by = "id")
 
+# join to rand10 on locality id
+dat <- dat %>% 
+  left_join(ebird_buff, by = "locality_id")
 
+# WRITE DAT AS PREFERRED
+fwrite(dat, file = "data/dataRand10_withLC.csv")
+
+# ends here
