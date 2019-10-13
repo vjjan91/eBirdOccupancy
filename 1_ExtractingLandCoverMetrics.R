@@ -3,7 +3,8 @@
 ### Loading the land cover rasters (resampled at diferent resolutions)
 
 library(raster)
-rast_10m <- raster("data/landUseClassification/Reprojected Image_UTM43N_31stAug_Ghats.tif")
+# THIS HAS BEEN CHANGED TO SUIT THE EXAMPLE, REPLACE WITH CORRECT LC RASTER
+rast_10m <- raster("data/spatial/landcover100m.tif")
 # plot(rast_10m)
 # rast_10m
 
