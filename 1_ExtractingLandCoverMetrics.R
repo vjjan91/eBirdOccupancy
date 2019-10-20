@@ -3,9 +3,10 @@
 ### Loading the land cover rasters (resampled at diferent resolutions)
 
 library(raster)
-rast_10m <- raster("C:\\Users\\vr235\\Downloads\\Reprojected Image_UTM43N_31stAug_Ghats.tif")
-plot(rast_10m)
-rast_10m
+# THIS HAS BEEN CHANGED TO SUIT THE EXAMPLE, REPLACE WITH CORRECT LC RASTER
+rast_10m <- raster("data/spatial/landcover100m.tif")
+# plot(rast_10m)
+# rast_10m
 
 ## From Matthew-strimas - eBird code 
 
@@ -19,13 +20,16 @@ rast_10m
 ### NOTE: Might want to find a measure of landscape configuration as well?? ##
 
 # Setting a radius of 2.5km * 2.5 km as suggested above
-
-neighborhood_radius <- 500* ceiling(max(res(rast_10m))) / 2
+# THIS HAS BEEN CHANGED TO SUIT THE EXAMPLE
+neighborhood_radius <- 50 * ceiling(max(res(rast_10m))) / 2
 
 # Load eBird data prepared by PG so far
 # Loading the dataset containing 10 random observations made to a site file
 
-dat <- read.csv("K:\\Chapter 2_Occupancy Modeling\\Data\\dataRand10.csv",header=T)
+library(data.table)
+# reading 1e2 rows --- THIS IS AN EXAMPLE, REMOVE NROWS FOR FULL DATA
+dat <- fread("data/dataRand10.csv",header=T, nrows = 1e2)
+setDF(dat)
 head(dat)
 
 # Creating a buffer around every unique localityID, latitude and longitude
@@ -45,28 +49,36 @@ ebird_buff <- dat %>%
 ## Now we will extract landcover data for every unique locality
 library(velox) # Much faster than raster in terms of extracting data
 
-calculate_pland <- function(regions,lc) {
-  # create a lookup table to get locality_id from row number
-  locs <- st_set_geometry(regions, NULL) %>% 
-    mutate(id = row_number())
+# make velox object
+lc_velox = velox(rast_10m)
+
+# extract values from velox
+lcvals = lc_velox$extract(sp = ebird_buff, df=T)
+names(lcvals) = c("id", "lc")
+
+# get spread proportions
+library(glue); library(stringr)
+lc_prop = count(lcvals, id, lc) %>% 
+  group_by(id) %>%
+  mutate(lc = glue('lc_{str_pad(lc, 2, pad = "0")}'), 
+    prop = n/sum(n)) %>% 
+  dplyr::select(-n) %>% 
+  tidyr::pivot_wider(names_from = lc, 
+                     values_from = prop)
   
-  # extract using velox
-  lc_vlx <- velox(lc)
-  lc_vlx$extract(regions, df = TRUE) %>% 
-    # velox doesn't properly name columns, fix that
-    set_names(c("id", "landcover")) %>% 
-    # join to lookup table to get locality_id
-    inner_join(locs, ., by = "id") %>% 
-    select(-id)
-}
+# link back to rand10 via ebird buff using coordinate id
+# drop geometry and assign id column
+ebird_buff <- ebird_buff %>% 
+  st_drop_geometry() %>% 
+  mutate(id = 1:nrow(.)) %>% 
+  # merge on id
+  left_join(lc_prop, by = "id")
 
-# Extracting landcover 
-library(purrr)
-library(tidyr)
+# join to rand10 on locality id
+dat <- dat %>% 
+  left_join(ebird_buff, by = "locality_id")
 
-lc_extract <- ebird_buff %>% 
-  mutate(pland = map_df(data, calculate_pland, lc=rast_10m)) %>% 
-  select(pland) %>% 
-  unnest(cols = pland)
+# WRITE DAT AS PREFERRED
+fwrite(dat, file = "data/dataRand10_withLC.csv")
 
-
+# ends here
