@@ -19,14 +19,16 @@ assertthat::assert_that(funcMode(c(2,2,2,2,3,3,3,4)) == as.character(2),
 rasterAgg = raster::aggregate(landcover, fact=10, fun = funcMode)
 
 # aggregate some more
-rasterAgg1km = raster::aggregate(landcover, fact=10, fun = funcMode)
+rasterAgg1km = raster::aggregate(landcover, fact=100, fun = funcMode)
 
 # plot
 x11();plot(rasterAgg1km, col = c("white",pals::kovesi.rainbow(7)))
 
 # export rasters
-raster::writeRaster(rasterAgg, filename = "data/spatial/landcover100m.tif", format = "GTiff")
-raster::writeRaster(rasterAgg1km, filename = "data/spatial/landcover1km.tif", format = "GTiff")
+raster::writeRaster(rasterAgg, filename = "data/spatial/landcover100m.tif", 
+                    format = "GTiff", overwrite =T)
+raster::writeRaster(rasterAgg1km, filename = "data/spatial/landcover1km.tif", 
+                    format = "GTiff", overwrite =T)
 
 #### compare rasters ####
 
@@ -66,3 +68,5 @@ data1km = raster::getValues(rasterAgg1km); data1km = data1km[data1km > 0]; data1
           col = "grey20", border = NA, density = 30, add = T)
   dev.off()
 }
+
+# ends here
