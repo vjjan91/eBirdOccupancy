@@ -65,3 +65,5 @@ save(envdataDf, file = "data/chelsa/chelsaVariograms.rdata")
   })
   dev.off()
 }
+
+# ends here
