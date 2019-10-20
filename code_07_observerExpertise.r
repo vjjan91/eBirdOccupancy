@@ -84,6 +84,7 @@ count(obsRanef, rptrScore < 0.5)
 # remove score below 0.5 and rescale
 obsRanef <- obsRanef[rptrScore >= 0.5,
          ][,rptrScore:=rescale(rptrScore)]
+
 # hist again
 hist(obsRanef$rptrScore)
 
