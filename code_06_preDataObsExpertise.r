@@ -9,12 +9,14 @@ rm(list = ls()); gc()
 # load libs
 library(data.table)
 
-# read in shapefile of wg to subset by bounding box
+#### load data and subset ####
+
+# read in shapefile of nilgiris to subset by bounding box
 library(sf)
-wg <- st_read("hillsShapefile/WG.shp"); box <- st_bbox(wg)
+wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp"); box <- st_bbox(wg)
 
 # read in data and subset
-ebd = fread("ebd_Filtered_May2018.txt")[between(LONGITUDE, box["xmin"], box["xmax"]) & between(LATITUDE, box["ymin"], box["ymax"]),]
+ebd = fread("ebd_Filtered_Jun2019.txt")[between(LONGITUDE, box["xmin"], box["xmax"]) & between(LATITUDE, box["ymin"], box["ymax"]),][year(`OBSERVATION DATE`) >= 2013,]
 
 # make new column names
 library(magrittr); library(stringr)
@@ -27,6 +29,9 @@ columnsOfInterest <- c("checklist_id","scientific_name","observation_count","loc
 
 ebd <- dplyr::select(ebd, dplyr::one_of(columnsOfInterest))
 
+# # read in data
+# ebd <- fread("data/dataForUse.csv")
+
 gc()
 
 # get the checklist id as SEI or group id
@@ -38,12 +43,6 @@ ebdNchk <- ebd[,year:=year(observation_date)
                ][,.(nChk = length(unique(checklist_id)), 
                   nSei = length(unique(sampling_event_identifier))), 
                by= list(observer_id, year)]
-
-# print as confirmation that SEIs are checklists
-{pdf(file = "figs/figNchkVsNsei.pdf")
-  plot(ebdNchk$nChk, ebdNchk$nSei); abline(a = 0, b=1)
-  dev.off()
-}
 
 # get decimal time function
 library(lubridate)
@@ -59,7 +58,17 @@ time_to_decimal <- function(x) {
 # at the SEI level
 
 # count the number of records of SEI and observer combinations
-ebdSpSum <- ebd[,.N, by = list(sampling_event_identifier, observer_id)]
+# count number of species of the focal species seen per sei per observer
+# get species of interest list
+# add species of interest
+specieslist = fread("data/specieslistExtended.csv")
+
+# set species of interest
+soi = specieslist$sciName
+
+ebdSpSum <- ebd[,.(nSp = .N,
+                   totSoiSeen = length(intersect(scientific_name, soi))), 
+                by = list(sampling_event_identifier, observer_id)]
 
 # write to file and link with checklsit id later
 fwrite(ebdSpSum, file = "data/dataChecklistSpecies.csv")
@@ -68,54 +77,44 @@ fwrite(ebdSpSum, file = "data/dataChecklistSpecies.csv")
 ebd[,`:=`(decimalTime = time_to_decimal(time_observations_started),
           julianDate = yday(as.POSIXct(observation_date)))]
 
+# write useful data to file
+fwrite(ebd, "data/dataForUse.csv")
+
 # 2. get the summed effort and distance for each checklist
 # and the first of all other variables
 library(dplyr)
 ebdEffChk <- setDF(ebd) %>% 
+  mutate(year = year(observation_date)) %>% 
   distinct(sampling_event_identifier, observer_id,
+           year,
            duration_minutes, effort_distance_km, longitude, latitude,
            decimalTime, julianDate, number_observers) %>% 
   # drop rows with NAs in cols used in the model
   tidyr::drop_na(sampling_event_identifier, observer_id,
-          duration_minutes, decimalTime, julianDate)
-
-# count groups larger than 10
-count(ebdEffChk, number_observers > 10)
+          duration_minutes, decimalTime, julianDate) %>% 
+  
+  # drop years below 2013
+  filter(year >= 2013)
 
 # 3. join to covariates and remove large groups (> 10)
 ebdChkSummary <- inner_join(ebdEffChk, ebdSpSum)#
 
-# plot relationship between species and observers
-tempdata <- setDT(ebdChkSummary)[,roundobs:=plyr::round_any(number_observers, 5)
-                                 ][,.(mean = mean(N),
-                                    sd = sd(N)), by = roundobs]
+# count groups larger than 10
+count(ebdEffChk, number_observers > 10)
 
-# plot and check
-ggplot(tempdata)+
-  geom_pointrange(aes(x = roundobs, y = mean, ymin=mean-sd, ymax=mean+sd),
-                  col = "grey40")+
-  xlim(0, 200)+
-  geom_hline(yintercept = 30, col = 2)+
-  theme_light()+labs(x = "osbervers", y = "species seen")
-
-ggsave(filename = "figs/figNspVsObs.pdf", height = 6, width = 6, device = "pdf")
-
-# remove only groups greater than 50 obs
+# remove only groups greater than 10 obs
 ebdChkSummary <- ebdChkSummary %>% 
   filter(number_observers <= 50, !is.na(number_observers))
 
 # remove ebird data
 rm(ebd); gc()
 
-# write number of checklists per observer to file
-fwrite(ebdNchk, file = "data/eBirdNchecklistObserver.csv")
-
 #### get landcover ####
 # here, we read in the landcover raster and assign a landcover value
 # to each checklist. checklists might consist of one or more landcovers
 # in some cases, but we assign only one based on the first coord pair
 # read in raster
-landcover <- raster::raster("data/glob_cover_wghats.tif")
+landcover <- raster::raster("data/landUseClassification/Classified Image_31stAug_WGS84_Ghats.tif")
 
 # get for unique points
 landcoverVec <- raster::extract(x = landcover, y = as.matrix(ebdChkSummary[,c("longitude","latitude")]))

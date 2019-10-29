@@ -18,8 +18,10 @@ data = mutate(data, jul.date = lubridate::yday(as.Date(observation_date)))
 #'keep the useful columns, filter only black and orange flycatcher
 dataSelected = select(data, scientific_name, sampling_event_identifier, locality_id, jul.date,
                     duration_minutes, effort_distance_km, number_observers,
-                    time_observations_started, pres_abs) %>% 
-  filter(scientific_name == "Ficedula nigrorufa") # comment out this filter to process all species
+                    time_observations_started, pres_abs,
+                    expertise) %>% 
+  # filter(scientific_name == "Ficedula nigrorufa") # comment out this filter to process all species
+  filter(!is.na(expertise))
 
 #'split into list by species
 dataBySpecies = dataSelected %>% 
@@ -40,8 +42,8 @@ dataGathered = dataBySpecies %>%
 dataGathered = map(dataGathered, function(x){
   plyr::dlply(x, "variable")})
 
-#'check that there are 14 species, each as a list element
-#assertthat::assert_that(length(dataGathered) == 14)
+#'check that there are 41 species, each as a list element
+assertthat::assert_that(length(dataGathered) == 41)
 
 #### spread data over localities by visit ####
 #'each date is taken to be a single visit
@@ -58,3 +60,5 @@ dataSpread = dataGathered %>%
 
 #### save as rdata for next phase ####
 save(dataSpread, file = "dataSpread.rdata")
+
+# end here2

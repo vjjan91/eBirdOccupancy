@@ -10,7 +10,6 @@ ebd*.txt
 *.shp
 *.dbf
 *.shx
-*.txt
 
 # Session Data files
 *.RData
@@ -22,10 +21,20 @@ ebd*.txt
 *.Rhistory
 .Rproj.user
 
-<<<<<<< HEAD
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
 .Rproj.user
 =======
 *.csv
->>>>>>> 6386cde094606219151c7d9ba7fea2e6d423267e
+!data/specieslistExtended.csv
+
+# any zip or shapefile
+*.zip
+*.shp
+*.prj
+*.cpg
+*ini
+
+# pdf files
+*.pdf
+*.xl*

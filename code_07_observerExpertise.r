@@ -5,13 +5,17 @@ rm(list = ls()); gc()
 # load libs and data
 library(data.table)
 library(magrittr); library(dplyr); library(tidyr)
+
+# get ci func
+ci <- function(x){qnorm(0.975)*sd(x, na.rm = T)/sqrt(length(x))}
+
 # read checklist covars
-ebdChkSummary <- fread("data/eBirdChecklistVars.csv")[,roundobs:=NULL]
+ebdChkSummary <- fread("data/eBirdChecklistVars.csv")
 
 # change names
-setnames(ebdChkSummary, c("sei", "observer", "duration", "distance",
+setnames(ebdChkSummary, c("sei", "observer","year", "duration", "distance",
                           "longitude", "latitude", "decimalTime",
-                          "julianDate", "nObs", "nSp", "landcover"))
+                          "julianDate", "nObs", "nSp", "nSoi", "landcover"))
 
 # count data points per observer 
 obscount <- count(ebdChkSummary, observer) %>% filter(n >= 10)
@@ -23,109 +27,68 @@ ebdChkSummary <- ebdChkSummary %>%
          duration > 0) %>% 
   mutate(landcover = as.factor(landcover),
          observer = as.factor(observer)) %>% 
-  drop_na() # remove NAs, avoids errors later
+  tidyr::drop_na() # remove NAs, avoids errors later
 
-#### modelling species in checklist ####
-# summarise the data
+#### repeatability model for observers ####
+library(scales)
 
-# construct a scam
-library(gamm4)
+# cosine transform the decimal time and julian date
+ebdChkSummary <- setDT(ebdChkSummary)[duration <= 300,
+              ][,`:=`(timeTrans = 1 - cos(12.5*decimalTime/max(decimalTime)),
+                dateTrans = cos(6.25*julianDate/max(julianDate)))
+              ][,`:=`(timeTrans = rescale(timeTrans, to = c(0,6)),
+              dateTrans = rescale(dateTrans, to = c(0,6)))]
 
-# drop NAs to avoid errors
-modNspecies <- gamm4(nSp ~ s(log(duration), k = 5) + 
-                       s(decimalTime, bs = "cc") +
-                       s(julianDate, bs = "cc") + 
-                       landcover, 
-                     random = ~(1|observer), 
-                     data = ebdChkSummary, family = "poisson")
+# uses either a subset or all data
+library(rptR)
+modObsRep <- rpt(log(nSp) ~ log(duration) + timeTrans + dateTrans + landcover + 
+                   (1|year)+
+                   (1|observer), 
+                 grname = c("observer"), 
+                 data = ebdChkSummary, nboot = 100, npermut = 0, datatype = "Gaussian")
+
+# examine observer repeatability
+modObsRep
 
 # save model object
-save(modNspecies, file = "data/modExpertiseData.rdata")
+save(modObsRep, file = "data/modObsRepeat.rdata")
 
-#### load model object and fit a curve ####
-load("data/modExpertiseData.rdata")
+#### write model output to file ####
+# make dir if absent
+if(!dir.exists("data/modOutput")){
+  dir.create("data/modOutput")
+}
 
-summary(modNspecies$mer)
+# write model output to text file
+{writeLines(R.utils::captureOutput(list(Sys.time(), summary(modObsRep))), 
+            con = "data/modOutput/modOutExpertise.txt")}
+
+#### load model object and get ranef scores ####
+load("data/modObsRepeat.rdata")
 
 # get the ranef coefficients as a measure of observer score
-obsRanef <- lme4::ranef(modNspecies$mer)[[1]]
+obsRanef <- lme4::ranef(modObsRep$mod)[[1]]
+
 # make datatable
 setDT(obsRanef, keep.rownames = T)[]
 # set names
-setnames(obsRanef, c("observer", "ranefScore"))
+setnames(obsRanef, c("observer", "rptrScore"))
+
 # scale ranefscore between 0 and 1
-obsRanef[,ranefScore:=scales::rescale(ranefScore)]
+obsRanef[,rptrScore:=scales::rescale(rptrScore)]
 
-# use predict method
-setDT(ebdChkSummary)
-ebdChkSummary[,predval:=predict(modNspecies$gam, type = "response")]
-# round the effort to 10 min intervals
-ebdChkSummary[,roundHour:=plyr::round_any(duration, 30, f = floor)]
+# plot histogram and remove outliers
+hist(obsRanef$rptrScore)
+count(obsRanef, rptrScore < 0.5)
 
-# summarise the empval, predval grouped by observer and round10min
-pltData <- ebdChkSummary[,.(prednspMean = mean(predval, na.rm = T),
-             prednspSD = sd(predval, na.rm = T)),
-          by=list(observer, roundHour)]
+# remove score below 0.5 and rescale
+obsRanef <- obsRanef[rptrScore >= 0.5,
+         ][,rptrScore:=rescale(rptrScore)]
 
-# get emp data mean and sd
-pltDataEmp <- ebdChkSummary[,roundHour:=plyr::round_any(duration, 30, f = floor)
-                        ][,.(empnspMean = mean(nSp),
-                             empnspSd = sd(nSp)), by=list(roundHour)]
+# hist again
+hist(obsRanef$rptrScore)
 
-# plot and examine in base R plots
-setDF(pltData)
+# export observer ranef score
+fwrite(obsRanef, file = "data/dataObsRptrScore.csv")
 
-# filter for 10 data points or more
-pltData <- pltData %>% filter(observer %in% obscount$observer)  
-# nest data
-pltData <- tidyr::nest(pltData, -observer)
-
-# get limits
-xlims = c(0, 660); ylims = c(0, 100)
-# set up plot
-{pdf(file = "figs/figNspTime.pdf", width = 6, height = 6)
-  plot(0, xlim = xlims, ylim = ylims, type = "n", 
-       xlab = "total effort (mins)", ylab = "N species")
-  # plot in a loop
-  for(i in 1:nrow(pltData)){
-    df = pltData$data[[i]]
-    lines(df$roundHour, df$prednspMean, col=scales::alpha(rgb(0,0,0), 0.05))
-  }
-  
-  # add emp data points
-  points(pltDataEmp$roundHour, pltDataEmp$empnspMean, col = 2)
-  abline(v = 60, lty = 2, col = 2)
-  
-  # add error bars
-  #arrows(pltDataEmp$roundHour, pltDataEmp$empnspMean+pltDataEmp$empnspSd, pltDataEmp$roundHour, pltDataEmp$empnspMean-pltDataEmp$empnspSd, col = 2, code=3, angle = 90, length = 0.05)
-  dev.off()
-  
-}
-
-#### predict observer scores ####
-# run predict on new data with obs id, mean duration
-ebdPredict <- setDF(ebdChkSummary) %>% 
-  mutate(duration = 60)
-
-# get predicted value at 60 mins
-ebdPredict$predNsp <- predict(modNspecies$mer, type = "response", 
-                              newdata = ebdPredict, allow.new.levels = T)
-
-# summarise over observers
-ebdObsScore <- ebdPredict %>% 
-  group_by(observer) %>% 
-  summarise_at(vars(predNsp), list(~mean(.))) %>% 
-  mutate(normScore = scales::rescale(predNsp))
-
-# save observer scores
-fwrite(ebdObsScore, file = "data/dataObserverScore.csv")
-
-# plot figure
-{pdf(file = "figs/figObsScoreDist.pdf", width = 6, height = 6)
-  print(ggplot(ebdObsScore)+
-    stat_density(aes(x = normScore), geom = "line")+
-    theme_classic())
-  dev.off()
-}
-#
 # end here

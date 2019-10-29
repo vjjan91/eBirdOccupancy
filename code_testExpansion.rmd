@@ -1,0 +1,120 @@
+
+# test for expansion
+
+testing some things:
+
+1. adding study sites
+2. identifying study species per area
+3. getting scores per area
+
+```{r}
+# load libs
+library(data.table)
+library(sf)
+library(magrittr)
+library(purrr)
+```
+
+## add data
+
+```{r get_data}
+# load checklist data from raw
+ebd = fread("data/dataWGbboxMid2018.csv")
+
+# make new column names
+library(stringr)
+newNames = str_replace_all(colnames(ebd), " ", "_") %>%
+  str_to_lower()
+setnames(ebd, newNames)
+
+# keep useful columns
+columnsOfInterest = c("checklist_id","scientific_name","observation_count","locality","locality_id","locality_type","latitude","longitude","observation_date","time_observations_started","observer_id","sampling_event_identifier","protocol_type","duration_minutes","effort_distance_km","effort_area_ha","number_observers","species_observed","reviewed","state_code", "group_identifier")
+
+ebd = dplyr::select(ebd, dplyr::one_of(columnsOfInterest))
+
+# add checklist id
+ebd[,checklist_id := ifelse(group_identifier == "", 
+                            sampling_event_identifier, group_identifier),]
+```
+
+```{r get_checklists}
+# figure whether to include checklists and in which study site
+library(dplyr)
+chk = ebd %>% distinct(observer_id, checklist_id, longitude, latitude, number_observers) %>% 
+  filter(number_observers <= 10)
+# get positions
+library(sf)
+pos = chk[,c("longitude","latitude")] %>% 
+  st_as_sf(coords = c("longitude", "latitude")) %>% 
+  `st_crs<-`(4326) %>% 
+  st_transform(32643)
+```
+
+## adding study sites
+
+we only have data from the western states, so we'll restrict ourselves to the WG, and choose three equally spaced points in the shapefile. about each one, we'll construct a 100 km buffer, and work with the bounding box.
+
+```{r get_bboxes}
+# load shapefile and get bbox
+wg = st_read("data/spatial/hillsShapefile/WG.shp")
+wgbox = st_bbox(wg)
+# get random points
+set.seed(0)
+wgsample = st_sample(wg, size = 3, type = "random")
+
+# get buffer and boxes
+wgsample = st_transform(wgsample, 32643)
+wgsample = st_buffer(wgsample, 5e4) %>% 
+  purrr::map(st_sfc) %>%
+  purrr::map(st_sf) %>% 
+  purrr::map(function(z){ `st_crs<-`(z, 32643)})
+
+# assign numeric value to polygon
+wgsample = purrr::map2(wgsample, c(1:length(wgsample)), function(a,b){
+  dplyr::mutate(a, site = b)
+})
+# join polygons
+wgsample = purrr::reduce(wgsample, rbind)
+
+# rasterise wg for site assignment later
+# wg = st_transform(wg, 32643)
+# library(stars)
+# rast1 = raster(st_rasterize(wg))
+# r1 = as(rast1, "Raster")
+
+# prep site as default none
+# r1$site = 0
+
+# rasterise polygons
+library(stars)
+r2 = st_rasterize(wgsample) %>% as("Raster")
+```
+
+```{r get_site}
+library(raster)
+site = extract(r2, st_coordinates(pos))
+# add site to data
+setDT(chk)
+chk[,site:=site]
+```
+
+# splitting data by site
+
+```{r filter_data}
+# merge data for site
+ebd = merge(ebd, chk)
+# remove site NA
+ebd <- ebd[!is.na(site),]
+```
+
+```{r count_species}
+# for each site count species reports
+library(tidyr)
+species = ebd[,.N, by=list(site, scientific_name)
+              ][N >= 5,] # remove species with fewer than 5 obs
+
+# group by site and get quantiles
+species = species %>% 
+  group_by(site) %>% nest()
+```
+
