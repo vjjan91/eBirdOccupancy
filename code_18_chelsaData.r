@@ -72,7 +72,7 @@ ebird_buff <- dat %>%
 # run extract across all 
 env2.5kData <- purrr::map(list(eviData, chelsaData, elevData), function(stk){
   velstk <- velox(stk)
-  dextr <- velstk$extract(sp = ebird_buff, df = TRUE, fun = mean)
+  dextr <- velstk$extract(sp = ebird_buff, df = TRUE, fun = function(x)mean(x, na.rm=T))
   names(dextr) <- c("id", names(stk))
   return(as_tibble(dextr))
 })
