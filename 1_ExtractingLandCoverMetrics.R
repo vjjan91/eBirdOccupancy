@@ -64,7 +64,8 @@ lc_prop = count(lcvals, id, lc) %>%
     prop = n/sum(n)) %>% 
   dplyr::select(-n) %>% 
   tidyr::pivot_wider(names_from = lc, 
-                     values_from = prop)
+                     values_from = prop, 
+                     values_fill = list(prop = 0))
   
 # link back to rand10 via ebird buff using coordinate id
 # drop geometry and assign id column
