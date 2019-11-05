@@ -77,18 +77,35 @@ setnames(obsRanef, c("observer", "rptrScore"))
 # scale ranefscore between 0 and 1
 obsRanef[,rptrScore:=scales::rescale(rptrScore)]
 
-# plot histogram and remove outliers
+#### plot histogram ####
 hist(obsRanef$rptrScore)
 count(obsRanef, rptrScore < 0.5)
 
 # remove score below 0.5 and rescale
 obsRanef <- obsRanef[rptrScore >= 0.5,
-         ][,rptrScore:=rescale(rptrScore)]
-
+                     ][,rptrScore:=rescale(rptrScore)]
 # hist again
 hist(obsRanef$rptrScore)
 
-# export observer ranef score
-fwrite(obsRanef, file = "data/dataObsRptrScore.csv")
+# plot in landcover classes
+obsRanef <- merge(ebdChkSummary[,c("observer", "landcover","year")], obsRanef, 
+                  by = c("observer"))
+
+library(ggplot2)
+
+ggplot(obsRanef)+
+  geom_histogram(aes(x = rptrScore, group = landcover))+
+  facet_wrap(~landcover, scales = "free", labeller = label_both)+
+  scale_y_continuous(labels = scales::comma,
+                     breaks = scales::pretty_breaks(n = 4))+
+  # ggthemes::theme_clean()+
+  labs(x = "expertise", y = "count", title = "observer expertise in landcover classes")
+
+ggsave("figs/fig_histObsExp_landcover_correctscore.png", device = png(), width = 11, height = 8, units = "in",
+       dpi = 300)
+dev.off()
+
+#### export observer ranef score ####
+fwrite(obsRanef[,.(observer, rptrScore)], file = "data/dataObsRptrScore.csv")
 
 # end here
