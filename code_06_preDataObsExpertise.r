@@ -104,7 +104,7 @@ count(ebdEffChk, number_observers > 10)
 
 # remove only groups greater than 10 obs
 ebdChkSummary <- ebdChkSummary %>% 
-  filter(number_observers <= 50, !is.na(number_observers))
+  filter(number_observers <= 10, !is.na(number_observers))
 
 # remove ebird data
 rm(ebd); gc()
