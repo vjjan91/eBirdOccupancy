@@ -9,7 +9,7 @@ library(sf)
 
 #### load ebird data ####
 # reading 1e2 rows --- THIS IS AN EXAMPLE, REMOVE NROWS FOR FULL DATA
-dat <- fread("data/dataRand10.csv",header=T, nrows = 1e3)
+dat <- fread("data/dataRand10.csv", header=T)
 setDF(dat)
 head(dat)
 

@@ -1,5 +1,5 @@
 [[1]]
-[1] "2019-09-19 15:26:19 CEST"
+[1] "2019-11-05 21:25:24 CET"
 
 [[2]]
 
@@ -7,24 +7,24 @@ Repeatability estimation using the lmm method
 
 Call = rpt(formula = log(nSp) ~ log(duration) + timeTrans + dateTrans + landcover + (1 | year) + (1 | observer), grname = c("observer"), data = ebdChkSummary, datatype = "Gaussian", nboot = 100, npermut = 0)
 
-Data: 73600 observations
+Data: 69739 observations
 ----------------------------------------
 
-observer (856 groups)
+observer (813 groups)
 
 Repeatability estimation overview: 
       R     SE   2.5%  97.5% P_permut  LRT_P
-   0.33   0.02  0.293  0.366       NA      0
+  0.326 0.0187  0.286  0.359       NA      0
 
 Bootstrapping and Permutation test: 
             N   Mean Median   2.5%  97.5%
-boot      100   0.33  0.329  0.293  0.366
+boot      100   0.33  0.333  0.286  0.359
 permut      1     NA     NA     NA     NA
 
 Likelihood ratio test: 
-logLik full model = -56457.56
-logLik red. model = -65660.88
-D  = 18400, df = 1, P = 0
+logLik full model = -53557.29
+logLik red. model = -62444.02
+D  = 17800, df = 1, P = 0
 
 ----------------------------------------
 
