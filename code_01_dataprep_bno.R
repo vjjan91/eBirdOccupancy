@@ -6,6 +6,7 @@ rm(list = ls()); gc()
 # load libs
 library(tidyverse); library(readr); library(sf)
 library(auk)
+library(readxl)
 
 # custom sum function
 sum.no.na = function(x){sum(x, na.rm = T)}
@@ -16,10 +17,10 @@ dropGeometry = function(x){
 }
 
 # add species of interest
-specieslist = read_csv("data/specieslistExtended.csv")
+specieslist = read_excel("data/species_list_13_11_2019.xlsx")
 
 # set species of interest
-speciesOfInterest = specieslist$sciName
+speciesOfInterest = specieslist$scientific_name
 
 #set file paths for auk functions
 f_in_ebd <- file.path("ebd_Filtered_Jun2019.txt")
@@ -45,8 +46,8 @@ f_out_sampling <- "data/eBirdSamplingDataWG_filtered.txt"
 
 # Below code need not be run if it has been filtered once already and the above path leads to
 # the right dataset
-# ebd_filtered <- auk_filter(ebd_filters, file = f_out_ebd,
-#                            file_sampling = f_out_sampling, overwrite = TRUE)
+ebd_filtered <- auk_filter(ebd_filters, file = f_out_ebd,
+                           file_sampling = f_out_sampling, overwrite = TRUE)
 
 #### read the ebird data in ####
 ebd <- read_ebd(f_out_ebd)
@@ -130,7 +131,7 @@ dataGrouped = map(data, function(x){
 
 # bind rows combining data frames, and filter
 dataGrouped = bind_rows(dataGrouped) %>%
-  filter(duration_minutes <= 240, effort_distance_km <= 5, effort_area_ha <= 500)
+  filter(duration_minutes <= 300, effort_distance_km <= 5, effort_area_ha <= 500)
 
 # get data identifiers, such as sampling identifier etc
 dataConstants = data %>% 
@@ -156,7 +157,7 @@ dataGrouped = mutate(dataGrouped,
                      decimalTime = time_to_decimal(time_observations_started))
 
 # check class of dataGrouped, make sure not sf
-class(dataGrouped)
+assertthat::assert_that(!"sf" %in% class(dataGrouped))
 
 #### load covariates from raster files ####
 # load elevation and crop to hills size, then mask by hills
@@ -182,7 +183,7 @@ EVI.yearly = raster::stack(as.list(evifiles))
 # EVI.yearly = EVI.yearly*0.0001
 
 # resample to elevation resolution
-EVI.all.resam <-  raster::resample(EVI.all, alt.hills,method ="bilinear")
+EVI.all.resam <-  raster::resample(EVI.all, alt.hills, method ="bilinear")
 EVI.yearly.resam <- raster::resample(EVI.yearly, alt.hills, method="bilinear")
 
 # get slope and aspect
