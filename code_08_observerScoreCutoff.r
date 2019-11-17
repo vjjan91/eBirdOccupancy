@@ -8,12 +8,12 @@ library(tidyverse)
 
 #### data loading ####
 # get ranef score data
-ranefscore <- fread("data/dataObsRptrScore.csv")
+ranefscore <- read_csv("data/dataObsRptrScore.csv") %>% 
+  distinct()
 
 # plot ranef score dist
 plotScoreDist <- ggplot(ranefscore)+
   geom_histogram(aes(rptrScore), fill = "white", col = 1)+
-  themeEbird()+
   labs(x = "observer score", y = "count", title = "distribution of observer scores")
 
 # export
@@ -25,20 +25,8 @@ ebd <- fread("data/dataForUse.csv")
 ebd[,year:=year(observation_date)]
 
 # get soi names
-soi <- c("Anthus nilghiriensis",
-         "Montecincla cachinnans",
-         "Montecincla fairbanki",
-         "Sholicola albiventris",
-         "Sholicola major",
-         "Culicicapa ceylonensis",
-         "Pomatorhinus horsfieldii",
-         "Ficedula nigrorufa",
-         "Pycnonotus jocosus",
-         "Iole indica",
-         "Hemipus picatus",
-         "Saxicola caprata",
-         "Eumyias albicaudatus",
-         "Rhopocichla atriceps")
+soifile <- readxl::read_excel("data/species_list_13_11_2019.xlsx")
+soi <- soifile$scientific_name
 
 #### prop checklist reporting species ####
 # what is the proportion of each observer's checklists per year
@@ -50,9 +38,8 @@ ebdSoiSummary <- ebd[,.(nSei = length(unique(sampling_event_identifier))), by = 
                        ][,propChk:=N/nSei]
 
 # add observer score
-ebdSoiSummary <- merge(ebdSoiSummary, ranefscore, by.x = "observer_id", by.y = "observer", all.y = FALSE, no.dups = TRUE)
+ebdSoiSummary <- left_join(ebdSoiSummary, ranefscore, by = c("observer_id" = "observer"))
 
-source("ggThemeEbird.r")
 plotSoiPropChk <-
   ggplot(ebdSoiSummary)+
   geom_point(aes(x = rptrScore, y = propChk), 
@@ -69,7 +56,6 @@ plotSoiPropChk <-
   # scale_x_continuous(breaks = c(2013:2018))+
   # scale_y_continuous(breaks = seq(0,1, 0.1))+
   coord_cartesian(ylim = c(0, 1), expand = T)+
-  themeEbird()+
   # theme(legend.position = c(0.8, 0.1),
   #       legend.direction = "horizontal")+
   labs(y = "proportion of checklists",
@@ -77,15 +63,17 @@ plotSoiPropChk <-
        title = "prop. checklists reporting focal species ~ osberver score")
 
 # export
-ggsave(plotSoiPropChk, filename = "figs/figSoiScore.png", width = 8, height = 8, device = png(), dpi = 300); dev.off()
+ggsave(plotSoiPropChk, filename = "figs/figSoiScore.png", width = 11, height = 10, device = png(), dpi = 300); dev.off()
 
 #### prop of sightings reported by score ####
 # of all the reports of focal species, what proportion were reported
 # by different observer scores?
-ebdSoiProp <- ebd[scientific_name %in% soi,
-    ][,.N, by = list(observer_id, scientific_name),
-          ][,prop:= N/sum(N), by = scientific_name
-            ][ranefscore, on = c("observer_id" = "observer")] %>% 
+ebdSoiProp <- ebd %>% 
+  filter(scientific_name %in% soi) %>% 
+  count(observer_id, scientific_name) %>% 
+  group_by(observer_id) %>% 
+  mutate(prop = n/sum(n)) %>% 
+  left_join(ranefscore, by = c("observer_id" = "observer")) %>% 
   na.omit()
 
 # plot
@@ -96,9 +84,8 @@ plotSoiPropObs <- ggplot(ebdSoiProp)+
               col = 4, size = 0.5, method = "gam",
               formula = y ~ s(x, k = 4))+
   facet_wrap(~scientific_name, scales = "free_y", drop = T)+
-  scale_y_continuous(labels = percent)+
-  coord_cartesian(ylim=c(0,0.02))+
-  themeEbird()+
+  scale_y_continuous(labels = scales::percent)+
+  #coord_cartesian(ylim=c(0,0.02))+
   labs(x = "osberver score",
        y = "% observations",
        title = "prop. observations of focal species ~ observer score")
@@ -107,15 +94,19 @@ plotSoiPropObs <- ggplot(ebdSoiProp)+
 ggsave(plotSoiPropObs, filename = "figs/figSoiProp.png", width = 8, height = 8, device = png(), dpi = 300); dev.off()
 
 #### get panel plot ####
-ebdSoiProp <- ebd[ranefscore, on = c("observer_id" = "observer")
-                  ][,roundscore := plyr::round_any(rptrScore, 0.1),
-                    ][scientific_name %in% soi,
-                      ][,.N, by = list(roundscore, scientific_name, year),
-                        ][,prop:= N/sum(N), by = list(scientific_name,year)] %>% 
+# prepare data for panel plot
+ebdSoiProp <- ebd %>% 
+  filter(scientific_name %in% soi) %>% 
+  left_join(ranefscore, by = c("observer_id" = "observer")) %>% 
+  mutate(roundscore = plyr::round_any(rptrScore, 0.1)) %>% 
+  count(roundscore, scientific_name, year) %>% 
+  group_by(scientific_name, year) %>% 
+  mutate(prop = n/sum(n)) %>% 
   na.omit() %>% 
   full_join(crossing(scientific_name = soi, year = 2013:2018, roundscore = seq(0,1,0.1))) %>% 
   drop_na(scientific_name)
 
+# make panel plot
 plotPanelSoiProp <- ggplot(ebdSoiProp)+
   geom_tile(aes(year, roundscore, fill = prop))+
   facet_wrap(~scientific_name, drop = T)+
@@ -123,12 +114,13 @@ plotPanelSoiProp <- ggplot(ebdSoiProp)+
   scale_fill_viridis_c(option = "C", direction = -1)+
   scale_x_continuous(breaks = 2013:2018)+
   scale_y_continuous(breaks = seq(0, 1, 0.1))+
-  
-  themeEbird()+
-  theme(legend.position = c(0.8, 0.1))+
+  theme(legend.position = "right",
+        legend.key.width = unit(0.1, "cm"))+
   labs(x = "year", y = "binned expertise score",
        title = "prop. observations of focal species ~ binned score ~ year",
-       fill = "prop. observations")
+       fill = "prop. obsvtns")
 
 # export
 ggsave(plotPanelSoiProp, filename = "figs/figSoiPanelProp.png", width = 8, height = 8, device = png(), dpi = 300); dev.off()
+
+# ends here
