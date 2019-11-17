@@ -5,7 +5,7 @@ Elevation/
 EVI/
 hillsShapefile/
 ebd*.txt
-eBird*.txt
+data/
 
 *.tif*
 *.shp
