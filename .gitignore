@@ -5,7 +5,8 @@ Elevation/
 EVI/
 hillsShapefile/
 ebd*.txt
-data/*
+data/eBirdDataWG_filtered.txt
+data/eBirdSamplingDataWG_filtered.txt
 
 *.tif*
 *.shp
