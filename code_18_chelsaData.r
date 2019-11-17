@@ -24,7 +24,7 @@ reslist <- purrr::map_dbl(rasterFiles, function(chr){
 })
 
 # load evi data rasters
-eviData <- raster::stack("EVI/MOD13Q1_EVI_AllYears.tif")[[c(1,7,10)]]
+eviData <- raster::stack("data/spatial/EVI/MOD13Q1_EVI_AllYears.tif")[[c(1,7,10)]]
 
 # gather chelsa rasters
 chelsaData <- purrr::map(rasterFiles, function(chr){

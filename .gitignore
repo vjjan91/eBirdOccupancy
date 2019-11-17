@@ -5,6 +5,8 @@ Elevation/
 EVI/
 hillsShapefile/
 ebd*.txt
+data/eBirdDataWG_filtered.txt
+data/eBirdSamplingDataWG_filtered.txt
 
 *.tif*
 *.shp
@@ -26,7 +28,9 @@ rsconnect/
 .Rproj.user
 =======
 *.csv
+*.xl*
 !data/specieslistExtended.csv
+!data/species_list_13_11_2019.xlsx
 
 # any zip or shapefile
 *.zip
@@ -37,4 +41,3 @@ rsconnect/
 
 # pdf files
 *.pdf
-*.xl*
