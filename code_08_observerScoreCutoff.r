@@ -91,7 +91,7 @@ plotSoiPropObs <- ggplot(ebdSoiProp)+
        title = "prop. observations of focal species ~ observer score")
 
 # export
-ggsave(plotSoiPropObs, filename = "figs/figSoiProp.png", width = 8, height = 8, device = png(), dpi = 300); dev.off()
+ggsave(plotSoiPropObs, filename = "figs/figSoiProp.png", width = 12, height = 10, device = png(), dpi = 300); dev.off()
 
 #### get panel plot ####
 # prepare data for panel plot
@@ -121,6 +121,6 @@ plotPanelSoiProp <- ggplot(ebdSoiProp)+
        fill = "prop. obsvtns")
 
 # export
-ggsave(plotPanelSoiProp, filename = "figs/figSoiPanelProp.png", width = 8, height = 8, device = png(), dpi = 300); dev.off()
+ggsave(plotPanelSoiProp, filename = "figs/figSoiPanelProp.png", width = 12, height = 10, device = png(), dpi = 300); dev.off()
 
 # ends here
