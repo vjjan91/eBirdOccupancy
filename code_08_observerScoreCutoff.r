@@ -6,6 +6,11 @@ rm(list = ls()); gc()
 library(data.table)
 library(tidyverse)
 
+# simple ci
+ci <- function(x){
+  qnorm(0.975)*sd(x, na.rm = T)/sqrt(length(x))
+}
+
 #### data loading ####
 # get ranef score data
 ranefscore <- read_csv("data/dataObsRptrScore.csv") %>% 
@@ -16,9 +21,6 @@ plotScoreDist <- ggplot(ranefscore)+
   geom_histogram(aes(rptrScore), fill = "white", col = 1)+
   labs(x = "observer score", y = "count", title = "distribution of observer scores")
 
-# export
-ggsave(plotScoreDist, filename = "figs/figScoreDist.png", width = 8, height = 8, device = png(), dpi = 300); dev.off()
-
 # read in nilgiris data
 ebd <- fread("data/dataForUse.csv")
 # add year
@@ -27,6 +29,27 @@ ebd[,year:=year(observation_date)]
 # get soi names
 soifile <- readxl::read_excel("data/species_list_13_11_2019.xlsx")
 soi <- soifile$scientific_name
+
+#### soi per obs score ####
+soi_obs <- read_csv(file = "data/dataChecklistSpecies.csv") %>% 
+  left_join(ranefscore, by = c("observer_id" = "observer"))
+
+# make plot of soi and nsp by score
+soi_obs <- pivot_longer(soi_obs, cols = c("nSp", "totSoiSeen")) %>% 
+  mutate(round_score = plyr::round_any(rptrScore, 0.05)) %>% 
+  group_by(round_score, year, name) %>% 
+  summarise_at(vars(value), .funs = list(~mean(.), ~ci(.)))
+
+ggplot(soi_obs)+
+  geom_pointrange(aes(round_score, mean, ymin = mean-ci, ymax=mean+ci, col = name),
+                  shape = 1)+
+  scale_colour_brewer(labels = c("total","SoI"), palette = "Dark2")+
+  coord_cartesian(ylim=c(0,50))+
+  facet_wrap(~year)+
+  labs(x = "observer expertise (binsize = 0.05)", y = "species",
+       caption = Sys.time(), col = "variable")
+
+ggsave(filename = "figs/figNsp_Score.png", width = 8, height = 6, device = png(), dpi = 300); dev.off()
 
 #### prop checklist reporting species ####
 # what is the proportion of each observer's checklists per year
