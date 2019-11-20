@@ -68,7 +68,7 @@ soi = specieslist$scientific_name
 
 ebdSpSum <- ebd[,.(nSp = .N,
                    totSoiSeen = length(intersect(scientific_name, soi))), 
-                by = list(sampling_event_identifier, observer_id)]
+                by = list(sampling_event_identifier, observer_id, year)]
 
 # write to file and link with checklsit id later
 fwrite(ebdSpSum, file = "data/dataChecklistSpecies.csv")
