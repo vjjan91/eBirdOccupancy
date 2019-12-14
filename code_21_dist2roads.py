@@ -38,20 +38,39 @@ roads = roads.to_crs({'init': 'epsg:32642'})
 unique_locs = unique_locs.to_crs({'init': 'epsg:32642'})
 
 
-c = unique_locs[1:1000].geometry
+# function to simplify multilinestrings
+def simplify_roads(complex_roads):
+    simpleRoads = []
+    for i in range(len(complex_roads.geometry)):
+        feature = complex_roads.geometry.iloc[i]
 
-# make a function based on geopandas distance
-def dist_to_road(point, roads):
-    return roads.distance(point).min()
+        if feature.geom_type == "LineString":
+            simpleRoads.append(feature)
+        elif feature.geom_type == "MultiLineString":
+            for road_level2 in feature:
+                simpleRoads.append(road_level2)
+    return simpleRoads
+
+
+# function to use ckdtrees for nearest point finding
+def ckdnearest(gdfA, gdfB):
+    A = np.concatenate(
+        [np.array(geom.coords) for geom in gdfA.geometry.to_list()])
+    simplified_features = simplify_roads(gdfB)
+
+    B = [np.array(geom.coords) for geom in simplified_features]
+    B = np.concatenate(B)
+    ckd_tree = cKDTree(B)
+    dist, idx = ckd_tree.query(A, k=1)
+
+    return dist
 
 
 # get distance to nearest road
-unique_locs['min_dist_to_lines'] = unique_locs.geometry.apply(dist_to_road, args=(roads,))
-unique_locs[1:3].geometry.apply(dist_to_road, args=(roads,))
+unique_locs['dist_road'] = ckdnearest(unique_locs, roads)
 
 # write to file
 unique_locs = pd.DataFrame(unique_locs.drop(columns='geometry'))
-unique_locs = unique_locs.drop(columns='min_dist_to_lines')
 unique_locs['dist_road'] = round(unique_locs['dist_road'], 2)
 unique_locs.to_csv(path_or_buf="data/locs_dist_to_road.csv", index=False)
 
@@ -59,10 +78,35 @@ unique_locs.to_csv(path_or_buf="data/locs_dist_to_road.csv", index=False)
 chkCovars = chkCovars.merge(unique_locs, on=['latitude', 'longitude', 'coordId'])
 
 # make histogram plots
-chkCovars['dist_road'].hist(bins=200, grid=False, )
+chkCovars['dist_road'].hist(bins=100, grid=False, )
 plt.xlabel("distance to road (m)")
 plt.xscale('log')
 
 plt.savefig("figs/fig_dist_roads.png", dpi=300)
+
+# sanity check
+# read in unique locs with dist to road
+unique_locs = pd.read_csv("data/locs_dist_to_road.csv")
+# make geodata
+unique_locs = gpd.GeoDataFrame(
+   unique_locs,
+    geometry=gpd.points_from_xy(unique_locs.longitude, unique_locs.latitude))
+unique_locs.crs = {'init' :'epsg:4326'}
+unique_locs = unique_locs.to_crs({'init': 'epsg:32642'})
+
+# read in hills
+hills = gpd.read_file("data/spatial/hillsShapefile/Nil_Ana_Pal.shp")
+hills = hills.to_crs({'init': 'epsg:32642'})
+
+# plot
+base = roads.plot(linewidth=0.3)
+unique_locs.plot(ax=base, column="dist_road", markersize=0.2,
+                 cmap="gnuplot2", legend=True,
+                 legend_kwds={'label': "nearest road (m)",
+                              'orientation': "horizontal"})
+hills.geometry.boundary.plot(ax=base, linewidth=0.8, edgecolor="red",
+                             color=None)
+
+plt.savefig("figs/map_dist_roads.png", dpi=300)
 
 # ends here
