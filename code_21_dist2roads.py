@@ -11,6 +11,7 @@ import pandas as pd
 # import libs for geodata
 from shapely.ops import nearest_points
 import geopandas as gpd
+import rasterio
 
 # import ckdtree
 from scipy.spatial import cKDTree
@@ -91,7 +92,7 @@ unique_locs = pd.read_csv("data/locs_dist_to_road.csv")
 unique_locs = gpd.GeoDataFrame(
    unique_locs,
     geometry=gpd.points_from_xy(unique_locs.longitude, unique_locs.latitude))
-unique_locs.crs = {'init' :'epsg:4326'}
+unique_locs.crs = {'init': 'epsg:4326'}
 unique_locs = unique_locs.to_crs({'init': 'epsg:32642'})
 
 # read in hills
@@ -108,5 +109,17 @@ hills.geometry.boundary.plot(ax=base, linewidth=0.8, edgecolor="red",
                              color=None)
 
 plt.savefig("figs/map_dist_roads.png", dpi=300)
+
+# read locs and plot against elev
+unique_locs = unique_locs.to_crs({'init': 'epsg:4326'})
+coords = [(x, y) for x, y in zip(unique_locs.longitude, unique_locs.latitude)]
+
+# Open the raster and store metadata
+src = rasterio.open('data/elevationHills.tif')
+
+# Sample the raster at every point location and store values in DataFrame
+unique_locs['elev'] = [x[0] for x in src.sample(coords)]
+
+
 
 # ends here
