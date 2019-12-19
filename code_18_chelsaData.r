@@ -9,7 +9,7 @@ library(sf)
 
 #### load ebird data ####
 # reading 1e2 rows --- THIS IS AN EXAMPLE, REMOVE NROWS FOR FULL DATA
-dat <- fread("data/dataRand10.csv",header=T, nrows = 1e3)
+dat <- fread("data/dataRand10.csv", header=T)
 setDF(dat)
 head(dat)
 
@@ -24,7 +24,7 @@ reslist <- purrr::map_dbl(rasterFiles, function(chr){
 })
 
 # load evi data rasters
-eviData <- raster::stack("EVI/MOD13Q1_EVI_AllYears.tif")[[c(1,7,10)]]
+eviData <- raster::stack("data/spatial/EVI/MOD13Q1_EVI_AllYears.tif")[[c(1,7,10)]]
 
 # gather chelsa rasters
 chelsaData <- purrr::map(rasterFiles, function(chr){

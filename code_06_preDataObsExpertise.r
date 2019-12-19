@@ -8,7 +8,7 @@ rm(list = ls()); gc()
 
 # load libs
 library(data.table)
-
+library(readxl)
 #### load data and subset ####
 
 # read in shapefile of nilgiris to subset by bounding box
@@ -61,14 +61,14 @@ time_to_decimal <- function(x) {
 # count number of species of the focal species seen per sei per observer
 # get species of interest list
 # add species of interest
-specieslist = fread("data/specieslistExtended.csv")
+specieslist = read_excel(path = "data/species_list_13_11_2019.xlsx")
 
 # set species of interest
-soi = specieslist$sciName
+soi = specieslist$scientific_name
 
 ebdSpSum <- ebd[,.(nSp = .N,
                    totSoiSeen = length(intersect(scientific_name, soi))), 
-                by = list(sampling_event_identifier, observer_id)]
+                by = list(sampling_event_identifier, observer_id, year)]
 
 # write to file and link with checklsit id later
 fwrite(ebdSpSum, file = "data/dataChecklistSpecies.csv")
@@ -104,7 +104,7 @@ count(ebdEffChk, number_observers > 10)
 
 # remove only groups greater than 10 obs
 ebdChkSummary <- ebdChkSummary %>% 
-  filter(number_observers <= 50, !is.na(number_observers))
+  filter(number_observers <= 10, !is.na(number_observers))
 
 # remove ebird data
 rm(ebd); gc()
