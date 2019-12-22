@@ -26,7 +26,9 @@ assertthat::assert_that(funcMode(c(2,2,2,2,3,3,3,4)) == as.character(2),
                         msg = "problem in the mode function") # works
 ```
 
-## Prepare saptial extent
+## Prepare initial data
+
+### Prepare spatial extent
 
 ```{r load_hills, eval=FALSE}
 # load hills
@@ -35,60 +37,114 @@ hills <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp")
 ```
 
 
-## Prepare terrain rasters
+### Prepare terrain rasters
 
 ```{r terrain_raster, eval=FALSE}
 # load elevation and crop to hills size, then mask by hills
 alt <- raster("data/spatial/Elevation/alt")
-cr <- crop(alt, extent(as(hills, "Spatial")))
-alt.hills <- mask(cr, as(hills, "Spatial"))
+alt.hills <- crop(alt, as(hills, "Spatial"))
+rm(alt); gc()
 
 # get slope and aspect
-# get slope and aspect
-slope <- terrain(alt.hills, opt = 'slope', unit='degrees', neighbors = 8)
-aspect <- terrain(alt.hills, opt = 'aspect', unit='degrees', neighbors = 8)
+slopeData <- terrain(x = alt.hills, opt = c("slope", "aspect"))
+elevData <- raster::stack(alt.hills, slopeData)
+rm(alt.hills); gc()
 ```
 
-## Prepare EVI rasters
+### Prepare EVI rasters
 
 ```{r evi_raster, eval=FALSE}
 # load evi layers
-EVI.all <- stack("data/spatial/EVI/MOD13Q1_EVI_AllYears.tif")
-names(EVI.all) <- paste("evi", month.abb, sep = ".")
+evi <- raster::stack("data/spatial/EVI/MOD13Q1_EVI_AllYears.tif")[[c(1,7,10)]]
 
-# load 5 year evi change(?) this is currently 6 years
-evifiles <- list.files("data/spatial/EVI", pattern = "_201", full.names = T)
-evifiles <- evifiles[as.numeric(stri_sub(evifiles, -8, -5)) >= 2013]
-
-# make stack
-EVI.yearly <- stack(as.list(evifiles))
+# reproject to elevdata
+evi <- projectRaster(evi, elevData, res(elevData))
 ```
 
-## Prepare landcover
+### Prepare CHELSA rasters
 
-```{r landcover_raster, eval=FALSE, message=FALSE}
-# read in landcover raster
-landcover <- raster("data/landUseClassification/Reprojected Image_UTM43N_31stAug_Ghats.tif")
+```{r chelsa_rasters, eval=FALSE}
+# list chelsa files
+chelsaFiles <- list.files("data/chelsa/", full.names = TRUE, pattern = "crop.tif")
 
-# make list to hold resampled values
-lc_resample <- vector("list", 4)
-
-# create vector of resample value
-resample_res <- c(10,10,10,2.5)
-
-# resample landcover along list
-for(i in 1:length(resample_res)){
-  
-  lc_resample[[i]] <- aggregate(ifelse(i==1, landcover, lc_resample[[i-1]]), 
-                                fact = resample_res[i], fun = funcMode)
-}
-
-names(lc_resample) <- c("lc_100m", "lc_1km", "lc_10km", "lc_25km")
-
-# export in a single lapply
-map2(lc_resample, names(lc_resample) function(rs, rs_name){
-  writeRaster(rs, filename = glue::glue('data/spatial/{rs_name}.tif'),
-              format = "GTiff")
+# gather chelsa rasters
+chelsaData <- purrr::map(chelsaFiles, function(chr){
+  a <- raster(chr)
+  crs(a) <- crs(evi)
+  return(a)
 })
 
+# stack chelsa data
+chelsaData <- raster::stack(chelsaData)
+
+# project to elevation
+chelsaData <- projectRaster(chelsaData, elevData, res(elevData))
 ```
+
+### Stack prepared rasters
+
+```{r stack_rasters, eval=FALSE}
+# stack rasters for efficient reprojection later
+env_data <- stack(elevData, evi, chelsaData)
+```
+
+### Prepare landcover
+
+```{r landcover_raster, eval=FALSE, message=FALSE}
+# read in landcover raster location
+landcover <- "data/landUseClassification/ClassifiedImage_31stAug_UTM34N_Ghats.tif"
+# get extent
+e = bbox(raster(landcover))
+
+# use gdalutils gdalwarp for resampling transform
+# to 1km from 10m
+gdalwarp(srcfile = landcover, 
+         dstfile = "data/landUseClassification/lc_01km.tif", 
+         tr=c(1000,1000), r='mode', te=c(e))
+# to 10km from 1km
+gdalwarp(srcfile = "data/landUseClassification/lc_01km.tif", 
+         dstfile = "data/landUseClassification/lc_10km.tif", 
+         tr=c(10000,10000), r='mode', te=c(e))
+# to 25km from 1km
+gdalwarp(srcfile = "data/landUseClassification/lc_01km.tif", 
+         dstfile = "data/landUseClassification/lc_25km.tif", 
+         tr=c(25000,25000), r='mode', te=c(e))
+```
+
+## Resample rasters
+
+### Read landcover as list
+
+Here, we read in the 1km, 10km, and 25km resampled landcover rasters as a list.
+
+```{r read_resamp_lc, eval=FALSE}
+
+# list the files and map a raster read over them
+lc_files <- list.files("data/landUseClassification/", 
+                       pattern = "km.tif", full.names = TRUE)
+lc_data <- map(lc_files, raster)
+```
+
+### Reproject environmental data to landcover
+
+```{r resample_env_data, eval=FALSE}
+
+# resample to the corresponding landcover data
+env_data_resamp <- map(lc_data, function(rs){
+  projectRaster(from = env_data, to = rs, crs = crs(rs), res = res(rs))
+})
+
+# export as raster stack
+land_stacks <- map2(env_data_resamp, lc_data, function(a, b){
+  land_stack = stack(a, b)})
+
+# get names
+land_names <- glue('data/spatial/landscape_resamp{c("01","10","25")}km.tif')
+
+# write to file
+map2(land_stacks, land_names, function(x,y){
+  writeRaster(x, filename = as.character(y))
+})
+```
+
+## WIP
