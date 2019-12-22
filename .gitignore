@@ -1,12 +1,6 @@
 #Remove data files
-
-blackOrangeFicedula/
-Elevation/
-EVI/
-hillsShapefile/
 ebd*.txt
-data/eBirdDataWG_filtered.txt
-data/eBirdSamplingDataWG_filtered.txt
+data/*
 
 *.tif*
 *.shp
@@ -19,14 +13,12 @@ data/eBirdSamplingDataWG_filtered.txt
 
 /.Rproj.user
 
-*.html
 *.Rhistory
 .Rproj.user
 
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
 .Rproj.user
-=======
 *.csv
 *.xl*
 !data/specieslistExtended.csv
