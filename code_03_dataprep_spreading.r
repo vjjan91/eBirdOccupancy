@@ -43,7 +43,7 @@ dataGathered = map(dataGathered, function(x){
   plyr::dlply(x, "variable")})
 
 #'check that there are 41 species, each as a list element
-assertthat::assert_that(length(dataGathered) == 41)
+assertthat::assert_that(length(dataGathered) == 50)
 
 #### spread data over localities by visit ####
 #'each date is taken to be a single visit

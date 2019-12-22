@@ -16,26 +16,23 @@ assertthat::assert_that(funcMode(c(2,2,2,2,3,3,3,4)) == as.character(2),
                         msg = "problem in the mode function") # works
 
 #### raster aggregation ####
-rasterAgg = raster::aggregate(landcover, fact=10, fun = funcMode)
+# aggregate at different levels in sequence
+lc_100m <- aggregate(landcover, fact = 10, fun = funcMode)
+lc_1km <- aggregate(lc_100m, fact = 10, fun = funcMode)
+lc_10km <- aggregate(lc_1km, fact = 10, fun = funcMode)
+lc_25km <- aggregate(lc_10km, fact = 2.5, fun = funcMode)
 
-# aggregate some more
-rasterAgg1km = raster::aggregate(landcover, fact=100, fun = funcMode)
-
-# plot
-x11();plot(rasterAgg1km, col = c("white",pals::kovesi.rainbow(7)))
-
-# export rasters
-raster::writeRaster(rasterAgg, filename = "data/spatial/landcover100m.tif", 
-                    format = "GTiff", overwrite =T)
-raster::writeRaster(rasterAgg1km, filename = "data/spatial/landcover1km.tif", 
-                    format = "GTiff", overwrite =T)
+# write 10 and 25km
+writeRaster(lc_10km, filename = "data/spatial/landcover10km.tif")
+writeRaster(lc_25km, filename = "data/spatial/landcover25km.tif")
 
 #### compare rasters ####
 
 # load new rasters
 library(dplyr)
-{rasterAgg = raster("data/spatial/landcover100m.tif")
-rasterAgg1km = raster("data/spatial/landcover1km.tif")
+{
+  rasterAgg = raster("data/spatial/landcover100m.tif")
+  rasterAgg1km = raster("data/spatial/landcover1km.tif")
 }
 
 # make raster barplot data
