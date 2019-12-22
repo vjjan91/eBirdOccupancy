@@ -1,0 +1,92 @@
+---
+editor_options: 
+  chunk_output_type: console
+---
+
+# Prepare landscape data
+
+## Prepare libraries
+
+```{r load_libs2, eval=FALSE}
+
+# load libs
+library(raster)
+library(stringi)
+
+# prep mode function to aggregate
+funcMode <- function(x, na.rm = T) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+# a basic test
+assertthat::assert_that(funcMode(c(2,2,2,2,3,3,3,4)) == as.character(2), 
+                        msg = "problem in the mode function") # works
+```
+
+## Prepare saptial extent
+
+```{r load_hills, eval=FALSE}
+# load hills
+library(sf)
+hills <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp")
+```
+
+
+## Prepare terrain rasters
+
+```{r terrain_raster, eval=FALSE}
+# load elevation and crop to hills size, then mask by hills
+alt <- raster("data/spatial/Elevation/alt")
+cr <- crop(alt, extent(as(hills, "Spatial")))
+alt.hills <- mask(cr, as(hills, "Spatial"))
+
+# get slope and aspect
+# get slope and aspect
+slope <- terrain(alt.hills, opt = 'slope', unit='degrees', neighbors = 8)
+aspect <- terrain(alt.hills, opt = 'aspect', unit='degrees', neighbors = 8)
+```
+
+## Prepare EVI rasters
+
+```{r evi_raster, eval=FALSE}
+# load evi layers
+EVI.all <- stack("data/spatial/EVI/MOD13Q1_EVI_AllYears.tif")
+names(EVI.all) <- paste("evi", month.abb, sep = ".")
+
+# load 5 year evi change(?) this is currently 6 years
+evifiles <- list.files("data/spatial/EVI", pattern = "_201", full.names = T)
+evifiles <- evifiles[as.numeric(stri_sub(evifiles, -8, -5)) >= 2013]
+
+# make stack
+EVI.yearly <- stack(as.list(evifiles))
+```
+
+## Prepare landcover
+
+```{r landcover_raster, eval=FALSE, message=FALSE}
+# read in landcover raster
+landcover <- raster("data/landUseClassification/Reprojected Image_UTM43N_31stAug_Ghats.tif")
+
+# make list to hold resampled values
+lc_resample <- vector("list", 4)
+
+# create vector of resample value
+resample_res <- c(10,10,10,2.5)
+
+# resample landcover along list
+for(i in 1:length(resample_res)){
+  
+  lc_resample[[i]] <- aggregate(ifelse(i==1, landcover, lc_resample[[i-1]]), 
+                                fact = resample_res[i], fun = funcMode)
+}
+
+names(lc_resample) <- c("lc_100m", "lc_1km", "lc_10km", "lc_25km")
+
+# export in a single lapply
+map2(lc_resample, names(lc_resample) function(rs, rs_name){
+  writeRaster(rs, filename = glue::glue('data/spatial/{rs_name}.tif'),
+              format = "GTiff")
+})
+
+```
