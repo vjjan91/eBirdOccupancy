@@ -4,9 +4,7 @@ title: "Influence of land cover and climate on the occupancy of avian distributi
 author: "Vijay Ramesh, Pratik R Gupte, and Morgan Tingley"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
-output: 
-    bookdown::gitbook:
-        highlight: default
+output: bookdown::gitbook
 documentclass: book
 bibliography: [refs.bib]
 biblio-style: apalike
