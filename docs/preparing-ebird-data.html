@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="index.html"/>
-
+<link rel="next" href="prepare-landscape-data.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -142,6 +142,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.6" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#add-decimal-time"><i class="fa fa-check"></i><b>2.6</b> Add decimal time</a></li>
 <li class="chapter" data-level="2.7" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#write-data"><i class="fa fa-check"></i><b>2.7</b> Write data</a></li>
 </ul></li>
+<li class="chapter" data-level="3" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html"><i class="fa fa-check"></i><b>3</b> Prepare landscape data</a><ul>
+<li class="chapter" data-level="3.1" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html#prepare-libraries"><i class="fa fa-check"></i><b>3.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="3.2" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html#prepare-initial-data"><i class="fa fa-check"></i><b>3.2</b> Prepare initial data</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html#prepare-spatial-extent"><i class="fa fa-check"></i><b>3.2.1</b> Prepare spatial extent</a></li>
+<li class="chapter" data-level="3.2.2" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html#prepare-terrain-rasters"><i class="fa fa-check"></i><b>3.2.2</b> Prepare terrain rasters</a></li>
+<li class="chapter" data-level="3.2.3" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html#prepare-evi-rasters"><i class="fa fa-check"></i><b>3.2.3</b> Prepare EVI rasters</a></li>
+<li class="chapter" data-level="3.2.4" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html#prepare-chelsa-rasters"><i class="fa fa-check"></i><b>3.2.4</b> Prepare CHELSA rasters</a></li>
+<li class="chapter" data-level="3.2.5" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html#stack-prepared-rasters"><i class="fa fa-check"></i><b>3.2.5</b> Stack prepared rasters</a></li>
+<li class="chapter" data-level="3.2.6" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html#prepare-landcover"><i class="fa fa-check"></i><b>3.2.6</b> Prepare landcover</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html#resample-rasters"><i class="fa fa-check"></i><b>3.3</b> Resample rasters</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html#read-landcover-as-list"><i class="fa fa-check"></i><b>3.3.1</b> Read landcover as list</a></li>
+<li class="chapter" data-level="3.3.2" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html#reproject-environmental-data-to-landcover"><i class="fa fa-check"></i><b>3.3.2</b> Reproject environmental data to landcover</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html#wip"><i class="fa fa-check"></i><b>3.4</b> WIP</a></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -193,11 +209,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb3-9" title="9"><span class="co"># check filters</span></a>
 <a class="sourceLine" id="cb3-10" title="10">ebd_filters</a></code></pre></div>
 <p>Below code need not be run if it has been filtered once already and the above path leads to the right dataset. NB: This is a computation heavy process, run with caution.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">f_out_ebd &lt;-<span class="st"> &quot;data/eBirdDataWG_filtered.txt&quot;</span></a>
-<a class="sourceLine" id="cb4-2" title="2">f_out_sampling &lt;-<span class="st"> &quot;data/eBirdSamplingDataWG_filtered.txt&quot;</span></a>
-<a class="sourceLine" id="cb4-3" title="3"></a>
-<a class="sourceLine" id="cb4-4" title="4">ebd_filtered &lt;-<span class="st"> </span><span class="kw">auk_filter</span>(ebd_filters, <span class="dt">file =</span> f_out_ebd,</a>
-<a class="sourceLine" id="cb4-5" title="5">                           <span class="dt">file_sampling =</span> f_out_sampling, <span class="dt">overwrite =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="co"># specify output location and perform filter</span></a>
+<a class="sourceLine" id="cb4-2" title="2">f_out_ebd &lt;-<span class="st"> &quot;data/eBirdDataWG_filtered.txt&quot;</span></a>
+<a class="sourceLine" id="cb4-3" title="3">f_out_sampling &lt;-<span class="st"> &quot;data/eBirdSamplingDataWG_filtered.txt&quot;</span></a>
+<a class="sourceLine" id="cb4-4" title="4"></a>
+<a class="sourceLine" id="cb4-5" title="5">ebd_filtered &lt;-<span class="st"> </span><span class="kw">auk_filter</span>(ebd_filters, <span class="dt">file =</span> f_out_ebd,</a>
+<a class="sourceLine" id="cb4-6" title="6">                           <span class="dt">file_sampling =</span> f_out_sampling, <span class="dt">overwrite =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 </div>
 <div id="process-filtered-data" class="section level2">
 <h2><span class="header-section-number">2.3</span> Process filtered data</h2>
@@ -321,8 +338,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="prepare-landscape-data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -344,7 +361,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/pratikunterwegs/eBirdOccupancy/edit/master/01_preparingData.rmd",
+"link": "https://github.com/pratikunterwegs/eBirdOccupancy/edit/master/01_prepEbirdData.rmd",
 "text": "Edit"
 },
 "history": {
