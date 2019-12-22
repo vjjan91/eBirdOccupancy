@@ -33,6 +33,7 @@ speciesOfInterest <- specieslist$scientific_name
 ```
 
 ```{r prep_ebd_filters, eval=FALSE}
+
 # run filters using auk packages
 ebd_filters <- auk_ebd(f_in_ebd, f_in_sampling) %>%
   auk_species(speciesOfInterest) %>%
@@ -48,6 +49,8 @@ ebd_filters
 Below code need not be run if it has been filtered once already and the above path leads to the right dataset. NB: This is a computation heavy process, run with caution.
 
 ```{r filter_data, eval=FALSE}
+
+# specify output location and perform filter
 f_out_ebd <- "data/eBirdDataWG_filtered.txt"
 f_out_sampling <- "data/eBirdSamplingDataWG_filtered.txt"
 
