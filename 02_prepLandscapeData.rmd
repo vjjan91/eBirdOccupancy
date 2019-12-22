@@ -12,6 +12,8 @@ editor_options:
 # load libs
 library(raster)
 library(stringi)
+library(glue)
+library(gdalUtils)
 
 # prep mode function to aggregate
 funcMode <- function(x, na.rm = T) {
