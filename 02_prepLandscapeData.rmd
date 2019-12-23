@@ -7,13 +7,14 @@ editor_options:
 
 ## Prepare libraries
 
-```{r load_libs2, eval=FALSE}
+```{r load_libs2, eval=FALSE, message=FALSE, warning=FALSE}
 
 # load libs
 library(raster)
 library(stringi)
 library(glue)
 library(gdalUtils)
+library(purrr)
 
 # prep mode function to aggregate
 funcMode <- function(x, na.rm = T) {
@@ -30,7 +31,7 @@ assertthat::assert_that(funcMode(c(2,2,2,2,3,3,3,4)) == as.character(2),
 
 ### Prepare spatial extent
 
-```{r load_hills, eval=FALSE}
+```{r load_hills, eval=FALSE, message=FALSE, warning=FALSE}
 # load hills
 library(sf)
 hills <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp")
@@ -39,7 +40,7 @@ hills <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp")
 
 ### Prepare terrain rasters
 
-```{r terrain_raster, eval=FALSE}
+```{r terrain_raster, eval=FALSE, message=FALSE, warning=FALSE}
 # load elevation and crop to hills size, then mask by hills
 alt <- raster("data/spatial/Elevation/alt")
 alt.hills <- crop(alt, as(hills, "Spatial"))
@@ -53,7 +54,7 @@ rm(alt.hills); gc()
 
 ### Prepare EVI rasters
 
-```{r evi_raster, eval=FALSE}
+```{r evi_raster, eval=FALSE, message=FALSE, warning=FALSE}
 # load evi layers
 evi <- raster::stack("data/spatial/EVI/MOD13Q1_EVI_AllYears.tif")[[c(1,7,10)]]
 
@@ -63,7 +64,7 @@ evi <- projectRaster(evi, elevData, res(elevData))
 
 ### Prepare CHELSA rasters
 
-```{r chelsa_rasters, eval=FALSE}
+```{r chelsa_rasters, eval=FALSE, message=FALSE, warning=FALSE}
 # list chelsa files
 chelsaFiles <- list.files("data/chelsa/", full.names = TRUE, pattern = "crop.tif")
 
@@ -83,14 +84,14 @@ chelsaData <- projectRaster(chelsaData, elevData, res(elevData))
 
 ### Stack prepared rasters
 
-```{r stack_rasters, eval=FALSE}
+```{r stack_rasters, eval=FALSE, message=FALSE, warning=FALSE}
 # stack rasters for efficient reprojection later
 env_data <- stack(elevData, evi, chelsaData)
 ```
 
 ### Prepare landcover
 
-```{r landcover_raster, eval=FALSE, message=FALSE}
+```{r landcover_raster, eval=FALSE, message=FALSE, warning=FALSE, message=FALSE}
 # read in landcover raster location
 landcover <- "data/landUseClassification/ClassifiedImage_31stAug_UTM34N_Ghats.tif"
 # get extent
@@ -117,7 +118,7 @@ gdalwarp(srcfile = "data/landUseClassification/lc_01km.tif",
 
 Here, we read in the 1km, 10km, and 25km resampled landcover rasters as a list.
 
-```{r read_resamp_lc, eval=FALSE}
+```{r read_resamp_lc, eval=FALSE, message=FALSE, warning=FALSE}
 
 # list the files and map a raster read over them
 lc_files <- list.files("data/landUseClassification/", 
@@ -127,7 +128,7 @@ lc_data <- map(lc_files, raster)
 
 ### Reproject environmental data to landcover
 
-```{r resample_env_data, eval=FALSE}
+```{r resample_env_data, eval=FALSE, message=FALSE, warning=FALSE}
 
 # resample to the corresponding landcover data
 env_data_resamp <- map(lc_data, function(rs){
@@ -143,8 +144,16 @@ land_names <- glue('data/spatial/landscape_resamp{c("01","10","25")}km.tif')
 
 # write to file
 map2(land_stacks, land_names, function(x,y){
-  writeRaster(x, filename = as.character(y))
+  writeRaster(x, filename = as.character(y), overwrite=TRUE)
 })
 ```
+
+### Map rasters
+
+```{r map_rasters, eval=FALSE, message=FALSE, warning=FALSE}
+# plot the first land stack
+plot(land_stacks[[1]])
+```
+
 
 ## WIP
