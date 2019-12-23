@@ -15,6 +15,7 @@ library(stringr)
 library(purrr)
 library(raster)
 library(glue)
+library(velox)
 
 # load saved data object
 load("data_prelim_processing.rdata")
@@ -95,6 +96,49 @@ landscape_names <- map(landscape_data, names) %>%
 for(i in 1:length(landscape_data)){
   names(landscape_data[[i]]) <- landscape_names[[i]]
 }
+```
+
+## Construct 2.5km buffer around subsampled points
+
+```{r point_buffer, eval=FALSE}
+# assign neighbourhood radius in m
+neighbourhood_radius <- 2500
+
+# get distinct points and make buffer
+ebird_buff <- dataSubsample %>% 
+  distinct(locality_id, latitude, longitude) %>% 
+  # convert to spatial features
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>% 
+  # transform to modis projection
+  st_transform(crs = 32643) %>% 
+  # buffer to create neighborhood around each point
+  st_buffer(dist = neighbourhood_radius)
+
+```
+
+## Get mean landscape values
+
+```{r mean_landscape, eval=FALSE}
+# get area mean for all preds except landcover, which is the last one
+env_area_mean <- purrr::map(landscape_data, function(stk){
+  stk <- stk[[-dim(stk)[3]]] # removing landcover here
+  velstk <- velox(stk)
+  dextr <- velstk$extract(sp = ebird_buff, df = TRUE, 
+                          fun = function(x)mean(x, na.rm=T))
+  names(dextr) <- c("id", names(stk))
+  return(as_tibble(dextr))
+})
+
+# run a reduce leftjoin on the data
+env_area_mean <- purrr::reduce(env_area_mean, left_join)
+# rename to be clear which are mean-area vars
+names(env_area_mean) <- c("id", glue::glue('area_mean_{names(env_area_mean)[-1]}'))
+```
+
+## Get proportional landcover
+
+```{r pland, eval=FALSE}
+# WIP
 ```
 
 # WIP
