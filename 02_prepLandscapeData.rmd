@@ -148,12 +148,3 @@ map2(land_stacks, land_names, function(x,y){
 })
 ```
 
-### Map rasters
-
-```{r map_rasters, eval=FALSE, message=FALSE, warning=FALSE}
-# plot the first land stack
-plot(land_stacks[[1]])
-```
-
-
-## WIP
