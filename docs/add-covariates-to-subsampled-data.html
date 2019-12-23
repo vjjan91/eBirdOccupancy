@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Section 5 Add covariates to subsampled data | Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient</title>
+  <meta name="description" content="Section 5 Add covariates to subsampled data | Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient" />
+  <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Section 5 Add covariates to subsampled data | Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Section 5 Add covariates to subsampled data | Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient" />
+  <meta name="github-repo" content="pratikunterwegs/eBirdOccupancy" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Section 5 Add covariates to subsampled data | Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient" />
+  
+  <meta name="twitter:description" content="Section 5 Add covariates to subsampled data | Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient" />
+  
+
+<meta name="author" content="Vijay Ramesh, Pratik R Gupte, and Morgan Tingley" />
+
+
+<meta name="date" content="2019-12-23" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="prepare-observer-expertise.html"/>
+<link rel="next" href="wip.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#attribution"><i class="fa fa-check"></i><b>1.1</b> Attribution</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#data-access"><i class="fa fa-check"></i><b>1.2</b> Data access</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#data-processing"><i class="fa fa-check"></i><b>1.3</b> Data processing</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html"><i class="fa fa-check"></i><b>2</b> Preparing eBird data</a><ul>
+<li class="chapter" data-level="2.1" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#prepare-libraries-and-data-sources"><i class="fa fa-check"></i><b>2.1</b> Prepare libraries and data sources</a></li>
+<li class="chapter" data-level="2.2" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#filter-data"><i class="fa fa-check"></i><b>2.2</b> Filter data</a></li>
+<li class="chapter" data-level="2.3" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#process-filtered-data"><i class="fa fa-check"></i><b>2.3</b> Process filtered data</a></li>
+<li class="chapter" data-level="2.4" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#spatial-filter"><i class="fa fa-check"></i><b>2.4</b> Spatial filter</a></li>
+<li class="chapter" data-level="2.5" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#handle-presence-data"><i class="fa fa-check"></i><b>2.5</b> Handle presence data</a></li>
+<li class="chapter" data-level="2.6" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#add-decimal-time"><i class="fa fa-check"></i><b>2.6</b> Add decimal time</a></li>
+<li class="chapter" data-level="2.7" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#write-data"><i class="fa fa-check"></i><b>2.7</b> Write data</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html"><i class="fa fa-check"></i><b>3</b> Prepare landscape data</a><ul>
+<li class="chapter" data-level="3.1" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html#prepare-libraries"><i class="fa fa-check"></i><b>3.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="3.2" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html#prepare-initial-data"><i class="fa fa-check"></i><b>3.2</b> Prepare initial data</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html#prepare-spatial-extent"><i class="fa fa-check"></i><b>3.2.1</b> Prepare spatial extent</a></li>
+<li class="chapter" data-level="3.2.2" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html#prepare-terrain-rasters"><i class="fa fa-check"></i><b>3.2.2</b> Prepare terrain rasters</a></li>
+<li class="chapter" data-level="3.2.3" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html#prepare-evi-rasters"><i class="fa fa-check"></i><b>3.2.3</b> Prepare EVI rasters</a></li>
+<li class="chapter" data-level="3.2.4" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html#prepare-chelsa-rasters"><i class="fa fa-check"></i><b>3.2.4</b> Prepare CHELSA rasters</a></li>
+<li class="chapter" data-level="3.2.5" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html#stack-prepared-rasters"><i class="fa fa-check"></i><b>3.2.5</b> Stack prepared rasters</a></li>
+<li class="chapter" data-level="3.2.6" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html#prepare-landcover"><i class="fa fa-check"></i><b>3.2.6</b> Prepare landcover</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html#resample-rasters"><i class="fa fa-check"></i><b>3.3</b> Resample rasters</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html#read-landcover-as-list"><i class="fa fa-check"></i><b>3.3.1</b> Read landcover as list</a></li>
+<li class="chapter" data-level="3.3.2" data-path="prepare-landscape-data.html"><a href="prepare-landscape-data.html#reproject-environmental-data-to-landcover"><i class="fa fa-check"></i><b>3.3.2</b> Reproject environmental data to landcover</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="prepare-observer-expertise.html"><a href="prepare-observer-expertise.html"><i class="fa fa-check"></i><b>4</b> Prepare observer expertise</a><ul>
+<li class="chapter" data-level="4.1" data-path="prepare-observer-expertise.html"><a href="prepare-observer-expertise.html#prepare-libraries-1"><i class="fa fa-check"></i><b>4.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="4.2" data-path="prepare-observer-expertise.html"><a href="prepare-observer-expertise.html#prepare-data"><i class="fa fa-check"></i><b>4.2</b> Prepare data</a></li>
+<li class="chapter" data-level="4.3" data-path="prepare-observer-expertise.html"><a href="prepare-observer-expertise.html#prepare-species-of-interest"><i class="fa fa-check"></i><b>4.3</b> Prepare species of interest</a></li>
+<li class="chapter" data-level="4.4" data-path="prepare-observer-expertise.html"><a href="prepare-observer-expertise.html#prepare-checklists-for-observer-score"><i class="fa fa-check"></i><b>4.4</b> Prepare checklists for observer score</a></li>
+<li class="chapter" data-level="4.5" data-path="prepare-observer-expertise.html"><a href="prepare-observer-expertise.html#get-landcover"><i class="fa fa-check"></i><b>4.5</b> Get landcover</a></li>
+<li class="chapter" data-level="4.6" data-path="prepare-observer-expertise.html"><a href="prepare-observer-expertise.html#filter-data-for-stats"><i class="fa fa-check"></i><b>4.6</b> Filter data for stats</a></li>
+<li class="chapter" data-level="4.7" data-path="prepare-observer-expertise.html"><a href="prepare-observer-expertise.html#run-observer-expertise-model"><i class="fa fa-check"></i><b>4.7</b> Run observer expertise model</a></li>
+<li class="chapter" data-level="4.8" data-path="prepare-observer-expertise.html"><a href="prepare-observer-expertise.html#write-model-to-file"><i class="fa fa-check"></i><b>4.8</b> Write model to file</a></li>
+<li class="chapter" data-level="4.9" data-path="prepare-observer-expertise.html"><a href="prepare-observer-expertise.html#get-observer-expertise-as-random-effect"><i class="fa fa-check"></i><b>4.9</b> Get observer expertise as random effect</a></li>
+<li class="chapter" data-level="4.10" data-path="prepare-observer-expertise.html"><a href="prepare-observer-expertise.html#write-observer-expertise-to-file"><i class="fa fa-check"></i><b>4.10</b> Write observer expertise to file</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html"><i class="fa fa-check"></i><b>5</b> Add covariates to subsampled data</a><ul>
+<li class="chapter" data-level="5.1" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#prepare-libraries-and-data"><i class="fa fa-check"></i><b>5.1</b> Prepare libraries and data</a></li>
+<li class="chapter" data-level="5.2" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#subsample-data"><i class="fa fa-check"></i><b>5.2</b> Subsample data</a></li>
+<li class="chapter" data-level="5.3" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#add-expertise-score"><i class="fa fa-check"></i><b>5.3</b> Add expertise score</a></li>
+<li class="chapter" data-level="5.4" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#add-landscape-covariates"><i class="fa fa-check"></i><b>5.4</b> Add landscape covariates</a></li>
+<li class="chapter" data-level="5.5" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#construct-2.5km-buffer-around-subsampled-points"><i class="fa fa-check"></i><b>5.5</b> Construct 2.5km buffer around subsampled points</a></li>
+<li class="chapter" data-level="5.6" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#get-mean-landscape-values"><i class="fa fa-check"></i><b>5.6</b> Get mean landscape values</a></li>
+<li class="chapter" data-level="5.7" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#get-proportional-landcover"><i class="fa fa-check"></i><b>5.7</b> Get proportional landcover</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="wip.html"><a href="wip.html"><i class="fa fa-check"></i><b>6</b> WIP</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="add-covariates-to-subsampled-data" class="section level1">
+<h1><span class="header-section-number">Section 5</span> Add covariates to subsampled data</h1>
+<div id="prepare-libraries-and-data" class="section level2">
+<h2><span class="header-section-number">5.1</span> Prepare libraries and data</h2>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1"><span class="co"># load libs</span></a>
+<a class="sourceLine" id="cb33-2" title="2"><span class="kw">library</span>(dplyr); <span class="kw">library</span>(readr)</a>
+<a class="sourceLine" id="cb33-3" title="3"><span class="kw">library</span>(stringr)</a>
+<a class="sourceLine" id="cb33-4" title="4"><span class="kw">library</span>(purrr)</a>
+<a class="sourceLine" id="cb33-5" title="5"><span class="kw">library</span>(raster)</a>
+<a class="sourceLine" id="cb33-6" title="6"><span class="kw">library</span>(glue)</a>
+<a class="sourceLine" id="cb33-7" title="7"><span class="kw">library</span>(velox)</a>
+<a class="sourceLine" id="cb33-8" title="8"></a>
+<a class="sourceLine" id="cb33-9" title="9"><span class="co"># load saved data object</span></a>
+<a class="sourceLine" id="cb33-10" title="10"><span class="kw">load</span>(<span class="st">&quot;data_prelim_processing.rdata&quot;</span>)</a></code></pre></div>
+</div>
+<div id="subsample-data" class="section level2">
+<h2><span class="header-section-number">5.2</span> Subsample data</h2>
+<p>Get 10 random (if available) observations of each species at each locality.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1"><span class="co"># subsample data for random 10 observations</span></a>
+<a class="sourceLine" id="cb34-2" title="2">dataSubsample &lt;-<span class="st"> </span>dataGrouped <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb34-3" title="3"><span class="st">  </span>plyr<span class="op">::</span><span class="kw">dlply</span>(<span class="kw">c</span>(<span class="st">&quot;scientific_name&quot;</span>, <span class="st">&quot;locality_id&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb34-4" title="4"><span class="st">  </span><span class="kw">map_if</span>(<span class="cf">function</span>(x) <span class="kw">nrow</span>(x) <span class="op">&gt;</span><span class="st"> </span><span class="dv">10</span>, <span class="cf">function</span>(x) <span class="kw">sample_n</span>(x, <span class="dv">10</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb34-5" title="5"><span class="st">  </span><span class="kw">bind_rows</span>()</a>
+<a class="sourceLine" id="cb34-6" title="6"></a>
+<a class="sourceLine" id="cb34-7" title="7"><span class="co"># remove full data</span></a>
+<a class="sourceLine" id="cb34-8" title="8"><span class="kw">rm</span>(dataGrouped)</a></code></pre></div>
+</div>
+<div id="add-expertise-score" class="section level2">
+<h2><span class="header-section-number">5.3</span> Add expertise score</h2>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1"><span class="co"># read in obs score and extract numbers</span></a>
+<a class="sourceLine" id="cb35-2" title="2">expertiseScore &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/dataObsRptrScore.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb35-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">numObserver =</span> <span class="kw">str_extract</span>(observer, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">d+&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb35-4" title="4"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>observer)</a>
+<a class="sourceLine" id="cb35-5" title="5"></a>
+<a class="sourceLine" id="cb35-6" title="6"><span class="co"># group seis consist of multiple observers</span></a>
+<a class="sourceLine" id="cb35-7" title="7"><span class="co"># in this case, seis need to have the highest expertise observer score</span></a>
+<a class="sourceLine" id="cb35-8" title="8"><span class="co"># as the associated covariate</span></a>
+<a class="sourceLine" id="cb35-9" title="9"></a>
+<a class="sourceLine" id="cb35-10" title="10"><span class="co"># get unique observers per sei</span></a>
+<a class="sourceLine" id="cb35-11" title="11">dataSeiScore &lt;-<span class="st"> </span><span class="kw">distinct</span>(dataSubsample, sampling_event_identifier, observer_id) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb35-12" title="12"><span class="st">  </span><span class="co"># make list column of observers</span></a>
+<a class="sourceLine" id="cb35-13" title="13"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">observers =</span> <span class="kw">str_split</span>(observer_id, <span class="st">&quot;,&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb35-14" title="14"><span class="st">  </span><span class="kw">unnest</span>(<span class="dt">cols =</span> <span class="kw">c</span>(observers)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb35-15" title="15"><span class="st">  </span><span class="co"># add numeric observer id</span></a>
+<a class="sourceLine" id="cb35-16" title="16"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">numObserver =</span> <span class="kw">str_extract</span>(observers, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">d+&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb35-17" title="17"><span class="st">  </span><span class="co"># now get distinct sei and observer id numeric</span></a>
+<a class="sourceLine" id="cb35-18" title="18"><span class="st">  </span><span class="kw">distinct</span>(sampling_event_identifier, numObserver)</a>
+<a class="sourceLine" id="cb35-19" title="19"></a>
+<a class="sourceLine" id="cb35-20" title="20"><span class="co"># now add expertise score to sei</span></a>
+<a class="sourceLine" id="cb35-21" title="21">dataSeiScore &lt;-<span class="st"> </span><span class="kw">left_join</span>(dataSeiScore, expertiseScore,</a>
+<a class="sourceLine" id="cb35-22" title="22">                         <span class="dt">by=</span><span class="st">&quot;numObserver&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb35-23" title="23"><span class="st">  </span><span class="co"># get max expertise score per sei</span></a>
+<a class="sourceLine" id="cb35-24" title="24"><span class="st">  </span><span class="kw">group_by</span>(sampling_event_identifier) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb35-25" title="25"><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">expertise =</span> <span class="kw">max</span>(rptrScore))</a>
+<a class="sourceLine" id="cb35-26" title="26"></a>
+<a class="sourceLine" id="cb35-27" title="27"><span class="co"># add to dataCovar</span></a>
+<a class="sourceLine" id="cb35-28" title="28">dataSubsample &lt;-<span class="st"> </span><span class="kw">left_join</span>(dataSubsample, dataSeiScore, <span class="dt">by =</span> <span class="st">&quot;sampling_event_identifier&quot;</span>)</a>
+<a class="sourceLine" id="cb35-29" title="29"></a>
+<a class="sourceLine" id="cb35-30" title="30"><span class="co"># remove data without expertise score</span></a>
+<a class="sourceLine" id="cb35-31" title="31">dataSubsample &lt;-<span class="st"> </span><span class="kw">filter</span>(dataSubsample, <span class="op">!</span><span class="kw">is.na</span>(expertise))</a></code></pre></div>
+</div>
+<div id="add-landscape-covariates" class="section level2">
+<h2><span class="header-section-number">5.4</span> Add landscape covariates</h2>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1"><span class="co"># list landscape covariate stacks</span></a>
+<a class="sourceLine" id="cb36-2" title="2">landscape_files &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="st">&quot;data/spatial/&quot;</span>, <span class="dt">pattern =</span> <span class="st">&quot;landscape&quot;</span>, <span class="dt">full.names =</span> T)</a>
+<a class="sourceLine" id="cb36-3" title="3"></a>
+<a class="sourceLine" id="cb36-4" title="4"><span class="co"># read in as stacks</span></a>
+<a class="sourceLine" id="cb36-5" title="5">landscape_data &lt;-<span class="st"> </span><span class="kw">map</span>(landscape_files, stack)</a>
+<a class="sourceLine" id="cb36-6" title="6"></a>
+<a class="sourceLine" id="cb36-7" title="7"><span class="co"># get proper names</span></a>
+<a class="sourceLine" id="cb36-8" title="8">elev_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;elev&quot;</span>, <span class="st">&quot;slope&quot;</span>, <span class="st">&quot;aspect&quot;</span>)</a>
+<a class="sourceLine" id="cb36-9" title="9">evi_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;evi_01&quot;</span>, <span class="st">&quot;evi_07&quot;</span>, <span class="st">&quot;evi_10&quot;</span>)</a>
+<a class="sourceLine" id="cb36-10" title="10">chelsa_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;chelsa_bio10_04&quot;</span>, <span class="st">&quot;chelsa_bio10_17&quot;</span>, <span class="st">&quot;chelsa_bio10_18&quot;</span>,</a>
+<a class="sourceLine" id="cb36-11" title="11">                  <span class="st">&quot;chelsa_prec&quot;</span>, <span class="st">&quot;chelsa_temp&quot;</span>)</a>
+<a class="sourceLine" id="cb36-12" title="12"></a>
+<a class="sourceLine" id="cb36-13" title="13">landscape_names &lt;-<span class="st"> </span><span class="kw">map</span>(landscape_data, names) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb36-14" title="14"><span class="st">  </span><span class="kw">map</span>(<span class="cf">function</span>(chr){<span class="kw">as.character</span>(<span class="kw">glue</span>(<span class="st">&#39;{str_sub(chr,1,20)}_{c(elev_names, evi_names, chelsa_names, &quot;landcover&quot;)}&#39;</span>))})</a>
+<a class="sourceLine" id="cb36-15" title="15"></a>
+<a class="sourceLine" id="cb36-16" title="16"><span class="co"># assign names</span></a>
+<a class="sourceLine" id="cb36-17" title="17"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(landscape_data)){</a>
+<a class="sourceLine" id="cb36-18" title="18">  <span class="kw">names</span>(landscape_data[[i]]) &lt;-<span class="st"> </span>landscape_names[[i]]</a>
+<a class="sourceLine" id="cb36-19" title="19">}</a></code></pre></div>
+</div>
+<div id="construct-2.5km-buffer-around-subsampled-points" class="section level2">
+<h2><span class="header-section-number">5.5</span> Construct 2.5km buffer around subsampled points</h2>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1"><span class="co"># assign neighbourhood radius in m</span></a>
+<a class="sourceLine" id="cb37-2" title="2">neighbourhood_radius &lt;-<span class="st"> </span><span class="dv">2500</span></a>
+<a class="sourceLine" id="cb37-3" title="3"></a>
+<a class="sourceLine" id="cb37-4" title="4"><span class="co"># get distinct points and make buffer</span></a>
+<a class="sourceLine" id="cb37-5" title="5">ebird_buff &lt;-<span class="st"> </span>dataSubsample <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb37-6" title="6"><span class="st">  </span><span class="kw">distinct</span>(locality_id, latitude, longitude) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb37-7" title="7"><span class="st">  </span><span class="co"># convert to spatial features</span></a>
+<a class="sourceLine" id="cb37-8" title="8"><span class="st">  </span><span class="kw">st_as_sf</span>(<span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>), <span class="dt">crs =</span> <span class="dv">4326</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb37-9" title="9"><span class="st">  </span><span class="co"># transform to modis projection</span></a>
+<a class="sourceLine" id="cb37-10" title="10"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dt">crs =</span> <span class="dv">32643</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb37-11" title="11"><span class="st">  </span><span class="co"># buffer to create neighborhood around each point</span></a>
+<a class="sourceLine" id="cb37-12" title="12"><span class="st">  </span><span class="kw">st_buffer</span>(<span class="dt">dist =</span> neighbourhood_radius)</a></code></pre></div>
+</div>
+<div id="get-mean-landscape-values" class="section level2">
+<h2><span class="header-section-number">5.6</span> Get mean landscape values</h2>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1"><span class="co"># get area mean for all preds except landcover, which is the last one</span></a>
+<a class="sourceLine" id="cb38-2" title="2">env_area_mean &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(landscape_data, <span class="cf">function</span>(stk){</a>
+<a class="sourceLine" id="cb38-3" title="3">  stk &lt;-<span class="st"> </span>stk[[<span class="op">-</span><span class="kw">dim</span>(stk)[<span class="dv">3</span>]]] <span class="co"># removing landcover here</span></a>
+<a class="sourceLine" id="cb38-4" title="4">  velstk &lt;-<span class="st"> </span><span class="kw">velox</span>(stk)</a>
+<a class="sourceLine" id="cb38-5" title="5">  dextr &lt;-<span class="st"> </span>velstk<span class="op">$</span><span class="kw">extract</span>(<span class="dt">sp =</span> ebird_buff, <span class="dt">df =</span> <span class="ot">TRUE</span>, </a>
+<a class="sourceLine" id="cb38-6" title="6">                          <span class="dt">fun =</span> <span class="cf">function</span>(x)<span class="kw">mean</span>(x, <span class="dt">na.rm=</span>T))</a>
+<a class="sourceLine" id="cb38-7" title="7">  <span class="kw">names</span>(dextr) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="kw">names</span>(stk))</a>
+<a class="sourceLine" id="cb38-8" title="8">  <span class="kw">return</span>(<span class="kw">as_tibble</span>(dextr))</a>
+<a class="sourceLine" id="cb38-9" title="9">})</a>
+<a class="sourceLine" id="cb38-10" title="10"></a>
+<a class="sourceLine" id="cb38-11" title="11"><span class="co"># run a reduce leftjoin on the data</span></a>
+<a class="sourceLine" id="cb38-12" title="12">env_area_mean &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">reduce</span>(env_area_mean, left_join)</a>
+<a class="sourceLine" id="cb38-13" title="13"><span class="co"># rename to be clear which are mean-area vars</span></a>
+<a class="sourceLine" id="cb38-14" title="14"><span class="kw">names</span>(env_area_mean) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, glue<span class="op">::</span><span class="kw">glue</span>(<span class="st">&#39;area_mean_{names(env_area_mean)[-1]}&#39;</span>))</a></code></pre></div>
+</div>
+<div id="get-proportional-landcover" class="section level2">
+<h2><span class="header-section-number">5.7</span> Get proportional landcover</h2>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1"><span class="co"># WIP</span></a></code></pre></div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="prepare-observer-expertise.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="wip.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": false,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/pratikunterwegs/eBirdOccupancy/edit/master/04_finalCovarData.rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
