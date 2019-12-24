@@ -1,10 +1,6 @@
 #Remove data files
-
-blackOrangeFicedula/
-Elevation/
-EVI/
-hillsShapefile/
 ebd*.txt
+data/*
 
 *.tif*
 *.shp
@@ -17,14 +13,23 @@ ebd*.txt
 
 /.Rproj.user
 
-*.html
 *.Rhistory
 .Rproj.user
 
-<<<<<<< HEAD
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
 .Rproj.user
-=======
 *.csv
->>>>>>> 6386cde094606219151c7d9ba7fea2e6d423267e
+*.xl*
+!data/specieslistExtended.csv
+!data/species_list_13_11_2019.xlsx
+
+# any zip or shapefile
+*.zip
+*.shp
+*.prj
+*.cpg
+*ini
+
+# pdf files
+*.pdf

@@ -1,0 +1,39 @@
+--- 
+knit: "bookdown::render_book"
+title: "Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient"
+author: "Vijay Ramesh, Pratik R Gupte, and Morgan Tingley"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [refs.bib]
+biblio-style: apalike
+link-citations: yes
+github-repo: pratikunterwegs/eBirdOccupancy
+description: "Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient"
+---
+
+# Introduction
+
+This is the `bookdown` version of a project in preparation that models occupancy for birds in the Nilgiri hills. 
+Methods and format are derived from [Strimas-Mackey et al.](http://strimas.com/ebird-best-practices/), the supplement to [Jonhnston et al. (2019)](https://www.biorxiv.org/content/10.1101/574392v1).
+
+## Attribution
+
+Please contact the following in case of interest in the project.
+
+- Vijay Ramesh (lead author)
+    - PhD student, Columbia University
+
+- Pratik Gupte (repo maintainer)
+    - PhD student, University of Groningen
+
+- [Morgan Tingley (PI)](https://www.morgantingley.com)
+
+## Data access
+
+The data used in this work are available from eBird.
+
+## Data processing
+
+The data processing for this project is described in the following sections. Navigate through them using the links in the sidebar.

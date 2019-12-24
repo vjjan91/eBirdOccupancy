@@ -1,0 +1,10 @@
+book_filename: "ebird_nilgiris_2019"
+output: 
+  html_document: 
+    fig_caption: yes
+delete_merged_file: true
+#before_chapter_script: "_common.r"
+output_dir: "docs"
+language:
+  ui:
+    chapter_name: "Section "

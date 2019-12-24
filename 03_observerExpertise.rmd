@@ -1,0 +1,204 @@
+---
+editor_options: 
+  chunk_output_type: console
+---
+
+# Prepare observer expertise
+
+## Prepare libraries
+
+```{r load_libs3, eval=FALSE, message=FALSE, warning=FALSE}
+
+# load libs
+library(data.table)
+library(readxl)
+library(magrittr)
+library(stringr)
+library(dplyr)
+
+# get decimal time function
+library(lubridate)
+time_to_decimal <- function(x) {
+  x <- hms(x, quiet = TRUE)
+  hour(x) + minute(x) / 60 + second(x) / 3600
+}
+```
+
+## Prepare data
+
+Here, we go through the data preparation process again because we might want to assess observer expertise over a larger area than the study site.
+
+```{r load_raw_data, eval=FALSE}
+# read in shapefile of nilgiris to subset by bounding box
+library(sf)
+wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp"); box <- st_bbox(wg)
+
+# read in data and subset
+ebd <- fread("ebd_Filtered_Jun2019.txt")[between(LONGITUDE, box["xmin"], box["xmax"]) & between(LATITUDE, box["ymin"], box["ymax"]),][year(`OBSERVATION DATE`) >= 2013,]
+
+# make new column names
+newNames <- str_replace_all(colnames(ebd), " ", "_") %>%
+  str_to_lower()
+setnames(ebd, newNames)
+
+# keep useful columns
+columnsOfInterest <- c("checklist_id","scientific_name","observation_count","locality","locality_id","locality_type","latitude","longitude","observation_date","time_observations_started","observer_id","sampling_event_identifier","protocol_type","duration_minutes","effort_distance_km","effort_area_ha","number_observers","species_observed","reviewed","state_code", "group_identifier")
+
+ebd <- select(ebd, one_of(columnsOfInterest))
+
+# get the checklist id as SEI or group id
+ebd[,checklist_id := ifelse(group_identifier == "", 
+                            sampling_event_identifier, group_identifier),]
+
+# n checklists per observer
+ebdNchk <- ebd[,year:=year(observation_date)
+               ][,.(nChk = length(unique(checklist_id)), 
+                    nSei = length(unique(sampling_event_identifier))), 
+                 by= list(observer_id, year)]
+```
+
+## Prepare species of interest
+
+```{r soi_score, eval=FALSE}
+# read in species list
+specieslist = read_excel(path = "data/species_list_13_11_2019.xlsx")
+
+# set species of interest
+soi = specieslist$scientific_name
+
+ebdSpSum <- ebd[,.(nSp = .N,
+                   totSoiSeen = length(intersect(scientific_name, soi))), 
+                by = list(sampling_event_identifier, observer_id, year)]
+
+# write to file and link with checklsit id later
+fwrite(ebdSpSum, file = "data/dataChecklistSpecies.csv")
+```
+
+## Prepare checklists for observer score
+
+```{r prepare_chk_covars, eval=FALSE}
+# 1. add new columns of decimal time and julian date
+ebd[,`:=`(decimalTime = time_to_decimal(time_observations_started),
+          julianDate = yday(as.POSIXct(observation_date)))]
+
+ebdEffChk <- setDF(ebd) %>% 
+  mutate(year = year(observation_date)) %>% 
+  distinct(sampling_event_identifier, observer_id,
+           year,
+           duration_minutes, effort_distance_km, longitude, latitude,
+           decimalTime, julianDate, number_observers) %>% 
+  # drop rows with NAs in cols used in the model
+  tidyr::drop_na(sampling_event_identifier, observer_id,
+                 duration_minutes, decimalTime, julianDate) %>% 
+  
+  # drop years below 2013
+  filter(year >= 2013)
+
+# 3. join to covariates and remove large groups (> 10)
+ebdChkSummary <- inner_join(ebdEffChk, ebdSpSum)
+
+# remove ebird data
+rm(ebd); gc()
+```
+
+## Get landcover
+
+Using the landcover 100m resolution here.
+
+```{r chk_covar_landuse, eval=FALSE}
+# read in 100m landcover
+landcover <- raster::raster("data/landUseClassification/lc_100m.tif")
+
+# get for unique points
+landcoverVec <- raster::extract(x = landcover, y = as.matrix(ebdChkSummary[,c("longitude","latitude")]))
+
+# assign to df and overwrite
+setDT(ebdChkSummary)[,landcover:= landcoverVec]
+
+# save to file for later reuse
+fwrite(ebdChkSummary, file = "data/eBirdChecklistVars.csv")
+```
+
+## Filter data for stats
+
+```{r filter_data2, eval=FALSE}
+# change names for easy handling
+setnames(ebdChkSummary, c("sei", "observer","year", "duration", "distance",
+                          "longitude", "latitude", "decimalTime",
+                          "julianDate", "nObs", "nSp", "nSoi", "landcover"))
+
+# count data points per observer 
+obscount <- count(ebdChkSummary, observer) %>% 
+  filter(n >= 10)
+
+# make factor variables and remove obs not in obscount
+# also remove 0 durations
+ebdChkSummary <- ebdChkSummary %>% 
+  filter(observer %in% obscount$observer, 
+         duration > 0,
+         duration <= 300,
+         nSoi > 0,
+         !is.na(nSoi)) %>% 
+  mutate(landcover = as.factor(landcover),
+         observer = as.factor(observer)) %>% 
+  tidyr::drop_na() # remove NAs, avoids errors later
+```
+
+## Run observer expertise model
+
+Our observer expertise model aims to include the random intercpet effect of observer identity, with a random slope effect of duration. This models the different rate of species accumulation by different observers, as well as their different starting points.
+
+```{r run_model, eval=FALSE}
+# uses either a subset or all data
+library(rptR)
+library(lmerTest)
+
+# here we specify a glmm with random effects for observer
+# time is considered a fixed log predictor and a random slope
+modObsRep <- glmer(nSoi ~ log(duration) + 
+                   sqrt(decimalTime) + 
+                   I((sqrt(decimalTime))^2) + 
+                   log(julianDate) + 
+                   I((log(julianDate)^2)) + 
+                   (1|observer) + (0+duration|observer),
+                   data = ebdChkSummary, family = "poisson")
+```
+
+## Write model to file
+
+```{r write_obsexp_model, eval=FALSE}
+# make dir if absent
+if(!dir.exists("data/modOutput")){
+  dir.create("data/modOutput")
+}
+
+# write model output to text file
+{writeLines(R.utils::captureOutput(list(Sys.time(), summary(modObsRep))), 
+            con = "data/modOutput/modOutExpertise.txt")}
+```
+
+## Get observer expertise as random effect
+
+```{r obsexp_ranef, eval=FALSE}
+# get the ranef coefficients as a measure of observer score
+obsRanef <- lme4::ranef(modObsRep$mod)[[1]]
+
+# make datatable
+setDT(obsRanef, keep.rownames = T)[]
+# set names
+setnames(obsRanef, c("observer", "rptrScore"))
+
+# scale ranefscore between 0 and 1
+obsRanef[,rptrScore:=scales::rescale(rptrScore)]
+```
+
+## Write observer expertise to file
+
+```{r write_obsexp, eval=FALSE}
+# make dataframe
+obsRanef <- merge(ebdChkSummary[,c("observer", "landcover","year")], obsRanef, by = c("observer"))
+
+# write to file
+fwrite(obsRanef[,.(observer, rptrScore)], file = "data/dataObsRptrScore.csv")
+```
+
