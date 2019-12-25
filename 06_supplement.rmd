@@ -158,4 +158,11 @@ ggsave(filename = "figs/fig_distRoads.png", device = png())
 dev.off()
 ```
 
+```{r plot_figure1, eval=TRUE, echo=FALSE, fig.cap="Checklist locations in the Nilgiris. Inset histogram shows checklists' distance to the nearest road, with the X-axis on a log-scale."}
+# inset image here
+knitr::include_graphics("figs/fig_distRoads.png")
+
+```
+
+
 ## WIP
