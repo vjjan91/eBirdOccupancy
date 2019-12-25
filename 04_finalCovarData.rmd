@@ -32,7 +32,7 @@ Get 10 random (if available) observations of each species at each locality.
 # subsample data for random 10 observations
 dataSubsample <- dataGrouped %>%
   
-  sample_n(1e3) %>% # SAMPLING 1000 AS AN EXAMPLE
+  # sample_n(1e3) %>% # SAMPLING 1000 AS AN EXAMPLE
   
   plyr::dlply(c("scientific_name", "locality_id")) %>% 
   map_if(function(x) nrow(x) > 10, function(x) sample_n(x, 10, replace = FALSE)) %>% 
