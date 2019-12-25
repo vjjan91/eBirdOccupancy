@@ -1,6 +1,21 @@
-## Occupancy modeling for the Western Ghats endemic birds  
+# Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient 
 
-This project is being carried out in collaboration with [Dr. Morgan Tingley](http://www.morgantingley.com/) and [Pratik Gupte](https://www.rug.nl/staff/p.r.gupte/). More details to follow.  
+This repository is the source for a project on the influence of land cover and climate on the distribution of common and endemic birds in the Western Ghats, using eBird data.
 
-Update: Pre-processing is complete for a single species (as of March 19th 2019)  
+## [Readable version](https://pratikunterwegs.github.io/eBirdOccupancy/)
 
+A human-readable version of this code is available in bookdown format by clicking on the heading.
+
+Methods and format are derived from [Strimas-Mackey et al.](http://strimas.com/ebird-best-practices/), the supplement to [Jonhnston et al. (2019)](https://www.biorxiv.org/content/10.1101/574392v1).
+
+## Attribution
+
+Please contact the following in case of interest in the project.
+
+- [Vijay Ramesh (lead author)](https://evolecol.weebly.com/)
+    - PhD student, Columbia University
+
+- [Pratik Gupte (repo maintainer)](https://github.com/pratikunterwegs)
+    - PhD student, University of Groningen
+
+- [Morgan Tingley (PI)](https://www.morgantingley.com)
