@@ -19,3 +19,4 @@ Please contact the following in case of interest in the project.
     - PhD student, University of Groningen
 
 - [Morgan Tingley (PI)](https://www.morgantingley.com)
+    - University of California, Los Angeles
