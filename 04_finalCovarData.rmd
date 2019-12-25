@@ -16,6 +16,8 @@ library(purrr)
 library(raster)
 library(glue)
 library(velox)
+library(tidyr)
+library(sf)
 
 # load saved data object
 load("data_prelim_processing.rdata")
@@ -24,10 +26,14 @@ load("data_prelim_processing.rdata")
 ## Subsample data
 
 Get 10 random (if available) observations of each species at each locality.
+**Only 1000 samples used as an example.**
 
 ```{r subsample_data, eval=FALSE}
 # subsample data for random 10 observations
-dataSubsample <- dataGrouped %>% 
+dataSubsample <- dataGrouped %>%
+  
+  sample_n(1e3) %>% # SAMPLING 1000 AS AN EXAMPLE
+  
   plyr::dlply(c("scientific_name", "locality_id")) %>% 
   map_if(function(x) nrow(x) > 10, function(x) sample_n(x, 10, replace = FALSE)) %>% 
   bind_rows()
@@ -42,7 +48,7 @@ rm(dataGrouped)
 # read in obs score and extract numbers
 expertiseScore <- read_csv("data/dataObsRptrScore.csv") %>% 
   mutate(numObserver = str_extract(observer, "\\d+")) %>% 
-  select(-observer)
+  dplyr::select(-observer)
 
 # group seis consist of multiple observers
 # in this case, seis need to have the highest expertise observer score
@@ -60,13 +66,14 @@ dataSeiScore <- distinct(dataSubsample, sampling_event_identifier, observer_id) 
 
 # now add expertise score to sei
 dataSeiScore <- left_join(dataSeiScore, expertiseScore,
-                         by="numObserver") %>% 
+                          by="numObserver") %>% 
   # get max expertise score per sei
   group_by(sampling_event_identifier) %>% 
   summarise(expertise = max(rptrScore))
 
 # add to dataCovar
-dataSubsample <- left_join(dataSubsample, dataSeiScore, by = "sampling_event_identifier")
+dataSubsample <- left_join(dataSubsample, dataSeiScore, 
+                           by = "sampling_event_identifier")
 
 # remove data without expertise score
 dataSubsample <- filter(dataSubsample, !is.na(expertise))
@@ -90,7 +97,8 @@ chelsa_names <- c("chelsa_bio10_04", "chelsa_bio10_17", "chelsa_bio10_18",
                   "chelsa_prec", "chelsa_temp")
 
 landscape_names <- map(landscape_data, names) %>%
-  map(function(chr){as.character(glue('{str_sub(chr,1,20)}_{c(elev_names, evi_names, chelsa_names, "landcover")}'))})
+  map(function(chr){
+    as.character(glue('{str_sub(chr,1,20)}_{c(elev_names, evi_names, chelsa_names, "landcover")}'))})
 
 # assign names
 for(i in 1:length(landscape_data)){
@@ -116,7 +124,11 @@ ebird_buff <- dataSubsample %>%
 
 ```
 
-## Get mean landscape values
+## Getting area means
+
+### Mean environmental covariates
+
+All covariates are 2.5km mean values and prefixed "am_".
 
 ```{r mean_landscape, eval=FALSE}
 # get area mean for all preds except landcover, which is the last one
@@ -125,20 +137,72 @@ env_area_mean <- purrr::map(landscape_data, function(stk){
   velstk <- velox(stk)
   dextr <- velstk$extract(sp = ebird_buff, df = TRUE, 
                           fun = function(x)mean(x, na.rm=T))
+  
+  # assign names for joining
   names(dextr) <- c("id", names(stk))
   return(as_tibble(dextr))
 })
 
 # run a reduce leftjoin on the data
-env_area_mean <- purrr::reduce(env_area_mean, left_join)
+env_area_mean <- purrr::reduce(env_area_mean, left_join, by="id")
 # rename to be clear which are mean-area vars
-names(env_area_mean) <- c("id", glue::glue('area_mean_{names(env_area_mean)[-1]}'))
+temp_names <- str_split(names(env_area_mean), "resamp") %>% map(function(x)x[2])
+names(env_area_mean) <- c("id", glue::glue('am_{temp_names[-1]}'))
 ```
 
-## Get proportional landcover
+### Proportional landcover
 
 ```{r pland, eval=FALSE}
-# WIP
+# get the last element of each stack from the list
+# this is the landcover at that resolution
+lc_area_prop <- purrr::map(landscape_data, function(stk){
+  lc <- stk[[dim(stk)[3]]] # accessing landcover here
+  lc_velox <- velox(lc)
+  lc_vals <- lc_velox$extract(sp = ebird_buff, df = TRUE)
+  names(lc_vals) <- c("id", "lc")
+  
+  # temporary names here as well
+  temp_name <- str_split(names(lc), "resamp") %>% map_chr(function(x) x[2])
+  
+  # get landcover proportions
+  lc_prop <- count(lc_vals, id, lc) %>% 
+    group_by(id) %>%
+    mutate(lc = glue('am_{temp_name}_{str_pad(lc, 2, pad = "0")}'), 
+           prop = n/sum(n)) %>% 
+    dplyr::select(-n) %>% 
+    tidyr::pivot_wider(names_from = lc, 
+                       values_from = prop, 
+                       values_fill = list(prop = 0))
+  
+  return(lc_prop)
+})
+
+lc_area_prop <- reduce(lc_area_prop, left_join, by="id")
+
 ```
 
-# WIP
+## Add landscape covariates
+
+```{r add_land_covars, eval=FALSE}
+# link back to rand10 via ebird buff using coordinate id
+# drop geometry and assign id column
+ebird_buff <- ebird_buff %>% 
+  st_drop_geometry() %>% 
+  mutate(id = 1:nrow(.)) %>% 
+  # merge on id
+  left_join(lc_prop, by = "id") %>%
+  left_join(env_area_mean, by = "id")
+
+# join to random 10 dataset on locality id
+dataSubsample <- left_join(dataSubsample, ebird_buff,
+                            by = "locality_id")
+
+```
+
+## Write random 10 with covariates
+
+```{r write_final_covars, eval=FALSE}
+# write using write_csv
+write_csv(dataSubsample, "data/dataRand10_withLC.csv")
+```
+
