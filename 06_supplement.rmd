@@ -1,0 +1,161 @@
+---
+editor_options: 
+  chunk_output_type: console
+---
+
+# Supplementary material
+
+## Distance to roads
+
+### Prepare libraries
+
+```{r setup_python, eval=FALSE}
+# load libraries
+library(reticulate)
+library(ggplot2)
+library(ggthemes)
+
+# set python path
+use_python("/usr/bin/python3")
+```
+
+Importing python libraries.
+
+```{python prepare_py_libs, eval=FALSE}
+
+# import classic python libs
+import itertools
+from operator import itemgetter
+import numpy as np
+import matplotlib.pyplot as plt
+import math
+
+# libs for dataframes
+import pandas as pd
+
+# import libs for geodata
+from shapely.ops import nearest_points
+import geopandas as gpd
+import rasterio
+
+# import ckdtree
+from scipy.spatial import cKDTree
+from shapely.geometry import Point, MultiPoint, LineString, MultiLineString
+```
+
+### Prepare data for processing
+
+```{python read_spatial_data, eval=FALSE}
+# read in roads shapefile
+roads = gpd.read_file("data/spatial/roads_studysite_2019/roads_studysite_2019.shp")
+roads.head()
+
+# read in checklist covariates for conversion to gpd
+# get unique coordinates, assign them to the df
+# convert df to geo-df
+chkCovars = pd.read_csv("data/eBirdChecklistVars.csv")
+unique_locs = chkCovars.drop_duplicates(subset=['longitude','latitude'])[['longitude', 'latitude', 'nSp']]
+unique_locs['coordId'] = np.arange(1, unique_locs.shape[0]+1)
+chkCovars = chkCovars.merge(unique_locs, on=['longitude', 'latitude'])
+
+unique_locs = gpd.GeoDataFrame(
+unique_locs,
+geometry=gpd.points_from_xy(unique_locs.longitude, unique_locs.latitude))
+unique_locs.crs = {'init' :'epsg:4326'}
+
+# reproject spatials to 43n epsg 32642
+roads = roads.to_crs({'init': 'epsg:32642'})
+unique_locs = unique_locs.to_crs({'init': 'epsg:32642'})
+
+
+# function to simplify multilinestrings
+def simplify_roads(complex_roads):
+simpleRoads = []
+for i in range(len(complex_roads.geometry)):
+feature = complex_roads.geometry.iloc[i]
+if feature.geom_type == "LineString":
+simpleRoads.append(feature)
+elif feature.geom_type == "MultiLineString":
+for road_level2 in feature:
+simpleRoads.append(road_level2)
+return simpleRoads
+
+
+# function to use ckdtrees for nearest point finding
+def ckdnearest(gdfA, gdfB):
+A = np.concatenate(
+[np.array(geom.coords) for geom in gdfA.geometry.to_list()])
+simplified_features = simplify_roads(gdfB)
+B = [np.array(geom.coords) for geom in simplified_features]
+B = np.concatenate(B)
+ckd_tree = cKDTree(B)
+dist, idx = ckd_tree.query(A, k=1)
+return dist
+
+
+# get distance to nearest road
+unique_locs['dist_road'] = ckdnearest(unique_locs, roads)
+
+# write to file
+unique_locs = pd.DataFrame(unique_locs.drop(columns='geometry'))
+unique_locs['dist_road'] = unique_locs['dist_road']
+unique_locs.to_csv(path_or_buf="data/locs_dist_to_road.csv", index=False)
+
+# merge unique locs with chkCovars
+chkCovars = chkCovars.merge(unique_locs, on=['latitude', 'longitude', 'coordId'])
+```
+
+### Plot histogram: distance to roads
+
+```{r plot_histogram, eval=FALSE}
+# extract data from python
+chkCovars <- py$chkCovars
+
+# make histogram
+hist_roads <- ggplot(chkCovars)+
+  geom_histogram(aes(dist_road / 1e3),
+                 bins = 20, size=0.2, fill="steelblue")+
+  labs(x = "distance to roads (km)", y = "# checklists")+
+  scale_x_log10(label=label_number(accuracy = 0.1), 
+                breaks = c(0.1, 1, 10))+
+  scale_y_continuous(label=label_number(scale=0.001, suffix = "K"))+
+  theme_few()+
+  theme(plot.background = element_rect(fill="white", colour = 1),
+        panel.background = element_blank(),
+        panel.border = element_blank(), axis.line = element_blank())
+
+```
+
+### Plot map: points on roads
+
+```{r load_data_in_r, eval=FALSE}
+# load data into R
+library(sf)
+library(ggspatial)
+hills <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp")
+roads <- st_read("data/spatial/roads_studysite_2019/roads_studysite_2019.shp")
+points <- read_csv("data/locs_dist_to_road.csv") %>% 
+  st_as_sf(coords = c("longitude","latitude")) %>% 
+  `st_crs<-`(4326)
+
+# plot on maps
+ggplot(hills)+
+  geom_sf(fill="transparent", col = 2)+
+  geom_sf(data=roads, col="steelblue", size=0.2)+
+  geom_sf(data=points, aes(col=dist_road), size = 0.1, col = "grey40")+
+  annotation_custom(grob = hist_roads %>% ggplotGrob(),
+                    xmin = 77.1, xmax = 77.8, ymin = 10.9, ymax = 11.5)+
+  annotation_scale(location = "br", width_hint = 0.4, text_cex = 1) +
+  annotation_north_arrow(location = "br", which_north = "true", 
+                         pad_x = unit(0.1, "in"), pad_y = unit(0.5, "in"),
+                         style = north_arrow_fancy_orienteering) +
+  theme_few()+
+  theme(legend.position = "none")+
+  coord_sf(expand = FALSE)
+
+# save figure
+ggsave(filename = "figs/fig_distRoads.png", device = png())
+dev.off()
+```
+
+## WIP
