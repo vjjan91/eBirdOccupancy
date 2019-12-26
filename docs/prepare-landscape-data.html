@@ -24,7 +24,7 @@
 <meta name="author" content="Vijay Ramesh, Pratik R Gupte, and Morgan Tingley" />
 
 
-<meta name="date" content="2019-12-25" />
+<meta name="date" content="2019-12-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -179,8 +179,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.6.1" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#mean-environmental-covariates"><i class="fa fa-check"></i><b>5.6.1</b> Mean environmental covariates</a></li>
 <li class="chapter" data-level="5.6.2" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#proportional-landcover"><i class="fa fa-check"></i><b>5.6.2</b> Proportional landcover</a></li>
 </ul></li>
-<li class="chapter" data-level="5.7" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#add-landscape-covariates-1"><i class="fa fa-check"></i><b>5.7</b> Add landscape covariates</a></li>
-<li class="chapter" data-level="5.8" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#write-random-10-with-covariates"><i class="fa fa-check"></i><b>5.8</b> Write random 10 with covariates</a></li>
+<li class="chapter" data-level="5.7" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#join-landscape-data-to-obs-data"><i class="fa fa-check"></i><b>5.7</b> Join landscape data to obs data</a></li>
+<li class="chapter" data-level="5.8" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#write-data-to-files"><i class="fa fa-check"></i><b>5.8</b> Write data to files</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="occupancy-modelling-here.html"><a href="occupancy-modelling-here.html"><i class="fa fa-check"></i><b>6</b> Occupancy modelling here</a></li>
 <li class="chapter" data-level="7" data-path="supplementary-material.html"><a href="supplementary-material.html"><i class="fa fa-check"></i><b>7</b> Supplementary material</a><ul>
@@ -292,15 +292,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb20-7" title="7"><span class="co"># to 1km from 10m</span></a>
 <a class="sourceLine" id="cb20-8" title="8"><span class="kw">gdalwarp</span>(<span class="dt">srcfile =</span> landcover, </a>
 <a class="sourceLine" id="cb20-9" title="9">         <span class="dt">dstfile =</span> <span class="st">&quot;data/landUseClassification/lc_01km.tif&quot;</span>, </a>
-<a class="sourceLine" id="cb20-10" title="10">         <span class="dt">tr=</span><span class="kw">c</span>(<span class="dv">1000</span>,<span class="dv">1000</span>), <span class="dt">r=</span><span class="st">&#39;mode&#39;</span>, <span class="dt">te=</span><span class="kw">c</span>(e))</a>
-<a class="sourceLine" id="cb20-11" title="11"><span class="co"># to 10km from 1km</span></a>
-<a class="sourceLine" id="cb20-12" title="12"><span class="kw">gdalwarp</span>(<span class="dt">srcfile =</span> <span class="st">&quot;data/landUseClassification/lc_01km.tif&quot;</span>, </a>
-<a class="sourceLine" id="cb20-13" title="13">         <span class="dt">dstfile =</span> <span class="st">&quot;data/landUseClassification/lc_10km.tif&quot;</span>, </a>
-<a class="sourceLine" id="cb20-14" title="14">         <span class="dt">tr=</span><span class="kw">c</span>(<span class="dv">10000</span>,<span class="dv">10000</span>), <span class="dt">r=</span><span class="st">&#39;mode&#39;</span>, <span class="dt">te=</span><span class="kw">c</span>(e))</a>
-<a class="sourceLine" id="cb20-15" title="15"><span class="co"># to 25km from 1km</span></a>
-<a class="sourceLine" id="cb20-16" title="16"><span class="kw">gdalwarp</span>(<span class="dt">srcfile =</span> <span class="st">&quot;data/landUseClassification/lc_01km.tif&quot;</span>, </a>
-<a class="sourceLine" id="cb20-17" title="17">         <span class="dt">dstfile =</span> <span class="st">&quot;data/landUseClassification/lc_25km.tif&quot;</span>, </a>
-<a class="sourceLine" id="cb20-18" title="18">         <span class="dt">tr=</span><span class="kw">c</span>(<span class="dv">25000</span>,<span class="dv">25000</span>), <span class="dt">r=</span><span class="st">&#39;mode&#39;</span>, <span class="dt">te=</span><span class="kw">c</span>(e))</a></code></pre></div>
+<a class="sourceLine" id="cb20-10" title="10">         <span class="dt">tr=</span><span class="kw">c</span>(<span class="dv">1000</span>,<span class="dv">1000</span>), <span class="dt">r=</span><span class="st">&#39;mode&#39;</span>, <span class="dt">te=</span><span class="kw">c</span>(e))</a></code></pre></div>
 </div>
 </div>
 <div id="resample-rasters" class="section level2">
@@ -310,7 +302,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Here, we read in the 1km, 10km, and 25km resampled landcover rasters as a list.</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1"><span class="co"># list the files and map a raster read over them</span></a>
 <a class="sourceLine" id="cb21-2" title="2">lc_files &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="st">&quot;data/landUseClassification/&quot;</span>, </a>
-<a class="sourceLine" id="cb21-3" title="3">                       <span class="dt">pattern =</span> <span class="st">&quot;km.tif&quot;</span>, <span class="dt">full.names =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb21-3" title="3">                       <span class="dt">pattern =</span> <span class="st">&quot;01km.tif&quot;</span>, <span class="dt">full.names =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb21-4" title="4">lc_data &lt;-<span class="st"> </span><span class="kw">map</span>(lc_files, raster)</a></code></pre></div>
 </div>
 <div id="reproject-environmental-data-to-landcover" class="section level3">
@@ -325,7 +317,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb22-8" title="8">  land_stack =<span class="st"> </span><span class="kw">stack</span>(a, b)})</a>
 <a class="sourceLine" id="cb22-9" title="9"></a>
 <a class="sourceLine" id="cb22-10" title="10"><span class="co"># get names</span></a>
-<a class="sourceLine" id="cb22-11" title="11">land_names &lt;-<span class="st"> </span><span class="kw">glue</span>(<span class="st">&#39;data/spatial/landscape_resamp{c(&quot;01&quot;,&quot;10&quot;,&quot;25&quot;)}km.tif&#39;</span>)</a>
+<a class="sourceLine" id="cb22-11" title="11">land_names &lt;-<span class="st"> </span><span class="kw">glue</span>(<span class="st">&#39;data/spatial/landscape_resamp{c(&quot;01&quot;)}km.tif&#39;</span>)</a>
 <a class="sourceLine" id="cb22-12" title="12"></a>
 <a class="sourceLine" id="cb22-13" title="13"><span class="co"># write to file</span></a>
 <a class="sourceLine" id="cb22-14" title="14"><span class="kw">map2</span>(land_stacks, land_names, <span class="cf">function</span>(x,y){</a>

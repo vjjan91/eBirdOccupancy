@@ -106,11 +106,13 @@ rm(ebd); gc()
 Using the landcover 100m resolution here.
 
 ```{r chk_covar_landuse, eval=FALSE}
-# read in 100m landcover
-landcover <- raster::raster("data/landUseClassification/lc_100m.tif")
+# read in 1km landcover and set 0 to NA
+landcover <- raster::raster("data/landUseClassification/lc_01km.tif")
+landcover[landcover == 0] <- NA
 
 # get for unique points
-landcoverVec <- raster::extract(x = landcover, y = as.matrix(ebdChkSummary[,c("longitude","latitude")]))
+landcoverVec <- raster::extract(x = landcover, 
+                                y = as.matrix(ebdChkSummary[,c("longitude","latitude")]))
 
 # assign to df and overwrite
 setDT(ebdChkSummary)[,landcover:= landcoverVec]

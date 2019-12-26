@@ -24,7 +24,7 @@
 <meta name="author" content="Vijay Ramesh, Pratik R Gupte, and Morgan Tingley" />
 
 
-<meta name="date" content="2019-12-25" />
+<meta name="date" content="2019-12-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -179,8 +179,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.6.1" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#mean-environmental-covariates"><i class="fa fa-check"></i><b>5.6.1</b> Mean environmental covariates</a></li>
 <li class="chapter" data-level="5.6.2" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#proportional-landcover"><i class="fa fa-check"></i><b>5.6.2</b> Proportional landcover</a></li>
 </ul></li>
-<li class="chapter" data-level="5.7" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#add-landscape-covariates-1"><i class="fa fa-check"></i><b>5.7</b> Add landscape covariates</a></li>
-<li class="chapter" data-level="5.8" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#write-random-10-with-covariates"><i class="fa fa-check"></i><b>5.8</b> Write random 10 with covariates</a></li>
+<li class="chapter" data-level="5.7" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#join-landscape-data-to-obs-data"><i class="fa fa-check"></i><b>5.7</b> Join landscape data to obs data</a></li>
+<li class="chapter" data-level="5.8" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#write-data-to-files"><i class="fa fa-check"></i><b>5.8</b> Write data to files</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="occupancy-modelling-here.html"><a href="occupancy-modelling-here.html"><i class="fa fa-check"></i><b>6</b> Occupancy modelling here</a></li>
 <li class="chapter" data-level="7" data-path="supplementary-material.html"><a href="supplementary-material.html"><i class="fa fa-check"></i><b>7</b> Supplementary material</a><ul>
@@ -280,10 +280,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="add-landscape-covariates" class="section level2">
 <h2><span class="header-section-number">5.4</span> Add landscape covariates</h2>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1"><span class="co"># list landscape covariate stacks</span></a>
-<a class="sourceLine" id="cb36-2" title="2">landscape_files &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="st">&quot;data/spatial/&quot;</span>, <span class="dt">pattern =</span> <span class="st">&quot;landscape&quot;</span>, <span class="dt">full.names =</span> T)</a>
+<a class="sourceLine" id="cb36-2" title="2">landscape_files &lt;-<span class="st"> &quot;data/spatial/landscape_resamp01km.tif&quot;</span></a>
 <a class="sourceLine" id="cb36-3" title="3"></a>
 <a class="sourceLine" id="cb36-4" title="4"><span class="co"># read in as stacks</span></a>
-<a class="sourceLine" id="cb36-5" title="5">landscape_data &lt;-<span class="st"> </span><span class="kw">map</span>(landscape_files, stack)</a>
+<a class="sourceLine" id="cb36-5" title="5">landscape_data &lt;-<span class="st"> </span><span class="kw">stack</span>(landscape_files)</a>
 <a class="sourceLine" id="cb36-6" title="6"></a>
 <a class="sourceLine" id="cb36-7" title="7"><span class="co"># get proper names</span></a>
 <a class="sourceLine" id="cb36-8" title="8">elev_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;elev&quot;</span>, <span class="st">&quot;slope&quot;</span>, <span class="st">&quot;aspect&quot;</span>)</a>
@@ -291,29 +291,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb36-10" title="10">chelsa_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;chelsa_bio10_04&quot;</span>, <span class="st">&quot;chelsa_bio10_17&quot;</span>, <span class="st">&quot;chelsa_bio10_18&quot;</span>,</a>
 <a class="sourceLine" id="cb36-11" title="11">                  <span class="st">&quot;chelsa_prec&quot;</span>, <span class="st">&quot;chelsa_temp&quot;</span>)</a>
 <a class="sourceLine" id="cb36-12" title="12"></a>
-<a class="sourceLine" id="cb36-13" title="13">landscape_names &lt;-<span class="st"> </span><span class="kw">map</span>(landscape_data, names) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb36-14" title="14"><span class="st">  </span><span class="kw">map</span>(<span class="cf">function</span>(chr){</a>
-<a class="sourceLine" id="cb36-15" title="15">    <span class="kw">as.character</span>(<span class="kw">glue</span>(<span class="st">&#39;{str_sub(chr,1,20)}_{c(elev_names, evi_names, chelsa_names, &quot;landcover&quot;)}&#39;</span>))})</a>
-<a class="sourceLine" id="cb36-16" title="16"></a>
-<a class="sourceLine" id="cb36-17" title="17"><span class="co"># assign names</span></a>
-<a class="sourceLine" id="cb36-18" title="18"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(landscape_data)){</a>
-<a class="sourceLine" id="cb36-19" title="19">  <span class="kw">names</span>(landscape_data[[i]]) &lt;-<span class="st"> </span>landscape_names[[i]]</a>
-<a class="sourceLine" id="cb36-20" title="20">}</a></code></pre></div>
+<a class="sourceLine" id="cb36-13" title="13"><span class="kw">names</span>(landscape_data) &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">glue</span>(<span class="st">&#39;{c(elev_names, evi_names, chelsa_names, &quot;landcover&quot;)}&#39;</span>))</a></code></pre></div>
 </div>
 <div id="construct-2.5km-buffer-around-subsampled-points" class="section level2">
 <h2><span class="header-section-number">5.5</span> Construct 2.5km buffer around subsampled points</h2>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1"><span class="co"># assign neighbourhood radius in m</span></a>
-<a class="sourceLine" id="cb37-2" title="2">neighbourhood_radius &lt;-<span class="st"> </span><span class="dv">2500</span></a>
+<a class="sourceLine" id="cb37-2" title="2">sample_radius &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">2.5</span>, <span class="dv">10</span>, <span class="dv">25</span>) <span class="op">*</span><span class="st"> </span><span class="fl">1e3</span></a>
 <a class="sourceLine" id="cb37-3" title="3"></a>
 <a class="sourceLine" id="cb37-4" title="4"><span class="co"># get distinct points and make buffer</span></a>
 <a class="sourceLine" id="cb37-5" title="5">ebird_buff &lt;-<span class="st"> </span>dataSubsample <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb37-6" title="6"><span class="st">  </span><span class="kw">distinct</span>(locality_id, latitude, longitude) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb37-7" title="7"><span class="st">  </span><span class="co"># convert to spatial features</span></a>
-<a class="sourceLine" id="cb37-8" title="8"><span class="st">  </span><span class="kw">st_as_sf</span>(<span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>), <span class="dt">crs =</span> <span class="dv">4326</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb37-9" title="9"><span class="st">  </span><span class="co"># transform to modis projection</span></a>
-<a class="sourceLine" id="cb37-10" title="10"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dt">crs =</span> <span class="dv">32643</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb37-11" title="11"><span class="st">  </span><span class="co"># buffer to create neighborhood around each point</span></a>
-<a class="sourceLine" id="cb37-12" title="12"><span class="st">  </span><span class="kw">st_buffer</span>(<span class="dt">dist =</span> neighbourhood_radius)</a></code></pre></div>
+<a class="sourceLine" id="cb37-7" title="7"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(.)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb37-8" title="8"><span class="st">  </span><span class="kw">crossing</span>(sample_radius) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb37-9" title="9"><span class="st">  </span><span class="kw">group_by</span>(sample_radius) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb37-10" title="10"><span class="st">  </span><span class="kw">nest</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb37-11" title="11"><span class="st">  </span><span class="kw">ungroup</span>()</a>
+<a class="sourceLine" id="cb37-12" title="12"></a>
+<a class="sourceLine" id="cb37-13" title="13"></a>
+<a class="sourceLine" id="cb37-14" title="14"><span class="co"># convert to spatial features</span></a>
+<a class="sourceLine" id="cb37-15" title="15">ebird_buff &lt;-<span class="st"> </span><span class="kw">mutate</span>(ebird_buff, </a>
+<a class="sourceLine" id="cb37-16" title="16">                     <span class="dt">data =</span> <span class="kw">map2</span>(data, sample_radius, </a>
+<a class="sourceLine" id="cb37-17" title="17">                                 <span class="cf">function</span>(df,rd){</a>
+<a class="sourceLine" id="cb37-18" title="18">  df_sf &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(df, <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>), <span class="dt">crs =</span> <span class="dv">4326</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb37-19" title="19"><span class="st">    </span><span class="co"># transform to modis projection</span></a>
+<a class="sourceLine" id="cb37-20" title="20"><span class="st">    </span><span class="kw">st_transform</span>(<span class="dt">crs =</span> <span class="dv">32643</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb37-21" title="21"><span class="st">    </span><span class="co"># buffer to create neighborhood around each point</span></a>
+<a class="sourceLine" id="cb37-22" title="22"><span class="st">    </span><span class="kw">st_buffer</span>(<span class="dt">dist =</span> rd)</a>
+<a class="sourceLine" id="cb37-23" title="23">}))</a></code></pre></div>
 </div>
 <div id="getting-area-means" class="section level2">
 <h2><span class="header-section-number">5.6</span> Getting area means</h2>
@@ -321,71 +325,70 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">5.6.1</span> Mean environmental covariates</h3>
 <p>All covariates are 2.5km mean values and prefixed “am_”.</p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1"><span class="co"># get area mean for all preds except landcover, which is the last one</span></a>
-<a class="sourceLine" id="cb38-2" title="2">env_area_mean &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(landscape_data, <span class="cf">function</span>(stk){</a>
-<a class="sourceLine" id="cb38-3" title="3">  stk &lt;-<span class="st"> </span>stk[[<span class="op">-</span><span class="kw">dim</span>(stk)[<span class="dv">3</span>]]] <span class="co"># removing landcover here</span></a>
-<a class="sourceLine" id="cb38-4" title="4">  velstk &lt;-<span class="st"> </span><span class="kw">velox</span>(stk)</a>
-<a class="sourceLine" id="cb38-5" title="5">  dextr &lt;-<span class="st"> </span>velstk<span class="op">$</span><span class="kw">extract</span>(<span class="dt">sp =</span> ebird_buff, <span class="dt">df =</span> <span class="ot">TRUE</span>, </a>
-<a class="sourceLine" id="cb38-6" title="6">                          <span class="dt">fun =</span> <span class="cf">function</span>(x)<span class="kw">mean</span>(x, <span class="dt">na.rm=</span>T))</a>
-<a class="sourceLine" id="cb38-7" title="7">  </a>
-<a class="sourceLine" id="cb38-8" title="8">  <span class="co"># assign names for joining</span></a>
-<a class="sourceLine" id="cb38-9" title="9">  <span class="kw">names</span>(dextr) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="kw">names</span>(stk))</a>
-<a class="sourceLine" id="cb38-10" title="10">  <span class="kw">return</span>(<span class="kw">as_tibble</span>(dextr))</a>
-<a class="sourceLine" id="cb38-11" title="11">})</a>
-<a class="sourceLine" id="cb38-12" title="12"></a>
-<a class="sourceLine" id="cb38-13" title="13"><span class="co"># run a reduce leftjoin on the data</span></a>
-<a class="sourceLine" id="cb38-14" title="14">env_area_mean &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">reduce</span>(env_area_mean, left_join, <span class="dt">by=</span><span class="st">&quot;id&quot;</span>)</a>
-<a class="sourceLine" id="cb38-15" title="15"><span class="co"># rename to be clear which are mean-area vars</span></a>
-<a class="sourceLine" id="cb38-16" title="16">temp_names &lt;-<span class="st"> </span><span class="kw">str_split</span>(<span class="kw">names</span>(env_area_mean), <span class="st">&quot;resamp&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map</span>(<span class="cf">function</span>(x)x[<span class="dv">2</span>])</a>
-<a class="sourceLine" id="cb38-17" title="17"><span class="kw">names</span>(env_area_mean) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, glue<span class="op">::</span><span class="kw">glue</span>(<span class="st">&#39;am_{temp_names[-1]}&#39;</span>))</a></code></pre></div>
+<a class="sourceLine" id="cb38-2" title="2">env_area_mean &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(ebird_buff<span class="op">$</span>data, <span class="cf">function</span>(df){</a>
+<a class="sourceLine" id="cb38-3" title="3">  </a>
+<a class="sourceLine" id="cb38-4" title="4">  stk &lt;-<span class="st"> </span>landscape_data[[<span class="op">-</span><span class="kw">dim</span>(landscape_data)[<span class="dv">3</span>]]] <span class="co"># removing landcover here</span></a>
+<a class="sourceLine" id="cb38-5" title="5">  velstk &lt;-<span class="st"> </span><span class="kw">velox</span>(stk)</a>
+<a class="sourceLine" id="cb38-6" title="6">  dextr &lt;-<span class="st"> </span>velstk<span class="op">$</span><span class="kw">extract</span>(<span class="dt">sp =</span> df, <span class="dt">df =</span> <span class="ot">TRUE</span>, </a>
+<a class="sourceLine" id="cb38-7" title="7">                          <span class="dt">fun =</span> <span class="cf">function</span>(x)<span class="kw">mean</span>(x, <span class="dt">na.rm=</span>T))</a>
+<a class="sourceLine" id="cb38-8" title="8">  </a>
+<a class="sourceLine" id="cb38-9" title="9">  <span class="co"># assign names for joining</span></a>
+<a class="sourceLine" id="cb38-10" title="10">  <span class="kw">names</span>(dextr) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="kw">names</span>(stk))</a>
+<a class="sourceLine" id="cb38-11" title="11">  <span class="kw">return</span>(<span class="kw">as_tibble</span>(dextr))</a>
+<a class="sourceLine" id="cb38-12" title="12">})</a>
+<a class="sourceLine" id="cb38-13" title="13"></a>
+<a class="sourceLine" id="cb38-14" title="14"><span class="co"># join to buffer data</span></a>
+<a class="sourceLine" id="cb38-15" title="15">ebird_buff &lt;-<span class="st"> </span>ebird_buff <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb38-16" title="16"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">data =</span> <span class="kw">map2</span>(data, env_area_mean, inner_join, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>))</a></code></pre></div>
 </div>
 <div id="proportional-landcover" class="section level3">
 <h3><span class="header-section-number">5.6.2</span> Proportional landcover</h3>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1"><span class="co"># get the last element of each stack from the list</span></a>
 <a class="sourceLine" id="cb39-2" title="2"><span class="co"># this is the landcover at that resolution</span></a>
-<a class="sourceLine" id="cb39-3" title="3">lc_area_prop &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(landscape_data, <span class="cf">function</span>(stk){</a>
-<a class="sourceLine" id="cb39-4" title="4">  lc &lt;-<span class="st"> </span>stk[[<span class="kw">dim</span>(stk)[<span class="dv">3</span>]]] <span class="co"># accessing landcover here</span></a>
+<a class="sourceLine" id="cb39-3" title="3">lc_area_prop &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(ebird_buff<span class="op">$</span>data, <span class="cf">function</span>(df){</a>
+<a class="sourceLine" id="cb39-4" title="4">  lc &lt;-<span class="st"> </span>landscape_data[[<span class="kw">dim</span>(landscape_data)[<span class="dv">3</span>]]] <span class="co"># accessing landcover here</span></a>
 <a class="sourceLine" id="cb39-5" title="5">  lc_velox &lt;-<span class="st"> </span><span class="kw">velox</span>(lc)</a>
-<a class="sourceLine" id="cb39-6" title="6">  lc_vals &lt;-<span class="st"> </span>lc_velox<span class="op">$</span><span class="kw">extract</span>(<span class="dt">sp =</span> ebird_buff, <span class="dt">df =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb39-6" title="6">  lc_vals &lt;-<span class="st"> </span>lc_velox<span class="op">$</span><span class="kw">extract</span>(<span class="dt">sp =</span> df, <span class="dt">df =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb39-7" title="7">  <span class="kw">names</span>(lc_vals) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;lc&quot;</span>)</a>
 <a class="sourceLine" id="cb39-8" title="8">  </a>
-<a class="sourceLine" id="cb39-9" title="9">  <span class="co"># temporary names here as well</span></a>
-<a class="sourceLine" id="cb39-10" title="10">  temp_name &lt;-<span class="st"> </span><span class="kw">str_split</span>(<span class="kw">names</span>(lc), <span class="st">&quot;resamp&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map_chr</span>(<span class="cf">function</span>(x) x[<span class="dv">2</span>])</a>
-<a class="sourceLine" id="cb39-11" title="11">  </a>
-<a class="sourceLine" id="cb39-12" title="12">  <span class="co"># get landcover proportions</span></a>
-<a class="sourceLine" id="cb39-13" title="13">  lc_prop &lt;-<span class="st"> </span><span class="kw">count</span>(lc_vals, id, lc) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb39-14" title="14"><span class="st">    </span><span class="kw">group_by</span>(id) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb39-15" title="15"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">lc =</span> <span class="kw">glue</span>(<span class="st">&#39;am_{temp_name}_{str_pad(lc, 2, pad = &quot;0&quot;)}&#39;</span>), </a>
-<a class="sourceLine" id="cb39-16" title="16">           <span class="dt">prop =</span> n<span class="op">/</span><span class="kw">sum</span>(n)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb39-17" title="17"><span class="st">    </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>n) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb39-18" title="18"><span class="st">    </span>tidyr<span class="op">::</span><span class="kw">pivot_wider</span>(<span class="dt">names_from =</span> lc, </a>
-<a class="sourceLine" id="cb39-19" title="19">                       <span class="dt">values_from =</span> prop, </a>
-<a class="sourceLine" id="cb39-20" title="20">                       <span class="dt">values_fill =</span> <span class="kw">list</span>(<span class="dt">prop =</span> <span class="dv">0</span>))</a>
-<a class="sourceLine" id="cb39-21" title="21">  </a>
-<a class="sourceLine" id="cb39-22" title="22">  <span class="kw">return</span>(lc_prop)</a>
-<a class="sourceLine" id="cb39-23" title="23">})</a>
-<a class="sourceLine" id="cb39-24" title="24"></a>
-<a class="sourceLine" id="cb39-25" title="25">lc_area_prop &lt;-<span class="st"> </span><span class="kw">reduce</span>(lc_area_prop, left_join, <span class="dt">by=</span><span class="st">&quot;id&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb39-9" title="9">  <span class="co"># get landcover proportions</span></a>
+<a class="sourceLine" id="cb39-10" title="10">  lc_prop &lt;-<span class="st"> </span><span class="kw">count</span>(lc_vals, id, lc) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb39-11" title="11"><span class="st">    </span><span class="kw">group_by</span>(id) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb39-12" title="12"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">lc =</span> <span class="kw">glue</span>(<span class="st">&#39;lc_{str_pad(lc, 2, pad = &quot;0&quot;)}&#39;</span>), </a>
+<a class="sourceLine" id="cb39-13" title="13">           <span class="dt">prop =</span> n<span class="op">/</span><span class="kw">sum</span>(n)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb39-14" title="14"><span class="st">    </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>n) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb39-15" title="15"><span class="st">    </span>tidyr<span class="op">::</span><span class="kw">pivot_wider</span>(<span class="dt">names_from =</span> lc, </a>
+<a class="sourceLine" id="cb39-16" title="16">                       <span class="dt">values_from =</span> prop, </a>
+<a class="sourceLine" id="cb39-17" title="17">                       <span class="dt">values_fill =</span> <span class="kw">list</span>(<span class="dt">prop =</span> <span class="dv">0</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb39-18" title="18"><span class="st">    </span><span class="kw">ungroup</span>()</a>
+<a class="sourceLine" id="cb39-19" title="19">  </a>
+<a class="sourceLine" id="cb39-20" title="20">  <span class="kw">return</span>(lc_prop)</a>
+<a class="sourceLine" id="cb39-21" title="21">})</a>
+<a class="sourceLine" id="cb39-22" title="22"></a>
+<a class="sourceLine" id="cb39-23" title="23"><span class="co"># join to data</span></a>
+<a class="sourceLine" id="cb39-24" title="24">ebird_buff &lt;-<span class="st"> </span>ebird_buff <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb39-25" title="25"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">data =</span> <span class="kw">map2</span>(data, lc_area_prop, inner_join, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>))</a></code></pre></div>
 </div>
 </div>
-<div id="add-landscape-covariates-1" class="section level2">
-<h2><span class="header-section-number">5.7</span> Add landscape covariates</h2>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1"><span class="co"># link back to rand10 via ebird buff using coordinate id</span></a>
-<a class="sourceLine" id="cb40-2" title="2"><span class="co"># drop geometry and assign id column</span></a>
-<a class="sourceLine" id="cb40-3" title="3">ebird_buff &lt;-<span class="st"> </span>ebird_buff <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb40-4" title="4"><span class="st">  </span><span class="kw">st_drop_geometry</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb40-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(.)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb40-6" title="6"><span class="st">  </span><span class="co"># merge on id</span></a>
-<a class="sourceLine" id="cb40-7" title="7"><span class="st">  </span><span class="kw">left_join</span>(lc_prop, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb40-8" title="8"><span class="st">  </span><span class="kw">left_join</span>(env_area_mean, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>)</a>
-<a class="sourceLine" id="cb40-9" title="9"></a>
-<a class="sourceLine" id="cb40-10" title="10"><span class="co"># join to random 10 dataset on locality id</span></a>
-<a class="sourceLine" id="cb40-11" title="11">dataSubsample &lt;-<span class="st"> </span><span class="kw">left_join</span>(dataSubsample, ebird_buff,</a>
-<a class="sourceLine" id="cb40-12" title="12">                            <span class="dt">by =</span> <span class="st">&quot;locality_id&quot;</span>)</a></code></pre></div>
+<div id="join-landscape-data-to-obs-data" class="section level2">
+<h2><span class="header-section-number">5.7</span> Join landscape data to obs data</h2>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1"><span class="co"># duplicate scale data</span></a>
+<a class="sourceLine" id="cb40-2" title="2">data_at_scale &lt;-<span class="st"> </span>ebird_buff</a>
+<a class="sourceLine" id="cb40-3" title="3"></a>
+<a class="sourceLine" id="cb40-4" title="4"><span class="co"># join the full data to landscape samples at each scale</span></a>
+<a class="sourceLine" id="cb40-5" title="5">data_at_scale<span class="op">$</span>data &lt;-<span class="st"> </span><span class="kw">map</span>(data_at_scale<span class="op">$</span>data, <span class="cf">function</span>(df){</a>
+<a class="sourceLine" id="cb40-6" title="6">  df &lt;-<span class="st"> </span><span class="kw">st_drop_geometry</span>(df)</a>
+<a class="sourceLine" id="cb40-7" title="7">  df &lt;-<span class="st"> </span><span class="kw">inner_join</span>(dataSubsample, df, <span class="dt">by=</span><span class="st">&quot;locality_id&quot;</span>)</a>
+<a class="sourceLine" id="cb40-8" title="8">  <span class="kw">return</span>(df)</a>
+<a class="sourceLine" id="cb40-9" title="9">})</a></code></pre></div>
 </div>
-<div id="write-random-10-with-covariates" class="section level2">
-<h2><span class="header-section-number">5.8</span> Write random 10 with covariates</h2>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1"><span class="co"># write using write_csv</span></a>
-<a class="sourceLine" id="cb41-2" title="2"><span class="kw">write_csv</span>(dataSubsample, <span class="st">&quot;data/dataRand10_withLC.csv&quot;</span>)</a></code></pre></div>
+<div id="write-data-to-files" class="section level2">
+<h2><span class="header-section-number">5.8</span> Write data to files</h2>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1"><span class="co"># write to file</span></a>
+<a class="sourceLine" id="cb41-2" title="2"><span class="kw">pmap</span>(data_at_scale, <span class="cf">function</span>(sample_radius, data){</a>
+<a class="sourceLine" id="cb41-3" title="3">  <span class="kw">write_csv</span>(data, <span class="dt">path =</span> <span class="kw">glue</span>(<span class="st">&#39;data/dataCovars_{str_pad(sample_radius/1e3, 2, pad = &quot;0&quot;)}km.csv&#39;</span>))</a>
+<a class="sourceLine" id="cb41-4" title="4">  <span class="kw">return</span>(<span class="st">&quot;export done&quot;</span>)</a>
+<a class="sourceLine" id="cb41-5" title="5">})</a></code></pre></div>
 
 </div>
 </div>
