@@ -102,14 +102,6 @@ e = bbox(raster(landcover))
 gdalwarp(srcfile = landcover, 
          dstfile = "data/landUseClassification/lc_01km.tif", 
          tr=c(1000,1000), r='mode', te=c(e))
-# to 10km from 1km
-gdalwarp(srcfile = "data/landUseClassification/lc_01km.tif", 
-         dstfile = "data/landUseClassification/lc_10km.tif", 
-         tr=c(10000,10000), r='mode', te=c(e))
-# to 25km from 1km
-gdalwarp(srcfile = "data/landUseClassification/lc_01km.tif", 
-         dstfile = "data/landUseClassification/lc_25km.tif", 
-         tr=c(25000,25000), r='mode', te=c(e))
 ```
 
 ## Resample rasters
@@ -122,7 +114,7 @@ Here, we read in the 1km, 10km, and 25km resampled landcover rasters as a list.
 
 # list the files and map a raster read over them
 lc_files <- list.files("data/landUseClassification/", 
-                       pattern = "km.tif", full.names = TRUE)
+                       pattern = "01km.tif", full.names = TRUE)
 lc_data <- map(lc_files, raster)
 ```
 
@@ -140,7 +132,7 @@ land_stacks <- map2(env_data_resamp, lc_data, function(a, b){
   land_stack = stack(a, b)})
 
 # get names
-land_names <- glue('data/spatial/landscape_resamp{c("01","10","25")}km.tif')
+land_names <- glue('data/spatial/landscape_resamp{c("01")}km.tif')
 
 # write to file
 map2(land_stacks, land_names, function(x,y){
