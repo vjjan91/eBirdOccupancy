@@ -24,7 +24,7 @@
 <meta name="author" content="Vijay Ramesh, Pratik R Gupte, and Morgan Tingley" />
 
 
-<meta name="date" content="2019-12-25" />
+<meta name="date" content="2019-12-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -179,8 +179,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.6.1" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#mean-environmental-covariates"><i class="fa fa-check"></i><b>5.6.1</b> Mean environmental covariates</a></li>
 <li class="chapter" data-level="5.6.2" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#proportional-landcover"><i class="fa fa-check"></i><b>5.6.2</b> Proportional landcover</a></li>
 </ul></li>
-<li class="chapter" data-level="5.7" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#add-landscape-covariates-1"><i class="fa fa-check"></i><b>5.7</b> Add landscape covariates</a></li>
-<li class="chapter" data-level="5.8" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#write-random-10-with-covariates"><i class="fa fa-check"></i><b>5.8</b> Write random 10 with covariates</a></li>
+<li class="chapter" data-level="5.7" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#join-landscape-data-to-obs-data"><i class="fa fa-check"></i><b>5.7</b> Join landscape data to obs data</a></li>
+<li class="chapter" data-level="5.8" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#write-data-to-files"><i class="fa fa-check"></i><b>5.8</b> Write data to files</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="occupancy-modelling-here.html"><a href="occupancy-modelling-here.html"><i class="fa fa-check"></i><b>6</b> Occupancy modelling here</a></li>
 <li class="chapter" data-level="7" data-path="supplementary-material.html"><a href="supplementary-material.html"><i class="fa fa-check"></i><b>7</b> Supplementary material</a><ul>
@@ -300,17 +300,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="get-landcover" class="section level2">
 <h2><span class="header-section-number">4.5</span> Get landcover</h2>
 <p>Using the landcover 100m resolution here.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="co"># read in 100m landcover</span></a>
-<a class="sourceLine" id="cb27-2" title="2">landcover &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw">raster</span>(<span class="st">&quot;data/landUseClassification/lc_100m.tif&quot;</span>)</a>
-<a class="sourceLine" id="cb27-3" title="3"></a>
-<a class="sourceLine" id="cb27-4" title="4"><span class="co"># get for unique points</span></a>
-<a class="sourceLine" id="cb27-5" title="5">landcoverVec &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw">extract</span>(<span class="dt">x =</span> landcover, <span class="dt">y =</span> <span class="kw">as.matrix</span>(ebdChkSummary[,<span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>,<span class="st">&quot;latitude&quot;</span>)]))</a>
-<a class="sourceLine" id="cb27-6" title="6"></a>
-<a class="sourceLine" id="cb27-7" title="7"><span class="co"># assign to df and overwrite</span></a>
-<a class="sourceLine" id="cb27-8" title="8"><span class="kw">setDT</span>(ebdChkSummary)[,landcover<span class="op">:</span><span class="er">=</span><span class="st"> </span>landcoverVec]</a>
-<a class="sourceLine" id="cb27-9" title="9"></a>
-<a class="sourceLine" id="cb27-10" title="10"><span class="co"># save to file for later reuse</span></a>
-<a class="sourceLine" id="cb27-11" title="11"><span class="kw">fwrite</span>(ebdChkSummary, <span class="dt">file =</span> <span class="st">&quot;data/eBirdChecklistVars.csv&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="co"># read in 1km landcover and set 0 to NA</span></a>
+<a class="sourceLine" id="cb27-2" title="2">landcover &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw">raster</span>(<span class="st">&quot;data/landUseClassification/lc_01km.tif&quot;</span>)</a>
+<a class="sourceLine" id="cb27-3" title="3">landcover[landcover <span class="op">==</span><span class="st"> </span><span class="dv">0</span>] &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb27-4" title="4"></a>
+<a class="sourceLine" id="cb27-5" title="5"><span class="co"># get for unique points</span></a>
+<a class="sourceLine" id="cb27-6" title="6">landcoverVec &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw">extract</span>(<span class="dt">x =</span> landcover, </a>
+<a class="sourceLine" id="cb27-7" title="7">                                <span class="dt">y =</span> <span class="kw">as.matrix</span>(ebdChkSummary[,<span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>,<span class="st">&quot;latitude&quot;</span>)]))</a>
+<a class="sourceLine" id="cb27-8" title="8"></a>
+<a class="sourceLine" id="cb27-9" title="9"><span class="co"># assign to df and overwrite</span></a>
+<a class="sourceLine" id="cb27-10" title="10"><span class="kw">setDT</span>(ebdChkSummary)[,landcover<span class="op">:</span><span class="er">=</span><span class="st"> </span>landcoverVec]</a>
+<a class="sourceLine" id="cb27-11" title="11"></a>
+<a class="sourceLine" id="cb27-12" title="12"><span class="co"># save to file for later reuse</span></a>
+<a class="sourceLine" id="cb27-13" title="13"><span class="kw">fwrite</span>(ebdChkSummary, <span class="dt">file =</span> <span class="st">&quot;data/eBirdChecklistVars.csv&quot;</span>)</a></code></pre></div>
 </div>
 <div id="filter-data-for-stats" class="section level2">
 <h2><span class="header-section-number">4.6</span> Filter data for stats</h2>
