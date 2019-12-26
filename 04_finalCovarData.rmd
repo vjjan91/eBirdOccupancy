@@ -135,10 +135,11 @@ All covariates are 2.5km mean values and prefixed "am_".
 
 ```{r mean_landscape, eval=FALSE}
 # get area mean for all preds except landcover, which is the last one
-env_area_mean <- purrr::map(landscape_data, function(stk){
-  stk <- stk[[-dim(stk)[3]]] # removing landcover here
+env_area_mean <- purrr::map(ebird_buff$data, function(df){
+  
+  stk <- landscape_data[[-dim(landscape_data)[3]]] # removing landcover here
   velstk <- velox(stk)
-  dextr <- velstk$extract(sp = ebird_buff, df = TRUE, 
+  dextr <- velstk$extract(sp = df, df = TRUE, 
                           fun = function(x)mean(x, na.rm=T))
   
   # assign names for joining
@@ -146,11 +147,10 @@ env_area_mean <- purrr::map(landscape_data, function(stk){
   return(as_tibble(dextr))
 })
 
-# run a reduce leftjoin on the data
-env_area_mean <- purrr::reduce(env_area_mean, left_join, by="id")
-# rename to be clear which are mean-area vars
-temp_names <- str_split(names(env_area_mean), "resamp") %>% map(function(x)x[2])
-names(env_area_mean) <- c("id", glue::glue('am_{temp_names[-1]}'))
+# join to buffer data
+ebird_buff <- ebird_buff %>% 
+  mutate(data = map2(data, env_area_mean, inner_join, by = "id"))
+
 ```
 
 ### Proportional landcover
@@ -158,54 +158,55 @@ names(env_area_mean) <- c("id", glue::glue('am_{temp_names[-1]}'))
 ```{r pland, eval=FALSE}
 # get the last element of each stack from the list
 # this is the landcover at that resolution
-lc_area_prop <- purrr::map(landscape_data, function(stk){
-  lc <- stk[[dim(stk)[3]]] # accessing landcover here
+lc_area_prop <- purrr::map(ebird_buff$data, function(df){
+  lc <- landscape_data[[dim(landscape_data)[3]]] # accessing landcover here
   lc_velox <- velox(lc)
-  lc_vals <- lc_velox$extract(sp = ebird_buff, df = TRUE)
+  lc_vals <- lc_velox$extract(sp = df, df = TRUE)
   names(lc_vals) <- c("id", "lc")
-  
-  # temporary names here as well
-  temp_name <- str_split(names(lc), "resamp") %>% map_chr(function(x) x[2])
   
   # get landcover proportions
   lc_prop <- count(lc_vals, id, lc) %>% 
     group_by(id) %>%
-    mutate(lc = glue('am_{temp_name}_{str_pad(lc, 2, pad = "0")}'), 
+    mutate(lc = glue('lc_{str_pad(lc, 2, pad = "0")}'), 
            prop = n/sum(n)) %>% 
     dplyr::select(-n) %>% 
     tidyr::pivot_wider(names_from = lc, 
                        values_from = prop, 
-                       values_fill = list(prop = 0))
+                       values_fill = list(prop = 0)) %>% 
+    ungroup()
   
   return(lc_prop)
 })
 
-lc_area_prop <- reduce(lc_area_prop, left_join, by="id")
-
-```
-
-## Add landscape covariates
-
-```{r add_land_covars, eval=FALSE}
-# link back to rand10 via ebird buff using coordinate id
-# drop geometry and assign id column
+# join to data
 ebird_buff <- ebird_buff %>% 
-  st_drop_geometry() %>% 
-  mutate(id = 1:nrow(.)) %>% 
-  # merge on id
-  left_join(lc_prop, by = "id") %>%
-  left_join(env_area_mean, by = "id")
+  mutate(data = map2(data, lc_area_prop, inner_join, by = "id"))
+```
 
-# join to random 10 dataset on locality id
-dataSubsample <- left_join(dataSubsample, ebird_buff,
-                            by = "locality_id")
+## Join landscape data to obs data
+
+```{r land_to_obs, eval=FALSE}
+# duplicate scale data
+data_at_scale <- ebird_buff
+
+# join the full data to landscape samples at each scale
+data_at_scale$data <- map(data_at_scale$data, function(df){
+  df <- st_drop_geometry(df)
+  df <- inner_join(dataSubsample, df, by="locality_id")
+  return(df)
+})
 
 ```
 
-## Write random 10 with covariates
 
-```{r write_final_covars, eval=FALSE}
-# write using write_csv
-write_csv(dataSubsample, "data/dataRand10_withLC.csv")
+## Write data to files
+
+```{r spit_scale, eval=FALSE}
+# write to file
+pmap(data_at_scale, function(sample_radius, data){
+  write_csv(data, path = glue('data/dataCovars_{str_pad(sample_radius/1e3, 2, pad = "0")}km.csv'))
+  return("export done")
+})
+
 ```
 
