@@ -85,10 +85,10 @@ dataSubsample <- filter(dataSubsample, !is.na(expertise))
 ```{r add_landcovars, eval=FALSE}
 
 # list landscape covariate stacks
-landscape_files <- list.files("data/spatial/", pattern = "landscape", full.names = T)
+landscape_files <- "data/spatial/landscape_resamp01km.tif"
 
 # read in as stacks
-landscape_data <- map(landscape_files, stack)
+landscape_data <- stack(landscape_files)
 
 # get proper names
 elev_names <- c("elev", "slope", "aspect")
@@ -96,32 +96,35 @@ evi_names <- c("evi_01", "evi_07", "evi_10")
 chelsa_names <- c("chelsa_bio10_04", "chelsa_bio10_17", "chelsa_bio10_18",
                   "chelsa_prec", "chelsa_temp")
 
-landscape_names <- map(landscape_data, names) %>%
-  map(function(chr){
-    as.character(glue('{str_sub(chr,1,20)}_{c(elev_names, evi_names, chelsa_names, "landcover")}'))})
-
-# assign names
-for(i in 1:length(landscape_data)){
-  names(landscape_data[[i]]) <- landscape_names[[i]]
-}
+names(landscape_data) <- as.character(glue('{c(elev_names, evi_names, chelsa_names, "landcover")}'))
 ```
 
 ## Construct 2.5km buffer around subsampled points
 
 ```{r point_buffer, eval=FALSE}
 # assign neighbourhood radius in m
-neighbourhood_radius <- 2500
+sample_radius <- c(2.5, 10, 25) * 1e3
 
 # get distinct points and make buffer
 ebird_buff <- dataSubsample %>% 
   distinct(locality_id, latitude, longitude) %>% 
-  # convert to spatial features
-  st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>% 
-  # transform to modis projection
-  st_transform(crs = 32643) %>% 
-  # buffer to create neighborhood around each point
-  st_buffer(dist = neighbourhood_radius)
+  mutate(id = 1:nrow(.)) %>% 
+  crossing(sample_radius) %>% 
+  group_by(sample_radius) %>% 
+  nest() %>% 
+  ungroup()
 
+
+# convert to spatial features
+ebird_buff <- mutate(ebird_buff, 
+                     data = map2(data, sample_radius, 
+                                 function(df,rd){
+  df_sf <- st_as_sf(df, coords = c("longitude", "latitude"), crs = 4326) %>% 
+    # transform to modis projection
+    st_transform(crs = 32643) %>% 
+    # buffer to create neighborhood around each point
+    st_buffer(dist = rd)
+}))
 ```
 
 ## Getting area means
