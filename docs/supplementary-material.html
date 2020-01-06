@@ -24,7 +24,7 @@
 <meta name="author" content="Vijay Ramesh, Pratik R Gupte, and Morgan Tingley" />
 
 
-<meta name="date" content="2019-12-26" />
+<meta name="date" content="2020-01-06" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -190,7 +190,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.1.3" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-histogram-distance-to-roads"><i class="fa fa-check"></i><b>7.1.3</b> Plot histogram: distance to roads</a></li>
 <li class="chapter" data-level="7.1.4" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-map-points-on-roads"><i class="fa fa-check"></i><b>7.1.4</b> Plot map: points on roads</a></li>
 </ul></li>
-<li class="chapter" data-level="7.2" data-path="supplementary-material.html"><a href="supplementary-material.html#wip"><i class="fa fa-check"></i><b>7.2</b> WIP</a></li>
+<li class="chapter" data-level="7.2" data-path="supplementary-material.html"><a href="supplementary-material.html#species-observation-distributions"><i class="fa fa-check"></i><b>7.2</b> Species observation distributions</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-3"><i class="fa fa-check"></i><b>7.2.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="7.2.2" data-path="supplementary-material.html"><a href="supplementary-material.html#read-species-of-interest"><i class="fa fa-check"></i><b>7.2.2</b> Read species of interest</a></li>
+<li class="chapter" data-level="7.2.3" data-path="supplementary-material.html"><a href="supplementary-material.html#load-raw-data-for-locations"><i class="fa fa-check"></i><b>7.2.3</b> Load raw data for locations</a></li>
+<li class="chapter" data-level="7.2.4" data-path="supplementary-material.html"><a href="supplementary-material.html#get-proportional-obs-counts-in-20km-cells"><i class="fa fa-check"></i><b>7.2.4</b> Get proportional obs counts in 20km cells</a></li>
+<li class="chapter" data-level="7.2.5" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-maps"><i class="fa fa-check"></i><b>7.2.5</b> Plot maps</a></li>
+</ul></li>
 </ul></li>
 </ul>
 
@@ -355,11 +361,122 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 (#fig:plot_figure1)Checklist locations in the Nilgiris. Inset histogram shows checklists’ distance to the nearest road, with the X-axis on a log-scale.
 </p>
 </div>
-</div>
-</div>
-<div id="wip" class="section level2">
-<h2><span class="header-section-number">7.2</span> WIP</h2>
 
+</div>
+</div>
+<div id="species-observation-distributions" class="section level2">
+<h2><span class="header-section-number">7.2</span> Species observation distributions</h2>
+<div id="prepare-libraries-3" class="section level3">
+<h3><span class="header-section-number">7.2.1</span> Prepare libraries</h3>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1"><span class="co"># load libraries</span></a>
+<a class="sourceLine" id="cb47-2" title="2"><span class="kw">library</span>(data.table)</a>
+<a class="sourceLine" id="cb47-3" title="3"><span class="kw">library</span>(readxl)</a>
+<a class="sourceLine" id="cb47-4" title="4"><span class="kw">library</span>(magrittr)</a>
+<a class="sourceLine" id="cb47-5" title="5"><span class="kw">library</span>(stringr)</a>
+<a class="sourceLine" id="cb47-6" title="6"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb47-7" title="7"></a>
+<a class="sourceLine" id="cb47-8" title="8"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb47-9" title="9"><span class="kw">library</span>(ggthemes)</a></code></pre></div>
+</div>
+<div id="read-species-of-interest" class="section level3">
+<h3><span class="header-section-number">7.2.2</span> Read species of interest</h3>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1"><span class="co"># add species of interest</span></a>
+<a class="sourceLine" id="cb48-2" title="2">specieslist &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;data/species_list_13_11_2019.xlsx&quot;</span>)</a>
+<a class="sourceLine" id="cb48-3" title="3">speciesOfInterest &lt;-<span class="st"> </span>specieslist<span class="op">$</span>scientific_name</a></code></pre></div>
+</div>
+<div id="load-raw-data-for-locations" class="section level3">
+<h3><span class="header-section-number">7.2.3</span> Load raw data for locations</h3>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1"><span class="co"># read in shapefile of nilgiris to subset by bounding box</span></a>
+<a class="sourceLine" id="cb49-2" title="2"><span class="kw">library</span>(sf)</a>
+<a class="sourceLine" id="cb49-3" title="3">wg &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>); box &lt;-<span class="st"> </span><span class="kw">st_bbox</span>(wg)</a>
+<a class="sourceLine" id="cb49-4" title="4"></a>
+<a class="sourceLine" id="cb49-5" title="5"><span class="co"># read in data and subset</span></a>
+<a class="sourceLine" id="cb49-6" title="6">ebd &lt;-<span class="st"> </span><span class="kw">fread</span>(<span class="st">&quot;ebd_Filtered_Jun2019.txt&quot;</span>)</a>
+<a class="sourceLine" id="cb49-7" title="7">ebd &lt;-<span class="st"> </span>ebd[<span class="kw">between</span>(LONGITUDE, box[<span class="st">&quot;xmin&quot;</span>], box[<span class="st">&quot;xmax&quot;</span>]) <span class="op">&amp;</span><span class="st"> </span><span class="kw">between</span>(LATITUDE, box[<span class="st">&quot;ymin&quot;</span>], box[<span class="st">&quot;ymax&quot;</span>]),]</a>
+<a class="sourceLine" id="cb49-8" title="8">ebd &lt;-<span class="st"> </span>ebd[<span class="kw">year</span>(<span class="st">`</span><span class="dt">OBSERVATION DATE</span><span class="st">`</span>) <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2013</span>,]</a>
+<a class="sourceLine" id="cb49-9" title="9"></a>
+<a class="sourceLine" id="cb49-10" title="10"><span class="co"># make new column names</span></a>
+<a class="sourceLine" id="cb49-11" title="11">newNames &lt;-<span class="st"> </span><span class="kw">str_replace_all</span>(<span class="kw">colnames</span>(ebd), <span class="st">&quot; &quot;</span>, <span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb49-12" title="12"><span class="st">  </span><span class="kw">str_to_lower</span>()</a>
+<a class="sourceLine" id="cb49-13" title="13"><span class="kw">setnames</span>(ebd, newNames)</a>
+<a class="sourceLine" id="cb49-14" title="14"></a>
+<a class="sourceLine" id="cb49-15" title="15"><span class="co"># keep useful columns</span></a>
+<a class="sourceLine" id="cb49-16" title="16">columnsOfInterest &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;scientific_name&quot;</span>,<span class="st">&quot;observation_count&quot;</span>,<span class="st">&quot;locality&quot;</span>,<span class="st">&quot;locality_id&quot;</span>,<span class="st">&quot;locality_type&quot;</span>,<span class="st">&quot;latitude&quot;</span>,<span class="st">&quot;longitude&quot;</span>,<span class="st">&quot;observation_date&quot;</span>, <span class="st">&quot;sampling_event_identifier&quot;</span>)</a>
+<a class="sourceLine" id="cb49-17" title="17"></a>
+<a class="sourceLine" id="cb49-18" title="18"><span class="co"># keep species of interest</span></a>
+<a class="sourceLine" id="cb49-19" title="19">ebd &lt;-<span class="st"> </span>ebd[scientific_name <span class="op">%in%</span><span class="st"> </span>speciesOfInterest,]</a>
+<a class="sourceLine" id="cb49-20" title="20"></a>
+<a class="sourceLine" id="cb49-21" title="21">ebd &lt;-<span class="st"> </span><span class="kw">select</span>(ebd, <span class="kw">one_of</span>(columnsOfInterest))</a></code></pre></div>
+</div>
+<div id="get-proportional-obs-counts-in-20km-cells" class="section level3">
+<h3><span class="header-section-number">7.2.4</span> Get proportional obs counts in 20km cells</h3>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1"><span class="co"># transform data to UTM zone 43N</span></a>
+<a class="sourceLine" id="cb50-2" title="2">ebd &lt;-<span class="st"> </span><span class="kw">setDF</span>(ebd) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb50-3" title="3"><span class="st">  </span><span class="kw">st_as_sf</span>(<span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>,<span class="st">&quot;latitude&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb50-4" title="4"><span class="st">  `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
+<a class="sourceLine" id="cb50-5" title="5"></a>
+<a class="sourceLine" id="cb50-6" title="6"><span class="co"># add UTM coordinate columns</span></a>
+<a class="sourceLine" id="cb50-7" title="7">ebd &lt;-<span class="st"> </span><span class="kw">cbind</span>(ebd, <span class="kw">st_coordinates</span>(ebd)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb50-8" title="8"><span class="st">  </span><span class="kw">st_drop_geometry</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb50-9" title="9"><span class="st">  </span><span class="kw">setDT</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1"><span class="co"># round to cell size</span></a>
+<a class="sourceLine" id="cb51-2" title="2">cell_size =<span class="st"> </span><span class="dv">20000</span> <span class="co"># 20km in metres</span></a>
+<a class="sourceLine" id="cb51-3" title="3">ebd[,<span class="st">`</span><span class="dt">:=</span><span class="st">`</span>(<span class="dt">X_round =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(X, cell_size), <span class="dt">Y_round =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(Y, cell_size))]</a>
+<a class="sourceLine" id="cb51-4" title="4"></a>
+<a class="sourceLine" id="cb51-5" title="5"><span class="co"># set observation count to 1 if NA or X</span></a>
+<a class="sourceLine" id="cb51-6" title="6">ebd_summary &lt;-<span class="st"> </span>ebd[, observation_count <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ifelse</span>(observation_count <span class="op">==</span><span class="st"> &quot;X&quot;</span>, <span class="dv">1</span>, observation_count)</a>
+<a class="sourceLine" id="cb51-7" title="7">                   ][,observation_count<span class="op">:</span><span class="er">=</span><span class="kw">as.numeric</span>(observation_count)</a>
+<a class="sourceLine" id="cb51-8" title="8">                     ][,.(<span class="dt">count=</span><span class="kw">sum</span>(observation_count)), </a>
+<a class="sourceLine" id="cb51-9" title="9">                       by =<span class="st"> </span><span class="kw">list</span>(scientific_name, X_round, Y_round)</a>
+<a class="sourceLine" id="cb51-10" title="10">                       ][,prop<span class="op">:</span><span class="er">=</span>count<span class="op">/</span><span class="kw">sum</span>(count), by =<span class="st"> </span><span class="kw">list</span>(scientific_name)]</a></code></pre></div>
+</div>
+<div id="plot-maps" class="section level3">
+<h3><span class="header-section-number">7.2.5</span> Plot maps</h3>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1"><span class="co"># get bbox</span></a>
+<a class="sourceLine" id="cb52-2" title="2">bbox &lt;-<span class="st"> </span>wg <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb52-3" title="3"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb52-4" title="4"><span class="st">  </span><span class="kw">st_bbox</span>()</a>
+<a class="sourceLine" id="cb52-5" title="5"></a>
+<a class="sourceLine" id="cb52-6" title="6"><span class="co"># add land</span></a>
+<a class="sourceLine" id="cb52-7" title="7"><span class="kw">library</span>(rnaturalearth)</a>
+<a class="sourceLine" id="cb52-8" title="8"><span class="co"># land &lt;- ne_countries(scale = 50, type = &quot;countries&quot;, continent = &quot;asia&quot;,</span></a>
+<a class="sourceLine" id="cb52-9" title="9"><span class="co">#                      country = &quot;india&quot;,</span></a>
+<a class="sourceLine" id="cb52-10" title="10"><span class="co">#                      returnclass = c(&quot;sf&quot;))</span></a>
+<a class="sourceLine" id="cb52-11" title="11"><span class="co"># </span></a>
+<a class="sourceLine" id="cb52-12" title="12"><span class="co"># # crop land</span></a>
+<a class="sourceLine" id="cb52-13" title="13"><span class="co"># land &lt;- st_transform(land, 32643) %&gt;% st_crop(bbox)</span></a></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1"><span class="co"># make plot</span></a>
+<a class="sourceLine" id="cb53-2" title="2">wg &lt;-<span class="st"> </span><span class="kw">st_transform</span>(wg, <span class="dv">32643</span>)</a>
+<a class="sourceLine" id="cb53-3" title="3"></a>
+<a class="sourceLine" id="cb53-4" title="4">plotDistributions &lt;-</a>
+<a class="sourceLine" id="cb53-5" title="5"><span class="kw">ggplot</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb53-6" title="6"><span class="st">  </span><span class="co"># geom_sf(data = land, fill = &quot;grey99&quot;, col = &quot;transparent&quot;)+</span></a>
+<a class="sourceLine" id="cb53-7" title="7"><span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">data =</span> ebd_summary,</a>
+<a class="sourceLine" id="cb53-8" title="8">            <span class="kw">aes</span>(X_round, Y_round, <span class="dt">fill =</span> prop), <span class="dt">lwd =</span> <span class="fl">0.5</span>, <span class="dt">col =</span> <span class="st">&quot;white&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb53-9" title="9"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> wg, <span class="dt">fill =</span> <span class="st">&quot;transparent&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">lwd =</span> <span class="fl">0.3</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb53-10" title="10"><span class="st">  </span></a>
+<a class="sourceLine" id="cb53-11" title="11"><span class="st">  </span><span class="kw">scale_fill_distiller</span>(<span class="dt">palette =</span> <span class="st">&quot;Blues&quot;</span>, <span class="dt">direction =</span> <span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb53-12" title="12">                       <span class="dt">values =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.3</span>), <span class="dt">na.value =</span> <span class="st">&quot;darkslateblue&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb53-13" title="13"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>scientific_name, <span class="dt">ncol =</span> <span class="dv">10</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb53-14" title="14"><span class="st">  </span><span class="kw">coord_sf</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb53-15" title="15"><span class="st">  </span><span class="kw">theme_few</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb53-16" title="16"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>, </a>
+<a class="sourceLine" id="cb53-17" title="17">        <span class="dt">axis.text =</span> <span class="kw">element_blank</span>(), </a>
+<a class="sourceLine" id="cb53-18" title="18">        <span class="dt">axis.title =</span> <span class="kw">element_blank</span>())</a>
+<a class="sourceLine" id="cb53-19" title="19">  </a>
+<a class="sourceLine" id="cb53-20" title="20"><span class="co"># export data</span></a>
+<a class="sourceLine" id="cb53-21" title="21"><span class="kw">ggsave</span>(plotDistributions, <span class="dt">filename =</span> <span class="st">&quot;figs/fig_species_distributions.png&quot;</span>, </a>
+<a class="sourceLine" id="cb53-22" title="22">       <span class="dt">height =</span> <span class="dv">10</span>, <span class="dt">width =</span> <span class="dv">16</span>, <span class="dt">device =</span> <span class="kw">png</span>(), <span class="dt">dpi =</span> <span class="dv">300</span>); <span class="kw">dev.off</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1"><span class="co"># show exported image</span></a>
+<a class="sourceLine" id="cb54-2" title="2">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;figs/fig_species_distributions.png&quot;</span>)</a></code></pre></div>
+<div class="figure">
+<img src="figs/fig_species_distributions.png" alt="Proportion of individuals observed in each grid cell (20km side) between 2013 and 2018." width="2400" />
+<p class="caption">
+(#fig:export_fig_obs_dist)Proportion of individuals observed in each grid cell (20km side) between 2013 and 2018.
+</p>
+</div>
+
+</div>
 </div>
 </div>
             </section>
@@ -390,7 +507,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/pratikunterwegs/eBirdOccupancy/edit/master/06_supplement.rmd",
+"link": "https://github.com/pratikunterwegs/eBirdOccupancy/edit/master/06_supplement01.rmd",
 "text": "Edit"
 },
 "history": {
