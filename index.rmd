@@ -17,7 +17,7 @@ description: "Influence of land cover and climate on the occupancy of avian dist
 # Introduction
 
 This is the `bookdown` version of a project in preparation that models occupancy for birds in the Nilgiri hills. 
-Methods and format are derived from [Strimas-Mackey et al.](http://strimas.com/ebird-best-practices/), the supplement to [Jonhnston et al. (2019)](https://www.biorxiv.org/content/10.1101/574392v1).
+Methods and format are derived from [Strimas-Mackey et al.](http://strimas.com/ebird-best-practices/), the supplement to [Johnston et al. (2019)](https://www.biorxiv.org/content/10.1101/574392v1).
 
 ## Attribution
 
