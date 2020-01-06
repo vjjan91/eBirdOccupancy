@@ -15,6 +15,7 @@ library(readxl)
 library(magrittr)
 library(stringr)
 library(dplyr)
+library(tidyr)
 
 # get decimal time function
 library(lubridate)
@@ -107,12 +108,21 @@ Using the landcover 100m resolution here.
 
 ```{r chk_covar_landuse, eval=FALSE}
 # read in 1km landcover and set 0 to NA
-landcover <- raster::raster("data/landUseClassification/lc_01km.tif")
-landcover[landcover == 0] <- NA
+library(raster)
+landcover <- raster::raster("data/spatial/landcover1km.tif")
+
+# get locs in utm coords
+locs <- distinct(ebdChkSummary, sampling_event_identifier, longitude, latitude)
+locs <- st_as_sf(locs, coords = c("longitude", "latitude")) %>% 
+  `st_crs<-`(4326) %>% 
+  st_transform(32643) %>% 
+  st_coordinates()
 
 # get for unique points
 landcoverVec <- raster::extract(x = landcover, 
-                                y = as.matrix(ebdChkSummary[,c("longitude","latitude")]))
+                                y = locs)
+
+landcoverVec[landcoverVec == 0] <- NA
 
 # assign to df and overwrite
 setDT(ebdChkSummary)[,landcover:= landcoverVec]
@@ -143,7 +153,7 @@ ebdChkSummary <- ebdChkSummary %>%
          !is.na(nSoi)) %>% 
   mutate(landcover = as.factor(landcover),
          observer = as.factor(observer)) %>% 
-  tidyr::drop_na() # remove NAs, avoids errors later
+  drop_na(landcover)
 ```
 
 ## Run observer expertise model
@@ -152,19 +162,20 @@ Our observer expertise model aims to include the random intercpet effect of obse
 
 ```{r run_model, eval=FALSE}
 # uses either a subset or all data
-library(rptR)
 library(lmerTest)
+
 
 # here we specify a glmm with random effects for observer
 # time is considered a fixed log predictor and a random slope
-modObsRep <- glmer(nSoi ~ log(duration) + 
+modObsExp <- glmer(nSoi ~ sqrt(duration) + 
+                     landcover+
                    sqrt(decimalTime) + 
                    I((sqrt(decimalTime))^2) + 
                    log(julianDate) + 
                    I((log(julianDate)^2)) + 
                    (1|observer) + (0+duration|observer),
                    data = ebdChkSummary, family = "poisson")
-```
+``` 
 
 ## Write model to file
 
@@ -175,32 +186,32 @@ if(!dir.exists("data/modOutput")){
 }
 
 # write model output to text file
-{writeLines(R.utils::captureOutput(list(Sys.time(), summary(modObsRep))), 
-            con = "data/modOutput/modOutExpertise.txt")}
+{
+  writeLines(R.utils::captureOutput(list(Sys.time(), summary(modObsExp))), 
+            con = "data/modOutput/modOutExpertise.txt")
+  }
 ```
 
-## Get observer expertise as random effect
+## Get observer expertise as species in 60 mins
 
 ```{r obsexp_ranef, eval=FALSE}
-# get the ranef coefficients as a measure of observer score
-obsRanef <- lme4::ranef(modObsRep$mod)[[1]]
+# make df with means
+observer <- unique(ebdChkSummary$observer)
+dfPredict <- ebdChkSummary %>% 
+  summarise_at(vars(duration, decimalTime, julianDate), list(~mean(.))) %>% 
+  mutate(duration = 60, landcover = as.factor(6)) %>% 
+  tidyr::crossing(observer)
 
-# make datatable
-setDT(obsRanef, keep.rownames = T)[]
-# set names
-setnames(obsRanef, c("observer", "rptrScore"))
-
-# scale ranefscore between 0 and 1
-obsRanef[,rptrScore:=scales::rescale(rptrScore)]
+# run predict from model on it
+dfPredict <- mutate(dfPredict, 
+                    score = predict(modObsExp, newdata = dfPredict, type = "response",
+                                    allow.new.levels = TRUE)) %>% 
+  mutate(score = scales::rescale(score))
 ```
 
 ## Write observer expertise to file
 
 ```{r write_obsexp, eval=FALSE}
-# make dataframe
-obsRanef <- merge(ebdChkSummary[,c("observer", "landcover","year")], obsRanef, by = c("observer"))
-
-# write to file
-fwrite(obsRanef[,.(observer, rptrScore)], file = "data/dataObsRptrScore.csv")
+fwrite(dfPredict %>% dplyr::select(observer, score), file = "data/dataObsExpScore.csv")
 ```
 
