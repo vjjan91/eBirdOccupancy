@@ -164,5 +164,8 @@ knitr::include_graphics("figs/fig_distRoads.png")
 
 ```
 
+## Species observation maps
+
+
 
 ## WIP
