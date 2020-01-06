@@ -24,14 +24,14 @@
 <meta name="author" content="Vijay Ramesh, Pratik R Gupte, and Morgan Tingley" />
 
 
-<meta name="date" content="2020-01-06" />
+<meta name="date" content="2020-01-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="occupancy-modelling-here.html"/>
+<link rel="prev" href="occupancy-modelling.html"/>
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -166,7 +166,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6" data-path="prepare-observer-expertise.html"><a href="prepare-observer-expertise.html#filter-data-for-stats"><i class="fa fa-check"></i><b>4.6</b> Filter data for stats</a></li>
 <li class="chapter" data-level="4.7" data-path="prepare-observer-expertise.html"><a href="prepare-observer-expertise.html#run-observer-expertise-model"><i class="fa fa-check"></i><b>4.7</b> Run observer expertise model</a></li>
 <li class="chapter" data-level="4.8" data-path="prepare-observer-expertise.html"><a href="prepare-observer-expertise.html#write-model-to-file"><i class="fa fa-check"></i><b>4.8</b> Write model to file</a></li>
-<li class="chapter" data-level="4.9" data-path="prepare-observer-expertise.html"><a href="prepare-observer-expertise.html#get-observer-expertise-as-random-effect"><i class="fa fa-check"></i><b>4.9</b> Get observer expertise as random effect</a></li>
+<li class="chapter" data-level="4.9" data-path="prepare-observer-expertise.html"><a href="prepare-observer-expertise.html#get-observer-expertise-as-species-in-60-mins"><i class="fa fa-check"></i><b>4.9</b> Get observer expertise as species in 60 mins</a></li>
 <li class="chapter" data-level="4.10" data-path="prepare-observer-expertise.html"><a href="prepare-observer-expertise.html#write-observer-expertise-to-file"><i class="fa fa-check"></i><b>4.10</b> Write observer expertise to file</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html"><i class="fa fa-check"></i><b>5</b> Add covariates to subsampled data</a><ul>
@@ -182,7 +182,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.7" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#join-landscape-data-to-obs-data"><i class="fa fa-check"></i><b>5.7</b> Join landscape data to obs data</a></li>
 <li class="chapter" data-level="5.8" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#write-data-to-files"><i class="fa fa-check"></i><b>5.8</b> Write data to files</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="occupancy-modelling-here.html"><a href="occupancy-modelling-here.html"><i class="fa fa-check"></i><b>6</b> Occupancy modelling here</a></li>
+<li class="chapter" data-level="6" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html"><i class="fa fa-check"></i><b>6</b> Occupancy modelling</a><ul>
+<li class="chapter" data-level="6.1" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#load-necessary-libraries"><i class="fa fa-check"></i><b>6.1</b> Load necessary libraries</a></li>
+<li class="chapter" data-level="6.2" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#load-dataframe-and-scale-covariates"><i class="fa fa-check"></i><b>6.2</b> Load dataframe and scale covariates</a></li>
+<li class="chapter" data-level="6.3" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#identifying-covariates-necessary-to-model-the-detection-process"><i class="fa fa-check"></i><b>6.3</b> Identifying covariates necessary to model the detection process</a></li>
+<li class="chapter" data-level="6.4" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#running-a-null-model"><i class="fa fa-check"></i><b>6.4</b> Running a null model</a></li>
+<li class="chapter" data-level="6.5" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#land-cover-and-climate-effects-modeled-separately"><i class="fa fa-check"></i><b>6.5</b> Land Cover and Climate (effects modeled separately)</a></li>
+<li class="chapter" data-level="6.6" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#elevation-alone"><i class="fa fa-check"></i><b>6.6</b> Elevation alone</a></li>
+<li class="chapter" data-level="6.7" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#the-interaction-between-land-cover-and-elevation-and-climate-and-elevation"><i class="fa fa-check"></i><b>6.7</b> The interaction between Land cover and elevation and climate and Elevation</a></li>
+<li class="chapter" data-level="6.8" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#the-linear-combined-effect-of-land-cover-and-climate"><i class="fa fa-check"></i><b>6.8</b> The linear combined effect of land cover and climate</a></li>
+<li class="chapter" data-level="6.9" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#the-interaction-between-inter-annual-variation-in-temperature-and-land-cover"><i class="fa fa-check"></i><b>6.9</b> The interaction between inter-annual variation in temperature and land cover</a></li>
+<li class="chapter" data-level="6.10" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#the-interaction-between-inter-annual-variation-in-precip-and-land-cover"><i class="fa fa-check"></i><b>6.10</b> The interaction between inter-annual variation in precip and land cover</a></li>
+</ul></li>
 <li class="chapter" data-level="7" data-path="supplementary-material.html"><a href="supplementary-material.html"><i class="fa fa-check"></i><b>7</b> Supplementary material</a><ul>
 <li class="chapter" data-level="7.1" data-path="supplementary-material.html"><a href="supplementary-material.html#distance-to-roads"><i class="fa fa-check"></i><b>7.1</b> Distance to roads</a><ul>
 <li class="chapter" data-level="7.1.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-2"><i class="fa fa-check"></i><b>7.1.1</b> Prepare libraries</a></li>
@@ -229,140 +240,140 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">7.1</span> Distance to roads</h2>
 <div id="prepare-libraries-2" class="section level3">
 <h3><span class="header-section-number">7.1.1</span> Prepare libraries</h3>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1"><span class="co"># load libraries</span></a>
-<a class="sourceLine" id="cb42-2" title="2"><span class="kw">library</span>(reticulate)</a>
-<a class="sourceLine" id="cb42-3" title="3"><span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb42-4" title="4"><span class="kw">library</span>(ggthemes)</a>
-<a class="sourceLine" id="cb42-5" title="5"></a>
-<a class="sourceLine" id="cb42-6" title="6"><span class="co"># set python path</span></a>
-<a class="sourceLine" id="cb42-7" title="7"><span class="kw">use_python</span>(<span class="st">&quot;/usr/bin/python3&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1"><span class="co"># load libraries</span></a>
+<a class="sourceLine" id="cb52-2" title="2"><span class="kw">library</span>(reticulate)</a>
+<a class="sourceLine" id="cb52-3" title="3"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb52-4" title="4"><span class="kw">library</span>(ggthemes)</a>
+<a class="sourceLine" id="cb52-5" title="5"></a>
+<a class="sourceLine" id="cb52-6" title="6"><span class="co"># set python path</span></a>
+<a class="sourceLine" id="cb52-7" title="7"><span class="kw">use_python</span>(<span class="st">&quot;/usr/bin/python3&quot;</span>)</a></code></pre></div>
 <p>Importing python libraries.</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb43-1" title="1"><span class="co"># import classic python libs</span></a>
-<a class="sourceLine" id="cb43-2" title="2"><span class="im">import</span> itertools</a>
-<a class="sourceLine" id="cb43-3" title="3"><span class="im">from</span> operator <span class="im">import</span> itemgetter</a>
-<a class="sourceLine" id="cb43-4" title="4"><span class="im">import</span> numpy <span class="im">as</span> np</a>
-<a class="sourceLine" id="cb43-5" title="5"><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</a>
-<a class="sourceLine" id="cb43-6" title="6"><span class="im">import</span> math</a>
-<a class="sourceLine" id="cb43-7" title="7"></a>
-<a class="sourceLine" id="cb43-8" title="8"><span class="co"># libs for dataframes</span></a>
-<a class="sourceLine" id="cb43-9" title="9"><span class="im">import</span> pandas <span class="im">as</span> pd</a>
-<a class="sourceLine" id="cb43-10" title="10"></a>
-<a class="sourceLine" id="cb43-11" title="11"><span class="co"># import libs for geodata</span></a>
-<a class="sourceLine" id="cb43-12" title="12"><span class="im">from</span> shapely.ops <span class="im">import</span> nearest_points</a>
-<a class="sourceLine" id="cb43-13" title="13"><span class="im">import</span> geopandas <span class="im">as</span> gpd</a>
-<a class="sourceLine" id="cb43-14" title="14"><span class="im">import</span> rasterio</a>
-<a class="sourceLine" id="cb43-15" title="15"></a>
-<a class="sourceLine" id="cb43-16" title="16"><span class="co"># import ckdtree</span></a>
-<a class="sourceLine" id="cb43-17" title="17"><span class="im">from</span> scipy.spatial <span class="im">import</span> cKDTree</a>
-<a class="sourceLine" id="cb43-18" title="18"><span class="im">from</span> shapely.geometry <span class="im">import</span> Point, MultiPoint, LineString, MultiLineString</a></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb53-1" title="1"><span class="co"># import classic python libs</span></a>
+<a class="sourceLine" id="cb53-2" title="2"><span class="im">import</span> itertools</a>
+<a class="sourceLine" id="cb53-3" title="3"><span class="im">from</span> operator <span class="im">import</span> itemgetter</a>
+<a class="sourceLine" id="cb53-4" title="4"><span class="im">import</span> numpy <span class="im">as</span> np</a>
+<a class="sourceLine" id="cb53-5" title="5"><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</a>
+<a class="sourceLine" id="cb53-6" title="6"><span class="im">import</span> math</a>
+<a class="sourceLine" id="cb53-7" title="7"></a>
+<a class="sourceLine" id="cb53-8" title="8"><span class="co"># libs for dataframes</span></a>
+<a class="sourceLine" id="cb53-9" title="9"><span class="im">import</span> pandas <span class="im">as</span> pd</a>
+<a class="sourceLine" id="cb53-10" title="10"></a>
+<a class="sourceLine" id="cb53-11" title="11"><span class="co"># import libs for geodata</span></a>
+<a class="sourceLine" id="cb53-12" title="12"><span class="im">from</span> shapely.ops <span class="im">import</span> nearest_points</a>
+<a class="sourceLine" id="cb53-13" title="13"><span class="im">import</span> geopandas <span class="im">as</span> gpd</a>
+<a class="sourceLine" id="cb53-14" title="14"><span class="im">import</span> rasterio</a>
+<a class="sourceLine" id="cb53-15" title="15"></a>
+<a class="sourceLine" id="cb53-16" title="16"><span class="co"># import ckdtree</span></a>
+<a class="sourceLine" id="cb53-17" title="17"><span class="im">from</span> scipy.spatial <span class="im">import</span> cKDTree</a>
+<a class="sourceLine" id="cb53-18" title="18"><span class="im">from</span> shapely.geometry <span class="im">import</span> Point, MultiPoint, LineString, MultiLineString</a></code></pre></div>
 </div>
 <div id="prepare-data-for-processing" class="section level3">
 <h3><span class="header-section-number">7.1.2</span> Prepare data for processing</h3>
-<div class="sourceCode" id="cb44"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb44-1" title="1"><span class="co"># read in roads shapefile</span></a>
-<a class="sourceLine" id="cb44-2" title="2">roads <span class="op">=</span> gpd.read_file(<span class="st">&quot;data/spatial/roads_studysite_2019/roads_studysite_2019.shp&quot;</span>)</a>
-<a class="sourceLine" id="cb44-3" title="3">roads.head()</a>
-<a class="sourceLine" id="cb44-4" title="4"></a>
-<a class="sourceLine" id="cb44-5" title="5"><span class="co"># read in checklist covariates for conversion to gpd</span></a>
-<a class="sourceLine" id="cb44-6" title="6"><span class="co"># get unique coordinates, assign them to the df</span></a>
-<a class="sourceLine" id="cb44-7" title="7"><span class="co"># convert df to geo-df</span></a>
-<a class="sourceLine" id="cb44-8" title="8">chkCovars <span class="op">=</span> pd.read_csv(<span class="st">&quot;data/eBirdChecklistVars.csv&quot;</span>)</a>
-<a class="sourceLine" id="cb44-9" title="9">unique_locs <span class="op">=</span> chkCovars.drop_duplicates(subset<span class="op">=</span>[<span class="st">&#39;longitude&#39;</span>,<span class="st">&#39;latitude&#39;</span>])[[<span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;latitude&#39;</span>, <span class="st">&#39;nSp&#39;</span>]]</a>
-<a class="sourceLine" id="cb44-10" title="10">unique_locs[<span class="st">&#39;coordId&#39;</span>] <span class="op">=</span> np.arange(<span class="dv">1</span>, unique_locs.shape[<span class="dv">0</span>]<span class="op">+</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb44-11" title="11">chkCovars <span class="op">=</span> chkCovars.merge(unique_locs, on<span class="op">=</span>[<span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;latitude&#39;</span>])</a>
-<a class="sourceLine" id="cb44-12" title="12"></a>
-<a class="sourceLine" id="cb44-13" title="13">unique_locs <span class="op">=</span> gpd.GeoDataFrame(</a>
-<a class="sourceLine" id="cb44-14" title="14">unique_locs,</a>
-<a class="sourceLine" id="cb44-15" title="15">geometry<span class="op">=</span>gpd.points_from_xy(unique_locs.longitude, unique_locs.latitude))</a>
-<a class="sourceLine" id="cb44-16" title="16">unique_locs.crs <span class="op">=</span> {<span class="st">&#39;init&#39;</span> :<span class="st">&#39;epsg:4326&#39;</span>}</a>
-<a class="sourceLine" id="cb44-17" title="17"></a>
-<a class="sourceLine" id="cb44-18" title="18"><span class="co"># reproject spatials to 43n epsg 32642</span></a>
-<a class="sourceLine" id="cb44-19" title="19">roads <span class="op">=</span> roads.to_crs({<span class="st">&#39;init&#39;</span>: <span class="st">&#39;epsg:32642&#39;</span>})</a>
-<a class="sourceLine" id="cb44-20" title="20">unique_locs <span class="op">=</span> unique_locs.to_crs({<span class="st">&#39;init&#39;</span>: <span class="st">&#39;epsg:32642&#39;</span>})</a>
-<a class="sourceLine" id="cb44-21" title="21"></a>
-<a class="sourceLine" id="cb44-22" title="22"></a>
-<a class="sourceLine" id="cb44-23" title="23"><span class="co"># function to simplify multilinestrings</span></a>
-<a class="sourceLine" id="cb44-24" title="24"><span class="kw">def</span> simplify_roads(complex_roads):</a>
-<a class="sourceLine" id="cb44-25" title="25">simpleRoads <span class="op">=</span> []</a>
-<a class="sourceLine" id="cb44-26" title="26"><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(complex_roads.geometry)):</a>
-<a class="sourceLine" id="cb44-27" title="27">feature <span class="op">=</span> complex_roads.geometry.iloc[i]</a>
-<a class="sourceLine" id="cb44-28" title="28"><span class="cf">if</span> feature.geom_type <span class="op">==</span> <span class="st">&quot;LineString&quot;</span>:</a>
-<a class="sourceLine" id="cb44-29" title="29">simpleRoads.append(feature)</a>
-<a class="sourceLine" id="cb44-30" title="30"><span class="cf">elif</span> feature.geom_type <span class="op">==</span> <span class="st">&quot;MultiLineString&quot;</span>:</a>
-<a class="sourceLine" id="cb44-31" title="31"><span class="cf">for</span> road_level2 <span class="kw">in</span> feature:</a>
-<a class="sourceLine" id="cb44-32" title="32">simpleRoads.append(road_level2)</a>
-<a class="sourceLine" id="cb44-33" title="33"><span class="cf">return</span> simpleRoads</a>
-<a class="sourceLine" id="cb44-34" title="34"></a>
-<a class="sourceLine" id="cb44-35" title="35"></a>
-<a class="sourceLine" id="cb44-36" title="36"><span class="co"># function to use ckdtrees for nearest point finding</span></a>
-<a class="sourceLine" id="cb44-37" title="37"><span class="kw">def</span> ckdnearest(gdfA, gdfB):</a>
-<a class="sourceLine" id="cb44-38" title="38">A <span class="op">=</span> np.concatenate(</a>
-<a class="sourceLine" id="cb44-39" title="39">[np.array(geom.coords) <span class="cf">for</span> geom <span class="kw">in</span> gdfA.geometry.to_list()])</a>
-<a class="sourceLine" id="cb44-40" title="40">simplified_features <span class="op">=</span> simplify_roads(gdfB)</a>
-<a class="sourceLine" id="cb44-41" title="41">B <span class="op">=</span> [np.array(geom.coords) <span class="cf">for</span> geom <span class="kw">in</span> simplified_features]</a>
-<a class="sourceLine" id="cb44-42" title="42">B <span class="op">=</span> np.concatenate(B)</a>
-<a class="sourceLine" id="cb44-43" title="43">ckd_tree <span class="op">=</span> cKDTree(B)</a>
-<a class="sourceLine" id="cb44-44" title="44">dist, idx <span class="op">=</span> ckd_tree.query(A, k<span class="op">=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb44-45" title="45"><span class="cf">return</span> dist</a>
-<a class="sourceLine" id="cb44-46" title="46"></a>
-<a class="sourceLine" id="cb44-47" title="47"></a>
-<a class="sourceLine" id="cb44-48" title="48"><span class="co"># get distance to nearest road</span></a>
-<a class="sourceLine" id="cb44-49" title="49">unique_locs[<span class="st">&#39;dist_road&#39;</span>] <span class="op">=</span> ckdnearest(unique_locs, roads)</a>
-<a class="sourceLine" id="cb44-50" title="50"></a>
-<a class="sourceLine" id="cb44-51" title="51"><span class="co"># write to file</span></a>
-<a class="sourceLine" id="cb44-52" title="52">unique_locs <span class="op">=</span> pd.DataFrame(unique_locs.drop(columns<span class="op">=</span><span class="st">&#39;geometry&#39;</span>))</a>
-<a class="sourceLine" id="cb44-53" title="53">unique_locs[<span class="st">&#39;dist_road&#39;</span>] <span class="op">=</span> unique_locs[<span class="st">&#39;dist_road&#39;</span>]</a>
-<a class="sourceLine" id="cb44-54" title="54">unique_locs.to_csv(path_or_buf<span class="op">=</span><span class="st">&quot;data/locs_dist_to_road.csv&quot;</span>, index<span class="op">=</span><span class="va">False</span>)</a>
-<a class="sourceLine" id="cb44-55" title="55"></a>
-<a class="sourceLine" id="cb44-56" title="56"><span class="co"># merge unique locs with chkCovars</span></a>
-<a class="sourceLine" id="cb44-57" title="57">chkCovars <span class="op">=</span> chkCovars.merge(unique_locs, on<span class="op">=</span>[<span class="st">&#39;latitude&#39;</span>, <span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;coordId&#39;</span>])</a></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb54-1" title="1"><span class="co"># read in roads shapefile</span></a>
+<a class="sourceLine" id="cb54-2" title="2">roads <span class="op">=</span> gpd.read_file(<span class="st">&quot;data/spatial/roads_studysite_2019/roads_studysite_2019.shp&quot;</span>)</a>
+<a class="sourceLine" id="cb54-3" title="3">roads.head()</a>
+<a class="sourceLine" id="cb54-4" title="4"></a>
+<a class="sourceLine" id="cb54-5" title="5"><span class="co"># read in checklist covariates for conversion to gpd</span></a>
+<a class="sourceLine" id="cb54-6" title="6"><span class="co"># get unique coordinates, assign them to the df</span></a>
+<a class="sourceLine" id="cb54-7" title="7"><span class="co"># convert df to geo-df</span></a>
+<a class="sourceLine" id="cb54-8" title="8">chkCovars <span class="op">=</span> pd.read_csv(<span class="st">&quot;data/eBirdChecklistVars.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb54-9" title="9">unique_locs <span class="op">=</span> chkCovars.drop_duplicates(subset<span class="op">=</span>[<span class="st">&#39;longitude&#39;</span>,<span class="st">&#39;latitude&#39;</span>])[[<span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;latitude&#39;</span>, <span class="st">&#39;nSp&#39;</span>]]</a>
+<a class="sourceLine" id="cb54-10" title="10">unique_locs[<span class="st">&#39;coordId&#39;</span>] <span class="op">=</span> np.arange(<span class="dv">1</span>, unique_locs.shape[<span class="dv">0</span>]<span class="op">+</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb54-11" title="11">chkCovars <span class="op">=</span> chkCovars.merge(unique_locs, on<span class="op">=</span>[<span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;latitude&#39;</span>])</a>
+<a class="sourceLine" id="cb54-12" title="12"></a>
+<a class="sourceLine" id="cb54-13" title="13">unique_locs <span class="op">=</span> gpd.GeoDataFrame(</a>
+<a class="sourceLine" id="cb54-14" title="14">unique_locs,</a>
+<a class="sourceLine" id="cb54-15" title="15">geometry<span class="op">=</span>gpd.points_from_xy(unique_locs.longitude, unique_locs.latitude))</a>
+<a class="sourceLine" id="cb54-16" title="16">unique_locs.crs <span class="op">=</span> {<span class="st">&#39;init&#39;</span> :<span class="st">&#39;epsg:4326&#39;</span>}</a>
+<a class="sourceLine" id="cb54-17" title="17"></a>
+<a class="sourceLine" id="cb54-18" title="18"><span class="co"># reproject spatials to 43n epsg 32642</span></a>
+<a class="sourceLine" id="cb54-19" title="19">roads <span class="op">=</span> roads.to_crs({<span class="st">&#39;init&#39;</span>: <span class="st">&#39;epsg:32642&#39;</span>})</a>
+<a class="sourceLine" id="cb54-20" title="20">unique_locs <span class="op">=</span> unique_locs.to_crs({<span class="st">&#39;init&#39;</span>: <span class="st">&#39;epsg:32642&#39;</span>})</a>
+<a class="sourceLine" id="cb54-21" title="21"></a>
+<a class="sourceLine" id="cb54-22" title="22"></a>
+<a class="sourceLine" id="cb54-23" title="23"><span class="co"># function to simplify multilinestrings</span></a>
+<a class="sourceLine" id="cb54-24" title="24"><span class="kw">def</span> simplify_roads(complex_roads):</a>
+<a class="sourceLine" id="cb54-25" title="25">simpleRoads <span class="op">=</span> []</a>
+<a class="sourceLine" id="cb54-26" title="26"><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(complex_roads.geometry)):</a>
+<a class="sourceLine" id="cb54-27" title="27">feature <span class="op">=</span> complex_roads.geometry.iloc[i]</a>
+<a class="sourceLine" id="cb54-28" title="28"><span class="cf">if</span> feature.geom_type <span class="op">==</span> <span class="st">&quot;LineString&quot;</span>:</a>
+<a class="sourceLine" id="cb54-29" title="29">simpleRoads.append(feature)</a>
+<a class="sourceLine" id="cb54-30" title="30"><span class="cf">elif</span> feature.geom_type <span class="op">==</span> <span class="st">&quot;MultiLineString&quot;</span>:</a>
+<a class="sourceLine" id="cb54-31" title="31"><span class="cf">for</span> road_level2 <span class="kw">in</span> feature:</a>
+<a class="sourceLine" id="cb54-32" title="32">simpleRoads.append(road_level2)</a>
+<a class="sourceLine" id="cb54-33" title="33"><span class="cf">return</span> simpleRoads</a>
+<a class="sourceLine" id="cb54-34" title="34"></a>
+<a class="sourceLine" id="cb54-35" title="35"></a>
+<a class="sourceLine" id="cb54-36" title="36"><span class="co"># function to use ckdtrees for nearest point finding</span></a>
+<a class="sourceLine" id="cb54-37" title="37"><span class="kw">def</span> ckdnearest(gdfA, gdfB):</a>
+<a class="sourceLine" id="cb54-38" title="38">A <span class="op">=</span> np.concatenate(</a>
+<a class="sourceLine" id="cb54-39" title="39">[np.array(geom.coords) <span class="cf">for</span> geom <span class="kw">in</span> gdfA.geometry.to_list()])</a>
+<a class="sourceLine" id="cb54-40" title="40">simplified_features <span class="op">=</span> simplify_roads(gdfB)</a>
+<a class="sourceLine" id="cb54-41" title="41">B <span class="op">=</span> [np.array(geom.coords) <span class="cf">for</span> geom <span class="kw">in</span> simplified_features]</a>
+<a class="sourceLine" id="cb54-42" title="42">B <span class="op">=</span> np.concatenate(B)</a>
+<a class="sourceLine" id="cb54-43" title="43">ckd_tree <span class="op">=</span> cKDTree(B)</a>
+<a class="sourceLine" id="cb54-44" title="44">dist, idx <span class="op">=</span> ckd_tree.query(A, k<span class="op">=</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb54-45" title="45"><span class="cf">return</span> dist</a>
+<a class="sourceLine" id="cb54-46" title="46"></a>
+<a class="sourceLine" id="cb54-47" title="47"></a>
+<a class="sourceLine" id="cb54-48" title="48"><span class="co"># get distance to nearest road</span></a>
+<a class="sourceLine" id="cb54-49" title="49">unique_locs[<span class="st">&#39;dist_road&#39;</span>] <span class="op">=</span> ckdnearest(unique_locs, roads)</a>
+<a class="sourceLine" id="cb54-50" title="50"></a>
+<a class="sourceLine" id="cb54-51" title="51"><span class="co"># write to file</span></a>
+<a class="sourceLine" id="cb54-52" title="52">unique_locs <span class="op">=</span> pd.DataFrame(unique_locs.drop(columns<span class="op">=</span><span class="st">&#39;geometry&#39;</span>))</a>
+<a class="sourceLine" id="cb54-53" title="53">unique_locs[<span class="st">&#39;dist_road&#39;</span>] <span class="op">=</span> unique_locs[<span class="st">&#39;dist_road&#39;</span>]</a>
+<a class="sourceLine" id="cb54-54" title="54">unique_locs.to_csv(path_or_buf<span class="op">=</span><span class="st">&quot;data/locs_dist_to_road.csv&quot;</span>, index<span class="op">=</span><span class="va">False</span>)</a>
+<a class="sourceLine" id="cb54-55" title="55"></a>
+<a class="sourceLine" id="cb54-56" title="56"><span class="co"># merge unique locs with chkCovars</span></a>
+<a class="sourceLine" id="cb54-57" title="57">chkCovars <span class="op">=</span> chkCovars.merge(unique_locs, on<span class="op">=</span>[<span class="st">&#39;latitude&#39;</span>, <span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;coordId&#39;</span>])</a></code></pre></div>
 </div>
 <div id="plot-histogram-distance-to-roads" class="section level3">
 <h3><span class="header-section-number">7.1.3</span> Plot histogram: distance to roads</h3>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1"><span class="co"># extract data from python</span></a>
-<a class="sourceLine" id="cb45-2" title="2">chkCovars &lt;-<span class="st"> </span>py<span class="op">$</span>chkCovars</a>
-<a class="sourceLine" id="cb45-3" title="3"></a>
-<a class="sourceLine" id="cb45-4" title="4"><span class="co"># make histogram</span></a>
-<a class="sourceLine" id="cb45-5" title="5">hist_roads &lt;-<span class="st"> </span><span class="kw">ggplot</span>(chkCovars)<span class="op">+</span></a>
-<a class="sourceLine" id="cb45-6" title="6"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(dist_road <span class="op">/</span><span class="st"> </span><span class="fl">1e3</span>),</a>
-<a class="sourceLine" id="cb45-7" title="7">                 <span class="dt">bins =</span> <span class="dv">20</span>, <span class="dt">size=</span><span class="fl">0.2</span>, <span class="dt">fill=</span><span class="st">&quot;steelblue&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb45-8" title="8"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;distance to roads (km)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;# checklists&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb45-9" title="9"><span class="st">  </span><span class="kw">scale_x_log10</span>(<span class="dt">label=</span><span class="kw">label_number</span>(<span class="dt">accuracy =</span> <span class="fl">0.1</span>), </a>
-<a class="sourceLine" id="cb45-10" title="10">                <span class="dt">breaks =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="dv">1</span>, <span class="dv">10</span>))<span class="op">+</span></a>
-<a class="sourceLine" id="cb45-11" title="11"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">label=</span><span class="kw">label_number</span>(<span class="dt">scale=</span><span class="fl">0.001</span>, <span class="dt">suffix =</span> <span class="st">&quot;K&quot;</span>))<span class="op">+</span></a>
-<a class="sourceLine" id="cb45-12" title="12"><span class="st">  </span><span class="kw">theme_few</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb45-13" title="13"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">plot.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill=</span><span class="st">&quot;white&quot;</span>, <span class="dt">colour =</span> <span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb45-14" title="14">        <span class="dt">panel.background =</span> <span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb45-15" title="15">        <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.line =</span> <span class="kw">element_blank</span>())</a></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" title="1"><span class="co"># extract data from python</span></a>
+<a class="sourceLine" id="cb55-2" title="2">chkCovars &lt;-<span class="st"> </span>py<span class="op">$</span>chkCovars</a>
+<a class="sourceLine" id="cb55-3" title="3"></a>
+<a class="sourceLine" id="cb55-4" title="4"><span class="co"># make histogram</span></a>
+<a class="sourceLine" id="cb55-5" title="5">hist_roads &lt;-<span class="st"> </span><span class="kw">ggplot</span>(chkCovars)<span class="op">+</span></a>
+<a class="sourceLine" id="cb55-6" title="6"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(dist_road <span class="op">/</span><span class="st"> </span><span class="fl">1e3</span>),</a>
+<a class="sourceLine" id="cb55-7" title="7">                 <span class="dt">bins =</span> <span class="dv">20</span>, <span class="dt">size=</span><span class="fl">0.2</span>, <span class="dt">fill=</span><span class="st">&quot;steelblue&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb55-8" title="8"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;distance to roads (km)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;# checklists&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb55-9" title="9"><span class="st">  </span><span class="kw">scale_x_log10</span>(<span class="dt">label=</span><span class="kw">label_number</span>(<span class="dt">accuracy =</span> <span class="fl">0.1</span>), </a>
+<a class="sourceLine" id="cb55-10" title="10">                <span class="dt">breaks =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="dv">1</span>, <span class="dv">10</span>))<span class="op">+</span></a>
+<a class="sourceLine" id="cb55-11" title="11"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">label=</span><span class="kw">label_number</span>(<span class="dt">scale=</span><span class="fl">0.001</span>, <span class="dt">suffix =</span> <span class="st">&quot;K&quot;</span>))<span class="op">+</span></a>
+<a class="sourceLine" id="cb55-12" title="12"><span class="st">  </span><span class="kw">theme_few</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb55-13" title="13"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">plot.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill=</span><span class="st">&quot;white&quot;</span>, <span class="dt">colour =</span> <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb55-14" title="14">        <span class="dt">panel.background =</span> <span class="kw">element_blank</span>(),</a>
+<a class="sourceLine" id="cb55-15" title="15">        <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.line =</span> <span class="kw">element_blank</span>())</a></code></pre></div>
 </div>
 <div id="plot-map-points-on-roads" class="section level3">
 <h3><span class="header-section-number">7.1.4</span> Plot map: points on roads</h3>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1"><span class="co"># load data into R</span></a>
-<a class="sourceLine" id="cb46-2" title="2"><span class="kw">library</span>(sf)</a>
-<a class="sourceLine" id="cb46-3" title="3"><span class="kw">library</span>(ggspatial)</a>
-<a class="sourceLine" id="cb46-4" title="4">hills &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>)</a>
-<a class="sourceLine" id="cb46-5" title="5">roads &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/roads_studysite_2019/roads_studysite_2019.shp&quot;</span>)</a>
-<a class="sourceLine" id="cb46-6" title="6">points &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/locs_dist_to_road.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb46-7" title="7"><span class="st">  </span><span class="kw">st_as_sf</span>(<span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>,<span class="st">&quot;latitude&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb46-8" title="8"><span class="st">  `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>)</a>
-<a class="sourceLine" id="cb46-9" title="9"></a>
-<a class="sourceLine" id="cb46-10" title="10"><span class="co"># plot on maps</span></a>
-<a class="sourceLine" id="cb46-11" title="11"><span class="kw">ggplot</span>(hills)<span class="op">+</span></a>
-<a class="sourceLine" id="cb46-12" title="12"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">fill=</span><span class="st">&quot;transparent&quot;</span>, <span class="dt">col =</span> <span class="dv">2</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb46-13" title="13"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>roads, <span class="dt">col=</span><span class="st">&quot;steelblue&quot;</span>, <span class="dt">size=</span><span class="fl">0.2</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb46-14" title="14"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>points, <span class="kw">aes</span>(<span class="dt">col=</span>dist_road), <span class="dt">size =</span> <span class="fl">0.1</span>, <span class="dt">col =</span> <span class="st">&quot;grey40&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb46-15" title="15"><span class="st">  </span><span class="kw">annotation_custom</span>(<span class="dt">grob =</span> hist_roads <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplotGrob</span>(),</a>
-<a class="sourceLine" id="cb46-16" title="16">                    <span class="dt">xmin =</span> <span class="fl">77.1</span>, <span class="dt">xmax =</span> <span class="fl">77.8</span>, <span class="dt">ymin =</span> <span class="fl">10.9</span>, <span class="dt">ymax =</span> <span class="fl">11.5</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb46-17" title="17"><span class="st">  </span><span class="kw">annotation_scale</span>(<span class="dt">location =</span> <span class="st">&quot;br&quot;</span>, <span class="dt">width_hint =</span> <span class="fl">0.4</span>, <span class="dt">text_cex =</span> <span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb46-18" title="18"><span class="st">  </span><span class="kw">annotation_north_arrow</span>(<span class="dt">location =</span> <span class="st">&quot;br&quot;</span>, <span class="dt">which_north =</span> <span class="st">&quot;true&quot;</span>, </a>
-<a class="sourceLine" id="cb46-19" title="19">                         <span class="dt">pad_x =</span> <span class="kw">unit</span>(<span class="fl">0.1</span>, <span class="st">&quot;in&quot;</span>), <span class="dt">pad_y =</span> <span class="kw">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;in&quot;</span>),</a>
-<a class="sourceLine" id="cb46-20" title="20">                         <span class="dt">style =</span> north_arrow_fancy_orienteering) <span class="op">+</span></a>
-<a class="sourceLine" id="cb46-21" title="21"><span class="st">  </span><span class="kw">theme_few</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb46-22" title="22"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb46-23" title="23"><span class="st">  </span><span class="kw">coord_sf</span>(<span class="dt">expand =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb46-24" title="24"></a>
-<a class="sourceLine" id="cb46-25" title="25"><span class="co"># save figure</span></a>
-<a class="sourceLine" id="cb46-26" title="26"><span class="kw">ggsave</span>(<span class="dt">filename =</span> <span class="st">&quot;figs/fig_distRoads.png&quot;</span>, <span class="dt">device =</span> <span class="kw">png</span>())</a>
-<a class="sourceLine" id="cb46-27" title="27"><span class="kw">dev.off</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1"><span class="co"># load data into R</span></a>
+<a class="sourceLine" id="cb56-2" title="2"><span class="kw">library</span>(sf)</a>
+<a class="sourceLine" id="cb56-3" title="3"><span class="kw">library</span>(ggspatial)</a>
+<a class="sourceLine" id="cb56-4" title="4">hills &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>)</a>
+<a class="sourceLine" id="cb56-5" title="5">roads &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/roads_studysite_2019/roads_studysite_2019.shp&quot;</span>)</a>
+<a class="sourceLine" id="cb56-6" title="6">points &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/locs_dist_to_road.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb56-7" title="7"><span class="st">  </span><span class="kw">st_as_sf</span>(<span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>,<span class="st">&quot;latitude&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb56-8" title="8"><span class="st">  `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>)</a>
+<a class="sourceLine" id="cb56-9" title="9"></a>
+<a class="sourceLine" id="cb56-10" title="10"><span class="co"># plot on maps</span></a>
+<a class="sourceLine" id="cb56-11" title="11"><span class="kw">ggplot</span>(hills)<span class="op">+</span></a>
+<a class="sourceLine" id="cb56-12" title="12"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">fill=</span><span class="st">&quot;transparent&quot;</span>, <span class="dt">col =</span> <span class="dv">2</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb56-13" title="13"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>roads, <span class="dt">col=</span><span class="st">&quot;steelblue&quot;</span>, <span class="dt">size=</span><span class="fl">0.2</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb56-14" title="14"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>points, <span class="kw">aes</span>(<span class="dt">col=</span>dist_road), <span class="dt">size =</span> <span class="fl">0.1</span>, <span class="dt">col =</span> <span class="st">&quot;grey40&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb56-15" title="15"><span class="st">  </span><span class="kw">annotation_custom</span>(<span class="dt">grob =</span> hist_roads <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplotGrob</span>(),</a>
+<a class="sourceLine" id="cb56-16" title="16">                    <span class="dt">xmin =</span> <span class="fl">77.1</span>, <span class="dt">xmax =</span> <span class="fl">77.8</span>, <span class="dt">ymin =</span> <span class="fl">10.9</span>, <span class="dt">ymax =</span> <span class="fl">11.5</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb56-17" title="17"><span class="st">  </span><span class="kw">annotation_scale</span>(<span class="dt">location =</span> <span class="st">&quot;br&quot;</span>, <span class="dt">width_hint =</span> <span class="fl">0.4</span>, <span class="dt">text_cex =</span> <span class="dv">1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb56-18" title="18"><span class="st">  </span><span class="kw">annotation_north_arrow</span>(<span class="dt">location =</span> <span class="st">&quot;br&quot;</span>, <span class="dt">which_north =</span> <span class="st">&quot;true&quot;</span>, </a>
+<a class="sourceLine" id="cb56-19" title="19">                         <span class="dt">pad_x =</span> <span class="kw">unit</span>(<span class="fl">0.1</span>, <span class="st">&quot;in&quot;</span>), <span class="dt">pad_y =</span> <span class="kw">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;in&quot;</span>),</a>
+<a class="sourceLine" id="cb56-20" title="20">                         <span class="dt">style =</span> north_arrow_fancy_orienteering) <span class="op">+</span></a>
+<a class="sourceLine" id="cb56-21" title="21"><span class="st">  </span><span class="kw">theme_few</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb56-22" title="22"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb56-23" title="23"><span class="st">  </span><span class="kw">coord_sf</span>(<span class="dt">expand =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb56-24" title="24"></a>
+<a class="sourceLine" id="cb56-25" title="25"><span class="co"># save figure</span></a>
+<a class="sourceLine" id="cb56-26" title="26"><span class="kw">ggsave</span>(<span class="dt">filename =</span> <span class="st">&quot;figs/fig_distRoads.png&quot;</span>, <span class="dt">device =</span> <span class="kw">png</span>())</a>
+<a class="sourceLine" id="cb56-27" title="27"><span class="kw">dev.off</span>()</a></code></pre></div>
 <div class="figure">
 <img src="figs/fig_distRoads.png" alt="Checklist locations in the Nilgiris. Inset histogram shows checklists' distance to the nearest road, with the X-axis on a log-scale." width="1000" />
 <p class="caption">
@@ -376,107 +387,107 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">7.2</span> Species observation distributions</h2>
 <div id="prepare-libraries-3" class="section level3">
 <h3><span class="header-section-number">7.2.1</span> Prepare libraries</h3>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1"><span class="co"># load libraries</span></a>
-<a class="sourceLine" id="cb47-2" title="2"><span class="kw">library</span>(data.table)</a>
-<a class="sourceLine" id="cb47-3" title="3"><span class="kw">library</span>(readxl)</a>
-<a class="sourceLine" id="cb47-4" title="4"><span class="kw">library</span>(magrittr)</a>
-<a class="sourceLine" id="cb47-5" title="5"><span class="kw">library</span>(stringr)</a>
-<a class="sourceLine" id="cb47-6" title="6"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb47-7" title="7"></a>
-<a class="sourceLine" id="cb47-8" title="8"><span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb47-9" title="9"><span class="kw">library</span>(ggthemes)</a></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1"><span class="co"># load libraries</span></a>
+<a class="sourceLine" id="cb57-2" title="2"><span class="kw">library</span>(data.table)</a>
+<a class="sourceLine" id="cb57-3" title="3"><span class="kw">library</span>(readxl)</a>
+<a class="sourceLine" id="cb57-4" title="4"><span class="kw">library</span>(magrittr)</a>
+<a class="sourceLine" id="cb57-5" title="5"><span class="kw">library</span>(stringr)</a>
+<a class="sourceLine" id="cb57-6" title="6"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb57-7" title="7"></a>
+<a class="sourceLine" id="cb57-8" title="8"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb57-9" title="9"><span class="kw">library</span>(ggthemes)</a></code></pre></div>
 </div>
 <div id="read-species-of-interest" class="section level3">
 <h3><span class="header-section-number">7.2.2</span> Read species of interest</h3>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1"><span class="co"># add species of interest</span></a>
-<a class="sourceLine" id="cb48-2" title="2">specieslist &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;data/species_list_13_11_2019.xlsx&quot;</span>)</a>
-<a class="sourceLine" id="cb48-3" title="3">speciesOfInterest &lt;-<span class="st"> </span>specieslist<span class="op">$</span>scientific_name</a></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1"><span class="co"># add species of interest</span></a>
+<a class="sourceLine" id="cb58-2" title="2">specieslist &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;data/species_list_13_11_2019.xlsx&quot;</span>)</a>
+<a class="sourceLine" id="cb58-3" title="3">speciesOfInterest &lt;-<span class="st"> </span>specieslist<span class="op">$</span>scientific_name</a></code></pre></div>
 </div>
 <div id="load-raw-data-for-locations" class="section level3">
 <h3><span class="header-section-number">7.2.3</span> Load raw data for locations</h3>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1"><span class="co"># read in shapefile of nilgiris to subset by bounding box</span></a>
-<a class="sourceLine" id="cb49-2" title="2"><span class="kw">library</span>(sf)</a>
-<a class="sourceLine" id="cb49-3" title="3">wg &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>); box &lt;-<span class="st"> </span><span class="kw">st_bbox</span>(wg)</a>
-<a class="sourceLine" id="cb49-4" title="4"></a>
-<a class="sourceLine" id="cb49-5" title="5"><span class="co"># read in data and subset</span></a>
-<a class="sourceLine" id="cb49-6" title="6">ebd &lt;-<span class="st"> </span><span class="kw">fread</span>(<span class="st">&quot;ebd_Filtered_Jun2019.txt&quot;</span>)</a>
-<a class="sourceLine" id="cb49-7" title="7">ebd &lt;-<span class="st"> </span>ebd[<span class="kw">between</span>(LONGITUDE, box[<span class="st">&quot;xmin&quot;</span>], box[<span class="st">&quot;xmax&quot;</span>]) <span class="op">&amp;</span><span class="st"> </span><span class="kw">between</span>(LATITUDE, box[<span class="st">&quot;ymin&quot;</span>], box[<span class="st">&quot;ymax&quot;</span>]),]</a>
-<a class="sourceLine" id="cb49-8" title="8">ebd &lt;-<span class="st"> </span>ebd[<span class="kw">year</span>(<span class="st">`</span><span class="dt">OBSERVATION DATE</span><span class="st">`</span>) <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2013</span>,]</a>
-<a class="sourceLine" id="cb49-9" title="9"></a>
-<a class="sourceLine" id="cb49-10" title="10"><span class="co"># make new column names</span></a>
-<a class="sourceLine" id="cb49-11" title="11">newNames &lt;-<span class="st"> </span><span class="kw">str_replace_all</span>(<span class="kw">colnames</span>(ebd), <span class="st">&quot; &quot;</span>, <span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb49-12" title="12"><span class="st">  </span><span class="kw">str_to_lower</span>()</a>
-<a class="sourceLine" id="cb49-13" title="13"><span class="kw">setnames</span>(ebd, newNames)</a>
-<a class="sourceLine" id="cb49-14" title="14"></a>
-<a class="sourceLine" id="cb49-15" title="15"><span class="co"># keep useful columns</span></a>
-<a class="sourceLine" id="cb49-16" title="16">columnsOfInterest &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;scientific_name&quot;</span>,<span class="st">&quot;observation_count&quot;</span>,<span class="st">&quot;locality&quot;</span>,<span class="st">&quot;locality_id&quot;</span>,<span class="st">&quot;locality_type&quot;</span>,<span class="st">&quot;latitude&quot;</span>,<span class="st">&quot;longitude&quot;</span>,<span class="st">&quot;observation_date&quot;</span>, <span class="st">&quot;sampling_event_identifier&quot;</span>)</a>
-<a class="sourceLine" id="cb49-17" title="17"></a>
-<a class="sourceLine" id="cb49-18" title="18"><span class="co"># keep species of interest</span></a>
-<a class="sourceLine" id="cb49-19" title="19">ebd &lt;-<span class="st"> </span>ebd[scientific_name <span class="op">%in%</span><span class="st"> </span>speciesOfInterest,]</a>
-<a class="sourceLine" id="cb49-20" title="20"></a>
-<a class="sourceLine" id="cb49-21" title="21">ebd &lt;-<span class="st"> </span><span class="kw">select</span>(ebd, <span class="kw">one_of</span>(columnsOfInterest))</a></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" title="1"><span class="co"># read in shapefile of nilgiris to subset by bounding box</span></a>
+<a class="sourceLine" id="cb59-2" title="2"><span class="kw">library</span>(sf)</a>
+<a class="sourceLine" id="cb59-3" title="3">wg &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>); box &lt;-<span class="st"> </span><span class="kw">st_bbox</span>(wg)</a>
+<a class="sourceLine" id="cb59-4" title="4"></a>
+<a class="sourceLine" id="cb59-5" title="5"><span class="co"># read in data and subset</span></a>
+<a class="sourceLine" id="cb59-6" title="6">ebd &lt;-<span class="st"> </span><span class="kw">fread</span>(<span class="st">&quot;ebd_Filtered_Jun2019.txt&quot;</span>)</a>
+<a class="sourceLine" id="cb59-7" title="7">ebd &lt;-<span class="st"> </span>ebd[<span class="kw">between</span>(LONGITUDE, box[<span class="st">&quot;xmin&quot;</span>], box[<span class="st">&quot;xmax&quot;</span>]) <span class="op">&amp;</span><span class="st"> </span><span class="kw">between</span>(LATITUDE, box[<span class="st">&quot;ymin&quot;</span>], box[<span class="st">&quot;ymax&quot;</span>]),]</a>
+<a class="sourceLine" id="cb59-8" title="8">ebd &lt;-<span class="st"> </span>ebd[<span class="kw">year</span>(<span class="st">`</span><span class="dt">OBSERVATION DATE</span><span class="st">`</span>) <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2013</span>,]</a>
+<a class="sourceLine" id="cb59-9" title="9"></a>
+<a class="sourceLine" id="cb59-10" title="10"><span class="co"># make new column names</span></a>
+<a class="sourceLine" id="cb59-11" title="11">newNames &lt;-<span class="st"> </span><span class="kw">str_replace_all</span>(<span class="kw">colnames</span>(ebd), <span class="st">&quot; &quot;</span>, <span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb59-12" title="12"><span class="st">  </span><span class="kw">str_to_lower</span>()</a>
+<a class="sourceLine" id="cb59-13" title="13"><span class="kw">setnames</span>(ebd, newNames)</a>
+<a class="sourceLine" id="cb59-14" title="14"></a>
+<a class="sourceLine" id="cb59-15" title="15"><span class="co"># keep useful columns</span></a>
+<a class="sourceLine" id="cb59-16" title="16">columnsOfInterest &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;scientific_name&quot;</span>,<span class="st">&quot;observation_count&quot;</span>,<span class="st">&quot;locality&quot;</span>,<span class="st">&quot;locality_id&quot;</span>,<span class="st">&quot;locality_type&quot;</span>,<span class="st">&quot;latitude&quot;</span>,<span class="st">&quot;longitude&quot;</span>,<span class="st">&quot;observation_date&quot;</span>, <span class="st">&quot;sampling_event_identifier&quot;</span>)</a>
+<a class="sourceLine" id="cb59-17" title="17"></a>
+<a class="sourceLine" id="cb59-18" title="18"><span class="co"># keep species of interest</span></a>
+<a class="sourceLine" id="cb59-19" title="19">ebd &lt;-<span class="st"> </span>ebd[scientific_name <span class="op">%in%</span><span class="st"> </span>speciesOfInterest,]</a>
+<a class="sourceLine" id="cb59-20" title="20"></a>
+<a class="sourceLine" id="cb59-21" title="21">ebd &lt;-<span class="st"> </span><span class="kw">select</span>(ebd, <span class="kw">one_of</span>(columnsOfInterest))</a></code></pre></div>
 </div>
 <div id="get-proportional-obs-counts-in-20km-cells" class="section level3">
 <h3><span class="header-section-number">7.2.4</span> Get proportional obs counts in 20km cells</h3>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1"><span class="co"># transform data to UTM zone 43N</span></a>
-<a class="sourceLine" id="cb50-2" title="2">ebd &lt;-<span class="st"> </span><span class="kw">setDF</span>(ebd) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb50-3" title="3"><span class="st">  </span><span class="kw">st_as_sf</span>(<span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>,<span class="st">&quot;latitude&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb50-4" title="4"><span class="st">  `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
-<a class="sourceLine" id="cb50-5" title="5"></a>
-<a class="sourceLine" id="cb50-6" title="6"><span class="co"># add UTM coordinate columns</span></a>
-<a class="sourceLine" id="cb50-7" title="7">ebd &lt;-<span class="st"> </span><span class="kw">cbind</span>(ebd, <span class="kw">st_coordinates</span>(ebd)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb50-8" title="8"><span class="st">  </span><span class="kw">st_drop_geometry</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb50-9" title="9"><span class="st">  </span><span class="kw">setDT</span>()</a></code></pre></div>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1"><span class="co"># round to cell size</span></a>
-<a class="sourceLine" id="cb51-2" title="2">cell_size =<span class="st"> </span><span class="dv">20000</span> <span class="co"># 20km in metres</span></a>
-<a class="sourceLine" id="cb51-3" title="3">ebd[,<span class="st">`</span><span class="dt">:=</span><span class="st">`</span>(<span class="dt">X_round =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(X, cell_size), <span class="dt">Y_round =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(Y, cell_size))]</a>
-<a class="sourceLine" id="cb51-4" title="4"></a>
-<a class="sourceLine" id="cb51-5" title="5"><span class="co"># set observation count to 1 if NA or X</span></a>
-<a class="sourceLine" id="cb51-6" title="6">ebd_summary &lt;-<span class="st"> </span>ebd[, observation_count <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ifelse</span>(observation_count <span class="op">==</span><span class="st"> &quot;X&quot;</span>, <span class="dv">1</span>, observation_count)</a>
-<a class="sourceLine" id="cb51-7" title="7">                   ][,observation_count<span class="op">:</span><span class="er">=</span><span class="kw">as.numeric</span>(observation_count)</a>
-<a class="sourceLine" id="cb51-8" title="8">                     ][,.(<span class="dt">count=</span><span class="kw">sum</span>(observation_count)), </a>
-<a class="sourceLine" id="cb51-9" title="9">                       by =<span class="st"> </span><span class="kw">list</span>(scientific_name, X_round, Y_round)</a>
-<a class="sourceLine" id="cb51-10" title="10">                       ][,prop<span class="op">:</span><span class="er">=</span>count<span class="op">/</span><span class="kw">sum</span>(count), by =<span class="st"> </span><span class="kw">list</span>(scientific_name)]</a></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1"><span class="co"># transform data to UTM zone 43N</span></a>
+<a class="sourceLine" id="cb60-2" title="2">ebd &lt;-<span class="st"> </span><span class="kw">setDF</span>(ebd) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb60-3" title="3"><span class="st">  </span><span class="kw">st_as_sf</span>(<span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>,<span class="st">&quot;latitude&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb60-4" title="4"><span class="st">  `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
+<a class="sourceLine" id="cb60-5" title="5"></a>
+<a class="sourceLine" id="cb60-6" title="6"><span class="co"># add UTM coordinate columns</span></a>
+<a class="sourceLine" id="cb60-7" title="7">ebd &lt;-<span class="st"> </span><span class="kw">cbind</span>(ebd, <span class="kw">st_coordinates</span>(ebd)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb60-8" title="8"><span class="st">  </span><span class="kw">st_drop_geometry</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb60-9" title="9"><span class="st">  </span><span class="kw">setDT</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" title="1"><span class="co"># round to cell size</span></a>
+<a class="sourceLine" id="cb61-2" title="2">cell_size =<span class="st"> </span><span class="dv">20000</span> <span class="co"># 20km in metres</span></a>
+<a class="sourceLine" id="cb61-3" title="3">ebd[,<span class="st">`</span><span class="dt">:=</span><span class="st">`</span>(<span class="dt">X_round =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(X, cell_size), <span class="dt">Y_round =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(Y, cell_size))]</a>
+<a class="sourceLine" id="cb61-4" title="4"></a>
+<a class="sourceLine" id="cb61-5" title="5"><span class="co"># set observation count to 1 if NA or X</span></a>
+<a class="sourceLine" id="cb61-6" title="6">ebd_summary &lt;-<span class="st"> </span>ebd[, observation_count <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ifelse</span>(observation_count <span class="op">==</span><span class="st"> &quot;X&quot;</span>, <span class="dv">1</span>, observation_count)</a>
+<a class="sourceLine" id="cb61-7" title="7">                   ][,observation_count<span class="op">:</span><span class="er">=</span><span class="kw">as.numeric</span>(observation_count)</a>
+<a class="sourceLine" id="cb61-8" title="8">                     ][,.(<span class="dt">count=</span><span class="kw">sum</span>(observation_count)), </a>
+<a class="sourceLine" id="cb61-9" title="9">                       by =<span class="st"> </span><span class="kw">list</span>(scientific_name, X_round, Y_round)</a>
+<a class="sourceLine" id="cb61-10" title="10">                       ][,prop<span class="op">:</span><span class="er">=</span>count<span class="op">/</span><span class="kw">sum</span>(count), by =<span class="st"> </span><span class="kw">list</span>(scientific_name)]</a></code></pre></div>
 </div>
 <div id="plot-maps" class="section level3">
 <h3><span class="header-section-number">7.2.5</span> Plot maps</h3>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1"><span class="co"># get bbox</span></a>
-<a class="sourceLine" id="cb52-2" title="2">bbox &lt;-<span class="st"> </span>wg <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb52-3" title="3"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb52-4" title="4"><span class="st">  </span><span class="kw">st_bbox</span>()</a>
-<a class="sourceLine" id="cb52-5" title="5"></a>
-<a class="sourceLine" id="cb52-6" title="6"><span class="co"># add land</span></a>
-<a class="sourceLine" id="cb52-7" title="7"><span class="kw">library</span>(rnaturalearth)</a>
-<a class="sourceLine" id="cb52-8" title="8"><span class="co"># land &lt;- ne_countries(scale = 50, type = &quot;countries&quot;, continent = &quot;asia&quot;,</span></a>
-<a class="sourceLine" id="cb52-9" title="9"><span class="co">#                      country = &quot;india&quot;,</span></a>
-<a class="sourceLine" id="cb52-10" title="10"><span class="co">#                      returnclass = c(&quot;sf&quot;))</span></a>
-<a class="sourceLine" id="cb52-11" title="11"><span class="co"># </span></a>
-<a class="sourceLine" id="cb52-12" title="12"><span class="co"># # crop land</span></a>
-<a class="sourceLine" id="cb52-13" title="13"><span class="co"># land &lt;- st_transform(land, 32643) %&gt;% st_crop(bbox)</span></a></code></pre></div>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1"><span class="co"># make plot</span></a>
-<a class="sourceLine" id="cb53-2" title="2">wg &lt;-<span class="st"> </span><span class="kw">st_transform</span>(wg, <span class="dv">32643</span>)</a>
-<a class="sourceLine" id="cb53-3" title="3"></a>
-<a class="sourceLine" id="cb53-4" title="4">plotDistributions &lt;-</a>
-<a class="sourceLine" id="cb53-5" title="5"><span class="kw">ggplot</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb53-6" title="6"><span class="st">  </span><span class="co"># geom_sf(data = land, fill = &quot;grey99&quot;, col = &quot;transparent&quot;)+</span></a>
-<a class="sourceLine" id="cb53-7" title="7"><span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">data =</span> ebd_summary,</a>
-<a class="sourceLine" id="cb53-8" title="8">            <span class="kw">aes</span>(X_round, Y_round, <span class="dt">fill =</span> prop), <span class="dt">lwd =</span> <span class="fl">0.5</span>, <span class="dt">col =</span> <span class="st">&quot;white&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb53-9" title="9"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> wg, <span class="dt">fill =</span> <span class="st">&quot;transparent&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">lwd =</span> <span class="fl">0.3</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb53-10" title="10"><span class="st">  </span></a>
-<a class="sourceLine" id="cb53-11" title="11"><span class="st">  </span><span class="kw">scale_fill_distiller</span>(<span class="dt">palette =</span> <span class="st">&quot;Blues&quot;</span>, <span class="dt">direction =</span> <span class="dv">1</span>, </a>
-<a class="sourceLine" id="cb53-12" title="12">                       <span class="dt">values =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.3</span>), <span class="dt">na.value =</span> <span class="st">&quot;darkslateblue&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb53-13" title="13"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>scientific_name, <span class="dt">ncol =</span> <span class="dv">10</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb53-14" title="14"><span class="st">  </span><span class="kw">coord_sf</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb53-15" title="15"><span class="st">  </span><span class="kw">theme_few</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb53-16" title="16"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>, </a>
-<a class="sourceLine" id="cb53-17" title="17">        <span class="dt">axis.text =</span> <span class="kw">element_blank</span>(), </a>
-<a class="sourceLine" id="cb53-18" title="18">        <span class="dt">axis.title =</span> <span class="kw">element_blank</span>())</a>
-<a class="sourceLine" id="cb53-19" title="19">  </a>
-<a class="sourceLine" id="cb53-20" title="20"><span class="co"># export data</span></a>
-<a class="sourceLine" id="cb53-21" title="21"><span class="kw">ggsave</span>(plotDistributions, <span class="dt">filename =</span> <span class="st">&quot;figs/fig_species_distributions.png&quot;</span>, </a>
-<a class="sourceLine" id="cb53-22" title="22">       <span class="dt">height =</span> <span class="dv">10</span>, <span class="dt">width =</span> <span class="dv">16</span>, <span class="dt">device =</span> <span class="kw">png</span>(), <span class="dt">dpi =</span> <span class="dv">300</span>); <span class="kw">dev.off</span>()</a></code></pre></div>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1"><span class="co"># show exported image</span></a>
-<a class="sourceLine" id="cb54-2" title="2">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;figs/fig_species_distributions.png&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1"><span class="co"># get bbox</span></a>
+<a class="sourceLine" id="cb62-2" title="2">bbox &lt;-<span class="st"> </span>wg <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb62-3" title="3"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb62-4" title="4"><span class="st">  </span><span class="kw">st_bbox</span>()</a>
+<a class="sourceLine" id="cb62-5" title="5"></a>
+<a class="sourceLine" id="cb62-6" title="6"><span class="co"># add land</span></a>
+<a class="sourceLine" id="cb62-7" title="7"><span class="kw">library</span>(rnaturalearth)</a>
+<a class="sourceLine" id="cb62-8" title="8"><span class="co"># land &lt;- ne_countries(scale = 50, type = &quot;countries&quot;, continent = &quot;asia&quot;,</span></a>
+<a class="sourceLine" id="cb62-9" title="9"><span class="co">#                      country = &quot;india&quot;,</span></a>
+<a class="sourceLine" id="cb62-10" title="10"><span class="co">#                      returnclass = c(&quot;sf&quot;))</span></a>
+<a class="sourceLine" id="cb62-11" title="11"><span class="co"># </span></a>
+<a class="sourceLine" id="cb62-12" title="12"><span class="co"># # crop land</span></a>
+<a class="sourceLine" id="cb62-13" title="13"><span class="co"># land &lt;- st_transform(land, 32643) %&gt;% st_crop(bbox)</span></a></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" title="1"><span class="co"># make plot</span></a>
+<a class="sourceLine" id="cb63-2" title="2">wg &lt;-<span class="st"> </span><span class="kw">st_transform</span>(wg, <span class="dv">32643</span>)</a>
+<a class="sourceLine" id="cb63-3" title="3"></a>
+<a class="sourceLine" id="cb63-4" title="4">plotDistributions &lt;-</a>
+<a class="sourceLine" id="cb63-5" title="5"><span class="kw">ggplot</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb63-6" title="6"><span class="st">  </span><span class="co"># geom_sf(data = land, fill = &quot;grey99&quot;, col = &quot;transparent&quot;)+</span></a>
+<a class="sourceLine" id="cb63-7" title="7"><span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">data =</span> ebd_summary,</a>
+<a class="sourceLine" id="cb63-8" title="8">            <span class="kw">aes</span>(X_round, Y_round, <span class="dt">fill =</span> prop), <span class="dt">lwd =</span> <span class="fl">0.5</span>, <span class="dt">col =</span> <span class="st">&quot;white&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb63-9" title="9"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> wg, <span class="dt">fill =</span> <span class="st">&quot;transparent&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">lwd =</span> <span class="fl">0.3</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb63-10" title="10"><span class="st">  </span></a>
+<a class="sourceLine" id="cb63-11" title="11"><span class="st">  </span><span class="kw">scale_fill_distiller</span>(<span class="dt">palette =</span> <span class="st">&quot;Blues&quot;</span>, <span class="dt">direction =</span> <span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb63-12" title="12">                       <span class="dt">values =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.3</span>), <span class="dt">na.value =</span> <span class="st">&quot;darkslateblue&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb63-13" title="13"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>scientific_name, <span class="dt">ncol =</span> <span class="dv">10</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb63-14" title="14"><span class="st">  </span><span class="kw">coord_sf</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb63-15" title="15"><span class="st">  </span><span class="kw">theme_few</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb63-16" title="16"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>, </a>
+<a class="sourceLine" id="cb63-17" title="17">        <span class="dt">axis.text =</span> <span class="kw">element_blank</span>(), </a>
+<a class="sourceLine" id="cb63-18" title="18">        <span class="dt">axis.title =</span> <span class="kw">element_blank</span>())</a>
+<a class="sourceLine" id="cb63-19" title="19">  </a>
+<a class="sourceLine" id="cb63-20" title="20"><span class="co"># export data</span></a>
+<a class="sourceLine" id="cb63-21" title="21"><span class="kw">ggsave</span>(plotDistributions, <span class="dt">filename =</span> <span class="st">&quot;figs/fig_species_distributions.png&quot;</span>, </a>
+<a class="sourceLine" id="cb63-22" title="22">       <span class="dt">height =</span> <span class="dv">10</span>, <span class="dt">width =</span> <span class="dv">16</span>, <span class="dt">device =</span> <span class="kw">png</span>(), <span class="dt">dpi =</span> <span class="dv">300</span>); <span class="kw">dev.off</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" title="1"><span class="co"># show exported image</span></a>
+<a class="sourceLine" id="cb64-2" title="2">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;figs/fig_species_distributions.png&quot;</span>)</a></code></pre></div>
 <div class="figure">
 <img src="figs/fig_species_distributions.png" alt="Proportion of individuals observed in each grid cell (20km side) between 2013 and 2018. Deeper shades of blue indicate higher proportions in the range 0 -- 0.3, values above 0.3 are coloured purple." width="2400" />
 <p class="caption">
@@ -490,68 +501,68 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">7.3</span> Climate in relation to elevation</h2>
 <div id="prepare-libraries-4" class="section level3">
 <h3><span class="header-section-number">7.3.1</span> Prepare libraries</h3>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" title="1"><span class="co"># load libs</span></a>
-<a class="sourceLine" id="cb55-2" title="2"><span class="kw">library</span>(raster)</a>
-<a class="sourceLine" id="cb55-3" title="3"><span class="kw">library</span>(glue)</a>
-<a class="sourceLine" id="cb55-4" title="4"><span class="kw">library</span>(purrr)</a>
-<a class="sourceLine" id="cb55-5" title="5"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb55-6" title="6"><span class="kw">library</span>(tidyr)</a>
-<a class="sourceLine" id="cb55-7" title="7"></a>
-<a class="sourceLine" id="cb55-8" title="8"><span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb55-9" title="9"><span class="kw">library</span>(ggthemes)</a>
-<a class="sourceLine" id="cb55-10" title="10"></a>
-<a class="sourceLine" id="cb55-11" title="11"><span class="co"># get ci func</span></a>
-<a class="sourceLine" id="cb55-12" title="12">ci &lt;-<span class="st"> </span><span class="cf">function</span>(x){<span class="kw">qnorm</span>(<span class="fl">0.975</span>)<span class="op">*</span><span class="kw">sd</span>(x, <span class="dt">na.rm =</span> T)<span class="op">/</span><span class="kw">sqrt</span>(<span class="kw">length</span>(x))}</a></code></pre></div>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1"><span class="co"># read landscape prepare for plotting</span></a>
-<a class="sourceLine" id="cb56-2" title="2">landscape &lt;-<span class="st"> </span><span class="kw">stack</span>(<span class="st">&quot;data/spatial/landscape_resamp01km.tif&quot;</span>)</a>
-<a class="sourceLine" id="cb56-3" title="3"></a>
-<a class="sourceLine" id="cb56-4" title="4"><span class="co"># get proper names</span></a>
-<a class="sourceLine" id="cb56-5" title="5">elev_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;elev&quot;</span>, <span class="st">&quot;slope&quot;</span>, <span class="st">&quot;aspect&quot;</span>)</a>
-<a class="sourceLine" id="cb56-6" title="6">evi_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;evi_01&quot;</span>, <span class="st">&quot;evi_07&quot;</span>, <span class="st">&quot;evi_10&quot;</span>)</a>
-<a class="sourceLine" id="cb56-7" title="7">chelsa_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;chelsa_bio10_04&quot;</span>, <span class="st">&quot;chelsa_bio10_17&quot;</span>, <span class="st">&quot;chelsa_bio10_18&quot;</span>,</a>
-<a class="sourceLine" id="cb56-8" title="8">                  <span class="st">&quot;chelsa_prec&quot;</span>, <span class="st">&quot;chelsa_temp&quot;</span>)</a>
-<a class="sourceLine" id="cb56-9" title="9"></a>
-<a class="sourceLine" id="cb56-10" title="10"><span class="kw">names</span>(landscape) &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">glue</span>(<span class="st">&#39;{c(elev_names, evi_names, chelsa_names, &quot;landcover&quot;)}&#39;</span>))</a></code></pre></div>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1"><span class="co"># make duplicate stack</span></a>
-<a class="sourceLine" id="cb57-2" title="2">land_data &lt;-<span class="st"> </span>landscape[[<span class="kw">c</span>(<span class="st">&quot;elev&quot;</span>, chelsa_names)]]</a>
-<a class="sourceLine" id="cb57-3" title="3"></a>
-<a class="sourceLine" id="cb57-4" title="4"><span class="co"># convert to list</span></a>
-<a class="sourceLine" id="cb57-5" title="5">land_data &lt;-<span class="st"> </span><span class="kw">as.list</span>(land_data)</a>
-<a class="sourceLine" id="cb57-6" title="6"></a>
-<a class="sourceLine" id="cb57-7" title="7"><span class="co"># map get values over the stack</span></a>
-<a class="sourceLine" id="cb57-8" title="8">land_data &lt;-<span class="st"> </span><span class="kw">map</span>(land_data, getValues)</a>
-<a class="sourceLine" id="cb57-9" title="9"><span class="kw">names</span>(land_data) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;elev&quot;</span>, chelsa_names)</a>
-<a class="sourceLine" id="cb57-10" title="10"></a>
-<a class="sourceLine" id="cb57-11" title="11"><span class="co"># conver to dataframe and round to 100m</span></a>
-<a class="sourceLine" id="cb57-12" title="12">land_data &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(land_data)</a>
-<a class="sourceLine" id="cb57-13" title="13">land_data &lt;-<span class="st"> </span><span class="kw">drop_na</span>(land_data) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb57-14" title="14"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">elev_round  =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(elev, <span class="dv">200</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb57-15" title="15"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>elev) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb57-16" title="16"><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols =</span> <span class="kw">contains</span>(<span class="st">&quot;chelsa&quot;</span>),</a>
-<a class="sourceLine" id="cb57-17" title="17">               <span class="dt">names_to =</span> <span class="st">&quot;clim_var&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb57-18" title="18"><span class="st">  </span><span class="kw">group_by</span>(elev_round, clim_var) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb57-19" title="19"><span class="st">  </span><span class="kw">summarise_all</span>(<span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="kw">mean</span>(.), <span class="op">~</span><span class="kw">ci</span>(.)))</a></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" title="1"><span class="co"># load libs</span></a>
+<a class="sourceLine" id="cb65-2" title="2"><span class="kw">library</span>(raster)</a>
+<a class="sourceLine" id="cb65-3" title="3"><span class="kw">library</span>(glue)</a>
+<a class="sourceLine" id="cb65-4" title="4"><span class="kw">library</span>(purrr)</a>
+<a class="sourceLine" id="cb65-5" title="5"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb65-6" title="6"><span class="kw">library</span>(tidyr)</a>
+<a class="sourceLine" id="cb65-7" title="7"></a>
+<a class="sourceLine" id="cb65-8" title="8"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb65-9" title="9"><span class="kw">library</span>(ggthemes)</a>
+<a class="sourceLine" id="cb65-10" title="10"></a>
+<a class="sourceLine" id="cb65-11" title="11"><span class="co"># get ci func</span></a>
+<a class="sourceLine" id="cb65-12" title="12">ci &lt;-<span class="st"> </span><span class="cf">function</span>(x){<span class="kw">qnorm</span>(<span class="fl">0.975</span>)<span class="op">*</span><span class="kw">sd</span>(x, <span class="dt">na.rm =</span> T)<span class="op">/</span><span class="kw">sqrt</span>(<span class="kw">length</span>(x))}</a></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" title="1"><span class="co"># read landscape prepare for plotting</span></a>
+<a class="sourceLine" id="cb66-2" title="2">landscape &lt;-<span class="st"> </span><span class="kw">stack</span>(<span class="st">&quot;data/spatial/landscape_resamp01km.tif&quot;</span>)</a>
+<a class="sourceLine" id="cb66-3" title="3"></a>
+<a class="sourceLine" id="cb66-4" title="4"><span class="co"># get proper names</span></a>
+<a class="sourceLine" id="cb66-5" title="5">elev_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;elev&quot;</span>, <span class="st">&quot;slope&quot;</span>, <span class="st">&quot;aspect&quot;</span>)</a>
+<a class="sourceLine" id="cb66-6" title="6">evi_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;evi_01&quot;</span>, <span class="st">&quot;evi_07&quot;</span>, <span class="st">&quot;evi_10&quot;</span>)</a>
+<a class="sourceLine" id="cb66-7" title="7">chelsa_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;chelsa_bio10_04&quot;</span>, <span class="st">&quot;chelsa_bio10_17&quot;</span>, <span class="st">&quot;chelsa_bio10_18&quot;</span>,</a>
+<a class="sourceLine" id="cb66-8" title="8">                  <span class="st">&quot;chelsa_prec&quot;</span>, <span class="st">&quot;chelsa_temp&quot;</span>)</a>
+<a class="sourceLine" id="cb66-9" title="9"></a>
+<a class="sourceLine" id="cb66-10" title="10"><span class="kw">names</span>(landscape) &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">glue</span>(<span class="st">&#39;{c(elev_names, evi_names, chelsa_names, &quot;landcover&quot;)}&#39;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" title="1"><span class="co"># make duplicate stack</span></a>
+<a class="sourceLine" id="cb67-2" title="2">land_data &lt;-<span class="st"> </span>landscape[[<span class="kw">c</span>(<span class="st">&quot;elev&quot;</span>, chelsa_names)]]</a>
+<a class="sourceLine" id="cb67-3" title="3"></a>
+<a class="sourceLine" id="cb67-4" title="4"><span class="co"># convert to list</span></a>
+<a class="sourceLine" id="cb67-5" title="5">land_data &lt;-<span class="st"> </span><span class="kw">as.list</span>(land_data)</a>
+<a class="sourceLine" id="cb67-6" title="6"></a>
+<a class="sourceLine" id="cb67-7" title="7"><span class="co"># map get values over the stack</span></a>
+<a class="sourceLine" id="cb67-8" title="8">land_data &lt;-<span class="st"> </span><span class="kw">map</span>(land_data, getValues)</a>
+<a class="sourceLine" id="cb67-9" title="9"><span class="kw">names</span>(land_data) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;elev&quot;</span>, chelsa_names)</a>
+<a class="sourceLine" id="cb67-10" title="10"></a>
+<a class="sourceLine" id="cb67-11" title="11"><span class="co"># conver to dataframe and round to 100m</span></a>
+<a class="sourceLine" id="cb67-12" title="12">land_data &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(land_data)</a>
+<a class="sourceLine" id="cb67-13" title="13">land_data &lt;-<span class="st"> </span><span class="kw">drop_na</span>(land_data) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb67-14" title="14"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">elev_round  =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(elev, <span class="dv">200</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb67-15" title="15"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>elev) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb67-16" title="16"><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols =</span> <span class="kw">contains</span>(<span class="st">&quot;chelsa&quot;</span>),</a>
+<a class="sourceLine" id="cb67-17" title="17">               <span class="dt">names_to =</span> <span class="st">&quot;clim_var&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb67-18" title="18"><span class="st">  </span><span class="kw">group_by</span>(elev_round, clim_var) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb67-19" title="19"><span class="st">  </span><span class="kw">summarise_all</span>(<span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="kw">mean</span>(.), <span class="op">~</span><span class="kw">ci</span>(.)))</a></code></pre></div>
 </div>
 <div id="plot-climatic-variables-over-elevation" class="section level3">
 <h3><span class="header-section-number">7.3.2</span> Plot climatic variables over elevation</h3>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1"><span class="co"># plot in facets</span></a>
-<a class="sourceLine" id="cb58-2" title="2"></a>
-<a class="sourceLine" id="cb58-3" title="3">fig_climate_elev &lt;-<span class="st"> </span><span class="kw">ggplot</span>(land_data)<span class="op">+</span></a>
-<a class="sourceLine" id="cb58-4" title="4"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> elev_round, <span class="dt">y =</span> mean),</a>
-<a class="sourceLine" id="cb58-5" title="5">                  <span class="dt">size =</span> <span class="fl">0.2</span>, <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb58-6" title="6"><span class="st">  </span><span class="kw">geom_pointrange</span>(<span class="kw">aes</span>(<span class="dt">x =</span> elev_round, <span class="dt">y =</span> mean, <span class="dt">ymin=</span>mean<span class="op">-</span>ci, <span class="dt">ymax=</span>mean<span class="op">+</span>ci),</a>
-<a class="sourceLine" id="cb58-7" title="7">                  <span class="dt">size =</span> <span class="fl">0.3</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb58-8" title="8"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>comma)<span class="op">+</span></a>
-<a class="sourceLine" id="cb58-9" title="9"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>comma)<span class="op">+</span></a>
-<a class="sourceLine" id="cb58-10" title="10"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>clim_var, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb58-11" title="11"><span class="st">  </span><span class="kw">theme_few</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb58-12" title="12"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;elevation (m)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;CHELSA variable value&quot;</span>)</a>
-<a class="sourceLine" id="cb58-13" title="13"></a>
-<a class="sourceLine" id="cb58-14" title="14"><span class="co"># save as png</span></a>
-<a class="sourceLine" id="cb58-15" title="15"><span class="kw">ggsave</span>(fig_climate_elev, <span class="dt">filename =</span> <span class="st">&quot;figs/fig_climate_elev.png&quot;</span>, </a>
-<a class="sourceLine" id="cb58-16" title="16">       <span class="dt">height =</span> <span class="dv">4</span>, <span class="dt">width =</span> <span class="dv">6</span>, <span class="dt">device =</span> <span class="kw">png</span>(), <span class="dt">dpi =</span> <span class="dv">300</span>); <span class="kw">dev.off</span>()</a></code></pre></div>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" title="1"><span class="co"># show exported image</span></a>
-<a class="sourceLine" id="cb59-2" title="2">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;figs/fig_climate_elev.png&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" title="1"><span class="co"># plot in facets</span></a>
+<a class="sourceLine" id="cb68-2" title="2"></a>
+<a class="sourceLine" id="cb68-3" title="3">fig_climate_elev &lt;-<span class="st"> </span><span class="kw">ggplot</span>(land_data)<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-4" title="4"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> elev_round, <span class="dt">y =</span> mean),</a>
+<a class="sourceLine" id="cb68-5" title="5">                  <span class="dt">size =</span> <span class="fl">0.2</span>, <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-6" title="6"><span class="st">  </span><span class="kw">geom_pointrange</span>(<span class="kw">aes</span>(<span class="dt">x =</span> elev_round, <span class="dt">y =</span> mean, <span class="dt">ymin=</span>mean<span class="op">-</span>ci, <span class="dt">ymax=</span>mean<span class="op">+</span>ci),</a>
+<a class="sourceLine" id="cb68-7" title="7">                  <span class="dt">size =</span> <span class="fl">0.3</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-8" title="8"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>comma)<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-9" title="9"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>comma)<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-10" title="10"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>clim_var, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-11" title="11"><span class="st">  </span><span class="kw">theme_few</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-12" title="12"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;elevation (m)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;CHELSA variable value&quot;</span>)</a>
+<a class="sourceLine" id="cb68-13" title="13"></a>
+<a class="sourceLine" id="cb68-14" title="14"><span class="co"># save as png</span></a>
+<a class="sourceLine" id="cb68-15" title="15"><span class="kw">ggsave</span>(fig_climate_elev, <span class="dt">filename =</span> <span class="st">&quot;figs/fig_climate_elev.png&quot;</span>, </a>
+<a class="sourceLine" id="cb68-16" title="16">       <span class="dt">height =</span> <span class="dv">4</span>, <span class="dt">width =</span> <span class="dv">6</span>, <span class="dt">device =</span> <span class="kw">png</span>(), <span class="dt">dpi =</span> <span class="dv">300</span>); <span class="kw">dev.off</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" title="1"><span class="co"># show exported image</span></a>
+<a class="sourceLine" id="cb69-2" title="2">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;figs/fig_climate_elev.png&quot;</span>)</a></code></pre></div>
 <div class="figure">
 <img src="figs/fig_climate_elev.png" alt="CHELSA climatic variables as a function of elevation, in increments of 200m. Points represent means, while vertical lines show 95% confidence intervals." width="900" />
 <p class="caption">
@@ -565,65 +576,65 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">7.4</span> Climate in relation to landcover</h2>
 <div id="prepare-libraries-5" class="section level3">
 <h3><span class="header-section-number">7.4.1</span> Prepare libraries</h3>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1"><span class="co"># load libs</span></a>
-<a class="sourceLine" id="cb60-2" title="2"><span class="kw">library</span>(raster)</a>
-<a class="sourceLine" id="cb60-3" title="3"><span class="kw">library</span>(glue)</a>
-<a class="sourceLine" id="cb60-4" title="4"><span class="kw">library</span>(purrr)</a>
-<a class="sourceLine" id="cb60-5" title="5"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb60-6" title="6"><span class="kw">library</span>(tidyr)</a>
-<a class="sourceLine" id="cb60-7" title="7"></a>
-<a class="sourceLine" id="cb60-8" title="8"><span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb60-9" title="9"><span class="kw">library</span>(ggthemes)</a>
-<a class="sourceLine" id="cb60-10" title="10"></a>
-<a class="sourceLine" id="cb60-11" title="11"><span class="co"># get ci func</span></a>
-<a class="sourceLine" id="cb60-12" title="12">ci &lt;-<span class="st"> </span><span class="cf">function</span>(x){<span class="kw">qnorm</span>(<span class="fl">0.975</span>)<span class="op">*</span><span class="kw">sd</span>(x, <span class="dt">na.rm =</span> T)<span class="op">/</span><span class="kw">sqrt</span>(<span class="kw">length</span>(x))}</a></code></pre></div>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" title="1"><span class="co"># read landscape prepare for plotting</span></a>
-<a class="sourceLine" id="cb61-2" title="2">landscape &lt;-<span class="st"> </span><span class="kw">stack</span>(<span class="st">&quot;data/spatial/landscape_resamp01km.tif&quot;</span>)</a>
-<a class="sourceLine" id="cb61-3" title="3"></a>
-<a class="sourceLine" id="cb61-4" title="4"><span class="co"># get proper names</span></a>
-<a class="sourceLine" id="cb61-5" title="5">elev_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;elev&quot;</span>, <span class="st">&quot;slope&quot;</span>, <span class="st">&quot;aspect&quot;</span>)</a>
-<a class="sourceLine" id="cb61-6" title="6">evi_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;evi_01&quot;</span>, <span class="st">&quot;evi_07&quot;</span>, <span class="st">&quot;evi_10&quot;</span>)</a>
-<a class="sourceLine" id="cb61-7" title="7">chelsa_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;chelsa_bio10_04&quot;</span>, <span class="st">&quot;chelsa_bio10_17&quot;</span>, <span class="st">&quot;chelsa_bio10_18&quot;</span>,</a>
-<a class="sourceLine" id="cb61-8" title="8">                  <span class="st">&quot;chelsa_prec&quot;</span>, <span class="st">&quot;chelsa_temp&quot;</span>)</a>
-<a class="sourceLine" id="cb61-9" title="9"></a>
-<a class="sourceLine" id="cb61-10" title="10"><span class="kw">names</span>(landscape) &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">glue</span>(<span class="st">&#39;{c(elev_names, evi_names, chelsa_names, &quot;landcover&quot;)}&#39;</span>))</a></code></pre></div>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1"><span class="co"># make duplicate stack</span></a>
-<a class="sourceLine" id="cb62-2" title="2">land_data &lt;-<span class="st"> </span>landscape[[<span class="kw">c</span>(<span class="st">&quot;landcover&quot;</span>, chelsa_names)]]</a>
-<a class="sourceLine" id="cb62-3" title="3"></a>
-<a class="sourceLine" id="cb62-4" title="4"><span class="co"># convert to list</span></a>
-<a class="sourceLine" id="cb62-5" title="5">land_data &lt;-<span class="st"> </span><span class="kw">as.list</span>(land_data)</a>
-<a class="sourceLine" id="cb62-6" title="6"></a>
-<a class="sourceLine" id="cb62-7" title="7"><span class="co"># map get values over the stack</span></a>
-<a class="sourceLine" id="cb62-8" title="8">land_data &lt;-<span class="st"> </span><span class="kw">map</span>(land_data, getValues)</a>
-<a class="sourceLine" id="cb62-9" title="9"><span class="kw">names</span>(land_data) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;landcover&quot;</span>, chelsa_names)</a>
-<a class="sourceLine" id="cb62-10" title="10"></a>
-<a class="sourceLine" id="cb62-11" title="11"><span class="co"># conver to dataframe and round to 100m</span></a>
-<a class="sourceLine" id="cb62-12" title="12">land_data &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(land_data)</a>
-<a class="sourceLine" id="cb62-13" title="13">land_data &lt;-<span class="st"> </span><span class="kw">drop_na</span>(land_data) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb62-14" title="14"><span class="st">  </span><span class="kw">filter</span>(landcover <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb62-15" title="15"><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols =</span> <span class="kw">contains</span>(<span class="st">&quot;chelsa&quot;</span>),</a>
-<a class="sourceLine" id="cb62-16" title="16">               <span class="dt">names_to =</span> <span class="st">&quot;clim_var&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb62-17" title="17"><span class="st">  </span><span class="kw">group_by</span>(landcover, clim_var) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb62-18" title="18"><span class="st">  </span><span class="kw">summarise_all</span>(<span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="kw">mean</span>(.), <span class="op">~</span><span class="kw">ci</span>(.)))</a></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1"><span class="co"># load libs</span></a>
+<a class="sourceLine" id="cb70-2" title="2"><span class="kw">library</span>(raster)</a>
+<a class="sourceLine" id="cb70-3" title="3"><span class="kw">library</span>(glue)</a>
+<a class="sourceLine" id="cb70-4" title="4"><span class="kw">library</span>(purrr)</a>
+<a class="sourceLine" id="cb70-5" title="5"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb70-6" title="6"><span class="kw">library</span>(tidyr)</a>
+<a class="sourceLine" id="cb70-7" title="7"></a>
+<a class="sourceLine" id="cb70-8" title="8"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb70-9" title="9"><span class="kw">library</span>(ggthemes)</a>
+<a class="sourceLine" id="cb70-10" title="10"></a>
+<a class="sourceLine" id="cb70-11" title="11"><span class="co"># get ci func</span></a>
+<a class="sourceLine" id="cb70-12" title="12">ci &lt;-<span class="st"> </span><span class="cf">function</span>(x){<span class="kw">qnorm</span>(<span class="fl">0.975</span>)<span class="op">*</span><span class="kw">sd</span>(x, <span class="dt">na.rm =</span> T)<span class="op">/</span><span class="kw">sqrt</span>(<span class="kw">length</span>(x))}</a></code></pre></div>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" title="1"><span class="co"># read landscape prepare for plotting</span></a>
+<a class="sourceLine" id="cb71-2" title="2">landscape &lt;-<span class="st"> </span><span class="kw">stack</span>(<span class="st">&quot;data/spatial/landscape_resamp01km.tif&quot;</span>)</a>
+<a class="sourceLine" id="cb71-3" title="3"></a>
+<a class="sourceLine" id="cb71-4" title="4"><span class="co"># get proper names</span></a>
+<a class="sourceLine" id="cb71-5" title="5">elev_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;elev&quot;</span>, <span class="st">&quot;slope&quot;</span>, <span class="st">&quot;aspect&quot;</span>)</a>
+<a class="sourceLine" id="cb71-6" title="6">evi_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;evi_01&quot;</span>, <span class="st">&quot;evi_07&quot;</span>, <span class="st">&quot;evi_10&quot;</span>)</a>
+<a class="sourceLine" id="cb71-7" title="7">chelsa_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;chelsa_bio10_04&quot;</span>, <span class="st">&quot;chelsa_bio10_17&quot;</span>, <span class="st">&quot;chelsa_bio10_18&quot;</span>,</a>
+<a class="sourceLine" id="cb71-8" title="8">                  <span class="st">&quot;chelsa_prec&quot;</span>, <span class="st">&quot;chelsa_temp&quot;</span>)</a>
+<a class="sourceLine" id="cb71-9" title="9"></a>
+<a class="sourceLine" id="cb71-10" title="10"><span class="kw">names</span>(landscape) &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">glue</span>(<span class="st">&#39;{c(elev_names, evi_names, chelsa_names, &quot;landcover&quot;)}&#39;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1"><span class="co"># make duplicate stack</span></a>
+<a class="sourceLine" id="cb72-2" title="2">land_data &lt;-<span class="st"> </span>landscape[[<span class="kw">c</span>(<span class="st">&quot;landcover&quot;</span>, chelsa_names)]]</a>
+<a class="sourceLine" id="cb72-3" title="3"></a>
+<a class="sourceLine" id="cb72-4" title="4"><span class="co"># convert to list</span></a>
+<a class="sourceLine" id="cb72-5" title="5">land_data &lt;-<span class="st"> </span><span class="kw">as.list</span>(land_data)</a>
+<a class="sourceLine" id="cb72-6" title="6"></a>
+<a class="sourceLine" id="cb72-7" title="7"><span class="co"># map get values over the stack</span></a>
+<a class="sourceLine" id="cb72-8" title="8">land_data &lt;-<span class="st"> </span><span class="kw">map</span>(land_data, getValues)</a>
+<a class="sourceLine" id="cb72-9" title="9"><span class="kw">names</span>(land_data) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;landcover&quot;</span>, chelsa_names)</a>
+<a class="sourceLine" id="cb72-10" title="10"></a>
+<a class="sourceLine" id="cb72-11" title="11"><span class="co"># conver to dataframe and round to 100m</span></a>
+<a class="sourceLine" id="cb72-12" title="12">land_data &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(land_data)</a>
+<a class="sourceLine" id="cb72-13" title="13">land_data &lt;-<span class="st"> </span><span class="kw">drop_na</span>(land_data) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb72-14" title="14"><span class="st">  </span><span class="kw">filter</span>(landcover <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb72-15" title="15"><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols =</span> <span class="kw">contains</span>(<span class="st">&quot;chelsa&quot;</span>),</a>
+<a class="sourceLine" id="cb72-16" title="16">               <span class="dt">names_to =</span> <span class="st">&quot;clim_var&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb72-17" title="17"><span class="st">  </span><span class="kw">group_by</span>(landcover, clim_var) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb72-18" title="18"><span class="st">  </span><span class="kw">summarise_all</span>(<span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="kw">mean</span>(.), <span class="op">~</span><span class="kw">ci</span>(.)))</a></code></pre></div>
 </div>
 <div id="plot-climatic-variables-over-landcover" class="section level3">
 <h3><span class="header-section-number">7.4.2</span> Plot climatic variables over landcover</h3>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" title="1"><span class="co"># plot in facets</span></a>
-<a class="sourceLine" id="cb63-2" title="2"></a>
-<a class="sourceLine" id="cb63-3" title="3">fig_climate_lc &lt;-<span class="st"> </span><span class="kw">ggplot</span>(land_data)<span class="op">+</span></a>
-<a class="sourceLine" id="cb63-4" title="4"><span class="st">  </span><span class="kw">geom_pointrange</span>(<span class="kw">aes</span>(<span class="dt">x =</span> landcover, <span class="dt">y =</span> mean, <span class="dt">ymin=</span>mean<span class="op">-</span>ci, <span class="dt">ymax=</span>mean<span class="op">+</span>ci),</a>
-<a class="sourceLine" id="cb63-5" title="5">                  <span class="dt">size =</span> <span class="fl">0.3</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb63-6" title="6"><span class="st">  </span><span class="co"># scale_x_continuous(labels = scales::comma)+</span></a>
-<a class="sourceLine" id="cb63-7" title="7"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>comma)<span class="op">+</span></a>
-<a class="sourceLine" id="cb63-8" title="8"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>clim_var, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb63-9" title="9"><span class="st">  </span><span class="kw">theme_few</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb63-10" title="10"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;landcover class&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;CHELSA variable value&quot;</span>)</a>
-<a class="sourceLine" id="cb63-11" title="11"></a>
-<a class="sourceLine" id="cb63-12" title="12"><span class="co"># save as png</span></a>
-<a class="sourceLine" id="cb63-13" title="13"><span class="kw">ggsave</span>(fig_climate_lc, <span class="dt">filename =</span> <span class="st">&quot;figs/fig_climate_landcover.png&quot;</span>, </a>
-<a class="sourceLine" id="cb63-14" title="14">       <span class="dt">height =</span> <span class="dv">4</span>, <span class="dt">width =</span> <span class="dv">6</span>, <span class="dt">device =</span> <span class="kw">png</span>(), <span class="dt">dpi =</span> <span class="dv">300</span>); <span class="kw">dev.off</span>()</a></code></pre></div>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" title="1"><span class="co"># show exported image</span></a>
-<a class="sourceLine" id="cb64-2" title="2">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;figs/fig_climate_landcover.png&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" title="1"><span class="co"># plot in facets</span></a>
+<a class="sourceLine" id="cb73-2" title="2"></a>
+<a class="sourceLine" id="cb73-3" title="3">fig_climate_lc &lt;-<span class="st"> </span><span class="kw">ggplot</span>(land_data)<span class="op">+</span></a>
+<a class="sourceLine" id="cb73-4" title="4"><span class="st">  </span><span class="kw">geom_pointrange</span>(<span class="kw">aes</span>(<span class="dt">x =</span> landcover, <span class="dt">y =</span> mean, <span class="dt">ymin=</span>mean<span class="op">-</span>ci, <span class="dt">ymax=</span>mean<span class="op">+</span>ci),</a>
+<a class="sourceLine" id="cb73-5" title="5">                  <span class="dt">size =</span> <span class="fl">0.3</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb73-6" title="6"><span class="st">  </span><span class="co"># scale_x_continuous(labels = scales::comma)+</span></a>
+<a class="sourceLine" id="cb73-7" title="7"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>comma)<span class="op">+</span></a>
+<a class="sourceLine" id="cb73-8" title="8"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>clim_var, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb73-9" title="9"><span class="st">  </span><span class="kw">theme_few</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb73-10" title="10"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;landcover class&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;CHELSA variable value&quot;</span>)</a>
+<a class="sourceLine" id="cb73-11" title="11"></a>
+<a class="sourceLine" id="cb73-12" title="12"><span class="co"># save as png</span></a>
+<a class="sourceLine" id="cb73-13" title="13"><span class="kw">ggsave</span>(fig_climate_lc, <span class="dt">filename =</span> <span class="st">&quot;figs/fig_climate_landcover.png&quot;</span>, </a>
+<a class="sourceLine" id="cb73-14" title="14">       <span class="dt">height =</span> <span class="dv">4</span>, <span class="dt">width =</span> <span class="dv">6</span>, <span class="dt">device =</span> <span class="kw">png</span>(), <span class="dt">dpi =</span> <span class="dv">300</span>); <span class="kw">dev.off</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1"><span class="co"># show exported image</span></a>
+<a class="sourceLine" id="cb74-2" title="2">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;figs/fig_climate_landcover.png&quot;</span>)</a></code></pre></div>
 <div class="figure">
 <img src="figs/fig_climate_landcover.png" alt="CHELSA climatic variables as a function of landcover class. Points represent means, while vertical lines show 95% confidence intervals." width="900" />
 <p class="caption">
@@ -639,7 +650,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="occupancy-modelling-here.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="occupancy-modelling.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
     </div>
   </div>
