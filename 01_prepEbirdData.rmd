@@ -19,7 +19,7 @@ library(readxl)
 # custom sum function
 sum.no.na <- function(x){sum(x, na.rm = T)}
 
-#set file paths for auk functions
+# set file paths for auk functions
 f_in_ebd <- file.path("ebd_Filtered_Jun2019.txt")
 f_in_sampling <- file.path("ebd_sampling_Filtered_Jun2019.txt")
 ```

@@ -1,0 +1,1326 @@
+---
+editor_options: 
+  chunk_output_type: console
+---
+
+# Occupancy modelling 
+
+## Load necessary libraries
+```{r load_libraries, eval=FALSE, message=FALSE, warning=FALSE}
+
+# Load libraries
+library(auk)
+library(lubridate)
+library(sf)
+library(unmarked)
+library(raster)
+library(ebirdst)
+library(MuMIn)
+library(AICcmodavg)
+library(fields)
+library(tidyverse)
+library(doParallel)
+library(snow)
+library(openxlsx)
+library(data.table)
+library(dplyr)
+
+```
+
+## Load dataframe and scale covariates
+
+Here, we load the required dataframe that contains 10 random visits to a site. Please note that this process is repeated for each dataframe where environmental covariates were prepared at a spatial scale of 2.5, 10 and 25 sq.km around each unique locality. We also scaled all covariates (mean around 0 and standard deviation of 1)
+
+```{r load_dataframe, eval=FALSE}
+# Load in the prepared dataframe that contains 10 random visits to each site
+library(data.table)
+dat <- fread("K:\\Chapter 2_Occupancy Modeling\\Data\\SpeciesCovariateData\\4_dataForOccu.csv",header=T)
+setDF(dat)
+head(dat)
+
+# Some more pre-processing to get the right data structures
+dat.1 <- dat %>% 
+  mutate(year = year(observation_date),
+         pres_abs = as.integer(pres_abs)) # occupancy modeling requires an integer response
+
+# Scaling detection and occupancy covariates
+dat.scaled <- dat.1
+dat.scaled[,c(1,2,11,15,19:35)] <- scale(dat.scaled[,c(1,2,11,15,19:35)]) # Scaling and standardizing detection and site-level covariates
+fwrite(dat.scaled, file = "K:\\Chapter 2_Occupancy Modeling\\Data\\SpeciesCovariateData\\5_scaled_Covs.csv")
+
+```
+
+## Identifying covariates necessary to model the detection process
+
+Here, we use the `unmarked` package in R (Fiske and Chandler 2019) to identify detection level covariates that are important for each species
+
+```{r prob_detection, eval=FALSE}
+
+# All models are stored in lists below
+det_dred <- list()
+
+# Subsetting those models whose deltaAIC<4 (Burnham et al., 2011)
+top_det <- list()
+
+# Getting model averaged coefficients and relative importance scores
+det_avg <- list()
+det_imp <- list()
+
+# Getting model estimates
+det_modelEst <- list()
+
+# Add a progress bar for the loop
+pb <- txtProgressBar(min = 0, max = length(unique(dat.scaled$scientific_name)), style = 3) #text based bar
+
+for(i in 1:length(unique(dat.scaled$scientific_name))){
+  
+  data <- dat.scaled %>% filter(dat.scaled$scientific_name==unique(dat.scaled$scientific_name)[i]) 
+  
+  # Preparing data for the unmarked model
+  occ <- filter_repeat_visits(data, 
+                              min_obs = 1, max_obs = 10,
+                              annual_closure = FALSE,
+                              n_days = 2200, # 6 years is considered a period of closure
+                              date_var = "observation_date",
+                              site_vars = c("locality_id"))
+  
+  obs_covs <- c("min_obs_started", 
+                "duration_minutes", 
+                "effort_distance_km", 
+                "number_observers", 
+                "protocol_type",
+                "expertise",
+                "julian_date")
+  
+  # format for unmarked
+  occ_wide <- format_unmarked_occu(occ, 
+                                   site_id = "site", 
+                                   response = "pres_abs",
+                                   site_covs = c( "locality_id","lc_01.y","lc_02.y","lc_03.y", "lc_04.y",                                "lc_05.y", "lc_06.y", "lc_07.y","bio_4.y", "bio_17.y","bio_18.y", "prec_interannual.y","temp_interannual.y"),obs_covs = obs_covs)
+  
+  # Convert this dataframe of observations into an unmarked object to start fitting occupancy models
+  occ_um <- formatWide(occ_wide, type = "unmarkedFrameOccu")
+  
+  # Fit a global model with all detection level covariates
+  global_mod <- occu(~ min_obs_started+
+                    julian_date +
+                    duration_minutes + 
+                    effort_distance_km + 
+                    number_observers + 
+                    protocol_type +
+                    expertise ~ 1, data = occ_um)
+  
+  # Set up the cluster
+  clusterType <- if(length(find.package("snow", quiet = TRUE))) "SOCK" else "PSOCK"
+  clust <- try(makeCluster(getOption("cl.cores", 5), type = clusterType))
+  
+  clusterEvalQ(clust, library(unmarked))
+  clusterExport(clust, "occ_um")
+  
+  # Dredging the same
+  det_dred[[i]] <- pdredge(global_mod, clust) 
+  names(det_dred)[i] <- unique(dat.scaled$scientific_name)[i] 
+  
+  # Get the top models, which we'll define as those with deltaAICc <4
+  top_det[[i]] <- get.models(det_dred[[i]], subset = delta < 4, cluster = clust)
+  names(top_det)[i] <- unique(dat.scaled$scientific_name)[i] 
+  
+  # Obtaining model averaged coefficients 
+  if(length(top_det[[i]])>1){
+    a <- model.avg(top_det[[i]], fit = TRUE)
+    det_avg[[i]] <- as.data.frame(a$coefficients) 
+    names(det_avg)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+    det_modelEst[[i]] <- data.frame(Predictor = rownames(coefTable(a, full = T)),
+                                        Coefficient = coefTable(a, full = T)[,1],
+                                        SE = coefTable(a, full = T)[,2],
+                                        lowerCI = confint(a)[,1],
+                                        upperCI = confint(a)[,2])
+    names(det_modelEst)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+    det_imp[[i]] <- as.data.frame(MuMIn::importance(a))
+    names(det_imp)[i] <- unique(dat.scaled$scientific_name)[i]
+   } else {
+    det_avg[[i]] <- as.data.frame(unmarked::coef(top_det[[i]][[1]]))
+    names(det_avg)[i] <- unique(dat.scaled$scientific_name)[i] 
+    
+    lowSt <-  data.frame(lowerCI=confint(top_det[[i]][[1]], type="state")[,1])
+    lowDet <- data.frame(lowerCI=confint(top_det[[i]][[1]], type="det")[,1])
+    upSt <-  data.frame(upperCI=confint(top_det[[i]][[1]], type="state")[,2])
+    upDet <- data.frame(upperCI=confint(top_det[[i]][[1]], type="det")[,2])
+    
+    det_modelEst[[i]] <- data.frame(Predictor = rownames(coefTable(top_det[[i]][[1]])),
+                                        Coefficient = coefTable(top_det[[i]][[1]])[,1],
+                                        SE = coefTable(top_det[[i]][[1]])[,2],
+                                        lowerCI = rbind(lowSt,lowDet),
+                                        upperCI = rbind(upSt,upDet))
+    
+    names(det_modelEst)[i] <- unique(dat.scaled$scientific_name)[i]
+  }
+  setTxtProgressBar(pb, i)
+  stopCluster(clust)
+}  
+close(pb)
+  
+## Storing output from the above models in excel sheets 
+
+# 1. Store all the dredged model outputs for each species (variable: det_dred() - see above)
+write.xlsx(det_dred ,file="C:\\Users\\vr235\\Downloads\\det_dred.xlsx")
+
+# 2. Store all the model averaged outputs for each species and the relative importance score
+write.xlsx(det_avg, file = "C:\\Users\\vr235\\Downloads\\det_avg.xlsx", rowNames=T, colNames=T)
+write.xlsx(det_imp, file = "C:\\Users\\vr235\\Downloads\\det_imp.xlsx", rowNames=T, colNames=T)
+
+write.xlsx(det_modelEst, file = "C:\\Users\\vr235\\Downloads\\det_modelEst.xlsx", rowNames=T, colNames=T)
+
+```
+
+## Running a null model
+
+```{r null_model, eval=FALSE}
+# All null models are stored in lists below
+all_null <- list()
+
+# Add a progress bar for the loop
+pb <- txtProgressBar(min = 0, max = length(unique(dat.1$scientific_name)), style = 3) #text based bar
+
+for(i in 1:length(unique(dat.scaled$scientific_name))){
+  
+  data <- dat.scaled %>% filter(dat.scaled$scientific_name==unique(dat.scaled$scientific_name)[i]) 
+  
+  # Preparing data for the unmarked model
+  occ <- filter_repeat_visits(data, 
+                              min_obs = 1, max_obs = 10,
+                              annual_closure = FALSE,
+                              n_days = 2200, # 6 years is considered a period of closure
+                              date_var = "observation_date",
+                              site_vars = c("locality_id"))
+  
+  obs_covs <- c("min_obs_started", 
+                "duration_minutes", 
+                "effort_distance_km", 
+                "number_observers", 
+                "protocol_type",
+                "expertise",
+                "julian_date")
+  
+  # format for unmarked
+  occ_wide <- format_unmarked_occu(occ, 
+                                   site_id = "site", 
+                                   response = "pres_abs",
+                                   site_covs = c( "locality_id","lc_01.y","lc_02.y","lc_03.y", "lc_04.y",
+                                                  "lc_05.y", "lc_06.y", "lc_07.y","bio_4.y", "bio_17.y","bio_18.y", 
+                                                  "prec_interannual.y","temp_interannual.y", 
+                                                  "alt.y","slope.y"),
+                                   obs_covs = obs_covs)
+  
+  # Convert this dataframe of observations into an unmarked object to start fitting occupancy models
+  occ_um <- formatWide(occ_wide, type = "unmarkedFrameOccu")
+  
+  # Set up the model 
+  all_null[[i]] <- occu(~1~1, data = occ_um)
+  names(all_null)[i] <- unique(dat.scaled$scientific_name)[i]
+  setTxtProgressBar(pb, i)
+  }
+close(pb)
+
+# Store all the  model outputs for each species
+capture.output(all_null ,file="C:\\Users\\vr235\\Downloads\\null_models.csv")
+
+```
+
+## Land Cover and Climate (effects modeled separately)
+
+```{r lc_clim, eval=FALSE}
+
+# All dredged models are stored in lists below
+landcover <- list()
+climate <- list()
+
+# Subsetting those models whose deltaAIC<4 (Burnham et al., 2011)
+top_lc <- list()
+top_clim <- list()
+
+# Getting model averaged coefficients and relative importance scores
+lc_avg <- list()
+clim_avg <- list()
+lc_imp <- list()
+clim_imp <- list()
+
+# Storing Model estimates
+lc_modelEst <- list()
+clim_modelEst <- list()
+  
+# Add a progress bar for the loop
+pb <- txtProgressBar(min = 0, max = length(unique(dat.scaled$scientific_name)), style = 3) #text based bar
+
+for(i in 1:length(unique(dat.scaled$scientific_name))){
+  
+  data <- dat.scaled %>% filter(dat.scaled$scientific_name==unique(dat.scaled$scientific_name)[i]) 
+
+  # Preparing data for the unmarked model
+  occ <- filter_repeat_visits(data, 
+                              min_obs = 1, max_obs = 10,
+                              annual_closure = FALSE,
+                              n_days = 2200, # 6 years is considered a period of closure
+                              date_var = "observation_date",
+                              site_vars = c("locality_id"))
+  
+  obs_covs <- c("min_obs_started", 
+                "duration_minutes", 
+                "effort_distance_km", 
+                "number_observers", 
+                "protocol_type",
+                "expertise",
+                "julian_date")
+  
+  # format for unmarked
+  occ_wide <- format_unmarked_occu(occ, 
+                                   site_id = "site", 
+                                   response = "pres_abs",
+                                   site_covs = c( "locality_id","lc_01.y","lc_02.y","lc_03.y", "lc_04.y",
+                                                  "lc_05.y", "lc_06.y", "lc_07.y","bio_4.y", "bio_17.y","bio_18.y", 
+                                                  "prec_interannual.y","temp_interannual.y" 
+                                                  ),
+                                   obs_covs = obs_covs)
+  
+  # Convert this dataframe of observations into an unmarked object to start fitting occupancy models
+  occ_um <- formatWide(occ_wide, type = "unmarkedFrameOccu")
+
+  # Subset 1: Keep all land cover predictors 
+  model_lc <- occu(~min_obs_started+
+                   julian_date +
+                   duration_minutes + 
+                   effort_distance_km + 
+                   number_observers + 
+                   protocol_type +
+                   expertise~lc_01.y+lc_02.y+lc_03.y+ lc_04.y+
+                   lc_05.y+ lc_06.y+ lc_07.y, data = occ_um)
+  
+  # Subset 2: Keep all climate associated predictors 
+  model_clim <- occu(~min_obs_started+
+                   julian_date +
+                   duration_minutes + 
+                   effort_distance_km + 
+                   number_observers + 
+                   protocol_type +
+                   expertise~bio_4.y + bio_17.y + bio_18.y +  
+                   prec_interannual.y + temp_interannual.y, data = occ_um)
+
+  # Set up the cluster
+  clusterType <- if(length(find.package("snow", quiet = TRUE))) "SOCK" else "PSOCK"
+  clust <- try(makeCluster(getOption("cl.cores", 6), type = clusterType))
+  
+  clusterEvalQ(clust, library(unmarked))
+  clusterExport(clust, "occ_um")
+  
+  # Detection terms are fixed
+  det_terms <- c("p(duration_minutes)","p(effort_distance_km)", "p(expertise)","p(julian_date)","p(min_obs_started)",
+  "p(number_observers)","p(protocol_type)")
+  
+  # Dredging
+  landcover[[i]] <- pdredge(model_lc, clust, fixed=det_terms)
+  climate[[i]] <- pdredge(model_clim, clust, fixed = det_terms)
+  
+  names(landcover)[i] <- unique(dat.scaled$scientific_name)[i] 
+  names(climate)[i] <- unique(dat.scaled$scientific_name)[i] 
+  
+  # Identiying top subset of models based on deltaAIC scores being less than 4 (Burnham et al., 2011)
+  top_lc[[i]] <- get.models(landcover[[i]], subset = delta<4, cluster = clust)
+  top_clim[[i]] <- get.models(climate[[i]], subset = delta <4, cluster = clust)
+  
+  names(top_lc)[i] <- unique(dat.scaled$scientific_name)[i] 
+  names(top_clim)[i] <- unique(dat.scaled$scientific_name)[i] 
+  
+  # Obtaining model averaged coefficients for both candidate model subsets
+  if(length(top_lc[[i]])>1){
+    a <- model.avg(top_lc[[i]], fit = TRUE)
+    lc_avg[[i]] <- as.data.frame(a$coefficients) 
+    names(lc_avg)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+    lc_modelEst[[i]] <- data.frame(Predictor = rownames(coefTable(a, full = T)),
+                                Coefficient = coefTable(a, full = T)[,1],
+                                SE = coefTable(a, full = T)[,2],
+                                lowerCI = confint(a)[,1],
+                                upperCI = confint(a)[,2])
+    names(lc_modelEst)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+    lc_imp[[i]] <- as.data.frame(MuMIn::importance(a))
+    names(lc_imp)[i] <- unique(dat.scaled$scientific_name)[i]
+  } else {
+    lc_avg[[i]] <- as.data.frame(unmarked::coef(top_lc[[i]][[1]]))
+    names(lc_avg)[i] <- unique(dat.scaled$scientific_name)[i] 
+    
+    lowSt <-  data.frame(lowerCI=confint(top_lc[[i]][[1]], type="state")[,1])
+    lowDet <- data.frame(lowerCI=confint(top_lc[[i]][[1]], type="det")[,1])
+    upSt <-  data.frame(upperCI=confint(top_lc[[i]][[1]], type="state")[,2])
+    upDet <- data.frame(upperCI=confint(top_lc[[i]][[1]], type="det")[,2])
+    
+    lc_modelEst[[i]] <- data.frame(Predictor = rownames(coefTable(top_lc[[i]][[1]])),
+                                Coefficient = coefTable(top_lc[[i]][[1]])[,1],
+                                SE = coefTable(top_lc[[i]][[1]])[,2],
+                                lowerCI = rbind(lowSt,lowDet),
+                                upperCI = rbind(upSt,upDet))
+    
+    names(lc_modelEst)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+  }
+  
+  if(length(top_clim[[i]])>1){
+    b <- model.avg(top_clim[[i]], fit = TRUE)
+    clim_avg[[i]] <- as.data.frame(b$coefficients) 
+    names(clim_avg)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+    clim_modelEst[[i]] <- data.frame(Predictor = rownames(coefTable(b, full = T)),
+                                Coefficient = coefTable(b, full = T)[,1],
+                                SE = coefTable(b, full = T)[,2],
+                                lowerCI = confint(b)[,1],
+                                upperCI = confint(b)[,2])
+    names(clim_modelEst)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+    clim_imp[[i]] <- as.data.frame(MuMIn::importance(b))
+    names(clim_imp)[i] <- unique(dat.scaled$scientific_name)[i]
+  } else {
+    clim_avg[[i]] <- as.data.frame(unmarked::coef(top_clim[[i]][[1]]))
+    names(clim_avg)[i] <- unique(dat.scaled$scientific_name)[i] 
+    
+    lowSt <-  data.frame(lowerCI=confint(top_clim[[i]][[1]], type="state")[,1])
+    lowDet <- data.frame(lowerCI=confint(top_clim[[i]][[1]], type="det")[,1])
+    upSt <-  data.frame(upperCI=confint(top_clim[[i]][[1]], type="state")[,2])
+    upDet <- data.frame(upperCI=confint(top_clim[[i]][[1]], type="det")[,2])
+    
+    clim_modelEst[[i]] <- data.frame(Predictor = rownames(coefTable(top_clim[[i]][[1]])),
+                                Coefficient = coefTable(top_clim[[i]][[1]])[,1],
+                                SE = coefTable(top_clim[[i]][[1]])[,2],
+                                lowerCI = rbind(lowSt,lowDet),
+                                upperCI = rbind(upSt,upDet))
+    
+    names(clim_modelEst)[i] <- unique(dat.scaled$scientific_name)[i]
+  }
+  
+  setTxtProgressBar(pb, i)
+  stopCluster(clust)
+}
+close(pb)  
+
+# 1. Store all the dredged model outputs for each species (for both landcover and climate)
+write.xlsx(landcover ,file="C:\\Users\\vr235\\Downloads\\landCover.xlsx")
+write.xlsx(climate, file = "C:\\Users\\vr235\\Downloads\\climate.xlsx")
+
+# 2. Store all the model averaged outputs for each species and relative importance scores
+write.xlsx(lc_avg, file = "C:\\Users\\vr235\\Downloads\\lc_avg.xlsx", rowNames=T, colNames=T)
+write.xlsx(clim_avg, file = "C:\\Users\\vr235\\Downloads\\clim_avg.xlsx", rowNames=T, colNames=T)
+
+write.xlsx(lc_imp, file = "C:\\Users\\vr235\\Downloads\\lc_imp.xlsx", rowNames=T, colNames=T)
+write.xlsx(clim_imp, file = "C:\\Users\\vr235\\Downloads\\clim_imp.xlsx", rowNames=T, colNames=T)
+
+# 3. Store all model estimates
+write.xlsx(lc_modelEst, file = "C:\\Users\\vr235\\Downloads\\lc_modelEst.xlsx", rowNames=T, colNames=T)
+write.xlsx(clim_modelEst, file = "C:\\Users\\vr235\\Downloads\\clim_modelEst.xlsx", rowNames=T, colNames=T)
+
+```
+
+## Elevation alone 
+
+```{r elev, eval=FALSE}
+
+dat.scaled <- fread("K:\\Chapter 2_Occupancy Modeling\\Data\\SpeciesCovariateData\\5_scaled_Covs.csv", header=T)
+setDF(dat.scaled)
+head(dat.scaled)
+
+# All dredged models are stored in lists below
+elev <- list()
+
+# Subsetting those models whose deltaAIC<4 (Burnham et al., 2011)
+top_elev <- list()
+
+# Getting model averaged coefficients and their importance (see MuMIN::importance())
+elev_avg <- list()
+elev_imp <- list()
+
+# Get all model related estimates
+modelEst <- list()
+
+# Add a progress bar for the loop
+pb <- txtProgressBar(min = 0, max = length(unique(dat.scaled$scientific_name)), style = 3) #text based bar
+
+for(i in 1:length(unique(dat.scaled$scientific_name))){
+  
+  data <- dat.scaled %>% filter(dat.scaled$scientific_name==unique(dat.scaled$scientific_name)[35]) 
+  
+  # Preparing data for the unmarked model
+  occ <- filter_repeat_visits(data, 
+                              min_obs = 1, max_obs = 10,
+                              annual_closure = FALSE,
+                              n_days = 2200, # 6 years is considered a period of closure
+                              date_var = "observation_date",
+                              site_vars = c("locality_id"))
+  
+  obs_covs <- c("min_obs_started", 
+                "duration_minutes", 
+                "effort_distance_km", 
+                "number_observers", 
+                "protocol_type",
+                "expertise",
+                "julian_date")
+  
+  # format for unmarked
+  occ_wide <- format_unmarked_occu(occ, 
+                                   site_id = "site", 
+                                   response = "pres_abs",
+                                   site_covs = c( "alt.y","aspect.y","slope.y"),
+                                   obs_covs = obs_covs)
+  
+  # Convert this dataframe of observations into an unmarked object to start fitting occupancy models
+  occ_um <- formatWide(occ_wide, type = "unmarkedFrameOccu")
+  
+  # Subset - Using all elevation predictors
+  model_elev <- occu(~min_obs_started+
+                     julian_date +
+                     duration_minutes + 
+                     effort_distance_km + 
+                     number_observers + 
+                     protocol_type +
+                     expertise~alt.y + slope.y +aspect.y , data = occ_um)
+  
+  # Set up the cluster
+  clusterType <- if(length(find.package("snow", quiet = TRUE))) "SOCK" else "PSOCK"
+  clust <- try(makeCluster(getOption("cl.cores", 5), type = clusterType))
+  
+  clusterEvalQ(clust, library(unmarked))
+  clusterExport(clust, "occ_um")
+  
+  # Detection terms are fixed
+  det_terms <- c("p(duration_minutes)","p(effort_distance_km)", "p(expertise)","p(julian_date)","p(min_obs_started)",
+                 "p(number_observers)","p(protocol_type)")
+  
+  # Dredging
+  elev[[i]] <- pdredge(model_elev, clust, fixed=det_terms)
+  names(elev)[i] <- unique(dat.scaled$scientific_name)[i] 
+  
+  # Identiying top subset of models based on deltaAIC scores being less than 4 (Burnham et al., 2011)
+  top_elev[[i]] <- get.models(elev[[i]], subset = delta<4, cluster = clust)
+  names(top_elev)[i] <- unique(dat.scaled$scientific_name)[i] 
+  
+  # Obtaining model averaged coefficients for candidate model subsets and importance
+  if(length(top_elev[[i]])>1){
+    a <- model.avg(top_elev[[i]], fit = TRUE)
+    
+    elev_avg[[i]] <- as.data.frame(a$coefficients) 
+    names(elev_avg)[i] <- unique(dat.scaled$scientific_name)[i] 
+  
+    modelEst[[i]] <- data.frame(Predictor = rownames(coefTable(a, full = T)),
+                                Coefficient = coefTable(a, full = T)[,1],
+                                SE = coefTable(a, full = T)[,2],
+                                lowerCI = confint(a)[,1],
+                                upperCI = confint(a)[,2])
+    names(modelEst)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+    elev_imp[[i]] <- as.data.frame(MuMIn::importance(a))
+    names(elev_imp)[i] <- unique(dat.scaled$scientific_name)[i]
+  } else {
+    elev_avg[[i]] <- as.data.frame(unmarked::coef(top_elev[[i]][[1]]))
+    names(elev_avg)[i] <- unique(dat.scaled$scientific_name)[i] 
+    
+    lowSt <-  data.frame(lowerCI=confint(top_elev[[i]][[1]], type="state")[,1])
+    lowDet <- data.frame(lowerCI=confint(top_elev[[i]][[1]], type="det")[,1])
+    upSt <-  data.frame(upperCI=confint(top_elev[[i]][[1]], type="state")[,2])
+    upDet <- data.frame(upperCI=confint(top_elev[[i]][[1]], type="det")[,2])
+    
+    modelEst[[i]] <- data.frame(Predictor = rownames(coefTable(top_elev[[i]][[1]])),
+                                Coefficient = coefTable(top_elev[[i]][[1]])[,1],
+                                SE = coefTable(top_elev[[i]][[1]])[,2],
+                                lowerCI = rbind(lowSt,lowDet),
+                                upperCI = rbind(upSt,upDet))
+    
+    names(modelEst)[i] <- unique(dat.scaled$scientific_name)[i]
+  }
+  setTxtProgressBar(pb, i)
+  stopCluster(clust)
+}
+close(pb)  
+
+# 1. Store all the dredged model outputs for each species 
+write.xlsx(elev ,file="C:\\Users\\vr235\\Downloads\\elev.xlsx")
+
+# 2. Store all the model averaged outputs for each species and the importance score
+write.xlsx(elev_avg, file = "C:\\Users\\vr235\\Downloads\\elev_avg.xlsx", rowNames=T, colNames=T)
+write.xlsx(elev_imp, file = "C:\\Users\\vr235\\Downloads\\elev_imp.xlsx", rowNames=T, colNames=T)
+
+# 3. Store all model estimates
+write.xlsx(modelEst, file = "C:\\Users\\vr235\\Downloads\\modelEst.xlsx", rowNames=T, colNames=T)
+
+```
+
+## The interaction between Land cover and elevation and climate and Elevation 
+
+```{r lc_clim*elev, eval=FALSE}
+
+# Q2: How does elevation influence the relative importance of land cover vs climate associated predictors in structuring the probability of occupancy?
+
+#### Candidate sets: lc1 | prop. of grasslands, forests, tea and plantations; elev
+####                 lc2 | prop. of agriculture, settlements, waterbodies; elev
+####                 clim | bio_4, bio_17, precip, bio_18; elev
+
+dat.scaled <- fread("K:\\Chapter 2_Occupancy Modeling\\Data\\SpeciesCovariateData\\5_scaled_Covs.csv", header=T)
+setDF(dat.scaled)
+head(dat.scaled)
+
+# All dredged models are stored in lists below
+lc1_elev <- list()
+lc2_elev <- list()
+clim_elev <- list()
+
+# Subsetting those models whose deltaAIC<4 (Burnham et al., 2011)
+top_lc1_elev <- list()
+top_lc2_elev <- list()
+top_clim_elev <- list()
+
+# Getting model averaged coefficients
+lc1_elev_avg <- list()
+lc2_elev_avg <- list()
+clim_elev_avg <- list()
+lc1_elev_imp <- list()
+lc2_elev_imp <- list()
+clim_elev_imp <- list()
+
+# Get model estimates
+lc1_modelEst <- list()
+lc2_modelEst <- list()
+clim_modelEst <- list()
+
+
+# Add a progress bar for the loop
+pb <- txtProgressBar(min = 0, max = length(unique(dat.scaled$scientific_name)), style = 3) #text based bar
+
+for(i in 1:length(unique(dat.scaled$scientific_name))){
+  
+  data <- dat.scaled %>% filter(dat.scaled$scientific_name==unique(dat.scaled$scientific_name)[i]) 
+  
+  # Preparing data for the unmarked model
+  occ <- filter_repeat_visits(data, 
+                              min_obs = 1, max_obs = 10,
+                              annual_closure = FALSE,
+                              n_days = 2200, # 6 years is considered a period of closure
+                              date_var = "observation_date",
+                              site_vars = c("locality_id"))
+  
+  obs_covs <- c("min_obs_started", 
+                "duration_minutes", 
+                "effort_distance_km", 
+                "number_observers", 
+                "protocol_type",
+                "expertise",
+                "julian_date")
+  
+  # format for unmarked
+  occ_wide <- format_unmarked_occu(occ, 
+                                   site_id = "site", 
+                                   response = "pres_abs",
+                                   site_covs = c( "locality_id","lc_01.y","lc_02.y","lc_03.y", "lc_04.y",
+                                                  "lc_05.y", "lc_06.y", "lc_07.y","bio_4.y", "bio_17.y","bio_18.y", 
+                                                  "prec_interannual.y","alt.y"),
+                                   obs_covs = obs_covs)
+  
+  # Convert this dataframe of observations into an unmarked object to start fitting occupancy models
+  occ_um <- formatWide(occ_wide, type = "unmarkedFrameOccu")
+  
+  # Subset 1: Keep all land cover predictors associated with grasslands, forests, plantations and tea
+  model_lc1 <- occu(~min_obs_started+
+                     julian_date +
+                     duration_minutes + 
+                     effort_distance_km + 
+                     number_observers + 
+                     protocol_type +
+                     expertise~lc_02.y*alt.y+lc_03.y*alt.y+ lc_04.y*alt.y+
+                     lc_06.y*alt.y, data = occ_um)
+  
+  # Subset 2: Keep all land cover predictors associated with agriculture, settlements and waterbodies
+  model_lc2 <- occu(~min_obs_started+
+                     julian_date +
+                     duration_minutes + 
+                     effort_distance_km + 
+                     number_observers + 
+                     protocol_type +
+                     expertise~lc_01.y*alt.y+lc_05.y*alt.y+ lc_07.y*alt.y, data = occ_um)
+  
+  # Subset 3: Keep climate associated predictors (bio_4,bio_17,bio_18,prec_interannual)
+  model_clim <- occu(~min_obs_started+
+                       julian_date +
+                       duration_minutes + 
+                       effort_distance_km + 
+                       number_observers + 
+                       protocol_type +
+                       expertise~bio_4.y*alt.y + bio_17.y*alt.y + bio_18.y*alt.y +  
+                       prec_interannual.y*alt.y, data = occ_um)
+  
+  # Set up the cluster
+  clusterType <- if(length(find.package("snow", quiet = TRUE))) "SOCK" else "PSOCK"
+  clust <- try(makeCluster(getOption("cl.cores", 6), type = clusterType))
+  
+  clusterEvalQ(clust, library(unmarked))
+  clusterExport(clust, "occ_um")
+  
+  # Detection terms are fixed
+  det_terms <- c("p(duration_minutes)","p(effort_distance_km)", "p(expertise)","p(julian_date)","p(min_obs_started)",
+                 "p(number_observers)","p(protocol_type)")
+  
+  # Dredging
+  lc1_elev[[i]] <- pdredge(model_lc1, clust, fixed=det_terms)
+  lc2_elev[[i]] <- pdredge(model_lc2, clust, fixed=det_terms)
+  clim_elev[[i]] <- pdredge(model_clim, clust, fixed = det_terms)
+  
+  names(lc1_elev)[i] <- unique(dat.scaled$scientific_name)[i] 
+  names(lc2_elev)[i] <- unique(dat.scaled$scientific_name)[i] 
+  names(clim_elev)[i] <- unique(dat.scaled$scientific_name)[i] 
+  
+  # Identiying top subset of models based on deltaAIC scores being less than 4 (Burnham et al., 2011)
+  top_lc1_elev[[i]] <- get.models(lc1_elev[[i]], subset = delta<4, cluster = clust)
+  top_lc2_elev[[i]] <- get.models(lc2_elev[[i]], subset = delta<4, cluster = clust)
+  top_clim_elev[[i]] <- get.models(clim_elev[[i]], subset = delta <4, cluster = clust)
+  
+  names(top_lc1_elev)[i] <- unique(dat.scaled$scientific_name)[i] 
+  names(top_lc2_elev)[i] <- unique(dat.scaled$scientific_name)[i] 
+  names(top_clim_elev)[i] <- unique(dat.scaled$scientific_name)[i] 
+  
+  # Obtaining model averaged coefficients for both candidate model subsets
+  if(length(top_lc1_elev[[i]])>1){
+    a <- model.avg(top_lc1_elev[[i]], fit = TRUE)
+    lc1_elev_avg[[i]] <- as.data.frame(a$coefficients) 
+    names(lc1_elev_avg)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+    lc1_modelEst[[i]] <- data.frame(Predictor = rownames(coefTable(a, full = T)),
+                                   Coefficient = coefTable(a, full = T)[,1],
+                                   SE = coefTable(a, full = T)[,2],
+                                   lowerCI = confint(a)[,1],
+                                   upperCI = confint(a)[,2])
+    names(lc1_modelEst)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+    lc1_elev_imp[[i]] <- as.data.frame(MuMIn::importance(a))
+    names(lc1_elev_imp)[i] <- unique(dat.scaled$scientific_name)[i]
+  } else {
+    lc1_elev_avg[[i]] <- as.data.frame(unmarked::coef(top_lc1_elev[[i]][[1]]))
+    names(lc1_elev_avg)[i] <- unique(dat.scaled$scientific_name)[i] 
+    
+    lowSt <-  data.frame(lowerCI=confint(top_lc1_elev[[i]][[1]], type="state")[,1])
+    lowDet <- data.frame(lowerCI=confint(top_lc1_elev[[i]][[1]], type="det")[,1])
+    upSt <-  data.frame(upperCI=confint(top_lc1_elev[[i]][[1]], type="state")[,2])
+    upDet <- data.frame(upperCI=confint(top_lc1_elev[[i]][[1]], type="det")[,2])
+    
+    lc1_modelEst[[i]] <- data.frame(Predictor = rownames(coefTable(top_lc1_elev[[i]][[1]])),
+                                   Coefficient = coefTable(top_lc1_elev[[i]][[1]])[,1],
+                                   SE = coefTable(top_lc1_elev[[i]][[1]])[,2],
+                                   lowerCI = rbind(lowSt,lowDet),
+                                   upperCI = rbind(upSt,upDet))
+    
+    names(lc1_modelEst)[i] <- unique(dat.scaled$scientific_name)[i]
+  }
+  
+  if(length(top_lc2_elev[[i]])>1){
+    b <- model.avg(top_lc2_elev[[i]], fit = TRUE)
+    lc2_elev_avg[[i]] <- as.data.frame(b$coefficients) 
+    names(lc2_elev_avg)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+    lc2_modelEst[[i]] <- data.frame(Predictor = rownames(coefTable(b, full = T)),
+                                    Coefficient = coefTable(b, full = T)[,1],
+                                    SE = coefTable(b, full = T)[,2],
+                                    lowerCI = confint(b)[,1],
+                                    upperCI = confint(b)[,2])
+    names(lc2_modelEst)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+    lc2_elev_imp[[i]] <- as.data.frame(MuMIn::importance(b))
+    names(lc2_elev_imp)[i] <- unique(dat.scaled$scientific_name)[i]
+  } else {
+    lc2_elev_avg[[i]] <- as.data.frame(unmarked::coef(top_lc2_elev[[i]][[1]]))
+    names(lc2_elev_avg)[i] <- unique(dat.scaled$scientific_name)[i] 
+    
+    lowSt <-  data.frame(lowerCI=confint(top_lc2_elev[[i]][[1]], type="state")[,1])
+    lowDet <- data.frame(lowerCI=confint(top_lc2_elev[[i]][[1]], type="det")[,1])
+    upSt <-  data.frame(upperCI=confint(top_lc2_elev[[i]][[1]], type="state")[,2])
+    upDet <- data.frame(upperCI=confint(top_lc2_elev[[i]][[1]], type="det")[,2])
+    
+    lc2_modelEst[[i]] <- data.frame(Predictor = rownames(coefTable(top_lc2_elev[[i]][[1]])),
+                                    Coefficient = coefTable(top_lc2_elev[[i]][[1]])[,1],
+                                    SE = coefTable(top_lc2_elev[[i]][[1]])[,2],
+                                    lowerCI = rbind(lowSt,lowDet),
+                                    upperCI = rbind(upSt,upDet))
+    
+    names(lc2_modelEst)[i] <- unique(dat.scaled$scientific_name)[i]
+  }
+   
+  if(length(top_clim_elev[[i]])>1){
+    c <- model.avg(top_clim_elev[[i]], fit = TRUE)
+    clim_elev_avg[[i]] <- as.data.frame(c$coefficients) 
+    names(clim_elev_avg)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+    clim_modelEst[[i]] <- data.frame(Predictor = rownames(coefTable(c, full = T)),
+                                    Coefficient = coefTable(c, full = T)[,1],
+                                    SE = coefTable(c, full = T)[,2],
+                                    lowerCI = confint(c)[,1],
+                                    upperCI = confint(c)[,2])
+    names(clim_modelEst)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+    clim_elev_imp[[i]] <- as.data.frame(MuMIn::importance(c))
+    names(clim_elev_imp)[i] <- unique(dat.scaled$scientific_name)[i]
+  } else {
+    clim_elev_avg[[i]] <- as.data.frame(unmarked::coef(top_clim_elev[[i]][[1]]))
+    names(clim_elev_avg)[i] <- unique(dat.scaled$scientific_name)[i] 
+    
+    lowSt <-  data.frame(lowerCI=confint(top_clim_elev[[i]][[1]], type="state")[,1])
+    lowDet <- data.frame(lowerCI=confint(top_clim_elev[[i]][[1]], type="det")[,1])
+    upSt <-  data.frame(upperCI=confint(top_clim_elev[[i]][[1]], type="state")[,2])
+    upDet <- data.frame(upperCI=confint(top_clim_elev[[i]][[1]], type="det")[,2])
+    
+    clim_modelEst[[i]] <- data.frame(Predictor = rownames(coefTable(top_clim_elev[[i]][[1]])),
+                                    Coefficient = coefTable(top_clim_elev[[i]][[1]])[,1],
+                                    SE = coefTable(top_clim_elev[[i]][[1]])[,2],
+                                    lowerCI = rbind(lowSt,lowDet),
+                                    upperCI = rbind(upSt,upDet))
+    
+    names(clim_modelEst)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+  }
+  setTxtProgressBar(pb, i)
+  stopCluster(clust)
+}
+close(pb)  
+
+# 1. Store all the dredged model outputs for each species (for lc1_elev, lc2_elev and clim_elev)
+write.xlsx(lc1_elev ,file="C:\\Users\\vr235\\Downloads\\lc1_elev.xlsx")
+write.xlsx(lc2_elev ,file="C:\\Users\\vr235\\Downloads\\lc2_elev.xlsx")
+write.xlsx(clim_elev, file = "C:\\Users\\vr235\\Downloads\\clim_elev.xlsx")
+
+# 2. Store all the model averaged outputs for each species and the relative importance score
+write.xlsx(lc1_elev_avg, file = "C:\\Users\\vr235\\Downloads\\lc1_elev_avg.xlsx", rowNames=T, colNames=T)
+write.xlsx(lc2_elev_avg, file = "C:\\Users\\vr235\\Downloads\\lc2_elev_avg.xlsx", rowNames=T, colNames=T)
+write.xlsx(clim_elev_avg, file = "C:\\Users\\vr235\\Downloads\\clim_elev_avg.xlsx", rowNames=T, colNames=T)
+
+write.xlsx(lc1_elev_imp, file = "C:\\Users\\vr235\\Downloads\\lc1_elev_imp.xlsx", rowNames=T, colNames=T)
+write.xlsx(lc2_elev_imp, file = "C:\\Users\\vr235\\Downloads\\lc2_elev_imp.xlsx", rowNames=T, colNames=T)
+write.xlsx(clim_elev_imp, file = "C:\\Users\\vr235\\Downloads\\clim_elev_imp.xlsx", rowNames=T, colNames=T)
+
+write.xlsx(lc1_modelEst, file = "C:\\Users\\vr235\\Downloads\\lc1_modelEst.xlsx", rowNames=T, colNames=T)
+write.xlsx(lc2_modelEst, file = "C:\\Users\\vr235\\Downloads\\lc2_modelEst.xlsx", rowNames=T, colNames=T)
+write.xlsx(clim_modelEst, file = "C:\\Users\\vr235\\Downloads\\clim_modelEst.xlsx", rowNames=T, colNames=T)
+
+```
+
+## The linear combined effect of land cover and climate
+
+```{r lc+clim, eval=FALSE}
+
+#### Using lc predictors: lc1, lc2, lc3,lc4,lc5,lc6
+#### Using climate predictors: temp_interannual and precip_interannual
+
+dat.scaled <- fread("K:\\Chapter 2_Occupancy Modeling\\Data\\SpeciesCovariateData\\5_scaled_Covs.csv",header=T)
+setDF(dat.scaled)
+head(dat.scaled)
+
+# All dredged models are stored in lists below
+lc_clim <- list()
+
+# Subsetting those models whose deltaAIC<4 (Burnham et al., 2011)
+top_lc_clim <- list()
+
+# Getting model averaged coefficients
+lc_clim_avg <-  list()
+lc_clim_imp <- list()
+
+# Getting model estimates
+lc_clim_modelEst <- list()
+
+# Add a progress bar for the loop
+pb <- txtProgressBar(min = 0, max = length(unique(dat.scaled$scientific_name)), style = 3) #text based bar
+
+for(i in 1:length(unique(dat.scaled$scientific_name))){
+  
+  data <- dat.scaled %>% filter(dat.scaled$scientific_name==unique(dat.scaled$scientific_name)[i]) 
+  
+  # Preparing data for the unmarked model
+  occ <- filter_repeat_visits(data, 
+                              min_obs = 1, max_obs = 10,
+                              annual_closure = FALSE,
+                              n_days = 2200, # 6 years is considered a period of closure
+                              date_var = "observation_date",
+                              site_vars = c("locality_id"))
+  
+  obs_covs <- c("min_obs_started", 
+                "duration_minutes", 
+                "effort_distance_km", 
+                "number_observers", 
+                "protocol_type",
+                "expertise",
+                "julian_date")
+  
+  # format for unmarked
+  occ_wide <- format_unmarked_occu(occ, 
+                                   site_id = "site", 
+                                   response = "pres_abs",
+                                   site_covs = c( "locality_id","lc_01.y","lc_02.y","lc_03.y", "lc_04.y",
+                                                  "lc_05.y", "lc_06.y", "lc_07.y","prec_interannual.y","temp_interannual.y"),
+                                   obs_covs = obs_covs)
+  
+  # Convert this dataframe of observations into an unmarked object to start fitting occupancy models
+  occ_um <- formatWide(occ_wide, type = "unmarkedFrameOccu")
+  
+  # Subset - usr 
+  model_lc_clim <- occu(~min_obs_started+
+                      julian_date +
+                      duration_minutes + 
+                      effort_distance_km + 
+                      number_observers + 
+                      protocol_type +
+                      expertise~lc_01.y + lc_02.y +lc_03.y + lc_04.y + lc_05.y + lc_06.y + prec_interannual.y +
+                        temp_interannual.y, data = occ_um)
+  
+  # Set up the cluster
+  clusterType <- if(length(find.package("snow", quiet = TRUE))) "SOCK" else "PSOCK"
+  clust <- try(makeCluster(getOption("cl.cores", 6), type = clusterType))
+  
+  clusterEvalQ(clust, library(unmarked))
+  clusterExport(clust, "occ_um")
+  
+  # Detection terms are fixed
+  det_terms <- c("p(duration_minutes)","p(effort_distance_km)", "p(expertise)","p(julian_date)","p(min_obs_started)",
+                 "p(number_observers)","p(protocol_type)")
+  
+  # Dredging
+  lc_clim[[i]] <- pdredge(model_lc_clim, clust, fixed=det_terms)
+  names(lc_clim)[i] <- unique(dat.scaled$scientific_name)[i] 
+  
+  # Identiying top subset of models based on deltaAIC scores being less than 4 (Burnham et al., 2011)
+  top_lc_clim[[i]] <- get.models(lc_clim[[i]], subset = delta<4, cluster = clust)
+  names(top_lc_clim)[i] <- unique(dat.scaled$scientific_name)[i] 
+  
+  # Obtaining model averaged coefficients for both candidate model subsets
+  if(length(top_lc_clim[[i]])>1){
+    a <- model.avg(top_lc_clim[[i]], fit = TRUE)
+    lc_clim_avg[[i]] <- as.data.frame(a$coefficients) 
+    names(lc_clim_avg)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+    lc_clim_modelEst[[i]] <- data.frame(Predictor = rownames(coefTable(a, full = T)),
+                                     Coefficient = coefTable(a, full = T)[,1],
+                                     SE = coefTable(a, full = T)[,2],
+                                     lowerCI = confint(a)[,1],
+                                     upperCI = confint(a)[,2])
+    names(lc_clim_modelEst)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+    lc_clim_imp[[i]] <- as.data.frame(MuMIn::importance(a))
+    names(lc_clim_imp)[i] <- unique(dat.scaled$scientific_name)[i]
+  } else {
+    lc_clim_avg[[i]] <- as.data.frame(unmarked::coef(top_lc_clim[[i]][[1]]))
+    names(lc_clim_avg)[i] <- unique(dat.scaled$scientific_name)[i] 
+    
+    lowSt <-  data.frame(lowerCI=confint(top_lc_clim[[i]][[1]], type="state")[,1])
+    lowDet <- data.frame(lowerCI=confint(top_lc_clim[[i]][[1]], type="det")[,1])
+    upSt <-  data.frame(upperCI=confint(top_lc_clim[[i]][[1]], type="state")[,2])
+    upDet <- data.frame(upperCI=confint(top_lc_clim[[i]][[1]], type="det")[,2])
+    
+    lc_clim_modelEst[[i]] <- data.frame(Predictor = rownames(coefTable(top_lc_clim[[i]][[1]])),
+                                     Coefficient = coefTable(top_lc_clim[[i]][[1]])[,1],
+                                     SE = coefTable(top_lc_clim[[i]][[1]])[,2],
+                                     lowerCI = rbind(lowSt,lowDet),
+                                     upperCI = rbind(upSt,upDet))
+    
+    names(lc_clim_modelEst)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+  }
+  setTxtProgressBar(pb, i)
+  stopCluster(clust)
+}
+close(pb)
+
+# 1. Store all the dredged model outputs for each species (for lc1_elev, lc2_elev and clim_elev)
+write.xlsx(lc_clim ,file="C:\\Users\\vr235\\Downloads\\lc_clim.xlsx")
+
+# 2. Store all the model averaged outputs for each species and the relative importance score
+write.xlsx(lc_clim_avg, file = "C:\\Users\\vr235\\Downloads\\lc_clim_avg.xlsx", rowNames=T, colNames=T)
+write.xlsx(lc_clim_imp, file = "C:\\Users\\vr235\\Downloads\\lc_clim_imp.xlsx", rowNames=T, colNames=T)
+
+write.xlsx(lc_clim_modelEst, file = "C:\\Users\\vr235\\Downloads\\lc_clim_modelEst.xlsx", rowNames=T, colNames=T)
+
+```
+
+## The interaction between inter-annual variation in temperature and land cover 
+
+```{r temp*landCover, eval=FALSE}
+
+dat.scaled <- fread("K:\\Chapter 2_Occupancy Modeling\\Data\\SpeciesCovariateData\\5_scaled_Covs.csv",header=T)
+setDF(dat.scaled)
+head(dat.scaled)
+
+# All dredged models are stored in lists below
+lc_temp1 <- list()
+lc_temp2 <- list()
+
+# Subsetting those models whose deltaAIC<4 (Burnham et al., 2011)
+top_lc_temp1 <- list()
+top_lc_temp2 <- list()
+
+# Getting model averaged coefficients
+lc_temp1_avg <-  list()
+lc_temp1_imp <- list()
+lc_temp2_avg <- list()
+lc_temp2_imp <- list()
+
+# Getting model estimates
+lc_temp1_modelEst <- list()
+lc_temp2_modelEst <- list()
+
+# Add a progress bar for the loop
+pb <- txtProgressBar(min = 0, max = length(unique(dat.scaled$scientific_name)), style = 3) #text based bar
+
+for(i in 1:length(unique(dat.scaled$scientific_name))){
+  
+  data <- dat.scaled %>% filter(dat.scaled$scientific_name==unique(dat.scaled$scientific_name)[i]) 
+  
+  # Preparing data for the unmarked model
+  occ <- filter_repeat_visits(data, 
+                              min_obs = 1, max_obs = 10,
+                              annual_closure = FALSE,
+                              n_days = 2200, # 6 years is considered a period of closure
+                              date_var = "observation_date",
+                              site_vars = c("locality_id"))
+  
+  obs_covs <- c("min_obs_started", 
+                "duration_minutes", 
+                "effort_distance_km", 
+                "number_observers", 
+                "protocol_type",
+                "expertise",
+                "julian_date")
+  
+  # format for unmarked
+  occ_wide <- format_unmarked_occu(occ, 
+                                   site_id = "site", 
+                                   response = "pres_abs",
+                                   site_covs = c( "locality_id","lc_01.y","lc_02.y","lc_03.y", "lc_04.y",
+                                                  "lc_05.y", "lc_06.y", "lc_07.y","prec_interannual.y","temp_interannual.y"),
+                                   obs_covs = obs_covs)
+  
+  # Convert this dataframe of observations into an unmarked object to start fitting occupancy models
+  occ_um <- formatWide(occ_wide, type = "unmarkedFrameOccu")
+  
+  # Subset - global models
+  model_lc_temp1 <- occu(~min_obs_started+
+                          julian_date +
+                          duration_minutes + 
+                          effort_distance_km + 
+                          number_observers + 
+                          protocol_type +
+                          expertise~lc_02.y*temp_interannual.y +lc_03.y*temp_interannual.y + lc_04.y*temp_interannual.y +
+                           lc_06.y*temp_interannual.y, data = occ_um)
+  
+  model_lc_temp2 <- occu(~min_obs_started+
+                           julian_date +
+                           duration_minutes + 
+                           effort_distance_km + 
+                           number_observers + 
+                           protocol_type +
+                           expertise~lc_01.y*temp_interannual.y + lc_05.y*temp_interannual.y + lc_07.y*temp_interannual.y, data = occ_um)
+  
+  # Set up the cluster
+  clusterType <- if(length(find.package("snow", quiet = TRUE))) "SOCK" else "PSOCK"
+  clust <- try(makeCluster(getOption("cl.cores", 6), type = clusterType))
+  
+  clusterEvalQ(clust, library(unmarked))
+  clusterExport(clust, "occ_um")
+  
+  # Detection terms are fixed
+  det_terms <- c("p(duration_minutes)","p(effort_distance_km)", "p(expertise)","p(julian_date)","p(min_obs_started)",
+                 "p(number_observers)","p(protocol_type)")
+  
+  # Dredging
+  lc_temp1[[i]] <- pdredge(model_lc_temp1, clust, fixed=det_terms)
+  lc_temp2[[i]] <- pdredge(model_lc_temp2, clust, fixed=det_terms)
+  
+  names(lc_temp1)[i] <- unique(dat.scaled$scientific_name)[i] 
+  names(lc_temp2)[i] <- unique(dat.scaled$scientific_name)[i] 
+  
+  # Identiying top subset of models based on deltaAIC scores being less than 4 (Burnham et al., 2011)
+  top_lc_temp1[[i]] <- get.models(lc_temp1[[i]], subset = delta<4, cluster = clust)
+  top_lc_temp2[[i]] <- get.models(lc_temp2[[i]], subset = delta<4, cluster = clust)
+  
+  names(top_lc_temp1)[i] <- unique(dat.scaled$scientific_name)[i] 
+  names(top_lc_temp2)[i] <- unique(dat.scaled$scientific_name)[i] 
+  
+  # Obtaining model averaged coefficients for both candidate model subsets
+  if(length(top_lc_temp1[[i]])>1){
+    a <- model.avg(top_lc_temp1[[i]], fit = TRUE)
+    lc_temp1_avg[[i]] <- as.data.frame(a$coefficients) 
+    names(lc_temp1_avg)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+    lc_temp1_modelEst[[i]] <- data.frame(Predictor = rownames(coefTable(a, full = T)),
+                                        Coefficient = coefTable(a, full = T)[,1],
+                                        SE = coefTable(a, full = T)[,2],
+                                        lowerCI = confint(a)[,1],
+                                        upperCI = confint(a)[,2])
+    names(lc_temp1_modelEst)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+    lc_temp1_imp[[i]] <- as.data.frame(MuMIn::importance(a))
+    names(lc_temp1_imp)[i] <- unique(dat.scaled$scientific_name)[i]
+  } else {
+    lc_temp1_avg[[i]] <- as.data.frame(unmarked::coef(top_lc_temp1[[i]][[1]]))
+    names(lc_temp1_avg)[i] <- unique(dat.scaled$scientific_name)[i] 
+    
+    lowSt <-  data.frame(lowerCI=confint(top_lc_temp1[[i]][[1]], type="state")[,1])
+    lowDet <- data.frame(lowerCI=confint(top_lc_temp1[[i]][[1]], type="det")[,1])
+    upSt <-  data.frame(upperCI=confint(top_lc_temp1[[i]][[1]], type="state")[,2])
+    upDet <- data.frame(upperCI=confint(top_lc_temp1[[i]][[1]], type="det")[,2])
+    
+    lc_temp1_modelEst[[i]] <- data.frame(Predictor = rownames(coefTable(top_lc_temp1[[i]][[1]])),
+                                        Coefficient = coefTable(top_lc_temp1[[i]][[1]])[,1],
+                                        SE = coefTable(top_lc_temp1[[i]][[1]])[,2],
+                                        lowerCI = rbind(lowSt,lowDet),
+                                        upperCI = rbind(upSt,upDet))
+    
+    names(lc_temp1_modelEst)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+  }
+  
+  if(length(top_lc_temp2[[i]])>1){
+    b <- model.avg(top_lc_temp2[[i]], fit = TRUE)
+    lc_temp2_avg[[i]] <- as.data.frame(b$coefficients) 
+    names(lc_temp2_avg)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+    lc_temp2_modelEst[[i]] <- data.frame(Predictor = rownames(coefTable(b, full = T)),
+                                         Coefficient = coefTable(b, full = T)[,1],
+                                         SE = coefTable(b, full = T)[,2],
+                                         lowerCI = confint(b)[,1],
+                                         upperCI = confint(b)[,2])
+    names(lc_temp2_modelEst)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+    lc_temp2_imp[[i]] <- as.data.frame(MuMIn::importance(b))
+    names(lc_temp2_imp)[i] <- unique(dat.scaled$scientific_name)[i]
+  } else {
+    lc_temp2_avg[[i]] <- as.data.frame(unmarked::coef(top_lc_temp2[[i]][[1]]))
+    names(lc_temp2_avg)[i] <- unique(dat.scaled$scientific_name)[i] 
+    
+    lowSt <-  data.frame(lowerCI=confint(top_lc_temp2[[i]][[1]], type="state")[,1])
+    lowDet <- data.frame(lowerCI=confint(top_lc_temp2[[i]][[1]], type="det")[,1])
+    upSt <-  data.frame(upperCI=confint(top_lc_temp2[[i]][[1]], type="state")[,2])
+    upDet <- data.frame(upperCI=confint(top_lc_temp2[[i]][[1]], type="det")[,2])
+    
+    lc_temp2_modelEst[[i]] <- data.frame(Predictor = rownames(coefTable(top_lc_temp2[[i]][[1]])),
+                                         Coefficient = coefTable(top_lc_temp2[[i]][[1]])[,1],
+                                         SE = coefTable(top_lc_temp2[[i]][[1]])[,2],
+                                         lowerCI = rbind(lowSt,lowDet),
+                                         upperCI = rbind(upSt,upDet))
+    
+    names(lc_temp2_modelEst)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+  }
+  
+  setTxtProgressBar(pb, i)
+  stopCluster(clust)
+}
+close(pb)
+
+# 1. Store all the dredged model outputs for each species (for lc1_temp and lc2_temp)
+write.xlsx(lc_temp1 ,file="C:\\Users\\vr235\\Downloads\\lc_temp1.xlsx")
+write.xlsx(lc_temp2 ,file="C:\\Users\\vr235\\Downloads\\lc_temp2.xlsx")
+
+# 2. Store all the model averaged outputs for each species and the relative importance score
+write.xlsx(lc_temp1_avg, file = "C:\\Users\\vr235\\Downloads\\lc_temp1_avg.xlsx", rowNames=T, colNames=T)
+write.xlsx(lc_temp2_avg, file = "C:\\Users\\vr235\\Downloads\\lc_temp2_avg.xlsx", rowNames=T, colNames=T)
+
+write.xlsx(lc_temp1_imp, file = "C:\\Users\\vr235\\Downloads\\lc_temp1_imp.xlsx", rowNames=T, colNames=T)
+write.xlsx(lc_temp2_imp, file = "C:\\Users\\vr235\\Downloads\\lc_temp2_imp.xlsx", rowNames=T, colNames=T)
+
+write.xlsx(lc_temp1_modelEst, file = "C:\\Users\\vr235\\Downloads\\lc_temp1_modelEst.xlsx", rowNames=T, colNames=T)
+write.xlsx(lc_temp2_modelEst, file = "C:\\Users\\vr235\\Downloads\\lc_temp2_modelEst.xlsx", rowNames=T, colNames=T)
+
+```
+
+## The interaction between inter-annual variation in precip and land cover 
+
+```{r precip*landCover, eval=FALSE}
+
+dat.scaled <- fread("K:\\Chapter 2_Occupancy Modeling\\Data\\SpeciesCovariateData\\5_scaled_Covs.csv",header=T)
+setDF(dat.scaled)
+head(dat.scaled)
+
+# All dredged models are stored in lists below
+lc_prec1 <- list()
+lc_prec2 <- list()
+
+# Subsetting those models whose deltaAIC<4 (Burnham et al., 2011)
+top_lc_prec1 <- list()
+top_lc_prec2 <- list()
+
+# Getting model averaged coefficients
+lc_prec1_avg <-  list()
+lc_prec1_imp <- list()
+lc_prec2_avg <- list()
+lc_prec2_imp <- list()
+
+# Getting model estimates
+lc_prec1_modelEst <- list()
+lc_prec2_modelEst <- list()
+
+# Add a progress bar for the loop
+pb <- txtProgressBar(min = 0, max = length(unique(dat.scaled$scientific_name)), style = 3) #text based bar
+
+for(i in 1:length(unique(dat.scaled$scientific_name))){
+  
+  data <- dat.scaled %>% filter(dat.scaled$scientific_name==unique(dat.scaled$scientific_name)[i]) 
+  
+  # Preparing data for the unmarked model
+  occ <- filter_repeat_visits(data, 
+                              min_obs = 1, max_obs = 10,
+                              annual_closure = FALSE,
+                              n_days = 2200, # 6 years is considered a period of closure
+                              date_var = "observation_date",
+                              site_vars = c("locality_id"))
+  
+  obs_covs <- c("min_obs_started", 
+                "duration_minutes", 
+                "effort_distance_km", 
+                "number_observers", 
+                "protocol_type",
+                "expertise",
+                "julian_date")
+  
+  # format for unmarked
+  occ_wide <- format_unmarked_occu(occ, 
+                                   site_id = "site", 
+                                   response = "pres_abs",
+                                   site_covs = c( "locality_id","lc_01.y","lc_02.y","lc_03.y", "lc_04.y",
+                                                  "lc_05.y", "lc_06.y", "lc_07.y","prec_interannual.y","temp_interannual.y"),
+                                   obs_covs = obs_covs)
+  
+  # Convert this dataframe of observations into an unmarked object to start fitting occupancy models
+  occ_um <- formatWide(occ_wide, type = "unmarkedFrameOccu")
+  
+  # Subset - global models
+  model_lc_prec1 <- occu(~min_obs_started+
+                           julian_date +
+                           duration_minutes + 
+                           effort_distance_km + 
+                           number_observers + 
+                           protocol_type +
+                           expertise~lc_02.y*prec_interannual.y +lc_03.y*prec_interannual.y + lc_04.y*prec_interannual.y +
+                           lc_06.y*prec_interannual.y, data = occ_um)
+  
+  model_lc_prec2 <- occu(~min_obs_started+
+                           julian_date +
+                           duration_minutes + 
+                           effort_distance_km + 
+                           number_observers + 
+                           protocol_type +
+                           expertise~lc_01.y*prec_interannual.y + lc_05.y*prec_interannual.y + lc_07.y*prec_interannual.y, data = occ_um)
+  
+  # Set up the cluster
+  clusterType <- if(length(find.package("snow", quiet = TRUE))) "SOCK" else "PSOCK"
+  clust <- try(makeCluster(getOption("cl.cores", 6), type = clusterType))
+  
+  clusterEvalQ(clust, library(unmarked))
+  clusterExport(clust, "occ_um")
+  
+  # Detection terms are fixed
+  det_terms <- c("p(duration_minutes)","p(effort_distance_km)", "p(expertise)","p(julian_date)","p(min_obs_started)",
+                 "p(number_observers)","p(protocol_type)")
+  
+  # Dredging
+  lc_prec1[[i]] <- pdredge(model_lc_prec1, clust, fixed=det_terms)
+  lc_prec2[[i]] <- pdredge(model_lc_prec2, clust, fixed=det_terms)
+  
+  names(lc_prec1)[i] <- unique(dat.scaled$scientific_name)[i] 
+  names(lc_prec2)[i] <- unique(dat.scaled$scientific_name)[i] 
+  
+  # Identiying top subset of models based on deltaAIC scores being less than 4 (Burnham et al., 2011)
+  top_lc_prec1[[i]] <- get.models(lc_prec1[[i]], subset = delta<4, cluster = clust)
+  top_lc_prec2[[i]] <- get.models(lc_prec2[[i]], subset = delta<4, cluster = clust)
+  
+  names(top_lc_prec1)[i] <- unique(dat.scaled$scientific_name)[i] 
+  names(top_lc_prec2)[i] <- unique(dat.scaled$scientific_name)[i] 
+  
+  # Obtaining model averaged coefficients for both candidate model subsets
+  if(length(top_lc_prec1[[i]])>1){
+    a <- model.avg(top_lc_prec1[[i]], fit = TRUE)
+    lc_prec1_avg[[i]] <- as.data.frame(a$coefficients) 
+    names(lc_prec1_avg)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+    lc_prec1_modelEst[[i]] <- data.frame(Predictor = rownames(coefTable(a, full = T)),
+                                         Coefficient = coefTable(a, full = T)[,1],
+                                         SE = coefTable(a, full = T)[,2],
+                                         lowerCI = confint(a)[,1],
+                                         upperCI = confint(a)[,2])
+    names(lc_prec1_modelEst)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+    lc_prec1_imp[[i]] <- as.data.frame(MuMIn::importance(a))
+    names(lc_prec1_imp)[i] <- unique(dat.scaled$scientific_name)[i]
+  } else {
+    lc_prec1_avg[[i]] <- as.data.frame(unmarked::coef(top_lc_prec1[[i]][[1]]))
+    names(lc_prec1_avg)[i] <- unique(dat.scaled$scientific_name)[i] 
+    
+    lowSt <-  data.frame(lowerCI=confint(top_lc_prec1[[i]][[1]], type="state")[,1])
+    lowDet <- data.frame(lowerCI=confint(top_lc_prec1[[i]][[1]], type="det")[,1])
+    upSt <-  data.frame(upperCI=confint(top_lc_prec1[[i]][[1]], type="state")[,2])
+    upDet <- data.frame(upperCI=confint(top_lc_prec1[[i]][[1]], type="det")[,2])
+    
+    lc_prec1_modelEst[[i]] <- data.frame(Predictor = rownames(coefTable(top_lc_prec1[[i]][[1]])),
+                                         Coefficient = coefTable(top_lc_prec1[[i]][[1]])[,1],
+                                         SE = coefTable(top_lc_prec1[[i]][[1]])[,2],
+                                         lowerCI = rbind(lowSt,lowDet),
+                                         upperCI = rbind(upSt,upDet))
+    
+    names(lc_prec1_modelEst)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+  }
+  
+  if(length(top_lc_prec2[[i]])>1){
+    b <- model.avg(top_lc_prec2[[i]], fit = TRUE)
+    lc_prec2_avg[[i]] <- as.data.frame(b$coefficients) 
+    names(lc_prec2_avg)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+    lc_prec2_modelEst[[i]] <- data.frame(Predictor = rownames(coefTable(b, full = T)),
+                                         Coefficient = coefTable(b, full = T)[,1],
+                                         SE = coefTable(b, full = T)[,2],
+                                         lowerCI = confint(b)[,1],
+                                         upperCI = confint(b)[,2])
+    names(lc_prec2_modelEst)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+    lc_prec2_imp[[i]] <- as.data.frame(MuMIn::importance(b))
+    names(lc_prec2_imp)[i] <- unique(dat.scaled$scientific_name)[i]
+  } else {
+    lc_prec2_avg[[i]] <- as.data.frame(unmarked::coef(top_lc_prec2[[i]][[1]]))
+    names(lc_prec2_avg)[i] <- unique(dat.scaled$scientific_name)[i] 
+    
+    lowSt <-  data.frame(lowerCI=confint(top_lc_prec2[[i]][[1]], type="state")[,1])
+    lowDet <- data.frame(lowerCI=confint(top_lc_prec2[[i]][[1]], type="det")[,1])
+    upSt <-  data.frame(upperCI=confint(top_lc_prec2[[i]][[1]], type="state")[,2])
+    upDet <- data.frame(upperCI=confint(top_lc_prec2[[i]][[1]], type="det")[,2])
+    
+    lc_prec2_modelEst[[i]] <- data.frame(Predictor = rownames(coefTable(top_lc_prec2[[i]][[1]])),
+                                         Coefficient = coefTable(top_lc_prec2[[i]][[1]])[,1],
+                                         SE = coefTable(top_lc_prec2[[i]][[1]])[,2],
+                                         lowerCI = rbind(lowSt,lowDet),
+                                         upperCI = rbind(upSt,upDet))
+    
+    names(lc_prec2_modelEst)[i] <- unique(dat.scaled$scientific_name)[i]
+    
+  }
+  
+  setTxtProgressBar(pb, i)
+  stopCluster(clust)
+}
+close(pb)
+
+# 1. Store all the dredged model outputs for each species (for lc1_temp and lc2_temp)
+write.xlsx(lc_prec1 ,file="C:\\Users\\vr235\\Downloads\\lc_prec1.xlsx")
+write.xlsx(lc_prec2 ,file="C:\\Users\\vr235\\Downloads\\lc_prec2.xlsx")
+
+# 2. Store all the model averaged outputs for each species and the relative importance score
+write.xlsx(lc_prec1_avg, file = "C:\\Users\\vr235\\Downloads\\lc_prec1_avg.xlsx", rowNames=T, colNames=T)
+write.xlsx(lc_prec2_avg, file = "C:\\Users\\vr235\\Downloads\\lc_prec2_avg.xlsx", rowNames=T, colNames=T)
+
+write.xlsx(lc_prec1_imp, file = "C:\\Users\\vr235\\Downloads\\lc_prec1_imp.xlsx", rowNames=T, colNames=T)
+write.xlsx(lc_prec2_imp, file = "C:\\Users\\vr235\\Downloads\\lc_prec2_imp.xlsx", rowNames=T, colNames=T)
+
+write.xlsx(lc_prec1_modelEst, file = "C:\\Users\\vr235\\Downloads\\lc_prec1_modelEst.xlsx", rowNames=T, colNames=T)
+write.xlsx(lc_prec2_modelEst, file = "C:\\Users\\vr235\\Downloads\\lc_prec2_modelEst.xlsx", rowNames=T, colNames=T)
+
+```
+
+
