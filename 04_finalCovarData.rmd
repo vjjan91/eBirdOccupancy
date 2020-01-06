@@ -46,7 +46,7 @@ rm(dataGrouped)
 
 ```{r add_expertise, eval=FALSE}
 # read in obs score and extract numbers
-expertiseScore <- read_csv("data/dataObsRptrScore.csv") %>% 
+expertiseScore <- read_csv("data/dataObsExpScore.csv") %>% 
   mutate(numObserver = str_extract(observer, "\\d+")) %>% 
   dplyr::select(-observer)
 
