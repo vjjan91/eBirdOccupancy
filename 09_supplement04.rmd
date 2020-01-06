@@ -1,0 +1,83 @@
+---
+editor_options: 
+  chunk_output_type: console
+---
+
+## Climate in relation to landcover
+
+### Prepare libraries
+
+```{r prep_libs_supp04, eval=FALSE}
+# load libs
+library(raster)
+library(glue)
+library(purrr)
+library(dplyr)
+library(tidyr)
+
+library(ggplot2)
+library(ggthemes)
+
+# get ci func
+ci <- function(x){qnorm(0.975)*sd(x, na.rm = T)/sqrt(length(x))}
+```
+
+```{r load_rasters_supp4, eval=FALSE}
+# read landscape prepare for plotting
+landscape <- stack("data/spatial/landscape_resamp01km.tif")
+
+# get proper names
+elev_names <- c("elev", "slope", "aspect")
+evi_names <- c("evi_01", "evi_07", "evi_10")
+chelsa_names <- c("chelsa_bio10_04", "chelsa_bio10_17", "chelsa_bio10_18",
+                  "chelsa_prec", "chelsa_temp")
+
+names(landscape) <- as.character(glue('{c(elev_names, evi_names, chelsa_names, "landcover")}'))
+```
+
+```{r get_data_at_lc, eval=FALSE}
+# make duplicate stack
+land_data <- landscape[[c("landcover", chelsa_names)]]
+
+# convert to list
+land_data <- as.list(land_data)
+
+# map get values over the stack
+land_data <- map(land_data, getValues)
+names(land_data) <- c("landcover", chelsa_names)
+
+# conver to dataframe and round to 100m
+land_data <- bind_cols(land_data)
+land_data <- drop_na(land_data) %>% 
+  filter(landcover != 0) %>% 
+  pivot_longer(cols = contains("chelsa"),
+               names_to = "clim_var") %>% 
+  group_by(landcover, clim_var) %>% 
+  summarise_all(.funs = list(~mean(.), ~ci(.)))
+```
+
+### Plot climatic variables over landcover
+
+```{r plot_clim_lc, eval=FALSE}
+# plot in facets
+
+fig_climate_lc <- ggplot(land_data)+
+  geom_pointrange(aes(x = landcover, y = mean, ymin=mean-ci, ymax=mean+ci),
+                  size = 0.3)+
+  # scale_x_continuous(labels = scales::comma)+
+  scale_y_continuous(labels = scales::comma)+
+  facet_wrap(~clim_var, scales = "free_y")+
+  theme_few()+
+  labs(x = "landcover class", y = "CHELSA variable value")
+
+# save as png
+ggsave(fig_climate_lc, filename = "figs/fig_climate_landcover.png", 
+       height = 4, width = 6, device = png(), dpi = 300); dev.off()
+```
+
+
+```{r export_fig_clim_lc, eval=TRUE, fig.cap="CHELSA climatic variables as a function of landcover class. Points represent means, while vertical lines show 95% confidence intervals."}
+
+# show exported image
+knitr::include_graphics("figs/fig_climate_landcover.png")
+```

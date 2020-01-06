@@ -1,0 +1,130 @@
+---
+editor_options: 
+  chunk_output_type: console
+---
+
+## Species observation distributions
+
+### Prepare libraries
+
+```{r setup_sup_02, eval=FALSE}
+# load libraries
+library(data.table)
+library(readxl)
+library(magrittr)
+library(stringr)
+library(dplyr)
+
+library(ggplot2)
+library(ggthemes)
+```
+
+### Read species of interest
+
+```{r soi_supplement, eval=FALSE, message=FALSE, warning=FALSE}
+# add species of interest
+specieslist <- read_excel("data/species_list_13_11_2019.xlsx")
+speciesOfInterest <- specieslist$scientific_name
+```
+
+### Load raw data for locations
+
+```{r load_raw_data_supp02, eval=FALSE}
+# read in shapefile of nilgiris to subset by bounding box
+library(sf)
+wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp"); box <- st_bbox(wg)
+
+# read in data and subset
+ebd <- fread("ebd_Filtered_Jun2019.txt")
+ebd <- ebd[between(LONGITUDE, box["xmin"], box["xmax"]) & between(LATITUDE, box["ymin"], box["ymax"]),]
+ebd <- ebd[year(`OBSERVATION DATE`) >= 2013,]
+
+# make new column names
+newNames <- str_replace_all(colnames(ebd), " ", "_") %>%
+  str_to_lower()
+setnames(ebd, newNames)
+
+# keep useful columns
+columnsOfInterest <- c("scientific_name","observation_count","locality","locality_id","locality_type","latitude","longitude","observation_date", "sampling_event_identifier")
+
+# keep species of interest
+ebd <- ebd[scientific_name %in% speciesOfInterest,]
+
+ebd <- select(ebd, one_of(columnsOfInterest))
+```
+
+### Get proportional obs counts in 20km cells
+
+```{r transform_proj, eval=FALSE}
+# transform data to UTM zone 43N
+ebd <- setDF(ebd) %>% 
+  st_as_sf(coords = c("longitude","latitude")) %>% 
+  `st_crs<-`(4326) %>% st_transform(32643)
+
+# add UTM coordinate columns
+ebd <- cbind(ebd, st_coordinates(ebd)) %>%
+  st_drop_geometry() %>% 
+  setDT()
+```
+
+```{r count_obs, eval=FALSE}
+# round to cell size
+cell_size = 20000 # 20km in metres
+ebd[,`:=`(X_round = plyr::round_any(X, cell_size), Y_round = plyr::round_any(Y, cell_size))]
+
+# set observation count to 1 if NA or X
+ebd_summary <- ebd[, observation_count := ifelse(observation_count == "X", 1, observation_count)
+                   ][,observation_count:=as.numeric(observation_count)
+                     ][,.(count=sum(observation_count)), 
+                       by = list(scientific_name, X_round, Y_round)
+                       ][,prop:=count/sum(count), by = list(scientific_name)]
+```
+### Plot maps
+
+```{r load_map_plot_data, eval=FALSE}
+# get bbox
+bbox <- wg %>% 
+  st_transform(32643) %>% 
+  st_bbox()
+
+# add land
+library(rnaturalearth)
+# land <- ne_countries(scale = 50, type = "countries", continent = "asia",
+#                      country = "india",
+#                      returnclass = c("sf"))
+# 
+# # crop land
+# land <- st_transform(land, 32643) %>% st_crop(bbox)
+```
+
+```{r plot_obs_distributions, eval=FALSE}
+# make plot
+wg <- st_transform(wg, 32643)
+
+plotDistributions <-
+ggplot()+
+  # geom_sf(data = land, fill = "grey99", col = "transparent")+
+  geom_tile(data = ebd_summary,
+            aes(X_round, Y_round, fill = prop), lwd = 0.5, col = "white")+
+  geom_sf(data = wg, fill = "transparent", col = "red", lwd = 0.3)+
+  
+  scale_fill_distiller(palette = "Blues", direction = 1, 
+                       values = c(0, 0.3), na.value = "darkslateblue")+
+  facet_wrap(~scientific_name, ncol = 10)+
+  coord_sf()+
+  theme_few()+
+  theme(legend.position = "none", 
+        axis.text = element_blank(), 
+        axis.title = element_blank())
+  
+# export data
+ggsave(plotDistributions, filename = "figs/fig_species_distributions.png", 
+       height = 10, width = 16, device = png(), dpi = 300); dev.off()
+```
+
+```{r export_fig_obs_dist, eval=TRUE, fig.cap="Proportion of individuals observed in each grid cell (20km side) between 2013 and 2018. Deeper shades of blue indicate higher proportions in the range 0 -- 0.3, values above 0.3 are coloured purple."}
+
+# show exported image
+knitr::include_graphics("figs/fig_species_distributions.png")
+
+```

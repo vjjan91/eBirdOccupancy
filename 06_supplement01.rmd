@@ -163,6 +163,3 @@ dev.off()
 knitr::include_graphics("figs/fig_distRoads.png")
 
 ```
-
-
-## WIP
