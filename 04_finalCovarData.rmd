@@ -69,7 +69,7 @@ dataSeiScore <- left_join(dataSeiScore, expertiseScore,
                           by="numObserver") %>% 
   # get max expertise score per sei
   group_by(sampling_event_identifier) %>% 
-  summarise(expertise = max(rptrScore))
+  summarise(expertise = max(score))
 
 # add to dataCovar
 dataSubsample <- left_join(dataSubsample, dataSeiScore, 
