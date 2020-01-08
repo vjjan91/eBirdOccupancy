@@ -50,13 +50,32 @@ ebd <- select(ebd, one_of(columnsOfInterest))
 # get the checklist id as SEI or group id
 ebd[,checklist_id := ifelse(group_identifier == "", 
                             sampling_event_identifier, group_identifier),]
-
-# n checklists per observer
-ebdNchk <- ebd[,year:=year(observation_date)
-               ][,.(nChk = length(unique(checklist_id)), 
-                    nSei = length(unique(sampling_event_identifier))), 
-                 by= list(observer_id, year)]
 ```
+
+## Explicit spatial subset
+
+```{r hills_subset_exp, eval=FALSE}
+# get checklist locations
+ebd_locs <- ebd[,.(longitude, latitude)]
+ebd_locs <- setDF(ebd_locs) %>% distinct(ebd_locs)
+ebd_locs <- st_as_sf(ebd_locs, 
+                     coords = c("longitude","latitude")) %>% 
+  `st_crs<-`(4326) %>% 
+  mutate(id = 1:nrow(.))
+
+# check whether to include
+to_keep <- unlist(st_contains(wg, ebd_locs))
+
+# filter locs
+ebd_locs <- filter(ebd_locs, id %in% to_keep) %>% 
+  bind_cols(as_tibble(st_coordinates(.))) %>% 
+  st_drop_geometry()
+```
+
+```{r hills_subset_exp2, eval=FALSE}
+ebd <- ebd[longitude %in% ebd_locs$X & latitude %in% ebd_locs$Y,]
+```
+
 
 ## Prepare species of interest
 
@@ -69,7 +88,7 @@ soi = specieslist$scientific_name
 
 ebdSpSum <- ebd[,.(nSp = .N,
                    totSoiSeen = length(intersect(scientific_name, soi))), 
-                by = list(sampling_event_identifier, observer_id, year)]
+                by = list(sampling_event_identifier)]
 
 # write to file and link with checklsit id later
 fwrite(ebdSpSum, file = "data/dataChecklistSpecies.csv")
@@ -104,12 +123,13 @@ rm(ebd); gc()
 
 ## Get landcover
 
-Using the landcover 100m resolution here.
+Using the landcover 1km resolution here.
 
 ```{r chk_covar_landuse, eval=FALSE}
 # read in 1km landcover and set 0 to NA
 library(raster)
 landcover <- raster::raster("data/spatial/landcover1km.tif")
+landcover[landcover==0] <- NA
 
 # get locs in utm coords
 locs <- distinct(ebdChkSummary, sampling_event_identifier, longitude, latitude)
@@ -121,8 +141,6 @@ locs <- st_as_sf(locs, coords = c("longitude", "latitude")) %>%
 # get for unique points
 landcoverVec <- raster::extract(x = landcover, 
                                 y = locs)
-
-landcoverVec[landcoverVec == 0] <- NA
 
 # assign to df and overwrite
 setDT(ebdChkSummary)[,landcover:= landcoverVec]
@@ -164,16 +182,15 @@ Our observer expertise model aims to include the random intercpet effect of obse
 # uses either a subset or all data
 library(lmerTest)
 
-
 # here we specify a glmm with random effects for observer
 # time is considered a fixed log predictor and a random slope
 modObsExp <- glmer(nSoi ~ sqrt(duration) + 
                      landcover+
-                   sqrt(decimalTime) + 
-                   I((sqrt(decimalTime))^2) + 
-                   log(julianDate) + 
-                   I((log(julianDate)^2)) + 
-                   (1|observer) + (0+duration|observer),
+                     sqrt(decimalTime) + 
+                     I((sqrt(decimalTime))^2) + 
+                     log(julianDate) + 
+                     I((log(julianDate)^2)) + 
+                     (1|observer) + (0+duration|observer),
                    data = ebdChkSummary, family = "poisson")
 ``` 
 
@@ -188,8 +205,8 @@ if(!dir.exists("data/modOutput")){
 # write model output to text file
 {
   writeLines(R.utils::captureOutput(list(Sys.time(), summary(modObsExp))), 
-            con = "data/modOutput/modOutExpertise.txt")
-  }
+             con = "data/modOutput/modOutExpertise.txt")
+}
 ```
 
 ## Get observer expertise as species in 60 mins
@@ -197,6 +214,8 @@ if(!dir.exists("data/modOutput")){
 ```{r obsexp_ranef, eval=FALSE}
 # make df with means
 observer <- unique(ebdChkSummary$observer)
+
+# predict at 60 mins on the most common landcover
 dfPredict <- ebdChkSummary %>% 
   summarise_at(vars(duration, decimalTime, julianDate), list(~mean(.))) %>% 
   mutate(duration = 60, landcover = as.factor(6)) %>% 
