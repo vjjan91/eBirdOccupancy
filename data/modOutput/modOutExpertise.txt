@@ -1,9 +1,9 @@
 [[1]]
-[1] "2020-01-07 00:27:47 CET"
+[1] "2020-01-08 21:22:29 CET"
 
 [[2]]
-Generalized linear mixed model fit by maximum
-  likelihood (Laplace Approximation) [glmerMod]
+Generalized linear mixed model fit by maximum likelihood (Laplace  Approximation)
+ [glmerMod]
  Family: poisson  ( log )
 Formula: 
 nSoi ~ sqrt(duration) + landcover + sqrt(decimalTime) + I((sqrt(decimalTime))^2) +  
@@ -12,76 +12,62 @@ nSoi ~ sqrt(duration) + landcover + sqrt(decimalTime) + I((sqrt(decimalTime))^2)
    Data: ebdChkSummary
 
      AIC      BIC   logLik deviance df.resid 
-187785.0 187904.7 -93878.5 187757.0    38086 
+182938.1 183057.4 -91455.0 182910.1    37183 
 
 Scaled residuals: 
     Min      1Q  Median      3Q     Max 
--4.7200 -0.8131 -0.0966  0.6839  8.0431 
+-4.4362 -0.8127 -0.0944  0.6858  8.2305 
 
 Random effects:
  Groups     Name        Variance  Std.Dev.
- observer   (Intercept) 1.520e-01 0.389833
- observer.1 duration    2.743e-05 0.005237
-Number of obs: 38100, groups:  observer, 785
+ observer   (Intercept) 1.424e-01 0.37740 
+ observer.1 duration    4.109e-05 0.00641 
+Number of obs: 37197, groups:  observer, 591
 
 Fixed effects:
-                          Estimate Std. Error z value
-(Intercept)               0.884971   0.080758  10.958
-sqrt(duration)            0.192072   0.005055  37.997
-landcover2                0.147366   0.036162   4.075
-landcover3                0.186445   0.035341   5.276
-landcover4                0.074333   0.038341   1.939
-landcover5                0.120176   0.038748   3.101
-landcover6                0.210462   0.035320   5.959
-landcover7                0.036077   0.043549   0.828
-sqrt(decimalTime)        -0.200589   0.038126  -5.261
-I((sqrt(decimalTime))^2)  0.012013   0.005672   2.118
-log(julianDate)           0.094032   0.011935   7.879
-I((log(julianDate)^2))   -0.014406   0.001437 -10.026
-                         Pr(>|z|)    
-(Intercept)               < 2e-16 ***
-sqrt(duration)            < 2e-16 ***
-landcover2               4.60e-05 ***
-landcover3               1.32e-07 ***
-landcover4                0.05253 .  
-landcover5                0.00193 ** 
-landcover6               2.54e-09 ***
-landcover7                0.40743    
-sqrt(decimalTime)        1.43e-07 ***
-I((sqrt(decimalTime))^2)  0.03419 *  
-log(julianDate)          3.30e-15 ***
-I((log(julianDate)^2))    < 2e-16 ***
+                          Estimate Std. Error z value Pr(>|z|)    
+(Intercept)               0.890437   0.085420  10.424  < 2e-16 ***
+sqrt(duration)            0.213766   0.004747  45.028  < 2e-16 ***
+landcover2                0.154718   0.036906   4.192 2.76e-05 ***
+landcover3                0.194080   0.036090   5.378 7.55e-08 ***
+landcover4                0.078091   0.039100   1.997  0.04580 *  
+landcover5                0.124335   0.039481   3.149  0.00164 ** 
+landcover6                0.220323   0.036068   6.109 1.01e-09 ***
+landcover7                0.046608   0.044196   1.055  0.29162    
+sqrt(decimalTime)        -0.229511   0.041159  -5.576 2.46e-08 ***
+I((sqrt(decimalTime))^2)  0.016115   0.006108   2.638  0.00833 ** 
+log(julianDate)           0.098210   0.012032   8.162 3.28e-16 ***
+I((log(julianDate)^2))   -0.015023   0.001448 -10.375  < 2e-16 ***
 ---
-Signif. codes:  
-0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 Correlation of Fixed Effects:
-            (Intr) sqrt() lndcv2 lndcv3 lndcv4 lndcv5
-sqrt(durtn) -0.256                                   
-landcover2  -0.410 -0.015                            
-landcover3  -0.432 -0.023  0.967                     
-landcover4  -0.385 -0.036  0.888  0.907              
-landcover5  -0.397 -0.033  0.880  0.904  0.825       
-landcover6  -0.427 -0.012  0.970  0.990  0.907  0.900
-landcover7  -0.345 -0.006  0.787  0.805  0.737  0.731
-sqrt(dcmlT) -0.785  0.021 -0.008  0.008 -0.004  0.011
-I((s(T))^2)  0.775 -0.032  0.008 -0.008  0.003 -0.011
-log(julnDt) -0.338  0.096 -0.003  0.002 -0.002  0.002
-I((l(D)^2))  0.319 -0.099  0.004 -0.001  0.003  0.000
-            lndcv6 lndcv7 sqr(T) I(((T) lg(jD)
-sqrt(durtn)                                   
-landcover2                                    
-landcover3                                    
-landcover4                                    
-landcover5                                    
-landcover6                                    
-landcover7   0.806                            
-sqrt(dcmlT) -0.001 -0.012                     
-I((s(T))^2)  0.001  0.010 -0.995              
-log(julnDt) -0.002  0.016  0.031 -0.030       
-I((l(D)^2))  0.003 -0.013 -0.033  0.032 -0.982
+            (Intr) sqrt() lndcv2 lndcv3 lndcv4 lndcv5 lndcv6 lndcv7 sqr(T) I(((T)
+sqrt(durtn) -0.227                                                               
+landcover2  -0.395 -0.019                                                        
+landcover3  -0.418 -0.026  0.968                                                 
+landcover4  -0.372 -0.036  0.890  0.909                                          
+landcover5  -0.387 -0.035  0.883  0.906  0.829                                   
+landcover6  -0.412 -0.016  0.971  0.990  0.909  0.903                            
+landcover7  -0.333 -0.011  0.793  0.810  0.743  0.737  0.811                     
+sqrt(dcmlT) -0.807  0.020 -0.009  0.008 -0.005  0.012 -0.002 -0.013              
+I((s(T))^2)  0.797 -0.029  0.009 -0.008  0.004 -0.012  0.002  0.012 -0.995       
+log(julnDt) -0.321  0.088 -0.004  0.002 -0.001  0.002 -0.002  0.016  0.030 -0.029
+I((l(D)^2))  0.303 -0.091  0.004 -0.001  0.002 -0.001  0.003 -0.013 -0.032  0.031
+            lg(jD)
+sqrt(durtn)       
+landcover2        
+landcover3        
+landcover4        
+landcover5        
+landcover6        
+landcover7        
+sqrt(dcmlT)       
+I((s(T))^2)       
+log(julnDt)       
+I((l(D)^2)) -0.982
 convergence code: 0
-Model failed to converge with max|grad| = 0.567224 (tol = 0.001, component 1)
+Model failed to converge with max|grad| = 0.169484 (tol = 0.001, component 1)
 Model is nearly unidentifiable: very large eigenvalue
  - Rescale variables?
 
