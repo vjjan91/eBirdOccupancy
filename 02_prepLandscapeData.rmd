@@ -84,7 +84,7 @@ env_data <- stack(elevData, chelsaData)
 
 ```{r landcover_raster, eval=FALSE, message=FALSE, warning=FALSE, message=FALSE}
 # read in landcover raster location
-landcover <- "data/landUseClassification/Classified Image_8th Jan 2020_WGBuffer.tif"
+landcover <- "data/landUseClassification/Reprojected Image_8th Jan 2020_WGBuffer.tif"
 # get extent
 e = bbox(raster(landcover))
 
