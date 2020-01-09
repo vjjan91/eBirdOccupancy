@@ -35,6 +35,9 @@ assertthat::assert_that(funcMode(c(2,2,2,2,3,3,3,4)) == as.character(2),
 # load hills
 library(sf)
 hills <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp")
+hills <- st_transform(hills, 32643)
+buffer <- st_buffer(hills, 3e4) %>% 
+  st_transform(4326)
 ```
 
 
@@ -43,7 +46,7 @@ hills <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp")
 ```{r terrain_raster, eval=FALSE, message=FALSE, warning=FALSE}
 # load elevation and crop to hills size, then mask by hills
 alt <- raster("data/spatial/Elevation/alt")
-alt.hills <- crop(alt, as(hills, "Spatial"))
+alt.hills <- crop(alt, as(buffer, "Spatial"))
 rm(alt); gc()
 
 # get slope and aspect
@@ -52,70 +55,60 @@ elevData <- raster::stack(alt.hills, slopeData)
 rm(alt.hills); gc()
 ```
 
-### Prepare EVI rasters
-
-```{r evi_raster, eval=FALSE, message=FALSE, warning=FALSE}
-# load evi layers
-evi <- raster::stack("data/spatial/EVI/MOD13Q1_EVI_AllYears.tif")[[c(1,7,10)]]
-
-# reproject to elevdata
-evi <- projectRaster(evi, elevData, res(elevData))
-```
-
 ### Prepare CHELSA rasters
 
 ```{r chelsa_rasters, eval=FALSE, message=FALSE, warning=FALSE}
 # list chelsa files
-chelsaFiles <- list.files("data/chelsa/", full.names = TRUE, pattern = "crop.tif")
+chelsaFiles <- list.files("data/chelsa/", full.names = TRUE, pattern = "*.tif")
 
 # gather chelsa rasters
 chelsaData <- purrr::map(chelsaFiles, function(chr){
   a <- raster(chr)
-  crs(a) <- crs(evi)
+  crs(a) <- crs(elevData)
+  a <- crop(a, as(buffer, "Spatial"))
   return(a)
 })
 
 # stack chelsa data
 chelsaData <- raster::stack(chelsaData)
-
-# project to elevation
-chelsaData <- projectRaster(chelsaData, elevData, res(elevData))
 ```
 
 ### Stack prepared rasters
 
 ```{r stack_rasters, eval=FALSE, message=FALSE, warning=FALSE}
 # stack rasters for efficient reprojection later
-env_data <- stack(elevData, evi, chelsaData)
+env_data <- stack(elevData, chelsaData)
 ```
 
 ### Prepare landcover
 
 ```{r landcover_raster, eval=FALSE, message=FALSE, warning=FALSE, message=FALSE}
 # read in landcover raster location
-landcover <- "data/landUseClassification/ClassifiedImage_31stAug_UTM34N_Ghats.tif"
+landcover <- "data/landUseClassification/Classified Image_8th Jan 2020_WGBuffer.tif"
 # get extent
 e = bbox(raster(landcover))
+
+# init resolution
+res_init <- res(raster(landcover))
+# res to transform to 1000m
+res_final <- res_init*100
 
 # use gdalutils gdalwarp for resampling transform
 # to 1km from 10m
 gdalwarp(srcfile = landcover, 
          dstfile = "data/landUseClassification/lc_01km.tif", 
-         tr=c(1000,1000), r='mode', te=c(e))
+         tr=c(res_final), r='mode', te=c(e))
 ```
 
 ## Resample rasters
 
 ### Read landcover as list
 
-Here, we read in the 1km, 10km, and 25km resampled landcover rasters as a list.
+Here, we read in the 1km landcover raster and set 0 to NA.
 
 ```{r read_resamp_lc, eval=FALSE, message=FALSE, warning=FALSE}
-
-# list the files and map a raster read over them
-lc_files <- list.files("data/landUseClassification/", 
-                       pattern = "01km.tif", full.names = TRUE)
-lc_data <- map(lc_files, raster)
+lc_data <- raster("data/landUseClassification/lc_01km.tif")
+lc_data[lc_data == 0] <- NA
 ```
 
 ### Reproject environmental data to landcover
@@ -123,20 +116,15 @@ lc_data <- map(lc_files, raster)
 ```{r resample_env_data, eval=FALSE, message=FALSE, warning=FALSE}
 
 # resample to the corresponding landcover data
-env_data_resamp <- map(lc_data, function(rs){
-  projectRaster(from = env_data, to = rs, crs = crs(rs), res = res(rs))
-})
+env_data_resamp <- projectRaster(from = env_data, to = lc_data, crs = crs(lc_data), res = res(lc_data))
 
 # export as raster stack
-land_stacks <- map2(env_data_resamp, lc_data, function(a, b){
-  land_stack = stack(a, b)})
+land_stack <- stack(env_data_resamp, lc_data)
 
 # get names
 land_names <- glue('data/spatial/landscape_resamp{c("01")}km.tif')
 
 # write to file
-map2(land_stacks, land_names, function(x,y){
-  writeRaster(x, filename = as.character(y), overwrite=TRUE)
-})
+writeRaster(land_stack, filename = as.character(land_names), overwrite=TRUE)
 ```
 
