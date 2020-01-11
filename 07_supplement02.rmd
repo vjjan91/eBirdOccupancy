@@ -147,7 +147,7 @@ ggsave(plotDistributions, filename = "figs/fig_species_distributions.png",
        height = 12, width = 17, device = png(), dpi = 300); dev.off()
 ```
 
-```{r export_fig_obs_dist, eval=TRUE, fig.cap="Proportion of individuals observed in each grid cell (20km side) between 2013 and 2018. Deeper shades of blue indicate higher proportions in the range 0 -- 0.3, values above 0.3 are coloured purple."}
+```{r export_fig_obs_dist, eval=TRUE, fig.cap="Proportion of checklists reporting a species in each grid cell (20km side) between 2013 and 2018. Checklists were filtered to be within the boundaries of the Nilgiri Hills (black outline), but rounding to 20km cells may place cells outside the boundary. Deeper shades of red indicate a higher proportion of checklists reporting a species."}
 
 # show exported image
 knitr::include_graphics("figs/fig_species_distributions.png")
