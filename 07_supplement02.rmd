@@ -14,9 +14,14 @@ library(readxl)
 library(magrittr)
 library(stringr)
 library(dplyr)
+library(tidyr)
 
 library(ggplot2)
 library(ggthemes)
+library(scico)
+
+# round any function
+round_any <- function(x, accuracy = 20000){round(x/accuracy)*accuracy}
 ```
 
 ### Read species of interest
@@ -46,83 +51,103 @@ setnames(ebd, newNames)
 
 # keep useful columns
 columnsOfInterest <- c("scientific_name","observation_count","locality","locality_id","locality_type","latitude","longitude","observation_date", "sampling_event_identifier")
+ebd <- ebd[,..columnsOfInterest]
+```
 
-# keep species of interest
-ebd <- ebd[scientific_name %in% speciesOfInterest,]
+```{r strict_filter_supp02, eval=FALSE}
+# strict spatial filter and assign grid
+locs <- ebd[,.(longitude, latitude)]
 
-ebd <- select(ebd, one_of(columnsOfInterest))
+# transform to UTM and get 20km boxes
+coords <- setDF(locs) %>% 
+  st_as_sf(coords = c("longitude", "latitude")) %>% 
+  `st_crs<-`(4326) %>% 
+  bind_cols(as.data.table(st_coordinates(.))) %>%  
+  st_transform(32643) %>% 
+  mutate(id = 1:nrow(.))
+
+# convert wg to UTM for filter
+wg <- st_transform(wg, 32643)
+coords <- coords %>% 
+  filter(id %in% unlist(st_contains(wg, coords))) %>% 
+  rename(longitude = X, latitude = Y) %>% 
+  bind_cols(as.data.table(st_coordinates(.))) %>%
+  st_drop_geometry() %>% 
+  as.data.table()
+
+# remove unneeded objs
+rm(locs); gc()
+
+coords <- coords[,.N,by=.(longitude, latitude, X, Y)]
+
+ebd <- merge(ebd, coords, all = FALSE, by = c("longitude", "latitude"))
+
+ebd <- ebd[(longitude %in% coords$longitude) & (latitude %in% coords$latitude),]
 ```
 
 ### Get proportional obs counts in 20km cells
 
-```{r transform_proj, eval=FALSE}
-# transform data to UTM zone 43N
-ebd <- setDF(ebd) %>% 
-  st_as_sf(coords = c("longitude","latitude")) %>% 
-  `st_crs<-`(4326) %>% st_transform(32643)
+```{r count_obs_cell, eval=FALSE}
+# round to 20km cell in UTM coords
+ebd[,`:=`(X = round_any(X), Y = round_any(Y))]
 
-# add UTM coordinate columns
-ebd <- cbind(ebd, st_coordinates(ebd)) %>%
-  st_drop_geometry() %>% 
-  setDT()
+# count checklists in cell
+ebd_summary <- ebd[,nchk := length(unique(sampling_event_identifier)), by=.(X,Y)]
+
+# count checklists reporting each species in cell and get proportion
+ebd_summary <- ebd_summary[,.(nrep = length(unique(sampling_event_identifier))), by = .(X,Y,nchk,scientific_name)]
+
+ebd_summary[,p_rep := nrep/nchk ]
+
+# filter for soi
+ebd_summary <- ebd_summary[scientific_name %in% speciesOfInterest,]
+
+# complete the dataframe for no reports
+ebd_summary <- setDF(ebd_summary) %>% 
+  complete(nesting(X,Y), scientific_name, fill = list(p_rep = 0))
 ```
 
-```{r count_obs, eval=FALSE}
-# round to cell size
-cell_size = 20000 # 20km in metres
-ebd[,`:=`(X_round = plyr::round_any(X, cell_size), Y_round = plyr::round_any(Y, cell_size))]
-
-# set observation count to 1 if NA or X
-ebd_summary <- ebd[, observation_count := ifelse(observation_count == "X", 1, observation_count)
-                   ][,observation_count:=as.numeric(observation_count)
-                     ][,.(count=sum(observation_count)), 
-                       by = list(scientific_name, X_round, Y_round)
-                       ][,prop:=count/sum(count), by = list(scientific_name)]
-```
 ### Plot maps
 
 ```{r load_map_plot_data, eval=FALSE}
-# get bbox
-bbox <- wg %>% 
-  st_transform(32643) %>% 
-  st_bbox()
-
 # add land
 library(rnaturalearth)
-# land <- ne_countries(scale = 50, type = "countries", continent = "asia",
-#                      country = "india",
-#                      returnclass = c("sf"))
-# 
-# # crop land
-# land <- st_transform(land, 32643) %>% st_crop(bbox)
+land <- ne_countries(scale = 50, type = "countries", continent = "asia",
+                     country = "india",
+                     returnclass = c("sf"))
+
+# crop land
+land <- st_transform(land, 32643)
 ```
 
 ```{r plot_obs_distributions, eval=FALSE}
 # make plot
 wg <- st_transform(wg, 32643)
+bbox <- st_bbox(wg)
 
 plotDistributions <-
 ggplot()+
-  # geom_sf(data = land, fill = "grey99", col = "transparent")+
+  geom_sf(data = land, fill = "grey90", col = NA)+
   geom_tile(data = ebd_summary,
-            aes(X_round, Y_round, fill = prop), lwd = 0.5, col = "white")+
-  geom_sf(data = wg, fill = "transparent", col = "red", lwd = 0.3)+
+            aes(X, Y, fill = p_rep), lwd = 0.5, col = "grey90")+
+  geom_sf(data = wg, fill = NA, col = "black", lwd = 0.3)+
   
-  scale_fill_distiller(palette = "Blues", direction = 1, 
-                       values = c(0, 0.3), na.value = "darkslateblue")+
+  scale_fill_scico(palette = "lajolla", direction = 1, label = scales::percent)+
   facet_wrap(~scientific_name, ncol = 10)+
-  coord_sf()+
+  coord_sf(xlim = bbox[c("xmin", "xmax")], ylim = bbox[c("ymin", "ymax")])+
   theme_few()+
-  theme(legend.position = "none", 
-        axis.text = element_blank(), 
-        axis.title = element_blank())
+  theme(legend.position = "right", 
+        axis.title = element_blank(),
+        axis.text.y = element_text(angle = 90),
+        panel.background = element_rect(fill = "lightblue"))+
+  labs(fill = "prop.\nreporting\nchecklists")
   
 # export data
 ggsave(plotDistributions, filename = "figs/fig_species_distributions.png", 
-       height = 10, width = 16, device = png(), dpi = 300); dev.off()
+       height = 12, width = 17, device = png(), dpi = 300); dev.off()
 ```
 
-```{r export_fig_obs_dist, eval=TRUE, fig.cap="Proportion of individuals observed in each grid cell (20km side) between 2013 and 2018. Deeper shades of blue indicate higher proportions in the range 0 -- 0.3, values above 0.3 are coloured purple."}
+```{r export_fig_obs_dist, eval=TRUE, fig.cap="Proportion of checklists reporting a species in each grid cell (20km side) between 2013 and 2018. Checklists were filtered to be within the boundaries of the Nilgiri Hills (black outline), but rounding to 20km cells may place cells outside the boundary. Deeper shades of red indicate a higher proportion of checklists reporting a species."}
 
 # show exported image
 knitr::include_graphics("figs/fig_species_distributions.png")
