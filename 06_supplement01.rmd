@@ -12,8 +12,18 @@ editor_options:
 ```{r setup_python, eval=FALSE}
 # load libraries
 library(reticulate)
+library(sf)
+library(dplyr)
+library(scales)
+library(readr)
+
 library(ggplot2)
 library(ggthemes)
+library(ggspatial)
+library(scico)
+
+# round any function
+round_any <- function(x, accuracy = 20000){round(x/accuracy)*accuracy}
 
 # set python path
 use_python("/usr/bin/python3")
@@ -54,9 +64,9 @@ roads.head()
 # get unique coordinates, assign them to the df
 # convert df to geo-df
 chkCovars = pd.read_csv("data/eBirdChecklistVars.csv")
-unique_locs = chkCovars.drop_duplicates(subset=['longitude','latitude'])[['longitude', 'latitude', 'nSp']]
+unique_locs = chkCovars.drop_duplicates(subset=['longitude','latitude','sampling_event_identifier'])[['longitude', 'latitude', 'nSp', 'sampling_event_identifier']]
 unique_locs['coordId'] = np.arange(1, unique_locs.shape[0]+1)
-chkCovars = chkCovars.merge(unique_locs, on=['longitude', 'latitude'])
+chkCovars = chkCovars.merge(unique_locs, on=['longitude', 'latitude', 'sampling_event_identifier'])
 
 unique_locs = gpd.GeoDataFrame(
 unique_locs,
@@ -70,27 +80,27 @@ unique_locs = unique_locs.to_crs({'init': 'epsg:32642'})
 
 # function to simplify multilinestrings
 def simplify_roads(complex_roads):
-simpleRoads = []
-for i in range(len(complex_roads.geometry)):
-feature = complex_roads.geometry.iloc[i]
-if feature.geom_type == "LineString":
-simpleRoads.append(feature)
-elif feature.geom_type == "MultiLineString":
-for road_level2 in feature:
-simpleRoads.append(road_level2)
-return simpleRoads
+    simpleRoads = []
+    for i in range(len(complex_roads.geometry)):
+        feature = complex_roads.geometry.iloc[i]
+        if feature.geom_type == "LineString":
+            simpleRoads.append(feature)
+        elif feature.geom_type == "MultiLineString":
+            for road_level2 in feature:
+                simpleRoads.append(road_level2)
+    return simpleRoads
 
 
 # function to use ckdtrees for nearest point finding
 def ckdnearest(gdfA, gdfB):
-A = np.concatenate(
-[np.array(geom.coords) for geom in gdfA.geometry.to_list()])
-simplified_features = simplify_roads(gdfB)
-B = [np.array(geom.coords) for geom in simplified_features]
-B = np.concatenate(B)
-ckd_tree = cKDTree(B)
-dist, idx = ckd_tree.query(A, k=1)
-return dist
+    A = np.concatenate(
+    [np.array(geom.coords) for geom in gdfA.geometry.to_list()])
+    simplified_features = simplify_roads(gdfB)
+    B = [np.array(geom.coords) for geom in simplified_features]
+    B = np.concatenate(B)
+    ckd_tree = cKDTree(B)
+    dist, idx = ckd_tree.query(A, k=1)
+    return dist
 
 
 # get distance to nearest road
@@ -102,14 +112,32 @@ unique_locs['dist_road'] = unique_locs['dist_road']
 unique_locs.to_csv(path_or_buf="data/locs_dist_to_road.csv", index=False)
 
 # merge unique locs with chkCovars
-chkCovars = chkCovars.merge(unique_locs, on=['latitude', 'longitude', 'coordId'])
+chkCovars = chkCovars.merge(unique_locs, on=['latitude', 'longitude', 'coordId', 'sampling_event_identifier'])
 ```
+
+### Explicit spatial filter
+
+```{r spatial_filter_supp01, eval=FALSE}
+# extract data from python
+chkCovars <- py$chkCovars
+chkCovars <- st_as_sf(chkCovars, coords = c("longitude", "latitude")) %>% 
+  `st_crs<-`(4326) %>% 
+  st_transform(32643)
+
+# read wg
+wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>% 
+  st_transform(32643)
+
+# spatial subset
+chkCovars <- chkCovars %>% 
+  mutate(id = 1:nrow(.)) %>% 
+  filter(id %in% unlist(st_contains(wg, chkCovars)))
+```
+
 
 ### Plot histogram: distance to roads
 
 ```{r plot_histogram, eval=FALSE}
-# extract data from python
-chkCovars <- py$chkCovars
 
 # make histogram
 hist_roads <- ggplot(chkCovars)+
@@ -118,7 +146,7 @@ hist_roads <- ggplot(chkCovars)+
   labs(x = "distance to roads (km)", y = "# checklists")+
   scale_x_log10(label=label_number(accuracy = 0.1), 
                 breaks = c(0.1, 1, 10))+
-  scale_y_continuous(label=label_number(scale=0.001, suffix = "K"))+
+  scale_y_continuous(label=label_number(scale=0.001, accuracy = 1, suffix = "K"))+
   theme_few()+
   theme(plot.background = element_rect(fill="white", colour = 1),
         panel.background = element_blank(),
@@ -129,29 +157,54 @@ hist_roads <- ggplot(chkCovars)+
 ### Plot map: points on roads
 
 ```{r load_data_in_r, eval=FALSE}
-# load data into R
-library(sf)
-library(ggspatial)
-hills <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp")
-roads <- st_read("data/spatial/roads_studysite_2019/roads_studysite_2019.shp")
-points <- read_csv("data/locs_dist_to_road.csv") %>% 
-  st_as_sf(coords = c("longitude","latitude")) %>% 
-  `st_crs<-`(4326)
+roads <- st_read("data/spatial/roads_studysite_2019/roads_studysite_2019.shp") %>% 
+  st_transform(32643)
+points <- chkCovars %>% 
+  bind_cols(as_tibble(st_coordinates(.))) %>% 
+  st_drop_geometry() %>% 
+  mutate(X = round_any(X, 2500), Y = round_any(Y, 2500))
 
+points <- count(points, X,Y)
+
+# add land
+library(rnaturalearth)
+land <- ne_countries(scale = 50, type = "countries", continent = "asia",
+                     country = "india",
+                     returnclass = c("sf")) %>% 
+  st_transform(32643)
+
+bbox <- st_bbox(wg)
+```
+
+```{r plot_map_dist_roads, eval=FALSE}
 # plot on maps
-ggplot(hills)+
-  geom_sf(fill="transparent", col = 2)+
-  geom_sf(data=roads, col="steelblue", size=0.2)+
-  geom_sf(data=points, aes(col=dist_road), size = 0.1, col = "grey40")+
+ggplot(wg)+
+  geom_sf(data = land, fill = "grey90", col = NA)+
   annotation_custom(grob = hist_roads %>% ggplotGrob(),
-                    xmin = 77.1, xmax = 77.8, ymin = 10.9, ymax = 11.5)+
-  annotation_scale(location = "br", width_hint = 0.4, text_cex = 1) +
+                    xmin = bbox["xmax"] - (bbox["xmax"] - bbox["xmin"])/2.5, 
+                    xmax = bbox["xmax"], 
+                    ymin = bbox["ymax"] - (bbox["ymax"] - bbox["ymin"])/3, 
+                    ymax = bbox["ymax"])+
+  geom_tile(data=points, aes(X,Y,fill=n), col = "grey90")+
+  geom_sf(fill= NA, col = 1)+
+  geom_sf(data=roads, size=0.2, col="steelblue")+
+  
+  # scale_colour_manual(values = "steelblue", labels = "roads")+
+  
+  scale_fill_scico(trans = "log10", palette = "lajolla", values=c(0, 1))+
   annotation_north_arrow(location = "br", which_north = "true", 
                          pad_x = unit(0.1, "in"), pad_y = unit(0.5, "in"),
                          style = north_arrow_fancy_orienteering) +
+  annotation_scale(location = "br", width_hint = 0.4, text_cex = 1) +
+  
   theme_few()+
-  theme(legend.position = "none")+
-  coord_sf(expand = FALSE)
+  theme(legend.position = c(0.9,0.55),
+        legend.background = element_blank(),
+        legend.key = element_rect(fill="grey90"),
+        axis.title = element_blank(),
+        panel.background = element_rect(fill="lightblue"))+
+  coord_sf(expand = FALSE, xlim = bbox[c("xmin", "xmax")], ylim = bbox[c("ymin", "ymax")])+
+  labs(fill = "checklists", colour=NULL)
 
 # save figure
 ggsave(filename = "figs/fig_distRoads.png", device = png())
