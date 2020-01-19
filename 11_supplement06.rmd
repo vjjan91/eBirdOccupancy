@@ -141,7 +141,7 @@ fig_list_chelsa <-
                   
                   theme_few()+
                   theme(legend.position = "top",
-                        title = element_text(face = "bold"),
+                        title = element_text(face = "bold", size = 8),
                         legend.key.height = unit(0.2, "cm"),
                         legend.key.width = unit(1, "cm"),
                         legend.text = element_text(size = 10),
