@@ -894,21 +894,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb87-13" title="13"><span class="kw">library</span>(scico)</a>
 <a class="sourceLine" id="cb87-14" title="14"><span class="kw">library</span>(gridExtra)</a>
 <a class="sourceLine" id="cb87-15" title="15"><span class="kw">library</span>(cowplot)</a>
-<a class="sourceLine" id="cb87-16" title="16"></a>
-<a class="sourceLine" id="cb87-17" title="17"><span class="co">#&#39;make custom functiont to convert matrix to df</span></a>
-<a class="sourceLine" id="cb87-18" title="18">raster_to_df &lt;-<span class="st"> </span><span class="cf">function</span>(inp) {</a>
-<a class="sourceLine" id="cb87-19" title="19">  </a>
-<a class="sourceLine" id="cb87-20" title="20">  <span class="co"># assert is a raster obj</span></a>
-<a class="sourceLine" id="cb87-21" title="21">  assertthat<span class="op">::</span><span class="kw">assert_that</span>(<span class="st">&quot;RasterLayer&quot;</span> <span class="op">%in%</span><span class="st"> </span><span class="kw">class</span>(inp),</a>
-<a class="sourceLine" id="cb87-22" title="22">                          <span class="dt">msg =</span> <span class="st">&quot;input is not a raster&quot;</span>)</a>
-<a class="sourceLine" id="cb87-23" title="23">  </a>
-<a class="sourceLine" id="cb87-24" title="24">  coords &lt;-<span class="st"> </span><span class="kw">coordinates</span>(inp)</a>
-<a class="sourceLine" id="cb87-25" title="25">  vals &lt;-<span class="st"> </span><span class="kw">getValues</span>(inp)</a>
-<a class="sourceLine" id="cb87-26" title="26">  </a>
-<a class="sourceLine" id="cb87-27" title="27">  data &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">x =</span> coords[,<span class="dv">1</span>], <span class="dt">y =</span> coords[,<span class="dv">2</span>], <span class="dt">value =</span> vals)</a>
-<a class="sourceLine" id="cb87-28" title="28">  </a>
-<a class="sourceLine" id="cb87-29" title="29">  <span class="kw">return</span>(data)</a>
-<a class="sourceLine" id="cb87-30" title="30">}</a></code></pre></div>
+<a class="sourceLine" id="cb87-16" title="16"><span class="kw">library</span>(ggspatial)</a>
+<a class="sourceLine" id="cb87-17" title="17"></a>
+<a class="sourceLine" id="cb87-18" title="18"><span class="co">#&#39;make custom functiont to convert matrix to df</span></a>
+<a class="sourceLine" id="cb87-19" title="19">raster_to_df &lt;-<span class="st"> </span><span class="cf">function</span>(inp) {</a>
+<a class="sourceLine" id="cb87-20" title="20">  </a>
+<a class="sourceLine" id="cb87-21" title="21">  <span class="co"># assert is a raster obj</span></a>
+<a class="sourceLine" id="cb87-22" title="22">  assertthat<span class="op">::</span><span class="kw">assert_that</span>(<span class="st">&quot;RasterLayer&quot;</span> <span class="op">%in%</span><span class="st"> </span><span class="kw">class</span>(inp),</a>
+<a class="sourceLine" id="cb87-23" title="23">                          <span class="dt">msg =</span> <span class="st">&quot;input is not a raster&quot;</span>)</a>
+<a class="sourceLine" id="cb87-24" title="24">  </a>
+<a class="sourceLine" id="cb87-25" title="25">  coords &lt;-<span class="st"> </span><span class="kw">coordinates</span>(inp)</a>
+<a class="sourceLine" id="cb87-26" title="26">  vals &lt;-<span class="st"> </span><span class="kw">getValues</span>(inp)</a>
+<a class="sourceLine" id="cb87-27" title="27">  </a>
+<a class="sourceLine" id="cb87-28" title="28">  data &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">x =</span> coords[,<span class="dv">1</span>], <span class="dt">y =</span> coords[,<span class="dv">2</span>], <span class="dt">value =</span> vals)</a>
+<a class="sourceLine" id="cb87-29" title="29">  </a>
+<a class="sourceLine" id="cb87-30" title="30">  <span class="kw">return</span>(data)</a>
+<a class="sourceLine" id="cb87-31" title="31">}</a></code></pre></div>
 <div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" title="1"><span class="co"># list landscape covariate stacks</span></a>
 <a class="sourceLine" id="cb88-2" title="2">landscape_files &lt;-<span class="st"> &quot;data/spatial/landscape_resamp01km.tif&quot;</span></a>
 <a class="sourceLine" id="cb88-3" title="3">landscape_data &lt;-<span class="st"> </span><span class="kw">stack</span>(landscape_files)</a>
@@ -941,8 +942,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb89-13" title="13">  df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(dist, gamma)</a>
 <a class="sourceLine" id="cb89-14" title="14">})</a>
 <a class="sourceLine" id="cb89-15" title="15">vgrams &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">variable =</span> chelsa_names,</a>
-<a class="sourceLine" id="cb89-16" title="16">                 <span class="dt">data =</span> vgrams)</a>
-<a class="sourceLine" id="cb89-17" title="17">vgrams &lt;-<span class="st"> </span><span class="kw">unnest</span>(vgrams, <span class="dt">col =</span> <span class="st">&quot;data&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb89-16" title="16">                 <span class="dt">data =</span> vgrams)</a></code></pre></div>
 <div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb90-1" title="1">wg &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb90-2" title="2"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
 <a class="sourceLine" id="cb90-3" title="3">bbox &lt;-<span class="st"> </span><span class="kw">st_bbox</span>(wg)</a>
@@ -959,42 +959,63 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="plot-chelsa-data-and-variograms" class="section level3">
 <h3><span class="header-section-number">7.7.3</span> Plot CHELSA data and variograms</h3>
 <div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb91-1" title="1"><span class="co"># make ggplot of variograms</span></a>
-<a class="sourceLine" id="cb91-2" title="2">fig_vgrams &lt;-<span class="st"> </span><span class="kw">ggplot</span>(vgrams)<span class="op">+</span></a>
-<a class="sourceLine" id="cb91-3" title="3"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> dist<span class="op">/</span><span class="dv">1000</span>, <span class="dt">y =</span> gamma), <span class="dt">size =</span> <span class="fl">0.2</span>, <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb91-4" title="4"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> dist<span class="op">/</span><span class="dv">1000</span>, <span class="dt">y =</span> gamma), <span class="dt">col =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb91-5" title="5"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>variable, <span class="dt">nrow =</span> <span class="dv">1</span>, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb91-6" title="6"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> comma)<span class="op">+</span></a>
-<a class="sourceLine" id="cb91-7" title="7"><span class="st">  </span><span class="kw">scale_y_log10</span>(<span class="dt">labels =</span> comma)<span class="op">+</span></a>
-<a class="sourceLine" id="cb91-8" title="8"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;distance (km)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;semivariance&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb91-9" title="9"><span class="st">  </span><span class="kw">theme_few</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb91-10" title="10"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.y =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">vjust =</span> <span class="dv">0</span>))</a>
-<a class="sourceLine" id="cb91-11" title="11">fig_vgrams &lt;-<span class="st"> </span><span class="kw">as_grob</span>(fig_vgrams)</a>
-<a class="sourceLine" id="cb91-12" title="12"></a>
-<a class="sourceLine" id="cb91-13" title="13"><span class="co"># make ggplot of chelsa data</span></a>
-<a class="sourceLine" id="cb91-14" title="14">chelsa &lt;-<span class="st"> </span><span class="kw">as.list</span>(landscape_data[[chelsa_names]]) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb91-15" title="15"><span class="st">  </span>purrr<span class="op">::</span><span class="kw">map</span>(st_as_stars)</a>
-<a class="sourceLine" id="cb91-16" title="16">fig_list_chelsa &lt;-<span class="st"> </span></a>
-<a class="sourceLine" id="cb91-17" title="17"><span class="st">  </span>purrr<span class="op">::</span><span class="kw">map</span>(chelsa, <span class="cf">function</span>(df){</a>
-<a class="sourceLine" id="cb91-18" title="18">    <span class="kw">ggplot</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb91-19" title="19"><span class="st">      </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> land, <span class="dt">fill =</span> <span class="st">&quot;grey90&quot;</span>, <span class="dt">colour =</span> <span class="ot">NA</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb91-20" title="20"><span class="st">      </span><span class="kw">geom_stars</span>(<span class="dt">data =</span> df)<span class="op">+</span></a>
-<a class="sourceLine" id="cb91-21" title="21"><span class="st">      </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> wg, <span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">size =</span> <span class="fl">0.3</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb91-22" title="22"><span class="st">      </span><span class="kw">scale_fill_scico</span>(<span class="dt">palette =</span> <span class="st">&quot;lapaz&quot;</span>, <span class="dt">direction =</span> <span class="dv">-1</span>, </a>
-<a class="sourceLine" id="cb91-23" title="23">                       <span class="dt">label =</span> comma)<span class="op">+</span></a>
-<a class="sourceLine" id="cb91-24" title="24"><span class="st">      </span><span class="kw">coord_sf</span>(<span class="dt">xlim =</span> bbox[<span class="kw">c</span>(<span class="st">&quot;xmin&quot;</span>, <span class="st">&quot;xmax&quot;</span>)], </a>
-<a class="sourceLine" id="cb91-25" title="25">               <span class="dt">ylim =</span> bbox[<span class="kw">c</span>(<span class="st">&quot;ymin&quot;</span>, <span class="st">&quot;ymax&quot;</span>)])<span class="op">+</span></a>
-<a class="sourceLine" id="cb91-26" title="26"><span class="st">      </span><span class="kw">theme_few</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb91-27" title="27"><span class="st">      </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;top&quot;</span>,</a>
-<a class="sourceLine" id="cb91-28" title="28">            <span class="dt">legend.text =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">30</span>),</a>
-<a class="sourceLine" id="cb91-29" title="29">            <span class="dt">axis.title =</span> <span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb91-30" title="30">            <span class="dt">axis.text.y =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>),</a>
-<a class="sourceLine" id="cb91-31" title="31">            <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;lightblue&quot;</span>))<span class="op">+</span></a>
-<a class="sourceLine" id="cb91-32" title="32"><span class="st">      </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="ot">NULL</span>, <span class="dt">y=</span><span class="ot">NULL</span>)</a>
-<a class="sourceLine" id="cb91-33" title="33">  })</a>
-<a class="sourceLine" id="cb91-34" title="34">fig_list_chelsa &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(fig_list_chelsa, as_grob)</a></code></pre></div>
-<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb92-1" title="1">fig_list_chelsa[[<span class="dv">6</span>]] &lt;-<span class="st"> </span>fig_vgrams</a>
-<a class="sourceLine" id="cb92-2" title="2">lmatrix &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>), <span class="kw">c</span>(<span class="dv">6</span>,<span class="dv">6</span>,<span class="dv">6</span>,<span class="dv">6</span>,<span class="dv">6</span>)), <span class="dt">nrow =</span> <span class="dv">2</span>, <span class="dt">byrow =</span> T)</a>
-<a class="sourceLine" id="cb92-3" title="3">plot_grid &lt;-<span class="st"> </span><span class="kw">grid.arrange</span>(<span class="dt">grobs =</span> fig_list_chelsa, <span class="dt">nrow =</span> <span class="dv">2</span>, <span class="dt">layout_matrix =</span> lmatrix)</a>
+<a class="sourceLine" id="cb91-2" title="2">yaxis &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;semivariance&quot;</span>, <span class="kw">rep</span>(<span class="st">&quot;&quot;</span>, <span class="dv">4</span>))</a>
+<a class="sourceLine" id="cb91-3" title="3">xaxis &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;distance (km)&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb91-4" title="4">fig_vgrams &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">pmap</span>(<span class="kw">list</span>(vgrams<span class="op">$</span>data, yaxis, xaxis), <span class="cf">function</span>(df, ya, xa){</a>
+<a class="sourceLine" id="cb91-5" title="5">  </a>
+<a class="sourceLine" id="cb91-6" title="6">  <span class="kw">ggplot</span>(df)<span class="op">+</span></a>
+<a class="sourceLine" id="cb91-7" title="7"><span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> dist<span class="op">/</span><span class="dv">1000</span>, <span class="dt">y =</span> gamma), <span class="dt">size =</span> <span class="fl">0.2</span>, <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb91-8" title="8"><span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> dist<span class="op">/</span><span class="dv">1000</span>, <span class="dt">y =</span> gamma), <span class="dt">col =</span> <span class="st">&quot;black&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb91-9" title="9"><span class="st">    </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> comma)<span class="op">+</span></a>
+<a class="sourceLine" id="cb91-10" title="10"><span class="st">    </span><span class="kw">scale_y_log10</span>(<span class="dt">labels =</span> comma)<span class="op">+</span></a>
+<a class="sourceLine" id="cb91-11" title="11"><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> xa, <span class="dt">y =</span> ya)<span class="op">+</span></a>
+<a class="sourceLine" id="cb91-12" title="12"><span class="st">    </span><span class="kw">theme_few</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb91-13" title="13"><span class="st">    </span><span class="kw">theme</span>(<span class="dt">axis.text.y =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),</a>
+<a class="sourceLine" id="cb91-14" title="14">          <span class="dt">strip.text =</span> <span class="kw">element_blank</span>())</a>
+<a class="sourceLine" id="cb91-15" title="15">  </a>
+<a class="sourceLine" id="cb91-16" title="16">})</a>
+<a class="sourceLine" id="cb91-17" title="17">fig_vgrams &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(fig_vgrams, as_grob)</a>
+<a class="sourceLine" id="cb91-18" title="18"></a>
+<a class="sourceLine" id="cb91-19" title="19"><span class="co"># make ggplot of chelsa data</span></a>
+<a class="sourceLine" id="cb91-20" title="20">chelsa &lt;-<span class="st"> </span><span class="kw">as.list</span>(landscape_data[[chelsa_names]]) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb91-21" title="21"><span class="st">  </span>purrr<span class="op">::</span><span class="kw">map</span>(st_as_stars)</a>
+<a class="sourceLine" id="cb91-22" title="22"></a>
+<a class="sourceLine" id="cb91-23" title="23"><span class="co"># colour palettes</span></a>
+<a class="sourceLine" id="cb91-24" title="24">pal &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;broc&quot;</span>, <span class="st">&quot;oslo&quot;</span>, <span class="st">&quot;oslo&quot;</span>, <span class="st">&quot;lapaz&quot;</span>, <span class="st">&quot;vik&quot;</span>)</a>
+<a class="sourceLine" id="cb91-25" title="25">title &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;a Temp. seasonality&quot;</span>,</a>
+<a class="sourceLine" id="cb91-26" title="26">           <span class="st">&quot;b Ppt. driest quarter&quot;</span>,</a>
+<a class="sourceLine" id="cb91-27" title="27">           <span class="st">&quot;c Ppt. warmest quarter&quot;</span>,</a>
+<a class="sourceLine" id="cb91-28" title="28">           <span class="st">&quot;d Variation ppt.&quot;</span>,</a>
+<a class="sourceLine" id="cb91-29" title="29">           <span class="st">&quot;e Variation temp.&quot;</span>)</a>
+<a class="sourceLine" id="cb91-30" title="30">fig_list_chelsa &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb91-31" title="31"><span class="st">  </span>purrr<span class="op">::</span><span class="kw">pmap</span>(<span class="kw">list</span>(chelsa, pal, title), </a>
+<a class="sourceLine" id="cb91-32" title="32">              <span class="cf">function</span>(df, pal, t){</a>
+<a class="sourceLine" id="cb91-33" title="33">                <span class="kw">ggplot</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb91-34" title="34"><span class="st">                  </span><span class="kw">geom_stars</span>(<span class="dt">data =</span> df)<span class="op">+</span></a>
+<a class="sourceLine" id="cb91-35" title="35"><span class="st">                  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> land, <span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb91-36" title="36"><span class="st">                  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> wg, <span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">size =</span> <span class="fl">0.3</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb91-37" title="37"><span class="st">                  </span><span class="kw">scale_fill_scico</span>(<span class="dt">palette =</span> pal, <span class="dt">direction =</span> <span class="dv">-1</span>, </a>
+<a class="sourceLine" id="cb91-38" title="38">                                   <span class="dt">label =</span> comma, <span class="dt">na.value =</span> <span class="ot">NA</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb91-39" title="39"><span class="st">                  </span><span class="kw">coord_sf</span>(<span class="dt">xlim =</span> bbox[<span class="kw">c</span>(<span class="st">&quot;xmin&quot;</span>, <span class="st">&quot;xmax&quot;</span>)], </a>
+<a class="sourceLine" id="cb91-40" title="40">                           <span class="dt">ylim =</span> bbox[<span class="kw">c</span>(<span class="st">&quot;ymin&quot;</span>, <span class="st">&quot;ymax&quot;</span>)])<span class="op">+</span></a>
+<a class="sourceLine" id="cb91-41" title="41"><span class="st">                  </span><span class="kw">annotation_scale</span>(<span class="dt">location =</span> <span class="st">&quot;br&quot;</span>, <span class="dt">width_hint =</span> <span class="fl">0.4</span>, <span class="dt">text_cex =</span> <span class="dv">1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb91-42" title="42"><span class="st">                  </span></a>
+<a class="sourceLine" id="cb91-43" title="43"><span class="st">                  </span><span class="kw">theme_few</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb91-44" title="44"><span class="st">                  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;top&quot;</span>,</a>
+<a class="sourceLine" id="cb91-45" title="45">                        <span class="dt">title =</span> <span class="kw">element_text</span>(<span class="dt">face =</span> <span class="st">&quot;bold&quot;</span>),</a>
+<a class="sourceLine" id="cb91-46" title="46">                        <span class="dt">legend.key.height =</span> <span class="kw">unit</span>(<span class="fl">0.2</span>, <span class="st">&quot;cm&quot;</span>),</a>
+<a class="sourceLine" id="cb91-47" title="47">                        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">1</span>, <span class="st">&quot;cm&quot;</span>),</a>
+<a class="sourceLine" id="cb91-48" title="48">                        <span class="dt">legend.text =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb91-49" title="49">                        <span class="dt">axis.title =</span> <span class="kw">element_blank</span>(),</a>
+<a class="sourceLine" id="cb91-50" title="50">                        <span class="dt">axis.text.y =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">hjust =</span> <span class="fl">0.5</span>),</a>
+<a class="sourceLine" id="cb91-51" title="51">                        <span class="co"># panel.background = element_rect(fill = &quot;lightblue&quot;),</span></a>
+<a class="sourceLine" id="cb91-52" title="52">                        <span class="dt">legend.title =</span> <span class="kw">element_blank</span>())<span class="op">+</span></a>
+<a class="sourceLine" id="cb91-53" title="53"><span class="st">                  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="ot">NULL</span>, <span class="dt">y=</span><span class="ot">NULL</span>, <span class="dt">title =</span> t)</a>
+<a class="sourceLine" id="cb91-54" title="54">              })</a>
+<a class="sourceLine" id="cb91-55" title="55">fig_list_chelsa &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(fig_list_chelsa, as_grob)</a></code></pre></div>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb92-1" title="1">fig_list_chelsa &lt;-<span class="st"> </span><span class="kw">append</span>(fig_list_chelsa, fig_vgrams)</a>
+<a class="sourceLine" id="cb92-2" title="2">lmatrix &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>), <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>), <span class="kw">c</span>(<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">9</span>,<span class="dv">10</span>)), <span class="dt">nrow =</span> <span class="dv">3</span>, <span class="dt">byrow =</span> T)</a>
+<a class="sourceLine" id="cb92-3" title="3">plot_grid &lt;-<span class="st"> </span><span class="kw">grid.arrange</span>(<span class="dt">grobs =</span> fig_list_chelsa, <span class="dt">layout_matrix =</span> lmatrix)</a>
 <a class="sourceLine" id="cb92-4" title="4"></a>
 <a class="sourceLine" id="cb92-5" title="5"><span class="kw">ggsave</span>(<span class="dt">plot =</span> plot_grid, <span class="dt">filename =</span> <span class="st">&quot;figs/fig_chelsa_variograms.png&quot;</span>, <span class="dt">dpi =</span> <span class="dv">300</span>, <span class="dt">width =</span> <span class="dv">12</span>, <span class="dt">height =</span> <span class="dv">6</span>)</a></code></pre></div>
 <div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb93-1" title="1"><span class="co"># show exported image</span></a>

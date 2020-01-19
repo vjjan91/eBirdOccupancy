@@ -23,6 +23,7 @@ library(ggthemes)
 library(scico)
 library(gridExtra)
 library(cowplot)
+library(ggspatial)
 
 #'make custom functiont to convert matrix to df
 raster_to_df <- function(inp) {
@@ -76,7 +77,6 @@ vgrams <- purrr::map(vgrams, function(df){
 })
 vgrams <- tibble(variable = chelsa_names,
                  data = vgrams)
-vgrams <- unnest(vgrams, col = "data")
 ```
 
 ```{r load_map_data, eval=FALSE, message = FALSE}
@@ -98,45 +98,66 @@ land <- st_transform(land, 32643)
 
 ```{r plot_variograms_maps, eval=FALSE, message=FALSE}
 # make ggplot of variograms
-fig_vgrams <- ggplot(vgrams)+
-  geom_line(aes(x = dist/1000, y = gamma), size = 0.2, col = "grey")+
-  geom_point(aes(x = dist/1000, y = gamma), col = "black", size = 1)+
-  facet_wrap(~variable, nrow = 1, scales = "free_y")+
-  scale_x_continuous(labels = comma)+
-  scale_y_log10(labels = comma)+
-  labs(x = "distance (km)", y = "semivariance")+
-  theme_few()+
-  theme(axis.text.y = element_text(angle = 90, vjust = 0))
-fig_vgrams <- as_grob(fig_vgrams)
+yaxis <- c("semivariance", rep("", 4))
+xaxis <- c("", "", "distance (km)", "", "")
+fig_vgrams <- purrr::pmap(list(vgrams$data, yaxis, xaxis), function(df, ya, xa){
+  
+  ggplot(df)+
+    geom_line(aes(x = dist/1000, y = gamma), size = 0.2, col = "grey")+
+    geom_point(aes(x = dist/1000, y = gamma), col = "black")+
+    scale_x_continuous(labels = comma)+
+    scale_y_log10(labels = comma)+
+    labs(x = xa, y = ya)+
+    theme_few()+
+    theme(axis.text.y = element_text(angle = 90, hjust = 0.5),
+          strip.text = element_blank())
+  
+})
+fig_vgrams <- purrr::map(fig_vgrams, as_grob)
 
 # make ggplot of chelsa data
 chelsa <- as.list(landscape_data[[chelsa_names]]) %>% 
   purrr::map(st_as_stars)
+
+# colour palettes
+pal <- c("broc", "oslo", "oslo", "lapaz", "vik")
+title <- c("a Temp. seasonality",
+           "b Ppt. driest quarter",
+           "c Ppt. warmest quarter",
+           "d Variation ppt.",
+           "e Variation temp.")
 fig_list_chelsa <- 
-  purrr::map(chelsa, function(df){
-    ggplot()+
-      geom_sf(data = land, fill = "grey90", colour = NA)+
-      geom_stars(data = df)+
-      geom_sf(data = wg, fill = NA, colour = "black", size = 0.3)+
-      scale_fill_scico(palette = "lapaz", direction = -1, 
-                       label = comma)+
-      coord_sf(xlim = bbox[c("xmin", "xmax")], 
-               ylim = bbox[c("ymin", "ymax")])+
-      theme_few()+
-      theme(legend.position = "top",
-            legend.text = element_text(angle = 30),
-            axis.title = element_blank(),
-            axis.text.y = element_text(angle = 90),
-            panel.background = element_rect(fill = "lightblue"))+
-      labs(x=NULL, y=NULL)
-  })
+  purrr::pmap(list(chelsa, pal, title), 
+              function(df, pal, t){
+                ggplot()+
+                  geom_stars(data = df)+
+                  geom_sf(data = land, fill = NA, colour = "black")+
+                  geom_sf(data = wg, fill = NA, colour = "black", size = 0.3)+
+                  scale_fill_scico(palette = pal, direction = -1, 
+                                   label = comma, na.value = NA)+
+                  coord_sf(xlim = bbox[c("xmin", "xmax")], 
+                           ylim = bbox[c("ymin", "ymax")])+
+                  annotation_scale(location = "br", width_hint = 0.4, text_cex = 1) +
+                  
+                  theme_few()+
+                  theme(legend.position = "top",
+                        title = element_text(face = "bold"),
+                        legend.key.height = unit(0.2, "cm"),
+                        legend.key.width = unit(1, "cm"),
+                        legend.text = element_text(size = 10),
+                        axis.title = element_blank(),
+                        axis.text.y = element_text(angle = 90, hjust = 0.5),
+                        # panel.background = element_rect(fill = "lightblue"),
+                        legend.title = element_blank())+
+                  labs(x=NULL, y=NULL, title = t)
+              })
 fig_list_chelsa <- purrr::map(fig_list_chelsa, as_grob)
 ```
 
 ```{r prep_figures_vgrams, eval=FALSE, message=FALSE}
-fig_list_chelsa[[6]] <- fig_vgrams
-lmatrix <- matrix(c(c(1,2,3,4,5), c(6,6,6,6,6)), nrow = 2, byrow = T)
-plot_grid <- grid.arrange(grobs = fig_list_chelsa, nrow = 2, layout_matrix = lmatrix)
+fig_list_chelsa <- append(fig_list_chelsa, fig_vgrams)
+lmatrix <- matrix(c(c(1,2,3,4,5), c(1,2,3,4,5), c(6,7,8,9,10)), nrow = 3, byrow = T)
+plot_grid <- grid.arrange(grobs = fig_list_chelsa, layout_matrix = lmatrix)
 
 ggsave(plot = plot_grid, filename = "figs/fig_chelsa_variograms.png", dpi = 300, width = 12, height = 6)
 ```
