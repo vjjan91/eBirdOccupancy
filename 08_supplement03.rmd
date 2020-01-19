@@ -15,6 +15,7 @@ library(purrr)
 library(dplyr)
 library(tidyr)
 
+library(scales)
 library(ggplot2)
 library(ggthemes)
 
@@ -65,7 +66,7 @@ land_data <- drop_na(land_data) %>%
 
 fig_climate_elev <- ggplot(land_data)+
   geom_line(aes(x = elev_round, y = mean),
-                  size = 0.2, col = "grey")+
+            size = 0.2, col = "grey")+
   geom_pointrange(aes(x = elev_round, y = mean, ymin=mean-ci, ymax=mean+ci),
                   size = 0.3)+
   scale_x_continuous(labels = scales::comma)+
@@ -84,4 +85,47 @@ ggsave(fig_climate_elev, filename = "figs/fig_climate_elev.png",
 
 # show exported image
 knitr::include_graphics("figs/fig_climate_elev.png")
+```
+
+## Landcover in relation to elevation
+
+### Get data from landscape rasters
+
+```{r prep_lc_elev, eval=FALSE, message=FALSE}
+# get data from landscape rasters
+lc_elev <- tibble(elev = getValues(landscape[["elev"]]),
+                  landcover = getValues(landscape[["landcover"]]))
+# process data for proportions
+lc_elev <- lc_elev %>% 
+  filter(!is.na(landcover), landcover != 0) %>% 
+  mutate(elev = plyr::round_any(elev, 100)) %>% 
+  count(elev, landcover) %>%
+  group_by(elev) %>% 
+  mutate(prop = n/sum(n))
+```
+
+### Plot proportional landcover in elevation
+
+```{r fig_lc_elev, eval=FALSE, message=FALSE}
+# plot figure as tilemap
+fig_lc_elev <- ggplot(lc_elev)+
+  geom_tile(aes(x=elev, y=factor(landcover), 
+                fill=prop), 
+            col="white", size = 0.6)+
+  scale_fill_scico(palette = "bilbao", begin = 0.0, end = 1.0)+
+  scale_x_continuous(breaks = seq(0, 2500, 500), labels = comma)+
+  scale_alpha_continuous(range = c(0.3, 1))+
+  labs(x = "elevation (m)", 
+       y = "landcover")+
+  theme_few()
+
+# export figure
+ggsave(fig_lc_elev, filename = "figs/fig_lc_elev.png", 
+       height = 3, width = 6, device = png(), dpi = 300); dev.off()
+```
+
+```{r show_fig_lc_elev, eval=TRUE, fig.cap="Proportional landcover (low = white, high = dark red), as a function of elevation in the study site. Data represent elevation in increments of 100m."}
+
+# show exported image
+knitr::include_graphics("figs/fig_lc_elev.png")
 ```
