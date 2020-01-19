@@ -15,9 +15,10 @@ library(purrr)
 library(dplyr)
 library(tidyr)
 
+# plotting options
 library(ggplot2)
 library(ggthemes)
-library(pals)
+library(scico)
 
 # get ci func
 ci <- function(x){qnorm(0.975)*sd(x, na.rm = T)/sqrt(length(x))}
@@ -43,7 +44,7 @@ land_data <- landscape[[c("landcover", chelsa_names)]]
 land_data <- as.list(land_data)
 
 # map get values over the stack
-land_data <- map(land_data, getValues)
+land_data <- purrr::map(land_data, raster::getValues)
 names(land_data) <- c("landcover", chelsa_names)
 
 # conver to dataframe and round to 100m
@@ -52,8 +53,8 @@ land_data <- drop_na(land_data) %>%
   filter(landcover != 0) %>% 
   pivot_longer(cols = contains("chelsa"),
                names_to = "clim_var") #%>% 
-  # group_by(landcover, clim_var) %>% 
-  # summarise_all(.funs = list(~mean(.), ~ci(.)))
+# group_by(landcover, clim_var) %>% 
+# summarise_all(.funs = list(~mean(.), ~ci(.)))
 ```
 
 ### Plot climatic variables over landcover
@@ -62,13 +63,16 @@ land_data <- drop_na(land_data) %>%
 # plot in facets
 
 fig_climate_lc <- ggplot(land_data)+
-  geom_jitter(aes(x = factor(landcover), y=value),
-             size = 0.1, alpha = 0.1, colour = "grey")+
-  geom_boxplot(aes(x = factor(landcover), y = value, fill = factor(landcover)),
-                  outlier.size = 0.2, alpha = 0.3)+
-  # scale_x_continuous(labels = scales::comma)+
-  scale_fill_manual(values = kovesi.rainbow(7))+
+  geom_jitter(aes(x = landcover-0.25, y=value,
+                  col = factor(landcover)),
+              width = 0.2,
+              size = 0.1, alpha = 0.1, shape = 4)+
+  geom_boxplot(aes(x = landcover+0.25, y = value, group = landcover),
+               width = 0.2,
+               outlier.size = 0.2, alpha = 0.3, fill = NA)+
+  scale_colour_scico_d(begin=0.2, end=0.8)+
   scale_y_continuous(labels = scales::comma)+
+  scale_x_continuous(breaks = c(1:7))+
   facet_wrap(~clim_var, scales = "free_y")+
   theme_few()+
   theme(legend.position = "none")+
@@ -76,7 +80,7 @@ fig_climate_lc <- ggplot(land_data)+
 
 # save as png
 ggsave(fig_climate_lc, filename = "figs/fig_climate_landcover.png", 
-       height = 6, width = 8, device = png(), dpi = 300); dev.off()
+       height = 5, width = 8, device = png(), dpi = 300); dev.off()
 ```
 
 
