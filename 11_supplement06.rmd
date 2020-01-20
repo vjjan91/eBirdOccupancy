@@ -16,6 +16,8 @@ library(purrr)
 library(tibble)
 library(dplyr)
 library(tidyr)
+library(glue)
+library(scales)
 
 # plot libs
 library(ggplot2)
@@ -105,11 +107,11 @@ fig_vgrams <- purrr::pmap(list(vgrams$data, yaxis, xaxis), function(df, ya, xa){
   ggplot(df)+
     geom_line(aes(x = dist/1000, y = gamma), size = 0.2, col = "grey")+
     geom_point(aes(x = dist/1000, y = gamma), col = "black")+
-    scale_x_continuous(labels = comma)+
+    scale_x_continuous(labels = comma, breaks = c(seq(0,100,25)))+
     scale_y_log10(labels = comma)+
     labs(x = xa, y = ya)+
     theme_few()+
-    theme(axis.text.y = element_text(angle = 90, hjust = 0.5),
+    theme(axis.text.y = element_text(angle = 90, hjust = 0.5, size = 8),
           strip.text = element_blank())
   
 })
@@ -120,31 +122,36 @@ chelsa <- as.list(landscape_data[[chelsa_names]]) %>%
   purrr::map(st_as_stars)
 
 # colour palettes
-pal <- c("broc", "oslo", "oslo", "lapaz", "vik")
+pal <- c("bilbao", "davos", "davos", "nuuk", "bilbao")
 title <- c("a Temp. seasonality",
-           "b Ppt. driest quarter",
-           "c Ppt. warmest quarter",
+           "b Ppt. driest qtr.",
+           "c Ppt. warmest qtr.",
            "d Variation ppt.",
            "e Variation temp.")
+direction <- c(1,-1,-1,-1,1)
+lims <- list(range(chelsa[[1]]$chelsa_bio10_04, na.rm = T), 
+             c(0, 500), c(0, 500),
+             c(0,500),#range(chelsa[[4]]$chelsa_prec, na.rm = T),
+             range(chelsa[[5]]$chelsa_temp, na.rm = T))
 fig_list_chelsa <- 
-  purrr::pmap(list(chelsa, pal, title), 
-              function(df, pal, t){
+  purrr::pmap(list(chelsa, pal, title, direction, lims), 
+              function(df, pal, t, d, l){
                 ggplot()+
                   geom_stars(data = df)+
                   geom_sf(data = land, fill = NA, colour = "black")+
                   geom_sf(data = wg, fill = NA, colour = "black", size = 0.3)+
-                  scale_fill_scico(palette = pal, direction = -1, 
-                                   label = comma, na.value = NA)+
+                  scale_fill_scico(palette = pal, direction = d, 
+                                   label = comma, na.value = NA, limits = l)+
                   coord_sf(xlim = bbox[c("xmin", "xmax")], 
                            ylim = bbox[c("ymin", "ymax")])+
-                  annotation_scale(location = "br", width_hint = 0.4, text_cex = 1) +
+                  annotation_scale(location = "tr", width_hint = 0.4, text_cex = 1) +
                   
                   theme_few()+
                   theme(legend.position = "top",
                         title = element_text(face = "bold", size = 8),
                         legend.key.height = unit(0.2, "cm"),
                         legend.key.width = unit(1, "cm"),
-                        legend.text = element_text(size = 10),
+                        legend.text = element_text(size = 8),
                         axis.title = element_blank(),
                         axis.text.y = element_text(angle = 90, hjust = 0.5),
                         # panel.background = element_rect(fill = "lightblue"),
