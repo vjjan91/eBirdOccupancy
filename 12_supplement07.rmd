@@ -1,0 +1,95 @@
+```{r}
+library(tidyverse)
+
+pairs = read_csv("data/site_pairs.csv")
+mods = read_csv("data/site_modules.csv")
+
+# merge and check module independence
+pairs = left_join(pairs, mods, by=c("p1" = "coordId"))
+pairs = left_join(pairs, mods, by=c("p2" = "coordId"))
+
+# count pairs where modules are not the same
+count(pairs, module.x != module.y)
+# count sites in more than 1 mod
+distinct(pairs,module.x, p1) %>% count(module.x,p1) %>% .$n %>% max
+# exclude them
+pairs = filter(pairs, module.x == module.y)
+
+# split by module
+data = group_by(pairs, module.x, module.y) %>% 
+  nest()
+```
+
+```{r func_select_sites, eval=FALSE}
+
+# a function to remove sites
+select_sites <- function(pair_data){
+  
+  {
+    a = pair_data %>%  
+      select(p1, p2)
+    
+    nodes_a_init = unique(c(a$p1, a$p2))
+    
+    i_n_d = filter(mods, coordId %in% nodes_a_init) %>% 
+      select(node = coordId, duration) %>% 
+      mutate(s_f_r = NA)
+    
+    nodes_keep = c()
+    nodes_removed = c()
+  }
+  
+  while(nrow(a) > 0){
+    
+    # how many nodes in a
+    nodes_a = unique(c(a$p1, a$p2))
+    
+    # get node or site efforts and arrange in ascending order
+    b = i_n_d %>% filter(node %in% nodes_a)
+    
+    for (i in 1:nrow(b)){
+      # which node to remove
+      node_out = b$node[i]
+      # how much duration lost
+      d_n_o = b$duration[i]
+      
+      # how many rows remain in a if node_out is removed?
+      a_n_o = filter(a, p1 != node_out, p2 != node_out)
+      indep_nodes = setdiff(nodes_a, unique(c(a_n_o$p1, a_n_o$p2, node_out)))
+      
+      # how much sampling effort made spatially independent
+      indep_sampling = filter(b, node %in% indep_nodes) %>% 
+        summarise(duration = sum(duration)) %>% 
+        .$duration
+      
+      # message(glue::glue('{node_out} removal frees {indep_sampling} m'))
+      # sampling freed by sampling lost
+      b$s_f_r[i] = indep_sampling/d_n_o
+    }
+    
+    # arrange node data by decreasing sfr and increasing duration
+    # highest duration nodes are processed last
+    b = arrange(b, -s_f_r, duration)
+    
+    nodes_removed = c(nodes_removed, b$node[1])
+    
+    # remove pairs of nodes containing the highest sfr node in b
+    a = filter(a, p1 != b$node[1], p2 != b$node[1])
+    
+    nodes_keep = c(nodes_keep, setdiff(nodes_a, unique(c(a$p1, a$p2, nodes_removed))))
+    
+  }
+  
+  message(glue::glue('keeping {length(nodes_keep)} of {length(nodes_a_init)}'))
+  
+  return(nodes_keep)
+}
+
+```
+
+```{r apply_select_sites}
+
+data$sites = map(data$data, select_sites)
+
+```
+
