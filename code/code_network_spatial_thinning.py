@@ -48,7 +48,7 @@ def ckd_pairs(gdfA, dist_indep):
     return dist
 
 
-site_pairs = ckd_pairs(ulgpd, 1)
+site_pairs = ckd_pairs(ulgpd, 100)
 site_pairs = pd.DataFrame(data=site_pairs, columns=['p1', 'p2'])
 
 # make dict of positions and array of coordinates
