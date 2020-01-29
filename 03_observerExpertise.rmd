@@ -133,7 +133,9 @@ ebdEffChk <- setDF(ebd) %>%
   mutate(year = year(observation_date)) %>% 
   distinct(sampling_event_identifier, observer_id,
            year,
-           duration_minutes, effort_distance_km, longitude, latitude,
+           duration_minutes, effort_distance_km, effort_area_ha, 
+           longitude, latitude,
+           locality, locality_id,
            decimalTime, julianDate, number_observers) %>% 
   # drop rows with NAs in cols used in the model
   tidyr::drop_na(sampling_event_identifier, observer_id,
