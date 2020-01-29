@@ -16,6 +16,7 @@ library(sf)
 library(dplyr)
 library(scales)
 library(readr)
+library(purrr)
 
 library(ggplot2)
 library(ggthemes)
@@ -32,7 +33,6 @@ use_python("/usr/bin/python3")
 Importing python libraries.
 
 ```{python prepare_py_libs, eval=FALSE}
-
 # import classic python libs
 import itertools
 from operator import itemgetter
@@ -64,9 +64,9 @@ roads.head()
 # get unique coordinates, assign them to the df
 # convert df to geo-df
 chkCovars = pd.read_csv("data/eBirdChecklistVars.csv")
-unique_locs = chkCovars.drop_duplicates(subset=['longitude','latitude','sampling_event_identifier'])[['longitude', 'latitude', 'nSp', 'sampling_event_identifier']]
+unique_locs = chkCovars.drop_duplicates(subset=['longitude','latitude'])[['longitude', 'latitude']]
 unique_locs['coordId'] = np.arange(1, unique_locs.shape[0]+1)
-chkCovars = chkCovars.merge(unique_locs, on=['longitude', 'latitude', 'sampling_event_identifier'])
+chkCovars = chkCovars.merge(unique_locs, on=['longitude', 'latitude'])
 
 unique_locs = gpd.GeoDataFrame(
 unique_locs,
