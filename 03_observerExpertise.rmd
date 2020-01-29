@@ -162,7 +162,8 @@ landcover <- raster::raster("data/spatial/landcover1km.tif")
 landcover[landcover==0] <- NA
 
 # get locs in utm coords
-locs <- distinct(ebdChkSummary, sampling_event_identifier, longitude, latitude)
+locs <- distinct(ebdChkSummary, sampling_event_identifier, longitude, latitude,
+                  locality, locality_id)
 locs <- st_as_sf(locs, coords = c("longitude", "latitude")) %>% 
   `st_crs<-`(4326) %>% 
   st_transform(32643) %>% 
@@ -174,17 +175,14 @@ landcoverVec <- raster::extract(x = landcover,
 
 # assign to df and overwrite
 setDT(ebdChkSummary)[,landcover:= landcoverVec]
-
-# save to file for later reuse
-fwrite(ebdChkSummary, file = "data/eBirdChecklistVars.csv")
 ```
 
 ## Filter data for stats
 
 ```{r filter_data2, eval=FALSE}
 # change names for easy handling
-setnames(ebdChkSummary, c("sei", "observer","year", "duration", "distance",
-                          "longitude", "latitude", "decimalTime",
+setnames(ebdChkSummary, c("sei", "observer","year", "duration", "distance", "area",
+                          "longitude", "latitude", "locality", "locality_id",  "decimalTime",
                           "julianDate", "nObs", "nSp", "nSoi", "landcover"))
 
 # count data points per observer 
@@ -194,14 +192,21 @@ obscount <- count(ebdChkSummary, observer) %>%
 # make factor variables and remove obs not in obscount
 # also remove 0 durations
 ebdChkSummary <- ebdChkSummary %>% 
+  mutate(distance = ifelse(is.na(distance), 0, distance),
+         duration = if_else(is.na(duration), 0.0, as.double(duration))) %>% 
   filter(observer %in% obscount$observer, 
          duration > 0,
          duration <= 300,
-         nSoi > 0,
+         nSoi >= 0,
+         distance <= 5,
          !is.na(nSoi)) %>% 
   mutate(landcover = as.factor(landcover),
          observer = as.factor(observer)) %>% 
   drop_na(landcover)
+
+
+# save to file for later reuse
+fwrite(ebdChkSummary, file = "data/eBirdChecklistVars.csv")
 ```
 
 ## Run observer expertise model
