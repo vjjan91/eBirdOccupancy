@@ -31,6 +31,11 @@ use_python("/usr/bin/python3")
 ### Traditional grid-based thinning
 
 ```{r load_checklist_data, eval=FALSE}
+# load wg
+wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>% 
+  st_transform(32643)
+
+# get scales
 # load checklist data and select one per rounded 500m coordinates
 {
   data <- read_csv("data/eBirdChecklistVars.csv") %>% 
@@ -51,47 +56,53 @@ use_python("/usr/bin/python3")
     ungroup()
 }
 
-# round to scale
+# select one point per grid cell
 data <- mutate(data, data = map2(scale, data, function(scale, df){
+  # transform the data
   df <- df %>% 
     st_as_sf(coords = c("longitude", "latitude")) %>% 
     `st_crs<-`(4326) %>% 
     st_transform(32643) %>% 
     bind_cols(as_tibble(st_coordinates(.))) %>% 
-    st_drop_geometry() %>% 
-    mutate(X_round = plyr::round_any(X, scale),
-           Y_round = plyr::round_any(Y, scale)) %>% 
-    
-    group_by(X_round, Y_round) 
+    mutate(coordId = 1:nrow(.))
+  
+  # make a grid
+  grid <- st_make_grid(wg, cellsize = scale)
+  
+  # which cell contains which points
+  grid_contents <- st_contains(grid, df) %>% 
+    as_tibble() %>% 
+    rename(cell = row.id, coordId = col.id)
   
   # what's the max point in each grid
-  max <- filter(df, tot_effort == max(tot_effort)) %>% 
+  points_max <- left_join(df %>% st_drop_geometry(),
+                   grid_contents, by = "coordId") %>% 
+    group_by(cell) %>% 
+    filter(tot_effort == max(tot_effort))
+  
+  # get summary for max
+  max_sites <- points_max %>% 
     ungroup() %>% 
-    summarise(prop_points= length(X)/n_all_points,
+    summarise(prop_points= length(coordId)/n_all_points,
               prop_effort = sum(tot_effort)/d_all_effort) %>% 
     pivot_longer(cols = everything(),
                  names_to = "variable")
-  
-  # which are the points kept
-  points_max <- filter(df, tot_effort == max(tot_effort)) %>% 
-    ungroup() %>% 
-    select(-contains("round"))
   
   # select a random point in each grid
-  rand_sites <- # bind_rows(rand_sites) %>% 
-    group_by(df, X_round, Y_round) %>% 
-    sample_n(1) %>% 
-    # summarise(mean_tot_effort = mean(tot_effort)) %>% 
+  points_rand <- left_join(df %>% st_drop_geometry(),
+                   grid_contents, by = "coordId") %>% 
+    group_by(cell) %>% 
+    sample_n(size = 1)
+  
+  # get summary for rand
+  rand_sites <- points_rand %>% 
     ungroup() %>% 
-    summarise(prop_points = length(X_round)/n_all_points,
+    summarise(prop_points = length(coordId)/n_all_points,
               prop_effort = sum(tot_effort)/d_all_effort) %>% 
     pivot_longer(cols = everything(),
                  names_to = "variable")
   
-  # which random points are kept
-  points_rand <- sample_n(df, size = 1)
-  
-  df <- tibble(grid_rand = list(rand_sites), grid_max = list(max),
+  df <- tibble(grid_rand = list(rand_sites), grid_max = list(max_sites),
                points_rand = list(points_rand), points_max = list(points_max))
 }))
 
@@ -397,7 +408,7 @@ points_list <- append(points_thin_net$data, values = append(points_thin_trad$poi
                                                             points_thin_trad$points_max))
 
 # get scales as list
-scales_list <- list(100,500,1000, rep(scale, 2)) %>% flatten()
+scales_list <- list(100,500,1000, rep(c(100,500,1000,2500,5000), 2)) %>% flatten()
 
 # send to python
 py$points_list = points_list
@@ -468,7 +479,8 @@ data_thin_compare <- tibble(scale = unlist(scales_list),
 data_plot <- bind_rows(data_plot, data_thin_compare)
 
 # plot results
-fig_spatial_thinning <- ggplot(data_plot)+
+fig_spatial_thinning <-
+  ggplot(data_plot)+
   geom_vline(xintercept = scale, lty = 3, colour="grey", lwd=0.4)+
   geom_line(aes(x = scale, y= value, col =method))+
   geom_point(aes(x = scale, y= value, col =method, shape = method))+
@@ -482,7 +494,7 @@ fig_spatial_thinning <- ggplot(data_plot)+
   labs(x= "buffer distance (m)")
 
 # save
-ggsave(fig_spatial_thinning, filename = "figs/fig_spatial_thinning.png", width = 10, height = 4,
+ggsave(fig_spatial_thinning, filename = "figs/fig_spatial_thinning_02.png", width = 10, height = 4,
        dpi=300); dev.off()
 ```
 
