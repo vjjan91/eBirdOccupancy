@@ -30,7 +30,7 @@ use_python("/usr/bin/python3")
 
 ### Traditional grid-based thinning
 
-```{r load_checklist_data, eval=FALSE}
+```{r load_checklist_data, eval=FALSE, message=FALSE, warning=FALSE}
 # load wg
 wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>% 
   st_transform(32643)
@@ -127,7 +127,7 @@ rm(data)
 
 Load python libraries.
 
-```{python prep_py_libs_supp07, eval=FALSE}
+```{python prep_py_libs_supp07, eval=FALSE, message=FALSE, warning=FALSE}
 # import classic python libs
 import numpy as np
 import matplotlib.pyplot as plt
@@ -147,7 +147,7 @@ from scipy.spatial import cKDTree
 
 #### Finding modularity in proximity networks
 
-```{python make_and_write_networks}
+```{python make_and_write_networks, eval=FALSE, message=FALSE, warning=FALSE}
 # read in checklist covariates for conversion to gpd
 # get unique coordinates, assign them to the df
 # convert df to geo-df
@@ -241,7 +241,7 @@ tot_pair_data.to_csv(path_or_buf="data/site_pairs.csv", index=False)
 
 #### Process proximity networks in R
 
-```{r continue_network_thinning, eval=FALSE}
+```{r continue_network_thinning, eval=FALSE, message=FALSE, warning=FALSE}
 # read in pair and module data
 pairs <- read_csv("data/site_pairs.csv")
 mods <- read_csv("data/site_modules.csv")
@@ -281,7 +281,7 @@ data$data <- map(data$data, function(df){
 
 #### A function that removes sites
 
-```{r func_select_sites, eval=FALSE}
+```{r func_select_sites, eval=FALSE, message=FALSE, warning=FALSE}
 
 # a function to remove sites
 remove_which_sites <- function(pair_data){
@@ -363,7 +363,7 @@ sites_removed <- map(data$data, function(df){
 })
 ```
 
-```{r remove_network_thinned_sites, eval=FALSE}
+```{r remove_network_thinned_sites, eval=FALSE, message=FALSE, warning=FALSE}
 # get python sites
 ul = py$ul
 
@@ -401,7 +401,7 @@ How many points, at different spatial scales, remain after the application of ea
 
 #### Prepare data for Python
 
-```{r compare_points_remaining, eval=FALSE}
+```{r compare_points_remaining, eval=FALSE, message=FALSE, warning=FALSE}
 
 # get points by each method
 points_list <- append(points_thin_net$data, values = append(points_thin_trad$points_rand,
@@ -417,7 +417,7 @@ py$scales_list = scales_list
 
 #### Count props under threshold in Python
 
-```{python, process_for_spat_indep, eval=FALSE}
+```{python, process_for_spat_indep, eval=FALSE, message=FALSE, warning=FALSE}
 # transform each element to gpd
 
 
@@ -462,7 +462,7 @@ mean_dist_diff = list(map(ckd_test, points_list, points_list, scales_list))
 
 ### Plot metrics for different methods
 
-```{r compare_methods_plot, eval=FALSE}
+```{r compare_methods_plot, eval=FALSE, message=FALSE, warning=FALSE}
 # combine the thinning metrics data
 data_plot <- bind_rows(data_thin_net, data_thin_trad)
 
@@ -496,5 +496,9 @@ fig_spatial_thinning <-
 # save
 ggsave(fig_spatial_thinning, filename = "figs/fig_spatial_thinning_02.png", width = 10, height = 4,
        dpi=300); dev.off()
+```
+
+```{r fig_spatial_thinning, eval=TRUE}
+knitr::include_graphics("figs/fig_spatial_thinning_02.png")
 ```
 
