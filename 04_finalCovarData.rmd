@@ -27,7 +27,7 @@ load("data_prelim_processing.rdata")
 
 ```{r spatial_thinning, eval=FALSE}
 # grid based spatial thinning
-gridsize = 500 # grid size in metres
+gridsize = 250 # grid size in metres
 
 # split data by species
 dataSpatialThin <- split(x = dataGrouped, f = dataGrouped$scientific_name)
