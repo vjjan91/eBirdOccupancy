@@ -360,6 +360,9 @@ data <- data %>% filter(scale <=1000)
 sites_removed <- map(data$data, function(df){
   remove_sites <- unlist(purrr::map(df$data, remove_which_sites))
 })
+
+# save as rdata
+save(sites_removed, file = "data/data_network_sites_removed.rdata")
 ```
 
 ```{r remove_network_thinned_sites, eval=FALSE, message=FALSE, warning=FALSE}
