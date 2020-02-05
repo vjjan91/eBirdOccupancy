@@ -410,12 +410,13 @@ points_list <- append(points_thin_net$data, values = append(points_thin_trad$poi
                                                             points_thin_trad$points_max))
 
 # get scales as list
-scales_list <- list(100,500,1000, rep(c(100,500,1000,2500,5000), 2)) %>% flatten()
+scales_list <- list(100,500,1000, rep(c(100,500,1000), 2)) %>% flatten()
 
 # send to python
 py$points_list = points_list
 py$scales_list = scales_list
 ```
+
 
 #### Count props under threshold in Python
 
