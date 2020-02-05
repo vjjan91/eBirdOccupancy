@@ -24,7 +24,7 @@
 <meta name="author" content="Vijay Ramesh, Pratik R Gupte, and Morgan Tingley" />
 
 
-<meta name="date" content="2020-02-01" />
+<meta name="date" content="2020-02-05" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -1225,7 +1225,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb102-14" title="14">  d_all_effort &lt;-<span class="st"> </span><span class="kw">sum</span>(data<span class="op">$</span>tot_effort)</a>
 <a class="sourceLine" id="cb102-15" title="15">  </a>
 <a class="sourceLine" id="cb102-16" title="16">  <span class="co"># round to different scales</span></a>
-<a class="sourceLine" id="cb102-17" title="17">  scale &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">100</span>, <span class="dv">500</span>, <span class="dv">1000</span>, <span class="dv">2500</span>, <span class="dv">5000</span>)</a>
+<a class="sourceLine" id="cb102-17" title="17">  scale &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">100</span>, <span class="dv">500</span>, <span class="dv">1000</span>)</a>
 <a class="sourceLine" id="cb102-18" title="18">  </a>
 <a class="sourceLine" id="cb102-19" title="19">  <span class="co"># group data by scale</span></a>
 <a class="sourceLine" id="cb102-20" title="20">  data &lt;-<span class="st"> </span><span class="kw">crossing</span>(scale, data) <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -1363,51 +1363,50 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb104-41" title="41">    <span class="co"># get site ids</span></a>
 <a class="sourceLine" id="cb104-42" title="42">    site_id <span class="op">=</span> np.concatenate((site_pairs.p1.unique(), site_pairs.p2.unique()))</a>
 <a class="sourceLine" id="cb104-43" title="43">    site_id <span class="op">=</span> np.unique(site_id)</a>
-<a class="sourceLine" id="cb104-44" title="44"></a>
-<a class="sourceLine" id="cb104-45" title="45"><span class="co"># make network</span></a>
-<a class="sourceLine" id="cb104-46" title="46">network <span class="op">=</span> nx.from_pandas_edgelist(site_pairs, <span class="st">&#39;p1&#39;</span>, <span class="st">&#39;p2&#39;</span>)</a>
-<a class="sourceLine" id="cb104-47" title="47"><span class="co"># get modules</span></a>
-<a class="sourceLine" id="cb104-48" title="48">modules <span class="op">=</span> <span class="bu">list</span>(nx.algorithms.community.greedy_modularity_communities(network))</a>
-<a class="sourceLine" id="cb104-49" title="49"><span class="co"># get modules as df</span></a>
-<a class="sourceLine" id="cb104-50" title="50">m <span class="op">=</span> []</a>
-<a class="sourceLine" id="cb104-51" title="51"><span class="cf">for</span> i <span class="kw">in</span> np.arange(<span class="bu">len</span>(modules)):</a>
-<a class="sourceLine" id="cb104-52" title="52">    module_number <span class="op">=</span> [i] <span class="op">*</span> <span class="bu">len</span>(modules[i])</a>
-<a class="sourceLine" id="cb104-53" title="53">    module_coords <span class="op">=</span> <span class="bu">list</span>(modules[i])</a>
-<a class="sourceLine" id="cb104-54" title="54">    m <span class="op">=</span> m <span class="op">+</span> <span class="bu">list</span>(<span class="bu">zip</span>(module_number, module_coords))</a>
-<a class="sourceLine" id="cb104-55" title="55"></a>
-<a class="sourceLine" id="cb104-56" title="56"><span class="co"># add location and summed sampling duration</span></a>
-<a class="sourceLine" id="cb104-57" title="57">unique_locs <span class="op">=</span> ul[ul.coordId.isin(site_id)][[<span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;latitude&#39;</span>, <span class="st">&#39;coordId&#39;</span>, <span class="st">&#39;duration&#39;</span>]]</a>
-<a class="sourceLine" id="cb104-58" title="58">module_data <span class="op">=</span> pd.DataFrame(m, columns<span class="op">=</span>[<span class="st">&#39;module&#39;</span>, <span class="st">&#39;coordId&#39;</span>])</a>
-<a class="sourceLine" id="cb104-59" title="59">module_data <span class="op">=</span> pd.merge(module_data, unique_locs, on<span class="op">=</span><span class="st">&#39;coordId&#39;</span>)</a>
-<a class="sourceLine" id="cb104-60" title="60"><span class="co"># add scale</span></a>
-<a class="sourceLine" id="cb104-61" title="61">module_data[<span class="st">&#39;scale&#39;</span>] <span class="op">=</span> scale</a>
-<a class="sourceLine" id="cb104-62" title="62"><span class="cf">return</span> [site_pairs, module_data]</a>
+<a class="sourceLine" id="cb104-44" title="44">    <span class="co"># make network</span></a>
+<a class="sourceLine" id="cb104-45" title="45">    network <span class="op">=</span> nx.from_pandas_edgelist(site_pairs, <span class="st">&#39;p1&#39;</span>, <span class="st">&#39;p2&#39;</span>)</a>
+<a class="sourceLine" id="cb104-46" title="46">    <span class="co"># get modules</span></a>
+<a class="sourceLine" id="cb104-47" title="47">    modules <span class="op">=</span> <span class="bu">list</span>(nx.algorithms.community.greedy_modularity_communities(network))</a>
+<a class="sourceLine" id="cb104-48" title="48">    <span class="co"># get modules as df</span></a>
+<a class="sourceLine" id="cb104-49" title="49">    m <span class="op">=</span> []</a>
+<a class="sourceLine" id="cb104-50" title="50">    <span class="cf">for</span> i <span class="kw">in</span> np.arange(<span class="bu">len</span>(modules)):</a>
+<a class="sourceLine" id="cb104-51" title="51">        module_number <span class="op">=</span> [i] <span class="op">*</span> <span class="bu">len</span>(modules[i])</a>
+<a class="sourceLine" id="cb104-52" title="52">        module_coords <span class="op">=</span> <span class="bu">list</span>(modules[i])</a>
+<a class="sourceLine" id="cb104-53" title="53">        m <span class="op">=</span> m <span class="op">+</span> <span class="bu">list</span>(<span class="bu">zip</span>(module_number, module_coords))</a>
+<a class="sourceLine" id="cb104-54" title="54">    </a>
+<a class="sourceLine" id="cb104-55" title="55">    <span class="co"># add location and summed sampling duration</span></a>
+<a class="sourceLine" id="cb104-56" title="56">    unique_locs <span class="op">=</span> ul[ul.coordId.isin(site_id)][[<span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;latitude&#39;</span>, <span class="st">&#39;coordId&#39;</span>, <span class="st">&#39;duration&#39;</span>]]</a>
+<a class="sourceLine" id="cb104-57" title="57">    module_data <span class="op">=</span> pd.DataFrame(m, columns<span class="op">=</span>[<span class="st">&#39;module&#39;</span>, <span class="st">&#39;coordId&#39;</span>])</a>
+<a class="sourceLine" id="cb104-58" title="58">    module_data <span class="op">=</span> pd.merge(module_data, unique_locs, on<span class="op">=</span><span class="st">&#39;coordId&#39;</span>)</a>
+<a class="sourceLine" id="cb104-59" title="59">    <span class="co"># add scale</span></a>
+<a class="sourceLine" id="cb104-60" title="60">    module_data[<span class="st">&#39;scale&#39;</span>] <span class="op">=</span> scale</a>
+<a class="sourceLine" id="cb104-61" title="61">    <span class="cf">return</span> [site_pairs, module_data]</a>
+<a class="sourceLine" id="cb104-62" title="62"></a>
 <a class="sourceLine" id="cb104-63" title="63"></a>
-<a class="sourceLine" id="cb104-64" title="64"></a>
-<a class="sourceLine" id="cb104-65" title="65"><span class="co"># run make modules on ulgpd at scales</span></a>
-<a class="sourceLine" id="cb104-66" title="66">data <span class="op">=</span> <span class="bu">list</span>(<span class="bu">map</span>(make_modules, scales))</a>
-<a class="sourceLine" id="cb104-67" title="67"></a>
-<a class="sourceLine" id="cb104-68" title="68"><span class="co"># extract data for output</span></a>
-<a class="sourceLine" id="cb104-69" title="69">tot_pair_data <span class="op">=</span> []</a>
-<a class="sourceLine" id="cb104-70" title="70">tot_module_data <span class="op">=</span> []</a>
-<a class="sourceLine" id="cb104-71" title="71"><span class="cf">for</span> i <span class="kw">in</span> np.arange(<span class="bu">len</span>(data)):</a>
-<a class="sourceLine" id="cb104-72" title="72">tot_pair_data.append(data[i][<span class="dv">0</span>])</a>
-<a class="sourceLine" id="cb104-73" title="73">tot_module_data.append(data[i][<span class="dv">1</span>])</a>
-<a class="sourceLine" id="cb104-74" title="74"></a>
-<a class="sourceLine" id="cb104-75" title="75">tot_pair_data <span class="op">=</span> pd.concat(tot_pair_data, ignore_index<span class="op">=</span><span class="va">True</span>)</a>
-<a class="sourceLine" id="cb104-76" title="76">tot_module_data <span class="op">=</span> pd.concat(tot_module_data, ignore_index<span class="op">=</span><span class="va">True</span>)</a>
-<a class="sourceLine" id="cb104-77" title="77"></a>
-<a class="sourceLine" id="cb104-78" title="78"><span class="co"># make dict of positions and array of coordinates</span></a>
-<a class="sourceLine" id="cb104-79" title="79"><span class="co"># site_id = np.concatenate((site_pairs.p1.unique(), site_pairs.p2.unique()))</span></a>
-<a class="sourceLine" id="cb104-80" title="80"><span class="co"># site_id = np.unique(site_id)</span></a>
-<a class="sourceLine" id="cb104-81" title="81"><span class="co"># locations_df = ul[ul.coordId.isin(site_id)][[&#39;longitude&#39;, &#39;latitude&#39;]].to_numpy()</span></a>
-<a class="sourceLine" id="cb104-82" title="82"><span class="co"># pos_dict = dict(zip(site_id, locations_df))</span></a>
-<a class="sourceLine" id="cb104-83" title="83"></a>
-<a class="sourceLine" id="cb104-84" title="84"><span class="co"># output data</span></a>
-<a class="sourceLine" id="cb104-85" title="85">tot_module_data.to_csv(path_or_buf<span class="op">=</span><span class="st">&quot;data/site_modules.csv&quot;</span>, index<span class="op">=</span><span class="va">False</span>)</a>
-<a class="sourceLine" id="cb104-86" title="86">tot_pair_data.to_csv(path_or_buf<span class="op">=</span><span class="st">&quot;data/site_pairs.csv&quot;</span>, index<span class="op">=</span><span class="va">False</span>)</a>
-<a class="sourceLine" id="cb104-87" title="87"></a>
-<a class="sourceLine" id="cb104-88" title="88"><span class="co"># ends here</span></a></code></pre></div>
+<a class="sourceLine" id="cb104-64" title="64"><span class="co"># run make modules on ulgpd at scales</span></a>
+<a class="sourceLine" id="cb104-65" title="65">data <span class="op">=</span> <span class="bu">list</span>(<span class="bu">map</span>(make_modules, scales))</a>
+<a class="sourceLine" id="cb104-66" title="66"></a>
+<a class="sourceLine" id="cb104-67" title="67"><span class="co"># extract data for output</span></a>
+<a class="sourceLine" id="cb104-68" title="68">tot_pair_data <span class="op">=</span> []</a>
+<a class="sourceLine" id="cb104-69" title="69">tot_module_data <span class="op">=</span> []</a>
+<a class="sourceLine" id="cb104-70" title="70"><span class="cf">for</span> i <span class="kw">in</span> np.arange(<span class="bu">len</span>(data)):</a>
+<a class="sourceLine" id="cb104-71" title="71">tot_pair_data.append(data[i][<span class="dv">0</span>])</a>
+<a class="sourceLine" id="cb104-72" title="72">tot_module_data.append(data[i][<span class="dv">1</span>])</a>
+<a class="sourceLine" id="cb104-73" title="73"></a>
+<a class="sourceLine" id="cb104-74" title="74">tot_pair_data <span class="op">=</span> pd.concat(tot_pair_data, ignore_index<span class="op">=</span><span class="va">True</span>)</a>
+<a class="sourceLine" id="cb104-75" title="75">tot_module_data <span class="op">=</span> pd.concat(tot_module_data, ignore_index<span class="op">=</span><span class="va">True</span>)</a>
+<a class="sourceLine" id="cb104-76" title="76"></a>
+<a class="sourceLine" id="cb104-77" title="77"><span class="co"># make dict of positions and array of coordinates</span></a>
+<a class="sourceLine" id="cb104-78" title="78"><span class="co"># site_id = np.concatenate((site_pairs.p1.unique(), site_pairs.p2.unique()))</span></a>
+<a class="sourceLine" id="cb104-79" title="79"><span class="co"># site_id = np.unique(site_id)</span></a>
+<a class="sourceLine" id="cb104-80" title="80"><span class="co"># locations_df = ul[ul.coordId.isin(site_id)][[&#39;longitude&#39;, &#39;latitude&#39;]].to_numpy()</span></a>
+<a class="sourceLine" id="cb104-81" title="81"><span class="co"># pos_dict = dict(zip(site_id, locations_df))</span></a>
+<a class="sourceLine" id="cb104-82" title="82"></a>
+<a class="sourceLine" id="cb104-83" title="83"><span class="co"># output data</span></a>
+<a class="sourceLine" id="cb104-84" title="84">tot_module_data.to_csv(path_or_buf<span class="op">=</span><span class="st">&quot;data/site_modules.csv&quot;</span>, index<span class="op">=</span><span class="va">False</span>)</a>
+<a class="sourceLine" id="cb104-85" title="85">tot_pair_data.to_csv(path_or_buf<span class="op">=</span><span class="st">&quot;data/site_pairs.csv&quot;</span>, index<span class="op">=</span><span class="va">False</span>)</a>
+<a class="sourceLine" id="cb104-86" title="86"></a>
+<a class="sourceLine" id="cb104-87" title="87"><span class="co"># ends here</span></a></code></pre></div>
 </div>
 <div id="process-proximity-networks-in-r" class="section level4">
 <h4><span class="header-section-number">7.8.3.2</span> Process proximity networks in R</h4>
@@ -1523,7 +1522,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb107-3" title="3"><span class="co"># run select sites on the various modules</span></a>
 <a class="sourceLine" id="cb107-4" title="4">sites_removed &lt;-<span class="st"> </span><span class="kw">map</span>(data<span class="op">$</span>data, <span class="cf">function</span>(df){</a>
 <a class="sourceLine" id="cb107-5" title="5">  remove_sites &lt;-<span class="st"> </span><span class="kw">unlist</span>(purrr<span class="op">::</span><span class="kw">map</span>(df<span class="op">$</span>data, remove_which_sites))</a>
-<a class="sourceLine" id="cb107-6" title="6">})</a></code></pre></div>
+<a class="sourceLine" id="cb107-6" title="6">})</a>
+<a class="sourceLine" id="cb107-7" title="7"></a>
+<a class="sourceLine" id="cb107-8" title="8"><span class="co"># save as rdata</span></a>
+<a class="sourceLine" id="cb107-9" title="9"><span class="kw">save</span>(sites_removed, <span class="dt">file =</span> <span class="st">&quot;data/data_network_sites_removed.rdata&quot;</span>)</a></code></pre></div>
 <div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb108-1" title="1"><span class="co"># get python sites</span></a>
 <a class="sourceLine" id="cb108-2" title="2">ul =<span class="st"> </span>py<span class="op">$</span>ul</a>
 <a class="sourceLine" id="cb108-3" title="3"></a>
@@ -1565,7 +1567,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb109-3" title="3">                                                            points_thin_trad<span class="op">$</span>points_max))</a>
 <a class="sourceLine" id="cb109-4" title="4"></a>
 <a class="sourceLine" id="cb109-5" title="5"><span class="co"># get scales as list</span></a>
-<a class="sourceLine" id="cb109-6" title="6">scales_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dv">100</span>,<span class="dv">500</span>,<span class="dv">1000</span>, <span class="kw">rep</span>(<span class="kw">c</span>(<span class="dv">100</span>,<span class="dv">500</span>,<span class="dv">1000</span>,<span class="dv">2500</span>,<span class="dv">5000</span>), <span class="dv">2</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">flatten</span>()</a>
+<a class="sourceLine" id="cb109-6" title="6">scales_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dv">100</span>,<span class="dv">500</span>,<span class="dv">1000</span>, <span class="kw">rep</span>(<span class="kw">c</span>(<span class="dv">100</span>,<span class="dv">500</span>,<span class="dv">1000</span>), <span class="dv">2</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">flatten</span>()</a>
 <a class="sourceLine" id="cb109-7" title="7"></a>
 <a class="sourceLine" id="cb109-8" title="8"><span class="co"># send to python</span></a>
 <a class="sourceLine" id="cb109-9" title="9">py<span class="op">$</span>points_list =<span class="st"> </span>points_list</a>
