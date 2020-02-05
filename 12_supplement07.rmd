@@ -47,7 +47,7 @@ wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>%
   d_all_effort <- sum(data$tot_effort)
   
   # round to different scales
-  scale <- c(100, 500, 1000, 2500, 5000)
+  scale <- c(100, 500, 1000)
   
   # group data by scale
   data <- crossing(scale, data) %>% 
