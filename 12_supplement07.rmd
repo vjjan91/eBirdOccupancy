@@ -191,25 +191,24 @@ def make_modules(scale):
     # get site ids
     site_id = np.concatenate((site_pairs.p1.unique(), site_pairs.p2.unique()))
     site_id = np.unique(site_id)
-
-# make network
-network = nx.from_pandas_edgelist(site_pairs, 'p1', 'p2')
-# get modules
-modules = list(nx.algorithms.community.greedy_modularity_communities(network))
-# get modules as df
-m = []
-for i in np.arange(len(modules)):
-    module_number = [i] * len(modules[i])
-    module_coords = list(modules[i])
-    m = m + list(zip(module_number, module_coords))
-
-# add location and summed sampling duration
-unique_locs = ul[ul.coordId.isin(site_id)][['longitude', 'latitude', 'coordId', 'duration']]
-module_data = pd.DataFrame(m, columns=['module', 'coordId'])
-module_data = pd.merge(module_data, unique_locs, on='coordId')
-# add scale
-module_data['scale'] = scale
-return [site_pairs, module_data]
+    # make network
+    network = nx.from_pandas_edgelist(site_pairs, 'p1', 'p2')
+    # get modules
+    modules = list(nx.algorithms.community.greedy_modularity_communities(network))
+    # get modules as df
+    m = []
+    for i in np.arange(len(modules)):
+        module_number = [i] * len(modules[i])
+        module_coords = list(modules[i])
+        m = m + list(zip(module_number, module_coords))
+    
+    # add location and summed sampling duration
+    unique_locs = ul[ul.coordId.isin(site_id)][['longitude', 'latitude', 'coordId', 'duration']]
+    module_data = pd.DataFrame(m, columns=['module', 'coordId'])
+    module_data = pd.merge(module_data, unique_locs, on='coordId')
+    # add scale
+    module_data['scale'] = scale
+    return [site_pairs, module_data]
 
 
 # run make modules on ulgpd at scales
