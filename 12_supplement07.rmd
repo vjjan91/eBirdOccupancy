@@ -39,15 +39,15 @@ wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>%
 # load checklist data and select one per rounded 500m coordinates
 {
   data <- read_csv("data/eBirdChecklistVars.csv") %>% 
-    group_by(longitude, latitude) %>% 
-    summarise(tot_effort = sum(duration))
+    count(longitude, latitude, name = "tot_effort")
+    
   
   # how many unique points
   n_all_points <- nrow(data)
   d_all_effort <- sum(data$tot_effort)
   
   # round to different scales
-  scale <- c(100, 500, 1000)
+  scale <- c(100, 250, 500, 1000)
   
   # group data by scale
   data <- crossing(scale, data) %>% 
