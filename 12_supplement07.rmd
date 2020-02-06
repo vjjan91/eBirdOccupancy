@@ -369,6 +369,8 @@ save(sites_removed, file = "data/data_network_sites_removed.rdata")
 # get python sites
 ul = py$ul
 
+load("data/data_network_sites_removed.rdata")
+
 # subset sites
 data <- mutate(data,
                data = map(sites_removed, function(site_id){
