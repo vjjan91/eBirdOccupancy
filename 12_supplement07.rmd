@@ -39,15 +39,15 @@ wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>%
 # load checklist data and select one per rounded 500m coordinates
 {
   data <- read_csv("data/eBirdChecklistVars.csv") %>% 
-    group_by(longitude, latitude) %>% 
-    summarise(tot_effort = sum(duration))
+    count(longitude, latitude, name = "tot_effort")
+    
   
   # how many unique points
   n_all_points <- nrow(data)
   d_all_effort <- sum(data$tot_effort)
   
   # round to different scales
-  scale <- c(100, 500, 1000, 2500, 5000)
+  scale <- c(100, 250, 500, 1000)
   
   # group data by scale
   data <- crossing(scale, data) %>% 
@@ -57,22 +57,26 @@ wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>%
 }
 
 # select one point per grid cell
-data <- mutate(data, data = map2(scale, data, function(scale, df){
+data <- mutate(data, data = map2(scale, data, function(sc, df){
   # transform the data
   df <- df %>% 
     st_as_sf(coords = c("longitude", "latitude")) %>% 
     `st_crs<-`(4326) %>% 
     st_transform(32643) %>% 
     bind_cols(as_tibble(st_coordinates(.))) %>% 
-    mutate(coordId = 1:nrow(.))
+    mutate(coordId = 1:nrow(.),
+           X_round = plyr::round_any(X, sc),
+           Y_round = plyr::round_any(Y, sc))
   
   # make a grid
-  grid <- st_make_grid(wg, cellsize = scale)
+  grid <- st_make_grid(wg, cellsize = sc)
   
   # which cell contains which points
   grid_contents <- st_contains(grid, df) %>% 
     as_tibble() %>% 
     rename(cell = row.id, coordId = col.id)
+  
+  rm(grid)
   
   # what's the max point in each grid
   points_max <- left_join(df %>% st_drop_geometry(),
@@ -152,21 +156,18 @@ from scipy.spatial import cKDTree
 # get unique coordinates, assign them to the df
 # convert df to geo-df
 chkCovars = pd.read_csv("data/eBirdChecklistVars.csv")
-ul = chkCovars.drop_duplicates(subset=['longitude', 'latitude'])
-ul = ul.drop(columns='duration')
+ul = chkCovars[['longitude', 'latitude']].drop_duplicates(subset=['longitude', 'latitude'])
 ul['coordId'] = np.arange(0, ul.shape[0])
 
 # get effort at each coordinate
-effort = chkCovars.groupby(['longitude', 'latitude'])[
-'duration'].sum()
+effort = chkCovars.groupby(['longitude', 'latitude']).size().to_frame('tot_effort')
 effort = effort.reset_index()
 
 # merge effort on ul
 ul = pd.merge(ul, effort, on=['longitude', 'latitude'])
 
 # make gpd and drop col from ul
-ulgpd = gpd.GeoDataFrame(ul,
-geometry=gpd.points_from_xy(ul.longitude, ul.latitude))
+ulgpd = gpd.GeoDataFrame(ul, geometry=gpd.points_from_xy(ul.longitude, ul.latitude))
 ulgpd.crs = {'init' :'epsg:4326'}
 # reproject spatials to 43n epsg 32642
 ulgpd = ulgpd.to_crs({'init': 'epsg:32642'})
@@ -180,7 +181,7 @@ def ckd_pairs(gdfA, dist_indep):
     return dist
 
 # define scales in metres
-scales = [100, 500, 1000]
+scales = [100, 250, 500, 1000]
 
 
 # function to process ckd_pairs
@@ -191,25 +192,23 @@ def make_modules(scale):
     # get site ids
     site_id = np.concatenate((site_pairs.p1.unique(), site_pairs.p2.unique()))
     site_id = np.unique(site_id)
-
-# make network
-network = nx.from_pandas_edgelist(site_pairs, 'p1', 'p2')
-# get modules
-modules = list(nx.algorithms.community.greedy_modularity_communities(network))
-# get modules as df
-m = []
-for i in np.arange(len(modules)):
-    module_number = [i] * len(modules[i])
-    module_coords = list(modules[i])
-    m = m + list(zip(module_number, module_coords))
-
-# add location and summed sampling duration
-unique_locs = ul[ul.coordId.isin(site_id)][['longitude', 'latitude', 'coordId', 'duration']]
-module_data = pd.DataFrame(m, columns=['module', 'coordId'])
-module_data = pd.merge(module_data, unique_locs, on='coordId')
-# add scale
-module_data['scale'] = scale
-return [site_pairs, module_data]
+    # make network
+    network = nx.from_pandas_edgelist(site_pairs, 'p1', 'p2')
+    # get modules
+    modules = list(nx.algorithms.community.greedy_modularity_communities(network))
+    # get modules as df
+    m = []
+    for i in np.arange(len(modules)):
+        module_number = [i] * len(modules[i])
+        module_coords = list(modules[i])
+        m = m + list(zip(module_number, module_coords))
+    # add location and summed sampling duration
+    unique_locs = ul[ul.coordId.isin(site_id)]
+    module_data = pd.DataFrame(m, columns=['module', 'coordId'])
+    module_data = pd.merge(module_data, unique_locs, on='coordId')
+    # add scale
+    module_data['scale'] = scale
+    return [site_pairs, module_data]
 
 
 # run make modules on ulgpd at scales
@@ -219,8 +218,8 @@ data = list(map(make_modules, scales))
 tot_pair_data = []
 tot_module_data = []
 for i in np.arange(len(data)):
-tot_pair_data.append(data[i][0])
-tot_module_data.append(data[i][1])
+    tot_pair_data.append(data[i][0])
+    tot_module_data.append(data[i][1])
 
 tot_pair_data = pd.concat(tot_pair_data, ignore_index=True)
 tot_module_data = pd.concat(tot_module_data, ignore_index=True)
@@ -293,7 +292,7 @@ remove_which_sites <- function(pair_data){
     nodes_a_init = unique(c(a$p1, a$p2))
     
     i_n_d = filter(mods, coordId %in% nodes_a_init) %>% 
-      select(node = coordId, duration) %>% 
+      select(node = coordId, tot_effort) %>% 
       mutate(s_f_r = NA)
     
     nodes_keep = c()
@@ -311,8 +310,8 @@ remove_which_sites <- function(pair_data){
     for (i in 1:nrow(b)){
       # which node to remove
       node_out = b$node[i]
-      # how much duration lost
-      d_n_o = b$duration[i]
+      # how much tot_effort lost
+      d_n_o = b$tot_effort[i]
       
       # how many rows remain in a if node_out is removed?
       a_n_o = filter(a, p1 != node_out, p2 != node_out)
@@ -320,17 +319,17 @@ remove_which_sites <- function(pair_data){
       
       # how much sampling effort made spatially independent
       indep_sampling = filter(b, node %in% indep_nodes) %>% 
-        summarise(duration = sum(duration)) %>% 
-        .$duration
+        summarise(tot_effort = sum(tot_effort)) %>% 
+        .$tot_effort
       
       # message(glue::glue('{node_out} removal frees {indep_sampling} m'))
       # sampling freed by sampling lost
       b$s_f_r[i] = indep_sampling/d_n_o
     }
     
-    # arrange node data by decreasing sfr and increasing duration
-    # highest duration nodes are processed last
-    b = arrange(b, -s_f_r, duration)
+    # arrange node data by decreasing sfr and increasing tot_effort
+    # highest tot_effort nodes are processed last
+    b = arrange(b, -s_f_r, tot_effort)
     
     nodes_removed = c(nodes_removed, b$node[1])
     
@@ -361,11 +360,16 @@ data <- data %>% filter(scale <=1000)
 sites_removed <- map(data$data, function(df){
   remove_sites <- unlist(purrr::map(df$data, remove_which_sites))
 })
+
+# save as rdata
+save(sites_removed, file = "data/data_network_sites_removed.rdata")
 ```
 
 ```{r remove_network_thinned_sites, eval=FALSE, message=FALSE, warning=FALSE}
 # get python sites
 ul = py$ul
+
+load("data/data_network_sites_removed.rdata")
 
 # subset sites
 data <- mutate(data,
@@ -389,7 +393,7 @@ points_thin_net <- mutate(data,
 data_thin_net <- unnest(data, cols = "data") %>% 
   group_by(scale) %>% 
   summarise(prop_points = length(coordId)/n_all_points,
-            prop_effort = sum(duration)/d_all_effort) %>% 
+            prop_effort = sum(tot_effort)/d_all_effort) %>% 
   mutate(method = "network") %>% 
   pivot_longer(cols = -one_of(c("method", "scale")),
                names_to = "variable")
@@ -408,12 +412,13 @@ points_list <- append(points_thin_net$data, values = append(points_thin_trad$poi
                                                             points_thin_trad$points_max))
 
 # get scales as list
-scales_list <- list(100,500,1000, rep(c(100,500,1000,2500,5000), 2)) %>% flatten()
+scales_list <- list(100,250,500,1000, rep(c(100,250, 500,1000), 2)) %>% flatten()
 
 # send to python
 py$points_list = points_list
 py$scales_list = scales_list
 ```
+
 
 #### Count props under threshold in Python
 
@@ -468,9 +473,9 @@ data_plot <- bind_rows(data_thin_net, data_thin_trad)
 
 # get data for mean distance
 data_thin_compare <- tibble(scale = unlist(scales_list),
-                            method = c(rep("network", 3),
-                                       rep("grid_rand", 5),
-                                       rep("grid_max", 5)),
+                            method = c(rep("network", 4),
+                                       rep("grid_rand", 4),
+                                       rep("grid_max", 4)),
                             `mean NND - buffer (m)` = unlist(py$mean_dist_diff)) %>% 
   pivot_longer(cols = "mean NND - buffer (m)",
                names_to = "variable")
