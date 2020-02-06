@@ -393,7 +393,7 @@ points_thin_net <- mutate(data,
 data_thin_net <- unnest(data, cols = "data") %>% 
   group_by(scale) %>% 
   summarise(prop_points = length(coordId)/n_all_points,
-            prop_effort = sum(duration)/d_all_effort) %>% 
+            prop_effort = sum(tot_effort)/d_all_effort) %>% 
   mutate(method = "network") %>% 
   pivot_longer(cols = -one_of(c("method", "scale")),
                names_to = "variable")
@@ -412,7 +412,7 @@ points_list <- append(points_thin_net$data, values = append(points_thin_trad$poi
                                                             points_thin_trad$points_max))
 
 # get scales as list
-scales_list <- list(100,500,1000, rep(c(100,500,1000), 2)) %>% flatten()
+scales_list <- list(100,250,500,1000, rep(c(100,250, 500,1000), 2)) %>% flatten()
 
 # send to python
 py$points_list = points_list
@@ -473,9 +473,9 @@ data_plot <- bind_rows(data_thin_net, data_thin_trad)
 
 # get data for mean distance
 data_thin_compare <- tibble(scale = unlist(scales_list),
-                            method = c(rep("network", 3),
-                                       rep("grid_rand", 5),
-                                       rep("grid_max", 5)),
+                            method = c(rep("network", 4),
+                                       rep("grid_rand", 4),
+                                       rep("grid_max", 4)),
                             `mean NND - buffer (m)` = unlist(py$mean_dist_diff)) %>% 
   pivot_longer(cols = "mean NND - buffer (m)",
                names_to = "variable")
