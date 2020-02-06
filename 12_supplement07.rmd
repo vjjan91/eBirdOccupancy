@@ -292,7 +292,7 @@ remove_which_sites <- function(pair_data){
     nodes_a_init = unique(c(a$p1, a$p2))
     
     i_n_d = filter(mods, coordId %in% nodes_a_init) %>% 
-      select(node = coordId, duration) %>% 
+      select(node = coordId, tot_effort) %>% 
       mutate(s_f_r = NA)
     
     nodes_keep = c()
@@ -310,8 +310,8 @@ remove_which_sites <- function(pair_data){
     for (i in 1:nrow(b)){
       # which node to remove
       node_out = b$node[i]
-      # how much duration lost
-      d_n_o = b$duration[i]
+      # how much tot_effort lost
+      d_n_o = b$tot_effort[i]
       
       # how many rows remain in a if node_out is removed?
       a_n_o = filter(a, p1 != node_out, p2 != node_out)
@@ -319,17 +319,17 @@ remove_which_sites <- function(pair_data){
       
       # how much sampling effort made spatially independent
       indep_sampling = filter(b, node %in% indep_nodes) %>% 
-        summarise(duration = sum(duration)) %>% 
-        .$duration
+        summarise(tot_effort = sum(tot_effort)) %>% 
+        .$tot_effort
       
       # message(glue::glue('{node_out} removal frees {indep_sampling} m'))
       # sampling freed by sampling lost
       b$s_f_r[i] = indep_sampling/d_n_o
     }
     
-    # arrange node data by decreasing sfr and increasing duration
-    # highest duration nodes are processed last
-    b = arrange(b, -s_f_r, duration)
+    # arrange node data by decreasing sfr and increasing tot_effort
+    # highest tot_effort nodes are processed last
+    b = arrange(b, -s_f_r, tot_effort)
     
     nodes_removed = c(nodes_removed, b$node[1])
     
