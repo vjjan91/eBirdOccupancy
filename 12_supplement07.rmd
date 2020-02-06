@@ -57,22 +57,26 @@ wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>%
 }
 
 # select one point per grid cell
-data <- mutate(data, data = map2(scale, data, function(scale, df){
+data <- mutate(data, data = map2(scale, data, function(sc, df){
   # transform the data
   df <- df %>% 
     st_as_sf(coords = c("longitude", "latitude")) %>% 
     `st_crs<-`(4326) %>% 
     st_transform(32643) %>% 
     bind_cols(as_tibble(st_coordinates(.))) %>% 
-    mutate(coordId = 1:nrow(.))
+    mutate(coordId = 1:nrow(.),
+           X_round = plyr::round_any(X, sc),
+           Y_round = plyr::round_any(Y, sc))
   
   # make a grid
-  grid <- st_make_grid(wg, cellsize = scale)
+  grid <- st_make_grid(wg, cellsize = sc)
   
   # which cell contains which points
   grid_contents <- st_contains(grid, df) %>% 
     as_tibble() %>% 
     rename(cell = row.id, coordId = col.id)
+  
+  rm(grid)
   
   # what's the max point in each grid
   points_max <- left_join(df %>% st_drop_geometry(),
