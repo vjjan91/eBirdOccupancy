@@ -202,9 +202,8 @@ def make_modules(scale):
         module_number = [i] * len(modules[i])
         module_coords = list(modules[i])
         m = m + list(zip(module_number, module_coords))
-    
     # add location and summed sampling duration
-    unique_locs = ul[ul.coordId.isin(site_id)][['longitude', 'latitude', 'coordId', 'duration']]
+    unique_locs = ul[ul.coordId.isin(site_id)]
     module_data = pd.DataFrame(m, columns=['module', 'coordId'])
     module_data = pd.merge(module_data, unique_locs, on='coordId')
     # add scale
@@ -219,8 +218,8 @@ data = list(map(make_modules, scales))
 tot_pair_data = []
 tot_module_data = []
 for i in np.arange(len(data)):
-tot_pair_data.append(data[i][0])
-tot_module_data.append(data[i][1])
+    tot_pair_data.append(data[i][0])
+    tot_module_data.append(data[i][1])
 
 tot_pair_data = pd.concat(tot_pair_data, ignore_index=True)
 tot_module_data = pd.concat(tot_module_data, ignore_index=True)
