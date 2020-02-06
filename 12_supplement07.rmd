@@ -181,7 +181,7 @@ def ckd_pairs(gdfA, dist_indep):
     return dist
 
 # define scales in metres
-scales = [100, 500, 1000]
+scales = [100, 250, 500, 1000]
 
 
 # function to process ckd_pairs
