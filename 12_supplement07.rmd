@@ -156,21 +156,18 @@ from scipy.spatial import cKDTree
 # get unique coordinates, assign them to the df
 # convert df to geo-df
 chkCovars = pd.read_csv("data/eBirdChecklistVars.csv")
-ul = chkCovars.drop_duplicates(subset=['longitude', 'latitude'])
-ul = ul.drop(columns='duration')
+ul = chkCovars[['longitude', 'latitude']].drop_duplicates(subset=['longitude', 'latitude'])
 ul['coordId'] = np.arange(0, ul.shape[0])
 
 # get effort at each coordinate
-effort = chkCovars.groupby(['longitude', 'latitude'])[
-'duration'].sum()
+effort = chkCovars.groupby(['longitude', 'latitude']).size().to_frame('tot_effort')
 effort = effort.reset_index()
 
 # merge effort on ul
 ul = pd.merge(ul, effort, on=['longitude', 'latitude'])
 
 # make gpd and drop col from ul
-ulgpd = gpd.GeoDataFrame(ul,
-geometry=gpd.points_from_xy(ul.longitude, ul.latitude))
+ulgpd = gpd.GeoDataFrame(ul, geometry=gpd.points_from_xy(ul.longitude, ul.latitude))
 ulgpd.crs = {'init' :'epsg:4326'}
 # reproject spatials to 43n epsg 32642
 ulgpd = ulgpd.to_crs({'init': 'epsg:32642'})
