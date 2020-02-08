@@ -129,7 +129,7 @@ data <- data %>%
 
 ```{r save_temp_data, eval=FALSE}
 # save a temp data file
-save(data, file = "data.temp.rdata")
+save(data, file = "data_temp.rdata")
 ```
 
 ## Handle presence data
