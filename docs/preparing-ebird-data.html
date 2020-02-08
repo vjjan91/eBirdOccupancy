@@ -24,7 +24,7 @@
 <meta name="author" content="Vijay Ramesh, Pratik R Gupte, and Morgan Tingley" />
 
 
-<meta name="date" content="2020-02-06" />
+<meta name="date" content="2020-02-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -171,7 +171,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="5" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html"><i class="fa fa-check"></i><b>5</b> Add covariates to subsampled data</a><ul>
 <li class="chapter" data-level="5.1" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#prepare-libraries-and-data"><i class="fa fa-check"></i><b>5.1</b> Prepare libraries and data</a></li>
-<li class="chapter" data-level="5.2" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#spatial-thinning"><i class="fa fa-check"></i><b>5.2</b> Spatial thinning</a></li>
+<li class="chapter" data-level="5.2" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#spatial-subsampling"><i class="fa fa-check"></i><b>5.2</b> Spatial subsampling</a></li>
 <li class="chapter" data-level="5.3" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#temporal-subsampling"><i class="fa fa-check"></i><b>5.3</b> Temporal subsampling</a></li>
 <li class="chapter" data-level="5.4" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#add-expertise-score"><i class="fa fa-check"></i><b>5.4</b> Add expertise score</a></li>
 <li class="chapter" data-level="5.5" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#add-landscape-covariates"><i class="fa fa-check"></i><b>5.5</b> Add landscape covariates</a></li>
@@ -287,7 +287,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="filter-data" class="section level2">
 <h2><span class="header-section-number">2.2</span> Filter data</h2>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># add species of interest</span></a>
-<a class="sourceLine" id="cb2-2" title="2">specieslist &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;data/species_list_13_11_2019.xlsx&quot;</span>)</a>
+<a class="sourceLine" id="cb2-2" title="2">specieslist &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;data/V2_ListOfSpecies_ChosenForStudy.csv.xlsx&quot;</span>)</a>
 <a class="sourceLine" id="cb2-3" title="3">speciesOfInterest &lt;-<span class="st"> </span>specieslist<span class="op">$</span>scientific_name</a></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># run filters using auk packages</span></a>
 <a class="sourceLine" id="cb3-2" title="2">ebd_filters &lt;-<span class="st"> </span><span class="kw">auk_ebd</span>(f_in_ebd, f_in_sampling) <span class="op">%&gt;%</span></a>
@@ -361,7 +361,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb9-29" title="29"><span class="st">      </span><span class="kw">select</span>(<span class="op">-</span>Id, <span class="op">-</span>spatialKeep)</a>
 <a class="sourceLine" id="cb9-30" title="30">  })</a></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="co"># save a temp data file</span></a>
-<a class="sourceLine" id="cb10-2" title="2"><span class="kw">save</span>(data, <span class="dt">file =</span> <span class="st">&quot;data.temp.rdata&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb10-2" title="2"><span class="kw">save</span>(data, <span class="dt">file =</span> <span class="st">&quot;data_temp.rdata&quot;</span>)</a></code></pre></div>
 </div>
 <div id="handle-presence-data" class="section level2">
 <h2><span class="header-section-number">2.5</span> Handle presence data</h2>
