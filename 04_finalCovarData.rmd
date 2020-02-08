@@ -250,7 +250,7 @@ data_at_scale <- ebird_buff
 # join the full data to landscape samples at each scale
 data_at_scale$data <- map(data_at_scale$data, function(df){
   df <- st_drop_geometry(df)
-  df <- inner_join(dataSubsample, df, by=c("longitude", "latitude"))
+  df <- inner_join(dataSubsample, df, by=c("X", "Y"))
   return(df)
 })
 ```
