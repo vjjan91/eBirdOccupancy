@@ -53,7 +53,8 @@ data_spatial_thin <- map(data_spatial_thin, function(df){
     st_as_sf(coords = c("longitude", "latitude")) %>% 
     `st_crs<-`(4326) %>% 
     st_transform(32643) %>% 
-    mutate(coordId = 1:nrow(.))
+    mutate(coordId = 1:nrow(.)) %>% 
+    bind_cols(as_tibble(st_coordinates(.)))
   
   # whcih cell has which coords
   grid_contents <- st_contains(grid, df) %>% 
