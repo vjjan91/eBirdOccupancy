@@ -24,7 +24,7 @@
 <meta name="author" content="Vijay Ramesh, Pratik R Gupte, and Morgan Tingley" />
 
 
-<meta name="date" content="2020-02-06" />
+<meta name="date" content="2020-02-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -171,7 +171,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="5" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html"><i class="fa fa-check"></i><b>5</b> Add covariates to subsampled data</a><ul>
 <li class="chapter" data-level="5.1" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#prepare-libraries-and-data"><i class="fa fa-check"></i><b>5.1</b> Prepare libraries and data</a></li>
-<li class="chapter" data-level="5.2" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#spatial-thinning"><i class="fa fa-check"></i><b>5.2</b> Spatial thinning</a></li>
+<li class="chapter" data-level="5.2" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#spatial-subsampling"><i class="fa fa-check"></i><b>5.2</b> Spatial subsampling</a></li>
 <li class="chapter" data-level="5.3" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#temporal-subsampling"><i class="fa fa-check"></i><b>5.3</b> Temporal subsampling</a></li>
 <li class="chapter" data-level="5.4" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#add-expertise-score"><i class="fa fa-check"></i><b>5.4</b> Add expertise score</a></li>
 <li class="chapter" data-level="5.5" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#add-landscape-covariates"><i class="fa fa-check"></i><b>5.5</b> Add landscape covariates</a></li>
@@ -283,62 +283,75 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb35-11" title="11"><span class="co"># load saved data object</span></a>
 <a class="sourceLine" id="cb35-12" title="12"><span class="kw">load</span>(<span class="st">&quot;data_prelim_processing.rdata&quot;</span>)</a></code></pre></div>
 </div>
-<div id="spatial-thinning" class="section level2">
-<h2><span class="header-section-number">5.2</span> Spatial thinning</h2>
+<div id="spatial-subsampling" class="section level2">
+<h2><span class="header-section-number">5.2</span> Spatial subsampling</h2>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1"><span class="co"># grid based spatial thinning</span></a>
-<a class="sourceLine" id="cb36-2" title="2">gridsize =<span class="st"> </span><span class="dv">250</span> <span class="co"># grid size in metres</span></a>
-<a class="sourceLine" id="cb36-3" title="3"></a>
-<a class="sourceLine" id="cb36-4" title="4"><span class="co"># split data by species</span></a>
-<a class="sourceLine" id="cb36-5" title="5">dataSpatialThin &lt;-<span class="st"> </span><span class="kw">split</span>(<span class="dt">x =</span> dataGrouped, <span class="dt">f =</span> dataGrouped<span class="op">$</span>scientific_name)</a>
-<a class="sourceLine" id="cb36-6" title="6"></a>
-<a class="sourceLine" id="cb36-7" title="7"><span class="co"># spatial thinning on each species retains</span></a>
-<a class="sourceLine" id="cb36-8" title="8"><span class="co"># site with maximum visits per grid cell</span></a>
-<a class="sourceLine" id="cb36-9" title="9">coordsUTM &lt;-<span class="st"> </span><span class="kw">map</span>(dataSpatialThin, <span class="cf">function</span>(df){</a>
-<a class="sourceLine" id="cb36-10" title="10">  df <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb36-11" title="11"><span class="st">    </span><span class="kw">st_as_sf</span>(<span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb36-12" title="12"><span class="st">    `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb36-13" title="13"><span class="st">    </span><span class="kw">st_transform</span>(<span class="dv">32643</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb36-14" title="14"><span class="st">    </span><span class="kw">st_coordinates</span>(.) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb36-15" title="15"><span class="st">    </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb36-16" title="16"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">X =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(X, gridsize),</a>
-<a class="sourceLine" id="cb36-17" title="17">           <span class="dt">Y =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(Y, gridsize))</a>
-<a class="sourceLine" id="cb36-18" title="18">})</a>
-<a class="sourceLine" id="cb36-19" title="19"></a>
-<a class="sourceLine" id="cb36-20" title="20"><span class="co"># add rounded coordinates to data</span></a>
-<a class="sourceLine" id="cb36-21" title="21">dataSpatialThin &lt;-<span class="st"> </span><span class="kw">map2</span>(dataSpatialThin, coordsUTM, <span class="cf">function</span>(df1, df2){</a>
-<a class="sourceLine" id="cb36-22" title="22">  df1 &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(df1, df2)</a>
-<a class="sourceLine" id="cb36-23" title="23">  </a>
-<a class="sourceLine" id="cb36-24" title="24">  <span class="co"># count visits</span></a>
-<a class="sourceLine" id="cb36-25" title="25">  n_visits &lt;-<span class="st"> </span><span class="kw">count</span>(df1, longitude, latitude, <span class="dt">name =</span> <span class="st">&quot;n_visits&quot;</span>)</a>
-<a class="sourceLine" id="cb36-26" title="26">  </a>
-<a class="sourceLine" id="cb36-27" title="27">  <span class="co"># bind visits to coordinate data</span></a>
-<a class="sourceLine" id="cb36-28" title="28">  df1 &lt;-<span class="st"> </span><span class="kw">left_join</span>(df1, n_visits, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>))</a>
-<a class="sourceLine" id="cb36-29" title="29">  </a>
-<a class="sourceLine" id="cb36-30" title="30">  <span class="co"># select max site per rounded UTM coords X and Y</span></a>
-<a class="sourceLine" id="cb36-31" title="31">  df1 &lt;-<span class="st"> </span><span class="kw">group_by</span>(df1, X, Y) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb36-32" title="32"><span class="st">    </span><span class="kw">filter</span>(n_visits <span class="op">==</span><span class="st"> </span><span class="kw">max</span>(n_visits))</a>
-<a class="sourceLine" id="cb36-33" title="33">  </a>
-<a class="sourceLine" id="cb36-34" title="34">  <span class="kw">return</span>(df1)</a>
-<a class="sourceLine" id="cb36-35" title="35">})</a>
-<a class="sourceLine" id="cb36-36" title="36"></a>
-<a class="sourceLine" id="cb36-37" title="37"><span class="co"># remove old data</span></a>
-<a class="sourceLine" id="cb36-38" title="38"><span class="kw">rm</span>(dataGrouped)</a></code></pre></div>
+<a class="sourceLine" id="cb36-2" title="2">gridsize =<span class="st"> </span><span class="dv">1000</span> <span class="co"># grid size in metres</span></a>
+<a class="sourceLine" id="cb36-3" title="3">effort_distance_max =<span class="st"> </span><span class="dv">1000</span> <span class="co"># removing checklists with this distance</span></a>
+<a class="sourceLine" id="cb36-4" title="4"></a>
+<a class="sourceLine" id="cb36-5" title="5"><span class="co"># make grida across the study site</span></a>
+<a class="sourceLine" id="cb36-6" title="6">hills &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb36-7" title="7"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
+<a class="sourceLine" id="cb36-8" title="8">grid &lt;-<span class="st"> </span><span class="kw">st_make_grid</span>(hills, <span class="dt">cellsize =</span> gridsize)</a>
+<a class="sourceLine" id="cb36-9" title="9"></a>
+<a class="sourceLine" id="cb36-10" title="10"><span class="co"># split data by species</span></a>
+<a class="sourceLine" id="cb36-11" title="11">data_spatial_thin &lt;-<span class="st"> </span><span class="kw">split</span>(<span class="dt">x =</span> dataGrouped, <span class="dt">f =</span> dataGrouped<span class="op">$</span>scientific_name)</a>
+<a class="sourceLine" id="cb36-12" title="12"></a>
+<a class="sourceLine" id="cb36-13" title="13"><span class="co"># spatial thinning on each species retains</span></a>
+<a class="sourceLine" id="cb36-14" title="14"><span class="co"># site with maximum visits per grid cell</span></a>
+<a class="sourceLine" id="cb36-15" title="15">data_spatial_thin &lt;-<span class="st"> </span><span class="kw">map</span>(data_spatial_thin, <span class="cf">function</span>(df){</a>
+<a class="sourceLine" id="cb36-16" title="16">  </a>
+<a class="sourceLine" id="cb36-17" title="17">  <span class="co"># count visits per locality</span></a>
+<a class="sourceLine" id="cb36-18" title="18">  df &lt;-<span class="st"> </span><span class="kw">group_by</span>(df, locality) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb36-19" title="19"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">tot_effort =</span> <span class="kw">length</span>(sampling_event_identifier)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb36-20" title="20"><span class="st">    </span><span class="kw">ungroup</span>()</a>
+<a class="sourceLine" id="cb36-21" title="21">  </a>
+<a class="sourceLine" id="cb36-22" title="22">  <span class="co"># remove sites with distances above spatial independence</span></a>
+<a class="sourceLine" id="cb36-23" title="23">  df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb36-24" title="24"><span class="st">    </span><span class="kw">filter</span>(effort_distance_km <span class="op">&lt;=</span><span class="st"> </span>effort_distance_max) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb36-25" title="25"><span class="st">    </span><span class="kw">st_as_sf</span>(<span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb36-26" title="26"><span class="st">    `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb36-27" title="27"><span class="st">    </span><span class="kw">st_transform</span>(<span class="dv">32643</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb36-28" title="28"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">coordId =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(.)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb36-29" title="29"><span class="st">    </span><span class="kw">bind_cols</span>(<span class="kw">as_tibble</span>(<span class="kw">st_coordinates</span>(.)))</a>
+<a class="sourceLine" id="cb36-30" title="30">  </a>
+<a class="sourceLine" id="cb36-31" title="31">  <span class="co"># whcih cell has which coords</span></a>
+<a class="sourceLine" id="cb36-32" title="32">  grid_contents &lt;-<span class="st"> </span><span class="kw">st_contains</span>(grid, df) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb36-33" title="33"><span class="st">    </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb36-34" title="34"><span class="st">    </span><span class="kw">rename</span>(<span class="dt">cell =</span> row.id, <span class="dt">coordId =</span> col.id)</a>
+<a class="sourceLine" id="cb36-35" title="35">  </a>
+<a class="sourceLine" id="cb36-36" title="36">  <span class="co"># what&#39;s the max point in each grid</span></a>
+<a class="sourceLine" id="cb36-37" title="37">  points_max &lt;-<span class="st"> </span><span class="kw">left_join</span>(df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">st_drop_geometry</span>(),</a>
+<a class="sourceLine" id="cb36-38" title="38">                   grid_contents, <span class="dt">by =</span> <span class="st">&quot;coordId&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb36-39" title="39"><span class="st">    </span><span class="kw">group_by</span>(cell) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb36-40" title="40"><span class="st">    </span><span class="kw">filter</span>(tot_effort <span class="op">==</span><span class="st"> </span><span class="kw">max</span>(tot_effort))</a>
+<a class="sourceLine" id="cb36-41" title="41">  </a>
+<a class="sourceLine" id="cb36-42" title="42">  <span class="kw">return</span>(points_max)</a>
+<a class="sourceLine" id="cb36-43" title="43">  </a>
+<a class="sourceLine" id="cb36-44" title="44">})</a>
+<a class="sourceLine" id="cb36-45" title="45"></a>
+<a class="sourceLine" id="cb36-46" title="46"><span class="co"># remove old data</span></a>
+<a class="sourceLine" id="cb36-47" title="47"><span class="kw">rm</span>(dataGrouped)</a></code></pre></div>
 </div>
 <div id="temporal-subsampling" class="section level2">
 <h2><span class="header-section-number">5.3</span> Temporal subsampling</h2>
 <p>Get 10 random (if available) observations of each species at each locality.</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1"><span class="co"># subsample data for random 10 observations</span></a>
-<a class="sourceLine" id="cb37-2" title="2">dataSubsample &lt;-<span class="st"> </span>dataSpatialThin <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb37-3" title="3"><span class="st">  </span><span class="kw">map</span>(<span class="cf">function</span>(df){</a>
-<a class="sourceLine" id="cb37-4" title="4">    locality_list &lt;-<span class="st"> </span><span class="kw">split</span>(<span class="dt">x =</span> df, <span class="dt">f =</span> df<span class="op">$</span>locality)</a>
-<a class="sourceLine" id="cb37-5" title="5">    locality_list &lt;-<span class="st"> </span><span class="kw">map_if</span>(<span class="dt">.x =</span> locality_list,</a>
-<a class="sourceLine" id="cb37-6" title="6">                            <span class="dt">.p =</span> <span class="cf">function</span>(x) <span class="kw">nrow</span>(x) <span class="op">&gt;</span><span class="st"> </span><span class="dv">10</span>, </a>
+<a class="sourceLine" id="cb37-2" title="2">dataSubsample &lt;-<span class="st"> </span><span class="kw">map</span>(data_spatial_thin, <span class="cf">function</span>(df){</a>
+<a class="sourceLine" id="cb37-3" title="3">    df &lt;-<span class="st"> </span><span class="kw">ungroup</span>(df)</a>
+<a class="sourceLine" id="cb37-4" title="4">    df_to_locality &lt;-<span class="st"> </span><span class="kw">split</span>(<span class="dt">x =</span> df, <span class="dt">f =</span> df<span class="op">$</span>locality)</a>
+<a class="sourceLine" id="cb37-5" title="5">    df_samples &lt;-<span class="st"> </span><span class="kw">map_if</span>(<span class="dt">.x =</span> df_to_locality,</a>
+<a class="sourceLine" id="cb37-6" title="6">                            <span class="dt">.p =</span> <span class="cf">function</span>(x) {<span class="kw">nrow</span>(x) <span class="op">&gt;</span><span class="st"> </span><span class="dv">10</span>}, </a>
 <a class="sourceLine" id="cb37-7" title="7">                            <span class="dt">.f =</span> <span class="cf">function</span>(x) <span class="kw">sample_n</span>(x, <span class="dv">10</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>))</a>
-<a class="sourceLine" id="cb37-8" title="8">  }) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb37-9" title="9"><span class="st">  </span><span class="kw">bind_rows</span>()</a>
-<a class="sourceLine" id="cb37-10" title="10"></a>
-<a class="sourceLine" id="cb37-11" title="11"><span class="co"># remove previous data</span></a>
-<a class="sourceLine" id="cb37-12" title="12"><span class="kw">rm</span>(dataSpatialThin)</a></code></pre></div>
+<a class="sourceLine" id="cb37-8" title="8">    </a>
+<a class="sourceLine" id="cb37-9" title="9">    <span class="kw">return</span>(<span class="kw">bind_rows</span>(df_samples))</a>
+<a class="sourceLine" id="cb37-10" title="10">  })</a>
+<a class="sourceLine" id="cb37-11" title="11"></a>
+<a class="sourceLine" id="cb37-12" title="12"><span class="co"># bind all rows for data frame</span></a>
+<a class="sourceLine" id="cb37-13" title="13">dataSubsample &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(dataSubsample)</a>
+<a class="sourceLine" id="cb37-14" title="14"></a>
+<a class="sourceLine" id="cb37-15" title="15"><span class="co"># remove previous data</span></a>
+<a class="sourceLine" id="cb37-16" title="16"><span class="kw">rm</span>(data_spatial_thin)</a></code></pre></div>
 </div>
 <div id="add-expertise-score" class="section level2">
 <h2><span class="header-section-number">5.4</span> Add expertise score</h2>
@@ -395,29 +408,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb40-2" title="2">sample_radius &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">2.5</span>, <span class="dv">10</span>, <span class="dv">25</span>) <span class="op">*</span><span class="st"> </span><span class="fl">1e3</span></a>
 <a class="sourceLine" id="cb40-3" title="3"></a>
 <a class="sourceLine" id="cb40-4" title="4"><span class="co"># get distinct points and make buffer</span></a>
-<a class="sourceLine" id="cb40-5" title="5">ebird_buff &lt;-<span class="st"> </span>dataSubsample <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb40-6" title="6"><span class="st">  </span><span class="kw">distinct</span>(latitude, longitude) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb40-7" title="7"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(.)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb40-8" title="8"><span class="st">  </span><span class="kw">crossing</span>(sample_radius) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb40-9" title="9"><span class="st">  </span><span class="kw">arrange</span>(id) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb40-10" title="10"><span class="st">  </span><span class="kw">group_by</span>(sample_radius) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb40-11" title="11"><span class="st">  </span><span class="kw">nest</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb40-12" title="12"><span class="st">  </span><span class="kw">ungroup</span>() </a>
-<a class="sourceLine" id="cb40-13" title="13"></a>
+<a class="sourceLine" id="cb40-5" title="5">ebird_buff &lt;-<span class="st"> </span>dataSubsample <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb40-6" title="6"><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb40-7" title="7"><span class="st">  </span><span class="kw">distinct</span>(X, Y) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb40-8" title="8"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(.)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb40-9" title="9"><span class="st">  </span><span class="kw">crossing</span>(sample_radius) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb40-10" title="10"><span class="st">  </span><span class="kw">arrange</span>(id) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb40-11" title="11"><span class="st">  </span><span class="kw">group_by</span>(sample_radius) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb40-12" title="12"><span class="st">  </span><span class="kw">nest</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb40-13" title="13"><span class="st">  </span><span class="kw">ungroup</span>() </a>
 <a class="sourceLine" id="cb40-14" title="14"></a>
-<a class="sourceLine" id="cb40-15" title="15"><span class="co"># convert to spatial features</span></a>
-<a class="sourceLine" id="cb40-16" title="16">ebird_buff &lt;-<span class="st"> </span><span class="kw">mutate</span>(ebird_buff, </a>
-<a class="sourceLine" id="cb40-17" title="17">                     <span class="dt">data =</span> <span class="kw">map2</span>(data, sample_radius, </a>
-<a class="sourceLine" id="cb40-18" title="18">                                 <span class="cf">function</span>(df,rd){</a>
-<a class="sourceLine" id="cb40-19" title="19">  df_sf &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(df, <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>), <span class="dt">crs =</span> <span class="dv">4326</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb40-20" title="20"><span class="st">    </span><span class="co"># add long lat</span></a>
-<a class="sourceLine" id="cb40-21" title="21"><span class="st">    </span><span class="kw">bind_cols</span>(<span class="kw">as_tibble</span>(<span class="kw">st_coordinates</span>(.))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb40-22" title="22"><span class="st">    </span><span class="kw">rename</span>(<span class="dt">longitude =</span> X, <span class="dt">latitude =</span> Y) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb40-23" title="23"><span class="st">    </span><span class="co"># transform to modis projection</span></a>
-<a class="sourceLine" id="cb40-24" title="24"><span class="st">    </span><span class="kw">st_transform</span>(<span class="dt">crs =</span> <span class="dv">32643</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb40-25" title="25"><span class="st">    </span><span class="co"># buffer to create neighborhood around each point</span></a>
-<a class="sourceLine" id="cb40-26" title="26"><span class="st">    </span><span class="kw">st_buffer</span>(<span class="dt">dist =</span> rd)</a>
-<a class="sourceLine" id="cb40-27" title="27">}))</a></code></pre></div>
+<a class="sourceLine" id="cb40-15" title="15"></a>
+<a class="sourceLine" id="cb40-16" title="16"><span class="co"># convert to spatial features</span></a>
+<a class="sourceLine" id="cb40-17" title="17">ebird_buff &lt;-<span class="st"> </span><span class="kw">mutate</span>(ebird_buff, </a>
+<a class="sourceLine" id="cb40-18" title="18">                     <span class="dt">data =</span> <span class="kw">map2</span>(data, sample_radius, </a>
+<a class="sourceLine" id="cb40-19" title="19">                                 <span class="cf">function</span>(df,rd){</a>
+<a class="sourceLine" id="cb40-20" title="20">  df_sf &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(df, <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;X&quot;</span>, <span class="st">&quot;Y&quot;</span>), <span class="dt">crs =</span> <span class="dv">32643</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb40-21" title="21"><span class="st">    </span><span class="co"># add long lat</span></a>
+<a class="sourceLine" id="cb40-22" title="22"><span class="st">    </span><span class="kw">bind_cols</span>(<span class="kw">as_tibble</span>(<span class="kw">st_coordinates</span>(.))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb40-23" title="23"><span class="st">    </span><span class="co"># rename(longitude = X, latitude = Y) %&gt;% </span></a>
+<a class="sourceLine" id="cb40-24" title="24"><span class="st">    </span><span class="co"># # transform to modis projection</span></a>
+<a class="sourceLine" id="cb40-25" title="25"><span class="st">    </span><span class="co"># st_transform(crs = 32643) %&gt;% </span></a>
+<a class="sourceLine" id="cb40-26" title="26"><span class="st">    </span><span class="co"># buffer to create neighborhood around each point</span></a>
+<a class="sourceLine" id="cb40-27" title="27"><span class="st">    </span><span class="kw">st_buffer</span>(<span class="dt">dist =</span> rd)</a>
+<a class="sourceLine" id="cb40-28" title="28">}))</a></code></pre></div>
 </div>
 <div id="getting-area-means" class="section level2">
 <h2><span class="header-section-number">5.7</span> Getting area means</h2>
@@ -478,7 +492,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb43-4" title="4"><span class="co"># join the full data to landscape samples at each scale</span></a>
 <a class="sourceLine" id="cb43-5" title="5">data_at_scale<span class="op">$</span>data &lt;-<span class="st"> </span><span class="kw">map</span>(data_at_scale<span class="op">$</span>data, <span class="cf">function</span>(df){</a>
 <a class="sourceLine" id="cb43-6" title="6">  df &lt;-<span class="st"> </span><span class="kw">st_drop_geometry</span>(df)</a>
-<a class="sourceLine" id="cb43-7" title="7">  df &lt;-<span class="st"> </span><span class="kw">inner_join</span>(dataSubsample, df, <span class="dt">by=</span><span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>))</a>
+<a class="sourceLine" id="cb43-7" title="7">  df &lt;-<span class="st"> </span><span class="kw">inner_join</span>(dataSubsample, df, <span class="dt">by=</span><span class="kw">c</span>(<span class="st">&quot;X&quot;</span>, <span class="st">&quot;Y&quot;</span>))</a>
 <a class="sourceLine" id="cb43-8" title="8">  <span class="kw">return</span>(df)</a>
 <a class="sourceLine" id="cb43-9" title="9">})</a></code></pre></div>
 </div>
@@ -487,7 +501,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1"><span class="co"># write to file</span></a>
 <a class="sourceLine" id="cb44-2" title="2"><span class="kw">pmap</span>(data_at_scale, <span class="cf">function</span>(sample_radius, data){</a>
 <a class="sourceLine" id="cb44-3" title="3">  <span class="kw">write_csv</span>(data, <span class="dt">path =</span> <span class="kw">glue</span>(<span class="st">&#39;data/dataCovars_{str_pad(sample_radius/1e3, 2, pad = &quot;0&quot;)}km.csv&#39;</span>))</a>
-<a class="sourceLine" id="cb44-4" title="4">  <span class="kw">return</span>(<span class="st">&quot;export done&quot;</span>)</a>
+<a class="sourceLine" id="cb44-4" title="4">  <span class="kw">message</span>(<span class="kw">glue</span>(<span class="st">&#39;export done: data/dataCovars_{str_pad(sample_radius/1e3, 2, pad = &quot;0&quot;)}km.csv&#39;</span>))</a>
 <a class="sourceLine" id="cb44-5" title="5">})</a></code></pre></div>
 
 </div>

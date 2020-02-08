@@ -24,7 +24,7 @@
 <meta name="author" content="Vijay Ramesh, Pratik R Gupte, and Morgan Tingley" />
 
 
-<meta name="date" content="2020-02-06" />
+<meta name="date" content="2020-02-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -171,7 +171,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="5" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html"><i class="fa fa-check"></i><b>5</b> Add covariates to subsampled data</a><ul>
 <li class="chapter" data-level="5.1" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#prepare-libraries-and-data"><i class="fa fa-check"></i><b>5.1</b> Prepare libraries and data</a></li>
-<li class="chapter" data-level="5.2" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#spatial-thinning"><i class="fa fa-check"></i><b>5.2</b> Spatial thinning</a></li>
+<li class="chapter" data-level="5.2" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#spatial-subsampling"><i class="fa fa-check"></i><b>5.2</b> Spatial subsampling</a></li>
 <li class="chapter" data-level="5.3" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#temporal-subsampling"><i class="fa fa-check"></i><b>5.3</b> Temporal subsampling</a></li>
 <li class="chapter" data-level="5.4" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#add-expertise-score"><i class="fa fa-check"></i><b>5.4</b> Add expertise score</a></li>
 <li class="chapter" data-level="5.5" data-path="add-covariates-to-subsampled-data.html"><a href="add-covariates-to-subsampled-data.html#add-landscape-covariates"><i class="fa fa-check"></i><b>5.5</b> Add landscape covariates</a></li>
@@ -356,7 +356,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="prepare-species-of-interest" class="section level2">
 <h2><span class="header-section-number">4.4</span> Prepare species of interest</h2>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="co"># read in species list</span></a>
-<a class="sourceLine" id="cb27-2" title="2">specieslist =<span class="st"> </span><span class="kw">read_excel</span>(<span class="dt">path =</span> <span class="st">&quot;data/species_list_13_11_2019.xlsx&quot;</span>)</a>
+<a class="sourceLine" id="cb27-2" title="2">specieslist =<span class="st"> </span><span class="kw">read_excel</span>(<span class="dt">path =</span> <span class="st">&quot;data/V2_ListOfSpecies_ChosenForStudy.csv.xlsx&quot;</span>)</a>
 <a class="sourceLine" id="cb27-3" title="3"></a>
 <a class="sourceLine" id="cb27-4" title="4"><span class="co"># set species of interest</span></a>
 <a class="sourceLine" id="cb27-5" title="5">soi =<span class="st"> </span>specieslist<span class="op">$</span>scientific_name</a>
@@ -400,7 +400,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Using the landcover 1km resolution here.</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="co"># read in 1km landcover and set 0 to NA</span></a>
 <a class="sourceLine" id="cb29-2" title="2"><span class="kw">library</span>(raster)</a>
-<a class="sourceLine" id="cb29-3" title="3">landcover &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw">raster</span>(<span class="st">&quot;data/spatial/landcover1km.tif&quot;</span>)</a>
+<a class="sourceLine" id="cb29-3" title="3">landcover &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw">raster</span>(<span class="st">&quot;data/landUseClassification/lc_01km.tif&quot;</span>)</a>
 <a class="sourceLine" id="cb29-4" title="4">landcover[landcover<span class="op">==</span><span class="dv">0</span>] &lt;-<span class="st"> </span><span class="ot">NA</span></a>
 <a class="sourceLine" id="cb29-5" title="5"></a>
 <a class="sourceLine" id="cb29-6" title="6"><span class="co"># get locs in utm coords</span></a>
