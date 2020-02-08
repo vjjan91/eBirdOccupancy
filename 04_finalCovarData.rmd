@@ -23,43 +23,51 @@ library(sf)
 load("data_prelim_processing.rdata")
 ```
 
-## Spatial thinning 
+## Spatial subsampling
 
 ```{r spatial_thinning, eval=FALSE}
 # grid based spatial thinning
-gridsize = 250 # grid size in metres
+gridsize = 1000 # grid size in metres
+effort_distance_max = 1000 # removing checklists with this distance
+
+# make grida across the study site
+hills <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>% 
+  st_transform(32643)
+grid <- st_make_grid(hills, cellsize = gridsize)
 
 # split data by species
 dataSpatialThin <- split(x = dataGrouped, f = dataGrouped$scientific_name)
 
 # spatial thinning on each species retains
 # site with maximum visits per grid cell
-coordsUTM <- map(dataSpatialThin, function(df){
-  df %>% 
+data_spatial_thin <- map(dataSpatialThin, function(df){
+  
+  # count visits per locality
+  df <- group_by(df, locality) %>% 
+    mutate(tot_effort = length(sampling_event_identifier)) %>% 
+    ungroup()
+  
+  # remove sites with distances above spatial independence
+  df <- df %>% 
+    filter(effort_distance_km <= effort_distance_max) %>% 
     st_as_sf(coords = c("longitude", "latitude")) %>% 
     `st_crs<-`(4326) %>% 
     st_transform(32643) %>% 
-    st_coordinates(.) %>% 
+    mutate(coordId = 1:nrow(.))
+  
+  # whcih cell has which coords
+  grid_contents <- st_contains(grid, df) %>% 
     as_tibble() %>% 
-    mutate(X = plyr::round_any(X, gridsize),
-           Y = plyr::round_any(Y, gridsize))
-})
-
-# add rounded coordinates to data
-dataSpatialThin <- map2(dataSpatialThin, coordsUTM, function(df1, df2){
-  df1 <- bind_cols(df1, df2)
+    rename(cell = row.id, coordId = col.id)
   
-  # count visits
-  n_visits <- count(df1, longitude, latitude, name = "n_visits")
+  # what's the max point in each grid
+  points_max <- left_join(df %>% st_drop_geometry(),
+                   grid_contents, by = "coordId") %>% 
+    group_by(cell) %>% 
+    filter(tot_effort == max(tot_effort))
   
-  # bind visits to coordinate data
-  df1 <- left_join(df1, n_visits, by = c("longitude", "latitude"))
+  return(points_max)
   
-  # select max site per rounded UTM coords X and Y
-  df1 <- group_by(df1, X, Y) %>% 
-    filter(n_visits == max(n_visits))
-  
-  return(df1)
 })
 
 # remove old data
