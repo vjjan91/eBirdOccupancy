@@ -36,11 +36,11 @@ hills <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>%
 grid <- st_make_grid(hills, cellsize = gridsize)
 
 # split data by species
-dataSpatialThin <- split(x = dataGrouped, f = dataGrouped$scientific_name)
+data_spatial_thin <- split(x = dataGrouped, f = dataGrouped$scientific_name)
 
 # spatial thinning on each species retains
 # site with maximum visits per grid cell
-data_spatial_thin <- map(dataSpatialThin, function(df){
+data_spatial_thin <- map(data_spatial_thin, function(df){
   
   # count visits per locality
   df <- group_by(df, locality) %>% 
