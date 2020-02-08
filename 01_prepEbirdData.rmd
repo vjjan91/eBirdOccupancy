@@ -28,7 +28,7 @@ f_in_sampling <- file.path("ebd_sampling_Filtered_Jun2019.txt")
 
 ```{r soi, eval=FALSE, message=FALSE, warning=FALSE}
 # add species of interest
-specieslist <- read_excel("data/species_list_13_11_2019.xlsx")
+specieslist <- read_excel("data/V2_ListOfSpecies_ChosenForStudy.csv.xlsx")
 speciesOfInterest <- specieslist$scientific_name
 ```
 
@@ -129,7 +129,7 @@ data <- data %>%
 
 ```{r save_temp_data, eval=FALSE}
 # save a temp data file
-save(data, file = "data.temp.rdata")
+save(data, file = "data_temp.rdata")
 ```
 
 ## Handle presence data
