@@ -109,7 +109,7 @@ ebd <- ebd[longitude %in% ebd_locs$X & latitude %in% ebd_locs$Y,]
 
 ```{r soi_score, eval=FALSE}
 # read in species list
-specieslist = read_excel(path = "data/species_list_13_11_2019.xlsx")
+specieslist = read_excel(path = "data/V2_ListOfSpecies_ChosenForStudy.csv.xlsx")
 
 # set species of interest
 soi = specieslist$scientific_name
@@ -158,7 +158,7 @@ Using the landcover 1km resolution here.
 ```{r chk_covar_landuse, eval=FALSE}
 # read in 1km landcover and set 0 to NA
 library(raster)
-landcover <- raster::raster("data/spatial/landcover1km.tif")
+landcover <- raster::raster("data/landUseClassification/lc_01km.tif")
 landcover[landcover==0] <- NA
 
 # get locs in utm coords
