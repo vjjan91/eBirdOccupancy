@@ -159,8 +159,9 @@ names(landscape_data) <- as.character(glue('{c(elev_names, chelsa_names, "landco
 sample_radius <- c(2.5, 10, 25) * 1e3
 
 # get distinct points and make buffer
-ebird_buff <- dataSubsample %>% 
-  distinct(latitude, longitude) %>% 
+ebird_buff <- dataSubsample %>%
+  ungroup() %>% 
+  distinct(X, Y) %>% 
   mutate(id = 1:nrow(.)) %>% 
   crossing(sample_radius) %>%
   arrange(id) %>% 
