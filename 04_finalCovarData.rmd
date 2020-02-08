@@ -264,7 +264,7 @@ data_at_scale$data <- map(data_at_scale$data, function(df){
 # write to file
 pmap(data_at_scale, function(sample_radius, data){
   write_csv(data, path = glue('data/dataCovars_{str_pad(sample_radius/1e3, 2, pad = "0")}km.csv'))
-  return("export done")
+  message(glue('export done: data/dataCovars_{str_pad(sample_radius/1e3, 2, pad = "0")}km.csv'))
 })
 
 ```
