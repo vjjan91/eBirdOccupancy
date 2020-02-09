@@ -16,6 +16,7 @@ library(sf)
 library(dplyr)
 library(scales)
 library(readr)
+library(purrr)
 
 library(ggplot2)
 library(ggthemes)
@@ -32,7 +33,6 @@ use_python("/usr/bin/python3")
 Importing python libraries.
 
 ```{python prepare_py_libs, eval=FALSE}
-
 # import classic python libs
 import itertools
 from operator import itemgetter
@@ -64,9 +64,9 @@ roads.head()
 # get unique coordinates, assign them to the df
 # convert df to geo-df
 chkCovars = pd.read_csv("data/eBirdChecklistVars.csv")
-unique_locs = chkCovars.drop_duplicates(subset=['longitude','latitude','sampling_event_identifier'])[['longitude', 'latitude', 'nSp', 'sampling_event_identifier']]
+unique_locs = chkCovars.drop_duplicates(subset=['longitude','latitude'])[['longitude', 'latitude']]
 unique_locs['coordId'] = np.arange(1, unique_locs.shape[0]+1)
-chkCovars = chkCovars.merge(unique_locs, on=['longitude', 'latitude', 'sampling_event_identifier'])
+chkCovars = chkCovars.merge(unique_locs, on=['longitude', 'latitude'])
 
 unique_locs = gpd.GeoDataFrame(
 unique_locs,
@@ -103,17 +103,67 @@ def ckdnearest(gdfA, gdfB):
     return dist
 
 
+# function to use ckdtrees for nearest point finding
+def ckdnearest_point(gdfA, gdfB):
+    A = np.concatenate(
+    [np.array(geom.coords) for geom in gdfA.geometry.to_list()])
+    #simplified_features = simplify_roads(gdfB)
+    B = np.concatenate(
+    [np.array(geom.coords) for geom in gdfB.geometry.to_list()])
+    #B = np.concatenate(B)
+    ckd_tree = cKDTree(B)
+    dist, idx = ckd_tree.query(A, k=[2])
+    return dist
+
+
 # get distance to nearest road
 unique_locs['dist_road'] = ckdnearest(unique_locs, roads)
+
+# get distance to nearest other site
+unique_locs['nnb'] = ckdnearest_point(unique_locs, unique_locs)
 
 # write to file
 unique_locs = pd.DataFrame(unique_locs.drop(columns='geometry'))
 unique_locs['dist_road'] = unique_locs['dist_road']
+unique_locs['nnb'] = unique_locs['nnb']
 unique_locs.to_csv(path_or_buf="data/locs_dist_to_road.csv", index=False)
 
 # merge unique locs with chkCovars
-chkCovars = chkCovars.merge(unique_locs, on=['latitude', 'longitude', 'coordId', 'sampling_event_identifier'])
+chkCovars = chkCovars.merge(unique_locs, on=['latitude', 'longitude', 'coordId'])
 ```
+
+### Species specific nearest sites
+
+```{r load_ebd_data_nnb, eval=FALSE}
+# load data and send to python
+load("data_prelim_processing.rdata")
+py$data <- dataGrouped
+```
+
+
+```{python sp_spec_nnb, eval=FALSE}
+# split data by species
+datalist = [pd.DataFrame(y) for x, y in data.groupby('scientific_name', as_index=False)]
+
+
+# function to get unique vals anc convert to gpd
+def convData(somedata):
+    somedata = somedata.drop_duplicates(subset=['longitude','latitude'])[['longitude', 'latitude', 'scientific_name']]
+    unique_locs = gpd.GeoDataFrame(somedata,
+                                  geometry=gpd.points_from_xy(somedata.longitude, 
+                                  somedata.latitude))
+    unique_locs.crs = {'init' :'epsg:4326'}
+    unique_locs = unique_locs.to_crs({'init': 'epsg:32642'})
+    dists = ckdnearest_point(unique_locs, unique_locs)
+    unique_locs = pd.DataFrame(unique_locs.drop(columns='geometry'))
+    unique_locs['nnb'] = dists
+    return unique_locs
+
+
+# apply function to datalist
+datalist = list(map(convData, datalist))
+```
+
 
 ### Explicit spatial filter
 
@@ -134,6 +184,25 @@ chkCovars <- chkCovars %>%
   filter(id %in% unlist(st_contains(wg, chkCovars)))
 ```
 
+### Species specific filter
+
+```{r sp_spec_filt, eval=FALSE}
+# extract values from python
+sp_spec_data <- py$datalist
+
+sp_spec_data <- map(sp_spec_data, function(df){
+  df <- as_tibble(df) %>% 
+    st_as_sf(coords = c("longitude", "latitude")) %>% 
+    `st_crs<-`(4326) %>% 
+    st_transform(32643) %>% 
+    mutate(id = 1:nrow(.)) %>% 
+    filter(id %in% unlist(st_contains(wg, .))) %>% 
+    st_drop_geometry()
+})
+
+sp_spec_data <- bind_rows(sp_spec_data)
+```
+
 
 ### Plot histogram: distance to roads
 
@@ -148,11 +217,57 @@ hist_roads <- ggplot(chkCovars)+
                 breaks = c(0.1, 1, 10))+
   scale_y_continuous(label=label_number(scale=0.001, accuracy = 1, suffix = "K"))+
   theme_few()+
-  theme(plot.background = element_rect(fill="white", colour = 1),
+  theme(plot.background = element_rect(fill=NA, colour = 1),
         panel.background = element_blank(),
         panel.border = element_blank(), axis.line = element_blank())
 
 ```
+
+### Plot histogram: distance to nearest site
+
+```{r plot_nn_site, eval=FALSE}
+# get unique locations
+locs <- py$unique_locs
+
+# make histogram of nearest neighbours
+hist_sites <- 
+  ggplot(locs)+
+  geom_histogram(aes(nnb / 1e3),
+                 bins = 100, size=0.2, fill="steelblue")+
+  labs(x = "dist. nearest site (km)", y = "# sites")+
+  # scale_x_log10(label=label_number(accuracy = 0.1), 
+  #               breaks = c(0.1, 1, 10))+
+  coord_cartesian(xlim=c(0,10))+
+  scale_y_continuous(label=label_number(scale=0.001, accuracy = 1, suffix = "K"))+
+  theme_few()+
+  theme(plot.background = element_rect(fill=NA, colour = 1),
+        panel.background = element_blank(),
+        panel.border = element_blank(), axis.line = element_blank())
+```
+
+### Plot species specific histograms: distance to nearest site
+
+```{r plot_nn_site_sp, eval=FALSE}
+# plot histograms by species
+hist_sites_sp <- 
+  ggplot(sp_spec_data)+
+  geom_histogram(aes(nnb / 1e3),
+                 bins = 100, size=0.2, fill="steelblue")+
+  labs(x = "dist. nearest site (km)", y = "# sites")+
+  # scale_x_log10(label=label_number(accuracy = 0.1), 
+  #               breaks = c(0.1, 1, 10))+
+  facet_wrap(~scientific_name)+
+  scale_x_log10()+
+  #coord_cartesian(xlim=c(0,10))+
+  scale_y_continuous(label=label_number(scale=0.001, accuracy = 1, suffix = "K"))+
+  theme_few()+
+  theme(plot.background = element_rect(fill=NA, colour = 1),
+        panel.background = element_blank(),
+        panel.border = element_blank(), axis.line = element_blank())
+
+ggsave(hist_sites_sp, filename = "fig_nnb_species.png")
+```
+
 
 ### Plot map: points on roads
 
@@ -178,15 +293,16 @@ bbox <- st_bbox(wg)
 
 ```{r plot_map_dist_roads, eval=FALSE}
 # plot on maps
-ggplot(wg)+
+ggplot()+
   geom_sf(data = land, fill = "grey90", col = NA)+
+  geom_sf(data = wg, fill= NA, col = 1)+
   annotation_custom(grob = hist_roads %>% ggplotGrob(),
                     xmin = bbox["xmax"] - (bbox["xmax"] - bbox["xmin"])/2.5, 
                     xmax = bbox["xmax"], 
                     ymin = bbox["ymax"] - (bbox["ymax"] - bbox["ymin"])/3, 
                     ymax = bbox["ymax"])+
   geom_tile(data=points, aes(X,Y,fill=n), col = "grey90")+
-  geom_sf(fill= NA, col = 1)+
+  
   geom_sf(data=roads, size=0.2, col="steelblue")+
   
   # scale_colour_manual(values = "steelblue", labels = "roads")+
@@ -210,6 +326,44 @@ ggplot(wg)+
 ggsave(filename = "figs/fig_distRoads.png", device = png())
 dev.off()
 ```
+
+```{r plot_map_nnb, eval=FALSE}
+# transform points to utm
+locs <- locs %>% 
+  st_as_sf(coords=c("longitude", "latitude")) %>% 
+  `st_crs<-`(4326) %>% 
+  st_transform(32643)
+
+# add nnb to locations
+ggplot()+
+  geom_sf(data = land, fill = "grey90", col = NA)+
+  geom_sf(data = wg, fill= NA, col = 1)+
+  annotation_custom(grob = hist_sites %>% ggplotGrob(),
+                    xmin = bbox["xmax"] - (bbox["xmax"] - bbox["xmin"])/2.5, 
+                    xmax = bbox["xmax"], 
+                    ymin = bbox["ymax"] - (bbox["ymax"] - bbox["ymin"])/3, 
+                    ymax = bbox["ymax"])+
+  geom_sf(data=roads, size=0.2, col="steelblue")+
+  geom_sf(data=locs, aes(col=nnb/1000))+
+  
+  scale_colour_scico(palette = "oslo", values=c(0, 1), direction = -1, limits = c(0, 5),
+                     na.value = "indianred")+
+
+  annotation_north_arrow(location = "br", which_north = "true", 
+                         pad_x = unit(0.1, "in"), pad_y = unit(0.5, "in"),
+                         style = north_arrow_fancy_orienteering) +
+  annotation_scale(location = "br", width_hint = 0.4, text_cex = 1) +
+  
+  theme_few()+
+  theme(legend.position = c(0.9,0.55),
+        legend.background = element_blank(),
+        legend.key = element_rect(fill="grey90"),
+        axis.title = element_blank(),
+        panel.background = element_rect(fill="lightblue"))+
+  coord_sf(expand = FALSE, xlim = bbox[c("xmin", "xmax")], ylim = bbox[c("ymin", "ymax")])+
+  labs(fill = "checklists", colour=NULL)
+```
+
 
 ```{r plot_figure1, eval=TRUE, echo=FALSE, fig.cap="Checklist locations in the Nilgiris. Inset histogram shows checklists' distance to the nearest road, with the X-axis on a log-scale."}
 # inset image here

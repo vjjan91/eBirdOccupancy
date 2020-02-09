@@ -16,6 +16,7 @@ library(magrittr)
 library(stringr)
 library(dplyr)
 library(tidyr)
+library(auk)
 
 # get decimal time function
 library(lubridate)
@@ -32,24 +33,49 @@ Here, we go through the data preparation process again because we might want to 
 ```{r load_raw_data, eval=FALSE}
 # read in shapefile of nilgiris to subset by bounding box
 library(sf)
-wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp"); box <- st_bbox(wg)
+wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>% 
+  st_transform(32643)
 
-# read in data and subset
-ebd <- fread("ebd_Filtered_Jun2019.txt")[between(LONGITUDE, box["xmin"], box["xmax"]) & between(LATITUDE, box["ymin"], box["ymax"]),][year(`OBSERVATION DATE`) >= 2013,]
 
-# make new column names
-newNames <- str_replace_all(colnames(ebd), " ", "_") %>%
-  str_to_lower()
-setnames(ebd, newNames)
+# set file paths for auk functions
+f_in_ebd <- file.path("ebd_Filtered_Jun2019.txt")
+f_in_sampling <- file.path("ebd_sampling_Filtered_Jun2019.txt")
 
-# keep useful columns
-columnsOfInterest <- c("checklist_id","scientific_name","observation_count","locality","locality_id","locality_type","latitude","longitude","observation_date","time_observations_started","observer_id","sampling_event_identifier","protocol_type","duration_minutes","effort_distance_km","effort_area_ha","number_observers","species_observed","reviewed","state_code", "group_identifier")
+# run filters using auk packages
+ebd_filters <- auk_ebd(f_in_ebd, f_in_sampling) %>%
+  auk_country(country = "IN") %>%
+  auk_state(c("IN-KL","IN-TN", "IN-KA")) %>% # Restricting geography to TamilNadu, Kerala & Karnataka
+  auk_date(c("2013-01-01", "2018-12-31")) %>%
+  auk_complete()
 
-ebd <- select(ebd, one_of(columnsOfInterest))
+# check filters
+ebd_filters
 
-# get the checklist id as SEI or group id
-ebd[,checklist_id := ifelse(group_identifier == "", 
-                            sampling_event_identifier, group_identifier),]
+# specify output location and perform filter
+f_out_ebd <- "data/ebird_for_expertise.txt"
+f_out_sampling <- "data/ebird_sampling_for_expertise.txt"
+
+ebd_filtered <- auk_filter(ebd_filters, file = f_out_ebd,
+                           file_sampling = f_out_sampling, overwrite = TRUE)
+```
+
+```{r read_all_ebd, eval=FALSE}
+## Process filtered data
+# read in the data
+ebd <- fread(f_out_ebd)
+names <- names(ebd) %>% 
+  stringr::str_to_lower() %>% 
+  stringr::str_replace_all(" ", "_")
+
+setnames(ebd, names)
+# choose columns of interest
+columnsOfInterest <- c("checklist_id","scientific_name","observation_count","locality","locality_id","locality_type","latitude","longitude","observation_date","time_observations_started","observer_id","sampling_event_identifier","protocol_type","duration_minutes","effort_distance_km","effort_area_ha","number_observers","species_observed","reviewed")
+
+ebd <- setDF(ebd) %>% 
+  as_tibble() %>% 
+  select(one_of(columnsOfInterest))
+
+setDT(ebd)
 ```
 
 ## Explicit spatial subset
@@ -57,10 +83,12 @@ ebd[,checklist_id := ifelse(group_identifier == "",
 ```{r hills_subset_exp, eval=FALSE}
 # get checklist locations
 ebd_locs <- ebd[,.(longitude, latitude)]
-ebd_locs <- setDF(ebd_locs) %>% distinct(ebd_locs)
+ebd_locs <- setDF(ebd_locs) %>% distinct()
 ebd_locs <- st_as_sf(ebd_locs, 
                      coords = c("longitude","latitude")) %>% 
   `st_crs<-`(4326) %>% 
+  bind_cols(as_tibble(st_coordinates(.))) %>% 
+  st_transform(32643) %>% 
   mutate(id = 1:nrow(.))
 
 # check whether to include
@@ -81,7 +109,7 @@ ebd <- ebd[longitude %in% ebd_locs$X & latitude %in% ebd_locs$Y,]
 
 ```{r soi_score, eval=FALSE}
 # read in species list
-specieslist = read_excel(path = "data/species_list_13_11_2019.xlsx")
+specieslist = read_excel(path = "data/V2_ListOfSpecies_ChosenForStudy.csv.xlsx")
 
 # set species of interest
 soi = specieslist$scientific_name
@@ -105,7 +133,9 @@ ebdEffChk <- setDF(ebd) %>%
   mutate(year = year(observation_date)) %>% 
   distinct(sampling_event_identifier, observer_id,
            year,
-           duration_minutes, effort_distance_km, longitude, latitude,
+           duration_minutes, effort_distance_km, effort_area_ha, 
+           longitude, latitude,
+           locality, locality_id,
            decimalTime, julianDate, number_observers) %>% 
   # drop rows with NAs in cols used in the model
   tidyr::drop_na(sampling_event_identifier, observer_id,
@@ -128,11 +158,12 @@ Using the landcover 1km resolution here.
 ```{r chk_covar_landuse, eval=FALSE}
 # read in 1km landcover and set 0 to NA
 library(raster)
-landcover <- raster::raster("data/spatial/landcover1km.tif")
+landcover <- raster::raster("data/landUseClassification/lc_01km.tif")
 landcover[landcover==0] <- NA
 
 # get locs in utm coords
-locs <- distinct(ebdChkSummary, sampling_event_identifier, longitude, latitude)
+locs <- distinct(ebdChkSummary, sampling_event_identifier, longitude, latitude,
+                  locality, locality_id)
 locs <- st_as_sf(locs, coords = c("longitude", "latitude")) %>% 
   `st_crs<-`(4326) %>% 
   st_transform(32643) %>% 
@@ -144,17 +175,14 @@ landcoverVec <- raster::extract(x = landcover,
 
 # assign to df and overwrite
 setDT(ebdChkSummary)[,landcover:= landcoverVec]
-
-# save to file for later reuse
-fwrite(ebdChkSummary, file = "data/eBirdChecklistVars.csv")
 ```
 
 ## Filter data for stats
 
 ```{r filter_data2, eval=FALSE}
 # change names for easy handling
-setnames(ebdChkSummary, c("sei", "observer","year", "duration", "distance",
-                          "longitude", "latitude", "decimalTime",
+setnames(ebdChkSummary, c("sei", "observer","year", "duration", "distance", "area",
+                          "longitude", "latitude", "locality", "locality_id",  "decimalTime",
                           "julianDate", "nObs", "nSp", "nSoi", "landcover"))
 
 # count data points per observer 
@@ -164,14 +192,21 @@ obscount <- count(ebdChkSummary, observer) %>%
 # make factor variables and remove obs not in obscount
 # also remove 0 durations
 ebdChkSummary <- ebdChkSummary %>% 
+  mutate(distance = ifelse(is.na(distance), 0, distance),
+         duration = if_else(is.na(duration), 0.0, as.double(duration))) %>% 
   filter(observer %in% obscount$observer, 
          duration > 0,
          duration <= 300,
-         nSoi > 0,
+         nSoi >= 0,
+         distance <= 5,
          !is.na(nSoi)) %>% 
   mutate(landcover = as.factor(landcover),
          observer = as.factor(observer)) %>% 
   drop_na(landcover)
+
+
+# save to file for later reuse
+fwrite(ebdChkSummary, file = "data/eBirdChecklistVars.csv")
 ```
 
 ## Run observer expertise model
