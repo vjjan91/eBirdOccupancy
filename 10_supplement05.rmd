@@ -20,7 +20,7 @@ library(scales)
 # plotting libs
 library(ggplot2)
 library(ggthemes)
-library(pals)
+library(scico)
 
 # get ci func
 ci <- function(x){qnorm(0.975)*sd(x, na.rm = T)/sqrt(length(x))}
@@ -31,8 +31,8 @@ ci <- function(x){qnorm(0.975)*sd(x, na.rm = T)/sqrt(length(x))}
 scores <- read_csv("data/dataObsExpScore.csv")
 data <- read_csv("data/eBirdChecklistVars.csv")
 
-data <- left_join(data, scores, by = c("observer_id" = "observer"))
-data <- select(data, score, nSp, totSoiSeen, landcover, year) %>% 
+data <- left_join(data, scores, by = c("observer" = "observer"))
+data <- select(data, score, nSp, nSoi, landcover, year) %>% 
   filter(!is.na(score))
 ```
 
@@ -42,8 +42,8 @@ data <- select(data, score, nSp, totSoiSeen, landcover, year) %>%
 # summarise data by rounded score and year
 data_summary01 <- data %>% 
   mutate(score = plyr::round_any(score, 0.2)) %>% 
-  select(score, year, nSp, totSoiSeen) %>% 
-  pivot_longer(cols = c("nSp", "totSoiSeen"),
+  select(score, year, nSp, nSoi) %>% 
+  pivot_longer(cols = c("nSp", "nSoi"),
                names_to = "variable", values_to = "value") %>% 
   group_by(score, year, variable) %>% 
   summarise_at(vars(value), list(~mean(.), ~ci(.)))
