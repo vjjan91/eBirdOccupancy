@@ -30,11 +30,10 @@ landscape <- stack("data/spatial/landscape_resamp01km.tif")
 
 # get proper names
 elev_names <- c("elev", "slope", "aspect")
-evi_names <- c("evi_01", "evi_07", "evi_10")
 chelsa_names <- c("chelsa_bio10_04", "chelsa_bio10_17", "chelsa_bio10_18",
                   "chelsa_prec", "chelsa_temp")
 
-names(landscape) <- as.character(glue('{c(elev_names, evi_names, chelsa_names, "landcover")}'))
+names(landscape) <- as.character(glue('{c(elev_names, chelsa_names, "landcover")}'))
 ```
 
 ```{r get_data_at_elev, eval=FALSE}
@@ -45,7 +44,7 @@ land_data <- landscape[[c("elev", chelsa_names)]]
 land_data <- as.list(land_data)
 
 # map get values over the stack
-land_data <- map(land_data, getValues)
+land_data <- purrr::map(land_data, getValues)
 names(land_data) <- c("elev", chelsa_names)
 
 # conver to dataframe and round to 100m
@@ -111,7 +110,7 @@ lc_elev <- lc_elev %>%
 fig_lc_elev <- ggplot(lc_elev)+
   geom_tile(aes(x=elev, y=factor(landcover), 
                 fill=prop), 
-            col="white", size = 0.6)+
+            col="grey99", size = 0.6)+
   scale_fill_scico(palette = "bilbao", begin = 0.0, end = 1.0)+
   scale_x_continuous(breaks = seq(0, 2500, 500), labels = comma)+
   scale_alpha_continuous(range = c(0.3, 1))+

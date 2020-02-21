@@ -28,7 +28,7 @@ round_any <- function(x, accuracy = 20000){round(x/accuracy)*accuracy}
 
 ```{r soi_supplement, eval=FALSE, message=FALSE, warning=FALSE}
 # add species of interest
-specieslist <- read_excel("data/species_list_13_11_2019.xlsx")
+specieslist <- read_excel("data/V2_ListOfSpecies_ChosenForStudy.csv.xlsx")
 speciesOfInterest <- specieslist$scientific_name
 ```
 
@@ -133,7 +133,7 @@ ggplot()+
   geom_sf(data = wg, fill = NA, col = "black", lwd = 0.3)+
   
   scale_fill_scico(palette = "lajolla", direction = 1, label = scales::percent)+
-  facet_wrap(~scientific_name, ncol = 10)+
+  facet_wrap(~scientific_name, ncol = 7)+
   coord_sf(xlim = bbox[c("xmin", "xmax")], ylim = bbox[c("ymin", "ymax")])+
   theme_few()+
   theme(legend.position = "right", 
