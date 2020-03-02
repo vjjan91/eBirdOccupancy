@@ -95,7 +95,7 @@ res_final <- res_init*100
 
 # use gdalutils gdalwarp for resampling transform
 # to 1km from 10m
-g1dalwarp(srcfile = landcover, 
+gdalwarp(srcfile = landcover, 
           dstfile = "data/landUseClassification/lc_01km.tif", 
           tr=c(res_final), r='mode', te=c(e))
 ```
