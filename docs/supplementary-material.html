@@ -24,7 +24,7 @@
 <meta name="author" content="Vijay Ramesh, Pratik R Gupte, and Morgan Tingley" />
 
 
-<meta name="date" content="2020-03-02" />
+<meta name="date" content="2020-03-05" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -1827,14 +1827,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">7.10.3</span> Plot distance exclusion effect</h3>
 <div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb125-1" title="1"><span class="co"># plot effort distance class cumulative sum</span></a>
 <a class="sourceLine" id="cb125-2" title="2">fig_dist_exclusion &lt;-<span class="st"> </span><span class="kw">ggplot</span>(effort_distance_summary)<span class="op">+</span></a>
-<a class="sourceLine" id="cb125-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(effort_distance_class, prop_effort))<span class="op">+</span></a>
+<a class="sourceLine" id="cb125-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(effort_distance_class, prop_effort), <span class="dt">size =</span> <span class="dv">3</span>)<span class="op">+</span></a>
 <a class="sourceLine" id="cb125-4" title="4"><span class="st">  </span><span class="kw">geom_path</span>(<span class="kw">aes</span>(effort_distance_class, prop_effort, <span class="dt">group =</span> <span class="ot">NA</span>))<span class="op">+</span></a>
 <a class="sourceLine" id="cb125-5" title="5"><span class="st">  </span><span class="co"># scale_y_continuous(label=label_number(scale=0.001, accuracy = 1, suffix = &quot;K&quot;))+</span></a>
 <a class="sourceLine" id="cb125-6" title="6"><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;stationary&quot;</span>, <span class="st">&quot;100m&quot;</span>, <span class="st">&quot;250m&quot;</span>, <span class="st">&quot;500m&quot;</span>, <span class="st">&quot;1 km&quot;</span>, <span class="st">&quot;2.5 km&quot;</span>, <span class="st">&quot;5 km&quot;</span>))<span class="op">+</span></a>
 <a class="sourceLine" id="cb125-7" title="7"><span class="st">  </span><span class="kw">theme_few</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb125-8" title="8"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;effort distance cutoff&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;proportion of checklists&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb125-8" title="8"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.grid =</span> <span class="kw">element_line</span>(<span class="dt">size =</span> <span class="fl">0.2</span>, <span class="dt">color =</span> <span class="st">&quot;grey&quot;</span>))<span class="op">+</span></a>
+<a class="sourceLine" id="cb125-9" title="9"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;effort distance cutoff&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;proportion of checklists&quot;</span>)</a>
+<a class="sourceLine" id="cb125-10" title="10"></a>
+<a class="sourceLine" id="cb125-11" title="11"><span class="kw">ggsave</span>(<span class="dt">plot =</span> fig_dist_exclusion, <span class="st">&quot;figs/fig_cutoff_effort.png&quot;</span>, <span class="dt">height =</span> <span class="dv">6</span>, <span class="dt">width =</span> <span class="dv">8</span>, <span class="dt">dpi =</span> <span class="dv">300</span>)</a>
+<a class="sourceLine" id="cb125-12" title="12"><span class="kw">dev.off</span>()</a></code></pre></div>
 <div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb126-1" title="1">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;figs/fig_cutoff_effort.png&quot;</span>)</a></code></pre></div>
-<p><img src="figs/fig_cutoff_effort.png" width="180" /></p>
+<p><img src="figs/fig_cutoff_effort.png" width="1200" /></p>
 
 </div>
 </div>
