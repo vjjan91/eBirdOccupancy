@@ -1,0 +1,77 @@
+---
+editor_options: 
+  chunk_output_type: console
+---
+
+# Results
+
+## Prepare libraries
+
+```{r load_libs_results, eval=FALSE}
+# load libraries
+library(dplyr)
+library(readr)
+library(forcats)
+
+# plotting
+library(ggplot2)
+library(ggthemes)
+library(scico)
+```
+
+```{r load_data_results, eval=FALSE}
+# load data
+data <- read_csv("data/results/ElevationSummary_2.5km.csv")
+data <- data %>% 
+  group_by(Hypothesis) %>% 
+  arrange(median, .by_group=T) %>% 
+  ungroup() %>% 
+  mutate(this_order = 1:nrow(.))
+```
+
+## Plot Figure 3 (heading to be changed)
+
+```{r plot_fig_3, eval=FALSE}
+# make figure 3 and add text to error bars
+fig_elevation_coefficient <- ggplot(data, aes(x = this_order, 
+                 y = median, ymin = q1, ymax = q3))+
+  geom_vline(xintercept = c(20.5, 21.5, 27.5, 37.5),
+             alpha = 0.2, lty = 3)+
+  annotate(geom = "text",
+           x = c(19.5, 21, 26.5, 36.5, 40),
+           y = 2000,
+           fontface = "bold",
+           label = letters[1:5])+
+  geom_hline(yintercept = c(700,1400),
+             lty = 2, size = 0.2)+
+  geom_errorbar(aes(col = Hypothesis),
+                width = 0.4)+
+  geom_point(aes(fill = Hypothesis),
+             shape = 21, col = "grey30")+
+  geom_text(aes(label = Species), 
+            size = 2.5,
+            fontface = "italic",
+            nudge_x = 0.5)+
+  
+  scale_colour_brewer(palette = "Dark2")+
+  scale_fill_brewer(palette = "Dark2")+
+    
+  coord_flip()+
+  theme_few()+
+  theme(legend.position = "none",
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
+  labs(y = "elevation (m)", x = "Species")
+
+# save figure
+ggsave(fig_elevation_coefficient, 
+       filename = "figs/fig_elevation_coefficient.png",
+       height = 8, width = 4)
+```
+
+## Show Figure 3
+
+```{r show_figure_3, eval = TRUE}
+knitr::include_graphics("figs/fig_elevation_coefficient.png")
+```
+
