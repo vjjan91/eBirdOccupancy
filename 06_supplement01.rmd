@@ -25,6 +25,8 @@ library(scico)
 
 # round any function
 round_any <- function(x, accuracy = 20000){round(x/accuracy)*accuracy}
+# ci function
+ci <- function(x){qnorm(0.975)*sd(x, na.rm = TRUE)/sqrt(length(x))}
 
 # set python path
 use_python("/usr/bin/python3")
@@ -223,6 +225,23 @@ hist_roads <- ggplot(chkCovars)+
 
 ```
 
+### Table: Distance to roads
+
+```{r save_global_mean_dist_roads, eval=FALSE}
+# write the mean and ci95 to file
+chkCovars %>% 
+  st_drop_geometry() %>% 
+  summarise_at(vars(dist_road, nnb), list(~mean(.), ~ci(.))) %>% 
+  write_csv("data/results/distance_roads_sites.csv")
+```
+
+```{r show_dist_roads_nnb, eval=TRUE, message=FALSE}
+# read in and show
+read_csv("data/results/distance_roads_sites.csv") %>% 
+  knitr::kable()
+
+```
+
 ### Plot histogram: distance to nearest site
 
 ```{r plot_nn_site, eval=FALSE}
@@ -265,7 +284,29 @@ hist_sites_sp <-
         panel.background = element_blank(),
         panel.border = element_blank(), axis.line = element_blank())
 
-ggsave(hist_sites_sp, filename = "fig_nnb_species.png")
+ggsave(hist_sites_sp, filename = "figs/fig_nnb_species.png")
+```
+
+### Table: Species specific nearest site
+
+```{r save_sp_mean_nnb, eval=FALSE}
+# write the mean and ci95 to file
+sp_spec_data %>% 
+  group_by(scientific_name) %>% 
+  summarise_at(vars(nnb), list(~mean(.), ~ci(.))) %>% 
+  write_csv("data/results/dist_nnb_species_specific.csv")
+```
+
+```{r show_sp_nnb, eval=TRUE, message=FALSE}
+# show table of distance to nearest site for each species
+read_csv("data/results/dist_nnb_species_specific.csv") %>% 
+  knitr::kable()
+```
+
+Histograms showing the species-specific distances to nearest neighbouring site.
+
+```{r show_sp_spec_nnb, eval=TRUE}
+knitr::include_graphics("figs/fig_nnb_species.png")
 ```
 
 
