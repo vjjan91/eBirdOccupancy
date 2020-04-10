@@ -487,26 +487,40 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1"><span class="co"># write the mean and ci95 to file</span></a>
 <a class="sourceLine" id="cb72-2" title="2">chkCovars <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb72-3" title="3"><span class="st">  </span><span class="kw">st_drop_geometry</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb72-4" title="4"><span class="st">  </span><span class="kw">summarise_at</span>(<span class="kw">vars</span>(dist_road, nnb), <span class="kw">list</span>(<span class="op">~</span><span class="kw">mean</span>(.), <span class="op">~</span><span class="kw">ci</span>(.))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb72-5" title="5"><span class="st">  </span><span class="kw">write_csv</span>(<span class="st">&quot;data/results/distance_roads_sites.csv&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb72-4" title="4"><span class="st">  </span><span class="kw">select</span>(dist_road, nnb) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb72-5" title="5"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">pivot_longer</span>(<span class="dt">cols =</span> <span class="kw">c</span>(<span class="st">&quot;dist_road&quot;</span>, <span class="st">&quot;nnb&quot;</span>),</a>
+<a class="sourceLine" id="cb72-6" title="6">                      <span class="dt">names_to =</span> <span class="st">&quot;variable&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb72-7" title="7"><span class="st">  </span><span class="kw">group_by</span>(variable) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb72-8" title="8"><span class="st">  </span><span class="kw">summarise_at</span>(<span class="kw">vars</span>(value), </a>
+<a class="sourceLine" id="cb72-9" title="9">               <span class="kw">list</span>(<span class="op">~</span><span class="kw">mean</span>(.), <span class="op">~</span><span class="kw">sd</span>(.), <span class="op">~</span><span class="kw">min</span>(.), <span class="op">~</span><span class="kw">max</span>(.))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb72-10" title="10"><span class="st">  </span><span class="kw">write_csv</span>(<span class="st">&quot;data/results/distance_roads_sites.csv&quot;</span>)</a></code></pre></div>
 <div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" title="1"><span class="co"># read in and show</span></a>
 <a class="sourceLine" id="cb73-2" title="2"><span class="kw">read_csv</span>(<span class="st">&quot;data/results/distance_roads_sites.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb73-3" title="3"><span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>()</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
-<th align="right">dist_road_mean</th>
-<th align="right">nnb_mean</th>
-<th align="right">dist_road_ci</th>
-<th align="right">nnb_ci</th>
+<th align="left">variable</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">min</th>
+<th align="right">max</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
+<td align="left">dist_road</td>
 <td align="right">389.7699</td>
+<td align="right">859.1526</td>
+<td align="right">0.2791282</td>
+<td align="right">7637.243</td>
+</tr>
+<tr class="even">
+<td align="left">nnb</td>
 <td align="right">296.8934</td>
-<td align="right">8.716376</td>
-<td align="right">5.60948</td>
+<td align="right">552.9132</td>
+<td align="right">0.1367772</td>
+<td align="right">12849.668</td>
 </tr>
 </tbody>
 </table>
@@ -557,8 +571,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" title="1"><span class="co"># write the mean and ci95 to file</span></a>
 <a class="sourceLine" id="cb76-2" title="2">sp_spec_data <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb76-3" title="3"><span class="st">  </span><span class="kw">group_by</span>(scientific_name) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb76-4" title="4"><span class="st">  </span><span class="kw">summarise_at</span>(<span class="kw">vars</span>(nnb), <span class="kw">list</span>(<span class="op">~</span><span class="kw">mean</span>(.), <span class="op">~</span><span class="kw">ci</span>(.))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb76-5" title="5"><span class="st">  </span><span class="kw">write_csv</span>(<span class="st">&quot;data/results/dist_nnb_species_specific.csv&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb76-4" title="4"><span class="st">  </span><span class="kw">summarise_at</span>(<span class="kw">vars</span>(nnb), </a>
+<a class="sourceLine" id="cb76-5" title="5">               <span class="kw">list</span>(<span class="op">~</span><span class="kw">mean</span>(.), <span class="op">~</span><span class="kw">sd</span>(.), <span class="op">~</span><span class="kw">ci</span>(.), <span class="op">~</span><span class="kw">min</span>(.), <span class="op">~</span><span class="kw">max</span>(.))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb76-6" title="6"><span class="st">  </span><span class="kw">write_csv</span>(<span class="st">&quot;data/results/dist_nnb_species_specific.csv&quot;</span>)</a></code></pre></div>
 <div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" title="1"><span class="co"># show table of distance to nearest site for each species</span></a>
 <a class="sourceLine" id="cb77-2" title="2"><span class="kw">read_csv</span>(<span class="st">&quot;data/results/dist_nnb_species_specific.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb77-3" title="3"><span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>()</a></code></pre></div>
@@ -567,219 +582,348 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tr class="header">
 <th align="left">scientific_name</th>
 <th align="right">mean</th>
+<th align="right">sd</th>
 <th align="right">ci</th>
+<th align="right">min</th>
+<th align="right">max</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="left">Alcippe poioicephala</td>
 <td align="right">416.7076</td>
+<td align="right">808.0633</td>
 <td align="right">25.00732</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="even">
 <td align="left">Carpodacus erythrinus</td>
 <td align="right">416.3566</td>
+<td align="right">807.9932</td>
 <td align="right">25.00515</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="odd">
 <td align="left">Centropus sinensis</td>
 <td align="right">416.8469</td>
+<td align="right">808.2412</td>
 <td align="right">25.01906</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="even">
 <td align="left">Chalcophaps indica</td>
 <td align="right">416.6251</td>
+<td align="right">807.9633</td>
 <td align="right">25.00111</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="odd">
 <td align="left">Chloropsis aurifrons</td>
 <td align="right">417.2270</td>
+<td align="right">808.7698</td>
 <td align="right">25.02918</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="even">
 <td align="left">Chrysocolaptes guttacristatus</td>
 <td align="right">416.6501</td>
+<td align="right">808.0689</td>
 <td align="right">25.00749</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="odd">
 <td align="left">Cinnyris asiaticus</td>
 <td align="right">416.7731</td>
+<td align="right">808.1539</td>
 <td align="right">25.01324</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="even">
 <td align="left">Copsychus fulicatus</td>
 <td align="right">416.8469</td>
+<td align="right">808.2412</td>
 <td align="right">25.01906</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="odd">
 <td align="left">Copsychus saularis</td>
 <td align="right">416.6281</td>
+<td align="right">808.0744</td>
 <td align="right">25.00766</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="even">
 <td align="left">Culicicapa ceylonensis</td>
 <td align="right">416.8469</td>
+<td align="right">808.2412</td>
 <td align="right">25.01906</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="odd">
 <td align="left">Cyornis tickelliae</td>
 <td align="right">416.7184</td>
+<td align="right">808.1772</td>
 <td align="right">25.01396</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="even">
 <td align="left">Dicaeum erythrorhynchos</td>
 <td align="right">416.4383</td>
+<td align="right">807.8246</td>
 <td align="right">24.99370</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="odd">
 <td align="left">Eumyias albicaudatus</td>
 <td align="right">416.5625</td>
+<td align="right">808.0762</td>
 <td align="right">25.00772</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="even">
 <td align="left">Hierococcyx varius</td>
 <td align="right">416.5075</td>
+<td align="right">807.9157</td>
 <td align="right">24.99964</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="odd">
 <td align="left">Hypsipetes ganeesa</td>
 <td align="right">416.9883</td>
+<td align="right">808.1900</td>
 <td align="right">25.01436</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="even">
 <td align="left">Iole indica</td>
 <td align="right">417.5128</td>
+<td align="right">809.7107</td>
 <td align="right">25.05830</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="odd">
 <td align="left">Irena puella</td>
 <td align="right">416.7806</td>
+<td align="right">808.0570</td>
 <td align="right">25.00712</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="even">
 <td align="left">Lanius schach</td>
 <td align="right">416.9222</td>
+<td align="right">808.0495</td>
 <td align="right">25.00689</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="odd">
 <td align="left">Leptocoma minima</td>
 <td align="right">416.7510</td>
+<td align="right">808.1632</td>
 <td align="right">25.01353</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="even">
 <td align="left">Leptocoma zeylonica</td>
 <td align="right">416.8469</td>
+<td align="right">808.2412</td>
 <td align="right">25.01906</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="odd">
 <td align="left">Motacilla maderaspatensis</td>
 <td align="right">416.7644</td>
+<td align="right">808.1430</td>
 <td align="right">25.01290</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="even">
 <td align="left">Myophonus horsfieldii</td>
 <td align="right">416.8469</td>
+<td align="right">808.2412</td>
 <td align="right">25.01906</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="odd">
 <td align="left">Orthotomus sutorius</td>
 <td align="right">416.7268</td>
+<td align="right">808.1720</td>
 <td align="right">25.01380</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="even">
 <td align="left">Parus cinereus</td>
 <td align="right">416.7780</td>
+<td align="right">808.1521</td>
 <td align="right">25.01319</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="odd">
 <td align="left">Passer domesticus</td>
 <td align="right">416.8469</td>
+<td align="right">808.2412</td>
 <td align="right">25.01906</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="even">
 <td align="left">Pellorneum ruficeps</td>
 <td align="right">416.8469</td>
+<td align="right">808.2412</td>
 <td align="right">25.01906</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="odd">
 <td align="left">Pericrocotus cinnamomeus</td>
 <td align="right">416.7935</td>
+<td align="right">808.1474</td>
 <td align="right">25.01304</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="even">
 <td align="left">Pericrocotus flammeus</td>
 <td align="right">416.7258</td>
+<td align="right">808.1102</td>
 <td align="right">25.01189</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="odd">
 <td align="left">Picus xanthopygaeus</td>
 <td align="right">416.8469</td>
+<td align="right">808.2412</td>
 <td align="right">25.01906</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="even">
 <td align="left">Pomatorhinus horsfieldii</td>
 <td align="right">416.8663</td>
+<td align="right">808.1413</td>
 <td align="right">25.01285</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="odd">
 <td align="left">Psilopogon viridis</td>
 <td align="right">416.8469</td>
+<td align="right">808.2412</td>
 <td align="right">25.01906</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="even">
 <td align="left">Psittacula columboides</td>
 <td align="right">416.8469</td>
+<td align="right">808.2412</td>
 <td align="right">25.01906</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="odd">
 <td align="left">Psittacula cyanocephala</td>
 <td align="right">416.8469</td>
+<td align="right">808.2412</td>
 <td align="right">25.01906</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="even">
 <td align="left">Pycnonotus cafer</td>
 <td align="right">416.9760</td>
+<td align="right">807.9851</td>
 <td align="right">25.00490</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="odd">
 <td align="left">Pycnonotus jocosus</td>
 <td align="right">416.7780</td>
+<td align="right">808.1521</td>
 <td align="right">25.01319</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="even">
 <td align="left">Saxicola caprata</td>
 <td align="right">416.8469</td>
+<td align="right">808.2412</td>
 <td align="right">25.01906</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="odd">
 <td align="left">Sitta frontalis</td>
 <td align="right">417.1803</td>
+<td align="right">808.0823</td>
 <td align="right">25.00479</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="even">
 <td align="left">Streptopelia chinensis</td>
 <td align="right">416.7387</td>
+<td align="right">808.1661</td>
 <td align="right">25.01362</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="odd">
 <td align="left">Turdoides striata</td>
 <td align="right">418.0558</td>
+<td align="right">810.0605</td>
 <td align="right">25.06913</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="even">
 <td align="left">Turdus simillimus</td>
 <td align="right">416.8469</td>
+<td align="right">808.2412</td>
 <td align="right">25.01906</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="odd">
 <td align="left">Upupa epops</td>
 <td align="right">416.8469</td>
+<td align="right">808.2412</td>
 <td align="right">25.01906</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 <tr class="even">
 <td align="left">Zosterops palpebrosus</td>
 <td align="right">416.7707</td>
+<td align="right">808.1456</td>
 <td align="right">25.01298</td>
+<td align="right">0.1367772</td>
+<td align="right">16460.7</td>
 </tr>
 </tbody>
 </table>

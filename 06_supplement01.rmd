@@ -231,7 +231,12 @@ hist_roads <- ggplot(chkCovars)+
 # write the mean and ci95 to file
 chkCovars %>% 
   st_drop_geometry() %>% 
-  summarise_at(vars(dist_road, nnb), list(~mean(.), ~ci(.))) %>% 
+  select(dist_road, nnb) %>% 
+  tidyr::pivot_longer(cols = c("dist_road", "nnb"),
+                      names_to = "variable") %>%
+  group_by(variable) %>% 
+  summarise_at(vars(value), 
+               list(~mean(.), ~sd(.), ~min(.), ~max(.))) %>% 
   write_csv("data/results/distance_roads_sites.csv")
 ```
 
@@ -239,7 +244,6 @@ chkCovars %>%
 # read in and show
 read_csv("data/results/distance_roads_sites.csv") %>% 
   knitr::kable()
-
 ```
 
 ### Plot histogram: distance to nearest site
@@ -293,7 +297,8 @@ ggsave(hist_sites_sp, filename = "figs/fig_nnb_species.png")
 # write the mean and ci95 to file
 sp_spec_data %>% 
   group_by(scientific_name) %>% 
-  summarise_at(vars(nnb), list(~mean(.), ~ci(.))) %>% 
+  summarise_at(vars(nnb), 
+               list(~mean(.), ~sd(.), ~ci(.), ~min(.), ~max(.))) %>% 
   write_csv("data/results/dist_nnb_species_specific.csv")
 ```
 
