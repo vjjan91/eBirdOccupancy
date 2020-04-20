@@ -1,0 +1,73 @@
+---
+editor_options: 
+  chunk_output_type: console
+---
+
+# Results: Occupancy predictors
+
+## Prepare libs
+
+```{r load_libs_res_p2, eval=FALSE}
+# for data
+library(dplyr)
+library(purrr)
+library(stringr)
+library(stringi)
+
+# for plotting
+
+```
+
+
+## Load model data
+
+Data is saved as model averaged objects.
+
+```{r load_model_obj, eval=FALSE}
+# load rdata files from a list
+mod_obj_list <- list.files("data/results/", pattern = ".rda",
+                          full.names = TRUE)
+walk(mod_obj_list, load, envir = .GlobalEnv)
+
+# rename the object
+models = c
+```
+
+## Summarise model data
+
+```{r extract_model_obj_data, eval=FALSE}
+# assuming there are multiple models in a list
+# there's no obvious way to check since the averaged object is a list
+mod_summary <- map(models, function(m){
+  as_tibble(m$coefficients, rownames = c("model_type"))
+})
+
+# if there is a single model
+mod_summary <- as_tibble(models$coefficients,
+                         rownames = "model_type")
+
+mod_coeff <- mod_summary %>% 
+  group_by(model_type) %>% 
+  nest() %>% 
+  mutate(data = map(data, function(df){
+    df = pivot_longer(df, cols = everything()) %>% 
+      mutate(has_val = if_else(str_detect(name, "psi"),
+                               "coeff", "p_val"),
+             variable = str_extract(name, pattern = regex("\\((.*?)\\)")),
+             variable = str_replace_all(variable, "[//(//)]", "")) %>% 
+      
+      select(-name)
+    
+    df = pivot_wider(df, id_cols = "variable", names_from = "has_val", 
+                     values_from = "value")
+    
+    predictors <- str_split_fixed(df$variable, ":", 2) %>% 
+      `colnames<-`(c("predictor", "modulator")) %>% 
+      as_tibble() %>% 
+      mutate(modulator = if_else(modulator == "", as.character(NA), modulator))
+    
+    df <- bind_cols(predictors, df) %>% 
+      select(-variable)
+  }))
+
+```

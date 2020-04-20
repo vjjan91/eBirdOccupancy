@@ -3,7 +3,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Results
+# Results: Best supported hypotheses
 
 ## Prepare libraries
 
@@ -140,7 +140,6 @@ data <- arrange(data, median) %>%
   ungroup() %>% 
   mutate(plot_order = 1:nrow(data))
 ```
-
 
 ```{r plot_fig_3_supplement, eval=FALSE}
 # make figure 3 for supplementary material
