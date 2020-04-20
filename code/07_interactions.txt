@@ -1,0 +1,204 @@
+---
+editor_options: 
+  chunk_output_type: console
+---
+
+# Results: Occupancy predictors
+
+## Prepare libs
+
+```{r load_libs_res_p2, eval=FALSE}
+# for data
+library(data.table)
+library(dplyr)
+library(purrr)
+library(stringr)
+library(stringi)
+
+# for models
+library(auk)
+library(unmarked)
+library(ebirdst)
+library(MuMIn)
+library(AICcmodavg)
+library(fields)
+library(doParallel)
+library(snow)
+
+# for plotting
+
+```
+
+## Prepare data
+
+```{r read_data_res_p2, eval=FALSE}
+# read in data
+dat.scaled <- fread("data/scaledCovs_2.5km.csv",header=T)
+head(dat.scaled)
+
+{
+  clim_elev <- list()
+  top_clim_elev <- list()
+  clim_elev_imp <- list()
+  clim_elev_modelEst <- list()
+  clim_elev_avg <- list() # this is not really used
+}
+
+data <- dat.scaled[scientific_name %in% c("Copsychus fulicatus",
+                                          "Copsychus saularis"),]
+
+# split data by species
+data <- split(data, data$scientific_name)
+```
+
+## Occupancy modelling
+
+```{r walk_over_list_occu, eval=FALSE}
+# walk across list
+
+walk(data, function(df){
+
+  # Preparing data for the unmarked model
+  occ <- filter_repeat_visits(df, 
+                              min_obs = 1, max_obs = 10,
+                              annual_closure = FALSE,
+                              n_days = 2200, # 6 years is considered a period of closure
+                              date_var = "observation_date",
+                              site_vars = c("locality_id"))
+  
+  obs_covs <- c("min_obs_started", 
+                "duration_minutes", 
+                "effort_distance_km", 
+                "number_observers", 
+                "protocol_type",
+                "expertise",
+                "julian_date")
+  
+  # format for unmarked
+  occ_wide <- format_unmarked_occu(occ, 
+                  site_id = "site", 
+                  response = "pres_abs",
+                  site_covs = c( "locality_id","lc_01.y","lc_02.y",
+                                 "lc_03.y", "lc_04.y",
+                                 "lc_05.y", "lc_06.y", "lc_07.y","bio_4.y",
+                                 "bio_17.y","bio_18.y",
+                                 "prec_interannual.y","alt.y"),
+                  obs_covs = obs_covs)
+  
+  # Convert this dataframe of observations into an unmarked object to start fitting occupancy models
+  occ_um <- formatWide(occ_wide, type = "unmarkedFrameOccu")
+  
+  # specify model
+  model_clim <- occu(~min_obs_started+
+                     julian_date +
+                     duration_minutes + 
+                     effort_distance_km + 
+                     number_observers + 
+                     protocol_type +
+                     expertise~bio_4.y*alt.y + bio_17.y*alt.y + bio_18.y*alt.y +  
+                     prec_interannual.y*alt.y, data = occ_um)
+  
+  # Set up the cluster
+  clusterType <- if(length(find.package("snow", quiet = TRUE))) 
+    {"SOCK"} else {"PSOCK"}
+  clust <- try(makeCluster(getOption("cl.cores", 4), type = clusterType))
+  
+  clusterEvalQ(clust, library(unmarked))
+  clusterExport(clust, "occ_um")
+  
+  # Detection terms are fixed
+  det_terms <- c("p(duration_minutes)","p(effort_distance_km)",
+                 "p(expertise)","p(julian_date)","p(min_obs_started)",
+                 "p(number_observers)","p(protocol_type)")
+  
+  #### add models to prepared list ####
+  # first get dredged model
+  model_dredge <- pdredge(model_clim, clust, fixed = det_terms)
+  clim_elev <- append(clim_elev, model_dredge)
+  
+  # select top models from the dredge
+  top_models <- get.models(model_dredge, subset = delta <4, cluster = clust)
+  top_clim_elev <- append(top_clim_elev, top_models)
+  
+  #### handle cases where there is more than one top model ####
+  if(length(top_models)>1){
+    # get a  model average from the top models
+    model_avg <- model.avg(top_models, fit = TRUE)
+    
+    # get model coefficients WHY IS THIS NECESSARY
+    model_coeff <- as_tibble(model_avg$coefficients,
+                             rownames = "model_type")
+    
+    # get the model_avg estimate
+    model_estimate <- as_tibble(summary(model_avg)[["coefmat.full"]],
+                                rownames = "predictor") %>% 
+      `colnames<-`(c("predictor","coefficient", "std_err", "z_value", "p_value"))
+    
+    # get model_avg confidence intervals
+    ci_data <- as_tibble(confint(model_avg), rownames = "predictor") %>% 
+      `colnames<-`(c("predictor", "ci_lower", "ci_higher"))
+    
+    # join ci data and model estimate
+    model_estimate <- left_join(model_estimate, ci_data)
+    model_estimate$scientific_name <- unique(df$scientific_name)
+    clim_elev_modelEst <- append(clim_elev_modelEst, model_estimate)
+    
+    # get the relative importance of predictors
+    model_imp <- as_tibble(MuMIn::importance(model_avg),
+                                  rownames = "predictor")
+    clim_elev_imp <- append(clim_elev_imp, model_imp)
+} 
+  else {
+    model <- top_models
+    # get the model coefficients, WHY
+    model_coeff <- unmarked::coef(model) %>% 
+      as_tibble(rownames = "predictors")
+  
+    # get confidence intervals data
+    ci_data <- map_df(c("state", "det"), function(type){
+      confint(model, type = type) %>% 
+        as_tibble(rownames = "predictor") %>% 
+        `colnames<-`(c("predictor", "ci_lower", "ci_higher"))
+    })
+  
+    # get the model estimate
+    model_estimate <- unmarked::summary(model) %>% 
+      bind_rows() %>% 
+      as_tibble() %>% 
+      `colnames<-`(c("coefficient", "std_err", "z_value", "p_value"))
+  
+    # join coeffs with confidence intervals
+    model_estimate <- bind_cols(ci_data, model_estimate)
+    model_estimate$scientific_name <- unique(df$scientific_name)
+    clim_elev_modelEst <- append(clim_elev_modelEst, model_estimate)
+  }
+  
+})
+```
+
+## Collect model data
+
+```{r extract_model_obj_data, eval=FALSE}
+# assuming there are multiple models in a list
+mod_estimates <- clim_elev_modelEst %>%
+  bind_rows() %>% 
+  group_by(scientific_name) %>% # grouping and nesting by scientific name
+  nest() %>% # just in case there are mix ups
+  
+  # now mutate a new column where 
+  mutate(data = map(data, function(df){
+    df = mutate(df, 
+                predictor = str_extract(predictor, pattern = regex("\\((.*?)\\)")),
+                predictor = str_replace_all(predictor, "[//(//)]", ""))
+    
+    pred_mod <- str_split_fixed(df$predictor, ":", 2) %>% 
+      `colnames<-`(c("predictor", "modulator")) %>% 
+      as_tibble() %>% 
+      mutate(modulator = if_else(modulator == "", as.character(NA), modulator))
+    
+    df <- select(df, -predictor) %>% 
+      bind_cols(predictors)
+  }))
+
+mod_estimates
+```
