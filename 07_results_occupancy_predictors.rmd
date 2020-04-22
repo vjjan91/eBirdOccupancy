@@ -1,0 +1,143 @@
+---
+editor_options: 
+  chunk_output_type: console
+---
+
+# Results: Occupancy predictors
+
+## Prepare libraries
+
+```{r load_libs_results02, eval=FALSE}
+# to load data
+library(readxl)
+
+# to handle data
+library(dplyr)
+library(readr)
+library(forcats)
+library(tidyr)
+library(purrr)
+library(stringr)
+
+# to wrangle models
+source("code/fun_model_estimate_collection.r")
+source("code/fun_make_resp_data.r")
+
+# plotting
+library(ggplot2)
+library(ggthemes)
+library(scico)
+```
+
+## Prepare data to load
+
+```{r prep_interaction_data, eval=FALSE}
+# list excel files
+data_files <- list.files(path = "data/results/results_model_est_2.5km/",
+                         include.dirs = FALSE,
+                         pattern = "Est", full.names = TRUE)
+
+# get model names
+model_names <- map_chr(data_files, function(x){
+  # split on /
+  str_split(x, "/") %>% 
+    unlist() %>% 
+    last() %>% 
+    # split on extension
+    str_split(".xlsx") %>% 
+    unlist() %>% 
+    first()
+})
+```
+
+## Load data
+
+```{r load_model_estimates, eval=FALSE}
+# load for one
+data_files <- data_files[[1]]
+model_data <- data_files %>% 
+  excel_sheets() %>%
+  set_names() %>%
+  map(read_excel, path = data_files)
+
+# rename model data components and separate predictors
+names <- c("predictor", "coefficient", "se", "ci_lower", "ci_higher", "z_value", "p_value")
+
+# map process over all models
+model_data <- map(model_data, function(df){
+  colnames(df) <- names
+  df <- separate_interaction_terms(df)
+  return(df)
+})
+```
+
+## Prepare interaction data
+
+Refer to the function `code/fun_make_resp_data.r`.
+
+```{r significant_predictors, eval=FALSE}
+# select by p value
+model_data <- map(model_data, make_response_data)
+
+# remove elements where there are no rows
+model_data <- keep(model_data, function(df) nrow(df) > 0)
+
+# bind rows
+# model_data <- map2(model_data, names(model_data), function(df, name){
+#   df <- mutate(df, scientific_name = name)
+#   df <- unnest(df, data) %>% 
+#     select(predictor, modulator, scientific_name, seq_x, m_group, y) %>% 
+#     mutate(modulator = if_else(is.na(modulator), "none", modulator))
+# })
+
+# now bind # THERE WILL BE WARNINGS -- use assert to check data is not lost
+# plot_data <- bind_rows(model_data)
+# assertthat::assert_that((map_int(model_data, nrow) %>% sum()) == nrow(plot_data))
+
+# split by predictor
+# plot_data <- split(plot_data, plot_data$predictor)
+```
+
+## Plot interaction data
+
+```{r plot_interactions, eval=FALSE}
+fig_list <- map2(model_data[1:10], names(model_data)[1:10], function(df, species){
+  
+  # now go over the predictor - modulator combos
+  
+  subplots <- pmap(df[,c("predictor","modulator","data")], 
+                   function(predictor, modulator, data){
+                     
+                     # make the actual ggplot here
+                     
+                     fig_subplot <- ggplot(data, aes(seq_x, y,
+                                                     col = m_group))+
+                       geom_point(shape = 1)+
+                       geom_smooth(method = "glm", col = "black",
+                                   size = 0.3)+
+                       
+                       scale_colour_brewer(palette = "Set1")+
+                       
+                       coord_cartesian(xlim=c(0,1),ylim = c(0,1))+
+                       theme_test(base_size = 8)+
+                       theme(legend.position = if_else(is.na(modulator), 
+                                                       "none","top"))+
+                       labs(x = glue::glue('{predictor}'),
+                            y = "occupancy",
+                            col = glue::glue('{modulator}'))
+                   })
+  subplots <- patchwork::wrap_plots(subplots, ncol = 5)+
+    patchwork::plot_annotation(
+      title = species,
+      theme = theme(plot.title = element_text(size = 11,face = "italic"))
+})
+
+# make pdf of patchwork
+cairo_pdf(file = "figs/fig_interaction_clim_elev.pdf", width = 10, height = 3,
+          onefile = TRUE)
+{
+  print(fig_list)
+}
+dev.off()
+```
+
