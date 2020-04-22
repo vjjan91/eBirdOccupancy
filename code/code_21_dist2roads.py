@@ -120,6 +120,33 @@ src = rasterio.open('data/elevationHills.tif')
 # Sample the raster at every point location and store values in DataFrame
 unique_locs['elev'] = [x[0] for x in src.sample(coords)]
 
+#### code for nearest neighbour distances ####
+# function to use ckdtrees for nearest point finding
+def ckdnearest_point(gdfA, gdfB):
+    A = np.concatenate(
+    [np.array(geom.coords) for geom in gdfA.geometry.to_list()])
+    #simplified_features = simplify_roads(gdfB)
+    B = np.concatenate(
+    [np.array(geom.coords) for geom in gdfB.geometry.to_list()])
+    #B = np.concatenate(B)
+    ckd_tree = cKDTree(B)
+    dist, idx = ckd_tree.query(A, k=[2])
+    return dist
 
+
+# get distance to nearest road
+unique_locs['dist_road'] = ckdnearest(unique_locs, roads)
+
+# get distance to nearest other site
+unique_locs['nnb'] = ckdnearest_point(unique_locs, unique_locs)
+
+# write to file
+unique_locs = pd.DataFrame(unique_locs.drop(columns='geometry'))
+unique_locs['dist_road'] = unique_locs['dist_road']
+unique_locs['nnb'] = unique_locs['nnb']
+unique_locs.to_csv(path_or_buf="data/locs_dist_to_road.csv", index=False)
+
+# merge unique locs with chkCovars
+chkCovars = chkCovars.merge(unique_locs, on=['latitude', 'longitude', 'coordId'])
 
 # ends here
