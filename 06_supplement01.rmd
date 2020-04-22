@@ -242,7 +242,7 @@ chkCovars %>%
 
 ```{r show_dist_roads_nnb, eval=TRUE, message=FALSE}
 # read in and show
-read_csv("data/results/distance_roads_sites.csv") %>% 
+readr::read_csv("data/results/distance_roads_sites.csv") %>% 
   knitr::kable()
 ```
 
@@ -304,7 +304,7 @@ sp_spec_data %>%
 
 ```{r show_sp_nnb, eval=TRUE, message=FALSE}
 # show table of distance to nearest site for each species
-read_csv("data/results/dist_nnb_species_specific.csv") %>% 
+readr::read_csv("data/results/dist_nnb_species_specific.csv") %>% 
   knitr::kable()
 ```
 

@@ -24,14 +24,14 @@
 <meta name="author" content="Vijay Ramesh, Pratik R Gupte, and Morgan Tingley" />
 
 
-<meta name="date" content="2020-04-10" />
+<meta name="date" content="2020-04-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="results.html"/>
+<link rel="prev" href="results-best-supported-hypotheses.html"/>
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -196,14 +196,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.9" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#the-interaction-between-inter-annual-variation-in-temperature-and-land-cover"><i class="fa fa-check"></i><b>6.9</b> The interaction between inter-annual variation in temperature and land cover</a></li>
 <li class="chapter" data-level="6.10" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#the-interaction-between-inter-annual-variation-in-precip-and-land-cover"><i class="fa fa-check"></i><b>6.10</b> The interaction between inter-annual variation in precip and land cover</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>7</b> Results</a><ul>
-<li class="chapter" data-level="7.1" data-path="results.html"><a href="results.html#prepare-libraries-2"><i class="fa fa-check"></i><b>7.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="7.2" data-path="results.html"><a href="results.html#prepare-data-1"><i class="fa fa-check"></i><b>7.2</b> Prepare data</a></li>
-<li class="chapter" data-level="7.3" data-path="results.html"><a href="results.html#main-text-figure-3"><i class="fa fa-check"></i><b>7.3</b> Main text Figure 3</a></li>
-<li class="chapter" data-level="7.4" data-path="results.html"><a href="results.html#plot-supplementary-figure-3"><i class="fa fa-check"></i><b>7.4</b> Plot supplementary Figure 3</a><ul>
-<li class="chapter" data-level="7.4.1" data-path="results.html"><a href="results.html#prepare-data-2"><i class="fa fa-check"></i><b>7.4.1</b> Prepare data</a></li>
+<li class="chapter" data-level="7" data-path="results-best-supported-hypotheses.html"><a href="results-best-supported-hypotheses.html"><i class="fa fa-check"></i><b>7</b> Results: Best supported hypotheses</a><ul>
+<li class="chapter" data-level="7.1" data-path="results-best-supported-hypotheses.html"><a href="results-best-supported-hypotheses.html#prepare-libraries-2"><i class="fa fa-check"></i><b>7.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="7.2" data-path="results-best-supported-hypotheses.html"><a href="results-best-supported-hypotheses.html#prepare-data-1"><i class="fa fa-check"></i><b>7.2</b> Prepare data</a></li>
+<li class="chapter" data-level="7.3" data-path="results-best-supported-hypotheses.html"><a href="results-best-supported-hypotheses.html#main-text-figure-3"><i class="fa fa-check"></i><b>7.3</b> Main text Figure 3</a></li>
+<li class="chapter" data-level="7.4" data-path="results-best-supported-hypotheses.html"><a href="results-best-supported-hypotheses.html#plot-supplementary-figure-3"><i class="fa fa-check"></i><b>7.4</b> Plot supplementary Figure 3</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="results-best-supported-hypotheses.html"><a href="results-best-supported-hypotheses.html#prepare-data-2"><i class="fa fa-check"></i><b>7.4.1</b> Prepare data</a></li>
 </ul></li>
-<li class="chapter" data-level="7.5" data-path="results.html"><a href="results.html#show-figure-3-supplement"><i class="fa fa-check"></i><b>7.5</b> Show Figure 3 Supplement</a></li>
+<li class="chapter" data-level="7.5" data-path="results-best-supported-hypotheses.html"><a href="results-best-supported-hypotheses.html#show-figure-3-supplement"><i class="fa fa-check"></i><b>7.5</b> Show Figure 3 Supplement</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="supplementary-material.html"><a href="supplementary-material.html"><i class="fa fa-check"></i><b>8</b> Supplementary material</a><ul>
 <li class="chapter" data-level="8.1" data-path="supplementary-material.html"><a href="supplementary-material.html#distance-to-roads"><i class="fa fa-check"></i><b>8.1</b> Distance to roads</a><ul>
@@ -495,7 +495,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb72-9" title="9">               <span class="kw">list</span>(<span class="op">~</span><span class="kw">mean</span>(.), <span class="op">~</span><span class="kw">sd</span>(.), <span class="op">~</span><span class="kw">min</span>(.), <span class="op">~</span><span class="kw">max</span>(.))) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb72-10" title="10"><span class="st">  </span><span class="kw">write_csv</span>(<span class="st">&quot;data/results/distance_roads_sites.csv&quot;</span>)</a></code></pre></div>
 <div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" title="1"><span class="co"># read in and show</span></a>
-<a class="sourceLine" id="cb73-2" title="2"><span class="kw">read_csv</span>(<span class="st">&quot;data/results/distance_roads_sites.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb73-2" title="2">readr<span class="op">::</span><span class="kw">read_csv</span>(<span class="st">&quot;data/results/distance_roads_sites.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb73-3" title="3"><span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>()</a></code></pre></div>
 <table>
 <thead>
@@ -575,7 +575,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb76-5" title="5">               <span class="kw">list</span>(<span class="op">~</span><span class="kw">mean</span>(.), <span class="op">~</span><span class="kw">sd</span>(.), <span class="op">~</span><span class="kw">ci</span>(.), <span class="op">~</span><span class="kw">min</span>(.), <span class="op">~</span><span class="kw">max</span>(.))) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb76-6" title="6"><span class="st">  </span><span class="kw">write_csv</span>(<span class="st">&quot;data/results/dist_nnb_species_specific.csv&quot;</span>)</a></code></pre></div>
 <div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" title="1"><span class="co"># show table of distance to nearest site for each species</span></a>
-<a class="sourceLine" id="cb77-2" title="2"><span class="kw">read_csv</span>(<span class="st">&quot;data/results/dist_nnb_species_specific.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb77-2" title="2">readr<span class="op">::</span><span class="kw">read_csv</span>(<span class="st">&quot;data/results/dist_nnb_species_specific.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb77-3" title="3"><span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>()</a></code></pre></div>
 <table>
 <thead>
@@ -2269,7 +2269,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="results.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="results-best-supported-hypotheses.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
     </div>
   </div>
