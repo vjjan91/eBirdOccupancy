@@ -48,5 +48,7 @@ make_response_data <- function(df){
                                      m_group = cut(seq_m, breaks = 2))
                  return(data_resp)
                }))
+  # now filter again on p_value
+  df <- filter(df, p_value <= 0.05)
   return(df)
 }
