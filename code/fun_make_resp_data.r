@@ -50,6 +50,6 @@ make_response_data <- function(df){
                  return(data_resp)
                }))
   # now filter again on p_value
-  df <- filter(df, p_value <= 0.05)
+  df <- filter(df, p_value <= 0.05, predictor != "Int")
   return(df)
 }
