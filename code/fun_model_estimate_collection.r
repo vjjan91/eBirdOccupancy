@@ -7,6 +7,8 @@
 #' @export
 #' @import magrittr
 
+source("code/fun_separate_interactions.r")
+
 get_model_estimates = function(list_of_top_models){
   
   #### handle cases where there is more than one top model ####
@@ -35,7 +37,7 @@ get_model_estimates = function(list_of_top_models){
     
     # join ci data and model estimate
     model_estimate <- dplyr::left_join(model_estimate, ci_data)
-    # model_estimate$scientific_name <- unique(df$scientific_name)
+    model_estimate <- separate_interaction_terms(model_estimate)
     
     # get the relative importance of predictors
     model_imp <- tibble::as_tibble(MuMIn::importance(model_avg),
@@ -65,7 +67,7 @@ get_model_estimates = function(list_of_top_models){
     
     # join coeffs with confidence intervals
     model_estimate <- dplyr::bind_cols(ci_data, model_estimate)
-    model_estimate$scientific_name <- unique(df$scientific_name)
+    model_estimate <- separate_interaction_terms(model_estimate)
     
     return_data = list(model_estimate, NULL)
     names(return_data) = c("model_estimate", "predictor_importance")
