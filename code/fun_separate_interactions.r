@@ -7,6 +7,12 @@
 
 separate_interaction_terms <- function(model_estimate_df){
   
+  # subset for occupancy covariates
+  model_estimate_df <- model_estimate_df %>%
+        dplyr::mutate(has_psi = stringr::str_detect(predictor, "psi")) %>%
+        dplyr::filter(has_psi) %>%
+        dplyr::select(-has_psi)
+        
   # now mutate a new column where 
   df <- dplyr::mutate(model_estimate_df, 
                 predictor = stringr::str_extract(predictor, 
