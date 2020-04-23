@@ -96,8 +96,58 @@ res_final <- res_init*100
 # use gdalutils gdalwarp for resampling transform
 # to 1km from 10m
 gdalwarp(srcfile = landcover, 
-         dstfile = "data/landUseClassification/lc_01km.tif", 
-         tr=c(res_final), r='mode', te=c(e))
+          dstfile = "data/landUseClassification/lc_01km.tif", 
+          tr=c(res_final), r='mode', te=c(e))
+```
+
+### Show resampled landcover
+
+```{r show_resampled_lc, eval=FALSE}
+# mask by study area
+{
+  landcover <- raster(landcover)
+  # landcover <- mask(landcover, mask = as(hills, "Spatial"))
+  lc_data <- raster("data/landUseClassification/lc_01km.tif")
+  # lc_data <- mask(lc_data, mask = as(hills, "Spatial"))
+  lc_data[lc_data == 0] <- NA
+}
+
+# make raster barplot data
+data1km = raster::getValues(lc_data); data1km = data1km[data1km > 0]; data1km = table(data1km); data1km = data1km/sum(data1km)
+
+{
+  data10m = raster::getValues(landcover); data10m = data10m[data10m > 0]
+  data10m = tibble(value = data10m)
+  data10m = dplyr::count(a, value) %>% dplyr::mutate(n=n/sum(n))
+  data10m = xtabs(n~value, data10m)
+}
+
+# map rasters
+{
+  png(filename = "figs/figLandcoverResample.png", width = 1200, height = 1200,
+      res = 150)
+  par(mfrow=c(2,2))
+  # rasterplots
+  raster::plot(landcover, col = c("white", scico::scico(palette = "batlow", 7)), 
+               main = "10m sentinel data", xlab = "longitude", y = "latitude")
+  plot(hills, add=T, border = "red", col = "transparent")
+  raster::plot(rasterAgg1km, col = c("white", scico::scico(palette = "batlow", 7)),
+               main = "1km resampled data", xlab = "longitude", y = "latitude")
+  plot(hills, add=T, border = "red", col = "transparent")
+  
+  # barplots
+  barplot(data10m, xlab = c("landcover class"), ylab = "prop.",
+          col = scico::scico(palette = "batlow", 7))
+  barplot(data1km, xlab = c("landcover class"), ylab = "prop.",
+          col = scico::scico(palette = "batlow", 7), alpha =0.8), add = F)
+  barplot(data10m, xlab = c("landcover class"), ylab = "prop.",
+          col = "grey20", border = NA, density = 30, add = T)
+  dev.off()
+}
+```
+
+```{r show_resampling, eval=TRUE, fig.caption="Resampling of Sentinel data from 10m to 1km."}
+knitr::include_graphics("figs/figLandcoverResample.png")
 ```
 
 ## Resample rasters

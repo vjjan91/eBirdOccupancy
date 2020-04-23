@@ -12,11 +12,11 @@ Methods and format are derived from [Strimas-Mackey et al.](http://strimas.com/e
 
 Please contact the following in case of interest in the project.
 
-- [Vijay Ramesh (lead author)](https://evolecol.weebly.com/)
-    - PhD student, Columbia University
+[Vijay Ramesh (lead author)](https://evolecol.weebly.com/)  
+PhD student, Columbia University
 
-- [Pratik Gupte (repo maintainer)](https://github.com/pratikunterwegs)
-    - PhD student, University of Groningen
+[Pratik Gupte (repo maintainer)](https://github.com/pratikunterwegs)  
+PhD student, University of Groningen
 
-- [Morgan Tingley (PI)](https://www.morgantingley.com)
-    - University of California, Los Angeles
+[Morgan Tingley (PI)](https://www.morgantingley.com)  
+University of California, Los Angeles
