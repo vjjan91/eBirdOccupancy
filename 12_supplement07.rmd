@@ -31,7 +31,7 @@ use_python("/usr/bin/python3")
 ### Traditional grid-based thinning
 
 ```{r load_checklist_data, eval=FALSE, message=FALSE, warning=FALSE}
-# load wg
+# load the shapefile of the study area
 wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>% 
   st_transform(32643)
 

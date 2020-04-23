@@ -30,7 +30,7 @@ load("data_prelim_processing.rdata")
 gridsize = 1000 # grid size in metres
 effort_distance_max = 1000 # removing checklists with this distance
 
-# make grida across the study site
+# make grids across the study site
 hills <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>% 
   st_transform(32643)
 grid <- st_make_grid(hills, cellsize = gridsize)

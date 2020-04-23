@@ -18,5 +18,5 @@ PhD student, Columbia University
 [Pratik Gupte (repo maintainer)](https://github.com/pratikunterwegs)  
 PhD student, University of Groningen
 
-[Morgan Tingley (PI)](https://www.morgantingley.com)  
+[Morgan Tingley](https://www.morgantingley.com)  
 University of California, Los Angeles

@@ -76,6 +76,9 @@ geometry=gpd.points_from_xy(unique_locs.longitude, unique_locs.latitude))
 unique_locs.crs = {'init' :'epsg:4326'}
 
 # reproject spatials to 43n epsg 32642
+
+# I think this should be EPSG 32643 rather than 42
+
 roads = roads.to_crs({'init': 'epsg:32642'})
 unique_locs = unique_locs.to_crs({'init': 'epsg:32642'})
 
@@ -155,7 +158,7 @@ def convData(somedata):
                                   geometry=gpd.points_from_xy(somedata.longitude, 
                                   somedata.latitude))
     unique_locs.crs = {'init' :'epsg:4326'}
-    unique_locs = unique_locs.to_crs({'init': 'epsg:32642'})
+    unique_locs = unique_locs.to_crs({'init': 'epsg:32642'}) # Same comment as above
     dists = ckdnearest_point(unique_locs, unique_locs)
     unique_locs = pd.DataFrame(unique_locs.drop(columns='geometry'))
     unique_locs['nnb'] = dists
@@ -411,7 +414,7 @@ ggplot()+
 ```
 
 
-```{r plot_figure1, eval=TRUE, echo=FALSE, fig.cap="Checklist locations in the Nilgiris. Inset histogram shows checklists' distance to the nearest road, with the X-axis on a log-scale."}
+```{r plot_figure1, eval=TRUE, echo=FALSE, fig.cap="Checklist locations across the Nilgiris, Anamalais and the Palani hills. Inset histogram shows checklists' distance to the nearest road, with the X-axis on a log-scale."}
 # inset image here
 knitr::include_graphics("figs/fig_distRoads.png")
 
