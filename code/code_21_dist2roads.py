@@ -34,9 +34,9 @@ unique_locs = gpd.GeoDataFrame(
     geometry=gpd.points_from_xy(unique_locs.longitude, unique_locs.latitude))
 unique_locs.crs = {'init' :'epsg:4326'}
 
-# reproject spatials to 43n epsg 32642
-roads = roads.to_crs({'init': 'epsg:32642'})
-unique_locs = unique_locs.to_crs({'init': 'epsg:32642'})
+# reproject spatials to 43n epsg 32643
+roads = roads.to_crs({'init': 'epsg:32643'})
+unique_locs = unique_locs.to_crs({'init': 'epsg:32643'})
 
 
 # function to simplify multilinestrings
@@ -93,11 +93,11 @@ unique_locs = gpd.GeoDataFrame(
    unique_locs,
     geometry=gpd.points_from_xy(unique_locs.longitude, unique_locs.latitude))
 unique_locs.crs = {'init': 'epsg:4326'}
-unique_locs = unique_locs.to_crs({'init': 'epsg:32642'})
+unique_locs = unique_locs.to_crs({'init': 'epsg:32643'})
 
 # read in hills
 hills = gpd.read_file("data/spatial/hillsShapefile/Nil_Ana_Pal.shp")
-hills = hills.to_crs({'init': 'epsg:32642'})
+hills = hills.to_crs({'init': 'epsg:32643'})
 
 # plot
 base = roads.plot(linewidth=0.3)
