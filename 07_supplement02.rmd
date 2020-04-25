@@ -35,7 +35,7 @@ speciesOfInterest <- specieslist$scientific_name
 ### Load raw data for locations
 
 ```{r load_raw_data_supp02, eval=FALSE}
-# read in shapefile of nilgiris to subset by bounding box
+# read in shapefile of the study area to subset by bounding box
 library(sf)
 wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp"); box <- st_bbox(wg)
 
@@ -147,7 +147,7 @@ ggsave(plotDistributions, filename = "figs/fig_species_distributions.png",
        height = 12, width = 17, device = png(), dpi = 300); dev.off()
 ```
 
-```{r export_fig_obs_dist, eval=TRUE, fig.cap="Proportion of checklists reporting a species in each grid cell (20km side) between 2013 and 2018. Checklists were filtered to be within the boundaries of the Nilgiri Hills (black outline), but rounding to 20km cells may place cells outside the boundary. Deeper shades of red indicate a higher proportion of checklists reporting a species."}
+```{r export_fig_obs_dist, eval=TRUE, fig.cap="Proportion of checklists reporting a species in each grid cell (20km side) between 2013 and 2018. Checklists were filtered to be within the boundaries of the Nilgiris, Anamalais and the Palani hills (black outline), but rounding to 20km cells may place cells outside the boundary. Deeper shades of red indicate a higher proportion of checklists reporting a species."}
 
 # show exported image
 knitr::include_graphics("figs/fig_species_distributions.png")

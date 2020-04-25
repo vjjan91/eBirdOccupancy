@@ -31,7 +31,7 @@ time_to_decimal <- function(x) {
 Here, we go through the data preparation process again because we might want to assess observer expertise over a larger area than the study site.
 
 ```{r load_raw_data, eval=FALSE}
-# read in shapefile of nilgiris to subset by bounding box
+# Read in shapefile of study area to subset by bounding box
 library(sf)
 wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>% 
   st_transform(32643)
