@@ -24,7 +24,7 @@
 <meta name="author" content="Vijay Ramesh, Pratik R Gupte, and Morgan Tingley" />
 
 
-<meta name="date" content="2020-04-20" />
+<meta name="date" content="2020-04-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="occupancy-modelling.html"/>
-<link rel="next" href="supplementary-material.html"/>
+<link rel="next" href="results-occupancy-predictors.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -187,14 +187,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html"><i class="fa fa-check"></i><b>6</b> Occupancy modelling</a><ul>
 <li class="chapter" data-level="6.1" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#load-necessary-libraries"><i class="fa fa-check"></i><b>6.1</b> Load necessary libraries</a></li>
 <li class="chapter" data-level="6.2" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#load-dataframe-and-scale-covariates"><i class="fa fa-check"></i><b>6.2</b> Load dataframe and scale covariates</a></li>
-<li class="chapter" data-level="6.3" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#identifying-covariates-necessary-to-model-the-detection-process"><i class="fa fa-check"></i><b>6.3</b> Identifying covariates necessary to model the detection process</a></li>
-<li class="chapter" data-level="6.4" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#running-a-null-model"><i class="fa fa-check"></i><b>6.4</b> Running a null model</a></li>
-<li class="chapter" data-level="6.5" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#land-cover-and-climate-effects-modeled-separately"><i class="fa fa-check"></i><b>6.5</b> Land Cover and Climate (effects modeled separately)</a></li>
-<li class="chapter" data-level="6.6" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#elevation-alone"><i class="fa fa-check"></i><b>6.6</b> Elevation alone</a></li>
-<li class="chapter" data-level="6.7" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#the-interaction-between-land-cover-and-elevation-and-climate-and-elevation"><i class="fa fa-check"></i><b>6.7</b> The interaction between Land cover and elevation and climate and Elevation</a></li>
-<li class="chapter" data-level="6.8" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#the-linear-combined-effect-of-land-cover-and-climate"><i class="fa fa-check"></i><b>6.8</b> The linear combined effect of land cover and climate</a></li>
-<li class="chapter" data-level="6.9" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#the-interaction-between-inter-annual-variation-in-temperature-and-land-cover"><i class="fa fa-check"></i><b>6.9</b> The interaction between inter-annual variation in temperature and land cover</a></li>
-<li class="chapter" data-level="6.10" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#the-interaction-between-inter-annual-variation-in-precip-and-land-cover"><i class="fa fa-check"></i><b>6.10</b> The interaction between inter-annual variation in precip and land cover</a></li>
+<li class="chapter" data-level="6.3" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#setting-up-observation-covariates-for-each-model-as-they-remain-consistent"><i class="fa fa-check"></i><b>6.3</b> Setting up observation covariates for each model as they remain consistent</a></li>
+<li class="chapter" data-level="6.4" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#get-the-aic-values-for-the-top-models"><i class="fa fa-check"></i><b>6.4</b> Get the AIC values for the top models</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="results-best-supported-hypotheses.html"><a href="results-best-supported-hypotheses.html"><i class="fa fa-check"></i><b>7</b> Results: Best supported hypotheses</a><ul>
 <li class="chapter" data-level="7.1" data-path="results-best-supported-hypotheses.html"><a href="results-best-supported-hypotheses.html#prepare-libraries-2"><i class="fa fa-check"></i><b>7.1</b> Prepare libraries</a></li>
@@ -205,66 +199,74 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="7.5" data-path="results-best-supported-hypotheses.html"><a href="results-best-supported-hypotheses.html#show-figure-3-supplement"><i class="fa fa-check"></i><b>7.5</b> Show Figure 3 Supplement</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="supplementary-material.html"><a href="supplementary-material.html"><i class="fa fa-check"></i><b>8</b> Supplementary material</a><ul>
-<li class="chapter" data-level="8.1" data-path="supplementary-material.html"><a href="supplementary-material.html#distance-to-roads"><i class="fa fa-check"></i><b>8.1</b> Distance to roads</a><ul>
-<li class="chapter" data-level="8.1.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-3"><i class="fa fa-check"></i><b>8.1.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="8.1.2" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-data-for-processing"><i class="fa fa-check"></i><b>8.1.2</b> Prepare data for processing</a></li>
-<li class="chapter" data-level="8.1.3" data-path="supplementary-material.html"><a href="supplementary-material.html#species-specific-nearest-sites"><i class="fa fa-check"></i><b>8.1.3</b> Species specific nearest sites</a></li>
-<li class="chapter" data-level="8.1.4" data-path="supplementary-material.html"><a href="supplementary-material.html#explicit-spatial-filter"><i class="fa fa-check"></i><b>8.1.4</b> Explicit spatial filter</a></li>
-<li class="chapter" data-level="8.1.5" data-path="supplementary-material.html"><a href="supplementary-material.html#species-specific-filter"><i class="fa fa-check"></i><b>8.1.5</b> Species specific filter</a></li>
-<li class="chapter" data-level="8.1.6" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-histogram-distance-to-roads"><i class="fa fa-check"></i><b>8.1.6</b> Plot histogram: distance to roads</a></li>
-<li class="chapter" data-level="8.1.7" data-path="supplementary-material.html"><a href="supplementary-material.html#table-distance-to-roads"><i class="fa fa-check"></i><b>8.1.7</b> Table: Distance to roads</a></li>
-<li class="chapter" data-level="8.1.8" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-histogram-distance-to-nearest-site"><i class="fa fa-check"></i><b>8.1.8</b> Plot histogram: distance to nearest site</a></li>
-<li class="chapter" data-level="8.1.9" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-species-specific-histograms-distance-to-nearest-site"><i class="fa fa-check"></i><b>8.1.9</b> Plot species specific histograms: distance to nearest site</a></li>
-<li class="chapter" data-level="8.1.10" data-path="supplementary-material.html"><a href="supplementary-material.html#table-species-specific-nearest-site"><i class="fa fa-check"></i><b>8.1.10</b> Table: Species specific nearest site</a></li>
-<li class="chapter" data-level="8.1.11" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-map-points-on-roads"><i class="fa fa-check"></i><b>8.1.11</b> Plot map: points on roads</a></li>
+<li class="chapter" data-level="8" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html"><i class="fa fa-check"></i><b>8</b> Results: Occupancy predictors</a><ul>
+<li class="chapter" data-level="8.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#prepare-libraries-3"><i class="fa fa-check"></i><b>8.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="8.2" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#prepare-data-to-load"><i class="fa fa-check"></i><b>8.2</b> Prepare data to load</a></li>
+<li class="chapter" data-level="8.3" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#load-data"><i class="fa fa-check"></i><b>8.3</b> Load data</a></li>
+<li class="chapter" data-level="8.4" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#prepare-interaction-data"><i class="fa fa-check"></i><b>8.4</b> Prepare interaction data</a></li>
+<li class="chapter" data-level="8.5" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#plot-interaction-data"><i class="fa fa-check"></i><b>8.5</b> Plot interaction data</a></li>
+<li class="chapter" data-level="8.6" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#show-example-interaction"><i class="fa fa-check"></i><b>8.6</b> Show example interaction</a></li>
 </ul></li>
-<li class="chapter" data-level="8.2" data-path="supplementary-material.html"><a href="supplementary-material.html#species-observation-distributions"><i class="fa fa-check"></i><b>8.2</b> Species observation distributions</a><ul>
-<li class="chapter" data-level="8.2.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-4"><i class="fa fa-check"></i><b>8.2.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="8.2.2" data-path="supplementary-material.html"><a href="supplementary-material.html#read-species-of-interest"><i class="fa fa-check"></i><b>8.2.2</b> Read species of interest</a></li>
-<li class="chapter" data-level="8.2.3" data-path="supplementary-material.html"><a href="supplementary-material.html#load-raw-data-for-locations"><i class="fa fa-check"></i><b>8.2.3</b> Load raw data for locations</a></li>
-<li class="chapter" data-level="8.2.4" data-path="supplementary-material.html"><a href="supplementary-material.html#get-proportional-obs-counts-in-20km-cells"><i class="fa fa-check"></i><b>8.2.4</b> Get proportional obs counts in 20km cells</a></li>
-<li class="chapter" data-level="8.2.5" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-maps"><i class="fa fa-check"></i><b>8.2.5</b> Plot maps</a></li>
+<li class="chapter" data-level="9" data-path="supplementary-material.html"><a href="supplementary-material.html"><i class="fa fa-check"></i><b>9</b> Supplementary material</a><ul>
+<li class="chapter" data-level="9.1" data-path="supplementary-material.html"><a href="supplementary-material.html#distance-to-roads"><i class="fa fa-check"></i><b>9.1</b> Distance to roads</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-4"><i class="fa fa-check"></i><b>9.1.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="9.1.2" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-data-for-processing"><i class="fa fa-check"></i><b>9.1.2</b> Prepare data for processing</a></li>
+<li class="chapter" data-level="9.1.3" data-path="supplementary-material.html"><a href="supplementary-material.html#species-specific-nearest-sites"><i class="fa fa-check"></i><b>9.1.3</b> Species specific nearest sites</a></li>
+<li class="chapter" data-level="9.1.4" data-path="supplementary-material.html"><a href="supplementary-material.html#explicit-spatial-filter"><i class="fa fa-check"></i><b>9.1.4</b> Explicit spatial filter</a></li>
+<li class="chapter" data-level="9.1.5" data-path="supplementary-material.html"><a href="supplementary-material.html#species-specific-filter"><i class="fa fa-check"></i><b>9.1.5</b> Species specific filter</a></li>
+<li class="chapter" data-level="9.1.6" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-histogram-distance-to-roads"><i class="fa fa-check"></i><b>9.1.6</b> Plot histogram: distance to roads</a></li>
+<li class="chapter" data-level="9.1.7" data-path="supplementary-material.html"><a href="supplementary-material.html#table-distance-to-roads"><i class="fa fa-check"></i><b>9.1.7</b> Table: Distance to roads</a></li>
+<li class="chapter" data-level="9.1.8" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-histogram-distance-to-nearest-site"><i class="fa fa-check"></i><b>9.1.8</b> Plot histogram: distance to nearest site</a></li>
+<li class="chapter" data-level="9.1.9" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-species-specific-histograms-distance-to-nearest-site"><i class="fa fa-check"></i><b>9.1.9</b> Plot species specific histograms: distance to nearest site</a></li>
+<li class="chapter" data-level="9.1.10" data-path="supplementary-material.html"><a href="supplementary-material.html#table-species-specific-nearest-site"><i class="fa fa-check"></i><b>9.1.10</b> Table: Species specific nearest site</a></li>
+<li class="chapter" data-level="9.1.11" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-map-points-on-roads"><i class="fa fa-check"></i><b>9.1.11</b> Plot map: points on roads</a></li>
 </ul></li>
-<li class="chapter" data-level="8.3" data-path="supplementary-material.html"><a href="supplementary-material.html#climate-in-relation-to-elevation"><i class="fa fa-check"></i><b>8.3</b> Climate in relation to elevation</a><ul>
-<li class="chapter" data-level="8.3.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-5"><i class="fa fa-check"></i><b>8.3.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="8.3.2" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-climatic-variables-over-elevation"><i class="fa fa-check"></i><b>8.3.2</b> Plot climatic variables over elevation</a></li>
+<li class="chapter" data-level="9.2" data-path="supplementary-material.html"><a href="supplementary-material.html#species-observation-distributions"><i class="fa fa-check"></i><b>9.2</b> Species observation distributions</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-5"><i class="fa fa-check"></i><b>9.2.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="9.2.2" data-path="supplementary-material.html"><a href="supplementary-material.html#read-species-of-interest"><i class="fa fa-check"></i><b>9.2.2</b> Read species of interest</a></li>
+<li class="chapter" data-level="9.2.3" data-path="supplementary-material.html"><a href="supplementary-material.html#load-raw-data-for-locations"><i class="fa fa-check"></i><b>9.2.3</b> Load raw data for locations</a></li>
+<li class="chapter" data-level="9.2.4" data-path="supplementary-material.html"><a href="supplementary-material.html#get-proportional-obs-counts-in-20km-cells"><i class="fa fa-check"></i><b>9.2.4</b> Get proportional obs counts in 20km cells</a></li>
+<li class="chapter" data-level="9.2.5" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-maps"><i class="fa fa-check"></i><b>9.2.5</b> Plot maps</a></li>
 </ul></li>
-<li class="chapter" data-level="8.4" data-path="supplementary-material.html"><a href="supplementary-material.html#landcover-in-relation-to-elevation"><i class="fa fa-check"></i><b>8.4</b> Landcover in relation to elevation</a><ul>
-<li class="chapter" data-level="8.4.1" data-path="supplementary-material.html"><a href="supplementary-material.html#get-data-from-landscape-rasters"><i class="fa fa-check"></i><b>8.4.1</b> Get data from landscape rasters</a></li>
-<li class="chapter" data-level="8.4.2" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-proportional-landcover-in-elevation"><i class="fa fa-check"></i><b>8.4.2</b> Plot proportional landcover in elevation</a></li>
+<li class="chapter" data-level="9.3" data-path="supplementary-material.html"><a href="supplementary-material.html#climate-in-relation-to-elevation"><i class="fa fa-check"></i><b>9.3</b> Climate in relation to elevation</a><ul>
+<li class="chapter" data-level="9.3.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-6"><i class="fa fa-check"></i><b>9.3.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="9.3.2" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-climatic-variables-over-elevation"><i class="fa fa-check"></i><b>9.3.2</b> Plot climatic variables over elevation</a></li>
 </ul></li>
-<li class="chapter" data-level="8.5" data-path="supplementary-material.html"><a href="supplementary-material.html#climate-in-relation-to-landcover"><i class="fa fa-check"></i><b>8.5</b> Climate in relation to landcover</a><ul>
-<li class="chapter" data-level="8.5.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-6"><i class="fa fa-check"></i><b>8.5.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="8.5.2" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-climatic-variables-over-landcover"><i class="fa fa-check"></i><b>8.5.2</b> Plot climatic variables over landcover</a></li>
+<li class="chapter" data-level="9.4" data-path="supplementary-material.html"><a href="supplementary-material.html#landcover-in-relation-to-elevation"><i class="fa fa-check"></i><b>9.4</b> Landcover in relation to elevation</a><ul>
+<li class="chapter" data-level="9.4.1" data-path="supplementary-material.html"><a href="supplementary-material.html#get-data-from-landscape-rasters"><i class="fa fa-check"></i><b>9.4.1</b> Get data from landscape rasters</a></li>
+<li class="chapter" data-level="9.4.2" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-proportional-landcover-in-elevation"><i class="fa fa-check"></i><b>9.4.2</b> Plot proportional landcover in elevation</a></li>
 </ul></li>
-<li class="chapter" data-level="8.6" data-path="supplementary-material.html"><a href="supplementary-material.html#obsever-expertise-in-time-and-space"><i class="fa fa-check"></i><b>8.6</b> Obsever expertise in time and space</a><ul>
-<li class="chapter" data-level="8.6.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-7"><i class="fa fa-check"></i><b>8.6.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="8.6.2" data-path="supplementary-material.html"><a href="supplementary-material.html#species-seen-in-relation-to-osberver-expertise"><i class="fa fa-check"></i><b>8.6.2</b> Species seen in relation to osberver expertise</a></li>
-<li class="chapter" data-level="8.6.3" data-path="supplementary-material.html"><a href="supplementary-material.html#expertise-in-relation-to-landcover"><i class="fa fa-check"></i><b>8.6.3</b> Expertise in relation to landcover</a></li>
+<li class="chapter" data-level="9.5" data-path="supplementary-material.html"><a href="supplementary-material.html#climate-in-relation-to-landcover"><i class="fa fa-check"></i><b>9.5</b> Climate in relation to landcover</a><ul>
+<li class="chapter" data-level="9.5.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-7"><i class="fa fa-check"></i><b>9.5.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="9.5.2" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-climatic-variables-over-landcover"><i class="fa fa-check"></i><b>9.5.2</b> Plot climatic variables over landcover</a></li>
 </ul></li>
-<li class="chapter" data-level="8.7" data-path="supplementary-material.html"><a href="supplementary-material.html#spatial-autocorrelation-in-climatic-predictors"><i class="fa fa-check"></i><b>8.7</b> Spatial autocorrelation in climatic predictors</a><ul>
-<li class="chapter" data-level="8.7.1" data-path="supplementary-material.html"><a href="supplementary-material.html#load-libs-and-prep-data"><i class="fa fa-check"></i><b>8.7.1</b> Load libs and prep data</a></li>
-<li class="chapter" data-level="8.7.2" data-path="supplementary-material.html"><a href="supplementary-material.html#calculate-variograms"><i class="fa fa-check"></i><b>8.7.2</b> Calculate variograms</a></li>
-<li class="chapter" data-level="8.7.3" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-chelsa-data-and-variograms"><i class="fa fa-check"></i><b>8.7.3</b> Plot CHELSA data and variograms</a></li>
+<li class="chapter" data-level="9.6" data-path="supplementary-material.html"><a href="supplementary-material.html#obsever-expertise-in-time-and-space"><i class="fa fa-check"></i><b>9.6</b> Obsever expertise in time and space</a><ul>
+<li class="chapter" data-level="9.6.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-8"><i class="fa fa-check"></i><b>9.6.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="9.6.2" data-path="supplementary-material.html"><a href="supplementary-material.html#species-seen-in-relation-to-osberver-expertise"><i class="fa fa-check"></i><b>9.6.2</b> Species seen in relation to osberver expertise</a></li>
+<li class="chapter" data-level="9.6.3" data-path="supplementary-material.html"><a href="supplementary-material.html#expertise-in-relation-to-landcover"><i class="fa fa-check"></i><b>9.6.3</b> Expertise in relation to landcover</a></li>
 </ul></li>
-<li class="chapter" data-level="8.8" data-path="supplementary-material.html"><a href="supplementary-material.html#climatic-raster-resampling"><i class="fa fa-check"></i><b>8.8</b> Climatic raster resampling</a><ul>
-<li class="chapter" data-level="8.8.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-landcover-1"><i class="fa fa-check"></i><b>8.8.1</b> Prepare landcover</a></li>
-<li class="chapter" data-level="8.8.2" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-spatial-extent-1"><i class="fa fa-check"></i><b>8.8.2</b> Prepare spatial extent</a></li>
-<li class="chapter" data-level="8.8.3" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-chelsa-rasters-1"><i class="fa fa-check"></i><b>8.8.3</b> Prepare CHELSA rasters</a></li>
-<li class="chapter" data-level="8.8.4" data-path="supplementary-material.html"><a href="supplementary-material.html#resample-prepared-rasters"><i class="fa fa-check"></i><b>8.8.4</b> Resample prepared rasters</a></li>
+<li class="chapter" data-level="9.7" data-path="supplementary-material.html"><a href="supplementary-material.html#spatial-autocorrelation-in-climatic-predictors"><i class="fa fa-check"></i><b>9.7</b> Spatial autocorrelation in climatic predictors</a><ul>
+<li class="chapter" data-level="9.7.1" data-path="supplementary-material.html"><a href="supplementary-material.html#load-libs-and-prep-data"><i class="fa fa-check"></i><b>9.7.1</b> Load libs and prep data</a></li>
+<li class="chapter" data-level="9.7.2" data-path="supplementary-material.html"><a href="supplementary-material.html#calculate-variograms"><i class="fa fa-check"></i><b>9.7.2</b> Calculate variograms</a></li>
+<li class="chapter" data-level="9.7.3" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-chelsa-data-and-variograms"><i class="fa fa-check"></i><b>9.7.3</b> Plot CHELSA data and variograms</a></li>
 </ul></li>
-<li class="chapter" data-level="8.9" data-path="supplementary-material.html"><a href="supplementary-material.html#spatial-thinning-a-comparison-of-approaches"><i class="fa fa-check"></i><b>8.9</b> Spatial thinning: A comparison of approaches</a><ul>
-<li class="chapter" data-level="8.9.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-8"><i class="fa fa-check"></i><b>8.9.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="8.9.2" data-path="supplementary-material.html"><a href="supplementary-material.html#traditional-grid-based-thinning"><i class="fa fa-check"></i><b>8.9.2</b> Traditional grid-based thinning</a></li>
-<li class="chapter" data-level="8.9.3" data-path="supplementary-material.html"><a href="supplementary-material.html#network-based-thinning"><i class="fa fa-check"></i><b>8.9.3</b> Network-based thinning</a></li>
-<li class="chapter" data-level="8.9.4" data-path="supplementary-material.html"><a href="supplementary-material.html#measuring-method-fallibility"><i class="fa fa-check"></i><b>8.9.4</b> Measuring method fallibility</a></li>
-<li class="chapter" data-level="8.9.5" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-metrics-for-different-methods"><i class="fa fa-check"></i><b>8.9.5</b> Plot metrics for different methods</a></li>
+<li class="chapter" data-level="9.8" data-path="supplementary-material.html"><a href="supplementary-material.html#climatic-raster-resampling"><i class="fa fa-check"></i><b>9.8</b> Climatic raster resampling</a><ul>
+<li class="chapter" data-level="9.8.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-landcover-1"><i class="fa fa-check"></i><b>9.8.1</b> Prepare landcover</a></li>
+<li class="chapter" data-level="9.8.2" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-spatial-extent-1"><i class="fa fa-check"></i><b>9.8.2</b> Prepare spatial extent</a></li>
+<li class="chapter" data-level="9.8.3" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-chelsa-rasters-1"><i class="fa fa-check"></i><b>9.8.3</b> Prepare CHELSA rasters</a></li>
+<li class="chapter" data-level="9.8.4" data-path="supplementary-material.html"><a href="supplementary-material.html#resample-prepared-rasters"><i class="fa fa-check"></i><b>9.8.4</b> Resample prepared rasters</a></li>
 </ul></li>
-<li class="chapter" data-level="8.10" data-path="supplementary-material.html"><a href="supplementary-material.html#matching-effort-with-spatial-independence"><i class="fa fa-check"></i><b>8.10</b> Matching effort with spatial independence</a><ul>
-<li class="chapter" data-level="8.10.1" data-path="supplementary-material.html"><a href="supplementary-material.html#load-librarires"><i class="fa fa-check"></i><b>8.10.1</b> Load librarires</a></li>
-<li class="chapter" data-level="8.10.2" data-path="supplementary-material.html"><a href="supplementary-material.html#load-data"><i class="fa fa-check"></i><b>8.10.2</b> Load data</a></li>
-<li class="chapter" data-level="8.10.3" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-distance-exclusion-effect"><i class="fa fa-check"></i><b>8.10.3</b> Plot distance exclusion effect</a></li>
+<li class="chapter" data-level="9.9" data-path="supplementary-material.html"><a href="supplementary-material.html#matching-effort-with-spatial-independence"><i class="fa fa-check"></i><b>9.9</b> Matching effort with spatial independence</a><ul>
+<li class="chapter" data-level="9.9.1" data-path="supplementary-material.html"><a href="supplementary-material.html#load-librarires"><i class="fa fa-check"></i><b>9.9.1</b> Load librarires</a></li>
+<li class="chapter" data-level="9.9.2" data-path="supplementary-material.html"><a href="supplementary-material.html#load-data-1"><i class="fa fa-check"></i><b>9.9.2</b> Load data</a></li>
+<li class="chapter" data-level="9.9.3" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-distance-exclusion-effect"><i class="fa fa-check"></i><b>9.9.3</b> Plot distance exclusion effect</a></li>
+</ul></li>
+<li class="chapter" data-level="9.10" data-path="supplementary-material.html"><a href="supplementary-material.html#spatial-thinning-a-comparison-of-approaches"><i class="fa fa-check"></i><b>9.10</b> Spatial thinning: A comparison of approaches</a><ul>
+<li class="chapter" data-level="9.10.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-9"><i class="fa fa-check"></i><b>9.10.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="9.10.2" data-path="supplementary-material.html"><a href="supplementary-material.html#traditional-grid-based-thinning"><i class="fa fa-check"></i><b>9.10.2</b> Traditional grid-based thinning</a></li>
+<li class="chapter" data-level="9.10.3" data-path="supplementary-material.html"><a href="supplementary-material.html#network-based-thinning"><i class="fa fa-check"></i><b>9.10.3</b> Network-based thinning</a></li>
+<li class="chapter" data-level="9.10.4" data-path="supplementary-material.html"><a href="supplementary-material.html#measuring-method-fallibility"><i class="fa fa-check"></i><b>9.10.4</b> Measuring method fallibility</a></li>
+<li class="chapter" data-level="9.10.5" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-metrics-for-different-methods"><i class="fa fa-check"></i><b>9.10.5</b> Plot metrics for different methods</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -288,93 +290,93 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Section 7</span> Results: Best supported hypotheses</h1>
 <div id="prepare-libraries-2" class="section level2">
 <h2><span class="header-section-number">7.1</span> Prepare libraries</h2>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1"><span class="co"># load libraries</span></a>
-<a class="sourceLine" id="cb57-2" title="2"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb57-3" title="3"><span class="kw">library</span>(readr)</a>
-<a class="sourceLine" id="cb57-4" title="4"><span class="kw">library</span>(forcats)</a>
-<a class="sourceLine" id="cb57-5" title="5"><span class="kw">library</span>(tidyr)</a>
-<a class="sourceLine" id="cb57-6" title="6"></a>
-<a class="sourceLine" id="cb57-7" title="7"><span class="co"># plotting</span></a>
-<a class="sourceLine" id="cb57-8" title="8"><span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb57-9" title="9"><span class="kw">library</span>(ggthemes)</a>
-<a class="sourceLine" id="cb57-10" title="10"><span class="kw">library</span>(scico)</a></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1"><span class="co"># load libraries</span></a>
+<a class="sourceLine" id="cb52-2" title="2"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb52-3" title="3"><span class="kw">library</span>(readr)</a>
+<a class="sourceLine" id="cb52-4" title="4"><span class="kw">library</span>(forcats)</a>
+<a class="sourceLine" id="cb52-5" title="5"><span class="kw">library</span>(tidyr)</a>
+<a class="sourceLine" id="cb52-6" title="6"></a>
+<a class="sourceLine" id="cb52-7" title="7"><span class="co"># plotting</span></a>
+<a class="sourceLine" id="cb52-8" title="8"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb52-9" title="9"><span class="kw">library</span>(ggthemes)</a>
+<a class="sourceLine" id="cb52-10" title="10"><span class="kw">library</span>(scico)</a></code></pre></div>
 </div>
 <div id="prepare-data-1" class="section level2">
 <h2><span class="header-section-number">7.2</span> Prepare data</h2>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1"><span class="co"># load data</span></a>
-<a class="sourceLine" id="cb58-2" title="2">data &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="dt">path =</span> <span class="st">&quot;data/results&quot;</span>,</a>
-<a class="sourceLine" id="cb58-3" title="3">                   <span class="dt">pattern =</span> <span class="st">&quot;ElevationSummary&quot;</span>,</a>
-<a class="sourceLine" id="cb58-4" title="4">                   <span class="dt">full.names =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb58-5" title="5">data &lt;-<span class="st"> </span><span class="kw">lapply</span>(data, read_csv)</a>
-<a class="sourceLine" id="cb58-6" title="6"></a>
-<a class="sourceLine" id="cb58-7" title="7"><span class="co"># attach scale</span></a>
-<a class="sourceLine" id="cb58-8" title="8">sp_scale &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;10.0km&quot;</span>, <span class="st">&quot;2.5km&quot;</span>)</a>
-<a class="sourceLine" id="cb58-9" title="9">data &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map2</span>(data, sp_scale, <span class="cf">function</span>(df, sp_scale){</a>
-<a class="sourceLine" id="cb58-10" title="10">  df<span class="op">$</span>scale =<span class="st"> </span>sp_scale</a>
-<a class="sourceLine" id="cb58-11" title="11">  <span class="kw">return</span>(df)</a>
-<a class="sourceLine" id="cb58-12" title="12">})</a>
-<a class="sourceLine" id="cb58-13" title="13"></a>
-<a class="sourceLine" id="cb58-14" title="14"><span class="co"># prepare data</span></a>
-<a class="sourceLine" id="cb58-15" title="15">data &lt;-<span class="st"> </span>data <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb58-16" title="16"><span class="st">  </span><span class="kw">bind_rows</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb58-17" title="17"><span class="st">  </span><span class="kw">group_by</span>(scale) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb58-18" title="18"><span class="st">  </span><span class="kw">arrange</span>(Hypothesis, median) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb58-19" title="19"><span class="st">  </span><span class="kw">group_by</span>(scale) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb58-20" title="20"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">plot_order =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(median)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb58-21" title="21"><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb58-22" title="22"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">scale =</span> <span class="kw">as_factor</span>(scale))</a>
-<a class="sourceLine" id="cb58-23" title="23"></a>
-<a class="sourceLine" id="cb58-24" title="24"><span class="co"># plot positions of hypothesis code</span></a>
-<a class="sourceLine" id="cb58-25" title="25">data_hyp &lt;-<span class="st"> </span><span class="kw">count</span>(data, scale, Hypothesis) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb58-26" title="26"><span class="st">  </span><span class="kw">group_by</span>(scale) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb58-27" title="27"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">plot_pos =</span> <span class="kw">cumsum</span>(n)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb58-28" title="28"><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb58-29" title="29"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Hypothesis =</span> <span class="kw">as_factor</span>(Hypothesis),</a>
-<a class="sourceLine" id="cb58-30" title="30">         <span class="dt">plot_letter =</span> letters[<span class="kw">as.numeric</span>(Hypothesis)])</a></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1"><span class="co"># load data</span></a>
+<a class="sourceLine" id="cb53-2" title="2">data &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="dt">path =</span> <span class="st">&quot;data/results&quot;</span>,</a>
+<a class="sourceLine" id="cb53-3" title="3">                   <span class="dt">pattern =</span> <span class="st">&quot;ElevationSummary&quot;</span>,</a>
+<a class="sourceLine" id="cb53-4" title="4">                   <span class="dt">full.names =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb53-5" title="5">data &lt;-<span class="st"> </span><span class="kw">lapply</span>(data, read_csv)</a>
+<a class="sourceLine" id="cb53-6" title="6"></a>
+<a class="sourceLine" id="cb53-7" title="7"><span class="co"># attach scale</span></a>
+<a class="sourceLine" id="cb53-8" title="8">sp_scale &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;10.0km&quot;</span>, <span class="st">&quot;2.5km&quot;</span>)</a>
+<a class="sourceLine" id="cb53-9" title="9">data &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map2</span>(data, sp_scale, <span class="cf">function</span>(df, sp_scale){</a>
+<a class="sourceLine" id="cb53-10" title="10">  df<span class="op">$</span>scale =<span class="st"> </span>sp_scale</a>
+<a class="sourceLine" id="cb53-11" title="11">  <span class="kw">return</span>(df)</a>
+<a class="sourceLine" id="cb53-12" title="12">})</a>
+<a class="sourceLine" id="cb53-13" title="13"></a>
+<a class="sourceLine" id="cb53-14" title="14"><span class="co"># prepare data</span></a>
+<a class="sourceLine" id="cb53-15" title="15">data &lt;-<span class="st"> </span>data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb53-16" title="16"><span class="st">  </span><span class="kw">bind_rows</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb53-17" title="17"><span class="st">  </span><span class="kw">group_by</span>(scale) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb53-18" title="18"><span class="st">  </span><span class="kw">arrange</span>(Hypothesis, median) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb53-19" title="19"><span class="st">  </span><span class="kw">group_by</span>(scale) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb53-20" title="20"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">plot_order =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(median)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb53-21" title="21"><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb53-22" title="22"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">scale =</span> <span class="kw">as_factor</span>(scale))</a>
+<a class="sourceLine" id="cb53-23" title="23"></a>
+<a class="sourceLine" id="cb53-24" title="24"><span class="co"># plot positions of hypothesis code</span></a>
+<a class="sourceLine" id="cb53-25" title="25">data_hyp &lt;-<span class="st"> </span><span class="kw">count</span>(data, scale, Hypothesis) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb53-26" title="26"><span class="st">  </span><span class="kw">group_by</span>(scale) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb53-27" title="27"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">plot_pos =</span> <span class="kw">cumsum</span>(n)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb53-28" title="28"><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb53-29" title="29"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Hypothesis =</span> <span class="kw">as_factor</span>(Hypothesis),</a>
+<a class="sourceLine" id="cb53-30" title="30">         <span class="dt">plot_letter =</span> letters[<span class="kw">as.numeric</span>(Hypothesis)])</a></code></pre></div>
 </div>
 <div id="main-text-figure-3" class="section level2">
 <h2><span class="header-section-number">7.3</span> Main text Figure 3</h2>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" title="1"><span class="co"># make figure 3 using option 1</span></a>
-<a class="sourceLine" id="cb59-2" title="2">fig_hypothesis_elev &lt;-<span class="st"> </span></a>
-<a class="sourceLine" id="cb59-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(data, <span class="kw">aes</span>(<span class="dt">x =</span> plot_order, <span class="dt">y =</span> median,</a>
-<a class="sourceLine" id="cb59-4" title="4">                   <span class="dt">col =</span> Hypothesis))<span class="op">+</span></a>
-<a class="sourceLine" id="cb59-5" title="5"><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="kw">c</span>(<span class="dv">700</span>,<span class="dv">1400</span>),</a>
-<a class="sourceLine" id="cb59-6" title="6">             <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">size =</span> <span class="fl">0.2</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb59-7" title="7"><span class="st">  </span><span class="kw">geom_errorbar</span>(<span class="dt">width =</span> <span class="fl">0.4</span>,</a>
-<a class="sourceLine" id="cb59-8" title="8">                <span class="kw">aes</span>(<span class="dt">ymin =</span> q1, <span class="dt">ymax =</span> q3,))<span class="op">+</span></a>
-<a class="sourceLine" id="cb59-9" title="9"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> Hypothesis),</a>
-<a class="sourceLine" id="cb59-10" title="10">             <span class="dt">shape =</span> <span class="dv">21</span>, <span class="dt">col =</span> <span class="st">&quot;grey20&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb59-11" title="11"><span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> Species), </a>
-<a class="sourceLine" id="cb59-12" title="12">            <span class="dt">size =</span> <span class="fl">2.5</span>,</a>
-<a class="sourceLine" id="cb59-13" title="13">            <span class="dt">fontface =</span> <span class="st">&quot;italic&quot;</span>,</a>
-<a class="sourceLine" id="cb59-14" title="14">            <span class="dt">nudge_x =</span> <span class="fl">0.4</span>, <span class="dt">col =</span> <span class="st">&quot;black&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb59-15" title="15"><span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> data_hyp,</a>
-<a class="sourceLine" id="cb59-16" title="16">            <span class="kw">aes</span>(<span class="dt">x =</span> plot_pos, <span class="dt">y =</span> <span class="dv">2250</span>,</a>
-<a class="sourceLine" id="cb59-17" title="17">                <span class="dt">label =</span> plot_letter),</a>
-<a class="sourceLine" id="cb59-18" title="18">            <span class="dt">col =</span> <span class="st">&quot;grey20&quot;</span>, <span class="dt">fontface =</span> <span class="st">&quot;bold&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb59-19" title="19"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">data =</span> data_hyp,</a>
-<a class="sourceLine" id="cb59-20" title="20">             <span class="kw">aes</span>(<span class="dt">xintercept =</span> plot_pos <span class="op">+</span><span class="st"> </span><span class="fl">0.5</span>),</a>
-<a class="sourceLine" id="cb59-21" title="21">             <span class="dt">lty =</span> <span class="dv">3</span>, <span class="dt">lwd =</span> <span class="fl">0.4</span>, <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb59-22" title="22"><span class="st">  </span><span class="kw">scale_color_hue</span>(<span class="dt">l =</span> <span class="dv">50</span>, <span class="dt">c =</span> <span class="dv">50</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb59-23" title="23"><span class="st">  </span><span class="kw">scale_fill_hue</span>(<span class="dt">l =</span> <span class="dv">70</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb59-24" title="24"><span class="st">  </span><span class="kw">theme_few</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb59-25" title="25"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>,</a>
-<a class="sourceLine" id="cb59-26" title="26">        <span class="dt">legend.key =</span> <span class="kw">element_rect</span>(<span class="dt">colour =</span> <span class="st">&quot;white&quot;</span>,</a>
-<a class="sourceLine" id="cb59-27" title="27">                                  <span class="dt">size =</span> <span class="fl">0.3</span>),</a>
-<a class="sourceLine" id="cb59-28" title="28">        <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb59-29" title="29">        <span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>())<span class="op">+</span></a>
-<a class="sourceLine" id="cb59-30" title="30"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;elevation (m)&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;Species&quot;</span>,</a>
-<a class="sourceLine" id="cb59-31" title="31">       <span class="dt">colour =</span> <span class="st">&quot;Best supported</span><span class="ch">\n</span><span class="st">hypothesis&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb59-32" title="32"><span class="st">  </span></a>
-<a class="sourceLine" id="cb59-33" title="33"><span class="st">  </span><span class="kw">coord_flip</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb59-34" title="34"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>scale, <span class="dt">labeller =</span> label_both)</a>
-<a class="sourceLine" id="cb59-35" title="35"></a>
-<a class="sourceLine" id="cb59-36" title="36"><span class="co"># save figure</span></a>
-<a class="sourceLine" id="cb59-37" title="37"><span class="co"># save figure</span></a>
-<a class="sourceLine" id="cb59-38" title="38"><span class="kw">ggsave</span>(fig_hypothesis_elev,</a>
-<a class="sourceLine" id="cb59-39" title="39">       <span class="dt">filename =</span> <span class="st">&quot;figs/fig_hyp_elev.png&quot;</span>,</a>
-<a class="sourceLine" id="cb59-40" title="40">       <span class="dt">height =</span> <span class="dv">10</span>, <span class="dt">width =</span> <span class="dv">8</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;figs/fig_hyp_elev.png&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1"><span class="co"># make figure 3 using option 1</span></a>
+<a class="sourceLine" id="cb54-2" title="2">fig_hypothesis_elev &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb54-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(data, <span class="kw">aes</span>(<span class="dt">x =</span> plot_order, <span class="dt">y =</span> median,</a>
+<a class="sourceLine" id="cb54-4" title="4">                   <span class="dt">col =</span> Hypothesis))<span class="op">+</span></a>
+<a class="sourceLine" id="cb54-5" title="5"><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="kw">c</span>(<span class="dv">700</span>,<span class="dv">1400</span>),</a>
+<a class="sourceLine" id="cb54-6" title="6">             <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">size =</span> <span class="fl">0.2</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb54-7" title="7"><span class="st">  </span><span class="kw">geom_errorbar</span>(<span class="dt">width =</span> <span class="fl">0.4</span>,</a>
+<a class="sourceLine" id="cb54-8" title="8">                <span class="kw">aes</span>(<span class="dt">ymin =</span> q1, <span class="dt">ymax =</span> q3,))<span class="op">+</span></a>
+<a class="sourceLine" id="cb54-9" title="9"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> Hypothesis),</a>
+<a class="sourceLine" id="cb54-10" title="10">             <span class="dt">shape =</span> <span class="dv">21</span>, <span class="dt">col =</span> <span class="st">&quot;grey20&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb54-11" title="11"><span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> Species), </a>
+<a class="sourceLine" id="cb54-12" title="12">            <span class="dt">size =</span> <span class="fl">2.5</span>,</a>
+<a class="sourceLine" id="cb54-13" title="13">            <span class="dt">fontface =</span> <span class="st">&quot;italic&quot;</span>,</a>
+<a class="sourceLine" id="cb54-14" title="14">            <span class="dt">nudge_x =</span> <span class="fl">0.4</span>, <span class="dt">col =</span> <span class="st">&quot;black&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb54-15" title="15"><span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> data_hyp,</a>
+<a class="sourceLine" id="cb54-16" title="16">            <span class="kw">aes</span>(<span class="dt">x =</span> plot_pos, <span class="dt">y =</span> <span class="dv">2250</span>,</a>
+<a class="sourceLine" id="cb54-17" title="17">                <span class="dt">label =</span> plot_letter),</a>
+<a class="sourceLine" id="cb54-18" title="18">            <span class="dt">col =</span> <span class="st">&quot;grey20&quot;</span>, <span class="dt">fontface =</span> <span class="st">&quot;bold&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb54-19" title="19"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">data =</span> data_hyp,</a>
+<a class="sourceLine" id="cb54-20" title="20">             <span class="kw">aes</span>(<span class="dt">xintercept =</span> plot_pos <span class="op">+</span><span class="st"> </span><span class="fl">0.5</span>),</a>
+<a class="sourceLine" id="cb54-21" title="21">             <span class="dt">lty =</span> <span class="dv">3</span>, <span class="dt">lwd =</span> <span class="fl">0.4</span>, <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb54-22" title="22"><span class="st">  </span><span class="kw">scale_color_hue</span>(<span class="dt">l =</span> <span class="dv">50</span>, <span class="dt">c =</span> <span class="dv">50</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb54-23" title="23"><span class="st">  </span><span class="kw">scale_fill_hue</span>(<span class="dt">l =</span> <span class="dv">70</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb54-24" title="24"><span class="st">  </span><span class="kw">theme_few</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb54-25" title="25"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>,</a>
+<a class="sourceLine" id="cb54-26" title="26">        <span class="dt">legend.key =</span> <span class="kw">element_rect</span>(<span class="dt">colour =</span> <span class="st">&quot;white&quot;</span>,</a>
+<a class="sourceLine" id="cb54-27" title="27">                                  <span class="dt">size =</span> <span class="fl">0.3</span>),</a>
+<a class="sourceLine" id="cb54-28" title="28">        <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(),</a>
+<a class="sourceLine" id="cb54-29" title="29">        <span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>())<span class="op">+</span></a>
+<a class="sourceLine" id="cb54-30" title="30"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;elevation (m)&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;Species&quot;</span>,</a>
+<a class="sourceLine" id="cb54-31" title="31">       <span class="dt">colour =</span> <span class="st">&quot;Best supported</span><span class="ch">\n</span><span class="st">hypothesis&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb54-32" title="32"><span class="st">  </span></a>
+<a class="sourceLine" id="cb54-33" title="33"><span class="st">  </span><span class="kw">coord_flip</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb54-34" title="34"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>scale, <span class="dt">labeller =</span> label_both)</a>
+<a class="sourceLine" id="cb54-35" title="35"></a>
+<a class="sourceLine" id="cb54-36" title="36"><span class="co"># save figure</span></a>
+<a class="sourceLine" id="cb54-37" title="37"><span class="co"># save figure</span></a>
+<a class="sourceLine" id="cb54-38" title="38"><span class="kw">ggsave</span>(fig_hypothesis_elev,</a>
+<a class="sourceLine" id="cb54-39" title="39">       <span class="dt">filename =</span> <span class="st">&quot;figs/fig_hyp_elev.png&quot;</span>,</a>
+<a class="sourceLine" id="cb54-40" title="40">       <span class="dt">height =</span> <span class="dv">10</span>, <span class="dt">width =</span> <span class="dv">8</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" title="1">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;figs/fig_hyp_elev.png&quot;</span>)</a></code></pre></div>
 <p><img src="figs/fig_hyp_elev.png" width="1200" /></p>
 </div>
 <div id="plot-supplementary-figure-3" class="section level2">
@@ -382,83 +384,83 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>This figure is intended to show the change (or not) in best supported hypothesis between spatial scales.</p>
 <div id="prepare-data-2" class="section level3">
 <h3><span class="header-section-number">7.4.1</span> Prepare data</h3>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" title="1"><span class="co"># load data again</span></a>
-<a class="sourceLine" id="cb61-2" title="2">data &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="dt">path =</span> <span class="st">&quot;data/results&quot;</span>,</a>
-<a class="sourceLine" id="cb61-3" title="3">                   <span class="dt">pattern =</span> <span class="st">&quot;ElevationSummary&quot;</span>,</a>
-<a class="sourceLine" id="cb61-4" title="4">                   <span class="dt">full.names =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb61-5" title="5">data &lt;-<span class="st"> </span><span class="kw">lapply</span>(data, read_csv)</a>
-<a class="sourceLine" id="cb61-6" title="6"></a>
-<a class="sourceLine" id="cb61-7" title="7"><span class="co"># attach scale</span></a>
-<a class="sourceLine" id="cb61-8" title="8">sp_scale &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;10.0km&quot;</span>, <span class="st">&quot;2.5km&quot;</span>)</a>
-<a class="sourceLine" id="cb61-9" title="9">data &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map2</span>(data, sp_scale, <span class="cf">function</span>(df, sp_scale){</a>
-<a class="sourceLine" id="cb61-10" title="10">  df<span class="op">$</span>scale =<span class="st"> </span>sp_scale</a>
-<a class="sourceLine" id="cb61-11" title="11">  <span class="kw">return</span>(df)</a>
-<a class="sourceLine" id="cb61-12" title="12">})</a>
-<a class="sourceLine" id="cb61-13" title="13"></a>
-<a class="sourceLine" id="cb61-14" title="14"><span class="co"># unlist and prepare to plot</span></a>
-<a class="sourceLine" id="cb61-15" title="15">data &lt;-<span class="st"> </span>data <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb61-16" title="16"><span class="st">  </span><span class="kw">bind_rows</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb61-17" title="17"><span class="st">  </span><span class="kw">arrange</span>(Hypothesis) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb61-18" title="18"><span class="st">  </span><span class="co"># select(Species, median, Hypothesis, scale)</span></a>
-<a class="sourceLine" id="cb61-19" title="19"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Hypothesis =</span> <span class="kw">as_factor</span>(Hypothesis)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb61-20" title="20"><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">names_from =</span> <span class="st">&quot;scale&quot;</span>,</a>
-<a class="sourceLine" id="cb61-21" title="21">            <span class="dt">values_from =</span> <span class="st">&quot;Hypothesis&quot;</span>,</a>
-<a class="sourceLine" id="cb61-22" title="22">            <span class="dt">names_prefix =</span> <span class="st">&quot;hypothesis_&quot;</span>)</a>
-<a class="sourceLine" id="cb61-23" title="23"></a>
-<a class="sourceLine" id="cb61-24" title="24"><span class="co"># set order</span></a>
-<a class="sourceLine" id="cb61-25" title="25">data &lt;-<span class="st"> </span><span class="kw">arrange</span>(data, median) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb61-26" title="26"><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb61-27" title="27"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">plot_order =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(data))</a></code></pre></div>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1"><span class="co"># make figure 3 for supplementary material</span></a>
-<a class="sourceLine" id="cb62-2" title="2">fig_hypothesis_elev_supp &lt;-</a>
-<a class="sourceLine" id="cb62-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(data, <span class="kw">aes</span>(<span class="dt">x =</span> plot_order, </a>
-<a class="sourceLine" id="cb62-4" title="4">                 <span class="dt">y =</span> median, <span class="dt">ymin =</span> q1, <span class="dt">ymax =</span> q3))<span class="op">+</span></a>
-<a class="sourceLine" id="cb62-5" title="5"><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="kw">c</span>(<span class="dv">700</span>,<span class="dv">1400</span>),</a>
-<a class="sourceLine" id="cb62-6" title="6">             <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">size =</span> <span class="fl">0.2</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb62-7" title="7"><span class="st">  </span><span class="kw">geom_errorbar</span>(<span class="dt">size =</span> <span class="fl">0.3</span>, <span class="dt">width =</span> <span class="fl">0.4</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb62-8" title="8"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">fill =</span> <span class="st">&quot;grey&quot;</span>, <span class="dt">shape =</span> <span class="dv">21</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb62-9" title="9"><span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> Species), </a>
-<a class="sourceLine" id="cb62-10" title="10">            <span class="dt">size =</span> <span class="dv">3</span>,</a>
-<a class="sourceLine" id="cb62-11" title="11">            <span class="dt">fontface =</span> <span class="st">&quot;italic&quot;</span>,</a>
-<a class="sourceLine" id="cb62-12" title="12">            <span class="dt">nudge_x =</span> <span class="fl">0.5</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb62-13" title="13"><span class="st">  </span></a>
-<a class="sourceLine" id="cb62-14" title="14"><span class="st">  </span><span class="kw">geom_label</span>(<span class="kw">aes</span>(<span class="dt">y =</span> <span class="dv">2500</span>,</a>
-<a class="sourceLine" id="cb62-15" title="15">                 <span class="dt">col =</span> hypothesis_<span class="fl">10.0</span>km,</a>
-<a class="sourceLine" id="cb62-16" title="16">                 <span class="dt">label =</span> <span class="kw">as.numeric</span>(hypothesis_<span class="fl">10.0</span>km)),</a>
-<a class="sourceLine" id="cb62-17" title="17">             <span class="dt">label.padding =</span> <span class="kw">unit</span>(<span class="fl">0.2</span>, <span class="st">&quot;lines&quot;</span>),</a>
-<a class="sourceLine" id="cb62-18" title="18">             <span class="dt">fontface =</span> <span class="st">&quot;bold&quot;</span>,</a>
-<a class="sourceLine" id="cb62-19" title="19">             <span class="dt">fill =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="dv">3</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb62-20" title="20"><span class="st">  </span><span class="kw">geom_label</span>(<span class="kw">aes</span>(<span class="dt">y =</span> <span class="dv">2250</span>,</a>
-<a class="sourceLine" id="cb62-21" title="21">                 <span class="dt">col =</span> hypothesis_<span class="fl">2.5</span>km,</a>
-<a class="sourceLine" id="cb62-22" title="22">                 <span class="dt">label =</span> <span class="kw">as.numeric</span>(hypothesis_<span class="fl">2.5</span>km)),</a>
-<a class="sourceLine" id="cb62-23" title="23">             <span class="dt">label.padding =</span> <span class="kw">unit</span>(<span class="fl">0.2</span>, <span class="st">&quot;lines&quot;</span>),</a>
-<a class="sourceLine" id="cb62-24" title="24">             <span class="dt">fontface =</span> <span class="st">&quot;bold&quot;</span>,</a>
-<a class="sourceLine" id="cb62-25" title="25">             <span class="dt">fill =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="dv">3</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb62-26" title="26"><span class="st">  </span><span class="kw">annotate</span>(<span class="dt">geom =</span> <span class="st">&quot;text&quot;</span>,</a>
-<a class="sourceLine" id="cb62-27" title="27">           <span class="dt">x =</span> <span class="kw">c</span>(<span class="dv">45</span>, <span class="dv">43</span>, <span class="dv">43</span>), <span class="dt">y =</span> <span class="kw">c</span>(<span class="dv">2375</span>, <span class="dv">2250</span>, <span class="dv">2500</span>),</a>
-<a class="sourceLine" id="cb62-28" title="28">           <span class="dt">label =</span> <span class="kw">c</span>(<span class="st">&quot;best supported</span><span class="ch">\n</span><span class="st">hypothesis&quot;</span>,<span class="st">&quot;2.5km&quot;</span>, <span class="st">&quot;10km&quot;</span>))<span class="op">+</span></a>
-<a class="sourceLine" id="cb62-29" title="29"><span class="st">  </span><span class="kw">scale_colour_scico_d</span>(<span class="dt">end =</span> <span class="fl">0.6</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb62-30" title="30"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">2000</span>, <span class="dv">500</span>)))<span class="op">+</span></a>
-<a class="sourceLine" id="cb62-31" title="31"><span class="st">  </span><span class="co"># scale_fill_hue(l = 100, c = 50)+</span></a>
-<a class="sourceLine" id="cb62-32" title="32"><span class="st">  </span><span class="kw">coord_flip</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb62-33" title="33"><span class="st">  </span><span class="kw">theme_few</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb62-34" title="34"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>,</a>
-<a class="sourceLine" id="cb62-35" title="35">        <span class="dt">legend.key =</span> <span class="kw">element_rect</span>(<span class="dt">colour =</span> <span class="st">&quot;white&quot;</span>,</a>
-<a class="sourceLine" id="cb62-36" title="36">                                  <span class="dt">size =</span> <span class="fl">0.3</span>),</a>
-<a class="sourceLine" id="cb62-37" title="37">        <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb62-38" title="38">        <span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>())<span class="op">+</span></a>
-<a class="sourceLine" id="cb62-39" title="39"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;elevation (m)&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;Species&quot;</span>,</a>
-<a class="sourceLine" id="cb62-40" title="40">       <span class="dt">colour =</span> <span class="st">&quot;Best supported</span><span class="ch">\n</span><span class="st">hypothesis&quot;</span>)</a>
-<a class="sourceLine" id="cb62-41" title="41"></a>
-<a class="sourceLine" id="cb62-42" title="42"><span class="co"># save figure</span></a>
-<a class="sourceLine" id="cb62-43" title="43"><span class="kw">ggsave</span>(fig_hypothesis_elev_supp, </a>
-<a class="sourceLine" id="cb62-44" title="44">       <span class="dt">filename =</span> <span class="st">&quot;figs/fig_hyp_elev_supp.png&quot;</span>,</a>
-<a class="sourceLine" id="cb62-45" title="45">       <span class="dt">height =</span> <span class="dv">10</span>, <span class="dt">width =</span> <span class="dv">6</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1"><span class="co"># load data again</span></a>
+<a class="sourceLine" id="cb56-2" title="2">data &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="dt">path =</span> <span class="st">&quot;data/results&quot;</span>,</a>
+<a class="sourceLine" id="cb56-3" title="3">                   <span class="dt">pattern =</span> <span class="st">&quot;ElevationSummary&quot;</span>,</a>
+<a class="sourceLine" id="cb56-4" title="4">                   <span class="dt">full.names =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb56-5" title="5">data &lt;-<span class="st"> </span><span class="kw">lapply</span>(data, read_csv)</a>
+<a class="sourceLine" id="cb56-6" title="6"></a>
+<a class="sourceLine" id="cb56-7" title="7"><span class="co"># attach scale</span></a>
+<a class="sourceLine" id="cb56-8" title="8">sp_scale &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;10.0km&quot;</span>, <span class="st">&quot;2.5km&quot;</span>)</a>
+<a class="sourceLine" id="cb56-9" title="9">data &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map2</span>(data, sp_scale, <span class="cf">function</span>(df, sp_scale){</a>
+<a class="sourceLine" id="cb56-10" title="10">  df<span class="op">$</span>scale =<span class="st"> </span>sp_scale</a>
+<a class="sourceLine" id="cb56-11" title="11">  <span class="kw">return</span>(df)</a>
+<a class="sourceLine" id="cb56-12" title="12">})</a>
+<a class="sourceLine" id="cb56-13" title="13"></a>
+<a class="sourceLine" id="cb56-14" title="14"><span class="co"># unlist and prepare to plot</span></a>
+<a class="sourceLine" id="cb56-15" title="15">data &lt;-<span class="st"> </span>data <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb56-16" title="16"><span class="st">  </span><span class="kw">bind_rows</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb56-17" title="17"><span class="st">  </span><span class="kw">arrange</span>(Hypothesis) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb56-18" title="18"><span class="st">  </span><span class="co"># select(Species, median, Hypothesis, scale)</span></a>
+<a class="sourceLine" id="cb56-19" title="19"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Hypothesis =</span> <span class="kw">as_factor</span>(Hypothesis)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb56-20" title="20"><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">names_from =</span> <span class="st">&quot;scale&quot;</span>,</a>
+<a class="sourceLine" id="cb56-21" title="21">            <span class="dt">values_from =</span> <span class="st">&quot;Hypothesis&quot;</span>,</a>
+<a class="sourceLine" id="cb56-22" title="22">            <span class="dt">names_prefix =</span> <span class="st">&quot;hypothesis_&quot;</span>)</a>
+<a class="sourceLine" id="cb56-23" title="23"></a>
+<a class="sourceLine" id="cb56-24" title="24"><span class="co"># set order</span></a>
+<a class="sourceLine" id="cb56-25" title="25">data &lt;-<span class="st"> </span><span class="kw">arrange</span>(data, median) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb56-26" title="26"><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb56-27" title="27"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">plot_order =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(data))</a></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1"><span class="co"># make figure 3 for supplementary material</span></a>
+<a class="sourceLine" id="cb57-2" title="2">fig_hypothesis_elev_supp &lt;-</a>
+<a class="sourceLine" id="cb57-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(data, <span class="kw">aes</span>(<span class="dt">x =</span> plot_order, </a>
+<a class="sourceLine" id="cb57-4" title="4">                 <span class="dt">y =</span> median, <span class="dt">ymin =</span> q1, <span class="dt">ymax =</span> q3))<span class="op">+</span></a>
+<a class="sourceLine" id="cb57-5" title="5"><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="kw">c</span>(<span class="dv">700</span>,<span class="dv">1400</span>),</a>
+<a class="sourceLine" id="cb57-6" title="6">             <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">size =</span> <span class="fl">0.2</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb57-7" title="7"><span class="st">  </span><span class="kw">geom_errorbar</span>(<span class="dt">size =</span> <span class="fl">0.3</span>, <span class="dt">width =</span> <span class="fl">0.4</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb57-8" title="8"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">fill =</span> <span class="st">&quot;grey&quot;</span>, <span class="dt">shape =</span> <span class="dv">21</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb57-9" title="9"><span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> Species), </a>
+<a class="sourceLine" id="cb57-10" title="10">            <span class="dt">size =</span> <span class="dv">3</span>,</a>
+<a class="sourceLine" id="cb57-11" title="11">            <span class="dt">fontface =</span> <span class="st">&quot;italic&quot;</span>,</a>
+<a class="sourceLine" id="cb57-12" title="12">            <span class="dt">nudge_x =</span> <span class="fl">0.5</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb57-13" title="13"><span class="st">  </span></a>
+<a class="sourceLine" id="cb57-14" title="14"><span class="st">  </span><span class="kw">geom_label</span>(<span class="kw">aes</span>(<span class="dt">y =</span> <span class="dv">2500</span>,</a>
+<a class="sourceLine" id="cb57-15" title="15">                 <span class="dt">col =</span> hypothesis_<span class="fl">10.0</span>km,</a>
+<a class="sourceLine" id="cb57-16" title="16">                 <span class="dt">label =</span> <span class="kw">as.numeric</span>(hypothesis_<span class="fl">10.0</span>km)),</a>
+<a class="sourceLine" id="cb57-17" title="17">             <span class="dt">label.padding =</span> <span class="kw">unit</span>(<span class="fl">0.2</span>, <span class="st">&quot;lines&quot;</span>),</a>
+<a class="sourceLine" id="cb57-18" title="18">             <span class="dt">fontface =</span> <span class="st">&quot;bold&quot;</span>,</a>
+<a class="sourceLine" id="cb57-19" title="19">             <span class="dt">fill =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="dv">3</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb57-20" title="20"><span class="st">  </span><span class="kw">geom_label</span>(<span class="kw">aes</span>(<span class="dt">y =</span> <span class="dv">2250</span>,</a>
+<a class="sourceLine" id="cb57-21" title="21">                 <span class="dt">col =</span> hypothesis_<span class="fl">2.5</span>km,</a>
+<a class="sourceLine" id="cb57-22" title="22">                 <span class="dt">label =</span> <span class="kw">as.numeric</span>(hypothesis_<span class="fl">2.5</span>km)),</a>
+<a class="sourceLine" id="cb57-23" title="23">             <span class="dt">label.padding =</span> <span class="kw">unit</span>(<span class="fl">0.2</span>, <span class="st">&quot;lines&quot;</span>),</a>
+<a class="sourceLine" id="cb57-24" title="24">             <span class="dt">fontface =</span> <span class="st">&quot;bold&quot;</span>,</a>
+<a class="sourceLine" id="cb57-25" title="25">             <span class="dt">fill =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="dv">3</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb57-26" title="26"><span class="st">  </span><span class="kw">annotate</span>(<span class="dt">geom =</span> <span class="st">&quot;text&quot;</span>,</a>
+<a class="sourceLine" id="cb57-27" title="27">           <span class="dt">x =</span> <span class="kw">c</span>(<span class="dv">45</span>, <span class="dv">43</span>, <span class="dv">43</span>), <span class="dt">y =</span> <span class="kw">c</span>(<span class="dv">2375</span>, <span class="dv">2250</span>, <span class="dv">2500</span>),</a>
+<a class="sourceLine" id="cb57-28" title="28">           <span class="dt">label =</span> <span class="kw">c</span>(<span class="st">&quot;best supported</span><span class="ch">\n</span><span class="st">hypothesis&quot;</span>,<span class="st">&quot;2.5km&quot;</span>, <span class="st">&quot;10km&quot;</span>))<span class="op">+</span></a>
+<a class="sourceLine" id="cb57-29" title="29"><span class="st">  </span><span class="kw">scale_colour_scico_d</span>(<span class="dt">end =</span> <span class="fl">0.6</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb57-30" title="30"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">2000</span>, <span class="dv">500</span>)))<span class="op">+</span></a>
+<a class="sourceLine" id="cb57-31" title="31"><span class="st">  </span><span class="co"># scale_fill_hue(l = 100, c = 50)+</span></a>
+<a class="sourceLine" id="cb57-32" title="32"><span class="st">  </span><span class="kw">coord_flip</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb57-33" title="33"><span class="st">  </span><span class="kw">theme_few</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb57-34" title="34"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>,</a>
+<a class="sourceLine" id="cb57-35" title="35">        <span class="dt">legend.key =</span> <span class="kw">element_rect</span>(<span class="dt">colour =</span> <span class="st">&quot;white&quot;</span>,</a>
+<a class="sourceLine" id="cb57-36" title="36">                                  <span class="dt">size =</span> <span class="fl">0.3</span>),</a>
+<a class="sourceLine" id="cb57-37" title="37">        <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(),</a>
+<a class="sourceLine" id="cb57-38" title="38">        <span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>())<span class="op">+</span></a>
+<a class="sourceLine" id="cb57-39" title="39"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;elevation (m)&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;Species&quot;</span>,</a>
+<a class="sourceLine" id="cb57-40" title="40">       <span class="dt">colour =</span> <span class="st">&quot;Best supported</span><span class="ch">\n</span><span class="st">hypothesis&quot;</span>)</a>
+<a class="sourceLine" id="cb57-41" title="41"></a>
+<a class="sourceLine" id="cb57-42" title="42"><span class="co"># save figure</span></a>
+<a class="sourceLine" id="cb57-43" title="43"><span class="kw">ggsave</span>(fig_hypothesis_elev_supp, </a>
+<a class="sourceLine" id="cb57-44" title="44">       <span class="dt">filename =</span> <span class="st">&quot;figs/fig_hyp_elev_supp.png&quot;</span>,</a>
+<a class="sourceLine" id="cb57-45" title="45">       <span class="dt">height =</span> <span class="dv">10</span>, <span class="dt">width =</span> <span class="dv">6</span>)</a></code></pre></div>
 </div>
 </div>
 <div id="show-figure-3-supplement" class="section level2">
 <h2><span class="header-section-number">7.5</span> Show Figure 3 Supplement</h2>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" title="1">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;figs/fig_hyp_elev_supp.png&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;figs/fig_hyp_elev_supp.png&quot;</span>)</a></code></pre></div>
 <p><img src="figs/fig_hyp_elev_supp.png" width="900" /></p>
 
 </div>
@@ -469,7 +471,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         </div>
       </div>
 <a href="occupancy-modelling.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="supplementary-material.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="results-occupancy-predictors.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
