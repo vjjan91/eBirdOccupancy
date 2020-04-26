@@ -273,9 +273,9 @@ list_of_models_per_species <-  map(list_of_species, function(df){
 ```
 
 
-# Use purrr::modify_depth() to get the AIC values for the top models
+## Get the AIC values for the top models
 
-```{r}
+```{r, eval=FALSE}
 
 # Unable to get the modify_depth to work
 ?modify_depth
@@ -288,8 +288,5 @@ list_of_AIC_per_species <- map(list_of_models_per_species, function(x){
   return(a)
   
 })
-
-  
-
 ```
 

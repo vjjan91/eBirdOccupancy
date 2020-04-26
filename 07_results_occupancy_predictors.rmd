@@ -149,7 +149,7 @@ fig_list <- map2(model_data, names(model_data), function(df, species){
 })
 ```
 
-```{r}
+```{r make_interactions_pdf, eval=FALSE}
 # make pdf of patchwork
 cairo_pdf(file = "figs/fig_interaction_clim_elev.pdf", width = 10, height = 3,
           onefile = TRUE)
@@ -157,5 +157,13 @@ cairo_pdf(file = "figs/fig_interaction_clim_elev.pdf", width = 10, height = 3,
   print(fig_list)
 }
 dev.off()
+```
+
+## Show example interaction
+
+```{r show_one_species, eval=TRUE}
+library(magick)
+fig_interaction = image_read_pdf("figs/fig_interaction_clim_elev.pdf", pages = 31)
+fig_interaction
 ```
 
