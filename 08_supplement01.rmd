@@ -75,12 +75,10 @@ unique_locs,
 geometry=gpd.points_from_xy(unique_locs.longitude, unique_locs.latitude))
 unique_locs.crs = {'init' :'epsg:4326'}
 
-# reproject spatials to 43n epsg 32642
+# reproject spatials to 43n epsg 32643
 
-# I think this should be EPSG 32643 rather than 42
-
-roads = roads.to_crs({'init': 'epsg:32642'})
-unique_locs = unique_locs.to_crs({'init': 'epsg:32642'})
+roads = roads.to_crs({'init': 'epsg:32643'})
+unique_locs = unique_locs.to_crs({'init': 'epsg:32643'})
 
 
 # function to simplify multilinestrings
@@ -158,7 +156,7 @@ def convData(somedata):
                                   geometry=gpd.points_from_xy(somedata.longitude, 
                                   somedata.latitude))
     unique_locs.crs = {'init' :'epsg:4326'}
-    unique_locs = unique_locs.to_crs({'init': 'epsg:32642'}) # Same comment as above
+    unique_locs = unique_locs.to_crs({'init': 'epsg:32643'})
     dists = ckdnearest_point(unique_locs, unique_locs)
     unique_locs = pd.DataFrame(unique_locs.drop(columns='geometry'))
     unique_locs['nnb'] = dists

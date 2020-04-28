@@ -35,8 +35,8 @@ ul = pd.merge(ul, effort, on=['longitude', 'latitude'])
 ulgpd = gpd.GeoDataFrame(ul,
               geometry=gpd.points_from_xy(ul.longitude, ul.latitude))
 ulgpd.crs = {'init' :'epsg:4326'}
-# reproject spatials to 43n epsg 32642
-ulgpd = ulgpd.to_crs({'init': 'epsg:32642'})
+# reproject spatials to 43n epsg 32643
+ulgpd = ulgpd.to_crs({'init': 'epsg:32643'})
 ul = pd.DataFrame(ul.drop(columns="geometry"))
 
 # function to use ckdtrees for nearest point finding
