@@ -9,102 +9,73 @@ library(purrr)
 library(ggplot2)
 library(data.table)
 
+# functions to wrangle models
+source("code/fun_model_estimate_collection.r")
+source("code/fun_make_resp_data.r")
+
 # Read in the excel sheet containing information on the best supported hypothesis
-allHypoSheets <- getSheetNames("C:\\Occupancy Runs\\all_hypoComparisons_allScales.xlsx")
-allHypo <-lapply(allHypoSheets,openxlsx::read.xlsx,xlsxFile="C:\\Occupancy Runs\\all_hypoComparisons_allScales.xlsx")
-names(allHypo) <- allHypoSheets
+sheet_names <- readxl::excel_sheets("data/results/all_hypoComparisons_allScales.xlsx")
+which_sheet <- which(str_detect(sheet_names, "Best"))
+
+hypothesis_data <- readxl::read_excel("data/results/all_hypoComparisons_allScales.xlsx",
+                                      sheet = sheet_names[which_sheet])
 
 # Subsetting the data needed to call in each species' model coefficient information
-dat <- allHypo[[4]][c(1,2,7,8)]
+hypothesis_data <- select(hypothesis_data,
+                          Scientific_name, Common_name,
+                          contains("Best supported hypothesis"))
 
-# List files from folder for which you need to read in the model estimates
-files <- list.files("C:\\Occupancy Runs\\Results_10km\\occuCovs\\modelEst\\",full.names=T)
-basename(files)
+# pivot longer
+hypothesis_data <- pivot_longer(hypothesis_data,
+                                cols = contains("Best"),
+                                names_to = "scale", values_to = "hypothesis")
+# fix scale to numeric
+hypothesis_data <- mutate(hypothesis_data,
+                          scale = if_else(str_detect(scale, "10"), "10km", "2.5km"))
 
-# Store data in a list
-modelEst1 <- list()
-modelEst2 <- list()
+# list the supported hypotheses
+# first separate the hypotheses into two columns
+hypothesis_data <- separate(hypothesis_data, col = hypothesis, sep = "; ", 
+                            into = c("hypothesis_01", "hypothesis_02"),
+                            fill = "right") %>% 
+  # then get the data into long format
+  pivot_longer(cols = c("hypothesis_01","hypothesis_02"),
+               values_to = "hypothesis") %>% 
+  # remove NA where there is only one hypothesis
+  drop_na() %>% 
+  # remove the name column
+  select(-name)
 
-for(i in 1:length(dat$Scientific_name)){
-  
-  if(grepl(";",dat$Best.supported.hypothesis_10km[i])==FALSE){
-    
-    bestHyp <- dat$Best.supported.hypothesis_10km[i]
-    
-    # Read in the model estimate information
-    allSheets <- getSheetNames(paste("C:\\Occupancy Runs\\Results_10km\\occuCovs\\modelEst\\",
-                                     bestHyp,"_modelEst.xlsx",sep = ""))
-    best <-  read.xlsx(paste("C:\\Occupancy Runs\\Results_10km\\occuCovs\\modelEst\\",
-                             bestHyp,"_modelEst.xlsx",sep = ""), sheet = dat$Scientific_name[i])
-    names(best)[1] <- "Predictor"
-  
-    # Store the species-specific sheet
-    modelEst1[[i]] <- best
-    names(modelEst1)[i] <- dat$Scientific_name[i]
-  
-  } else {
-    
-    a <- str_split_fixed(dat$Best.supported.hypothesis_10km[i], ";", 2) %>%
-      str_squish()
-    tmp_list <- list()
-    
-    for(j in 1:length(a)){
-      
-      bestHyp <- a[j]
+# correct the name landCover to lc
+hypothesis_data <- mutate(hypothesis_data,
+                          hypothesis = replace(hypothesis,
+                                               hypothesis %in% c("landCover", "climate",
+                                                                 "elevation"), 
+                                               c("lc","clim","elev")))
 
-      # Read in the model estimate information
-      allSheets <- getSheetNames(paste("C:\\Occupancy Runs\\Results_10km\\occuCovs\\modelEst\\",
-                                       bestHyp,"_modelEst.xlsx",sep = ""))
-      best <-  read.xlsx(paste("C:\\Occupancy Runs\\Results_10km\\occuCovs\\modelEst\\",
-                               bestHyp,"_modelEst.xlsx",sep = ""), sheet = dat$Scientific_name[i])
-      names(best)[1] <- "Predictor"
-      
-      # Store the species-specific sheet
-      tmp_list[[j]] <- best
-      names(tmp_list)[j] <- paste(dat$Scientific_name[i],"_",a[j], sep="")
-    }
-  modelEst2 <- append(modelEst2, tmp_list)
-  }
-}
+# which file to read model estimates from
+hypothesis_data <- mutate(hypothesis_data,
+                          file_read = glue::glue('data/results/results_model_est_{scale}/{hypothesis}_modelEst.xlsx'))
 
-# Removing NULL elements from the list of lists
-modelEst1[sapply(modelEst1, is.null)] <- NULL
+# read in data as list column
+model_data <- mutate(hypothesis_data,
+                     model_est = map2(file_read, Scientific_name, function(fr, sn){
+                       readxl::read_excel(fr, sheet = sn)
+                     }))
 
-# Appending all lists    
-all_dat <- append(modelEst1, modelEst2)    
+# rename model data components and separate predictors
+names <- c("predictor", "coefficient", "se", "ci_lower", "ci_higher", "z_value", "p_value")
 
-# Write the data out:
-write.xlsx(all_dat, file = "C:\\Occupancy Runs\\model_coef_Best_Hyp_10km.xlsx", rowNames=T, colNames=T)
+# get data for plotting
+model_data <- mutate(model_data, 
+                     model_est = map(model_est, function(df){
+  colnames(df) <- names
+  df <- separate_interaction_terms(df)
+  df <- make_response_data(df)
+  return(df)
+}))
 
+# keep significant predictors
+model_data <- model_data[map_int(model_data$model_est, nrow) > 0,]
 
-### Get excel sheets for modulators across each species ###
-
-## Work in Progress
-
-
-# example below to be used:
-# Pratik's code to get at models and modulator info:
-
-# assuming there are multiple models in a list
-mod_estimates <- clim_elev_modelEst %>%
-  bind_rows() %>% 
-  group_by(scientific_name) %>% # grouping and nesting by scientific name
-  nest() %>% # just in case there are mix ups
-  
-  # now mutate a new column where 
-  mutate(data = map(data, function(df){
-    df = mutate(df, 
-                predictor = str_extract(predictor, pattern = regex("\\((.*?)\\)")),
-                predictor = str_replace_all(predictor, "[//(//)]", ""))
-    
-    pred_mod <- str_split_fixed(df$predictor, ":", 2) %>% 
-      `colnames<-`(c("predictor", "modulator")) %>% 
-      as_tibble() %>% 
-      mutate(modulator = if_else(modulator == "", as.character(NA), modulator))
-    
-    df <- select(df, -predictor) %>% 
-      bind_cols(predictors)
-  }))
-
-mod_estimates
-
+# this data is ready to plot
