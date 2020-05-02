@@ -43,7 +43,7 @@ make_response_data <- function(df){
                  # make x and m combination df
                  data_resp <- tidyr::crossing(seq_x, seq_m)
                  # calculate y
-                 data_resp <- mutate(pred_tbl,
+                 data_resp <- mutate(data_resp,
                                     y  = intercept + 
                                       (coefficient_x*seq_x) + 
                                       (coefficient_m*seq_m) +
