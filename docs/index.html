@@ -24,7 +24,7 @@
 <meta name="author" content="Vijay Ramesh, Pratik R Gupte, and Morgan Tingley" />
 
 
-<meta name="date" content="2020-04-26" />
+<meta name="date" content="2020-05-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -69,7 +69,7 @@ a.sourceLine { text-indent: -1em; padding-left: 1em; }
 pre.numberSource a.sourceLine
   { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(title);
+  { content: attr(data-line-number);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
     border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
@@ -201,11 +201,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="8" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html"><i class="fa fa-check"></i><b>8</b> Results: Occupancy predictors</a><ul>
 <li class="chapter" data-level="8.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#prepare-libraries-3"><i class="fa fa-check"></i><b>8.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="8.2" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#prepare-data-to-load"><i class="fa fa-check"></i><b>8.2</b> Prepare data to load</a></li>
-<li class="chapter" data-level="8.3" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#load-data"><i class="fa fa-check"></i><b>8.3</b> Load data</a></li>
-<li class="chapter" data-level="8.4" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#prepare-interaction-data"><i class="fa fa-check"></i><b>8.4</b> Prepare interaction data</a></li>
-<li class="chapter" data-level="8.5" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#plot-interaction-data"><i class="fa fa-check"></i><b>8.5</b> Plot interaction data</a></li>
-<li class="chapter" data-level="8.6" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#show-example-interaction"><i class="fa fa-check"></i><b>8.6</b> Show example interaction</a></li>
+<li class="chapter" data-level="8.2" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#get-data-from-hypothesis-sheet"><i class="fa fa-check"></i><b>8.2</b> Get data from hypothesis sheet</a></li>
+<li class="chapter" data-level="8.3" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#read-model-estimates"><i class="fa fa-check"></i><b>8.3</b> Read model estimates</a></li>
+<li class="chapter" data-level="8.4" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#prepare-interaction-plots"><i class="fa fa-check"></i><b>8.4</b> Prepare interaction plots</a></li>
+<li class="chapter" data-level="8.5" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#show-example-interaction"><i class="fa fa-check"></i><b>8.5</b> Show example interaction</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="supplementary-material.html"><a href="supplementary-material.html"><i class="fa fa-check"></i><b>9</b> Supplementary material</a><ul>
 <li class="chapter" data-level="9.1" data-path="supplementary-material.html"><a href="supplementary-material.html#distance-to-roads"><i class="fa fa-check"></i><b>9.1</b> Distance to roads</a><ul>
@@ -258,7 +257,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="9.9" data-path="supplementary-material.html"><a href="supplementary-material.html#matching-effort-with-spatial-independence"><i class="fa fa-check"></i><b>9.9</b> Matching effort with spatial independence</a><ul>
 <li class="chapter" data-level="9.9.1" data-path="supplementary-material.html"><a href="supplementary-material.html#load-librarires"><i class="fa fa-check"></i><b>9.9.1</b> Load librarires</a></li>
-<li class="chapter" data-level="9.9.2" data-path="supplementary-material.html"><a href="supplementary-material.html#load-data-1"><i class="fa fa-check"></i><b>9.9.2</b> Load data</a></li>
+<li class="chapter" data-level="9.9.2" data-path="supplementary-material.html"><a href="supplementary-material.html#load-data"><i class="fa fa-check"></i><b>9.9.2</b> Load data</a></li>
 <li class="chapter" data-level="9.9.3" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-distance-exclusion-effect"><i class="fa fa-check"></i><b>9.9.3</b> Plot distance exclusion effect</a></li>
 </ul></li>
 <li class="chapter" data-level="9.10" data-path="supplementary-material.html"><a href="supplementary-material.html#spatial-thinning-a-comparison-of-approaches"><i class="fa fa-check"></i><b>9.10</b> Spatial thinning: A comparison of approaches</a><ul>
@@ -289,12 +288,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient</h1>
 <p class="author"><em>Vijay Ramesh, Pratik R Gupte, and Morgan Tingley</em></p>
-<p class="date"><em>2020-04-26</em></p>
+<p class="date"><em>2020-05-03</em></p>
 </div>
 <div id="introduction" class="section level1">
 <h1><span class="header-section-number">Section 1</span> Introduction</h1>
 <p>This is the <code>bookdown</code> version of a project in preparation that models occupancy for birds in the Nilgiri hills.
-Methods and format are derived from <a href="http://strimas.com/ebird-best-practices/">Strimas-Mackey et al.</a>, the supplement to <a href="https://www.biorxiv.org/content/10.1101/574392v1">Johnston et al. (2019)</a>.</p>
+Methods and format are derived from <a href="http://strimas.com/ebird-best-practices/">Strimas-Mackey et al.</a>, the supplement to <a href="https://www.biorxiv.org/content/10.1101/574392v1">Johnston et al. (2019)</a>.</p>
 <div id="attribution" class="section level2">
 <h2><span class="header-section-number">1.1</span> Attribution</h2>
 <p>Please contact the following in case of interest in the project.</p>

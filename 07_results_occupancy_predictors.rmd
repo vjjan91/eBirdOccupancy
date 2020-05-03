@@ -147,7 +147,7 @@ plot_data <- group_by(plot_data, Common_name, Scientific_name, scale, hypothesis
   summarise(figures = list(plot))
 ```
 
-```{r}
+```{r eval=TRUE}
 fig_list <- pmap(plot_data, 
                  function(Common_name, Scientific_name, scale, hypothesis, figures){
   final_plot <- wrap_plots(figures, ncol = 7)+
@@ -174,9 +174,9 @@ dev.off()
 
 ## Show example interaction
 
-```{r show_one_species, eval=TRUE}
+```{r show_one_species, eval=TRUE, fig.height=8}
 library(magick)
-fig_interaction = image_read_pdf("figs/fig_interaction_clim_elev.pdf", pages = 31)
+fig_interaction = image_read_pdf("figs/fig_occupancy.pdf", pages = 86)
 fig_interaction
 ```
 
