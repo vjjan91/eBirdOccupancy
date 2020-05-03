@@ -13,7 +13,7 @@ library(data.table)
 source("code/fun_model_estimate_collection.r")
 source("code/fun_make_resp_data.r")
 
-# Read in the excel sheet containing information on the best supported hypothesis
+# read in the excel sheet containing information on the best supported hypothesis
 sheet_names <- readxl::excel_sheets("data/results/all_hypoComparisons_allScales.xlsx")
 which_sheet <- which(str_detect(sheet_names, "Best"))
 

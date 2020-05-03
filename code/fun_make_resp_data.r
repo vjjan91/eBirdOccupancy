@@ -16,6 +16,23 @@ make_response_data <- function(df){
   
   intercept <- dplyr::filter(df, predictor == "Int") %>% .$coefficient
   
+  # swap predictor and modulator if modulator exists and predictor is elevation
+  df <- dplyr::mutate(df,
+                      tmp_modulator = dplyr::if_else(predictor == "alt.y" &
+                                                !is.na(modulator), 
+                                              true = "alt.y",
+                                              false = as.character(NA)))
+  
+  df <- dplyr::mutate(df,
+                      tmp_predictor = dplyr::if_else(predictor == "alt.y" &
+                                                       !is.na(modulator), 
+                                                     true = modulator,
+                                                     false = predictor))
+  df <- dplyr::mutate(df,
+                      modulator = tmp_modulator,
+                      predictor = tmp_predictor) %>% 
+    select(-contains("tmp"))
+  
   df <- dplyr::mutate(df, 
                data = purrr::map2(predictor, modulator, function(x,m){
                  # make a seq of x values
