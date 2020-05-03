@@ -34,9 +34,32 @@ make_response_data <- function(df){
     select(-contains("tmp"))
   
   df <- dplyr::mutate(df, 
-               data = purrr::map2(predictor, modulator, function(x,m){
+                      predictor_scale = case_when(
+                        predictor == "alt.y" ~ 2625,
+                        stringr::str_detect(predictor, "lc") == T ~ 1,
+                        stringr::str_detect(predictor, "prec") == T ~ 300,
+                        stringr::str_detect(predictor, "temp") == T ~ 50,
+                        stringr::str_detect(predictor, "17") == T ~ 80,
+                        stringr::str_detect(predictor, "18") == T ~ 300,
+                        TRUE ~ 1
+                      ),
+                      modulator_scale = case_when(
+                        modulator == "alt.y" ~ 2625,
+                        stringr::str_detect(predictor, "lc") == T ~ 1,
+                        stringr::str_detect(predictor, "prec") == T ~ 300,
+                        stringr::str_detect(predictor, "temp") == T ~ 50,
+                        stringr::str_detect(predictor, "17") == T ~ 80,
+                        stringr::str_detect(predictor, "18") == T ~ 300,
+                        TRUE ~ 1
+                      ))
+  df <- dplyr::mutate(df,
+                      data = purrr::pmap(list(predictor, predictor_scale,
+                                              modulator, modulator_scale), 
+                                         function(x,x_scale,m,m_scale){
+                 
                  # make a seq of x values
-                 seq_x <- seq(0,1, 0.1)
+                 seq_x <- seq(0, x_scale, length.out = 10)
+                 # get coeff values
                  coefficient_x <- dplyr::filter(df, 
                                                 predictor == x,
                                                 is.na(modulator)) %>% .$coefficient
@@ -44,7 +67,7 @@ make_response_data <- function(df){
                  # check if there is a modulator
                  if(!is.na(m)) {
                    # make a seq of m values and get coefficient
-                   seq_m <- seq(0,1, 0.1)
+                   seq_m <- seq(0, m_scale, length.out = 10)
                    coefficient_m <- dplyr::filter(df, 
                                                   predictor == m,
                                                   is.na(modulator)) %>% .$coefficient
