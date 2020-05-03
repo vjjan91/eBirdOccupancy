@@ -58,7 +58,7 @@ make_response_data <- function(df){
                                          function(x,x_scale,m,m_scale){
                  
                  # make a seq of x values
-                 seq_x <- seq(0, x_scale, length.out = 10)
+                 seq_x <- seq(0, 1, length.out = 10)
                  # get coeff values
                  coefficient_x <- dplyr::filter(df, 
                                                 predictor == x,
@@ -67,7 +67,7 @@ make_response_data <- function(df){
                  # check if there is a modulator
                  if(!is.na(m)) {
                    # make a seq of m values and get coefficient
-                   seq_m <- seq(0, m_scale, length.out = 10)
+                   seq_m <- seq(0, 1, length.out = 10)
                    coefficient_m <- dplyr::filter(df, 
                                                   predictor == m,
                                                   is.na(modulator)) %>% .$coefficient
@@ -92,7 +92,9 @@ make_response_data <- function(df){
                  
                  # make groups of the modulator
                  data_resp <- dplyr::mutate(data_resp,
-                                     m_group = cut(seq_m, breaks = 2))
+                                            seq_m = seq_m*m_scale,
+                                            seq_x = seq_x*x_scale,
+                                            m_group = cut(seq_m, breaks = 2))
                  
                  # group by modulator group and summarise
                  data_resp <- data_resp %>% 
