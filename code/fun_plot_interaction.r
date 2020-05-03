@@ -9,14 +9,14 @@ make_interaction_plot <- function(data, predictor, modulator){
   
   fig_subplot <- ggplot(data)+
     geom_point(aes(seq_x, mean,
-                        ymin = mean-ci,
-                        ymax = mean+ci,
-                        col = factor(m_group)),
-                    shape = 1)+
-    geom_errorbar(aes(seq_x, mean,
                    ymin = mean-ci,
                    ymax = mean+ci,
                    col = factor(m_group)),
+               shape = 1, size = 0.3)+
+    geom_errorbar(aes(seq_x, mean,
+                      ymin = mean-ci,
+                      ymax = mean+ci,
+                      col = factor(m_group)),
                   size = 0.2)+
     geom_smooth(aes(seq_x, mean,
                     col = factor(m_group)),
@@ -26,7 +26,8 @@ make_interaction_plot <- function(data, predictor, modulator){
     scale_colour_manual(values = c("black", "black"))+
     scale_y_continuous(breaks = c(0,0.5,1))+
     
-    coord_fixed(xlim=c(0,1),ylim = c(0,1.2), ratio = 0.8)+
+    # coord_fixed(xlim=c(0,1),ylim = c(0,1.2), ratio = 0.8)+
+    coord_cartesian(ylim = c(0,1.2))+
     theme_test(base_size = 6)+
     theme(legend.position = "none",
           # plot.background = element_rect(colour = "grey"),
@@ -39,9 +40,11 @@ make_interaction_plot <- function(data, predictor, modulator){
   # if there is a modulator
   
   if(!is.na(modulator)){
+    # a dataframe of where to place the labels
     label_data <-  group_by(data, m_group) %>% 
-      summarise(label_y = mean(mean)) %>% 
-      mutate(label_x = seq(0, 1, length.out = length(label_y)))
+      summarise(label_y = mean(mean),
+                max_x = max(seq_x)) %>% 
+      mutate(label_x = seq(0, max(max_x), length.out = length(label_y)))
     
     fig_subplot <- fig_subplot+
       geom_text(data = label_data,
