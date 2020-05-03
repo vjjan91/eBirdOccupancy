@@ -148,7 +148,8 @@ plot_data <- group_by(plot_data, Common_name, Scientific_name, scale, hypothesis
 ```
 
 ```{r}
-fig_list <- pmap(plot_data, function(Common_name, Scientific_name, scale, hypothesis, figures){
+fig_list <- pmap(plot_data, 
+                 function(Common_name, Scientific_name, scale, hypothesis, figures){
   final_plot <- wrap_plots(figures, ncol = 7)+
     patchwork::plot_annotation(
       title = glue::glue('{Common_name} ({Scientific_name})'),
