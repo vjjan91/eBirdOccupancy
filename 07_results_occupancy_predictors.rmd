@@ -25,133 +25,146 @@ source("code/fun_make_resp_data.r")
 
 # plotting
 library(ggplot2)
-library(ggrepel)
+library(patchwork)
+source('code/fun_plot_interaction.r')
 ```
 
-## Prepare data to load
+## Get data from hypothesis sheet
 
-```{r prep_interaction_data, eval=FALSE}
-# list excel files
-data_files <- list.files(path = "data/results/results_model_est_2.5km/",
-                         include.dirs = FALSE,
-                         pattern = "Est", full.names = TRUE)
+```{r eval=FALSE}
+# read in the excel sheet containing information on the best supported hypothesis
+sheet_names <- readxl::excel_sheets("data/results/all_hypoComparisons_allScales.xlsx")
+which_sheet <- which(str_detect(sheet_names, "Best"))
 
-# get model names
-model_names <- map_chr(data_files, function(x){
-  # split on /
-  str_split(x, "/") %>% 
-    unlist() %>% 
-    last() %>% 
-    # split on extension
-    str_split(".xlsx") %>% 
-    unlist() %>% 
-    first()
-})
+hypothesis_data <- readxl::read_excel("data/results/all_hypoComparisons_allScales.xlsx",
+                                      sheet = sheet_names[which_sheet])
+
+# Subsetting the data needed to call in each species' model coefficient information
+hypothesis_data <- select(hypothesis_data,
+                          Scientific_name, Common_name,
+                          contains("Best supported hypothesis"))
+
+# pivot longer
+hypothesis_data <- pivot_longer(hypothesis_data,
+                                cols = contains("Best"),
+                                names_to = "scale", values_to = "hypothesis")
+# fix scale to numeric
+hypothesis_data <- mutate(hypothesis_data,
+                          scale = if_else(str_detect(scale, "10"), "10km", "2.5km"))
+
+# list the supported hypotheses
+# first separate the hypotheses into two columns
+hypothesis_data <- separate(hypothesis_data, col = hypothesis, sep = "; ", 
+                            into = c("hypothesis_01", "hypothesis_02"),
+                            fill = "right") %>% 
+  # then get the data into long format
+  pivot_longer(cols = c("hypothesis_01","hypothesis_02"),
+               values_to = "hypothesis") %>% 
+  # remove NA where there is only one hypothesis
+  drop_na() %>% 
+  # remove the name column
+  select(-name)
+
+# correct the name landCover to lc
+hypothesis_data <- mutate(hypothesis_data,
+                          hypothesis = replace(hypothesis,
+                                               hypothesis %in% c("landCover", "climate",
+                                                                 "elevation"), 
+                                               c("lc","clim","elev")))
 ```
 
-## Load data
+## Read model estimates
 
-```{r load_model_estimates, eval=FALSE}
-# load for one
-data_files <- data_files[[1]]
-model_data <- data_files %>% 
-  excel_sheets() %>%
-  set_names() %>%
-  map(read_excel, path = data_files)
+```{r read_model_estimates, eval=FALSE}
+# which file to read model estimates from
+hypothesis_data <- mutate(hypothesis_data,
+                          file_read = glue::glue('data/results/results_model_est_{scale}/{hypothesis}_modelEst.xlsx'))
+
+# read in data as list column
+model_data <- mutate(hypothesis_data,
+                     model_est = map2(file_read, Scientific_name, function(fr, sn){
+                       readxl::read_excel(fr, sheet = sn)
+                     }))
 
 # rename model data components and separate predictors
 names <- c("predictor", "coefficient", "se", "ci_lower", "ci_higher", "z_value", "p_value")
 
-# map process over all models
-model_data <- map(model_data, function(df){
+# get data for plotting: separate the interaction terms and make the response df
+model_data <- mutate(model_data, 
+                     model_est = map(model_est, function(df){
   colnames(df) <- names
   df <- separate_interaction_terms(df)
+  df <- make_response_data(df)
   return(df)
-})
+}))
+
+# keep significant predictors
+model_data <- model_data[map_int(model_data$model_est, nrow) > 0,]
+
+# remove filename
+model_data <- select(model_data, -file_read) %>% 
+  unnest(model_est) %>% 
+  unnest(data)
 ```
 
-## Prepare interaction data
+Elevation always varies between 0 to 2625m
+Landcover predictors are proportions - so 0 to 1
+But climate varies:
 
-Refer to the function `code/fun_make_resp_data.r`.
+prec_interannual: 0 to 300
+temp_interannual: 0 to 50
+bio_17: 0 to 80
+bio_18: 0 to 300
 
-```{r significant_predictors, eval=FALSE}
-# select by p value
-model_data <- map(model_data, make_response_data)
+## Prepare interaction plots
 
-# remove elements where there are no rows
-model_data <- keep(model_data, function(df) nrow(df) > 0)
+Select useful columns and split by species, scale, and hypothesis.
+
+```{r prep_figures_interaction, eval=FALSE}
+# select useful columns
+plot_data <- select(model_data, 
+                   Scientific_name, Common_name,
+                   scale, hypothesis,
+                   predictor, modulator, m_group, seq_x, mean, ci)
+
+# nest at the plot level and ungroup
+plot_data <- group_by(plot_data, 
+                      Scientific_name, Common_name,
+                      scale, hypothesis,
+                      predictor, modulator) %>%
+  nest() %>% 
+  ungroup()
+
+# make plots
+plot_data$plot <- pmap(select(plot_data, data, predictor, modulator), 
+                      make_interaction_plot)
+
+# over all b map make interaction plo
+plot_data <- select(plot_data, 
+                   Common_name, Scientific_name, scale, hypothesis, plot)
+
+plot_data <- group_by(plot_data, Common_name, Scientific_name, scale, hypothesis) %>% 
+  summarise(figures = list(plot))
 ```
 
-## Plot interaction data
-
-```{r plot_interactions, eval=FALSE}
-fig_list <- map2(model_data, names(model_data), function(df, species){
-  
-  # now go over the predictor - modulator combos
-  
-  subplots <- pmap(df[,c("predictor","modulator","data")], 
-                   function(predictor, modulator, data){
-                     
-                     # make the actual ggplot here
-                     
-                     fig_subplot <- ggplot(data)+
-                       geom_pointrange(aes(seq_x, mean,
-                                           ymin = mean-ci,
-                                           ymax = mean+ci,
-                                           col = factor(m_group)),
-                                       shape = 16, size = 0.2)+
-                       geom_smooth(aes(seq_x, mean,
-                                       col = factor(m_group)),
-                                   method = "glm",
-                                   size = 0.3,
-                                   se = F)+
-                       scale_colour_manual(values = c("black", "black"))+
-                       scale_y_continuous(breaks = c(0,0.5,1))+
-                       
-                       coord_fixed(xlim=c(0,1),ylim = c(0,1.2))+
-                       theme_test(base_size = 6)+
-                       theme(legend.position = "none",
-                             plot.background = element_rect(colour = "grey"),
-                             legend.key = element_blank(),
-                             legend.title = element_text(size = 6),
-                             legend.text = element_text(size = 6))+
-                       labs(x = glue::glue('{predictor}'),
-                            y = "occupancy")
-                     
-                     # if there is a modulator
-                     
-                     if(!is.na(modulator)){
-                       label_data <-  group_by(data, m_group) %>% 
-                         summarise(label_y = mean(mean)) %>% 
-                         mutate(label_x = seq(0, 1, length.out = length(label_y)))
-                       
-                       fig_subplot <- fig_subplot+
-                         geom_text(data = label_data,
-                                   aes(x = label_x, y = 1.2, 
-                                       label = glue::glue('{modulator}\n{m_group}'),
-                                       col = factor(m_group)),
-                                   hjust = "inward",
-                                   vjust = "inward",
-                                   size = 1.5)+
-                         # overwrite palette
-                       scale_colour_brewer(palette = "Set1")
-                     }
-                     
-                     return(fig_subplot)
-                     
-                   })
-  subplots <- patchwork::wrap_plots(subplots, ncol = 6)+
+```{r eval=TRUE}
+fig_list <- pmap(plot_data, 
+                 function(Common_name, Scientific_name, scale, hypothesis, figures){
+  final_plot <- wrap_plots(figures, ncol = 7)+
     patchwork::plot_annotation(
-      title = species,
+      title = glue::glue('{Common_name} ({Scientific_name})'),
+      subtitle = glue::glue('scale: {scale}, best supported hypothesis: {hypothesis}'),
       tag_levels = "a",
       tag_prefix = "(", tag_suffix = ")",
-      theme = theme(plot.title = element_text(size = 8,face = "italic")))
+      theme = theme(plot.title = element_text(size = 10, face = "bold")))
+  
+  return(final_plot)
 })
 ```
 
 ```{r make_interactions_pdf, eval=FALSE}
 # make pdf of patchwork
-cairo_pdf(file = "figs/fig_interaction_clim_elev.pdf", width = 10, height = 3,
+cairo_pdf(file = "figs/fig_occupancy.pdf", width = 10, height = 3,
           onefile = TRUE)
 {
   print(fig_list)
@@ -161,9 +174,9 @@ dev.off()
 
 ## Show example interaction
 
-```{r show_one_species, eval=TRUE}
+```{r show_one_species, eval=TRUE, fig.height=8}
 library(magick)
-fig_interaction = image_read_pdf("figs/fig_interaction_clim_elev.pdf", pages = 31)
+fig_interaction = image_read_pdf("figs/fig_occupancy.pdf", pages = 86)
 fig_interaction
 ```
 
