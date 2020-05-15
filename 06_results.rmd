@@ -27,7 +27,7 @@ library(scico)
 data <- list.files(path = "data/results",
                    pattern = "ElevationSummary",
                    full.names = TRUE)
-data <- lapply(data, read_csv)
+data <- lapply(data, readxl::read_excel)
 
 # attach scale
 sp_scale <- c("10.0km", "2.5km")
@@ -116,7 +116,7 @@ This figure is intended to show the change (or not) in best supported hypothesis
 data <- list.files(path = "data/results",
                    pattern = "ElevationSummary",
                    full.names = TRUE)
-data <- lapply(data, read_csv)
+data <- lapply(data, readxl::read_excel)
 
 # attach scale
 sp_scale <- c("10.0km", "2.5km")
@@ -144,7 +144,7 @@ data <- arrange(data, median) %>%
 ```{r plot_fig_3_supplement, eval=FALSE}
 # make figure 3 for supplementary material
 fig_hypothesis_elev_supp <-
-  ggplot(data, aes(x = plot_order, 
+  ggplot(data, aes(x = plot_order,
                  y = median, ymin = q1, ymax = q3))+
   geom_hline(yintercept = c(700,1400),
              lty = 2, size = 0.2)+
