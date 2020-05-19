@@ -24,7 +24,7 @@
 <meta name="author" content="Vijay Ramesh, Pratik R Gupte, and Morgan Tingley" />
 
 
-<meta name="date" content="2020-05-15" />
+<meta name="date" content="2020-05-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -205,6 +205,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.3" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#read-model-estimates"><i class="fa fa-check"></i><b>8.3</b> Read model estimates</a></li>
 <li class="chapter" data-level="8.4" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#prepare-interaction-plots"><i class="fa fa-check"></i><b>8.4</b> Prepare interaction plots</a></li>
 <li class="chapter" data-level="8.5" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#show-example-interaction"><i class="fa fa-check"></i><b>8.5</b> Show example interaction</a></li>
+<li class="chapter" data-level="8.6" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#occupancy-predictors-aggregated-effect"><i class="fa fa-check"></i><b>8.6</b> Occupancy predictors’ aggregated effect</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="supplementary-material.html"><a href="supplementary-material.html"><i class="fa fa-check"></i><b>9</b> Supplementary material</a><ul>
 <li class="chapter" data-level="9.1" data-path="supplementary-material.html"><a href="supplementary-material.html#distance-to-roads"><i class="fa fa-check"></i><b>9.1</b> Distance to roads</a><ul>
@@ -466,6 +467,40 @@ Facet is predictor. Patchwork is scale.</p>
 <div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" title="1">fig_interaction =<span class="st"> </span><span class="kw">image_read_pdf</span>(<span class="st">&quot;figs/fig_occupancy.pdf&quot;</span>, <span class="dt">pages =</span> <span class="dv">86</span>)</a>
 <a class="sourceLine" id="cb67-2" title="2">fig_interaction</a></code></pre></div>
 <p><img src="ebird_nilgiris_2019_files/figure-html/show_one_species-1.png" width="1500" /></p>
+</div>
+<div id="occupancy-predictors-aggregated-effect" class="section level2">
+<h2><span class="header-section-number">8.6</span> Occupancy predictors’ aggregated effect</h2>
+<p>Plot the number of species affected and the direction of the effect, for each predictor.</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" title="1"><span class="co"># select the data</span></a>
+<a class="sourceLine" id="cb68-2" title="2">rev_bar_data &lt;-<span class="st"> </span><span class="kw">distinct</span>(model_data, </a>
+<a class="sourceLine" id="cb68-3" title="3">                         Scientific_name, scale, predictor, coefficient)</a>
+<a class="sourceLine" id="cb68-4" title="4"></a>
+<a class="sourceLine" id="cb68-5" title="5"><span class="co"># is the coeff positive? how many positive per scale per predictor?</span></a>
+<a class="sourceLine" id="cb68-6" title="6">rev_bar_data &lt;-<span class="st"> </span><span class="kw">mutate</span>(rev_bar_data, </a>
+<a class="sourceLine" id="cb68-7" title="7">                       <span class="dt">direction =</span> coefficient <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb68-8" title="8"><span class="st">  </span><span class="kw">count</span>(scale, predictor, direction) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb68-9" title="9"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">mag =</span> n <span class="op">*</span><span class="st"> </span>(<span class="kw">if_else</span>(direction, <span class="dv">1</span>, <span class="dv">-1</span>)))</a>
+<a class="sourceLine" id="cb68-10" title="10"></a>
+<a class="sourceLine" id="cb68-11" title="11"><span class="co"># visualise the data</span></a>
+<a class="sourceLine" id="cb68-12" title="12">fig_predictor_effect &lt;-</a>
+<a class="sourceLine" id="cb68-13" title="13"><span class="st">  </span><span class="kw">ggplot</span>(rev_bar_data)<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-14" title="14"><span class="st">  </span><span class="kw">geom_col</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">factor</span>(predictor),</a>
+<a class="sourceLine" id="cb68-15" title="15">               <span class="dt">y =</span> mag,</a>
+<a class="sourceLine" id="cb68-16" title="16">               <span class="dt">fill =</span> direction))<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-17" title="17"><span class="st">  </span>scico<span class="op">::</span><span class="kw">scale_fill_scico_d</span>(<span class="dt">palette =</span> <span class="st">&quot;lisbon&quot;</span>,</a>
+<a class="sourceLine" id="cb68-18" title="18">                            <span class="dt">begin =</span> <span class="fl">0.2</span>, <span class="dt">end =</span> <span class="fl">0.8</span>,</a>
+<a class="sourceLine" id="cb68-19" title="19">                            <span class="dt">direction =</span> <span class="dv">-1</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-20" title="20"><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">guide =</span> <span class="kw">guide_axis</span>(<span class="dt">n.dodge =</span> <span class="dv">2</span>))<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-21" title="21"><span class="st">  </span><span class="kw">theme_test</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-22" title="22"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-23" title="23"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>scale, <span class="dt">labeller =</span> label_both)<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-24" title="24"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;predictor&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;# species&quot;</span>)</a>
+<a class="sourceLine" id="cb68-25" title="25"></a>
+<a class="sourceLine" id="cb68-26" title="26"><span class="co"># save plot</span></a>
+<a class="sourceLine" id="cb68-27" title="27"><span class="kw">ggsave</span>(fig_predictor_effect, <span class="dt">filename =</span> <span class="st">&quot;figs/fig_predictor_effect.png&quot;</span>,</a>
+<a class="sourceLine" id="cb68-28" title="28">       <span class="dt">dpi =</span> <span class="dv">300</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" title="1">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;figs/fig_predictor_effect.png&quot;</span>)</a></code></pre></div>
+<p><img src="figs/fig_predictor_effect.png" width="1738" /></p>
 
 </div>
 </div>
