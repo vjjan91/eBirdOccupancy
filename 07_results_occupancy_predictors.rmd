@@ -202,33 +202,71 @@ fig_interaction
 
 ## Occupancy predictors' aggregated effect
 
+Read in the species as range restricted or wide ranging.
+
+```{r}
+species_data <- readxl::read_excel("data/results/all_hypoComparisons_allScales.xlsx")
+```
+
+
 Plot the number of species affected and the direction of the effect, for each predictor.
 
 ```{r mirror_bar_plot, eval=FALSE}
 # select the data
-rev_bar_data <- distinct(model_data, 
+data_predictor_effect <- distinct(model_data, 
                          Scientific_name, scale, predictor, coefficient)
 
+# add the species distribution
+data_predictor_effect <- left_join(data_predictor_effect, species_data,
+                                   by  = c("Scientific_name" = "Scientific.name"))
+data_predictor_effect <- mutate(data_predictor_effect,
+                                species_distribution = if_else(as.logical(`Range-Restricted`),
+                                                               "range restricted",
+                                                               "wide ranging"))
+
 # is the coeff positive? how many positive per scale per predictor?
-rev_bar_data <- mutate(rev_bar_data, 
+data_predictor_effect <- mutate(data_predictor_effect, 
                        direction = coefficient > 0) %>% 
-  count(scale, predictor, direction) %>% 
+  count(scale, predictor, species_distribution, direction) %>% 
   mutate(mag = n * (if_else(direction, 1, -1)))
 
+# wrangle data to get nice bars
+data_predictor_effect <- data_predictor_effect %>% 
+  select(-n) %>% 
+  mutate(direction = ifelse(direction, "positive", "negative")) %>% 
+  pivot_wider(values_from = "mag", names_from = "direction") %>% 
+  mutate_at(vars(positive, negative),
+            ~if_else(is.na(.),0, .))
+```
+
+```{r}
 # visualise the data
 fig_predictor_effect <-
-  ggplot(rev_bar_data)+
+ggplot(data_predictor_effect)+
+  geom_hline(yintercept = 0,
+             lty = 2, lwd = 0.2,
+             col = "grey")+
   geom_col(aes(x = factor(predictor),
-               y = mag,
-               fill = direction))+
-  scico::scale_fill_scico_d(palette = "lisbon",
+               y = positive,
+               group = species_distribution,
+               fill = interaction(species_distribution, positive > 0)),
+           position = position_dodge2(preserve = "single"))+
+  geom_col(aes(x = factor(predictor),
+               y = negative,
+               group = species_distribution,
+               fill = interaction(species_distribution, negative > 0)),
+           position = position_dodge2(preserve = "single"))+
+  
+  scico::scale_fill_scico_d(palette = "batlow",
                             begin = 0.2, end = 0.8,
                             direction = -1)+
+  
   scale_x_discrete(guide = guide_axis(n.dodge = 2))+
+  
   theme_test()+
   theme(legend.position = "none")+
-  facet_wrap(~scale, labeller = label_both)+
-  labs(x = "predictor", y = "# species")
+  facet_grid(species_distribution~scale, labeller = label_both)+
+  labs(x = "predictor", y = "species")
 
 # save plot
 ggsave(fig_predictor_effect, filename = "figs/fig_predictor_effect.png",
