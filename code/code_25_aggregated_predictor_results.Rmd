@@ -304,7 +304,6 @@ elev_data <- list.files(path = "C:\\Occupancy Runs\\",
                    full.names = TRUE)
 elev_data <- lapply(elev_data, readxl::read_excel)
 
-
 # prepare data
 elev_data <- elev_data %>% 
   bind_rows() %>% 
@@ -316,26 +315,44 @@ elev_data <- elev_data %>%
 data_predictor_effect <- distinct(model_data, 
                          Scientific_name, scale, predictor, modulator, coefficient)
 
+data_predictor_effect <- data_predictor_effect %>%
+  mutate_all(~str_replace_na(., "")) %>%
+  mutate(predictor_final = paste0(predictor,":",modulator,sep=""))
+
 data_predictor_effect <- left_join(data_predictor_effect, elev_data,
                                    by  = c("Scientific_name"="Species"))
 
+# Creating a synthetic variable 
+data_predictor_effect <- data_predictor_effect %>%
+  mutate(synthesis_var = if_else(
+    str_detect(predictor_final, pattern = "lc_[0-9]+.y:$"), "Land Cover",
+    if_else(str_detect(predictor_final, pattern = "lc_[0-9]+.y:alt.y"),"Land Cover*Elevation",if_else(str_detect(predictor_final, pattern = "alt.y:$"), "Elevation",
+    if_else(str_detect(predictor_final, pattern = "temp_interannual.y:$"),"Climate",
+    if_else(str_detect(predictor_final, pattern = "prec_interannual.y:$"),"Climate",
+    if_else(str_detect(predictor_final, pattern = "bio_[0-9]+.y:$"), "Climate",
+    if_else(str_detect(predictor_final, pattern = "prec_interannual.y:alt.y"), "Climate*Elevation",
+    if_else(str_detect(predictor_final, pattern = "temp_interannual.y:alt.y"),"Climate*Elevation",
+    if_else(str_detect(predictor_final, pattern = "bio_[0-9]+.y:alt.y"), "Climate*Elevation",
+    if_else(str_detect(predictor_final, pattern = "slope.y:$"), "Elevation",
+    if_else(str_detect(predictor_final, pattern = "aspect.y:$"), "Elevation","NA"))))))))))))
+
 # plot positions of predictor code
-data_pred <- count(data_predictor_effect, scale, predictor) %>%
+data_pred <- count(data_predictor_effect, scale, synthesis_var) %>%
   group_by(scale) %>% 
   mutate(plot_pos = cumsum(n)) %>% 
   ungroup() %>% 
-  mutate(predictor = as_factor(predictor),
-         plot_letter = letters[as.numeric(predictor)])
+  mutate(synthesis_var = as_factor(synthesis_var),
+         plot_letter = letters[as.numeric(synthesis_var)])
 
 # make figure
 fig_hypothesis_elev <- 
   ggplot(data_predictor_effect, aes(x = plot_order, y = median,
-                   col = predictor))+
+                   col = synthesis_var))+
   geom_hline(yintercept = c(700,1400),
              lty = 2, size = 0.2)+
   geom_errorbar(width = 0.4,
                 aes(ymin = q1, ymax = q3,))+
-  geom_point(aes(fill = predictor),
+  geom_point(aes(fill = synthesis_var),
              shape = 21, col = "grey20")+
   geom_text(aes(label = Scientific_name), 
             size = 2.5,
@@ -357,9 +374,9 @@ fig_hypothesis_elev <-
         axis.text.y = element_blank(),
         axis.ticks.y = element_blank())+
   labs(y = "elevation (m)", x = "Species",
-       colour = "Significant predictor")+
+       colour = "synthesis_var")+
   coord_flip()+
-  facet_wrap(~scale+predictor, labeller = label_both)
+  facet_wrap(~scale, labeller = label_both)
 
 fig_hypothesis_elev
 
