@@ -121,6 +121,10 @@ Plot the number of species affected and the direction of the effect, for each pr
 data_predictor_effect <- distinct(model_data, 
                          Scientific_name, scale, predictor, modulator, coefficient)
 
+data_predictor_effect <- data_predictor_effect %>%
+  mutate_all(~str_replace_na(., "")) %>%
+  mutate(predictor_final = paste0(predictor,":",modulator,sep=""))
+
 data_predictor_effect <- left_join(data_predictor_effect, hypothesis_data[,1:8],
                                    by  = "Scientific_name")
 
@@ -129,7 +133,7 @@ data_predictor_effect <- mutate(data_predictor_effect, species_distribution  =if
 # is the coeff positive? how many positive per scale per predictor?
 data_predictor_effect <- mutate(data_predictor_effect, 
                        direction = coefficient > 0) %>% 
-  count(scale, predictor, species_distribution, direction) %>% 
+  count(scale, predictor_final, species_distribution, direction) %>% 
   mutate(mag = n * (if_else(direction, 1, -1)))
 
 # wrangle data to get nice bars
@@ -147,12 +151,12 @@ fig_predictor_effect <-
   geom_hline(yintercept = 0,
              lty = 2, lwd = 0.2,
              col = "grey")+
-  geom_col(aes(x = factor(predictor),
+  geom_col(aes(x = factor(predictor_final),
                y = positive,
                group = species_distribution,
                fill = interaction(species_distribution, positive > 0)),
            position = position_dodge2(preserve = "single"))+
-  geom_col(aes(x = factor(predictor), y = negative,
+  geom_col(aes(x = factor(predictor_final), y = negative,
                group = species_distribution,
                fill = interaction(species_distribution, negative > 0)),
            position = position_dodge2(preserve = "single")) +
@@ -162,7 +166,8 @@ fig_predictor_effect <-
   theme_test()+
   theme(legend.position = "none")+
   facet_grid(species_distribution~scale, labeller = label_both)+
-  labs(x = "predictor", y = "species")
+  labs(x = "predictor", y = "species")+
+  theme(axis.text.x = element_text(angle = 90))
   
 fig_predictor_effect
 
@@ -177,13 +182,17 @@ ggsave(fig_predictor_effect, filename = "figs/fig_predictor_effect.png",
 data_predictor_effect <- distinct(model_data, 
                          Scientific_name, scale, predictor, modulator, coefficient)
 
+data_predictor_effect <- data_predictor_effect %>%
+  mutate_all(~str_replace_na(., "")) %>%
+  mutate(predictor_final = paste0(predictor,":",modulator,sep=""))
+
 data_predictor_effect <- left_join(data_predictor_effect, hypothesis_data[,1:8],
                                    by  = "Scientific_name")
 
 # is the coeff positive? how many positive per scale per predictor?
 data_predictor_effect <- mutate(data_predictor_effect, 
                        direction = coefficient > 0) %>% 
-  count(scale, predictor,`Habitat (Open Country / Forest )`, direction) %>% 
+  count(scale, predictor_final,`Habitat (Open Country / Forest )`, direction) %>% 
   mutate(mag = n * (if_else(direction, 1, -1)))
 
 # wrangle data to get nice bars
@@ -202,12 +211,12 @@ fig_predictor_effect <-
   geom_hline(yintercept = 0,
              lty = 2, lwd = 0.2,
              col = "grey")+
-  geom_col(aes(x = factor(predictor),
+  geom_col(aes(x = factor(predictor_final),
                y = positive,
                group = Habitat,
                fill = interaction(Habitat, positive > 0)),
            position = position_dodge2(preserve = "single"))+
-  geom_col(aes(x = factor(predictor), y = negative,
+  geom_col(aes(x = factor(predictor_final), y = negative,
                group = Habitat,
                fill = interaction(Habitat, negative > 0)),
            position = position_dodge2(preserve = "single")) +
@@ -217,7 +226,8 @@ fig_predictor_effect <-
   theme_test()+
   theme(legend.position = "none")+
   facet_grid(Habitat~scale, labeller = label_both)+
-  labs(x = "predictor", y = "species")
+  labs(x = "predictor", y = "species")+
+  theme(axis.text.x = element_text(angle = 90))
   
 fig_predictor_effect
 
@@ -232,13 +242,17 @@ ggsave(fig_predictor_effect, filename = "figs/fig_predictor_effect.png",
 data_predictor_effect <- distinct(model_data, 
                          Scientific_name, scale, predictor, modulator, coefficient)
 
+data_predictor_effect <- data_predictor_effect %>%
+  mutate_all(~str_replace_na(., "")) %>%
+  mutate(predictor_final = paste0(predictor,":",modulator,sep=""))
+
 data_predictor_effect <- left_join(data_predictor_effect, hypothesis_data[,1:8],
                                    by  = "Scientific_name")
 
 # is the coeff positive? how many positive per scale per predictor?
 data_predictor_effect <- mutate(data_predictor_effect, 
                        direction = coefficient > 0) %>% 
-  count(scale, predictor,`Foraging Space (Canopy / Mid-storey / Terrestrial / Shrub)`, direction) %>% 
+  count(scale, predictor_final,`Foraging Space (Canopy / Mid-storey / Terrestrial / Shrub)`, direction) %>% 
   mutate(mag = n * (if_else(direction, 1, -1)))
 
 # wrangle data to get nice bars
@@ -257,12 +271,12 @@ fig_predictor_effect <-
   geom_hline(yintercept = 0,
              lty = 2, lwd = 0.2,
              col = "grey")+
-  geom_col(aes(x = factor(predictor),
+  geom_col(aes(x = factor(predictor_final),
                y = positive,
                group = `foraging space`,
                fill = interaction(`foraging space`, positive > 0)),
            position = position_dodge2(preserve = "single"))+
-  geom_col(aes(x = factor(predictor), y = negative,
+  geom_col(aes(x = factor(predictor_final), y = negative,
                group = `foraging space`,
                fill = interaction(`foraging space`, negative > 0)),
            position = position_dodge2(preserve = "single")) +
@@ -272,7 +286,8 @@ fig_predictor_effect <-
   theme_test()+
   theme(legend.position = "none")+
   facet_grid(`foraging space`~scale, labeller = label_both)+
-  labs(x = "predictor", y = "species")
+  labs(x = "predictor", y = "species")+
+  theme(axis.text.x = element_text(angle = 90))
   
 fig_predictor_effect
 
