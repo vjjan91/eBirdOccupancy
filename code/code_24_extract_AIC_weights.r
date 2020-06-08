@@ -1,13 +1,4 @@
----
-editor_options: 
-  chunk_output_type: console
----
-
-# Cumulative AIC Weights
-
-## Prepare libraries
-
-```{r load_libs, eval=FALSE}
+## ----load_libs-----------------------------------------------------------------------------
 # to load data
 library(readxl)
 
@@ -28,11 +19,9 @@ source("code/fun_make_resp_data.r")
 library(ggplot2)
 library(patchwork)
 source('code/fun_plot_interaction.r')
-```
 
-## Get data from hypothesis sheet
 
-```{r eval=FALSE}
+## ----get_data_from_sheets------------------------------------------------------------------
 # read in the excel sheet containing information on the best supported hypothesis
 sheet_names <- readxl::excel_sheets("data/results/all_hypoComparisons_allScales.xlsx")
 which_sheet <- which(str_detect(sheet_names, "Best"))
@@ -72,11 +61,9 @@ hypothesis_data <- mutate(hypothesis_data,
                                                hypothesis %in% c("landCover", "climate",
                                                                  "elevation"), 
                                                c("lc","clim","elev")))
-```
 
-## Read model importance / AIC weights
 
-```{r read_model_importance, eval=FALSE}
+## ----read_model_importance-----------------------------------------------------------------
 # which file to read model importance from
 hypothesis_data <- mutate(hypothesis_data,
                           file_read = glue::glue('data/results/Results_{scale}/occuCovs/modelImp/{hypothesis}_imp.xlsx'))
@@ -102,11 +89,9 @@ model_data <- mutate(model_data,
 model_data <- select(model_data, -file_read) %>% 
   unnest(model_imp) 
 
-```
 
-Get cumulative sum of model weights for each unique combination of predictors:
 
-```{r get_aic_data}
+## ----get_aic_data--------------------------------------------------------------------------
 # nest model data
 model_data <- model_data %>% 
   group_by(scale) %>%
@@ -142,7 +127,5 @@ fig_cum_AIC <-
 # save plot
 ggsave(fig_cum_AIC, filename = "figs/fig_cum_AIC.png",
        dpi = 300)
-
-```
 
 
