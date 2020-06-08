@@ -1,6 +1,7 @@
 #Remove data files
 ebd*.txt
 data/*
+!data/results/00_data_exists.md
 
 *.tif*
 *.shp
