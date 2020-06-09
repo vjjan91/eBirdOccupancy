@@ -78,7 +78,7 @@ hypothesis_data <- mutate(hypothesis_data,
 ```{r read_model_estimates, eval=FALSE}
 # which file to read model estimates from
 hypothesis_data <- mutate(hypothesis_data,
-                          file_read = glue::glue('data/results/results_model_est_{scale}/{hypothesis}_modelEst.xlsx'))
+                          file_read = glue::glue('data/results/Results_{scale}/occuCovs/modelEst/{hypothesis}_modelEst.xlsx'))
 
 # read in data as list column
 model_data <- mutate(hypothesis_data,
@@ -202,32 +202,73 @@ fig_interaction
 
 ## Occupancy predictors' aggregated effect
 
-Read in the species as range restricted or wide ranging.
+Read in the species as range restricted or wide ranging. We previously identified the sheet.
 
 ```{r}
-species_data <- readxl::read_excel("data/results/all_hypoComparisons_allScales.xlsx")
+hypothesis_data <- readxl::read_excel("data/results/all_hypoComparisons_allScales.xlsx",
+                                      sheet = sheet_names[which_sheet])
 ```
 
 
 Plot the number of species affected and the direction of the effect, for each predictor.
+Split the data along the axes of range restriction, large scale habitat type, and small scale habitat type.
 
 ```{r mirror_bar_plot, eval=FALSE}
 # select the data
 data_predictor_effect <- distinct(model_data, 
-                         Scientific_name, scale, predictor, coefficient)
+                         Scientific_name, scale, 
+                         predictor, modulator, coefficient)
 
 # add the species distribution
-data_predictor_effect <- left_join(data_predictor_effect, species_data,
-                                   by  = c("Scientific_name" = "Scientific.name"))
-data_predictor_effect <- mutate(data_predictor_effect,
-                                species_distribution = if_else(as.logical(`Range-Restricted`),
-                                                               "range restricted",
-                                                               "wide ranging"))
+data_predictor_effect <- left_join(data_predictor_effect, hypothesis_data,
+                                   by  = c("Scientific_name" = "Scientific_name"))
 
-# is the coeff positive? how many positive per scale per predictor?
+# rename columns and make text 'nice'
+data_predictor_effect <- mutate(data_predictor_effect,
+                                distribution = if_else(as.logical(`Range-Restricted`),
+                                                               "range restricted",
+                                                               "wide ranging"),
+                                habitat = str_to_lower(`Habitat (Open Country / Forest )`),
+                                storey = str_to_lower(`Foraging Space (Canopy / Mid-storey / Terrestrial / Shrub)`),
+                                body_mass = `Body Mass (g)`
+                                )
+
+# remove old cols and set nice column names
+data_predictor_effect <- select(data_predictor_effect,
+                                -contains(c(" ", "-")))
+# convert colnames to lower case
+data_predictor_effect <- data_predictor_effect %>% 
+  `colnames<-`(str_to_lower(colnames(.)))
+
+# remove .y from predictors
+data_predictor_effect <- data_predictor_effect %>%
+  mutate_if(is.character, .funs = function(x){
+    stringr::str_remove(x, ".y")
+  }) %>%
+  
+  # remove the ":NA"
+  mutate(predictor_final = glue('{predictor}:{modulator}'),
+         predictor_final = str_remove(predictor_final, ":NA"))
+
+# now remove predictor and modulator
+data_predictor_effect <- select(data_predictor_effect,
+                                -predictor, -modulator)
+```
+
+What is the direction of the predictor effect for each subset of the data by the distribution, habitat, diet, and storey?
+
+```{r}
+# first pivot the data longer
+data_predictor_effect <- data_predictor_effect %>% 
+  pivot_longer(cols = c("diet", "distribution", "habitat", "storey"), 
+               names_to = "trait")
+
+
+# is the coeff positive? how many positive per scale per predictor per axis of split?
 data_predictor_effect <- mutate(data_predictor_effect, 
-                       direction = coefficient > 0) %>% 
-  count(scale, predictor, species_distribution, direction) %>% 
+                                direction = coefficient > 0) %>% 
+  count(scale, predictor_final, 
+        trait, value, direction) %>% 
   mutate(mag = n * (if_else(direction, 1, -1)))
 
 # wrangle data to get nice bars
@@ -237,37 +278,46 @@ data_predictor_effect <- data_predictor_effect %>%
   pivot_wider(values_from = "mag", names_from = "direction") %>% 
   mutate_at(vars(positive, negative),
             ~if_else(is.na(.),0, .))
+
+# nest the data by trait
+data_predictor_effect <- data_predictor_effect %>% nest(data = -trait)
 ```
 
 ```{r}
-# visualise the data
-fig_predictor_effect <-
-ggplot(data_predictor_effect)+
-  geom_hline(yintercept = 0,
-             lty = 2, lwd = 0.2,
-             col = "grey")+
-  geom_col(aes(x = factor(predictor),
-               y = positive,
-               group = species_distribution,
-               fill = interaction(species_distribution, positive > 0)),
-           position = position_dodge2(preserve = "single"))+
-  geom_col(aes(x = factor(predictor),
-               y = negative,
-               group = species_distribution,
-               fill = interaction(species_distribution, negative > 0)),
-           position = position_dodge2(preserve = "single"))+
-  
-  scico::scale_fill_scico_d(palette = "batlow",
-                            begin = 0.2, end = 0.8,
-                            direction = -1)+
-  
-  scale_x_discrete(guide = guide_axis(n.dodge = 2))+
-  
-  theme_test()+
-  theme(legend.position = "none")+
-  facet_grid(species_distribution~scale, labeller = label_both)+
-  labs(x = "predictor", y = "species")
+# visualise the data by mapping over the nested list
+data_predictor_effect <- mutate(data_predictor_effect,
+                                figs = map2(data, trait, function(df, tr){
+                                  ggplot(df)+
+                                    geom_hline(yintercept = 0,
+                                               lty = 2, lwd = 0.2,
+                                               col = "grey")+
+                                    geom_col(aes(x = factor(predictor_final),
+                                                 y = positive,
+                                                 group = value,
+                                                 fill = interaction(value, positive > 0)),
+                                             position = position_dodge2(preserve = "single"))+
+                                    geom_col(aes(x = factor(predictor_final),
+                                                 y = negative,
+                                                 group = value,
+                                                 fill = interaction(value, negative > 0)),
+                                             position = position_dodge2(preserve = "single"))+
+                                    scico::scale_fill_scico_d(palette = "hawaii",
+                                                              begin = 0.2, end = 0.8,
+                                                              direction = 1)+
+                                    
+                                    scale_x_discrete(guide = guide_axis(n.dodge = 2),
+                                                     label = 1:length(unique(df$predictor_final)))+
+                                    
+                                    theme_test(base_size = 6)+
+                                    theme(legend.position = "none")+
+                                    facet_grid(scale~value, labeller = label_both)+
+                                    labs(x = "predictor", y = "species",
+                                         title = glue('species split by {tr}'),
+                                         caption = "the X axis text overlaps, consider numbers - pg")
+                                }))
 
+fig_predictor_effect <- patchwork::wrap_plots(data_predictor_effect$figs,
+                                              nrow = 2)
 # save plot
 ggsave(fig_predictor_effect, filename = "figs/fig_predictor_effect.png",
        dpi = 300)
@@ -277,3 +327,210 @@ ggsave(fig_predictor_effect, filename = "figs/fig_predictor_effect.png",
 knitr::include_graphics("figs/fig_predictor_effect.png")
 ```
 
+## Habitat type and predictor effects
+
+```{r hbaitat_type, eval=FALSE}
+# select the data 
+data_predictor_effect <- distinct(model_data, 
+                                  Scientific_name, scale, 
+                                  predictor, modulator, coefficient)
+
+
+
+# join to species data
+data_predictor_effect <- left_join(data_predictor_effect, 
+                                   hypothesis_data,
+                                   by  = "Scientific_name")
+
+# is the coeff positive? how many positive per scale per predictor?
+data_predictor_effect <- mutate(data_predictor_effect, 
+                                direction = coefficient > 0) %>% 
+  count(scale, predictor_final,`Habitat (Open Country / Forest )`, direction) %>% 
+  mutate(mag = n * (if_else(direction, 1, -1)))
+
+# wrangle data to get nice bars
+data_predictor_effect <- data_predictor_effect %>% 
+  select(-n) %>% 
+  mutate(direction = ifelse(direction, "positive", "negative")) %>% 
+  pivot_wider(values_from = "mag", names_from = "direction") %>% 
+  mutate_at(vars(positive, negative),
+            ~if_else(is.na(.),0, .))
+
+names(data_predictor_effect)[3] <- "Habitat"
+
+# visualise the data
+fig_predictor_effect <-
+  ggplot(data_predictor_effect)+
+  geom_hline(yintercept = 0,
+             lty = 2, lwd = 0.2,
+             col = "grey")+
+  geom_col(aes(x = factor(predictor_final),
+               y = positive,
+               group = Habitat,
+               fill = interaction(Habitat, positive > 0)),
+           position = position_dodge2(preserve = "single"))+
+  geom_col(aes(x = factor(predictor_final), y = negative,
+               group = Habitat,
+               fill = interaction(Habitat, negative > 0)),
+           position = position_dodge2(preserve = "single")) +
+    scico::scale_fill_scico_d(palette = "batlow",
+                            begin = 0.2, end = 0.8,
+                            direction = -1) +
+  theme_test()+
+  theme(legend.position = "none")+
+  facet_grid(Habitat~scale, labeller = label_both)+
+  labs(x = "predictor", y = "species")+
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+3. Creating a plot that shows shrub, midstorey, understorey and canopy species
+```{r mirror_bar_plot, eval=FALSE}
+# select the data 
+data_predictor_effect <- distinct(model_data, 
+                         Scientific_name, scale, predictor, modulator, coefficient)
+
+data_predictor_effect <- data_predictor_effect %>%
+  mutate_all(~str_replace_na(., "")) %>%
+  mutate(predictor_final = paste0(predictor,":",modulator,sep=""))
+
+data_predictor_effect <- left_join(data_predictor_effect, hypothesis_data[,1:8],
+                                   by  = "Scientific_name")
+
+# is the coeff positive? how many positive per scale per predictor?
+data_predictor_effect <- mutate(data_predictor_effect, 
+                       direction = coefficient > 0) %>% 
+  count(scale, predictor_final,`Foraging Space (Canopy / Mid-storey / Terrestrial / Shrub)`, direction) %>% 
+  mutate(mag = n * (if_else(direction, 1, -1)))
+
+# wrangle data to get nice bars
+data_predictor_effect <- data_predictor_effect %>% 
+  select(-n) %>% 
+  mutate(direction = ifelse(direction, "positive", "negative")) %>% 
+  pivot_wider(values_from = "mag", names_from = "direction") %>% 
+  mutate_at(vars(positive, negative),
+            ~if_else(is.na(.),0, .))
+
+names(data_predictor_effect)[3] <- "foraging space"
+
+# visualise the data
+fig_predictor_effect <-
+  ggplot(data_predictor_effect)+
+  geom_hline(yintercept = 0,
+             lty = 2, lwd = 0.2,
+             col = "grey")+
+  geom_col(aes(x = factor(predictor_final),
+               y = positive,
+               group = `foraging space`,
+               fill = interaction(`foraging space`, positive > 0)),
+           position = position_dodge2(preserve = "single"))+
+  geom_col(aes(x = factor(predictor_final), y = negative,
+               group = `foraging space`,
+               fill = interaction(`foraging space`, negative > 0)),
+           position = position_dodge2(preserve = "single")) +
+    scico::scale_fill_scico_d(palette = "batlow",
+                            begin = 0.2, end = 0.8,
+                            direction = -1) +
+  theme_test()+
+  theme(legend.position = "none")+
+  facet_grid(`foraging space`~scale, labeller = label_both)+
+  labs(x = "predictor", y = "species")+
+  theme(axis.text.x = element_text(angle = 90))
+  
+fig_predictor_effect
+
+# save plot
+ggsave(fig_predictor_effect, filename = "figs/fig_predictor_effect.png",
+       dpi = 300)
+```
+
+A plot of elevational ranges of presence points and predictors 
+```{r}
+# load data
+elev_data <- list.files(path = "C:\\Occupancy Runs\\",
+                   pattern = "elevation",
+                   full.names = TRUE)
+elev_data <- lapply(elev_data, readxl::read_excel)
+
+# prepare data
+elev_data <- elev_data %>% 
+  bind_rows() %>% 
+  arrange(median) %>% 
+  mutate(plot_order = 1:length(median)) %>% 
+  ungroup() 
+
+# select the data 
+data_predictor_effect <- distinct(model_data, 
+                         Scientific_name, scale, predictor, modulator, coefficient)
+
+data_predictor_effect <- data_predictor_effect %>%
+  mutate_all(~str_replace_na(., "")) %>%
+  mutate(predictor_final = paste0(predictor,":",modulator,sep=""))
+
+data_predictor_effect <- left_join(data_predictor_effect, elev_data,
+                                   by  = c("Scientific_name"="Species"))
+
+# Creating a synthetic variable 
+data_predictor_effect <- data_predictor_effect %>%
+  mutate(synthesis_var = if_else(
+    str_detect(predictor_final, pattern = "lc_[0-9]+.y:$"), "Land Cover",
+    if_else(str_detect(predictor_final, pattern = "lc_[0-9]+.y:alt.y"),"Land Cover*Elevation",if_else(str_detect(predictor_final, pattern = "alt.y:$"), "Elevation",
+    if_else(str_detect(predictor_final, pattern = "temp_interannual.y:$"),"Climate",
+    if_else(str_detect(predictor_final, pattern = "prec_interannual.y:$"),"Climate",
+    if_else(str_detect(predictor_final, pattern = "bio_[0-9]+.y:$"), "Climate",
+    if_else(str_detect(predictor_final, pattern = "prec_interannual.y:alt.y"), "Climate*Elevation",
+    if_else(str_detect(predictor_final, pattern = "temp_interannual.y:alt.y"),"Climate*Elevation",
+    if_else(str_detect(predictor_final, pattern = "bio_[0-9]+.y:alt.y"), "Climate*Elevation",
+    if_else(str_detect(predictor_final, pattern = "slope.y:$"), "Elevation",
+    if_else(str_detect(predictor_final, pattern = "aspect.y:$"), "Elevation","NA"))))))))))))
+
+# plot positions of predictor code
+data_pred <- count(data_predictor_effect, scale, synthesis_var) %>%
+  group_by(scale) %>% 
+  mutate(plot_pos = cumsum(n)) %>% 
+  ungroup() %>% 
+  mutate(synthesis_var = as_factor(synthesis_var),
+         plot_letter = letters[as.numeric(synthesis_var)])
+
+# make figure
+fig_hypothesis_elev <- 
+  ggplot(data_predictor_effect, aes(x = plot_order, y = median,
+                   col = synthesis_var))+
+  geom_hline(yintercept = c(700,1400),
+             lty = 2, size = 0.2)+
+  geom_errorbar(width = 0.4,
+                aes(ymin = q1, ymax = q3,))+
+  geom_point(aes(fill = synthesis_var),
+             shape = 21, col = "grey20")+
+  geom_text(aes(label = Scientific_name), 
+            size = 2.5,
+            fontface = "italic",
+            nudge_x = 0.4, col = "black")+
+  geom_text(data = data_pred,
+            aes(x = plot_pos, y = 2250,
+                label = plot_letter),
+            col = "grey20", fontface = "bold")+
+  geom_vline(data = data_pred,
+             aes(xintercept = plot_pos + 0.5),
+             lty = 3, lwd = 0.4, col = "grey")+
+  scale_color_hue(l = 50, c = 50)+
+  scale_fill_hue(l = 70)+
+  theme_few()+
+  theme(legend.position = "none",
+        legend.key = element_rect(colour = "white",
+                                  size = 0.3),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
+  labs(y = "elevation (m)", x = "Species",
+       colour = "synthesis_var")+
+  coord_flip()+
+  facet_wrap(~scale, labeller = label_both)
+
+fig_hypothesis_elev
+
+```
+
+
+
+```{r show_reverse_bar, eval=TRUE}
+knitr::include_graphics("figs/fig_predictor_effect.png")
+```
