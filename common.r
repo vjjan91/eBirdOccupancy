@@ -6,6 +6,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   collapse = TRUE,
   cache = FALSE,
+  eval=FALSE,
   warning = FALSE,
   error = FALSE,
   message = FALSE,

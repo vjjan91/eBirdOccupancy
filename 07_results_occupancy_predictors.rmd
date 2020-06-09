@@ -78,7 +78,7 @@ hypothesis_data <- mutate(hypothesis_data,
 ```{r read_model_estimates, eval=FALSE}
 # which file to read model estimates from
 hypothesis_data <- mutate(hypothesis_data,
-                          file_read = glue::glue('data/results/results_model_est_{scale}/{hypothesis}_modelEst.xlsx'))
+                          file_read = glue::glue('data/results/Results_{scale}/occuCovs/modelEst/{hypothesis}_modelEst.xlsx'))
 
 # read in data as list column
 model_data <- mutate(hypothesis_data,
@@ -107,167 +107,124 @@ model_data <- select(model_data, -file_read) %>%
   unnest(data)
 ```
 
-Elevation always varies between 0 to 2625m
-Landcover predictors are proportions - so 0 to 1
-But climate varies:
-
-prec_interannual: 0 to 300
-temp_interannual: 0 to 50
-bio_17: 0 to 80
-bio_18: 0 to 300
-
-## Prepare interaction plots
-
-Select useful columns and split by scale. Hypothesis can be shape?
-Facet is predictor. Patchwork is scale.
-
-```{r prep_figures_interaction, eval=FALSE}
-# select useful columns
-plot_data <- select(model_data, 
-                   Scientific_name, Common_name,
-                   scale, hypothesis,
-                   predictor, modulator, m_group, seq_x, mean, ci)
-
-# nest at the scale level and ungroup
-plot_data <- group_by(plot_data, 
-                      scale) %>%
-  nest() %>% 
-  ungroup()
-
-# test plot
-temp_plot <- function(df){
-  ggplot(df, 
-       aes(seq_x, mean, col = m_group,
-                shape = hypothesis,
-                group = interaction(Scientific_name, hypothesis,
-                                    m_group)))+
-  geom_line(show.legend = FALSE,
-            size = 0.3)+
-  geom_ribbon(aes(ymin = mean-ci, ymax = mean+ci,
-                  fill = m_group),
-                  alpha= 0.3, col = NA)+
-  
-  scale_colour_manual(values = c("grey", "dodgerblue", "indianred"))+
-  scale_fill_manual(values = c("grey", "dodgerblue", "indianred"))+
-  theme_test(base_size = 8,
-             base_family = "Arial")+
-  theme(legend.position = "top")+
-  guides(colour = guide_legend(nrow = 1))+
-  facet_wrap(~predictor, scales = "free_x",
-             nrow = 2, strip.position = "bottom")+
-  labs(x = NULL, y = "p(occupancy)")
-}
-
-# make plots
-plot_data$plot <- map(plot_data$data, temp_plot)
-
-# make patchwork
-temp_plots <- wrap_plots(plot_data$plot)
-
-temp_plots
-```
-
-```{r eval=FALSE}
-fig_list <- pmap(plot_data, 
-                 function(Common_name, Scientific_name, scale, hypothesis, figures){
-  final_plot <- wrap_plots(figures, ncol = 7)+
-    patchwork::plot_annotation(
-      title = glue::glue('{Common_name} ({Scientific_name})'),
-      subtitle = glue::glue('scale: {scale}, best supported hypothesis: {hypothesis}'),
-      tag_levels = "a",
-      tag_prefix = "(", tag_suffix = ")",
-      theme = theme(plot.title = element_text(size = 10, face = "bold")))
-  
-  return(final_plot)
-})
-```
-
-```{r make_interactions_pdf, eval=FALSE}
-# make pdf of patchwork
-cairo_pdf(file = "figs/fig_occupancy.pdf", width = 10, height = 3,
-          onefile = TRUE)
-{
-  print(fig_list)
-}
-dev.off()
-```
-
-## Show example interaction
-
-```{r show_one_species, eval=TRUE, fig.height=8}
-library(magick)
-fig_interaction = image_read_pdf("figs/fig_occupancy.pdf", pages = 86)
-fig_interaction
-```
-
 ## Occupancy predictors' aggregated effect
 
-Read in the species as range restricted or wide ranging.
+Read in the species as range restricted or wide ranging. We previously identified the sheet.
 
 ```{r}
-species_data <- readxl::read_excel("data/results/all_hypoComparisons_allScales.xlsx")
+hypothesis_data <- readxl::read_excel("data/results/all_hypoComparisons_allScales.xlsx",
+                                      sheet = sheet_names[which_sheet])
 ```
 
 
 Plot the number of species affected and the direction of the effect, for each predictor.
+Split the data along the axes of range restriction, large scale habitat type, and small scale habitat type.
 
 ```{r mirror_bar_plot, eval=FALSE}
 # select the data
 data_predictor_effect <- distinct(model_data, 
-                         Scientific_name, scale, predictor, coefficient)
+                         Scientific_name, scale, 
+                         predictor, modulator, coefficient)
 
 # add the species distribution
-data_predictor_effect <- left_join(data_predictor_effect, species_data,
-                                   by  = c("Scientific_name" = "Scientific.name"))
-data_predictor_effect <- mutate(data_predictor_effect,
-                                species_distribution = if_else(as.logical(`Range-Restricted`),
-                                                               "range restricted",
-                                                               "wide ranging"))
+data_predictor_effect <- left_join(data_predictor_effect, hypothesis_data,
+                                   by  = c("Scientific_name" = "Scientific_name"))
 
-# is the coeff positive? how many positive per scale per predictor?
-data_predictor_effect <- mutate(data_predictor_effect, 
-                       direction = coefficient > 0) %>% 
-  count(scale, predictor, species_distribution, direction) %>% 
+# rename columns and make text 'nice'
+data_predictor_effect <- mutate(data_predictor_effect,
+                                distribution = if_else(as.logical(`Range-Restricted`),
+                                                               "range restricted",
+                                                               "wide ranging"),
+                                habitat = str_to_lower(`Habitat (Open Country / Forest )`),
+                                storey = str_to_lower(`Foraging Space (Canopy / Mid-storey / Terrestrial / Shrub)`),
+                                body_mass = `Body Mass (g)`
+                                )
+
+# remove old cols and set nice column names
+data_predictor_effect <- select(data_predictor_effect,
+                                -contains(c(" ", "-")))
+# convert colnames to lower case
+data_predictor_effect <- data_predictor_effect %>% 
+  `colnames<-`(str_to_lower(colnames(.)))
+
+# remove .y from predictors
+data_predictor_effect <- data_predictor_effect %>%
+  mutate_at(.vars = c("predictor", "modulator"), .funs = function(x){
+    stringr::str_remove(x, ".y")
+  }) %>%
+  
+  # remove the ":NA"
+  mutate(predictor_final = glue('{predictor}:{modulator}'),
+         predictor_final = str_remove(predictor_final, ":NA"))
+
+# now remove predictor and modulator
+data_predictor_effect <- select(data_predictor_effect,
+                                -predictor, -modulator)
+```
+
+What is the direction of the predictor effect for each subset of the data by the distribution, habitat, diet, and storey?
+
+```{r}
+# first pivot the data longer
+data_predictor_long <- data_predictor_effect %>% 
+  pivot_longer(cols = c("diet", "distribution", "habitat", "storey"), 
+               names_to = "trait")
+
+
+# is the coeff positive? how many positive per scale per predictor per axis of split?
+data_predictor_long <- mutate(data_predictor_long, 
+                                direction = coefficient > 0) %>% 
+  count(scale, predictor_final, 
+        trait, value, direction) %>% 
   mutate(mag = n * (if_else(direction, 1, -1)))
 
 # wrangle data to get nice bars
-data_predictor_effect <- data_predictor_effect %>% 
+data_predictor_long <- data_predictor_long %>% 
   select(-n) %>% 
   mutate(direction = ifelse(direction, "positive", "negative")) %>% 
   pivot_wider(values_from = "mag", names_from = "direction") %>% 
   mutate_at(vars(positive, negative),
             ~if_else(is.na(.),0, .))
+
+# nest the data by trait
+data_predictor_long <- data_predictor_long %>% nest(data = -trait)
 ```
 
 ```{r}
-# visualise the data
-fig_predictor_effect <-
-ggplot(data_predictor_effect)+
-  geom_hline(yintercept = 0,
-             lty = 2, lwd = 0.2,
-             col = "grey")+
-  geom_col(aes(x = factor(predictor),
-               y = positive,
-               group = species_distribution,
-               fill = interaction(species_distribution, positive > 0)),
-           position = position_dodge2(preserve = "single"))+
-  geom_col(aes(x = factor(predictor),
-               y = negative,
-               group = species_distribution,
-               fill = interaction(species_distribution, negative > 0)),
-           position = position_dodge2(preserve = "single"))+
-  
-  scico::scale_fill_scico_d(palette = "batlow",
-                            begin = 0.2, end = 0.8,
-                            direction = -1)+
-  
-  scale_x_discrete(guide = guide_axis(n.dodge = 2))+
-  
-  theme_test()+
-  theme(legend.position = "none")+
-  facet_grid(species_distribution~scale, labeller = label_both)+
-  labs(x = "predictor", y = "species")
+# visualise the data by mapping over the nested list
+data_predictor_long <- mutate(data_predictor_long,
+                                figs = map2(data, trait, function(df, tr){
+                                  ggplot(df)+
+                                    geom_hline(yintercept = 0,
+                                               lty = 2, lwd = 0.2,
+                                               col = "grey")+
+                                    geom_col(aes(x = factor(predictor_final),
+                                                 y = positive,
+                                                 group = value,
+                                                 fill = interaction(value, positive > 0)),
+                                             position = position_dodge2(preserve = "single"))+
+                                    geom_col(aes(x = factor(predictor_final),
+                                                 y = negative,
+                                                 group = value,
+                                                 fill = interaction(value, negative > 0)),
+                                             position = position_dodge2(preserve = "single"))+
+                                    scico::scale_fill_scico_d(palette = "hawaii",
+                                                              begin = 0.2, end = 0.8,
+                                                              direction = 1)+
+                                    
+                                    scale_x_discrete(guide = guide_axis(n.dodge = 2),
+                                                     label = 1:length(unique(df$predictor_final)))+
+                                    
+                                    theme_test(base_size = 6)+
+                                    theme(legend.position = "none")+
+                                    facet_grid(scale~value, labeller = label_both)+
+                                    labs(x = "predictor", y = "species",
+                                         title = glue('species split by {tr}'),
+                                         caption = "the X axis text overlaps, consider numbers - pg")
+                                }))
 
+fig_predictor_effect <- patchwork::wrap_plots(data_predictor_long$figs,
+                                              nrow = 2)
 # save plot
 ggsave(fig_predictor_effect, filename = "figs/fig_predictor_effect.png",
        dpi = 300)
@@ -276,4 +233,3 @@ ggsave(fig_predictor_effect, filename = "figs/fig_predictor_effect.png",
 ```{r show_reverse_bar, eval=TRUE}
 knitr::include_graphics("figs/fig_predictor_effect.png")
 ```
-

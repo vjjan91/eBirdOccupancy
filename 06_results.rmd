@@ -22,78 +22,154 @@ library(scico)
 
 ## Prepare data
 
-```{r load_data_results, eval=FALSE}
-# load data
-data <- list.files(path = "data/results",
-                   pattern = "ElevationSummary",
-                   full.names = TRUE)
-data <- lapply(data, readxl::read_excel)
+Read in the species as range restricted or wide ranging. We previously identified the sheet.
 
-# attach scale
-sp_scale <- c("10.0km", "2.5km")
-data <- purrr::map2(data, sp_scale, function(df, sp_scale){
-  df$scale = sp_scale
-  return(df)
-})
+```{r}
+hypothesis_data <- readxl::read_excel("data/results/all_hypoComparisons_allScales.xlsx",
+                                      sheet = sheet_names[which_sheet])
+```
+
+### Load hypothesis data
+
+```{r load_data_06, eval=FALSE}
+# select the data
+data_predictor_effect <- distinct(model_data, 
+                         Scientific_name, scale, 
+                         predictor, modulator, coefficient)
+
+# add the species distribution
+data_predictor_effect <- left_join(data_predictor_effect, hypothesis_data,
+                                   by  = c("Scientific_name" = "Scientific_name"))
+
+# rename columns and make text 'nice'
+data_predictor_effect <- mutate(data_predictor_effect,
+                                distribution = if_else(as.logical(`Range-Restricted`),
+                                                               "range restricted",
+                                                               "wide ranging"),
+                                habitat = str_to_lower(`Habitat (Open Country / Forest )`),
+                                storey = str_to_lower(`Foraging Space (Canopy / Mid-storey / Terrestrial / Shrub)`),
+                                body_mass = `Body Mass (g)`
+                                )
+
+# remove old cols and set nice column names
+data_predictor_effect <- select(data_predictor_effect,
+                                -contains(c(" ", "-")))
+# convert colnames to lower case
+data_predictor_effect <- data_predictor_effect %>% 
+  `colnames<-`(str_to_lower(colnames(.)))
+
+# remove .y from predictors
+data_predictor_effect <- data_predictor_effect %>%
+  mutate_at(.vars = c("predictor", "modulator"), .funs = function(x){
+    stringr::str_remove(x, ".y")
+  }) %>%
+  
+  # remove the ":NA"
+  mutate(predictor_final = glue('{predictor}:{modulator}'),
+         predictor_final = str_remove(predictor_final, ":NA"))
+
+# now remove predictor and modulator
+data_predictor_effect <- select(data_predictor_effect,
+                                -predictor, -modulator)
+```
+
+### Load elevation data
+
+```{r}
+# load data
+elev_data <- list.files(path = "data/results",
+                   pattern = "Elevation",
+                   full.names = TRUE)
+elev_data <- map(elev_data, readr::read_csv)
 
 # prepare data
-data <- data %>% 
+elev_data <- elev_data %>% 
+  bind_rows() %>%
+  select(-n) %>% 
+  distinct(Species, .keep_all = TRUE)
+
+# join the elevation range to hypothesis data
+data_predictor_elev <- left_join(data_predictor_effect, elev_data,
+                                   by  = c("scientific_name"="Species"))
+```
+
+### Create a synthetic variable
+
+```{r}
+# Creating a synthetic variable 
+data_predictor_elev <- data_predictor_elev %>%
+  mutate(synthesis_var = case_when(
+    str_detect(predictor_final, "lc_\\d{2}:alt") ~ "landcover*elevation",
+    str_detect(predictor_final, "lc_\\d{2}") ~ "landcover",
+    str_detect(predictor_final, "prec|temp|bio:alt") ~ "climate*elevation",
+    str_detect(predictor_final, "prec|temp|bio") ~"climate",
+    str_detect(predictor_final, "alt|slope|aspect") ~ "elevation",
+    TRUE ~ NA_character_
+  ))
+```
+
+### Prepare elevation and hypothesis data for plotting
+
+```{r}
+# determine the plot order of the errorbars
+data_predictor_elev <- data_predictor_elev %>% 
   bind_rows() %>% 
   group_by(scale) %>% 
-  arrange(Hypothesis, median) %>% 
+  arrange(synthesis_var, median) %>% 
   group_by(scale) %>% 
   mutate(plot_order = 1:length(median)) %>% 
   ungroup() %>% 
   mutate(scale = as_factor(scale))
 
-# plot positions of hypothesis code
-data_hyp <- count(data, scale, Hypothesis) %>%
+# plot positions of predictor code
+data_pred <- count(data_predictor_elev, scale, synthesis_var) %>%
   group_by(scale) %>% 
   mutate(plot_pos = cumsum(n)) %>% 
   ungroup() %>% 
-  mutate(Hypothesis = as_factor(Hypothesis),
-         plot_letter = letters[as.numeric(Hypothesis)])
+  mutate(synthesis_var = as_factor(synthesis_var),
+         plot_letter = letters[as.numeric(synthesis_var)])
 ```
-
 ## Main text Figure 3
 
 ```{r plot_fig_3, eval=FALSE}
 # make figure 3 using option 1
 fig_hypothesis_elev <- 
-  ggplot(data, aes(x = plot_order, y = median,
-                   col = Hypothesis))+
+  ggplot(data_predictor_elev, 
+         aes(x = factor(plot_order), y = median,
+             col = synthesis_var))+
   geom_hline(yintercept = c(700,1400),
              lty = 2, size = 0.2)+
   geom_errorbar(width = 0.4,
-                aes(ymin = q1, ymax = q3,))+
-  geom_point(aes(fill = Hypothesis),
+                aes(ymin = q1, ymax = q3))+
+  geom_point(aes(fill = synthesis_var),
              shape = 21, col = "grey20")+
-  geom_text(aes(label = Species), 
-            size = 2.5,
-            fontface = "italic",
-            nudge_x = 0.4, col = "black")+
-  geom_text(data = data_hyp,
+  # geom_text(aes(label = Scientific_name),
+  #           size = 2.5,
+  #           fontface = "italic",
+  #           nudge_x = 0.4, col = "black")+
+  geom_text(data = data_pred,
             aes(x = plot_pos, y = 2250,
                 label = plot_letter),
             col = "grey20", fontface = "bold")+
-  geom_vline(data = data_hyp,
+  geom_vline(data = data_pred,
              aes(xintercept = plot_pos + 0.5),
              lty = 3, lwd = 0.4, col = "grey")+
-  scale_color_hue(l = 50, c = 50)+
-  scale_fill_hue(l = 70)+
-  theme_few()+
+  scico::scale_fill_scico_d(palette = "batlow",
+                            end = 0.8)+
+  scico::scale_colour_scico_d(palette = "batlow",
+                              alpha = 0.5,
+                              end = 0.8)+
+  theme_test()+
   theme(legend.position = "none",
         legend.key = element_rect(colour = "white",
                                   size = 0.3),
         axis.text.y = element_blank(),
         axis.ticks.y = element_blank())+
   labs(y = "elevation (m)", x = "Species",
-       colour = "Best supported\nhypothesis")+
-  
+       colour = "synthesis_var")+
   coord_flip()+
   facet_wrap(~scale, labeller = label_both)
 
-# save figure
 # save figure
 ggsave(fig_hypothesis_elev,
        filename = "figs/fig_hyp_elev.png",
@@ -114,9 +190,9 @@ This figure is intended to show the change (or not) in best supported hypothesis
 ```{r prep_data_supplement_fig3, eval=FALSE}
 # load data again
 data <- list.files(path = "data/results",
-                   pattern = "ElevationSummary",
+                   pattern = "Elevation",
                    full.names = TRUE)
-data <- lapply(data, readxl::read_excel)
+data <- lapply(data, readr::read_csv)
 
 # attach scale
 sp_scale <- c("10.0km", "2.5km")
@@ -174,7 +250,7 @@ fig_hypothesis_elev_supp <-
   scale_y_continuous(breaks = c(seq(0, 2000, 500)))+
   # scale_fill_hue(l = 100, c = 50)+
   coord_flip()+
-  theme_few()+
+  theme_test()+
   theme(legend.position = "none",
         legend.key = element_rect(colour = "white",
                                   size = 0.3),

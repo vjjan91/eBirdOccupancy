@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Section 5 Add covariates to subsampled data | Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient</title>
   <meta name="description" content="Section 5 Add covariates to subsampled data | Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient" />
-  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Section 5 Add covariates to subsampled data | Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Vijay Ramesh, Pratik R Gupte, and Morgan Tingley" />
 
 
-<meta name="date" content="2020-05-19" />
+<meta name="date" content="2020-06-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -192,7 +192,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="7" data-path="results-best-supported-hypotheses.html"><a href="results-best-supported-hypotheses.html"><i class="fa fa-check"></i><b>7</b> Results: Best supported hypotheses</a><ul>
 <li class="chapter" data-level="7.1" data-path="results-best-supported-hypotheses.html"><a href="results-best-supported-hypotheses.html#prepare-libraries-2"><i class="fa fa-check"></i><b>7.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="7.2" data-path="results-best-supported-hypotheses.html"><a href="results-best-supported-hypotheses.html#prepare-data-1"><i class="fa fa-check"></i><b>7.2</b> Prepare data</a></li>
+<li class="chapter" data-level="7.2" data-path="results-best-supported-hypotheses.html"><a href="results-best-supported-hypotheses.html#prepare-data-1"><i class="fa fa-check"></i><b>7.2</b> Prepare data</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="results-best-supported-hypotheses.html"><a href="results-best-supported-hypotheses.html#load-hypothesis-data"><i class="fa fa-check"></i><b>7.2.1</b> Load hypothesis data</a></li>
+<li class="chapter" data-level="7.2.2" data-path="results-best-supported-hypotheses.html"><a href="results-best-supported-hypotheses.html#load-elevation-data"><i class="fa fa-check"></i><b>7.2.2</b> Load elevation data</a></li>
+<li class="chapter" data-level="7.2.3" data-path="results-best-supported-hypotheses.html"><a href="results-best-supported-hypotheses.html#create-a-synthetic-variable"><i class="fa fa-check"></i><b>7.2.3</b> Create a synthetic variable</a></li>
+<li class="chapter" data-level="7.2.4" data-path="results-best-supported-hypotheses.html"><a href="results-best-supported-hypotheses.html#prepare-elevation-and-hypothesis-data-for-plotting"><i class="fa fa-check"></i><b>7.2.4</b> Prepare elevation and hypothesis data for plotting</a></li>
+</ul></li>
 <li class="chapter" data-level="7.3" data-path="results-best-supported-hypotheses.html"><a href="results-best-supported-hypotheses.html#main-text-figure-3"><i class="fa fa-check"></i><b>7.3</b> Main text Figure 3</a></li>
 <li class="chapter" data-level="7.4" data-path="results-best-supported-hypotheses.html"><a href="results-best-supported-hypotheses.html#plot-supplementary-figure-3"><i class="fa fa-check"></i><b>7.4</b> Plot supplementary Figure 3</a><ul>
 <li class="chapter" data-level="7.4.1" data-path="results-best-supported-hypotheses.html"><a href="results-best-supported-hypotheses.html#prepare-data-2"><i class="fa fa-check"></i><b>7.4.1</b> Prepare data</a></li>
@@ -203,9 +208,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#prepare-libraries-3"><i class="fa fa-check"></i><b>8.1</b> Prepare libraries</a></li>
 <li class="chapter" data-level="8.2" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#get-data-from-hypothesis-sheet"><i class="fa fa-check"></i><b>8.2</b> Get data from hypothesis sheet</a></li>
 <li class="chapter" data-level="8.3" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#read-model-estimates"><i class="fa fa-check"></i><b>8.3</b> Read model estimates</a></li>
-<li class="chapter" data-level="8.4" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#prepare-interaction-plots"><i class="fa fa-check"></i><b>8.4</b> Prepare interaction plots</a></li>
-<li class="chapter" data-level="8.5" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#show-example-interaction"><i class="fa fa-check"></i><b>8.5</b> Show example interaction</a></li>
-<li class="chapter" data-level="8.6" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#occupancy-predictors-aggregated-effect"><i class="fa fa-check"></i><b>8.6</b> Occupancy predictors’ aggregated effect</a></li>
+<li class="chapter" data-level="8.4" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#occupancy-predictors-aggregated-effect"><i class="fa fa-check"></i><b>8.4</b> Occupancy predictors’ aggregated effect</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="supplementary-material.html"><a href="supplementary-material.html"><i class="fa fa-check"></i><b>9</b> Supplementary material</a><ul>
 <li class="chapter" data-level="9.1" data-path="supplementary-material.html"><a href="supplementary-material.html#distance-to-roads"><i class="fa fa-check"></i><b>9.1</b> Distance to roads</a><ul>
@@ -290,18 +293,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Section 5</span> Add covariates to subsampled data</h1>
 <div id="prepare-libraries-and-data" class="section level2">
 <h2><span class="header-section-number">5.1</span> Prepare libraries and data</h2>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1"><span class="co"># load libs</span></a>
-<a class="sourceLine" id="cb37-2" title="2"><span class="kw">library</span>(dplyr); <span class="kw">library</span>(readr)</a>
-<a class="sourceLine" id="cb37-3" title="3"><span class="kw">library</span>(stringr)</a>
-<a class="sourceLine" id="cb37-4" title="4"><span class="kw">library</span>(purrr)</a>
-<a class="sourceLine" id="cb37-5" title="5"><span class="kw">library</span>(raster)</a>
-<a class="sourceLine" id="cb37-6" title="6"><span class="kw">library</span>(glue)</a>
-<a class="sourceLine" id="cb37-7" title="7"><span class="kw">library</span>(velox)</a>
-<a class="sourceLine" id="cb37-8" title="8"><span class="kw">library</span>(tidyr)</a>
-<a class="sourceLine" id="cb37-9" title="9"><span class="kw">library</span>(sf)</a>
-<a class="sourceLine" id="cb37-10" title="10"></a>
-<a class="sourceLine" id="cb37-11" title="11"><span class="co"># load saved data object</span></a>
-<a class="sourceLine" id="cb37-12" title="12"><span class="kw">load</span>(<span class="st">&quot;data_prelim_processing.rdata&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1"></a>
+<a class="sourceLine" id="cb37-2" title="2"><span class="co"># load libs</span></a>
+<a class="sourceLine" id="cb37-3" title="3"><span class="kw">library</span>(dplyr); <span class="kw">library</span>(readr)</a>
+<a class="sourceLine" id="cb37-4" title="4"><span class="kw">library</span>(stringr)</a>
+<a class="sourceLine" id="cb37-5" title="5"><span class="kw">library</span>(purrr)</a>
+<a class="sourceLine" id="cb37-6" title="6"><span class="kw">library</span>(raster)</a>
+<a class="sourceLine" id="cb37-7" title="7"><span class="kw">library</span>(glue)</a>
+<a class="sourceLine" id="cb37-8" title="8"><span class="kw">library</span>(velox)</a>
+<a class="sourceLine" id="cb37-9" title="9"><span class="kw">library</span>(tidyr)</a>
+<a class="sourceLine" id="cb37-10" title="10"><span class="kw">library</span>(sf)</a>
+<a class="sourceLine" id="cb37-11" title="11"></a>
+<a class="sourceLine" id="cb37-12" title="12"><span class="co"># load saved data object</span></a>
+<a class="sourceLine" id="cb37-13" title="13"><span class="kw">load</span>(<span class="st">&quot;data_prelim_processing.rdata&quot;</span>)</a></code></pre></div>
 </div>
 <div id="spatial-subsampling" class="section level2">
 <h2><span class="header-section-number">5.2</span> Spatial subsampling</h2>
@@ -410,17 +414,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="add-landscape-covariates" class="section level2">
 <h2><span class="header-section-number">5.5</span> Add landscape covariates</h2>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1"><span class="co"># list landscape covariate stacks</span></a>
-<a class="sourceLine" id="cb41-2" title="2">landscape_files &lt;-<span class="st"> &quot;data/spatial/landscape_resamp01km.tif&quot;</span></a>
-<a class="sourceLine" id="cb41-3" title="3"></a>
-<a class="sourceLine" id="cb41-4" title="4"><span class="co"># read in as stacks</span></a>
-<a class="sourceLine" id="cb41-5" title="5">landscape_data &lt;-<span class="st"> </span><span class="kw">stack</span>(landscape_files)</a>
-<a class="sourceLine" id="cb41-6" title="6"></a>
-<a class="sourceLine" id="cb41-7" title="7"><span class="co"># get proper names</span></a>
-<a class="sourceLine" id="cb41-8" title="8">elev_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;elev&quot;</span>, <span class="st">&quot;slope&quot;</span>, <span class="st">&quot;aspect&quot;</span>)</a>
-<a class="sourceLine" id="cb41-9" title="9">chelsa_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;chelsa_bio10_04&quot;</span>, <span class="st">&quot;chelsa_bio10_17&quot;</span>, <span class="st">&quot;chelsa_bio10_18&quot;</span>,<span class="st">&quot;chelsa_prec&quot;</span>, <span class="st">&quot;chelsa_temp&quot;</span>)</a>
-<a class="sourceLine" id="cb41-10" title="10"></a>
-<a class="sourceLine" id="cb41-11" title="11"><span class="kw">names</span>(landscape_data) &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">glue</span>(<span class="st">&#39;{c(elev_names, chelsa_names, &quot;landcover&quot;)}&#39;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1"></a>
+<a class="sourceLine" id="cb41-2" title="2"><span class="co"># list landscape covariate stacks</span></a>
+<a class="sourceLine" id="cb41-3" title="3">landscape_files &lt;-<span class="st"> &quot;data/spatial/landscape_resamp01km.tif&quot;</span></a>
+<a class="sourceLine" id="cb41-4" title="4"></a>
+<a class="sourceLine" id="cb41-5" title="5"><span class="co"># read in as stacks</span></a>
+<a class="sourceLine" id="cb41-6" title="6">landscape_data &lt;-<span class="st"> </span><span class="kw">stack</span>(landscape_files)</a>
+<a class="sourceLine" id="cb41-7" title="7"></a>
+<a class="sourceLine" id="cb41-8" title="8"><span class="co"># get proper names</span></a>
+<a class="sourceLine" id="cb41-9" title="9">elev_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;elev&quot;</span>, <span class="st">&quot;slope&quot;</span>, <span class="st">&quot;aspect&quot;</span>)</a>
+<a class="sourceLine" id="cb41-10" title="10">chelsa_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;chelsa_bio10_04&quot;</span>, <span class="st">&quot;chelsa_bio10_17&quot;</span>, <span class="st">&quot;chelsa_bio10_18&quot;</span>,<span class="st">&quot;chelsa_prec&quot;</span>, <span class="st">&quot;chelsa_temp&quot;</span>)</a>
+<a class="sourceLine" id="cb41-11" title="11"></a>
+<a class="sourceLine" id="cb41-12" title="12"><span class="kw">names</span>(landscape_data) &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">glue</span>(<span class="st">&#39;{c(elev_names, chelsa_names, &quot;landcover&quot;)}&#39;</span>))</a></code></pre></div>
 </div>
 <div id="construct-buffers-around-subsampled-points" class="section level2">
 <h2><span class="header-section-number">5.6</span> Construct buffers around subsampled points</h2>
