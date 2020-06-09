@@ -3,7 +3,7 @@ output:
   html_document: 
     fig_caption: yes
 delete_merged_file: true
-before_chapter_script: "_common.r"
+before_chapter_script: "common.r"
 output_dir: "docs"
 language:
   ui:
