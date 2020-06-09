@@ -31,7 +31,7 @@ hypothesis_data <- readxl::read_excel("data/results/all_hypoComparisons_allScale
 
 ### Load hypothesis data
 
-```{r mirror_bar_plot, eval=FALSE}
+```{r load_data_06, eval=FALSE}
 # select the data
 data_predictor_effect <- distinct(model_data, 
                          Scientific_name, scale, 
@@ -190,9 +190,9 @@ This figure is intended to show the change (or not) in best supported hypothesis
 ```{r prep_data_supplement_fig3, eval=FALSE}
 # load data again
 data <- list.files(path = "data/results",
-                   pattern = "ElevationSummary",
+                   pattern = "Elevation",
                    full.names = TRUE)
-data <- lapply(data, readxl::read_excel)
+data <- lapply(data, readr::read_csv)
 
 # attach scale
 sp_scale <- c("10.0km", "2.5km")
@@ -250,7 +250,7 @@ fig_hypothesis_elev_supp <-
   scale_y_continuous(breaks = c(seq(0, 2000, 500)))+
   # scale_fill_hue(l = 100, c = 50)+
   coord_flip()+
-  theme_few()+
+  theme_test()+
   theme(legend.position = "none",
         legend.key = element_rect(colour = "white",
                                   size = 0.3),
