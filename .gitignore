@@ -1,6 +1,13 @@
 #Remove data files
-ebd*.txt
-data/*
+*ebd*.txt
+
+
+data/spatial/*
+data/results/*
+data/eBird*
+data/ebird_*
+!data/spatial/00_data_exists.txt
+!data/results/00_data_exists.txt
 
 *.tif*
 *.shp
@@ -9,6 +16,7 @@ data/*
 
 # Session Data files
 *.RData
+*.rda
 *.rdata
 
 /.Rproj.user
@@ -21,8 +29,6 @@ rsconnect/
 .Rproj.user
 *.csv
 *.xl*
-!data/specieslistExtended.csv
-!data/species_list_13_11_2019.xlsx
 
 # any zip or shapefile
 *.zip

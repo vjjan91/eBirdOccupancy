@@ -1,13 +1,4 @@
----
-editor_options: 
-  chunk_output_type: console
----
-
-# Cumulative AIC Weights
-
-## Prepare libraries
-
-```{r load_libs, eval=FALSE}
+## ----load_libs-----------------------------------------------------------------------------
 # to load data
 library(readxl)
 
@@ -18,6 +9,7 @@ library(forcats)
 library(tidyr)
 library(purrr)
 library(stringr)
+library(magrittr)
 
 # to wrangle models
 source("code/fun_model_estimate_collection.r")
@@ -27,16 +19,14 @@ source("code/fun_make_resp_data.r")
 library(ggplot2)
 library(patchwork)
 source('code/fun_plot_interaction.r')
-```
 
-## Get data from hypothesis sheet
 
-```{r eval=FALSE}
+## ----get_data_from_sheets------------------------------------------------------------------
 # read in the excel sheet containing information on the best supported hypothesis
-sheet_names <- readxl::excel_sheets("C:\\Occupancy Runs\\all_hypoComparisons_allScales.xlsx")
+sheet_names <- readxl::excel_sheets("data/results/all_hypoComparisons_allScales.xlsx")
 which_sheet <- which(str_detect(sheet_names, "Best"))
 
-hypothesis_data <- readxl::read_excel("C:\\Occupancy Runs\\all_hypoComparisons_allScales.xlsx",
+hypothesis_data <- readxl::read_excel("data/results/all_hypoComparisons_allScales.xlsx",
                                       sheet = sheet_names[which_sheet])
 
 # Subsetting the data needed to call in each species' model coefficient information
@@ -71,14 +61,12 @@ hypothesis_data <- mutate(hypothesis_data,
                                                hypothesis %in% c("landCover", "climate",
                                                                  "elevation"), 
                                                c("lc","clim","elev")))
-```
 
-## Read model importance / AIC weights
 
-```{r read_model_importance, eval=FALSE}
+## ----read_model_importance-----------------------------------------------------------------
 # which file to read model importance from
 hypothesis_data <- mutate(hypothesis_data,
-                          file_read = glue::glue('C:\\Occupancy Runs\\Results_{scale}\\occuCovs\\modelImp\\{hypothesis}_imp.xlsx'))
+                          file_read = glue::glue('data/results/Results_{scale}/occuCovs/modelImp/{hypothesis}_imp.xlsx'))
 
 # read in data as list column
 model_data <- mutate(hypothesis_data,
@@ -101,46 +89,43 @@ model_data <- mutate(model_data,
 model_data <- select(model_data, -file_read) %>% 
   unnest(model_imp) 
 
-```
 
-Get cumulative sum of model weights for each unique combination of predictors:
 
-```{r}
-
-model_data <-  model_data %>% group_by(scale) %>%
-           nest() %>% 
+## ----get_aic_data--------------------------------------------------------------------------
+# nest model data
+model_data <- model_data %>% 
+  group_by(scale) %>%
+  nest() %>% 
   ungroup()
 
-cum_2.5 <- model_data$data[[1]] %>%
-  group_by(predictor,modulator) %>%
-  summarise(cumulativeAICweight = sum(as.numeric(AICweight))) %>%
-  mutate_all(~str_replace_na(., "")) %>%
-  mutate(predictor_final = paste0(predictor,":",modulator,sep="")) %>%
-  mutate(scale="2.5km")
-  
-cum_10 <- model_data$data[[2]] %>%
-  group_by(predictor,modulator) %>%
-  summarise(cumulativeAICweight = sum(as.numeric(AICweight))) %>%
-  mutate_all(~str_replace_na(., "")) %>%
-  mutate(predictor_final = paste0(predictor,":",modulator,sep=""))%>%
-  mutate(scale="10km")
+# pass function over the data to get cumulative aic weight
+model_data <- model_data %>% 
+  mutate(aic_data = map(data, function(df){
+    group_by(df, predictor, modulator) %>% 
+      summarise(cumulative_AIC_weight = sum(as.numeric(AICweight))) %>%
+      ungroup() %>% 
+      
+      # remove .y from predictor names
+      mutate_if(is.character, .funs = function(x){
+        str_remove(x, pattern = ".y")
+        }) %>%
+      mutate(predictor_final = glue::glue('{predictor}:{modulator}'))
+  }))
 
-data <- bind_rows(cum_2.5,cum_10)
-data$cumulativeAICweight <- as.numeric(data$cumulativeAICweight)
+# unnest the data
+model_data %<>% unnest(cols = "aic_data")
 
 fig_cum_AIC <- 
-  ggplot(data, aes(x = predictor_final, y = cumulativeAICweight, colour=predictor_final)) +   geom_point(size=3)+
+  ggplot(model_data, 
+         aes(x = predictor_final, y = cumulative_AIC_weight, 
+             colour=predictor_final)) +   geom_point(size=3)+
   facet_wrap(~scale, scales = "free") + 
   theme_bw()+labs(x = "Predictor", colour = "Predictor")+
   theme(legend.position = "none") +
   theme(axis.text.x = element_text(angle = 90))
 
-fig_cum_AIC
-
 # save plot
 ggsave(fig_cum_AIC, filename = "figs/fig_cum_AIC.png",
        dpi = 300)
-
-```
 
 
