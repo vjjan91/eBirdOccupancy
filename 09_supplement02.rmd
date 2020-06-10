@@ -110,6 +110,17 @@ ebd_summary <- setDF(ebd_summary) %>%
   complete(nesting(X,Y), scientific_name, fill = list(p_rep = 0))
 ```
 
+### Which species are reported sufficiently in checklists?
+
+```{r eval=TRUE}
+# define a proportion
+X <- 0.1
+knitr::kable(ebd_summary %>%
+               group_by(scientific_name) %>%
+               summarise(meets_cutoff = all(p_rep > X)))
+```
+
+
 ### Plot maps
 
 ```{r load_map_plot_data, eval=FALSE}
