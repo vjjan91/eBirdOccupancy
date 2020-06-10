@@ -38,7 +38,7 @@ Here, we load the required dataframe that contains 10 random visits to a site. P
 
 ```{r load_dataframe, eval=FALSE}
 # Load in the prepared dataframe that contains 10 random visits to each site
-dat <- fread("C:\\Occupancy Runs\\dataCovars_2.5km.csv",header=T)
+dat <- fread("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\dataCovars_2.5km.csv",header=T)
 setDF(dat)
 head(dat)
 
@@ -67,10 +67,7 @@ dat <- dat[,-c(1,4,5,16,18,21,23)]
 
 # Rename column names:
 names(dat) <- c("duration_minutes", "effort_distance_km","locality", "locality_type",
-                  "locality_id", "observer_id", "observation_date", "scientific_name", "observation_count", "protocol_type",
-                  "number_observers","pres_abs","tot_effort","longitude", "latitude","expertise",
-                  "alt.y","slope.y","aspect.y","bio_4.y","bio_17.y","bio_18.y","prec_interannual.y","temp_interannual.y",
-                  "lc_01.y", "lc_02.y", "lc_03.y","lc_06.y", "lc_07.y","lc_04.y", "lc_05.y",
+                  "locality_id", "observer_id", "observation_date", "scientific_name", "observation_count", "protocol_type","number_observers","pres_abs","tot_effort","longitude", "latitude","expertise","alt.y","slope.y","aspect.y","bio1.y","bio2.y","bio3.y","bio4.y","bio5.y", "bio6.y", "bio7.y", "bio8.y","bio9.y" ,"bio10.y" , "bio11.y" ,"bio12.y" ,"bio13.y" , "bio14.y","bio15.y" ,"bio16.y" , "bio17.y" ,"bio18.y", "bio19.y","lc_02.y", "lc_03.y", "lc_06.y","lc_01.y", "lc_04.y","lc_07.y", "lc_05.y",
                   "min_obs_started", "julian_date")
 
 dat.1 <- dat %>% 
@@ -79,17 +76,17 @@ dat.1 <- dat %>%
 
 # Scaling detection and occupancy covariates
 dat.scaled <- dat.1
-dat.scaled[,c(1,2,11,16:33)] <- scale(dat.scaled[,c(1,2,11,16:33)]) # Scaling and standardizing detection and site-level covariates
-fwrite(dat.scaled, file = "C:\\Occupancy Runs\\scaledCovs_2.5km.csv")
+dat.scaled[,c(1,2,11,16:47)] <- scale(dat.scaled[,c(1,2,11,16:47)]) # Scaling and standardizing detection and site-level covariates
+fwrite(dat.scaled, file = "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\scaledCovs_2.5km.csv")
 
-dat.scaled <- fread("C:\\Occupancy Runs\\scaledCovs_10km.csv",header=T)
+dat.scaled <- fread("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\scaledCovs_2.5km.csv",header=T)
 setDF(dat.scaled)
 head(dat.scaled)
 
 # Testing for correlations before running further analyses
-
+source("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\screen_cor.R")
 names(dat.scaled)
-screen.cor(dat.scaled[,c(1,2,16:33)], threshold = 0.5)
+screen.cor(dat.scaled[,c(1,2,11,16:47)], threshold = 0.5)
 
 # Removing predictors that are highly correlated with one another
 # At a spatial scale of 2.5km, bio_4.y was removed and at a spatial scale of 10km,

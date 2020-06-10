@@ -28,7 +28,7 @@ round_any <- function(x, accuracy = 20000){round(x/accuracy)*accuracy}
 
 ```{r soi_supplement, eval=FALSE, message=FALSE, warning=FALSE}
 # add species of interest
-specieslist <- read_excel("data/V2_ListOfSpecies_ChosenForStudy.csv.xlsx")
+specieslist <- read_excel("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\3_List_of_species.xlsx")
 speciesOfInterest <- specieslist$scientific_name
 ```
 
@@ -37,10 +37,10 @@ speciesOfInterest <- specieslist$scientific_name
 ```{r load_raw_data_supp02, eval=FALSE}
 # read in shapefile of the study area to subset by bounding box
 library(sf)
-wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp"); box <- st_bbox(wg)
+wg <- st_read("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\Shapefiles\\Nil_Ana_Pal.shp"); box <- st_bbox(wg)
 
 # read in data and subset
-ebd <- fread("ebd_Filtered_Jun2019.txt")
+ebd <- fread("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\eBirdDataWG_filtered.txt")
 ebd <- ebd[between(LONGITUDE, box["xmin"], box["xmax"]) & 
             between(LATITUDE, box["ymin"], box["ymax"]),]
 ebd <- ebd[year(`OBSERVATION DATE`) >= 2013,]
