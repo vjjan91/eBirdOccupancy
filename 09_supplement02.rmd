@@ -106,8 +106,12 @@ ebd_summary[,p_rep := nrep/nchk ]
 ebd_summary <- ebd_summary[scientific_name %in% speciesOfInterest,]
 
 # complete the dataframe for no reports
+# keep no reports as NA --- allows filtering based on proportion reporting
 ebd_summary <- setDF(ebd_summary) %>% 
-  complete(nesting(X,Y), scientific_name, fill = list(p_rep = 0))
+  complete(nesting(X,Y), scientific_name #, 
+    # fill = list(p_rep = 0)
+    ) %>%
+  filter(!is.na(p_rep))
 ```
 
 ### Which species are reported sufficiently in checklists?
