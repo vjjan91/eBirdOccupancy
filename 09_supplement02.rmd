@@ -28,7 +28,7 @@ round_any <- function(x, accuracy = 20000){round(x/accuracy)*accuracy}
 
 ```{r soi_supplement, eval=FALSE, message=FALSE, warning=FALSE}
 # add species of interest
-specieslist <- read_excel("data/V2_ListOfSpecies_ChosenForStudy.csv.xlsx")
+specieslist <- read_excel("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\3_List_of_species.xlsx")
 speciesOfInterest <- specieslist$scientific_name
 ```
 
@@ -37,10 +37,10 @@ speciesOfInterest <- specieslist$scientific_name
 ```{r load_raw_data_supp02, eval=FALSE}
 # read in shapefile of the study area to subset by bounding box
 library(sf)
-wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp"); box <- st_bbox(wg)
+wg <- st_read("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\Shapefiles\\Nil_Ana_Pal.shp"); box <- st_bbox(wg)
 
 # read in data and subset
-ebd <- fread("ebd_Filtered_Jun2019.txt")
+ebd <- fread("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\eBirdDataWG_filtered.txt")
 ebd <- ebd[between(LONGITUDE, box["xmin"], box["xmax"]) & 
             between(LATITUDE, box["ymin"], box["ymax"]),]
 ebd <- ebd[year(`OBSERVATION DATE`) >= 2013,]
@@ -117,11 +117,48 @@ ebd_summary <- setDF(ebd_summary) %>%
 ### Which species are reported sufficiently in checklists?
 
 ```{r eval=TRUE}
-# define a proportion
-p_cutoff <- 0.1
-knitr::kable(ebd_summary %>%
-               group_by(scientific_name) %>%
-               summarise(meets_cutoff = all(p_rep > p_cutoff)))
+# total number of checklists across unique grids
+# A total of 59 unique grids across the study area
+tot_n_chklist <- ebd_summary %>%
+    distinct(X,Y,nchk)
+
+# species-specific number of grids
+spp_grids <- ebd_summary %>%
+          group_by(scientific_name) %>%
+          distinct(X,Y) %>%
+          count(scientific_name)
+names(spp_grids)[2] <- "n_grids"
+
+# left-join the datasets
+ebd_summary <- left_join(ebd_summary,spp_grids, by="scientific_name")
+
+# check the proportion of grids across which this cut-off is met for each species
+# Is it > 90% or 70%?
+# Not really justifiable: For example, with a 3% cut-off, only~100 species are occurring in >50% of the grids they have been reported in
+
+p_cutoff <- 0.03
+grid_proportions <- ebd_summary %>%
+          group_by(scientific_name) %>%
+          count(p_rep>p_cutoff) %>% 
+          mutate(prop_grids_cut = n[2]/(n[1]+n[2]))%>%
+          distinct(scientific_name,prop_grids_cut) %>%
+          arrange(desc(prop_grids_cut))
+          
+# Identifying the number of species that occur in potentially <5% of all lists
+
+total_number_lists <- sum(tot_n_chklist$nchk)
+
+spp_sum_chk <- ebd_summary %>%
+  distinct(X,Y, scientific_name, nrep) %>%
+  group_by(scientific_name) %>%
+  mutate(sum_chk = sum(nrep)) %>%
+  distinct(scientific_name,sum_chk)
+
+# Approximately 90 to 100 species occur in >5% of all checklists
+prop_all_lists <- spp_sum_chk %>%
+      mutate(prop_lists = sum_chk/total_number_lists) %>%
+      arrange(desc(prop_lists))
+
 ```
 
 

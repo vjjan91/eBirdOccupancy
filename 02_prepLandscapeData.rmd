@@ -34,7 +34,7 @@ assertthat::assert_that(funcMode(c(2,2,2,2,3,3,3,4)) == as.character(2),
 ```{r load_hills, eval=FALSE, message=FALSE, warning=FALSE}
 # load hills
 library(sf)
-hills <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp")
+hills <- st_read("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\Shapefiles\\Nil_Ana_Pal.shp")
 hills <- st_transform(hills, 32643)
 buffer <- st_buffer(hills, 3e4) %>% 
   st_transform(4326)
@@ -45,7 +45,7 @@ buffer <- st_buffer(hills, 3e4) %>%
 
 ```{r terrain_raster, eval=FALSE, message=FALSE, warning=FALSE}
 # load elevation and crop to hills size, then mask by hills
-alt <- raster("data/spatial/Elevation/alt")
+alt <- raster("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\Elevation\\alt")
 alt.hills <- crop(alt, as(buffer, "Spatial"))
 rm(alt); gc()
 
@@ -59,7 +59,7 @@ rm(alt.hills); gc()
 
 ```{r chelsa_rasters, eval=FALSE, message=FALSE, warning=FALSE}
 # list chelsa files
-chelsaFiles <- list.files("data/chelsa/", full.names = TRUE, pattern = "*.tif")
+chelsaFiles <- list.files("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\CHELSA\\", full.names = TRUE, pattern = "*.tif")
 
 # gather chelsa rasters
 chelsaData <- purrr::map(chelsaFiles, function(chr){
@@ -84,7 +84,7 @@ env_data <- stack(elevData, chelsaData)
 
 ```{r landcover_raster, eval=FALSE, message=FALSE, warning=FALSE, message=FALSE}
 # read in landcover raster location
-landcover <- "data/landUseClassification/Reprojected Image_26thJan2020_UTM_Ghats.tif"
+landcover <- "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\landcover\\Reprojected Image_26thJan2020_UTM_Ghats.tif"
 # get extent
 e = bbox(raster(landcover))
 
@@ -96,7 +96,7 @@ res_final <- res_init*100
 # use gdalutils gdalwarp for resampling transform
 # to 1km from 10m
 gdalwarp(srcfile = landcover, 
-          dstfile = "data/landUseClassification/lc_01km.tif", 
+          dstfile = "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\landcover\\lc_01km.tif", 
           tr=c(res_final), r='mode', te=c(e))
 ```
 
@@ -107,7 +107,7 @@ gdalwarp(srcfile = landcover,
 {
   landcover <- raster(landcover)
   # landcover <- mask(landcover, mask = as(hills, "Spatial"))
-  lc_data <- raster("data/landUseClassification/lc_01km.tif")
+  lc_data <- raster("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\landcover\\lc_01km.tif")
   # lc_data <- mask(lc_data, mask = as(hills, "Spatial"))
   lc_data[lc_data == 0] <- NA
 }
@@ -118,13 +118,13 @@ data1km = raster::getValues(lc_data); data1km = data1km[data1km > 0]; data1km = 
 {
   data10m = raster::getValues(landcover); data10m = data10m[data10m > 0]
   data10m = tibble(value = data10m)
-  data10m = dplyr::count(a, value) %>% dplyr::mutate(n=n/sum(n))
+  data10m = dplyr::count(data10m, value) %>% dplyr::mutate(n=n/sum(n))
   data10m = xtabs(n~value, data10m)
 }
 
 # map rasters
 {
-  png(filename = "figs/figLandcoverResample.png", width = 1200, height = 1200,
+  png(filename = "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\Figures\\figLandcoverResample.png", width = 1200, height = 1200,
       res = 150)
   par(mfrow=c(2,2))
   # rasterplots
@@ -139,7 +139,7 @@ data1km = raster::getValues(lc_data); data1km = data1km[data1km > 0]; data1km = 
   barplot(data10m, xlab = c("landcover class"), ylab = "prop.",
           col = scico::scico(palette = "batlow", 7))
   barplot(data1km, xlab = c("landcover class"), ylab = "prop.",
-          col = scico::scico(palette = "batlow", 7), alpha =0.8), add = F)
+          col = scico::scico(palette = "batlow", 7), alpha =0.8, add = F)
   barplot(data10m, xlab = c("landcover class"), ylab = "prop.",
           col = "grey20", border = NA, density = 30, add = T)
   dev.off()
@@ -157,7 +157,7 @@ knitr::include_graphics("figs/figLandcoverResample.png")
 Here, we read in the 1km landcover raster and set 0 to NA.
 
 ```{r read_resamp_lc, eval=FALSE, message=FALSE, warning=FALSE}
-lc_data <- raster("data/landUseClassification/lc_01km.tif")
+lc_data <- raster("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\landcover\\lc_01km.tif")
 lc_data[lc_data == 0] <- NA
 ```
 
@@ -172,7 +172,7 @@ env_data_resamp <- projectRaster(from = env_data, to = lc_data, crs = crs(lc_dat
 land_stack <- stack(env_data_resamp, lc_data)
 
 # get names
-land_names <- glue('data/spatial/landscape_resamp{c("01")}km.tif')
+land_names <- glue('C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\landcover\\landscape_resamp{c("01")}km.tif')
 
 # write to file
 writeRaster(land_stack, filename = as.character(land_names), overwrite=TRUE)
