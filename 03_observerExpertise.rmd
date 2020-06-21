@@ -33,13 +33,12 @@ Here, we go through the data preparation process again because we might want to 
 ```{r load_raw_data, eval=FALSE}
 # Read in shapefile of study area to subset by bounding box
 library(sf)
-wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>% 
+wg <- st_read("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\Shapefiles\\Nil_Ana_Pal.shp") %>% 
   st_transform(32643)
 
-
 # set file paths for auk functions
-f_in_ebd <- file.path("ebd_Filtered_Jun2019.txt")
-f_in_sampling <- file.path("ebd_sampling_Filtered_Jun2019.txt")
+f_in_ebd <- file.path("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\eBirdDataWG_filtered.txt")
+f_in_sampling <- file.path("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\eBirdSamplingDataWG_filtered.txt")
 
 # run filters using auk packages
 ebd_filters <- auk_ebd(f_in_ebd, f_in_sampling) %>%
@@ -52,8 +51,8 @@ ebd_filters <- auk_ebd(f_in_ebd, f_in_sampling) %>%
 ebd_filters
 
 # specify output location and perform filter
-f_out_ebd <- "data/ebird_for_expertise.txt"
-f_out_sampling <- "data/ebird_sampling_for_expertise.txt"
+f_out_ebd <- "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\ebird_for_expertise.txt"
+f_out_sampling <- "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\ebird_sampling_for_expertise.txt"
 
 ebd_filtered <- auk_filter(ebd_filters, file = f_out_ebd,
                            file_sampling = f_out_sampling, overwrite = TRUE)
@@ -109,7 +108,7 @@ ebd <- ebd[longitude %in% ebd_locs$X & latitude %in% ebd_locs$Y,]
 
 ```{r soi_score, eval=FALSE}
 # read in species list
-specieslist = read_excel(path = "data/V2_ListOfSpecies_ChosenForStudy.csv.xlsx")
+specieslist = read_excel(path = "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\3_List_of_species.xlsx")
 
 # set species of interest
 soi = specieslist$scientific_name
@@ -119,7 +118,7 @@ ebdSpSum <- ebd[,.(nSp = .N,
                 by = list(sampling_event_identifier)]
 
 # write to file and link with checklsit id later
-fwrite(ebdSpSum, file = "data/dataChecklistSpecies.csv")
+fwrite(ebdSpSum, file = "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\dataChecklistSpecies.csv")
 ```
 
 ## Prepare checklists for observer score
@@ -158,7 +157,7 @@ Using the landcover 1km resolution here.
 ```{r chk_covar_landuse, eval=FALSE}
 # read in 1km landcover and set 0 to NA
 library(raster)
-landcover <- raster::raster("data/landUseClassification/lc_01km.tif")
+landcover <- raster::raster("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\landcover\\lc_01km.tif")
 landcover[landcover==0] <- NA
 
 # get locs in utm coords
@@ -206,7 +205,7 @@ ebdChkSummary <- ebdChkSummary %>%
 
 
 # save to file for later reuse
-fwrite(ebdChkSummary, file = "data/eBirdChecklistVars.csv")
+fwrite(ebdChkSummary, file = "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\eBirdChecklistVars.csv")
 ```
 
 ## Run observer expertise model
@@ -233,14 +232,14 @@ modObsExp <- glmer(nSoi ~ sqrt(duration) +
 
 ```{r write_obsexp_model, eval=FALSE}
 # make dir if absent
-if(!dir.exists("data/modOutput")){
-  dir.create("data/modOutput")
+if(!dir.exists("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\modOutput")){
+  dir.create("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\modOutput")
 }
 
 # write model output to text file
 {
   writeLines(R.utils::captureOutput(list(Sys.time(), summary(modObsExp))), 
-             con = "data/modOutput/modOutExpertise.txt")
+             con = "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\modOutput\\modOutExpertise.txt")
 }
 ```
 
@@ -266,6 +265,6 @@ dfPredict <- mutate(dfPredict,
 ## Write observer expertise to file
 
 ```{r write_obsexp, eval=FALSE}
-fwrite(dfPredict %>% dplyr::select(observer, score), file = "data/dataObsExpScore.csv")
+fwrite(dfPredict %>% dplyr::select(observer, score), file = "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\dataObsExpScore.csv")
 ```
 

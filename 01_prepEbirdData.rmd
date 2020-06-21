@@ -20,15 +20,15 @@ library(readxl)
 sum.no.na <- function(x){sum(x, na.rm = T)}
 
 # set file paths for auk functions
-f_in_ebd <- file.path("ebd_Filtered_Jun2019.txt")
-f_in_sampling <- file.path("ebd_sampling_Filtered_Jun2019.txt")
+f_in_ebd <- file.path("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\ebd_IN_relApr-2020.txt")
+f_in_sampling <- file.path("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\ebd_sampling_relApr-2020.txt")
 ```
 
 ## Filter data
 
 ```{r soi, eval=FALSE, message=FALSE, warning=FALSE}
 # add species of interest
-specieslist <- read_excel("data/V2_ListOfSpecies_ChosenForStudy.csv.xlsx")
+specieslist <- read_excel("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\3_List_of_species.xlsx")
 speciesOfInterest <- specieslist$scientific_name
 ```
 
@@ -39,7 +39,7 @@ ebd_filters <- auk_ebd(f_in_ebd, f_in_sampling) %>%
   auk_species(speciesOfInterest) %>%
   auk_country(country = "IN") %>%
   auk_state(c("IN-KL","IN-TN", "IN-KA")) %>% # Restricting geography to TamilNadu, Kerala & Karnataka
-  auk_date(c("2013-01-01", "2018-12-31")) %>%
+  auk_date(c("2013-01-01", "2019-12-31")) %>%
   auk_complete()
 
 # check filters
@@ -51,8 +51,8 @@ Below code need not be run if it has been filtered once already and the above pa
 ```{r output_loc, eval=FALSE}
 
 # specify output location and perform filter
-f_out_ebd <- "data/eBirdDataWG_filtered.txt"
-f_out_sampling <- "data/eBirdSamplingDataWG_filtered.txt"
+f_out_ebd <- "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\eBirdDataWG_filtered.txt"
+f_out_sampling <- "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\eBirdSamplingDataWG_filtered.txt"
 ```
 
 ```{r filter_data, eval=FALSE}
@@ -96,7 +96,7 @@ data[[2]] <- data[[2]] %>% filter(species_observed == F)
 
 # load shapefiles of hill ranges
 library(sf)
-hills <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp")
+hills <- st_read("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\Shapefiles\\Nil_Ana_Pal.shp")
 
 # write a prelim filter by bounding box
 box <- st_bbox(hills)
@@ -129,7 +129,7 @@ data <- data %>%
 
 ```{r save_temp_data, eval=FALSE}
 # save a temp data file
-save(data, file = "data_temp.rdata")
+save(data, file = "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\data_temp.rdata")
 ```
 
 ## Handle presence data
@@ -198,7 +198,7 @@ assertthat::assert_that(!"sf" %in% class(dataGrouped))
 ```{r write_clean_data, eval=FALSE}
 
 # save a temp data file
-save(dataGrouped, file = "data_prelim_processing.rdata")
+save(dataGrouped, file = "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\data_prelim_processing.rdata")
 
 ```
 
