@@ -21,8 +21,8 @@ library(auk)
 # get decimal time function
 library(lubridate)
 time_to_decimal <- function(x) {
-  x <- hms(x, quiet = TRUE)
-  hour(x) + minute(x) / 60 + second(x) / 3600
+  x <- lubridate::hms(x, quiet = TRUE)
+  lubridate::hour(x) + lubridate::minute(x) / 60 + lubridate::second(x) / 3600
 }
 ```
 
@@ -108,7 +108,7 @@ ebd <- ebd[longitude %in% ebd_locs$X & latitude %in% ebd_locs$Y,]
 
 ```{r soi_score, eval=FALSE}
 # read in species list
-specieslist = read_excel(path = "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\3_List_of_species.xlsx")
+specieslist = read.csv("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\4_List_of_species_final.csv")
 
 # set species of interest
 soi = specieslist$scientific_name
