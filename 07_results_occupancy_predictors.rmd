@@ -40,7 +40,8 @@ data <- select(data,
 ```
 
 ```{r}
-fig_occupancy <- map(data$data, function(df) {
+fig_occupancy <- map2(data$data, data$scientific_name,
+                      function(df, name) {
   ggplot(df)+
   geom_line(aes(seq_x, mean,
                 col = predictor))+
@@ -48,16 +49,18 @@ fig_occupancy <- map(data$data, function(df) {
              labeller = label_both) +
   coord_cartesian(xlim = c(0, 1),
                   ylim = c(0, 1))+
-  theme_test(base_size = 8) +
-  theme(legend.position = "top")+
-  scale_colour_manual(values = pals::kovesi.rainbow(8))+
-  labs(x = "scaled predictor value",
-       y = "p(occupancy)")
+                          theme_grey(base_size = 6)+
+                          theme(legend.position = "top")+
+                          scale_colour_manual(values = pals::kovesi.rainbow(8))+
+                          labs(x = "scaled predictor value",
+                               y = "p(occupancy)",
+                               title = name)
 })
 ```
 
 ```{r}
-cairo_pdf(filename = "figs/fig_occupancy_predictors.pdf")
+cairo_pdf(filename = "figs/fig_occupancy_predictors.pdf",
+          onefile = TRUE, width = 6, height = 4)
 fig_occupancy
 dev.off()
 ```
