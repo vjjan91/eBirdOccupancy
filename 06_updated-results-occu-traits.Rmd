@@ -202,7 +202,7 @@ data_predictor_long <- mutate(data_predictor_long,
 fig_predictor_effect <- patchwork::wrap_plots(data_predictor_long$figs,
                                               nrow = 1)
 # save plot
-ggsave(fig_predictor_effect, filename = "figs/fig_predictor_effect.png",
+ggsave(fig_predictor_effect, filename = "figs/fig_lc_v_clim.png",
        dpi = 300)
 ```
 
