@@ -113,7 +113,7 @@ data_predictor_effect <- distinct(model_data,
                                   predictor, coefficient)
 ```
 
-### Add trait data
+### Add trait data and clean
 
 ```{r}
 # add trait by joining
@@ -134,6 +134,8 @@ data_predictor_effect <- data_predictor_effect %>%
 ```
 
 What is the direction of the predictor effect for each subset of the data by the distribution, habitat, diet, and storey?
+
+### Get predictor effects
 
 ```{r}
 # first pivot the data longer
@@ -157,10 +159,17 @@ data_predictor_long <- data_predictor_long %>%
   mutate_at(vars(positive, negative),
             ~if_else(is.na(.), 0, .))
 
+data_predictor_long <- data_predictor_long %>% 
+  pivot_longer(cols = c("negative", "positive"),
+               names_to = "effect",
+               values_to = "magnitude")
+
 # nest the data by trait
 data_predictor_long <- data_predictor_long %>% 
   nest(data = -trait)
 ```
+
+### Make figures for predictor effects
 
 ```{r}
 # visualise the data by mapping over the nested list
@@ -172,22 +181,17 @@ data_predictor_long <- mutate(data_predictor_long,
                                                col = "grey")+
                                     
                                     geom_col(aes(x = factor(predictor),
-                                                 y = positive,
-                                                 group = value),
-                                             fill = "darkblue",
-                                             position = position_dodge2(preserve = "single"))+
-                                    
-                                    geom_col(aes(x = factor(predictor),
-                                                 y = negative,
-                                                 group = value),
-                                                 fill = "indianred",
-                                             position = position_dodge2(preserve = "single"))+
+                                                 y = magnitude,
+                                                 fill = effect))+
 
                                     scale_x_discrete(guide = guide_axis(n.dodge = 2)#,
                                                      # label = 1:length(unique(df$predictor))
                                                      )+
                                     
-                                    theme_test(base_family = "TT Arial")+
+                                    scale_fill_brewer(palette = "Dark2",
+                                                      direction = -1)+
+                                    
+                                    theme_grey(base_family = "TT Arial")+
                                     theme(legend.position = "none")+
                                     facet_grid(scale ~ value, labeller = label_both)+
                                     labs(x = "predictor", y = "species",
@@ -205,3 +209,62 @@ ggsave(fig_predictor_effect, filename = "figs/fig_predictor_effect.png",
 ```{r show_reverse_bar, eval=TRUE}
 knitr::include_graphics("figs/fig_predictor_effect.png")
 ```
+
+## Land cover or climate?
+
+Group the predictor data by two broad classes, landcover or climate.
+
+### Get the effect of landcover or climate
+
+```{r}
+# remove figs and unnest
+data_predictor_long <- data_predictor_long %>% 
+  select(-figs) %>% 
+  unnest(data)
+
+# group by predictor
+data_lc_v_clim <- data_predictor_long %>% 
+  mutate(predictor = if_else(str_detect(predictor, "bio"), 
+                             "climate", "landcover")) %>% 
+  group_by(trait, scale, predictor, value) %>%
+  summarise_at(.vars = c("negative", "positive"),
+               .funs = list(sum))
+```
+
+```{r}
+# pivot for plot, groups maintained
+data_lc_v_clim <- data_lc_v_clim %>% 
+  pivot_longer(cols = c("negative", "positive"),
+               names_to = "effect",
+               values_to = "magnitude")
+
+# nest on trait
+data_lc_v_clim <- nest(data_lc_v_clim,
+                       cols = -trait)
+```
+
+
+### Plot a figure
+
+```{r}
+# make list of figures
+data_lc_v_clim$figs <- map(data_lc_v_clim$cols,
+                           function(df) {
+                             ggplot(df) +
+                               geom_col(aes(predictor, magnitude,
+                                            fill = effect)) +
+                               
+                               scale_fill_brewer(palette = "Dark2",
+                                                      direction = -1)+
+                               theme_grey(base_family = "TT Arial") +
+                               theme(legend.position = "none") +
+                               
+                               facet_grid(~ scale)
+                           })
+fig_lc_v_clim <- patchwork::wrap_plots(data_lc_v_clim$figs,
+                                       nrow = 1)
+# save plot
+ggsave(fig_predictor_effect, filename = "figs/fig_predictor_effect.png",
+       dpi = 300)
+```
+
