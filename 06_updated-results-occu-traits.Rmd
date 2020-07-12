@@ -38,7 +38,7 @@ species <- read_csv("data/species_list.csv")
 list_of_species <- as.character(species$scientific_name)
 
 # trait data
-species_trait <- read.csv("data/data_species_traits.csv")
+species_trait <- read_csv("data/data_species_traits.csv")
 ```
 
 ## Read model estimates
@@ -65,7 +65,8 @@ model_data <- tibble(crossing(scale = scales,
   arrange(desc(scale))
 
 # rename model data components and separate predictors
-names <- c("predictor", "coefficient", "se", "ci_lower", "ci_higher", "z_value", "p_value")
+names <- c("predictor", "coefficient", "se", "ci_lower", 
+           "ci_higher", "z_value", "p_value")
 
 # get data for plotting:
 model_est <- map(model_est, function(l) {
@@ -100,6 +101,23 @@ model_est <- bind_rows(model_est) %>%
 model_data <- model_data %>% 
   left_join(model_est)
 ```
+
+### Export data to file
+
+```{r}
+model_data_to_file <- model_data %>% 
+  select(predictor, data,
+         scientific_name, scale) %>% 
+  unnest(cols = "data")
+
+# remove .y
+model_data_to_file <- model_data_to_file %>% 
+  mutate(predictor = str_remove(predictor, "\\.y"))
+
+write_csv(model_data_to_file,
+          "data/results/data_occupancy_predictors.csv")
+```
+
 
 ## Occupancy predictors' aggregated effect
 
