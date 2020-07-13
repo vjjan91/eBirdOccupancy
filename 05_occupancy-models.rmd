@@ -38,7 +38,7 @@ Here, we load the required dataframe that contains 10 random visits to a site. P
 
 ```{r load_dataframe, eval=FALSE}
 # Load in the prepared dataframe that contains 10 random visits to each site
-dat <- fread("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\dataCovars_10km.csv",header=T)
+dat <- fread("data/dataCovars_10km.csv",header=T)
 setDF(dat)
 head(dat)
 
@@ -46,17 +46,21 @@ head(dat)
 
 # Ensuring that only Traveling and Stationary checklists were considered
 names(dat)
-dat <- dat %>% filter(protocol_type=="Traveling" | protocol_type=="Stationary")
+dat <- dat %>% filter(protocol_type %in% c("Traveling", "Stationary"))
 
 # We take all stationary counts and give them a distance of 100 m (so 0.1 km),
 # as that's approximately the max normal hearing distance for people doing point counts.
 dat <- dat %>% 
-  mutate(effort_distance_km = replace(effort_distance_km, which(effort_distance_km==0 & protocol_type == "Stationary"), 0.1))
+  mutate(effort_distance_km = replace(effort_distance_km, 
+                                      which(effort_distance_km == 0 & 
+                                            protocol_type == "Stationary"), 
+                                      0.1))
 
 # Converting time observations started to numeric and adding it as a new column
 # This new column will be minute_observations_started
 dat <- dat %>%
-  mutate(min_obs_started= strtoi(as.difftime(time_observations_started, format = "%H:%M:%S", units = "mins")))
+  mutate(min_obs_started= strtoi(as.difftime(time_observations_started, 
+                                 format = "%H:%M:%S", units = "mins")))
 
 # Adding the julian date to the dataframe
 dat <- dat %>% mutate(julian_date = lubridate::yday(dat$observation_date))
@@ -66,7 +70,13 @@ names(dat)
 dat <- dat[,-c(1,4,5,16,18,21,23,24,25,26,28:37,39:45,47)] 
 
 # Rename column names:
-names(dat) <- c("duration_minutes", "effort_distance_km","locality", "locality_type","locality_id", "observer_id", "observation_date", "scientific_name", "observation_count","protocol_type","number_observers","pres_abs","tot_effort","longitude","latitude","expertise","bio_1.y","bio_12.y","lc_02.y","lc_06.y","lc_01.y", "lc_07.y","lc_04.y", "lc_05.y",      "min_obs_started", "julian_date")
+names(dat) <- c("duration_minutes", "effort_distance_km","locality", 
+                "locality_type","locality_id", "observer_id", 
+                "observation_date", "scientific_name", "observation_count",
+                "protocol_type","number_observers","pres_abs","tot_effort",
+                "longitude","latitude","expertise","bio_1.y","bio_12.y",
+                "lc_02.y","lc_06.y","lc_01.y", "lc_07.y","lc_04.y", 
+                "lc_05.y", "min_obs_started", "julian_date")
 
 dat.1 <- dat %>% 
   mutate(year = year(observation_date),
@@ -77,18 +87,20 @@ dat.1$bio_1.y <- dat.1$bio_1.y/10
 # Scaling detection and occupancy covariates
 dat.scaled <- dat.1
 dat.scaled[,c(1,2,11,16:25)] <- scale(dat.scaled[,c(1,2,11,16:25)]) # Scaling and standardizing detection and site-level covariates
-fwrite(dat.scaled, file = "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\scaledCovs_10km.csv")
+fwrite(dat.scaled, file = "data/scaledCovs_10km.csv")
 
-dat.scaled <- fread("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\scaledCovs_2.5km.csv",header=T)
+dat.scaled <- fread("data/scaledCovs_2.5km.csv",header=T)
 setDF(dat.scaled)
 head(dat.scaled)
 
 # Ensure observation_date column is in the right format
-dat.scaled$observation_date<-format(as.Date(dat.scaled$observation_date,"%m/%d/%Y"),'%Y-%m-%d')
+dat.scaled$observation_date <- format(as.Date(dat.scaled$observation_date,
+                                              "%m/%d/%Y"),
+                                      '%Y-%m-%d')
 
 # Testing for correlations before running further analyses
 # Most are uncorrelated since we decided to keep only 2 climatic and 6 land cover predictors
-source("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\screen_cor.R")
+source("code/screen_cor.R")
 names(dat.scaled)
 screen.cor(dat.scaled[,c(1,2,11,16:25)], threshold = 0.5)
 
@@ -101,7 +113,9 @@ screen.cor(dat.scaled[,c(1,2,11,16:25)], threshold = 0.5)
 all_null <- list()
 
 # Add a progress bar for the loop
-pb <- txtProgressBar(min = 0, max = length(unique(dat.scaled$scientific_name)), style = 3) #text based bar
+pb <- txtProgressBar(min = 0, 
+                     max = length(unique(dat.scaled$scientific_name)), 
+                     style = 3) #text based bar
 
 for(i in 1:length(unique(dat.scaled$scientific_name))){
   
@@ -127,7 +141,8 @@ for(i in 1:length(unique(dat.scaled$scientific_name))){
   occ_wide <- format_unmarked_occu(occ, 
                                    site_id = "site", 
                                    response = "pres_abs",
-                                   site_covs = c( "locality_id","lc_01.y","lc_02.y", "lc_04.y",                         "lc_05.y", "lc_06.y", "lc_07.y","bio_1.y", "bio_12.y"),
+                                   site_covs = c( "locality_id","lc_01.y","lc_02.y", "lc_04.y",             
+                                   "lc_05.y", "lc_06.y", "lc_07.y","bio_1.y", "bio_12.y"),
                                    obs_covs = obs_covs)
   
   # Convert this dataframe of observations into an unmarked object to start fitting occupancy models

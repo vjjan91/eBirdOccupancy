@@ -20,15 +20,15 @@ library(readxl)
 sum.no.na <- function(x){sum(x, na.rm = T)}
 
 # set file paths for auk functions
-f_in_ebd <- file.path("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\ebd_IN_relApr-2020.txt")
-f_in_sampling <- file.path("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\ebd_sampling_relApr-2020.txt")
+f_in_ebd <- file.path("data/ebd_IN_relApr-2020.txt")
+f_in_sampling <- file.path("data/ebd_sampling_relApr-2020.txt")
 ```
 
 ## Filter data
 
 ```{r soi, eval=FALSE, message=FALSE, warning=FALSE}
 # add species of interest
-specieslist <- read.csv("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\4_List_of_species_final.csv")
+specieslist <- read.csv("data/4_List_of_species_final.csv")
 speciesOfInterest <- as.character(specieslist$scientific_name)
 ```
 
@@ -51,8 +51,8 @@ Below code need not be run if it has been filtered once already and the above pa
 ```{r output_loc, eval=FALSE}
 
 # specify output location and perform filter
-f_out_ebd <- "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\eBirdDataWG_filtered.txt"
-f_out_sampling <- "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\eBirdSamplingDataWG_filtered.txt"
+f_out_ebd <- "data/eBirdDataWG_filtered.txt"
+f_out_sampling <- "data/eBirdSamplingDataWG_filtered.txt"
 ```
 
 ```{r filter_data, eval=FALSE}
@@ -75,7 +75,15 @@ new_zf <- collapse_zerofill(zf) # Creates a new zero-filled dataframe with a 0 m
 
 ```{r choose_cols, eval=FALSE}
 # choose columns of interest
-columnsOfInterest <- c("checklist_id","scientific_name","common_name","observation_count","locality","locality_id","locality_type","latitude","longitude","observation_date","time_observations_started","observer_id","sampling_event_identifier","protocol_type","duration_minutes","effort_distance_km","effort_area_ha","number_observers","species_observed","reviewed")
+columnsOfInterest <- c("checklist_id", "scientific_name", "common_name", 
+                       "observation_count", "locality", "locality_id",
+                       "locality_type", "latitude", "longitude",
+                       "observation_date", "time_observations_started",
+                       "observer_id", "sampling_event_identifier",
+                       "protocol_type", "duration_minutes",
+                       "effort_distance_km", "effort_area_ha",
+                       "number_observers", "species_observed",
+                       "reviewed")
 
 # make list of presence and absence data and choose cols of interest
 data <- list(ebd, new_zf) %>%
@@ -96,7 +104,7 @@ data[[2]] <- data[[2]] %>% filter(species_observed == F)
 
 # load shapefiles of hill ranges
 library(sf)
-hills <- st_read("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\Shapefiles\\Nil_Ana_Pal.shp")
+hills <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp")
 
 # write a prelim filter by bounding box
 box <- st_bbox(hills)
@@ -105,7 +113,8 @@ box <- st_bbox(hills)
 dataLocs <- data %>%
   map(function(x){
     select(x, longitude, latitude) %>% 
-      filter(between(longitude, box["xmin"], box["xmax"]) & between(latitude, box["ymin"], box["ymax"]))}) %>%
+      filter(between(longitude, box["xmin"], box["xmax"]) & 
+               between(latitude, box["ymin"], box["ymax"]))}) %>%
   bind_rows() %>%
   distinct() %>%
   st_as_sf(coords = c("longitude", "latitude")) %>%
@@ -129,7 +138,7 @@ data <- data %>%
 
 ```{r save_temp_data, eval=FALSE}
 # save a temp data file
-save(data, file = "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\data_temp.rdata")
+save(data, file = "data/data_temp.rdata")
 ```
 
 ## Handle presence data
@@ -138,7 +147,8 @@ save(data, file = "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\data_temp.rd
 
 # in the first set, replace X, for presences, with 1
 data[[1]] <- data[[1]] %>% 
-  mutate(observation_count = ifelse(observation_count == "X", "1", observation_count))
+  mutate(observation_count = ifelse(observation_count == "X", 
+                                    "1", observation_count))
 
 # remove records where duration is 0
 data <- map(data, function(x) filter(x, duration_minutes > 0))
@@ -148,12 +158,16 @@ data <- map(data, function(x) filter(x, duration_minutes > 0))
 dataGrouped <- map(data, function(x){
   x %>% 
     group_by(sampling_event_identifier) %>%
-    summarise_at(vars(duration_minutes, effort_distance_km, effort_area_ha), list(sum.no.na))
+    summarise_at(vars(duration_minutes, effort_distance_km, 
+                      effort_area_ha), 
+                 list(sum.no.na))
 })
 
 # bind rows combining data frames, and filter
 dataGrouped <- bind_rows(dataGrouped) %>%
-  filter(duration_minutes <= 300, effort_distance_km <= 5, effort_area_ha <= 500)
+  filter(duration_minutes <= 300, 
+         effort_distance_km <= 5, 
+         effort_area_ha <= 500)
 
 # get data identifiers, such as sampling identifier etc
 dataConstants <- data %>% 
@@ -164,8 +178,10 @@ dataConstants <- data %>%
          observation_count, protocol_type, number_observers, 
          longitude, latitude)
 
-# join the summarised data with the identifiers, using sampling_event_identifier as the key
-dataGrouped <- left_join(dataGrouped, dataConstants, by = "sampling_event_identifier")
+# join the summarised data with the identifiers, 
+# using sampling_event_identifier as the key
+dataGrouped <- left_join(dataGrouped, dataConstants, 
+                         by = "sampling_event_identifier")
 
 # remove checklists or seis with more than 10 obervers
 count(dataGrouped, number_observers > 10) # count how many have 10+ obs
@@ -198,7 +214,7 @@ assertthat::assert_that(!"sf" %in% class(dataGrouped))
 ```{r write_clean_data, eval=FALSE}
 
 # save a temp data file
-save(dataGrouped, file = "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\data_prelim_processing.rdata")
+save(dataGrouped, file = "data/data_prelim_processing.rdata")
 
 ```
 
