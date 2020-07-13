@@ -146,7 +146,7 @@ data_predictor_effect <- data_predictor_effect %>%
   })
 ```
 
-What is the direction of the predictor effect for each subset of the data by the distribution, habitat, diet, and storey?
+What is the direction of the predictor effect for each subset of the data by the distribution, habitat, and migratory status?
 
 ### Get predictor effects
 
@@ -218,8 +218,9 @@ fig_predictor_effect <- patchwork::wrap_plots(data_predictor_long$figs,
                                               nrow = 1)
 
 # save plot
-ggsave(fig_predictor_effect, filename = "figs/fig_lc_v_clim.png",
-       dpi = 300)
+ggsave(fig_predictor_effect, filename = "figs/fig_predictor_effect.png",
+       dpi = 300,
+       width = 12)
 ```
 
 ```{r show_reverse_bar, eval=TRUE}
