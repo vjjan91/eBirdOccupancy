@@ -32,7 +32,6 @@ source('code/fun_plot_interaction.r')
 ## Read species trait data and the final list of species
 
 ```{r eval=FALSE}
-
 # list of species
 species <- read_csv("data/species_list.csv")
 list_of_species <- as.character(species$scientific_name)
@@ -44,7 +43,6 @@ species_trait <- read_csv("data/data_species_traits.csv")
 ## Read model estimates
 
 ```{r read_model_estimates, eval=FALSE}
-
 file_read <- c("data/results/occu-2.5km/occuCovs/modelEst/lc-clim-modelEst.xlsx",
                "data/results/occu-10km/occuCovs/modelEst/lc-clim-modelEst.xlsx")
 
@@ -137,9 +135,6 @@ data_predictor_effect <- distinct(model_data,
 # add trait by joining
 data_predictor_effect <- data_predictor_effect %>% 
   left_join(species_trait, by = "scientific_name")
-
-# remove body mass
-data_predictor_effect <- select(data_predictor_effect, -Body.mass)
 ```
 
 
@@ -192,33 +187,36 @@ data_predictor_long <- data_predictor_long %>%
 ```{r}
 # visualise the data by mapping over the nested list
 data_predictor_long <- mutate(data_predictor_long,
-                                figs = map2(data, trait, function(df, tr){
-                                  ggplot(df)+
-                                    geom_hline(yintercept = 0,
-                                               lty = 2, lwd = 0.2,
-                                               col = "grey")+
-                                    
-                                    geom_col(aes(x = factor(predictor),
-                                                 y = magnitude,
-                                                 fill = effect))+
-
-                                    scale_x_discrete(guide = guide_axis(n.dodge = 2)#,
-                                                     # label = 1:length(unique(df$predictor))
-                                                     )+
-                                    
-                                    scale_fill_brewer(palette = "Dark2",
-                                                      direction = -1)+
-                                    
-                                    theme_grey(base_family = "TT Arial")+
-                                    theme(legend.position = "none")+
-                                    facet_grid(scale ~ value, labeller = label_both)+
-                                    labs(x = "predictor", y = "species",
-                                         title = glue('species split by {tr}'),
-                                         caption = "the X axis text overlaps, consider numbers - pg")
-                                }))
+        figs = map2(data, trait, function(df, tr){
+          ggplot(df)+
+            geom_hline(yintercept = 0,
+                       lty = 2, lwd = 0.2,
+                       col = "grey")+
+            
+            geom_col(aes(x = factor(predictor),
+                         y = magnitude,
+                         fill = effect))+
+            
+            scale_x_discrete(guide = guide_axis(n.dodge = 2)#,
+                             # label = 1:length(unique(df$predictor))
+            )+
+            
+            scico::scale_fill_scico_d(palette = "berlin",
+                                     direction = -1,
+                                     begin = 0.1,
+                                     end = 0.9)+
+            
+            theme_grey(base_family = "TT Arial")+
+            theme(legend.position = "none")+
+            facet_grid(value ~ scale, 
+                       labeller = label_both)+
+            labs(x = "predictor", y = "species",
+                 title = glue::glue('trait: {tr}'))
+        }))
 
 fig_predictor_effect <- patchwork::wrap_plots(data_predictor_long$figs,
                                               nrow = 1)
+
 # save plot
 ggsave(fig_predictor_effect, filename = "figs/fig_lc_v_clim.png",
        dpi = 300)
@@ -237,25 +235,19 @@ Group the predictor data by two broad classes, landcover or climate.
 ```{r}
 # remove figs and unnest
 data_predictor_long <- data_predictor_long %>% 
-  select(-figs) %>% 
+  select(!matches("figs")) %>% 
   unnest(data)
 
 # group by predictor
 data_lc_v_clim <- data_predictor_long %>% 
   mutate(predictor = if_else(str_detect(predictor, "bio"), 
                              "climate", "landcover")) %>% 
-  group_by(trait, scale, predictor, value) %>%
-  summarise_at(.vars = c("negative", "positive"),
+  group_by(trait, scale, predictor, value, effect) %>%
+  summarise_at(.vars = c("magnitude"),
                .funs = list(sum))
 ```
 
 ```{r}
-# pivot for plot, groups maintained
-data_lc_v_clim <- data_lc_v_clim %>% 
-  pivot_longer(cols = c("negative", "positive"),
-               names_to = "effect",
-               values_to = "magnitude")
-
 # nest on trait
 data_lc_v_clim <- nest(data_lc_v_clim,
                        cols = -trait)
@@ -266,23 +258,32 @@ data_lc_v_clim <- nest(data_lc_v_clim,
 
 ```{r}
 # make list of figures
-data_lc_v_clim$figs <- map(data_lc_v_clim$cols,
-                           function(df) {
-                             ggplot(df) +
+data_lc_v_clim$figs <- pmap(data_lc_v_clim[,c("trait", "cols")],
+                           function(trait, cols) {
+                             ggplot(cols) +
                                geom_col(aes(predictor, magnitude,
-                                            fill = effect)) +
+                                            fill = effect),
+                                        width = 0.4) +
                                
-                               scale_fill_brewer(palette = "Dark2",
-                                                      direction = -1)+
+                               scico::scale_fill_scico_d(palette = "berlin",
+                                                      direction = -1,
+                                                      begin = 0.1, end = 0.9)+
                                theme_grey(base_family = "TT Arial") +
                                theme(legend.position = "none") +
                                
-                               facet_grid(~ scale)
+                               facet_grid(value ~ scale,
+                                          labeller = label_both) +
+                               labs(title = glue::glue('trait: {trait}'))
                            })
 fig_lc_v_clim <- patchwork::wrap_plots(data_lc_v_clim$figs,
                                        nrow = 1)
+
 # save plot
-ggsave(fig_predictor_effect, filename = "figs/fig_predictor_effect.png",
+ggsave(fig_lc_v_clim, filename = "figs/fig_lc_v_clim.png",
        dpi = 300)
+```
+
+```{r}
+knitr::include_graphics("figs/fig_lc_v_clim.png")
 ```
 
