@@ -15,6 +15,7 @@ library(magrittr)
 library(stringr)
 library(dplyr)
 library(tidyr)
+library(readr)
 
 library(ggplot2)
 library(ggthemes)
@@ -28,7 +29,7 @@ round_any <- function(x, accuracy = 25000){round(x/accuracy)*accuracy}
 
 ```{r soi_supplement, eval=FALSE, message=FALSE, warning=FALSE}
 # add species of interest
-specieslist <- read.csv("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\2_List_of_species.csv")
+specieslist <- read.csv("data/species_list.csv")
 speciesOfInterest <- specieslist$scientific_name
 ```
 
@@ -37,10 +38,10 @@ speciesOfInterest <- specieslist$scientific_name
 ```{r load_raw_data_supp02, eval=FALSE}
 # read in shapefile of the study area to subset by bounding box
 library(sf)
-wg <- st_read("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\Shapefiles\\Nil_Ana_Pal.shp"); box <- st_bbox(wg)
+wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp"); box <- st_bbox(wg)
 
 # read in data and subset
-ebd <- fread("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\eBirdDataWG_filtered.txt")
+ebd <- fread("data/eBirdDataWG_filtered.txt")
 ebd <- ebd[between(LONGITUDE, box["xmin"], box["xmax"]) & 
             between(LATITUDE, box["ymin"], box["ymax"]),]
 ebd <- ebd[year(`OBSERVATION DATE`) >= 2013,]
@@ -53,7 +54,8 @@ setnames(ebd, newNames)
 # keep useful columns
 columnsOfInterest <- c("scientific_name","observation_count","locality",
     "locality_id","locality_type","latitude","longitude","observation_date", "sampling_event_identifier")
-ebd <- ebd[,..columnsOfInterest]
+
+ebd <- ebd[, ..columnsOfInterest]
 ```
 
 ```{r strict_filter_supp02, eval=FALSE}
@@ -91,7 +93,7 @@ ebd <- ebd[(longitude %in% coords$longitude) & (latitude %in% coords$latitude),]
 
 ```{r count_obs_cell, eval=FALSE}
 # round to 25km cell in UTM coords
-ebd[,`:=`(X = round_any(X), Y = round_any(Y))]
+ebd[, `:=`(X = round_any(X), Y = round_any(Y))]
 
 # count checklists in cell
 ebd_summary <- ebd[,nchk := length(unique(sampling_event_identifier)), by=.(X,Y)]
@@ -127,15 +129,15 @@ tot_n_chklist <- ebd_summary %>%
 spp_grids <- ebd_summary %>%
           group_by(scientific_name) %>%
           distinct(X,Y) %>%
-          count(scientific_name)
-names(spp_grids)[2] <- "n_grids"
+          count(scientific_name,
+                name = "n_grids")
 
 # Write the above two results
-write.csv(tot_n_chklist,"C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\nchk_per_grid.csv", row.names = F)
-write.csv(spp_grids,"C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\ngrids_per_spp.csv", row.names = F)
+write_csv(tot_n_chklist,"data/nchk_per_grid.csv")
+write_csv(spp_grids,"data/ngrids_per_spp.csv")
 
 # left-join the datasets
-ebd_summary <- left_join(ebd_summary,spp_grids, by="scientific_name")
+ebd_summary <- left_join(ebd_summary, spp_grids, by="scientific_name")
 
 # check the proportion of grids across which this cut-off is met for each species
 # Is it > 90% or 70%?
@@ -148,13 +150,13 @@ grid_proportions <- ebd_summary %>%
           mutate(prop_grids_cut = n/(spp_grids$n_grids))%>%
           arrange(desc(prop_grids_cut))
 
-grid_prop_cut <- grid_proportions[grid_proportions$prop_grids_cut>=0.5,]
+grid_prop_cut <- filter(grid_proportions,
+                        prop_grids_cut > p_cutoff)
 
 # Write the results
-write.csv(grid_prop_cut,"C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\chk_3_percent.csv", row.names = F)
+write_csv(grid_prop_cut, "data/chk_3_percent.csv")
 
 # Identifying the number of species that occur in potentially <5% of all lists
-
 total_number_lists <- sum(tot_n_chklist$nchk)
 
 spp_sum_chk <- ebd_summary %>%
@@ -190,12 +192,17 @@ wg <- st_transform(wg, 32643)
 bbox <- st_bbox(wg)
 
 #get a plot of number of checklists across grids
-plotNchk <- ggplot()+
+plotNchk <-
+  ggplot()+
   geom_sf(data = land, fill = "grey90", col = NA)+
   geom_tile(data = tot_n_chklist,
             aes(X, Y, fill = nchk), lwd = 0.5, col = "grey90")+
   geom_sf(data = wg, fill = NA, col = "black", lwd = 0.3)+
-  scale_fill_scico(palette = "lajolla", direction = 1)+
+  scale_fill_scico(palette = "lajolla", 
+                   direction = 1,
+                   trans = "log10",
+                   limits = c(1, 10000),
+                   breaks = 10 ^ c(1:4))+
   coord_sf(xlim = bbox[c("xmin", "xmax")], ylim = bbox[c("ymin", "ymax")])+
   theme_few()+
   theme(legend.position = "right", 
@@ -205,10 +212,11 @@ plotNchk <- ggplot()+
   labs(fill = "number\nof\nchecklists")
 
 # export data
-ggsave(plotNchk, filename = "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\fig_number_checklists_10km.png",height = 12,width = 7, device = png(), dpi = 300); dev.off()
+ggsave(plotNchk, filename = "figs/fig_number_checklists_10km.png",height = 12,
+       width = 7, device = png(), dpi = 300); dev.off()
 
 # filter list of species
-ebd_filter <- semi_join(ebd_summary,grid_prop_cut, by="scientific_name")
+ebd_filter <- semi_join(ebd_summary, grid_prop_cut, by="scientific_name")
 
 plotDistributions <-
 ggplot()+
@@ -220,15 +228,19 @@ ggplot()+
   scale_fill_scico(palette = "lajolla", direction = 1, label = scales::percent)+
   facet_wrap(~scientific_name, ncol = 12)+
   coord_sf(xlim = bbox[c("xmin", "xmax")], ylim = bbox[c("ymin", "ymax")])+
-  theme_few()+
-  theme(legend.position = "right", 
+  ggthemes::theme_few(base_family = "TT Arial",
+                      base_size = 8)+
+  theme(legend.position = "right",
+        strip.text = element_text(face = "italic"),
         axis.title = element_blank(),
         axis.text.y = element_text(angle = 90),
         panel.background = element_rect(fill = "lightblue"))+
   labs(fill = "prop.\nreporting\nchecklists")
   
 # export data
-ggsave(plotDistributions, filename = "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\fig_species_distributions.png",height = 25,width = 25, device = png(), dpi = 300); dev.off()
+ggsave(plotDistributions, 
+       filename = "figs/fig_species_distributions.png",
+       height = 25,width = 25, device = png(), dpi = 300); dev.off()
 ```
 
 ```{r export_fig_obs_dist, eval=TRUE, fig.cap="Proportion of checklists reporting a species in each grid cell (20km side) between 2013 and 2018. Checklists were filtered to be within the boundaries of the Nilgiris, Anamalais and the Palani hills (black outline), but rounding to 20km cells may place cells outside the boundary. Deeper shades of red indicate a higher proportion of checklists reporting a species."}
@@ -236,12 +248,15 @@ ggsave(plotDistributions, filename = "C:\\Users\\vr235\\Desktop\\Occupancy Runs\
 # show exported image
 knitr::include_graphics("figs/fig_species_distributions.png")
 ```
-write the new list of species
+
+### Write the new list of species
+
 ```{r}
 # write the new list of species that occur in at least 3% of checklists across a minimum of 50% of the grids they have been reported in
 
 new_sp_list <- semi_join(specieslist,grid_prop_cut, by="scientific_name")
-write.csv(new_sp_list,"C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\3_List_of_species_cutoff.csv", row.names = F)
+
+write_csv(new_sp_list,"data/3_List_of_species_cutoff.csv", row.names = F)
 
 
 ```
