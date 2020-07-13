@@ -7,7 +7,7 @@ editor_options:
 
 ## Prepare libraries
 
-```{r load_libs_results02, eval=FALSE}
+```{r load_libs_results01, eval=FALSE}
 # to load data
 library(readxl)
 

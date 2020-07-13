@@ -118,7 +118,7 @@ ebd_summary <- setDF(ebd_summary) %>%
 
 ### Which species are reported sufficiently in checklists?
 
-```{r eval=TRUE}
+```{r eval=FALSE}
 # A total of 42 unique grids (of 25km by 25km) across the study area
 # total number of checklists across unique grids
 
@@ -257,7 +257,4 @@ knitr::include_graphics("figs/fig_species_distributions.png")
 new_sp_list <- semi_join(specieslist,grid_prop_cut, by="scientific_name")
 
 write_csv(new_sp_list,"data/3_List_of_species_cutoff.csv", row.names = F)
-
-
 ```
-
