@@ -20,7 +20,7 @@ library(tidyr)
 library(sf)
 
 # load saved data object
-load("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\data_prelim_processing.rdata")
+load("data/data_prelim_processing.rdata")
 ```
 
 ## Spatial subsampling
@@ -31,7 +31,7 @@ gridsize = 1000 # grid size in metres
 effort_distance_max = 1000 # removing checklists with this distance
 
 # make grids across the study site
-hills <- st_read("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\Shapefiles\\Nil_Ana_Pal.shp") %>% 
+hills <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>% 
   st_transform(32643)
 grid <- st_make_grid(hills, cellsize = gridsize)
 
@@ -103,7 +103,7 @@ rm(data_spatial_thin)
 
 ```{r add_expertise, eval=FALSE}
 # read in obs score and extract numbers
-expertiseScore <- read_csv("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\dataObsExpScore.csv") %>% 
+expertiseScore <- read_csv("data/dataObsExpScore.csv") %>% 
   mutate(numObserver = str_extract(observer, "\\d+")) %>% 
   dplyr::select(-observer)
 
@@ -112,7 +112,8 @@ expertiseScore <- read_csv("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\dat
 # as the associated covariate
 
 # get unique observers per sei
-dataSeiScore <- distinct(dataSubsample, sampling_event_identifier, observer_id) %>% 
+dataSeiScore <- distinct(dataSubsample, sampling_event_identifier, 
+                         observer_id) %>% 
   # make list column of observers
   mutate(observers = str_split(observer_id, ",")) %>% 
   unnest(cols = c(observers)) %>% 
@@ -142,7 +143,7 @@ dataSubsample <- filter(dataSubsample, !is.na(expertise))
 ```{r add_landcovars, eval=FALSE}
 
 # list landscape covariate stacks
-landscape_files <- "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\landcover\\landscape_resamp01km.tif"
+landscape_files <- "data/landcover\\landscape_resamp01km.tif"
 
 # read in as stacks
 landscape_data <- stack(landscape_files)
@@ -265,9 +266,8 @@ data_at_scale$data <- map(data_at_scale$data, function(df){
 ```{r spit_scale, eval=FALSE}
 # write to file
 pmap(data_at_scale, function(sample_radius, data){
-  write_csv(data, path = glue('C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\dataCovars_{str_pad(sample_radius/1e3, 2, pad = "0")}km.csv'))
-  message(glue('export done: C:\\Users\\vr235\\Desktop\\Occupancy Runs\\Data\\dataCovars_{str_pad(sample_radius/1e3, 2, pad = "0")}km.csv'))
+  write_csv(data, path = glue('data/dataCovars_{str_pad(sample_radius/1e3, 2, pad = "0")}km.csv'))
+  message(glue('export done: data/dataCovars_{str_pad(sample_radius/1e3, 2, pad = "0")}km.csv'))
 })
 
 ```
-
