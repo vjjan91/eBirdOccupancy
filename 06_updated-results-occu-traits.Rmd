@@ -26,7 +26,7 @@ source("code/fun_make_resp_data.r")
 # plotting
 library(ggplot2)
 library(patchwork)
-source('code/fun_plot_interaction.r')
+source("code/fun_plot_interaction.r")
 ```
 
 ## Read species trait data and the final list of species
@@ -68,7 +68,6 @@ names <- c("predictor", "coefficient", "se", "ci_lower",
 
 # get data for plotting:
 model_est <- map(model_est, function(l) {
-  
   map(l, function(df) {
     colnames(df) <- names
     df <- separate_interaction_terms(df)
@@ -86,7 +85,7 @@ model_est <- map(model_est, function(l) {
 
 # add names to model estimates
 names(model_est) <- scales
-model_est <- imap(model_est, function(.x,.y) {
+model_est <- imap(model_est, function(.x, .y) {
   bind_rows(.x) %>% 
     mutate(scale = .y)
 })
@@ -115,7 +114,6 @@ model_data_to_file <- model_data_to_file %>%
 write_csv(model_data_to_file,
           "data/results/data_occupancy_predictors.csv")
 ```
-
 
 ## Occupancy predictors' aggregated effect
 
@@ -153,8 +151,13 @@ What is the direction of the predictor effect for each subset of the data by the
 ```{r}
 # first pivot the data longer
 data_predictor_long <- data_predictor_effect %>% 
-  pivot_longer(cols = c("range_size", "migratory_status", "habitat"), 
+  pivot_longer(cols = c("range_size", "migratory_status", 
+                        "habitat", "elev"), 
                names_to = "trait")
+
+# reorder scale
+data_predictor_long <- data_predictor_long %>% 
+  mutate(scale = fct_relevel(scale, "2.5km", "10km"))
 
 # is the coeff positive? how many positive per scale per predictor per axis of split?
 data_predictor_long <- mutate(data_predictor_long, 
@@ -215,7 +218,7 @@ data_predictor_long <- mutate(data_predictor_long,
         }))
 
 fig_predictor_effect <- patchwork::wrap_plots(data_predictor_long$figs,
-                                              nrow = 1)
+                                              nrow = 2)
 
 # save plot
 ggsave(fig_predictor_effect, filename = "figs/fig_predictor_effect.png",
@@ -277,7 +280,7 @@ data_lc_v_clim$figs <- pmap(data_lc_v_clim[,c("trait", "cols")],
                                labs(title = glue::glue('trait: {trait}'))
                            })
 fig_lc_v_clim <- patchwork::wrap_plots(data_lc_v_clim$figs,
-                                       nrow = 1)
+                                       nrow = 2)
 
 # save plot
 ggsave(fig_lc_v_clim, filename = "figs/fig_lc_v_clim.png",
@@ -286,5 +289,65 @@ ggsave(fig_lc_v_clim, filename = "figs/fig_lc_v_clim.png",
 
 ```{r}
 knitr::include_graphics("figs/fig_lc_v_clim.png")
+```
+
+## Elevation summary THIS NEEDS TO BE REMOVED
+
+Plot elevation summaries faceted by scale and predictors.
+Read species elevation summaries.
+
+```{r}
+# add elevation data
+elev_summary <- read_excel("data/data_species_elevation.xlsx")
+
+# link to species
+elev_summary <- elev_summary %>% 
+  left_join(data_predictor_effect)
+
+# arrange in plot order
+elev_summary <- elev_summary %>% 
+  group_by(scale, scientific_name) %>% 
+  arrange(median) %>% 
+  mutate(plot_order = seq_len(n()))
+
+# remove NAs and order scale
+elev_summary <- select(elev_summary,
+                       -`Body mass`) %>% 
+  drop_na() %>% 
+  mutate(scale = fct_relevel(scale,
+                             "2.5km", "10km"))
+
+# rename median
+elev_summary <- rename(elev_summary,
+                       median_elev = median)
+
+# order
+elev_summary <- elev_summary %>% 
+  ungroup() %>% 
+  arrange(-median_elev) %>% 
+  group_by(scientific_name)
+```
+
+```{r}
+# plot elevation pointranges
+ggplot(elev_summary)+
+  geom_errorbar(aes(plot_order, 
+                    ymin = q1, ymax = q3),
+                size = 0.3, width = 0.4)+
+  geom_point(aes(plot_order, median_elev),
+             shape = 21, col = "grey20")+
+  facet_grid(scale ~ predictor, 
+             scales = "fixed",
+             labeller = label_both,
+             as.table = FALSE)+
+  theme_test()+
+  theme(legend.position = "none",
+        legend.key = element_rect(colour = "white",
+                                  size = 0.3),
+        # axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())#+
+  # coord_flip()+
+  # labs(x = "Species",
+       # colour = "synthesis_var")
 ```
 
