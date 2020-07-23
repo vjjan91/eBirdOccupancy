@@ -7,7 +7,7 @@ editor_options:
 
 ## Prepare libraries
 
-```{r load_libs_results02, eval=FALSE}
+```{r load_libs_results01, eval=FALSE}
 # to load data
 library(readxl)
 
@@ -26,182 +26,328 @@ source("code/fun_make_resp_data.r")
 # plotting
 library(ggplot2)
 library(patchwork)
-source('code/fun_plot_interaction.r')
+source("code/fun_plot_interaction.r")
 ```
 
 ## Read species trait data and the final list of species
 
 ```{r eval=FALSE}
-
 # list of species
-species <- read.csv("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\output\\finalizing-list-spp\\05_list-spp-spThin-min50-excl-waterBirds.csv")
+species <- read_csv("data/species_list.csv")
 list_of_species <- as.character(species$scientific_name)
 
 # trait data
-species_trait <- read.csv("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\output\\species-trait-dat.csv")
-
+species_trait <- read_csv("data/data_species_traits.csv")
 ```
 
 ## Read model estimates
 
 ```{r read_model_estimates, eval=FALSE}
-
-file_read <- "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\output\\occu-2.5km\\occuCovs\\modelEst\\lc-clim-modelEst.xlsx"
+file_read <- c("data/results/occu-2.5km/occuCovs/modelEst/lc-clim-modelEst.xlsx",
+               "data/results/occu-10km/occuCovs/modelEst/lc-clim-modelEst.xlsx")
 
 # read data as list column
-model_est <- map2(file_read,list_of_species, function(fr,sn){
-  readxl::read_excel(fr,sheet = sn)
+model_est <- map(file_read, function(fr) {
+  md_list <- map(list_of_species, function(sn) {
+    readxl::read_excel(fr, sheet = sn)
+  })
+  names(md_list) <- list_of_species
+  
+  return(md_list)
 })
+
+# prepare model data
+scales = c("2.5km", "10km")
+model_data <- tibble(crossing(scale = scales, 
+                              scientific_name = list_of_species)) %>% 
+  arrange(desc(scale))
 
 # rename model data components and separate predictors
-names <- c("predictor", "coefficient", "se", "ci_lower", "ci_higher", "z_value", "p_value")
+names <- c("predictor", "coefficient", "se", "ci_lower", 
+           "ci_higher", "z_value", "p_value")
 
 # get data for plotting:
-
-model_est <- map(model_est, function(df){
-  colnames(df) <- names
-  #df <- separate_interaction_terms(df)
-  #df <- make_response_data(df) - function needs to be edited to account for no modulator
-  return(df)
+model_est <- map(model_est, function(l) {
+  map(l, function(df) {
+    colnames(df) <- names
+    df <- separate_interaction_terms(df)
+    df <- make_response_data(df) 
+    return(df)
+  })
 })
 
-# keep significant predictors
-trial <- model_est[[1]][model_est[[1]]$p_value< 0.05,]
-trial <- trial[grep(trial,"^psi("),]
+# add names and scales
+model_est <- map(model_est, function(l) {
+  imap(l, function(.x, .y) {
+    mutate(.x, scientific_name = .y)
+  })
+})
 
-#### Need to edit script from here
+# add names to model estimates
+names(model_est) <- scales
+model_est <- imap(model_est, function(.x, .y) {
+  bind_rows(.x) %>% 
+    mutate(scale = .y)
+})
 
+# remove modulators
+model_est <- bind_rows(model_est) %>% 
+  select(-matches("modulator"))
 
+# join data to species name
+model_data <- model_data %>% 
+  left_join(model_est)
+```
 
-# remove filename
-model_data <- select(model_data, -file_read) %>% 
-  unnest(model_est) %>% 
-  unnest(data)
+### Export data to file
+
+```{r}
+model_data_to_file <- model_data %>% 
+  select(predictor, data,
+         scientific_name, scale) %>% 
+  unnest(cols = "data")
+
+# remove .y
+model_data_to_file <- model_data_to_file %>% 
+  mutate(predictor = str_remove(predictor, "\\.y"))
+
+write_csv(model_data_to_file,
+          "data/results/data_occupancy_predictors.csv")
 ```
 
 ## Occupancy predictors' aggregated effect
 
-Read in the species as range restricted or wide ranging. We previously identified the sheet.
-
-```{r}
-hypothesis_data <- readxl::read_excel("data/results/all_hypoComparisons_allScales.xlsx",
-                                      sheet = sheet_names[which_sheet])
-```
-
-
 Plot the number of species affected and the direction of the effect, for each predictor.
-Split the data along the axes of range restriction, large scale habitat type, and small scale habitat type.
+Split the data along the axes of range size, migratory status, and habitat.
 
 ```{r mirror_bar_plot, eval=FALSE}
 # select the data
 data_predictor_effect <- distinct(model_data, 
-                         Scientific_name, scale, 
-                         predictor, modulator, coefficient)
-
-# add the species distribution
-data_predictor_effect <- left_join(data_predictor_effect, hypothesis_data,
-                                   by  = c("Scientific_name" = "Scientific_name"))
-
-# rename columns and make text 'nice'
-data_predictor_effect <- mutate(data_predictor_effect,
-                                distribution = if_else(as.logical(`Range-Restricted`),
-                                                               "range restricted",
-                                                               "wide ranging"),
-                                habitat = str_to_lower(`Habitat (Open Country / Forest )`),
-                                storey = str_to_lower(`Foraging Space (Canopy / Mid-storey / Terrestrial / Shrub)`),
-                                body_mass = `Body Mass (g)`
-                                )
-
-# remove old cols and set nice column names
-data_predictor_effect <- select(data_predictor_effect,
-                                -contains(c(" ", "-")))
-# convert colnames to lower case
-data_predictor_effect <- data_predictor_effect %>% 
-  `colnames<-`(str_to_lower(colnames(.)))
-
-# remove .y from predictors
-data_predictor_effect <- data_predictor_effect %>%
-  mutate_at(.vars = c("predictor", "modulator"), .funs = function(x){
-    stringr::str_remove(x, ".y")
-  }) %>%
-  
-  # remove the ":NA"
-  mutate(predictor_final = glue('{predictor}:{modulator}'),
-         predictor_final = str_remove(predictor_final, ":NA"))
-
-# now remove predictor and modulator
-data_predictor_effect <- select(data_predictor_effect,
-                                -predictor, -modulator)
+                                  scientific_name, scale, 
+                                  predictor, coefficient)
 ```
 
-What is the direction of the predictor effect for each subset of the data by the distribution, habitat, diet, and storey?
+### Add trait data and clean
+
+```{r}
+# add trait by joining
+data_predictor_effect <- data_predictor_effect %>% 
+  left_join(species_trait, by = "scientific_name")
+```
+
+
+```{r}
+# remove .y from predictors
+data_predictor_effect <- data_predictor_effect %>%
+  mutate_at(.vars = c("predictor"), .funs = function(x){
+    stringr::str_remove(x, ".y")
+  })
+```
+
+What is the direction of the predictor effect for each subset of the data by the distribution, habitat, and migratory status?
+
+### Get predictor effects
 
 ```{r}
 # first pivot the data longer
 data_predictor_long <- data_predictor_effect %>% 
-  pivot_longer(cols = c("diet", "distribution", "habitat", "storey"), 
+  pivot_longer(cols = c("range_size", "migratory_status", 
+                        "habitat", "elev"), 
                names_to = "trait")
 
+# reorder scale
+data_predictor_long <- data_predictor_long %>% 
+  mutate(scale = fct_relevel(scale, "2.5km", "10km"))
 
 # is the coeff positive? how many positive per scale per predictor per axis of split?
 data_predictor_long <- mutate(data_predictor_long, 
                                 direction = coefficient > 0) %>% 
-  count(scale, predictor_final, 
+  count(scale, predictor, 
         trait, value, direction) %>% 
   mutate(mag = n * (if_else(direction, 1, -1)))
 
 # wrangle data to get nice bars
 data_predictor_long <- data_predictor_long %>% 
   select(-n) %>% 
+  drop_na(direction, value) %>% 
   mutate(direction = ifelse(direction, "positive", "negative")) %>% 
   pivot_wider(values_from = "mag", names_from = "direction") %>% 
   mutate_at(vars(positive, negative),
-            ~if_else(is.na(.),0, .))
+            ~if_else(is.na(.), 0, .))
+
+data_predictor_long <- data_predictor_long %>% 
+  pivot_longer(cols = c("negative", "positive"),
+               names_to = "effect",
+               values_to = "magnitude")
 
 # nest the data by trait
-data_predictor_long <- data_predictor_long %>% nest(data = -trait)
+data_predictor_long <- data_predictor_long %>% 
+  nest(data = -trait)
 ```
+
+### Make figures for predictor effects
 
 ```{r}
 # visualise the data by mapping over the nested list
 data_predictor_long <- mutate(data_predictor_long,
-                                figs = map2(data, trait, function(df, tr){
-                                  ggplot(df)+
-                                    geom_hline(yintercept = 0,
-                                               lty = 2, lwd = 0.2,
-                                               col = "grey")+
-                                    geom_col(aes(x = factor(predictor_final),
-                                                 y = positive,
-                                                 group = value,
-                                                 fill = interaction(value, positive > 0)),
-                                             position = position_dodge2(preserve = "single"))+
-                                    geom_col(aes(x = factor(predictor_final),
-                                                 y = negative,
-                                                 group = value,
-                                                 fill = interaction(value, negative > 0)),
-                                             position = position_dodge2(preserve = "single"))+
-                                    scico::scale_fill_scico_d(palette = "hawaii",
-                                                              begin = 0.2, end = 0.8,
-                                                              direction = 1)+
-                                    
-                                    scale_x_discrete(guide = guide_axis(n.dodge = 2),
-                                                     label = 1:length(unique(df$predictor_final)))+
-                                    
-                                    theme_test(base_size = 6)+
-                                    theme(legend.position = "none")+
-                                    facet_grid(scale~value, labeller = label_both)+
-                                    labs(x = "predictor", y = "species",
-                                         title = glue('species split by {tr}'),
-                                         caption = "the X axis text overlaps, consider numbers - pg")
-                                }))
+        figs = map2(data, trait, function(df, tr){
+          ggplot(df)+
+            geom_hline(yintercept = 0,
+                       lty = 2, lwd = 0.2,
+                       col = "grey")+
+            
+            geom_col(aes(x = factor(predictor),
+                         y = magnitude,
+                         fill = effect))+
+            
+            scale_x_discrete(guide = guide_axis(n.dodge = 2)#,
+                             # label = 1:length(unique(df$predictor))
+            )+
+            
+            scico::scale_fill_scico_d(palette = "berlin",
+                                     direction = -1,
+                                     begin = 0.1,
+                                     end = 0.9)+
+            
+            theme_grey(base_family = "TT Arial")+
+            theme(legend.position = "none")+
+            facet_grid(value ~ scale, 
+                       labeller = label_both)+
+            labs(x = "predictor", y = "species",
+                 title = glue::glue('trait: {tr}'))
+        }))
 
 fig_predictor_effect <- patchwork::wrap_plots(data_predictor_long$figs,
                                               nrow = 2)
+
 # save plot
 ggsave(fig_predictor_effect, filename = "figs/fig_predictor_effect.png",
-       dpi = 300)
+       dpi = 300,
+       width = 12)
 ```
 
 ```{r show_reverse_bar, eval=TRUE}
 knitr::include_graphics("figs/fig_predictor_effect.png")
 ```
+
+## Land cover or climate?
+
+Group the predictor data by two broad classes, landcover or climate.
+
+### Get the effect of landcover or climate
+
+```{r}
+# remove figs and unnest
+data_predictor_long <- data_predictor_long %>% 
+  select(!matches("figs")) %>% 
+  unnest(data)
+
+# group by predictor
+data_lc_v_clim <- data_predictor_long %>% 
+  mutate(predictor = if_else(str_detect(predictor, "bio"), 
+                             "climate", "landcover")) %>% 
+  group_by(trait, scale, predictor, value, effect) %>%
+  summarise_at(.vars = c("magnitude"),
+               .funs = list(sum))
+```
+
+```{r}
+# nest on trait
+data_lc_v_clim <- nest(data_lc_v_clim,
+                       cols = -trait)
+```
+
+
+### Plot a figure
+
+```{r}
+# make list of figures
+data_lc_v_clim$figs <- pmap(data_lc_v_clim[,c("trait", "cols")],
+                           function(trait, cols) {
+                             ggplot(cols) +
+                               geom_col(aes(predictor, magnitude,
+                                            fill = effect),
+                                        width = 0.4) +
+                               
+                               scico::scale_fill_scico_d(palette = "berlin",
+                                                      direction = -1,
+                                                      begin = 0.1, end = 0.9)+
+                               theme_grey(base_family = "TT Arial") +
+                               theme(legend.position = "none") +
+                               
+                               facet_grid(value ~ scale,
+                                          labeller = label_both) +
+                               labs(title = glue::glue('trait: {trait}'))
+                           })
+fig_lc_v_clim <- patchwork::wrap_plots(data_lc_v_clim$figs,
+                                       nrow = 2)
+
+# save plot
+ggsave(fig_lc_v_clim, filename = "figs/fig_lc_v_clim.png",
+       dpi = 300)
+```
+
+```{r}
+knitr::include_graphics("figs/fig_lc_v_clim.png")
+```
+
+## Elevation summary THIS NEEDS TO BE REMOVED
+
+Plot elevation summaries faceted by scale and predictors.
+Read species elevation summaries.
+
+```{r}
+# add elevation data
+elev_summary <- read_excel("data/data_species_elevation.xlsx")
+
+# link to species
+elev_summary <- elev_summary %>% 
+  left_join(data_predictor_effect)
+
+# arrange in plot order
+elev_summary <- elev_summary %>% 
+  group_by(scale, scientific_name) %>% 
+  arrange(median) %>% 
+  mutate(plot_order = seq_len(n()))
+
+# remove NAs and order scale
+elev_summary <- select(elev_summary,
+                       -`Body mass`) %>% 
+  drop_na() %>% 
+  mutate(scale = fct_relevel(scale,
+                             "2.5km", "10km"))
+
+# rename median
+elev_summary <- rename(elev_summary,
+                       median_elev = median)
+
+# order
+elev_summary <- elev_summary %>% 
+  ungroup() %>% 
+  arrange(-median_elev) %>% 
+  group_by(scientific_name)
+```
+
+```{r}
+# plot elevation pointranges
+ggplot(elev_summary)+
+  geom_errorbar(aes(plot_order, 
+                    ymin = q1, ymax = q3),
+                size = 0.3, width = 0.4)+
+  geom_point(aes(plot_order, median_elev),
+             shape = 21, col = "grey20")+
+  facet_grid(scale ~ predictor, 
+             scales = "fixed",
+             labeller = label_both,
+             as.table = FALSE)+
+  theme_test()+
+  theme(legend.position = "none",
+        legend.key = element_rect(colour = "white",
+                                  size = 0.3),
+        # axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())#+
+  # coord_flip()+
+  # labs(x = "Species",
+       # colour = "synthesis_var")
+```
+

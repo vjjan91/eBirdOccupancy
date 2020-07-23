@@ -19,217 +19,48 @@ library(tidyr)
 library(purrr)
 library(stringr)
 
-# to wrangle models
-source("code/fun_model_estimate_collection.r")
-source("code/fun_make_resp_data.r")
-
 # plotting
 library(ggplot2)
 library(patchwork)
-source('code/fun_plot_interaction.r')
 ```
 
-## Get data from hypothesis sheet
+## Read data
 
-```{r eval=FALSE}
-# read in the excel sheet containing information on the best supported hypothesis
-sheet_names <- readxl::excel_sheets("data/results/all_hypoComparisons_allScales.xlsx")
-which_sheet <- which(str_detect(sheet_names, "Best"))
+```{r}
+# read data
+data <- read_csv("data/results/data_occupancy_predictors.csv")
+```
 
-hypothesis_data <- readxl::read_excel("data/results/all_hypoComparisons_allScales.xlsx",
-                                      sheet = sheet_names[which_sheet])
-
-# Subsetting the data needed to call in each species' model coefficient information
-hypothesis_data <- select(hypothesis_data,
-                          Scientific_name, Common_name,
-                          contains("Best supported hypothesis"))
-
-# pivot longer
-hypothesis_data <- pivot_longer(hypothesis_data,
-                                cols = contains("Best"),
-                                names_to = "scale", values_to = "hypothesis")
-# fix scale to numeric
-hypothesis_data <- mutate(hypothesis_data,
-                          scale = if_else(str_detect(scale, "10"), "10km", "2.5km"))
-
-# list the supported hypotheses
-# first separate the hypotheses into two columns
-hypothesis_data <- separate(hypothesis_data, col = hypothesis, sep = "; ", 
-                            into = c("hypothesis_01", "hypothesis_02"),
-                            fill = "right") %>% 
-  # then get the data into long format
-  pivot_longer(cols = c("hypothesis_01","hypothesis_02"),
-               values_to = "hypothesis") %>% 
-  # remove NA where there is only one hypothesis
+```{r}
+# drop na
+data <- select(data,
+               -ci) %>% 
   drop_na() %>% 
-  # remove the name column
-  select(-name)
-
-# correct the name landCover to lc
-hypothesis_data <- mutate(hypothesis_data,
-                          hypothesis = replace(hypothesis,
-                                               hypothesis %in% c("landCover", "climate",
-                                                                 "elevation"), 
-                                               c("lc","clim","elev")))
-```
-
-## Read model estimates
-
-```{r read_model_estimates, eval=FALSE}
-# which file to read model estimates from
-hypothesis_data <- mutate(hypothesis_data,
-                          file_read = glue::glue('data/results/Results_{scale}/occuCovs/modelEst/{hypothesis}_modelEst.xlsx'))
-
-# read in data as list column
-model_data <- mutate(hypothesis_data,
-                     model_est = map2(file_read, Scientific_name, function(fr, sn){
-                       readxl::read_excel(fr, sheet = sn)
-                     }))
-
-# rename model data components and separate predictors
-names <- c("predictor", "coefficient", "se", "ci_lower", "ci_higher", "z_value", "p_value")
-
-# get data for plotting: separate the interaction terms and make the response df
-model_data <- mutate(model_data, 
-                     model_est = map(model_est, function(df){
-  colnames(df) <- names
-  df <- separate_interaction_terms(df)
-  df <- make_response_data(df)
-  return(df)
-}))
-
-# keep significant predictors
-model_data <- model_data[map_int(model_data$model_est, nrow) > 0,]
-
-# remove filename
-model_data <- select(model_data, -file_read) %>% 
-  unnest(model_est) %>% 
-  unnest(data)
-```
-
-## Occupancy predictors' aggregated effect
-
-Read in the species as range restricted or wide ranging. We previously identified the sheet.
-
-```{r}
-hypothesis_data <- readxl::read_excel("data/results/all_hypoComparisons_allScales.xlsx",
-                                      sheet = sheet_names[which_sheet])
-```
-
-
-Plot the number of species affected and the direction of the effect, for each predictor.
-Split the data along the axes of range restriction, large scale habitat type, and small scale habitat type.
-
-```{r mirror_bar_plot, eval=FALSE}
-# select the data
-data_predictor_effect <- distinct(model_data, 
-                         Scientific_name, scale, 
-                         predictor, modulator, coefficient)
-
-# add the species distribution
-data_predictor_effect <- left_join(data_predictor_effect, hypothesis_data,
-                                   by  = c("Scientific_name" = "Scientific_name"))
-
-# rename columns and make text 'nice'
-data_predictor_effect <- mutate(data_predictor_effect,
-                                distribution = if_else(as.logical(`Range-Restricted`),
-                                                               "range restricted",
-                                                               "wide ranging"),
-                                habitat = str_to_lower(`Habitat (Open Country / Forest )`),
-                                storey = str_to_lower(`Foraging Space (Canopy / Mid-storey / Terrestrial / Shrub)`),
-                                body_mass = `Body Mass (g)`
-                                )
-
-# remove old cols and set nice column names
-data_predictor_effect <- select(data_predictor_effect,
-                                -contains(c(" ", "-")))
-# convert colnames to lower case
-data_predictor_effect <- data_predictor_effect %>% 
-  `colnames<-`(str_to_lower(colnames(.)))
-
-# remove .y from predictors
-data_predictor_effect <- data_predictor_effect %>%
-  mutate_at(.vars = c("predictor", "modulator"), .funs = function(x){
-    stringr::str_remove(x, ".y")
-  }) %>%
-  
-  # remove the ":NA"
-  mutate(predictor_final = glue('{predictor}:{modulator}'),
-         predictor_final = str_remove(predictor_final, ":NA"))
-
-# now remove predictor and modulator
-data_predictor_effect <- select(data_predictor_effect,
-                                -predictor, -modulator)
-```
-
-What is the direction of the predictor effect for each subset of the data by the distribution, habitat, diet, and storey?
-
-```{r}
-# first pivot the data longer
-data_predictor_long <- data_predictor_effect %>% 
-  pivot_longer(cols = c("diet", "distribution", "habitat", "storey"), 
-               names_to = "trait")
-
-
-# is the coeff positive? how many positive per scale per predictor per axis of split?
-data_predictor_long <- mutate(data_predictor_long, 
-                                direction = coefficient > 0) %>% 
-  count(scale, predictor_final, 
-        trait, value, direction) %>% 
-  mutate(mag = n * (if_else(direction, 1, -1)))
-
-# wrangle data to get nice bars
-data_predictor_long <- data_predictor_long %>% 
-  select(-n) %>% 
-  mutate(direction = ifelse(direction, "positive", "negative")) %>% 
-  pivot_wider(values_from = "mag", names_from = "direction") %>% 
-  mutate_at(vars(positive, negative),
-            ~if_else(is.na(.),0, .))
-
-# nest the data by trait
-data_predictor_long <- data_predictor_long %>% nest(data = -trait)
+  nest(-scientific_name)
 ```
 
 ```{r}
-# visualise the data by mapping over the nested list
-data_predictor_long <- mutate(data_predictor_long,
-                                figs = map2(data, trait, function(df, tr){
-                                  ggplot(df)+
-                                    geom_hline(yintercept = 0,
-                                               lty = 2, lwd = 0.2,
-                                               col = "grey")+
-                                    geom_col(aes(x = factor(predictor_final),
-                                                 y = positive,
-                                                 group = value,
-                                                 fill = interaction(value, positive > 0)),
-                                             position = position_dodge2(preserve = "single"))+
-                                    geom_col(aes(x = factor(predictor_final),
-                                                 y = negative,
-                                                 group = value,
-                                                 fill = interaction(value, negative > 0)),
-                                             position = position_dodge2(preserve = "single"))+
-                                    scico::scale_fill_scico_d(palette = "hawaii",
-                                                              begin = 0.2, end = 0.8,
-                                                              direction = 1)+
-                                    
-                                    scale_x_discrete(guide = guide_axis(n.dodge = 2),
-                                                     label = 1:length(unique(df$predictor_final)))+
-                                    
-                                    theme_test(base_size = 6)+
-                                    theme(legend.position = "none")+
-                                    facet_grid(scale~value, labeller = label_both)+
-                                    labs(x = "predictor", y = "species",
-                                         title = glue('species split by {tr}'),
-                                         caption = "the X axis text overlaps, consider numbers - pg")
-                                }))
-
-fig_predictor_effect <- patchwork::wrap_plots(data_predictor_long$figs,
-                                              nrow = 2)
-# save plot
-ggsave(fig_predictor_effect, filename = "figs/fig_predictor_effect.png",
-       dpi = 300)
+fig_occupancy <- map2(data$data, data$scientific_name,
+                      function(df, name) {
+  ggplot(df)+
+  geom_line(aes(seq_x, mean,
+                col = predictor))+
+  facet_grid(~ scale,
+             labeller = label_both) +
+  coord_cartesian(xlim = c(0, 1),
+                  ylim = c(0, 1))+
+                          theme_grey(base_size = 6)+
+                          theme(legend.position = "top")+
+                          scale_colour_manual(values = pals::kovesi.rainbow(8))+
+                          labs(x = "scaled predictor value",
+                               y = "p(occupancy)",
+                               title = name)
+})
 ```
 
-```{r show_reverse_bar, eval=TRUE}
-knitr::include_graphics("figs/fig_predictor_effect.png")
+```{r}
+cairo_pdf(filename = "figs/fig_occupancy_predictors.pdf",
+          onefile = TRUE, width = 6, height = 4)
+fig_occupancy
+dev.off()
 ```

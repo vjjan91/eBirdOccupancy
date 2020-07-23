@@ -1,0 +1,94 @@
+scientific_name,common_name,cutoff_prop_of_grid_3_per_chk,count
+Acridotheres fuscus,Jungle Myna,0.878787879,39356
+Acridotheres tristis,Common Myna,0.975,159936
+Acrocephalus dumetorum,Blyth's Reed Warbler,0.972222222,41917
+Aegithina tiphia,Common Iora,0.823529412,27607
+Alcippe poioicephala,Brown-cheeked Fulvetta,0.633333333,3204
+Artamus fuscus,Ashy Woodswallow,0.575757576,16710
+Cecropis daurica,Red-rumped Swallow,0.588235294,21302
+Centropus sinensis,Greater Coucal,1,89551
+Chalcophaps indica,Asian Emerald Dove,0.9,4772
+Chloropsis aurifrons,Golden-fronted Leafbird,0.818181818,11541
+Chloropsis jerdoni,Jerdon's Leafbird,0.6875,6333
+Chrysocolaptes guttacristatus,Greater Flameback,0.878787879,7193
+Cinnyris asiaticus,Purple Sunbird,0.973684211,50266
+Cinnyris lotenius,Loten's Sunbird,0.696969697,20391
+Columba livia,Rock Pigeon,0.789473684,117223
+Copsychus fulicatus,Indian Robin,0.516129032,28481
+Copsychus saularis,Oriental Magpie-Robin,1,79432
+Corvus macrorhynchos,Large-billed Crow,1,132190
+Corvus splendens,House Crow,1,183926
+Culicicapa ceylonensis,Gray-headed Canary-Flycatcher,0.518518519,2510
+Cyornis tickelliae,Tickell's Blue Flycatcher,0.7,10786
+Cypsiurus balasiensis,Asian Palm-Swift,0.666666667,38686
+Dendrocitta leucogastra,White-bellied Treepie,0.538461538,4374
+Dendrocitta vagabunda,Rufous Treepie,0.864864865,68284
+Dicaeum concolor,Nilgiri Flowerpecker,0.84375,11991
+Dicaeum erythrorhynchos,Pale-billed Flowerpecker,0.810810811,56294
+Dicrurus aeneus,Bronzed Drongo,0.735294118,15140
+Dicrurus leucophaeus,Ashy Drongo,0.848484848,20393
+Dicrurus macrocercus,Black Drongo,0.925,99929
+Dicrurus paradiseus,Greater Racket-tailed Drongo,0.848484848,37902
+Dinopium benghalense,Black-rumped Flameback,0.918918919,44572
+Eudynamys scolopaceus,Asian Koel,0.820512821,111818
+Ficedula nigrorufa,Black-and-orange Flycatcher,0.5,1454
+Geokichla citrina,Orange-headed Thrush,0.633333333,8869
+Gracula indica,Southern Hill Myna,0.875,12683
+Halcyon smyrnensis,White-throated Kingfisher,1,105745
+Hierococcyx varius,Common Hawk-Cuckoo,0.787878788,19611
+Hirundo rustica,Barn Swallow,0.552631579,41392
+Hypothymis azurea,Black-naped Monarch,0.516129032,6488
+Hypsipetes ganeesa,Square-tailed Bulbul,0.538461538,3404
+Iole indica,Yellow-browed Bulbul,0.870967742,14582
+Irena puella,Asian Fairy-bluebird,0.806451613,6404
+Lanius cristatus,Brown Shrike,0.647058824,16134
+Lanius schach,Long-tailed Shrike,0.551724138,10864
+Leptocoma minima,Crimson-backed Sunbird,0.866666667,8566
+Leptocoma zeylonica,Purple-rumped Sunbird,1,95108
+Loriculus vernalis,Vernal Hanging-Parrot,0.9375,20495
+Merops leschenaulti,Chestnut-headed Bee-eater,0.888888889,9366
+Merops orientalis,Green Bee-eater,0.771428571,54837
+Montecincla fairbanki,Palani Laughingthrush,0.545454545,1615
+Motacilla cinerea,Gray Wagtail,0.852941176,16132
+Motacilla maderaspatensis,White-browed Wagtail,0.852941176,34542
+Muscicapa dauurica,Asian Brown Flycatcher,0.774193548,7305
+Myophonus horsfieldii,Malabar Whistling-Thrush,0.9,13091
+Ocyceros griseus,Malabar Gray Hornbill,0.620689655,10173
+Oriolus kundoo,Indian Golden Oriole,0.864864865,30094
+Oriolus xanthornus,Black-hooded Oriole,0.794117647,29065
+Orthotomus sutorius,Common Tailorbird,1,93059
+Parus cinereus,Cinereous Tit,0.709677419,16408
+Passer domesticus,House Sparrow,0.685714286,31090
+Pavo cristatus,Indian Peafowl,0.833333333,39850
+Pellorneum ruficeps,Puff-throated Babbler,0.7,8012
+Pericrocotus cinnamomeus,Small Minivet,0.741935484,10013
+Pericrocotus flammeus,Orange Minivet,1,13584
+Phylloscopus nitidus,Green Warbler,0.566666667,9022
+Phylloscopus trochiloides,Greenish Warbler,0.90625,15205
+Picus xanthopygaeus,Streak-throated Woodpecker,0.5,2567
+Pomatorhinus horsfieldii,Indian Scimitar-Babbler,0.827586207,8389
+Prinia hodgsonii,Gray-breasted Prinia,0.741935484,9125
+Prinia socialis,Ashy Prinia,0.588235294,57083
+Psilopogon haemacephalus,Coppersmith Barbet,0.833333333,35140
+Psilopogon malabaricus,Malabar Barbet,0.5,6984
+Psilopogon viridis,White-cheeked Barbet,1,108124
+Psilopogon zeylanicus,Brown-headed Barbet,0.6,3017
+Psittacula columboides,Malabar Parakeet,0.90625,11078
+Psittacula cyanocephala,Plum-headed Parakeet,0.818181818,15999
+Psittacula krameri,Rose-ringed Parakeet,0.769230769,97708
+Pycnonotus cafer,Red-vented Bulbul,1,82644
+Pycnonotus jocosus,Red-whiskered Bulbul,0.972222222,96981
+Pycnonotus luteolus,White-browed Bulbul,0.617647059,27519
+Rubigula gularis,Flame-throated Bulbul,0.518518519,5716
+Saxicola caprata,Pied Bushchat,0.838709677,33819
+Sitta frontalis,Velvet-fronted Nuthatch,0.896551724,5428
+Streptopelia chinensis,Spotted Dove,1,79290
+Terpsiphone paradisi,Indian Paradise-Flycatcher,0.742857143,20375
+Treron affinis,Gray-fronted Green-Pigeon,0.516129032,4371
+Turdoides affinis,Yellow-billed Babbler,0.810810811,59367
+Turdoides striata,Jungle Babbler,0.914285714,30544
+Turdoides subrufa,Rufous Babbler,0.5,5776
+Turdus simillimus,Indian Blackbird,0.678571429,3968
+Upupa epops,Eurasian Hoopoe,0.666666667,10378
+Yungipicus nanus,Brown-capped Woodpecker,0.633333333,4026
+Zosterops palpebrosus,Indian White-eye,0.821428571,17472

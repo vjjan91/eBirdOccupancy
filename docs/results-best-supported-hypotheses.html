@@ -24,7 +24,7 @@
 <meta name="author" content="Vijay Ramesh, Pratik R Gupte, and Morgan Tingley" />
 
 
-<meta name="date" content="2020-06-09" />
+<meta name="date" content="2020-07-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -187,8 +187,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html"><i class="fa fa-check"></i><b>6</b> Occupancy modelling</a><ul>
 <li class="chapter" data-level="6.1" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#load-necessary-libraries"><i class="fa fa-check"></i><b>6.1</b> Load necessary libraries</a></li>
 <li class="chapter" data-level="6.2" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#load-dataframe-and-scale-covariates"><i class="fa fa-check"></i><b>6.2</b> Load dataframe and scale covariates</a></li>
-<li class="chapter" data-level="6.3" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#setting-up-observation-covariates-for-each-model-as-they-remain-consistent"><i class="fa fa-check"></i><b>6.3</b> Setting up observation covariates for each model as they remain consistent</a></li>
-<li class="chapter" data-level="6.4" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#get-the-aic-values-for-the-top-models"><i class="fa fa-check"></i><b>6.4</b> Get the AIC values for the top models</a></li>
+<li class="chapter" data-level="6.3" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#running-a-null-model"><i class="fa fa-check"></i><b>6.3</b> Running a null model</a></li>
+<li class="chapter" data-level="6.4" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#identifying-covariates-necessary-to-model-the-detection-process"><i class="fa fa-check"></i><b>6.4</b> Identifying covariates necessary to model the detection process</a></li>
+<li class="chapter" data-level="6.5" data-path="occupancy-modelling.html"><a href="occupancy-modelling.html#land-cover-and-climate"><i class="fa fa-check"></i><b>6.5</b> Land Cover and Climate</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="results-best-supported-hypotheses.html"><a href="results-best-supported-hypotheses.html"><i class="fa fa-check"></i><b>7</b> Results: Best supported hypotheses</a><ul>
 <li class="chapter" data-level="7.1" data-path="results-best-supported-hypotheses.html"><a href="results-best-supported-hypotheses.html#prepare-libraries-2"><i class="fa fa-check"></i><b>7.1</b> Prepare libraries</a></li>
@@ -206,70 +207,86 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="8" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html"><i class="fa fa-check"></i><b>8</b> Results: Occupancy predictors</a><ul>
 <li class="chapter" data-level="8.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#prepare-libraries-3"><i class="fa fa-check"></i><b>8.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="8.2" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#get-data-from-hypothesis-sheet"><i class="fa fa-check"></i><b>8.2</b> Get data from hypothesis sheet</a></li>
-<li class="chapter" data-level="8.3" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#read-model-estimates"><i class="fa fa-check"></i><b>8.3</b> Read model estimates</a></li>
-<li class="chapter" data-level="8.4" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#occupancy-predictors-aggregated-effect"><i class="fa fa-check"></i><b>8.4</b> Occupancy predictors’ aggregated effect</a></li>
+<li class="chapter" data-level="8.2" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#read-species-trait-data-and-the-final-list-of-species"><i class="fa fa-check"></i><b>8.2</b> Read species trait data and the final list of species</a></li>
+<li class="chapter" data-level="8.3" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#read-model-estimates"><i class="fa fa-check"></i><b>8.3</b> Read model estimates</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#export-data-to-file"><i class="fa fa-check"></i><b>8.3.1</b> Export data to file</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="supplementary-material.html"><a href="supplementary-material.html"><i class="fa fa-check"></i><b>9</b> Supplementary material</a><ul>
-<li class="chapter" data-level="9.1" data-path="supplementary-material.html"><a href="supplementary-material.html#distance-to-roads"><i class="fa fa-check"></i><b>9.1</b> Distance to roads</a><ul>
-<li class="chapter" data-level="9.1.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-4"><i class="fa fa-check"></i><b>9.1.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="9.1.2" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-data-for-processing"><i class="fa fa-check"></i><b>9.1.2</b> Prepare data for processing</a></li>
-<li class="chapter" data-level="9.1.3" data-path="supplementary-material.html"><a href="supplementary-material.html#species-specific-nearest-sites"><i class="fa fa-check"></i><b>9.1.3</b> Species specific nearest sites</a></li>
-<li class="chapter" data-level="9.1.4" data-path="supplementary-material.html"><a href="supplementary-material.html#explicit-spatial-filter"><i class="fa fa-check"></i><b>9.1.4</b> Explicit spatial filter</a></li>
-<li class="chapter" data-level="9.1.5" data-path="supplementary-material.html"><a href="supplementary-material.html#species-specific-filter"><i class="fa fa-check"></i><b>9.1.5</b> Species specific filter</a></li>
-<li class="chapter" data-level="9.1.6" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-histogram-distance-to-roads"><i class="fa fa-check"></i><b>9.1.6</b> Plot histogram: distance to roads</a></li>
-<li class="chapter" data-level="9.1.7" data-path="supplementary-material.html"><a href="supplementary-material.html#table-distance-to-roads"><i class="fa fa-check"></i><b>9.1.7</b> Table: Distance to roads</a></li>
-<li class="chapter" data-level="9.1.8" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-histogram-distance-to-nearest-site"><i class="fa fa-check"></i><b>9.1.8</b> Plot histogram: distance to nearest site</a></li>
-<li class="chapter" data-level="9.1.9" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-species-specific-histograms-distance-to-nearest-site"><i class="fa fa-check"></i><b>9.1.9</b> Plot species specific histograms: distance to nearest site</a></li>
-<li class="chapter" data-level="9.1.10" data-path="supplementary-material.html"><a href="supplementary-material.html#table-species-specific-nearest-site"><i class="fa fa-check"></i><b>9.1.10</b> Table: Species specific nearest site</a></li>
-<li class="chapter" data-level="9.1.11" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-map-points-on-roads"><i class="fa fa-check"></i><b>9.1.11</b> Plot map: points on roads</a></li>
+<li class="chapter" data-level="8.4" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#occupancy-predictors-aggregated-effect"><i class="fa fa-check"></i><b>8.4</b> Occupancy predictors’ aggregated effect</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#add-trait-data-and-clean"><i class="fa fa-check"></i><b>8.4.1</b> Add trait data and clean</a></li>
+<li class="chapter" data-level="8.4.2" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#get-predictor-effects"><i class="fa fa-check"></i><b>8.4.2</b> Get predictor effects</a></li>
+<li class="chapter" data-level="8.4.3" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#make-figures-for-predictor-effects"><i class="fa fa-check"></i><b>8.4.3</b> Make figures for predictor effects</a></li>
 </ul></li>
-<li class="chapter" data-level="9.2" data-path="supplementary-material.html"><a href="supplementary-material.html#species-observation-distributions"><i class="fa fa-check"></i><b>9.2</b> Species observation distributions</a><ul>
-<li class="chapter" data-level="9.2.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-5"><i class="fa fa-check"></i><b>9.2.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="9.2.2" data-path="supplementary-material.html"><a href="supplementary-material.html#read-species-of-interest"><i class="fa fa-check"></i><b>9.2.2</b> Read species of interest</a></li>
-<li class="chapter" data-level="9.2.3" data-path="supplementary-material.html"><a href="supplementary-material.html#load-raw-data-for-locations"><i class="fa fa-check"></i><b>9.2.3</b> Load raw data for locations</a></li>
-<li class="chapter" data-level="9.2.4" data-path="supplementary-material.html"><a href="supplementary-material.html#get-proportional-obs-counts-in-20km-cells"><i class="fa fa-check"></i><b>9.2.4</b> Get proportional obs counts in 20km cells</a></li>
-<li class="chapter" data-level="9.2.5" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-maps"><i class="fa fa-check"></i><b>9.2.5</b> Plot maps</a></li>
+<li class="chapter" data-level="8.5" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#land-cover-or-climate"><i class="fa fa-check"></i><b>8.5</b> Land cover or climate?</a><ul>
+<li class="chapter" data-level="8.5.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#get-the-effect-of-landcover-or-climate"><i class="fa fa-check"></i><b>8.5.1</b> Get the effect of landcover or climate</a></li>
+<li class="chapter" data-level="8.5.2" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#plot-a-figure"><i class="fa fa-check"></i><b>8.5.2</b> Plot a figure</a></li>
 </ul></li>
-<li class="chapter" data-level="9.3" data-path="supplementary-material.html"><a href="supplementary-material.html#climate-in-relation-to-elevation"><i class="fa fa-check"></i><b>9.3</b> Climate in relation to elevation</a><ul>
-<li class="chapter" data-level="9.3.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-6"><i class="fa fa-check"></i><b>9.3.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="9.3.2" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-climatic-variables-over-elevation"><i class="fa fa-check"></i><b>9.3.2</b> Plot climatic variables over elevation</a></li>
 </ul></li>
-<li class="chapter" data-level="9.4" data-path="supplementary-material.html"><a href="supplementary-material.html#landcover-in-relation-to-elevation"><i class="fa fa-check"></i><b>9.4</b> Landcover in relation to elevation</a><ul>
-<li class="chapter" data-level="9.4.1" data-path="supplementary-material.html"><a href="supplementary-material.html#get-data-from-landscape-rasters"><i class="fa fa-check"></i><b>9.4.1</b> Get data from landscape rasters</a></li>
-<li class="chapter" data-level="9.4.2" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-proportional-landcover-in-elevation"><i class="fa fa-check"></i><b>9.4.2</b> Plot proportional landcover in elevation</a></li>
+<li class="chapter" data-level="9" data-path="results-occupancy-predictors-1.html"><a href="results-occupancy-predictors-1.html"><i class="fa fa-check"></i><b>9</b> Results: Occupancy predictors</a><ul>
+<li class="chapter" data-level="9.1" data-path="results-occupancy-predictors-1.html"><a href="results-occupancy-predictors-1.html#prepare-libraries-4"><i class="fa fa-check"></i><b>9.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="9.2" data-path="results-occupancy-predictors-1.html"><a href="results-occupancy-predictors-1.html#read-data"><i class="fa fa-check"></i><b>9.2</b> Read data</a></li>
 </ul></li>
-<li class="chapter" data-level="9.5" data-path="supplementary-material.html"><a href="supplementary-material.html#climate-in-relation-to-landcover"><i class="fa fa-check"></i><b>9.5</b> Climate in relation to landcover</a><ul>
-<li class="chapter" data-level="9.5.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-7"><i class="fa fa-check"></i><b>9.5.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="9.5.2" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-climatic-variables-over-landcover"><i class="fa fa-check"></i><b>9.5.2</b> Plot climatic variables over landcover</a></li>
+<li class="chapter" data-level="10" data-path="supplementary-material.html"><a href="supplementary-material.html"><i class="fa fa-check"></i><b>10</b> Supplementary material</a><ul>
+<li class="chapter" data-level="10.1" data-path="supplementary-material.html"><a href="supplementary-material.html#distance-to-roads"><i class="fa fa-check"></i><b>10.1</b> Distance to roads</a><ul>
+<li class="chapter" data-level="10.1.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-5"><i class="fa fa-check"></i><b>10.1.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="10.1.2" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-data-for-processing"><i class="fa fa-check"></i><b>10.1.2</b> Prepare data for processing</a></li>
+<li class="chapter" data-level="10.1.3" data-path="supplementary-material.html"><a href="supplementary-material.html#species-specific-nearest-sites"><i class="fa fa-check"></i><b>10.1.3</b> Species specific nearest sites</a></li>
+<li class="chapter" data-level="10.1.4" data-path="supplementary-material.html"><a href="supplementary-material.html#explicit-spatial-filter"><i class="fa fa-check"></i><b>10.1.4</b> Explicit spatial filter</a></li>
+<li class="chapter" data-level="10.1.5" data-path="supplementary-material.html"><a href="supplementary-material.html#species-specific-filter"><i class="fa fa-check"></i><b>10.1.5</b> Species specific filter</a></li>
+<li class="chapter" data-level="10.1.6" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-histogram-distance-to-roads"><i class="fa fa-check"></i><b>10.1.6</b> Plot histogram: distance to roads</a></li>
+<li class="chapter" data-level="10.1.7" data-path="supplementary-material.html"><a href="supplementary-material.html#table-distance-to-roads"><i class="fa fa-check"></i><b>10.1.7</b> Table: Distance to roads</a></li>
+<li class="chapter" data-level="10.1.8" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-histogram-distance-to-nearest-site"><i class="fa fa-check"></i><b>10.1.8</b> Plot histogram: distance to nearest site</a></li>
+<li class="chapter" data-level="10.1.9" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-species-specific-histograms-distance-to-nearest-site"><i class="fa fa-check"></i><b>10.1.9</b> Plot species specific histograms: distance to nearest site</a></li>
+<li class="chapter" data-level="10.1.10" data-path="supplementary-material.html"><a href="supplementary-material.html#table-species-specific-nearest-site"><i class="fa fa-check"></i><b>10.1.10</b> Table: Species specific nearest site</a></li>
+<li class="chapter" data-level="10.1.11" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-map-points-on-roads"><i class="fa fa-check"></i><b>10.1.11</b> Plot map: points on roads</a></li>
 </ul></li>
-<li class="chapter" data-level="9.6" data-path="supplementary-material.html"><a href="supplementary-material.html#obsever-expertise-in-time-and-space"><i class="fa fa-check"></i><b>9.6</b> Obsever expertise in time and space</a><ul>
-<li class="chapter" data-level="9.6.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-8"><i class="fa fa-check"></i><b>9.6.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="9.6.2" data-path="supplementary-material.html"><a href="supplementary-material.html#species-seen-in-relation-to-osberver-expertise"><i class="fa fa-check"></i><b>9.6.2</b> Species seen in relation to osberver expertise</a></li>
-<li class="chapter" data-level="9.6.3" data-path="supplementary-material.html"><a href="supplementary-material.html#expertise-in-relation-to-landcover"><i class="fa fa-check"></i><b>9.6.3</b> Expertise in relation to landcover</a></li>
+<li class="chapter" data-level="10.2" data-path="supplementary-material.html"><a href="supplementary-material.html#species-observation-distributions"><i class="fa fa-check"></i><b>10.2</b> Species observation distributions</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-6"><i class="fa fa-check"></i><b>10.2.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="10.2.2" data-path="supplementary-material.html"><a href="supplementary-material.html#read-species-of-interest"><i class="fa fa-check"></i><b>10.2.2</b> Read species of interest</a></li>
+<li class="chapter" data-level="10.2.3" data-path="supplementary-material.html"><a href="supplementary-material.html#load-raw-data-for-locations"><i class="fa fa-check"></i><b>10.2.3</b> Load raw data for locations</a></li>
+<li class="chapter" data-level="10.2.4" data-path="supplementary-material.html"><a href="supplementary-material.html#get-proportional-obs-counts-in-25km-cells"><i class="fa fa-check"></i><b>10.2.4</b> Get proportional obs counts in 25km cells</a></li>
+<li class="chapter" data-level="10.2.5" data-path="supplementary-material.html"><a href="supplementary-material.html#which-species-are-reported-sufficiently-in-checklists"><i class="fa fa-check"></i><b>10.2.5</b> Which species are reported sufficiently in checklists?</a></li>
+<li class="chapter" data-level="10.2.6" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-maps"><i class="fa fa-check"></i><b>10.2.6</b> Plot maps</a></li>
+<li class="chapter" data-level="10.2.7" data-path="supplementary-material.html"><a href="supplementary-material.html#write-the-new-list-of-species"><i class="fa fa-check"></i><b>10.2.7</b> Write the new list of species</a></li>
 </ul></li>
-<li class="chapter" data-level="9.7" data-path="supplementary-material.html"><a href="supplementary-material.html#spatial-autocorrelation-in-climatic-predictors"><i class="fa fa-check"></i><b>9.7</b> Spatial autocorrelation in climatic predictors</a><ul>
-<li class="chapter" data-level="9.7.1" data-path="supplementary-material.html"><a href="supplementary-material.html#load-libs-and-prep-data"><i class="fa fa-check"></i><b>9.7.1</b> Load libs and prep data</a></li>
-<li class="chapter" data-level="9.7.2" data-path="supplementary-material.html"><a href="supplementary-material.html#calculate-variograms"><i class="fa fa-check"></i><b>9.7.2</b> Calculate variograms</a></li>
-<li class="chapter" data-level="9.7.3" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-chelsa-data-and-variograms"><i class="fa fa-check"></i><b>9.7.3</b> Plot CHELSA data and variograms</a></li>
+<li class="chapter" data-level="10.3" data-path="supplementary-material.html"><a href="supplementary-material.html#climate-in-relation-to-elevation"><i class="fa fa-check"></i><b>10.3</b> Climate in relation to elevation</a><ul>
+<li class="chapter" data-level="10.3.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-7"><i class="fa fa-check"></i><b>10.3.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="10.3.2" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-climatic-variables-over-elevation"><i class="fa fa-check"></i><b>10.3.2</b> Plot climatic variables over elevation</a></li>
 </ul></li>
-<li class="chapter" data-level="9.8" data-path="supplementary-material.html"><a href="supplementary-material.html#climatic-raster-resampling"><i class="fa fa-check"></i><b>9.8</b> Climatic raster resampling</a><ul>
-<li class="chapter" data-level="9.8.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-landcover-1"><i class="fa fa-check"></i><b>9.8.1</b> Prepare landcover</a></li>
-<li class="chapter" data-level="9.8.2" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-spatial-extent-1"><i class="fa fa-check"></i><b>9.8.2</b> Prepare spatial extent</a></li>
-<li class="chapter" data-level="9.8.3" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-chelsa-rasters-1"><i class="fa fa-check"></i><b>9.8.3</b> Prepare CHELSA rasters</a></li>
-<li class="chapter" data-level="9.8.4" data-path="supplementary-material.html"><a href="supplementary-material.html#resample-prepared-rasters"><i class="fa fa-check"></i><b>9.8.4</b> Resample prepared rasters</a></li>
+<li class="chapter" data-level="10.4" data-path="supplementary-material.html"><a href="supplementary-material.html#landcover-in-relation-to-elevation"><i class="fa fa-check"></i><b>10.4</b> Landcover in relation to elevation</a><ul>
+<li class="chapter" data-level="10.4.1" data-path="supplementary-material.html"><a href="supplementary-material.html#get-data-from-landscape-rasters"><i class="fa fa-check"></i><b>10.4.1</b> Get data from landscape rasters</a></li>
+<li class="chapter" data-level="10.4.2" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-proportional-landcover-in-elevation"><i class="fa fa-check"></i><b>10.4.2</b> Plot proportional landcover in elevation</a></li>
 </ul></li>
-<li class="chapter" data-level="9.9" data-path="supplementary-material.html"><a href="supplementary-material.html#matching-effort-with-spatial-independence"><i class="fa fa-check"></i><b>9.9</b> Matching effort with spatial independence</a><ul>
-<li class="chapter" data-level="9.9.1" data-path="supplementary-material.html"><a href="supplementary-material.html#load-librarires"><i class="fa fa-check"></i><b>9.9.1</b> Load librarires</a></li>
-<li class="chapter" data-level="9.9.2" data-path="supplementary-material.html"><a href="supplementary-material.html#load-data"><i class="fa fa-check"></i><b>9.9.2</b> Load data</a></li>
-<li class="chapter" data-level="9.9.3" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-distance-exclusion-effect"><i class="fa fa-check"></i><b>9.9.3</b> Plot distance exclusion effect</a></li>
+<li class="chapter" data-level="10.5" data-path="supplementary-material.html"><a href="supplementary-material.html#climate-in-relation-to-landcover"><i class="fa fa-check"></i><b>10.5</b> Climate in relation to landcover</a><ul>
+<li class="chapter" data-level="10.5.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-8"><i class="fa fa-check"></i><b>10.5.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="10.5.2" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-climatic-variables-over-landcover"><i class="fa fa-check"></i><b>10.5.2</b> Plot climatic variables over landcover</a></li>
 </ul></li>
-<li class="chapter" data-level="9.10" data-path="supplementary-material.html"><a href="supplementary-material.html#spatial-thinning-a-comparison-of-approaches"><i class="fa fa-check"></i><b>9.10</b> Spatial thinning: A comparison of approaches</a><ul>
-<li class="chapter" data-level="9.10.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-9"><i class="fa fa-check"></i><b>9.10.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="9.10.2" data-path="supplementary-material.html"><a href="supplementary-material.html#traditional-grid-based-thinning"><i class="fa fa-check"></i><b>9.10.2</b> Traditional grid-based thinning</a></li>
-<li class="chapter" data-level="9.10.3" data-path="supplementary-material.html"><a href="supplementary-material.html#network-based-thinning"><i class="fa fa-check"></i><b>9.10.3</b> Network-based thinning</a></li>
-<li class="chapter" data-level="9.10.4" data-path="supplementary-material.html"><a href="supplementary-material.html#measuring-method-fallibility"><i class="fa fa-check"></i><b>9.10.4</b> Measuring method fallibility</a></li>
-<li class="chapter" data-level="9.10.5" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-metrics-for-different-methods"><i class="fa fa-check"></i><b>9.10.5</b> Plot metrics for different methods</a></li>
+<li class="chapter" data-level="10.6" data-path="supplementary-material.html"><a href="supplementary-material.html#obsever-expertise-in-time-and-space"><i class="fa fa-check"></i><b>10.6</b> Obsever expertise in time and space</a><ul>
+<li class="chapter" data-level="10.6.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-9"><i class="fa fa-check"></i><b>10.6.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="10.6.2" data-path="supplementary-material.html"><a href="supplementary-material.html#species-seen-in-relation-to-osberver-expertise"><i class="fa fa-check"></i><b>10.6.2</b> Species seen in relation to osberver expertise</a></li>
+<li class="chapter" data-level="10.6.3" data-path="supplementary-material.html"><a href="supplementary-material.html#expertise-in-relation-to-landcover"><i class="fa fa-check"></i><b>10.6.3</b> Expertise in relation to landcover</a></li>
+</ul></li>
+<li class="chapter" data-level="10.7" data-path="supplementary-material.html"><a href="supplementary-material.html#spatial-autocorrelation-in-climatic-predictors"><i class="fa fa-check"></i><b>10.7</b> Spatial autocorrelation in climatic predictors</a><ul>
+<li class="chapter" data-level="10.7.1" data-path="supplementary-material.html"><a href="supplementary-material.html#load-libs-and-prep-data"><i class="fa fa-check"></i><b>10.7.1</b> Load libs and prep data</a></li>
+<li class="chapter" data-level="10.7.2" data-path="supplementary-material.html"><a href="supplementary-material.html#calculate-variograms"><i class="fa fa-check"></i><b>10.7.2</b> Calculate variograms</a></li>
+<li class="chapter" data-level="10.7.3" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-chelsa-data-and-variograms"><i class="fa fa-check"></i><b>10.7.3</b> Plot CHELSA data and variograms</a></li>
+</ul></li>
+<li class="chapter" data-level="10.8" data-path="supplementary-material.html"><a href="supplementary-material.html#climatic-raster-resampling"><i class="fa fa-check"></i><b>10.8</b> Climatic raster resampling</a><ul>
+<li class="chapter" data-level="10.8.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-landcover-1"><i class="fa fa-check"></i><b>10.8.1</b> Prepare landcover</a></li>
+<li class="chapter" data-level="10.8.2" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-spatial-extent-1"><i class="fa fa-check"></i><b>10.8.2</b> Prepare spatial extent</a></li>
+<li class="chapter" data-level="10.8.3" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-chelsa-rasters-1"><i class="fa fa-check"></i><b>10.8.3</b> Prepare CHELSA rasters</a></li>
+<li class="chapter" data-level="10.8.4" data-path="supplementary-material.html"><a href="supplementary-material.html#resample-prepared-rasters"><i class="fa fa-check"></i><b>10.8.4</b> Resample prepared rasters</a></li>
+</ul></li>
+<li class="chapter" data-level="10.9" data-path="supplementary-material.html"><a href="supplementary-material.html#matching-effort-with-spatial-independence"><i class="fa fa-check"></i><b>10.9</b> Matching effort with spatial independence</a><ul>
+<li class="chapter" data-level="10.9.1" data-path="supplementary-material.html"><a href="supplementary-material.html#load-librarires"><i class="fa fa-check"></i><b>10.9.1</b> Load librarires</a></li>
+<li class="chapter" data-level="10.9.2" data-path="supplementary-material.html"><a href="supplementary-material.html#load-data"><i class="fa fa-check"></i><b>10.9.2</b> Load data</a></li>
+<li class="chapter" data-level="10.9.3" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-distance-exclusion-effect"><i class="fa fa-check"></i><b>10.9.3</b> Plot distance exclusion effect</a></li>
+</ul></li>
+<li class="chapter" data-level="10.10" data-path="supplementary-material.html"><a href="supplementary-material.html#spatial-thinning-a-comparison-of-approaches"><i class="fa fa-check"></i><b>10.10</b> Spatial thinning: A comparison of approaches</a><ul>
+<li class="chapter" data-level="10.10.1" data-path="supplementary-material.html"><a href="supplementary-material.html#prepare-libraries-10"><i class="fa fa-check"></i><b>10.10.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="10.10.2" data-path="supplementary-material.html"><a href="supplementary-material.html#traditional-grid-based-thinning"><i class="fa fa-check"></i><b>10.10.2</b> Traditional grid-based thinning</a></li>
+<li class="chapter" data-level="10.10.3" data-path="supplementary-material.html"><a href="supplementary-material.html#network-based-thinning"><i class="fa fa-check"></i><b>10.10.3</b> Network-based thinning</a></li>
+<li class="chapter" data-level="10.10.4" data-path="supplementary-material.html"><a href="supplementary-material.html#measuring-method-fallibility"><i class="fa fa-check"></i><b>10.10.4</b> Measuring method fallibility</a></li>
+<li class="chapter" data-level="10.10.5" data-path="supplementary-material.html"><a href="supplementary-material.html#plot-metrics-for-different-methods"><i class="fa fa-check"></i><b>10.10.5</b> Plot metrics for different methods</a></li>
 </ul></li>
 </ul></li>
 </ul>

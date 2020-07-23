@@ -129,6 +129,7 @@ data_pred <- count(data_predictor_elev, scale, synthesis_var) %>%
   mutate(synthesis_var = as_factor(synthesis_var),
          plot_letter = letters[as.numeric(synthesis_var)])
 ```
+
 ## Main text Figure 3
 
 ```{r plot_fig_3, eval=FALSE}

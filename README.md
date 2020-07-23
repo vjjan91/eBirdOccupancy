@@ -6,7 +6,7 @@ This repository is the source for a project on the influence of land cover and c
 
 A human-readable version of this code is available in bookdown format by clicking on the heading.
 
-Methods and format are derived from [Strimas-Mackey et al.](http://strimas.com/ebird-best-practices/), the supplement to [Johnston et al. (2019)](https://www.biorxiv.org/content/10.1101/574392v1).
+Methods and format are derived from [Strimas-Mackey et al.](https://cornelllabofornithology.github.io/ebird-best-practices/), the supplement to [Johnston et al. (2019)](https://www.biorxiv.org/content/10.1101/574392v1).
 
 ## Attribution
 
