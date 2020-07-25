@@ -23,6 +23,10 @@ library(stringr)
 source("code/fun_model_estimate_collection.r")
 source("code/fun_make_resp_data.r")
 
+# nice tables
+library(knitr)
+library(kableExtra)
+
 # plotting
 library(ggplot2)
 library(patchwork)
@@ -101,6 +105,21 @@ model_data <- model_data %>%
 
 ### Export data to file
 
+Export predictor effects.
+
+```{r}
+# get predictor effect data
+data_predictor_effect <- distinct(model_data, 
+                                  scientific_name, scale, 
+                                  predictor, coefficient)
+
+# write to file
+write_csv(data_predictor_effect,
+          path = "data/results/data_predictor_effect.csv")
+```
+
+Export model data.
+
 ```{r}
 model_data_to_file <- model_data %>% 
   select(predictor, data,
@@ -117,15 +136,13 @@ write_csv(model_data_to_file,
 
 ## Occupancy predictors' aggregated effect
 
+```{r}
+# read from file
+model_data <- read_csv("data/results/data_predictor_effect.csv")
+```
+
 Plot the number of species affected and the direction of the effect, for each predictor.
 Split the data along the axes of range size, migratory status, and habitat.
-
-```{r mirror_bar_plot, eval=FALSE}
-# select the data
-data_predictor_effect <- distinct(model_data, 
-                                  scientific_name, scale, 
-                                  predictor, coefficient)
-```
 
 ### Add trait data and clean
 
@@ -180,10 +197,23 @@ data_predictor_long <- data_predictor_long %>%
                names_to = "effect",
                values_to = "magnitude")
 
+# write
+write_csv(data_predictor_long,
+          path = "data/results/data_predictor_long.csv")
+
 # nest the data by trait
 data_predictor_long <- data_predictor_long %>% 
   nest(data = -trait)
 ```
+
+### Manual edits to levels
+
+```{r}
+# arrange data predictor long elevation in order of values
+data_predictor_long$data[[1]]$value <- as.factor(data_predictor_long$data[[1]]$value)
+levels(data_predictor_long$data[[1]]$value) <- c("Low", "Mid", "High")
+```
+
 
 ### Make figures for predictor effects
 
@@ -229,6 +259,40 @@ ggsave(fig_predictor_effect, filename = "figs/fig_predictor_effect.png",
 ```{r show_reverse_bar, eval=TRUE}
 knitr::include_graphics("figs/fig_predictor_effect.png")
 ```
+
+### Tabulate predictor effect
+
+```{r eval=TRUE, results="asis"}
+# read again and nest
+data_predictor_long <- readr::read_csv("data/results/data_predictor_long.csv")
+
+# nest the data by trait
+data_predictor_long <- tidyr::nest(data_predictor_long,
+                                   data = -trait)
+
+# first pivot the data columns
+purrr::pwalk(data_predictor_long, function(trait, data) {
+  predictors <- unique(data$predictor)
+  headers <- c(1, 1, rep(2, length(predictors)))
+  names(headers) <- c(rep(" ", 2), predictors)
+  
+  data %>% 
+    tidyr::drop_na() %>% 
+    tidyr::pivot_wider(names_from = c("predictor", "effect"), 
+                values_from = "magnitude") %>% 
+    
+    
+    `colnames<-`(c("spatial scale", glue::glue("{trait} class"),
+                 rep(c("+ve", "-ve"), length(predictors)))) %>% 
+    knitr::kable(caption = glue::glue("Predictor effects for {trait}")) %>% 
+    kableExtra::kable_styling("striped", full_width = F,
+                              font_size = 8) %>% 
+    kableExtra::add_header_above(headers) %>% 
+    print()
+  cat("\n")
+})
+```
+
 
 ## Land cover or climate?
 
