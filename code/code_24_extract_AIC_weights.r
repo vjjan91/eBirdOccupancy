@@ -20,48 +20,15 @@ library(ggplot2)
 library(patchwork)
 source('code/fun_plot_interaction.r')
 
+# list of species
+species <- read.csv("C:\\Users\\vr235\\Desktop\\Occupancy Runs\\output\\finalizing-list-spp\\05_list-spp-spThin-min50-excl-waterBirds.csv")
+list_of_species <- as.character(species$scientific_name)
 
-## ----get_data_from_sheets------------------------------------------------------------------
-# read in the excel sheet containing information on the best supported hypothesis
-sheet_names <- readxl::excel_sheets("data/results/all_hypoComparisons_allScales.xlsx")
-which_sheet <- which(str_detect(sheet_names, "Best"))
+# read model_imp
+file_read <- "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\output\\occu-10km\\occuCovs\\modelImp\\lc-clim-imp.xlsx"
 
-hypothesis_data <- readxl::read_excel("data/results/all_hypoComparisons_allScales.xlsx",
-                                      sheet = sheet_names[which_sheet])
-
-# Subsetting the data needed to call in each species' model coefficient information
-hypothesis_data <- select(hypothesis_data,
-                          Scientific_name, Common_name,
-                          contains("Best supported hypothesis"))
-
-# pivot longer
-hypothesis_data <- pivot_longer(hypothesis_data,
-                                cols = contains("Best"),
-                                names_to = "scale", values_to = "hypothesis")
-# fix scale to numeric
-hypothesis_data <- mutate(hypothesis_data,
-                          scale = if_else(str_detect(scale, "10"), "10km", "2.5km"))
-
-# list the supported hypotheses
-# first separate the hypotheses into two columns
-hypothesis_data <- separate(hypothesis_data, col = hypothesis, sep = "; ", 
-                            into = c("hypothesis_01", "hypothesis_02"),
-                            fill = "right") %>% 
-  # then get the data into long format
-  pivot_longer(cols = c("hypothesis_01","hypothesis_02"),
-               values_to = "hypothesis") %>% 
-  # remove NA where there is only one hypothesis
-  drop_na() %>% 
-  # remove the name column
-  select(-name)
-
-# correct the name landCover to lc
-hypothesis_data <- mutate(hypothesis_data,
-                          hypothesis = replace(hypothesis,
-                                               hypothesis %in% c("landCover", "climate",
-                                                                 "elevation"), 
-                                               c("lc","clim","elev")))
-
+model_imp <-  map2(file_read, list_of_species, function(fr, sn){
+  readxl::read_excel(fr, sheet = sn)})
 
 ## ----read_model_importance-----------------------------------------------------------------
 # which file to read model importance from
@@ -70,8 +37,7 @@ hypothesis_data <- mutate(hypothesis_data,
 
 # read in data as list column
 model_data <- mutate(hypothesis_data,
-                     model_imp = map2(file_read, Scientific_name, function(fr, sn){
-                       readxl::read_excel(fr, sheet = sn)
+                     
                      }))
 
 # rename model data components and separate predictors
@@ -85,40 +51,24 @@ model_data <- mutate(model_data,
   return(df)
 }))
 
-# remove filename
-model_data <- select(model_data, -file_read) %>% 
-  unnest(model_imp) 
-
-
-
-## ----get_aic_data--------------------------------------------------------------------------
-# nest model data
-model_data <- model_data %>% 
-  group_by(scale) %>%
-  nest() %>% 
-  ungroup()
-
+# get aic data
 # pass function over the data to get cumulative aic weight
-model_data <- model_data %>% 
-  mutate(aic_data = map(data, function(df){
-    group_by(df, predictor, modulator) %>% 
+aic_data<- map(model_imp, function(df){
+    group_by(df, predictor) %>% 
       summarise(cumulative_AIC_weight = sum(as.numeric(AICweight))) %>%
       ungroup() %>% 
       
       # remove .y from predictor names
       mutate_if(is.character, .funs = function(x){
         str_remove(x, pattern = ".y")
-        }) %>%
-      mutate(predictor_final = glue::glue('{predictor}:{modulator}'))
-  }))
+        })})
 
-# unnest the data
-model_data %<>% unnest(cols = "aic_data")
-
+## Need to create final figures, but getting an error
+  
 fig_cum_AIC <- 
-  ggplot(model_data, 
-         aes(x = predictor_final, y = cumulative_AIC_weight, 
-             colour=predictor_final)) +   geom_point(size=3)+
+  ggplot(aic_data, 
+         aes(x = predictor, y = cumulative_AIC_weight, 
+             colour=predictor)) +   geom_point(size=3)+
   facet_wrap(~scale, scales = "free") + 
   theme_bw()+labs(x = "Predictor", colour = "Predictor")+
   theme(legend.position = "none") +
