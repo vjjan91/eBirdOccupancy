@@ -1,6 +1,8 @@
 #' Separate model interaction terms.
 #'
-#' @param model_estimate_df A dataframe of model estimates, where interaction terms are represented as x1:x2.
+#' @param model_estimate_df A dataframe of model estimates, 
+#' where interaction terms are represented as x1:x2. Data must have the columns
+#' predictor, and modulator.
 #'
 #' @return A data frame of model estimates, with the interaction terms separated.
 #' @export

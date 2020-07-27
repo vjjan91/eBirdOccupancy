@@ -2,6 +2,8 @@ book_filename: "ebird_nilgiris_2019"
 output: 
   html_document: 
     fig_caption: yes
+  pdf_document:
+    keep_tex: yes
 delete_merged_file: true
 before_chapter_script: "common.r"
 output_dir: "docs"
