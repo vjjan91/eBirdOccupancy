@@ -45,7 +45,7 @@ buffer <- st_buffer(hills, 3e4) %>%
 
 ```{r terrain_raster, eval=FALSE, message=FALSE, warning=FALSE}
 # load elevation and crop to hills size, then mask by hills
-alt <- raster("data/spatial/Elevation/alt")
+alt <- raster("data/spatial/elevation/alt")
 alt.hills <- crop(alt, as(buffer, "Spatial"))
 rm(alt); gc()
 
@@ -70,6 +70,8 @@ chelsaData <- purrr::map(chelsaFiles, function(chr){
   a <- crop(a, as(buffer, "Spatial"))
   return(a)
 })
+
+chelsaData[[1]] <- chelsaData[[1]]/10
 
 # stack chelsa data
 chelsaData <- raster::stack(chelsaData)
@@ -179,7 +181,7 @@ env_data_resamp <- projectRaster(from = env_data, to = lc_data, crs = crs(lc_dat
 land_stack <- stack(env_data_resamp, lc_data)
 
 # get names
-land_names <- glue('data_spatial/landscape_resamp{c("01")}km.tif')
+land_names <- glue('data/spatial/landscape_resamp{c("01")}km.tif')
 
 # write to file
 writeRaster(land_stack, filename = as.character(land_names), overwrite=TRUE)
