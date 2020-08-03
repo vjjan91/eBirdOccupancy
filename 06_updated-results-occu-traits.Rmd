@@ -44,6 +44,92 @@ list_of_species <- as.character(species$scientific_name)
 species_trait <- read_csv("data/data_species_traits.csv")
 ```
 
+## Show AIC weights
+
+### Read in weight data
+
+```{r}
+# which files to read
+file_names <- c("data/results/occu-2.5km/occuCovs/modelImp/lc-clim-imp.xlsx",
+                "data/results/occu-10km/occuCovs/modelImp/lc-clim-imp.xlsx")
+
+# read in sheets by species
+model_imp <- map(file_names, function(f) {
+  md_list <- map(list_of_species, function(sn) {
+    
+    # some sheets are not found
+    
+    tryCatch({
+      
+      readxl::read_excel(f, sheet = sn) %>% 
+        `colnames<-`(c("predictor", "AIC_weight")) %>% 
+        filter(str_detect(predictor, "psi")) %>% 
+        mutate(predictor = stringr::str_extract(predictor, 
+                                pattern = stringr::regex("\\((.*?)\\)")),
+               predictor = stringr::str_replace_all(predictor, "[//(//)]", ""),
+               predictor = stringr::str_remove(predictor, "\\.y"))
+      
+      },
+      error = function(e) {
+        message(as.character(e))
+      }
+    )
+  })
+  names(md_list) <- list_of_species
+  
+  return(md_list)
+})
+```
+
+Sheets for one laughingthrush _Montecincla fairbankii_ and one barbet _Psilopogon viridis_ are not found at both scales.
+
+### Show cumulative weights as plot
+
+```{r}
+# assign scale
+names(model_imp) <- c("2.5km", "10km")
+model_imp <- imap(model_imp, function(.x, .y) {
+  .x <- bind_rows(.x)
+  .x$scale <- .y
+  return(.x)
+})
+
+# bind rows
+model_imp <- map(model_imp, bind_rows) %>% 
+  bind_rows()
+
+# convert to numeric
+model_imp$AIC_weight <- as.numeric(model_imp$AIC_weight)
+model_imp$scale <- as.factor(model_imp$scale)
+levels(model_imp$scale) <- c("2.5km", "10km")
+
+# summ by scale and predictor
+model_imp <- group_by(model_imp, predictor, scale) %>% 
+  summarise(AIC_weight_cumulative = sum(AIC_weight))
+```
+
+### Make plot
+
+```{r}
+ggplot(model_imp)+
+  geom_point(aes(predictor, AIC_weight_cumulative,
+               col = scale),
+             size = 3,
+           position = position_dodge(width = 0.5))+
+  geom_col(aes(predictor, AIC_weight_cumulative,
+               fill = scale),
+           colour = NA,
+           width = 0.1,
+           alpha = 0.5,
+           position = position_dodge(width = 0.5))+
+  theme_minimal()+
+  theme(legend.position = "top")
+
+ggsave("figs/fig_aic_weight.png", dpi = 300)
+```
+
+![Cumulative AIC weights.](figs/fig_aic_weight.png)
+
 ## Read model estimates
 
 ```{r read_model_estimates, eval=FALSE}
