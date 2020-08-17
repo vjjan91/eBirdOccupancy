@@ -41,7 +41,7 @@ species <- read_csv("data/species_list.csv")
 list_of_species <- as.character(species$scientific_name)
 
 # trait data
-species_trait <- read_csv("data/data_species_traits.csv")
+species_trait <- read_csv("data/data_species_trait.csv")
 ```
 
 ## Show AIC weights
@@ -267,7 +267,9 @@ model_data <- left_join(model_data, elev_summary)
 
 model_data <- rename(model_data,
                      median_elev = median)
+```
 
+```{r elev_of_area}
 # what is the median elevation of the study area?
 elev <- raster::stack("data/spatial/landscape_resamp01km.tif")[[1]]
 
@@ -298,29 +300,96 @@ model_data$diff_elev <- model_data$median_elev - med_elev
 model_data <- drop_na(model_data)
 ```
 
-### Exploratory plot
+### Species body mass
+
+Already included in the data.
+
+### Species range size
+
+This data is added from the State of India's Birds report.
 
 ```{r}
+soib <- read_csv("data/2020_state-india-birds-trait-dat - Information.csv")
+soib <- select(soib,
+               scientific_name = `Scientific Name (India Checklist)`,
+               range_size = `Distribution Range Size (units of 10,000 sq. km.)`)
+
+# join with model data
+model_data <- left_join(model_data, soib,
+                        by = "scientific_name")
+```
+
+### Prepare divisions by trait for plotting
+
+```{r}
+model_data <- select(model_data,
+                     scientific_name, predictor, coefficient,
+                     scale, 
+                     range_size = range_size.y,
+                     diff_elev,
+                     body_mass)
+
+model_data_long <- pivot_longer(model_data,
+                           cols = c("range_size", "diff_elev", "body_mass"),
+                           names_to = "trait",
+                           values_to = "trait_value")
+
+# no peacock!
+model_data_long <- filter(model_data_long,
+                          scientific_name != "Pavo cristatus")
+```
+
+
+### Effect of traits as continuous variables
+
+```{r}
+ggplot(model_data_long)+
+  geom_hline(yintercept = 0, size = 0.2)+
+  geom_vline(xintercept = 0,
+             size = 0.1)+
+  geom_point(aes(trait_value, coefficient,
+                 col = predictor),
+             size = 0.5, shape = 4)+
+  geom_smooth(aes(trait_value, coefficient,
+                  col = predictor),
+              method = "glm", 
+              se = F, size = 0.5)+
+  scale_x_continuous(labels = scales::comma)+
+  scale_colour_manual(values = pals::kovesi.rainbow(8))+
+  facet_grid(scale ~ trait, scales = "free_x",
+             labeller = label_both)+
+  ylim(-5, 5)+
+  # coord_cartesian(xlim = c(-500, 1000),
+                  # ylim = c(-5, 5))+
+  theme_test()
+
+# export
+ggsave("figs/fig_trait_coeff.png", dpi = 300)
+```
+
+### Effect of body mass
+
+```{r}
+model_data <- drop_na(model_data, predictor)
 ggplot(model_data)+
   geom_hline(yintercept = 0, size = 0.2,
              col = "red")+
   geom_vline(xintercept = 0, col = "green",
              size = 0.1)+
-  geom_point(aes(diff_elev, coefficient),
+  geom_point(aes(body_mass, coefficient),
              size = 0.5, shape = 4)+
-  geom_smooth(aes(diff_elev, coefficient),
+  geom_smooth(aes(body_mass, coefficient),
               method = "glm", 
               se = F, size = 0.5)+
-  scale_x_continuous(labels = scales::comma)+
+  scale_x_log10(labels = scales::comma)+
   facet_grid(predictor ~ scale, scales = "fixed")+
   ylim(-5, 5)+
-  coord_cartesian(xlim = c(-500, 1000),
+  coord_cartesian(#xlim = c(-500, 1000),
                   ylim = c(-5, 5))+
   theme_test()
 
-# export
-ggsave("figs/fig_elev_diff_coeff.png", dpi = 300)
 ```
+
 
 ---
 
