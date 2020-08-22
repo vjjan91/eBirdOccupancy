@@ -367,30 +367,6 @@ ggplot(model_data_long)+
 ggsave("figs/fig_trait_coeff.png", dpi = 300)
 ```
 
-### Effect of body mass
-
-```{r}
-model_data <- drop_na(model_data, predictor)
-ggplot(model_data)+
-  geom_hline(yintercept = 0, size = 0.2,
-             col = "red")+
-  geom_vline(xintercept = 0, col = "green",
-             size = 0.1)+
-  geom_point(aes(body_mass, coefficient),
-             size = 0.5, shape = 4)+
-  geom_smooth(aes(body_mass, coefficient),
-              method = "glm", 
-              se = F, size = 0.5)+
-  scale_x_log10(labels = scales::comma)+
-  facet_grid(predictor ~ scale, scales = "fixed")+
-  ylim(-5, 5)+
-  coord_cartesian(#xlim = c(-500, 1000),
-                  ylim = c(-5, 5))+
-  theme_test()
-
-```
-
-
 ---
 
 ## Occupancy predictors' aggregated effect
@@ -407,26 +383,26 @@ Split the data along the axes of range size, migratory status, and habitat.
 
 ```{r}
 # add trait by joining
-data_predictor_effect <- data_predictor_effect %>% 
+model_data <- model_data %>% 
   left_join(species_trait, by = "scientific_name")
 ```
 
 
 ```{r}
 # remove .y from predictors
-data_predictor_effect <- data_predictor_effect %>%
+model_data <- model_data %>%
   mutate_at(.vars = c("predictor"), .funs = function(x){
     stringr::str_remove(x, ".y")
   })
 ```
 
-What is the direction of the predictor effect for each subset of the data by the distribution, habitat, and migratory status?
+What is the direction of the predictor effect for each subset of the data by the distribution, habitat, elevation, and migratory status?
 
 ### Get predictor effects
 
 ```{r}
 # first pivot the data longer
-data_predictor_long <- data_predictor_effect %>% 
+data_predictor_long <- model_data %>% 
   pivot_longer(cols = c("range_size", "migratory_status", 
                         "habitat", "elev"), 
                names_to = "trait",
@@ -555,7 +531,7 @@ purrr::pwalk(data_predictor_long, function(trait, data) {
     
     
     `colnames<-`(c("spatial scale", glue::glue("{trait} class"),
-                 rep(c("+ve", "-ve"), length(predictors)))) %>% 
+                 rep(c("-ve", "+ve"), length(predictors)))) %>% 
     knitr::kable(caption = glue::glue("Predictor effects for {trait}")) %>% 
     kableExtra::kable_styling("striped", full_width = F,
                               font_size = 8) %>% 
@@ -582,9 +558,12 @@ data_predictor_long <- data_predictor_long %>%
 data_lc_v_clim <- data_predictor_long %>% 
   mutate(predictor = if_else(str_detect(predictor, "bio"), 
                              "climate", "landcover")) %>% 
-  group_by(trait, scale, predictor, value, effect) %>%
+  group_by(trait, scale, predictor, Class, effect) %>%
   summarise_at(.vars = c("magnitude"),
                .funs = list(sum))
+
+# save for later use
+write_csv(data_lc_v_clim, path = "data/data_lc_v_clim.csv")
 ```
 
 ```{r}
@@ -601,19 +580,34 @@ data_lc_v_clim <- nest(data_lc_v_clim,
 data_lc_v_clim$figs <- pmap(data_lc_v_clim[,c("trait", "cols")],
                            function(trait, cols) {
                              ggplot(cols) +
-                               geom_col(aes(predictor, magnitude,
-                                            fill = effect),
-                                        width = 0.4) +
+                               
+                               geom_hline(yintercept = 0,
+                                          lwd = 0.2,
+                                          col = "grey")+
+                               geom_col(aes(x = factor(predictor),
+                                            y = magnitude,
+                                            group = interaction(effect, scale)),
+                                        # position = position_dodge(width = 1),
+                                        width = 0.01)+
+                               
+                               geom_point(aes(x = factor(predictor),
+                                              y = magnitude,
+                                              fill = interaction(effect, scale)),
+                                          # position = position_dodge(width = 1),
+                                          size = 3,
+                                          shape = 21)+
                                
                                scico::scale_fill_scico_d(palette = "berlin",
                                                       direction = -1,
                                                       begin = 0.1, end = 0.9)+
-                               theme_grey(base_family = "TT Arial") +
+                               theme_test(base_family = "TT Arial") +
                                theme(legend.position = "none") +
                                
-                               facet_grid(value ~ scale,
+                               facet_grid(Class ~ scale,
                                           labeller = label_both) +
-                               labs(title = glue::glue('trait: {trait}'))
+                               labs(title = glue::glue('trait: {trait}'),
+                                    x = NULL,
+                                    y = "# species with signed effect")
                            })
 fig_lc_v_clim <- patchwork::wrap_plots(data_lc_v_clim$figs,
                                        nrow = 2)
@@ -627,63 +621,35 @@ ggsave(fig_lc_v_clim, filename = "figs/fig_lc_v_clim.png",
 knitr::include_graphics("figs/fig_lc_v_clim.png")
 ```
 
-## Elevation summary THIS NEEDS TO BE REMOVED
+### Tabulate landcover vs climate
 
-Plot elevation summaries faceted by scale and predictors.
-Read species elevation summaries.
+```{r eval=TRUE, results="asis"}
+# read again and nest
+data_lc_v_clim <- read_csv("data/data_lc_v_clim.csv")
 
-```{r}
-# add elevation data
-elev_summary <- read_excel("data/data_species_elevation.xlsx")
+# nest again
+data_lc_v_clim <- nest(data_lc_v_clim,
+                       data = -trait)
 
-# link to species
-elev_summary <- elev_summary %>% 
-  left_join(data_predictor_effect)
-
-# arrange in plot order
-elev_summary <- elev_summary %>% 
-  group_by(scale, scientific_name) %>% 
-  arrange(median) %>% 
-  mutate(plot_order = seq_len(n()))
-
-# remove NAs and order scale
-elev_summary <- select(elev_summary,
-                       -`Body mass`) %>% 
-  drop_na() %>% 
-  mutate(scale = fct_relevel(scale,
-                             "2.5km", "10km"))
-
-# rename median
-elev_summary <- rename(elev_summary,
-                       median_elev = median)
-
-# order
-elev_summary <- elev_summary %>% 
-  ungroup() %>% 
-  arrange(-median_elev) %>% 
-  group_by(scientific_name)
+# first pivot the data columns
+purrr::pwalk(data_lc_v_clim, function(trait, data) {
+  predictors <- unique(data$predictor)
+  headers <- c(1, 1, rep(2, length(predictors)))
+  names(headers) <- c(rep(" ", 2), predictors)
+  
+  data %>% 
+    tidyr::drop_na() %>% 
+    tidyr::pivot_wider(names_from = c("predictor", "effect"), 
+                values_from = "magnitude") %>% 
+    
+    
+    `colnames<-`(c("spatial scale", glue::glue("{trait} class"),
+                 rep(c("-ve", "+ve"), length(predictors)))) %>% 
+    knitr::kable(caption = glue::glue("Predictor effects for {trait}")) %>% 
+    kableExtra::kable_styling("striped", full_width = F,
+                              font_size = 8) %>% 
+    kableExtra::add_header_above(headers) %>% 
+    print()
+  cat("\n")
+})
 ```
-
-```{r}
-# plot elevation pointranges
-ggplot(elev_summary)+
-  geom_errorbar(aes(plot_order, 
-                    ymin = q1, ymax = q3),
-                size = 0.3, width = 0.4)+
-  geom_point(aes(plot_order, median_elev),
-             shape = 21, col = "grey20")+
-  facet_grid(scale ~ predictor, 
-             scales = "fixed",
-             labeller = label_both,
-             as.table = FALSE)+
-  theme_test()+
-  theme(legend.position = "none",
-        legend.key = element_rect(colour = "white",
-                                  size = 0.3),
-        # axis.text.y = element_blank(),
-        axis.ticks.y = element_blank())#+
-  # coord_flip()+
-  # labs(x = "Species",
-       # colour = "synthesis_var")
-```
-

@@ -3,7 +3,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Results: Occupancy predictors
+# Results: Occupancy predictors by species
 
 ## Prepare libraries
 
@@ -64,3 +64,10 @@ cairo_pdf(filename = "figs/fig_occupancy_predictors.pdf",
 fig_occupancy
 dev.off()
 ```
+
+### Show an example here
+
+```{r}
+
+```
+
