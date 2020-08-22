@@ -617,7 +617,7 @@ ggsave(fig_lc_v_clim, filename = "figs/fig_lc_v_clim.png",
        dpi = 300)
 ```
 
-```{r}
+```{r eval=TRUE}
 knitr::include_graphics("figs/fig_lc_v_clim.png")
 ```
 
