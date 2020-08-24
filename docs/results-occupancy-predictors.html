@@ -24,7 +24,7 @@
 <meta name="author" content="Vijay Ramesh, Pratik R Gupte, and Morgan Tingley" />
 
 
-<meta name="date" content="2020-07-25" />
+<meta name="date" content="2020-08-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="occupancy-modelling.html"/>
-<link rel="next" href="results-occupancy-predictors-1.html"/>
+<link rel="next" href="results-occupancy-predictors-by-species.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -194,25 +194,39 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html"><i class="fa fa-check"></i><b>7</b> Results: Occupancy predictors</a><ul>
 <li class="chapter" data-level="7.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#prepare-libraries-2"><i class="fa fa-check"></i><b>7.1</b> Prepare libraries</a></li>
 <li class="chapter" data-level="7.2" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#read-species-trait-data-and-the-final-list-of-species"><i class="fa fa-check"></i><b>7.2</b> Read species trait data and the final list of species</a></li>
-<li class="chapter" data-level="7.3" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#read-model-estimates"><i class="fa fa-check"></i><b>7.3</b> Read model estimates</a><ul>
-<li class="chapter" data-level="7.3.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#export-data-to-file"><i class="fa fa-check"></i><b>7.3.1</b> Export data to file</a></li>
+<li class="chapter" data-level="7.3" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#show-aic-weights"><i class="fa fa-check"></i><b>7.3</b> Show AIC weights</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#read-in-weight-data"><i class="fa fa-check"></i><b>7.3.1</b> Read in weight data</a></li>
+<li class="chapter" data-level="7.3.2" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#show-cumulative-weights-as-plot"><i class="fa fa-check"></i><b>7.3.2</b> Show cumulative weights as plot</a></li>
+<li class="chapter" data-level="7.3.3" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#make-plot"><i class="fa fa-check"></i><b>7.3.3</b> Make plot</a></li>
 </ul></li>
-<li class="chapter" data-level="7.4" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#occupancy-predictors-aggregated-effect"><i class="fa fa-check"></i><b>7.4</b> Occupancy predictors’ aggregated effect</a><ul>
-<li class="chapter" data-level="7.4.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#add-trait-data-and-clean"><i class="fa fa-check"></i><b>7.4.1</b> Add trait data and clean</a></li>
-<li class="chapter" data-level="7.4.2" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#get-predictor-effects"><i class="fa fa-check"></i><b>7.4.2</b> Get predictor effects</a></li>
-<li class="chapter" data-level="7.4.3" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#manual-edits-to-levels"><i class="fa fa-check"></i><b>7.4.3</b> Manual edits to levels</a></li>
-<li class="chapter" data-level="7.4.4" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#make-figures-for-predictor-effects"><i class="fa fa-check"></i><b>7.4.4</b> Make figures for predictor effects</a></li>
-<li class="chapter" data-level="7.4.5" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#tabulate-predictor-effect"><i class="fa fa-check"></i><b>7.4.5</b> Tabulate predictor effect</a></li>
+<li class="chapter" data-level="7.4" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#read-model-estimates"><i class="fa fa-check"></i><b>7.4</b> Read model estimates</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#export-data-to-file"><i class="fa fa-check"></i><b>7.4.1</b> Export data to file</a></li>
 </ul></li>
-<li class="chapter" data-level="7.5" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#land-cover-or-climate"><i class="fa fa-check"></i><b>7.5</b> Land cover or climate?</a><ul>
-<li class="chapter" data-level="7.5.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#get-the-effect-of-landcover-or-climate"><i class="fa fa-check"></i><b>7.5.1</b> Get the effect of landcover or climate</a></li>
-<li class="chapter" data-level="7.5.2" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#plot-a-figure"><i class="fa fa-check"></i><b>7.5.2</b> Plot a figure</a></li>
+<li class="chapter" data-level="7.5" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#occupancy-coefficients-in-relation-with-species-elevation"><i class="fa fa-check"></i><b>7.5</b> Occupancy coefficients in relation with species elevation</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#species-offset-from-median-elevation"><i class="fa fa-check"></i><b>7.5.1</b> Species offset from median elevation</a></li>
+<li class="chapter" data-level="7.5.2" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#species-body-mass"><i class="fa fa-check"></i><b>7.5.2</b> Species body mass</a></li>
+<li class="chapter" data-level="7.5.3" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#species-range-size"><i class="fa fa-check"></i><b>7.5.3</b> Species range size</a></li>
+<li class="chapter" data-level="7.5.4" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#prepare-divisions-by-trait-for-plotting"><i class="fa fa-check"></i><b>7.5.4</b> Prepare divisions by trait for plotting</a></li>
+<li class="chapter" data-level="7.5.5" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#effect-of-traits-as-continuous-variables"><i class="fa fa-check"></i><b>7.5.5</b> Effect of traits as continuous variables</a></li>
 </ul></li>
-<li class="chapter" data-level="7.6" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#elevation-summary-this-needs-to-be-removed"><i class="fa fa-check"></i><b>7.6</b> Elevation summary THIS NEEDS TO BE REMOVED</a></li>
+<li class="chapter" data-level="7.6" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#occupancy-predictors-aggregated-effect"><i class="fa fa-check"></i><b>7.6</b> Occupancy predictors’ aggregated effect</a><ul>
+<li class="chapter" data-level="7.6.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#add-trait-data-and-clean"><i class="fa fa-check"></i><b>7.6.1</b> Add trait data and clean</a></li>
+<li class="chapter" data-level="7.6.2" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#get-predictor-effects"><i class="fa fa-check"></i><b>7.6.2</b> Get predictor effects</a></li>
+<li class="chapter" data-level="7.6.3" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#manual-edits-to-levels"><i class="fa fa-check"></i><b>7.6.3</b> Manual edits to levels</a></li>
+<li class="chapter" data-level="7.6.4" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#make-figures-for-predictor-effects"><i class="fa fa-check"></i><b>7.6.4</b> Make figures for predictor effects</a></li>
+<li class="chapter" data-level="7.6.5" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#tabulate-predictor-effect"><i class="fa fa-check"></i><b>7.6.5</b> Tabulate predictor effect</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="results-occupancy-predictors-1.html"><a href="results-occupancy-predictors-1.html"><i class="fa fa-check"></i><b>8</b> Results: Occupancy predictors</a><ul>
-<li class="chapter" data-level="8.1" data-path="results-occupancy-predictors-1.html"><a href="results-occupancy-predictors-1.html#prepare-libraries-3"><i class="fa fa-check"></i><b>8.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="8.2" data-path="results-occupancy-predictors-1.html"><a href="results-occupancy-predictors-1.html#read-data"><i class="fa fa-check"></i><b>8.2</b> Read data</a></li>
+<li class="chapter" data-level="7.7" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#land-cover-or-climate"><i class="fa fa-check"></i><b>7.7</b> Land cover or climate?</a><ul>
+<li class="chapter" data-level="7.7.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#get-the-effect-of-landcover-or-climate"><i class="fa fa-check"></i><b>7.7.1</b> Get the effect of landcover or climate</a></li>
+<li class="chapter" data-level="7.7.2" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#plot-a-figure"><i class="fa fa-check"></i><b>7.7.2</b> Plot a figure</a></li>
+<li class="chapter" data-level="7.7.3" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#tabulate-landcover-vs-climate"><i class="fa fa-check"></i><b>7.7.3</b> Tabulate landcover vs climate</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="results-occupancy-predictors-by-species.html"><a href="results-occupancy-predictors-by-species.html"><i class="fa fa-check"></i><b>8</b> Results: Occupancy predictors by species</a><ul>
+<li class="chapter" data-level="8.1" data-path="results-occupancy-predictors-by-species.html"><a href="results-occupancy-predictors-by-species.html#prepare-libraries-3"><i class="fa fa-check"></i><b>8.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="8.2" data-path="results-occupancy-predictors-by-species.html"><a href="results-occupancy-predictors-by-species.html#read-data"><i class="fa fa-check"></i><b>8.2</b> Read data</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="results-occupancy-predictors-by-species.html"><a href="results-occupancy-predictors-by-species.html#show-an-example-here"><i class="fa fa-check"></i><b>8.2.1</b> Show an example here</a></li>
+</ul></li>
 </ul></li>
 </ul>
 
@@ -266,228 +280,440 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb53-3" title="3">list_of_species &lt;-<span class="st"> </span><span class="kw">as.character</span>(species<span class="op">$</span>scientific_name)</a>
 <a class="sourceLine" id="cb53-4" title="4"></a>
 <a class="sourceLine" id="cb53-5" title="5"><span class="co"># trait data</span></a>
-<a class="sourceLine" id="cb53-6" title="6">species_trait &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/data_species_traits.csv&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb53-6" title="6">species_trait &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/data_species_trait.csv&quot;</span>)</a></code></pre></div>
+</div>
+<div id="show-aic-weights" class="section level2">
+<h2><span class="header-section-number">7.3</span> Show AIC weights</h2>
+<div id="read-in-weight-data" class="section level3">
+<h3><span class="header-section-number">7.3.1</span> Read in weight data</h3>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1"><span class="co"># which files to read</span></a>
+<a class="sourceLine" id="cb54-2" title="2">file_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;data/results/occu-2.5km/occuCovs/modelImp/lc-clim-imp.xlsx&quot;</span>,</a>
+<a class="sourceLine" id="cb54-3" title="3">                <span class="st">&quot;data/results/occu-10km/occuCovs/modelImp/lc-clim-imp.xlsx&quot;</span>)</a>
+<a class="sourceLine" id="cb54-4" title="4"></a>
+<a class="sourceLine" id="cb54-5" title="5"><span class="co"># read in sheets by species</span></a>
+<a class="sourceLine" id="cb54-6" title="6">model_imp &lt;-<span class="st"> </span><span class="kw">map</span>(file_names, <span class="cf">function</span>(f) {</a>
+<a class="sourceLine" id="cb54-7" title="7">  md_list &lt;-<span class="st"> </span><span class="kw">map</span>(list_of_species, <span class="cf">function</span>(sn) {</a>
+<a class="sourceLine" id="cb54-8" title="8">    </a>
+<a class="sourceLine" id="cb54-9" title="9">    <span class="co"># some sheets are not found</span></a>
+<a class="sourceLine" id="cb54-10" title="10">    </a>
+<a class="sourceLine" id="cb54-11" title="11">    <span class="kw">tryCatch</span>({</a>
+<a class="sourceLine" id="cb54-12" title="12">      </a>
+<a class="sourceLine" id="cb54-13" title="13">      readxl<span class="op">::</span><span class="kw">read_excel</span>(f, <span class="dt">sheet =</span> sn) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb54-14" title="14"><span class="st">        `</span><span class="dt">colnames&lt;-</span><span class="st">`</span>(<span class="kw">c</span>(<span class="st">&quot;predictor&quot;</span>, <span class="st">&quot;AIC_weight&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb54-15" title="15"><span class="st">        </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(predictor, <span class="st">&quot;psi&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb54-16" title="16"><span class="st">        </span><span class="kw">mutate</span>(<span class="dt">predictor =</span> stringr<span class="op">::</span><span class="kw">str_extract</span>(predictor, </a>
+<a class="sourceLine" id="cb54-17" title="17">                                <span class="dt">pattern =</span> stringr<span class="op">::</span><span class="kw">regex</span>(<span class="st">&quot;</span><span class="ch">\\</span><span class="st">((.*?)</span><span class="ch">\\</span><span class="st">)&quot;</span>)),</a>
+<a class="sourceLine" id="cb54-18" title="18">               <span class="dt">predictor =</span> stringr<span class="op">::</span><span class="kw">str_replace_all</span>(predictor, <span class="st">&quot;[//(//)]&quot;</span>, <span class="st">&quot;&quot;</span>),</a>
+<a class="sourceLine" id="cb54-19" title="19">               <span class="dt">predictor =</span> stringr<span class="op">::</span><span class="kw">str_remove</span>(predictor, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">.y&quot;</span>))</a>
+<a class="sourceLine" id="cb54-20" title="20">      </a>
+<a class="sourceLine" id="cb54-21" title="21">      },</a>
+<a class="sourceLine" id="cb54-22" title="22">      <span class="dt">error =</span> <span class="cf">function</span>(e) {</a>
+<a class="sourceLine" id="cb54-23" title="23">        <span class="kw">message</span>(<span class="kw">as.character</span>(e))</a>
+<a class="sourceLine" id="cb54-24" title="24">      }</a>
+<a class="sourceLine" id="cb54-25" title="25">    )</a>
+<a class="sourceLine" id="cb54-26" title="26">  })</a>
+<a class="sourceLine" id="cb54-27" title="27">  <span class="kw">names</span>(md_list) &lt;-<span class="st"> </span>list_of_species</a>
+<a class="sourceLine" id="cb54-28" title="28">  </a>
+<a class="sourceLine" id="cb54-29" title="29">  <span class="kw">return</span>(md_list)</a>
+<a class="sourceLine" id="cb54-30" title="30">})</a></code></pre></div>
+<p>Sheets for one laughingthrush <em>Montecincla fairbankii</em> and one barbet <em>Psilopogon viridis</em> are not found at both scales.</p>
+</div>
+<div id="show-cumulative-weights-as-plot" class="section level3">
+<h3><span class="header-section-number">7.3.2</span> Show cumulative weights as plot</h3>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" title="1"><span class="co"># assign scale</span></a>
+<a class="sourceLine" id="cb55-2" title="2"><span class="kw">names</span>(model_imp) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2.5km&quot;</span>, <span class="st">&quot;10km&quot;</span>)</a>
+<a class="sourceLine" id="cb55-3" title="3">model_imp &lt;-<span class="st"> </span><span class="kw">imap</span>(model_imp, <span class="cf">function</span>(.x, .y) {</a>
+<a class="sourceLine" id="cb55-4" title="4">  .x &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(.x)</a>
+<a class="sourceLine" id="cb55-5" title="5">  .x<span class="op">$</span>scale &lt;-<span class="st"> </span>.y</a>
+<a class="sourceLine" id="cb55-6" title="6">  <span class="kw">return</span>(.x)</a>
+<a class="sourceLine" id="cb55-7" title="7">})</a>
+<a class="sourceLine" id="cb55-8" title="8"></a>
+<a class="sourceLine" id="cb55-9" title="9"><span class="co"># bind rows</span></a>
+<a class="sourceLine" id="cb55-10" title="10">model_imp &lt;-<span class="st"> </span><span class="kw">map</span>(model_imp, bind_rows) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb55-11" title="11"><span class="st">  </span><span class="kw">bind_rows</span>()</a>
+<a class="sourceLine" id="cb55-12" title="12"></a>
+<a class="sourceLine" id="cb55-13" title="13"><span class="co"># convert to numeric</span></a>
+<a class="sourceLine" id="cb55-14" title="14">model_imp<span class="op">$</span>AIC_weight &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(model_imp<span class="op">$</span>AIC_weight)</a>
+<a class="sourceLine" id="cb55-15" title="15">model_imp<span class="op">$</span>scale &lt;-<span class="st"> </span><span class="kw">as.factor</span>(model_imp<span class="op">$</span>scale)</a>
+<a class="sourceLine" id="cb55-16" title="16"><span class="kw">levels</span>(model_imp<span class="op">$</span>scale) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2.5km&quot;</span>, <span class="st">&quot;10km&quot;</span>)</a>
+<a class="sourceLine" id="cb55-17" title="17"></a>
+<a class="sourceLine" id="cb55-18" title="18"><span class="co"># summ by scale and predictor</span></a>
+<a class="sourceLine" id="cb55-19" title="19">model_imp &lt;-<span class="st"> </span><span class="kw">group_by</span>(model_imp, predictor, scale) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb55-20" title="20"><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">AIC_weight_cumulative =</span> <span class="kw">sum</span>(AIC_weight))</a></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1">predictor_name &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Temp&quot;</span> =<span class="st"> &quot;Mean annual temp.&quot;</span>,</a>
+<a class="sourceLine" id="cb56-2" title="2">                    <span class="st">&quot;Ppt&quot;</span> =<span class="st"> &quot;Mean annual ppt.&quot;</span>,</a>
+<a class="sourceLine" id="cb56-3" title="3">                    <span class="st">&quot;LC 1&quot;</span> =<span class="st"> &quot;% agriculture&quot;</span>,</a>
+<a class="sourceLine" id="cb56-4" title="4">                    <span class="st">&quot;LC 2&quot;</span> =<span class="st"> &quot;% forests&quot;</span>,</a>
+<a class="sourceLine" id="cb56-5" title="5">                    <span class="st">&quot;LC 3&quot;</span> =<span class="st"> &quot;% plantations&quot;</span>,</a>
+<a class="sourceLine" id="cb56-6" title="6">                    <span class="st">&quot;LC 4&quot;</span> =<span class="st"> &quot;% settlements&quot;</span>,</a>
+<a class="sourceLine" id="cb56-7" title="7">                    <span class="st">&quot;LC 5&quot;</span> =<span class="st"> &quot;% tea&quot;</span>,</a>
+<a class="sourceLine" id="cb56-8" title="8">                    <span class="st">&quot;LC 6&quot;</span> =<span class="st"> &quot;% water bodies&quot;</span>)</a></code></pre></div>
+</div>
+<div id="make-plot" class="section level3">
+<h3><span class="header-section-number">7.3.3</span> Make plot</h3>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1"><span class="kw">ggplot</span>(model_imp)<span class="op">+</span></a>
+<a class="sourceLine" id="cb57-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(predictor, AIC_weight_cumulative,</a>
+<a class="sourceLine" id="cb57-3" title="3">               <span class="dt">fill =</span> scale),</a>
+<a class="sourceLine" id="cb57-4" title="4">             <span class="dt">size =</span> <span class="dv">3</span>,</a>
+<a class="sourceLine" id="cb57-5" title="5">           <span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dt">width =</span> <span class="fl">0.5</span>),</a>
+<a class="sourceLine" id="cb57-6" title="6">           <span class="dt">shape =</span> <span class="dv">21</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb57-7" title="7"><span class="st">  </span><span class="kw">geom_col</span>(<span class="kw">aes</span>(predictor, AIC_weight_cumulative,</a>
+<a class="sourceLine" id="cb57-8" title="8">               <span class="dt">fill =</span> scale),</a>
+<a class="sourceLine" id="cb57-9" title="9">           <span class="dt">colour =</span> <span class="ot">NA</span>,</a>
+<a class="sourceLine" id="cb57-10" title="10">           <span class="dt">width =</span> <span class="fl">0.05</span>,</a>
+<a class="sourceLine" id="cb57-11" title="11">           <span class="dt">alpha =</span> <span class="fl">0.5</span>,</a>
+<a class="sourceLine" id="cb57-12" title="12">           <span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dt">width =</span> <span class="fl">0.5</span>))<span class="op">+</span></a>
+<a class="sourceLine" id="cb57-13" title="13"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">45</span>, <span class="dv">75</span>, <span class="dv">10</span>))<span class="op">+</span></a>
+<a class="sourceLine" id="cb57-14" title="14"><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">labels =</span> <span class="kw">names</span>(predictor_name))<span class="op">+</span></a>
+<a class="sourceLine" id="cb57-15" title="15"><span class="st">  </span><span class="co"># scale_color_brewer(palette = &quot;RdBu&quot;, values = c(0.5, 1))+</span></a>
+<a class="sourceLine" id="cb57-16" title="16"><span class="st">  </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette =</span> <span class="st">&quot;BuPu&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb57-17" title="17"><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">45</span>, <span class="dv">75</span>))<span class="op">+</span></a>
+<a class="sourceLine" id="cb57-18" title="18"><span class="st">  </span><span class="kw">theme_test</span>(<span class="dt">base_size =</span> <span class="dv">10</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb57-19" title="19"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb57-20" title="20"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Predictor&quot;</span>,</a>
+<a class="sourceLine" id="cb57-21" title="21">       <span class="dt">y =</span> <span class="st">&quot;Cumulative AIC weight&quot;</span>)</a>
+<a class="sourceLine" id="cb57-22" title="22"></a>
+<a class="sourceLine" id="cb57-23" title="23"><span class="kw">ggsave</span>(<span class="st">&quot;figs/fig_aic_weight.png&quot;</span>, <span class="dt">dpi =</span> <span class="dv">300</span>,</a>
+<a class="sourceLine" id="cb57-24" title="24">       <span class="dt">width =</span> <span class="dv">4</span>, <span class="dt">height =</span> <span class="dv">4</span>)</a></code></pre></div>
+<div class="figure">
+<img src="figs/fig_aic_weight.png" alt="Cumulative AIC weights for each predictor, where Temp is the mean annual temperature, Ppt is the mean annual precipitation, and LC 1 – LC 6 are the proportions of agriculture, forest, plantation, settlement, tea, and water bodies, respectively.&quot;" />
+<p class="caption">Cumulative AIC weights for each predictor, where <em>Temp</em> is the mean annual temperature, <em>Ppt</em> is the mean annual precipitation, and LC 1 – LC 6 are the proportions of agriculture, forest, plantation, settlement, tea, and water bodies, respectively."</p>
+</div>
+</div>
 </div>
 <div id="read-model-estimates" class="section level2">
-<h2><span class="header-section-number">7.3</span> Read model estimates</h2>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1">file_read &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;data/results/occu-2.5km/occuCovs/modelEst/lc-clim-modelEst.xlsx&quot;</span>,</a>
-<a class="sourceLine" id="cb54-2" title="2">               <span class="st">&quot;data/results/occu-10km/occuCovs/modelEst/lc-clim-modelEst.xlsx&quot;</span>)</a>
-<a class="sourceLine" id="cb54-3" title="3"></a>
-<a class="sourceLine" id="cb54-4" title="4"><span class="co"># read data as list column</span></a>
-<a class="sourceLine" id="cb54-5" title="5">model_est &lt;-<span class="st"> </span><span class="kw">map</span>(file_read, <span class="cf">function</span>(fr) {</a>
-<a class="sourceLine" id="cb54-6" title="6">  md_list &lt;-<span class="st"> </span><span class="kw">map</span>(list_of_species, <span class="cf">function</span>(sn) {</a>
-<a class="sourceLine" id="cb54-7" title="7">    readxl<span class="op">::</span><span class="kw">read_excel</span>(fr, <span class="dt">sheet =</span> sn)</a>
-<a class="sourceLine" id="cb54-8" title="8">  })</a>
-<a class="sourceLine" id="cb54-9" title="9">  <span class="kw">names</span>(md_list) &lt;-<span class="st"> </span>list_of_species</a>
-<a class="sourceLine" id="cb54-10" title="10">  </a>
-<a class="sourceLine" id="cb54-11" title="11">  <span class="kw">return</span>(md_list)</a>
-<a class="sourceLine" id="cb54-12" title="12">})</a>
-<a class="sourceLine" id="cb54-13" title="13"></a>
-<a class="sourceLine" id="cb54-14" title="14"><span class="co"># prepare model data</span></a>
-<a class="sourceLine" id="cb54-15" title="15">scales =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2.5km&quot;</span>, <span class="st">&quot;10km&quot;</span>)</a>
-<a class="sourceLine" id="cb54-16" title="16">model_data &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="kw">crossing</span>(<span class="dt">scale =</span> scales, </a>
-<a class="sourceLine" id="cb54-17" title="17">                              <span class="dt">scientific_name =</span> list_of_species)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb54-18" title="18"><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(scale))</a>
-<a class="sourceLine" id="cb54-19" title="19"></a>
-<a class="sourceLine" id="cb54-20" title="20"><span class="co"># rename model data components and separate predictors</span></a>
-<a class="sourceLine" id="cb54-21" title="21">names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;predictor&quot;</span>, <span class="st">&quot;coefficient&quot;</span>, <span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci_lower&quot;</span>, </a>
-<a class="sourceLine" id="cb54-22" title="22">           <span class="st">&quot;ci_higher&quot;</span>, <span class="st">&quot;z_value&quot;</span>, <span class="st">&quot;p_value&quot;</span>)</a>
-<a class="sourceLine" id="cb54-23" title="23"></a>
-<a class="sourceLine" id="cb54-24" title="24"><span class="co"># get data for plotting:</span></a>
-<a class="sourceLine" id="cb54-25" title="25">model_est &lt;-<span class="st"> </span><span class="kw">map</span>(model_est, <span class="cf">function</span>(l) {</a>
-<a class="sourceLine" id="cb54-26" title="26">  <span class="kw">map</span>(l, <span class="cf">function</span>(df) {</a>
-<a class="sourceLine" id="cb54-27" title="27">    <span class="kw">colnames</span>(df) &lt;-<span class="st"> </span>names</a>
-<a class="sourceLine" id="cb54-28" title="28">    df &lt;-<span class="st"> </span><span class="kw">separate_interaction_terms</span>(df)</a>
-<a class="sourceLine" id="cb54-29" title="29">    df &lt;-<span class="st"> </span><span class="kw">make_response_data</span>(df) </a>
-<a class="sourceLine" id="cb54-30" title="30">    <span class="kw">return</span>(df)</a>
-<a class="sourceLine" id="cb54-31" title="31">  })</a>
-<a class="sourceLine" id="cb54-32" title="32">})</a>
-<a class="sourceLine" id="cb54-33" title="33"></a>
-<a class="sourceLine" id="cb54-34" title="34"><span class="co"># add names and scales</span></a>
-<a class="sourceLine" id="cb54-35" title="35">model_est &lt;-<span class="st"> </span><span class="kw">map</span>(model_est, <span class="cf">function</span>(l) {</a>
-<a class="sourceLine" id="cb54-36" title="36">  <span class="kw">imap</span>(l, <span class="cf">function</span>(.x, .y) {</a>
-<a class="sourceLine" id="cb54-37" title="37">    <span class="kw">mutate</span>(.x, <span class="dt">scientific_name =</span> .y)</a>
-<a class="sourceLine" id="cb54-38" title="38">  })</a>
-<a class="sourceLine" id="cb54-39" title="39">})</a>
-<a class="sourceLine" id="cb54-40" title="40"></a>
-<a class="sourceLine" id="cb54-41" title="41"><span class="co"># add names to model estimates</span></a>
-<a class="sourceLine" id="cb54-42" title="42"><span class="kw">names</span>(model_est) &lt;-<span class="st"> </span>scales</a>
-<a class="sourceLine" id="cb54-43" title="43">model_est &lt;-<span class="st"> </span><span class="kw">imap</span>(model_est, <span class="cf">function</span>(.x, .y) {</a>
-<a class="sourceLine" id="cb54-44" title="44">  <span class="kw">bind_rows</span>(.x) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb54-45" title="45"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">scale =</span> .y)</a>
-<a class="sourceLine" id="cb54-46" title="46">})</a>
-<a class="sourceLine" id="cb54-47" title="47"></a>
-<a class="sourceLine" id="cb54-48" title="48"><span class="co"># remove modulators</span></a>
-<a class="sourceLine" id="cb54-49" title="49">model_est &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(model_est) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb54-50" title="50"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">matches</span>(<span class="st">&quot;modulator&quot;</span>))</a>
-<a class="sourceLine" id="cb54-51" title="51"></a>
-<a class="sourceLine" id="cb54-52" title="52"><span class="co"># join data to species name</span></a>
-<a class="sourceLine" id="cb54-53" title="53">model_data &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb54-54" title="54"><span class="st">  </span><span class="kw">left_join</span>(model_est)</a></code></pre></div>
+<h2><span class="header-section-number">7.4</span> Read model estimates</h2>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1">file_read &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;data/results/occu-2.5km/occuCovs/modelEst/lc-clim-modelEst.xlsx&quot;</span>,</a>
+<a class="sourceLine" id="cb58-2" title="2">               <span class="st">&quot;data/results/occu-10km/occuCovs/modelEst/lc-clim-modelEst.xlsx&quot;</span>)</a>
+<a class="sourceLine" id="cb58-3" title="3"></a>
+<a class="sourceLine" id="cb58-4" title="4"><span class="co"># read data as list column</span></a>
+<a class="sourceLine" id="cb58-5" title="5">model_est &lt;-<span class="st"> </span><span class="kw">map</span>(file_read, <span class="cf">function</span>(fr) {</a>
+<a class="sourceLine" id="cb58-6" title="6">  md_list &lt;-<span class="st"> </span><span class="kw">map</span>(list_of_species, <span class="cf">function</span>(sn) {</a>
+<a class="sourceLine" id="cb58-7" title="7">    readxl<span class="op">::</span><span class="kw">read_excel</span>(fr, <span class="dt">sheet =</span> sn)</a>
+<a class="sourceLine" id="cb58-8" title="8">  })</a>
+<a class="sourceLine" id="cb58-9" title="9">  <span class="kw">names</span>(md_list) &lt;-<span class="st"> </span>list_of_species</a>
+<a class="sourceLine" id="cb58-10" title="10">  </a>
+<a class="sourceLine" id="cb58-11" title="11">  <span class="kw">return</span>(md_list)</a>
+<a class="sourceLine" id="cb58-12" title="12">})</a>
+<a class="sourceLine" id="cb58-13" title="13"></a>
+<a class="sourceLine" id="cb58-14" title="14"><span class="co"># prepare model data</span></a>
+<a class="sourceLine" id="cb58-15" title="15">scales =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2.5km&quot;</span>, <span class="st">&quot;10km&quot;</span>)</a>
+<a class="sourceLine" id="cb58-16" title="16">model_data &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="kw">crossing</span>(<span class="dt">scale =</span> scales, </a>
+<a class="sourceLine" id="cb58-17" title="17">                              <span class="dt">scientific_name =</span> list_of_species)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb58-18" title="18"><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(scale))</a>
+<a class="sourceLine" id="cb58-19" title="19"></a>
+<a class="sourceLine" id="cb58-20" title="20"><span class="co"># rename model data components and separate predictors</span></a>
+<a class="sourceLine" id="cb58-21" title="21">names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;predictor&quot;</span>, <span class="st">&quot;coefficient&quot;</span>, <span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci_lower&quot;</span>, </a>
+<a class="sourceLine" id="cb58-22" title="22">           <span class="st">&quot;ci_higher&quot;</span>, <span class="st">&quot;z_value&quot;</span>, <span class="st">&quot;p_value&quot;</span>)</a>
+<a class="sourceLine" id="cb58-23" title="23"></a>
+<a class="sourceLine" id="cb58-24" title="24"><span class="co"># get data for plotting:</span></a>
+<a class="sourceLine" id="cb58-25" title="25">model_est &lt;-<span class="st"> </span><span class="kw">map</span>(model_est, <span class="cf">function</span>(l) {</a>
+<a class="sourceLine" id="cb58-26" title="26">  <span class="kw">map</span>(l, <span class="cf">function</span>(df) {</a>
+<a class="sourceLine" id="cb58-27" title="27">    <span class="kw">colnames</span>(df) &lt;-<span class="st"> </span>names</a>
+<a class="sourceLine" id="cb58-28" title="28">    df &lt;-<span class="st"> </span><span class="kw">separate_interaction_terms</span>(df)</a>
+<a class="sourceLine" id="cb58-29" title="29">    df &lt;-<span class="st"> </span><span class="kw">make_response_data</span>(df) </a>
+<a class="sourceLine" id="cb58-30" title="30">    <span class="kw">return</span>(df)</a>
+<a class="sourceLine" id="cb58-31" title="31">  })</a>
+<a class="sourceLine" id="cb58-32" title="32">})</a>
+<a class="sourceLine" id="cb58-33" title="33"></a>
+<a class="sourceLine" id="cb58-34" title="34"><span class="co"># add names and scales</span></a>
+<a class="sourceLine" id="cb58-35" title="35">model_est &lt;-<span class="st"> </span><span class="kw">map</span>(model_est, <span class="cf">function</span>(l) {</a>
+<a class="sourceLine" id="cb58-36" title="36">  <span class="kw">imap</span>(l, <span class="cf">function</span>(.x, .y) {</a>
+<a class="sourceLine" id="cb58-37" title="37">    <span class="kw">mutate</span>(.x, <span class="dt">scientific_name =</span> .y)</a>
+<a class="sourceLine" id="cb58-38" title="38">  })</a>
+<a class="sourceLine" id="cb58-39" title="39">})</a>
+<a class="sourceLine" id="cb58-40" title="40"></a>
+<a class="sourceLine" id="cb58-41" title="41"><span class="co"># add names to model estimates</span></a>
+<a class="sourceLine" id="cb58-42" title="42"><span class="kw">names</span>(model_est) &lt;-<span class="st"> </span>scales</a>
+<a class="sourceLine" id="cb58-43" title="43">model_est &lt;-<span class="st"> </span><span class="kw">imap</span>(model_est, <span class="cf">function</span>(.x, .y) {</a>
+<a class="sourceLine" id="cb58-44" title="44">  <span class="kw">bind_rows</span>(.x) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb58-45" title="45"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">scale =</span> .y)</a>
+<a class="sourceLine" id="cb58-46" title="46">})</a>
+<a class="sourceLine" id="cb58-47" title="47"></a>
+<a class="sourceLine" id="cb58-48" title="48"><span class="co"># remove modulators</span></a>
+<a class="sourceLine" id="cb58-49" title="49">model_est &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(model_est) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb58-50" title="50"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">matches</span>(<span class="st">&quot;modulator&quot;</span>))</a>
+<a class="sourceLine" id="cb58-51" title="51"></a>
+<a class="sourceLine" id="cb58-52" title="52"><span class="co"># join data to species name</span></a>
+<a class="sourceLine" id="cb58-53" title="53">model_data &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb58-54" title="54"><span class="st">  </span><span class="kw">left_join</span>(model_est)</a></code></pre></div>
 <div id="export-data-to-file" class="section level3">
-<h3><span class="header-section-number">7.3.1</span> Export data to file</h3>
+<h3><span class="header-section-number">7.4.1</span> Export data to file</h3>
 <p>Export predictor effects.</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" title="1"><span class="co"># get predictor effect data</span></a>
-<a class="sourceLine" id="cb55-2" title="2">data_predictor_effect &lt;-<span class="st"> </span><span class="kw">distinct</span>(model_data, </a>
-<a class="sourceLine" id="cb55-3" title="3">                                  scientific_name, scale, </a>
-<a class="sourceLine" id="cb55-4" title="4">                                  predictor, coefficient)</a>
-<a class="sourceLine" id="cb55-5" title="5"></a>
-<a class="sourceLine" id="cb55-6" title="6"><span class="co"># write to file</span></a>
-<a class="sourceLine" id="cb55-7" title="7"><span class="kw">write_csv</span>(data_predictor_effect,</a>
-<a class="sourceLine" id="cb55-8" title="8">          <span class="dt">path =</span> <span class="st">&quot;data/results/data_predictor_effect.csv&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" title="1"><span class="co"># get predictor effect data</span></a>
+<a class="sourceLine" id="cb59-2" title="2">data_predictor_effect &lt;-<span class="st"> </span><span class="kw">distinct</span>(model_data, </a>
+<a class="sourceLine" id="cb59-3" title="3">                                  scientific_name, scale, </a>
+<a class="sourceLine" id="cb59-4" title="4">                                  predictor, coefficient)</a>
+<a class="sourceLine" id="cb59-5" title="5"></a>
+<a class="sourceLine" id="cb59-6" title="6"><span class="co"># write to file</span></a>
+<a class="sourceLine" id="cb59-7" title="7"><span class="kw">write_csv</span>(data_predictor_effect,</a>
+<a class="sourceLine" id="cb59-8" title="8">          <span class="dt">path =</span> <span class="st">&quot;data/results/data_predictor_effect.csv&quot;</span>)</a></code></pre></div>
 <p>Export model data.</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1">model_data_to_file &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb56-2" title="2"><span class="st">  </span><span class="kw">select</span>(predictor, data,</a>
-<a class="sourceLine" id="cb56-3" title="3">         scientific_name, scale) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb56-4" title="4"><span class="st">  </span><span class="kw">unnest</span>(<span class="dt">cols =</span> <span class="st">&quot;data&quot;</span>)</a>
-<a class="sourceLine" id="cb56-5" title="5"></a>
-<a class="sourceLine" id="cb56-6" title="6"><span class="co"># remove .y</span></a>
-<a class="sourceLine" id="cb56-7" title="7">model_data_to_file &lt;-<span class="st"> </span>model_data_to_file <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb56-8" title="8"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">predictor =</span> <span class="kw">str_remove</span>(predictor, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">.y&quot;</span>))</a>
-<a class="sourceLine" id="cb56-9" title="9"></a>
-<a class="sourceLine" id="cb56-10" title="10"><span class="kw">write_csv</span>(model_data_to_file,</a>
-<a class="sourceLine" id="cb56-11" title="11">          <span class="st">&quot;data/results/data_occupancy_predictors.csv&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1">model_data_to_file &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb60-2" title="2"><span class="st">  </span><span class="kw">select</span>(predictor, data,</a>
+<a class="sourceLine" id="cb60-3" title="3">         scientific_name, scale) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb60-4" title="4"><span class="st">  </span><span class="kw">unnest</span>(<span class="dt">cols =</span> <span class="st">&quot;data&quot;</span>)</a>
+<a class="sourceLine" id="cb60-5" title="5"></a>
+<a class="sourceLine" id="cb60-6" title="6"><span class="co"># remove .y</span></a>
+<a class="sourceLine" id="cb60-7" title="7">model_data_to_file &lt;-<span class="st"> </span>model_data_to_file <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb60-8" title="8"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">predictor =</span> <span class="kw">str_remove</span>(predictor, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">.y&quot;</span>))</a>
+<a class="sourceLine" id="cb60-9" title="9"></a>
+<a class="sourceLine" id="cb60-10" title="10"><span class="kw">write_csv</span>(model_data_to_file,</a>
+<a class="sourceLine" id="cb60-11" title="11">          <span class="st">&quot;data/results/data_occupancy_predictors.csv&quot;</span>)</a></code></pre></div>
+</div>
+</div>
+<div id="occupancy-coefficients-in-relation-with-species-elevation" class="section level2">
+<h2><span class="header-section-number">7.5</span> Occupancy coefficients in relation with species elevation</h2>
+<p>How does species’ displacement from the median elevation of the study area relate with the coefficient of each predictor of occupancy?</p>
+<p>First get the saved model data.</p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" title="1"><span class="co"># read from file</span></a>
+<a class="sourceLine" id="cb61-2" title="2">model_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/results/data_predictor_effect.csv&quot;</span>)</a></code></pre></div>
+<div id="species-offset-from-median-elevation" class="section level3">
+<h3><span class="header-section-number">7.5.1</span> Species offset from median elevation</h3>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1"><span class="co"># add trait by joining</span></a>
+<a class="sourceLine" id="cb62-2" title="2">model_data &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb62-3" title="3"><span class="st">  </span><span class="kw">left_join</span>(species_trait, <span class="dt">by =</span> <span class="st">&quot;scientific_name&quot;</span>)</a>
+<a class="sourceLine" id="cb62-4" title="4"></a>
+<a class="sourceLine" id="cb62-5" title="5"><span class="co"># add elevation data</span></a>
+<a class="sourceLine" id="cb62-6" title="6">elev_summary &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;data/data_species_elevation.xlsx&quot;</span>)</a>
+<a class="sourceLine" id="cb62-7" title="7">model_data &lt;-<span class="st"> </span><span class="kw">left_join</span>(model_data, elev_summary)</a>
+<a class="sourceLine" id="cb62-8" title="8"></a>
+<a class="sourceLine" id="cb62-9" title="9">model_data &lt;-<span class="st"> </span><span class="kw">rename</span>(model_data,</a>
+<a class="sourceLine" id="cb62-10" title="10">                     <span class="dt">median_elev =</span> median)</a></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" title="1"><span class="co"># what is the median elevation of the study area?</span></a>
+<a class="sourceLine" id="cb63-2" title="2">elev &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw">stack</span>(<span class="st">&quot;data/spatial/landscape_resamp01km.tif&quot;</span>)[[<span class="dv">1</span>]]</a>
+<a class="sourceLine" id="cb63-3" title="3"></a>
+<a class="sourceLine" id="cb63-4" title="4"><span class="co"># mask the raster by the hills shapefile</span></a>
+<a class="sourceLine" id="cb63-5" title="5"><span class="kw">library</span>(sf)</a>
+<a class="sourceLine" id="cb63-6" title="6">hills &lt;-<span class="st"> </span>sf<span class="op">::</span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb63-7" title="7"><span class="st">  </span>sf<span class="op">::</span><span class="st">`</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb63-8" title="8"><span class="st">  </span>sf<span class="op">::</span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
+<a class="sourceLine" id="cb63-9" title="9"></a>
+<a class="sourceLine" id="cb63-10" title="10"><span class="co"># get masked elevation</span></a>
+<a class="sourceLine" id="cb63-11" title="11">elev &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw">mask</span>(elev, sf<span class="op">::</span><span class="kw">as_Spatial</span>(hills))</a>
+<a class="sourceLine" id="cb63-12" title="12"></a>
+<a class="sourceLine" id="cb63-13" title="13"><span class="co"># get median elevation</span></a>
+<a class="sourceLine" id="cb63-14" title="14"><span class="kw">median</span>(raster<span class="op">::</span><span class="kw">values</span>(elev), <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p>The median elevation is 686.0872 metres, which we will round to 685 metres for convenience.</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" title="1">med_elev &lt;-<span class="st"> </span><span class="dv">685</span></a></code></pre></div>
+<p>Subtract species’ median elevation from the study area median elevation.</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" title="1">model_data<span class="op">$</span>diff_elev &lt;-<span class="st"> </span>model_data<span class="op">$</span>median_elev <span class="op">-</span><span class="st"> </span>med_elev</a>
+<a class="sourceLine" id="cb65-2" title="2"></a>
+<a class="sourceLine" id="cb65-3" title="3">model_data &lt;-<span class="st"> </span><span class="kw">drop_na</span>(model_data)</a></code></pre></div>
+</div>
+<div id="species-body-mass" class="section level3">
+<h3><span class="header-section-number">7.5.2</span> Species body mass</h3>
+<p>Already included in the data.</p>
+</div>
+<div id="species-range-size" class="section level3">
+<h3><span class="header-section-number">7.5.3</span> Species range size</h3>
+<p>This data is added from the State of India’s Birds report.</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" title="1">soib &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/2020_state-india-birds-trait-dat - Information.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb66-2" title="2">soib &lt;-<span class="st"> </span><span class="kw">select</span>(soib,</a>
+<a class="sourceLine" id="cb66-3" title="3">               <span class="dt">scientific_name =</span> <span class="st">`</span><span class="dt">Scientific Name (India Checklist)</span><span class="st">`</span>,</a>
+<a class="sourceLine" id="cb66-4" title="4">               <span class="dt">range_size =</span> <span class="st">`</span><span class="dt">Distribution Range Size (units of 10,000 sq. km.)</span><span class="st">`</span>)</a>
+<a class="sourceLine" id="cb66-5" title="5"></a>
+<a class="sourceLine" id="cb66-6" title="6"><span class="co"># join with model data</span></a>
+<a class="sourceLine" id="cb66-7" title="7">model_data &lt;-<span class="st"> </span><span class="kw">left_join</span>(model_data, soib,</a>
+<a class="sourceLine" id="cb66-8" title="8">                        <span class="dt">by =</span> <span class="st">&quot;scientific_name&quot;</span>)</a></code></pre></div>
+</div>
+<div id="prepare-divisions-by-trait-for-plotting" class="section level3">
+<h3><span class="header-section-number">7.5.4</span> Prepare divisions by trait for plotting</h3>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" title="1">model_data &lt;-<span class="st"> </span><span class="kw">select</span>(model_data,</a>
+<a class="sourceLine" id="cb67-2" title="2">                     scientific_name, predictor, coefficient,</a>
+<a class="sourceLine" id="cb67-3" title="3">                     scale, </a>
+<a class="sourceLine" id="cb67-4" title="4">                     <span class="dt">range_size =</span> range_size.y,</a>
+<a class="sourceLine" id="cb67-5" title="5">                     diff_elev,</a>
+<a class="sourceLine" id="cb67-6" title="6">                     body_mass)</a>
+<a class="sourceLine" id="cb67-7" title="7"></a>
+<a class="sourceLine" id="cb67-8" title="8">model_data_long &lt;-<span class="st"> </span><span class="kw">pivot_longer</span>(model_data,</a>
+<a class="sourceLine" id="cb67-9" title="9">                           <span class="dt">cols =</span> <span class="kw">c</span>(<span class="st">&quot;range_size&quot;</span>, <span class="st">&quot;diff_elev&quot;</span>, <span class="st">&quot;body_mass&quot;</span>),</a>
+<a class="sourceLine" id="cb67-10" title="10">                           <span class="dt">names_to =</span> <span class="st">&quot;trait&quot;</span>,</a>
+<a class="sourceLine" id="cb67-11" title="11">                           <span class="dt">values_to =</span> <span class="st">&quot;trait_value&quot;</span>)</a>
+<a class="sourceLine" id="cb67-12" title="12"></a>
+<a class="sourceLine" id="cb67-13" title="13"><span class="co"># no peacock!</span></a>
+<a class="sourceLine" id="cb67-14" title="14">model_data_long &lt;-<span class="st"> </span><span class="kw">filter</span>(model_data_long,</a>
+<a class="sourceLine" id="cb67-15" title="15">                          scientific_name <span class="op">!=</span><span class="st"> &quot;Pavo cristatus&quot;</span>)</a></code></pre></div>
+</div>
+<div id="effect-of-traits-as-continuous-variables" class="section level3">
+<h3><span class="header-section-number">7.5.5</span> Effect of traits as continuous variables</h3>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" title="1"><span class="kw">ggplot</span>(model_data_long)<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-2" title="2"><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">size =</span> <span class="fl">0.2</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-3" title="3"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb68-4" title="4">             <span class="dt">size =</span> <span class="fl">0.1</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-5" title="5"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(trait_value, coefficient,</a>
+<a class="sourceLine" id="cb68-6" title="6">                 <span class="dt">col =</span> predictor),</a>
+<a class="sourceLine" id="cb68-7" title="7">             <span class="dt">size =</span> <span class="fl">0.5</span>, <span class="dt">shape =</span> <span class="dv">4</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-8" title="8"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="kw">aes</span>(trait_value, coefficient,</a>
+<a class="sourceLine" id="cb68-9" title="9">                  <span class="dt">col =</span> predictor),</a>
+<a class="sourceLine" id="cb68-10" title="10">              <span class="dt">method =</span> <span class="st">&quot;glm&quot;</span>, </a>
+<a class="sourceLine" id="cb68-11" title="11">              <span class="dt">se =</span> F, <span class="dt">size =</span> <span class="fl">0.5</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-12" title="12"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>comma)<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-13" title="13"><span class="st">  </span><span class="kw">scale_colour_manual</span>(<span class="dt">values =</span> pals<span class="op">::</span><span class="kw">kovesi.rainbow</span>(<span class="dv">8</span>))<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-14" title="14"><span class="st">  </span><span class="kw">facet_grid</span>(scale <span class="op">~</span><span class="st"> </span>trait, <span class="dt">scales =</span> <span class="st">&quot;free_x&quot;</span>,</a>
+<a class="sourceLine" id="cb68-15" title="15">             <span class="dt">labeller =</span> label_both)<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-16" title="16"><span class="st">  </span><span class="kw">ylim</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-17" title="17"><span class="st">  </span><span class="co"># coord_cartesian(xlim = c(-500, 1000),</span></a>
+<a class="sourceLine" id="cb68-18" title="18"><span class="st">                  </span><span class="co"># ylim = c(-5, 5))+</span></a>
+<a class="sourceLine" id="cb68-19" title="19"><span class="st">  </span><span class="kw">theme_test</span>()</a>
+<a class="sourceLine" id="cb68-20" title="20"></a>
+<a class="sourceLine" id="cb68-21" title="21"><span class="co"># export</span></a>
+<a class="sourceLine" id="cb68-22" title="22"><span class="kw">ggsave</span>(<span class="st">&quot;figs/fig_trait_coeff.png&quot;</span>, <span class="dt">dpi =</span> <span class="dv">300</span>)</a></code></pre></div>
+<hr />
 </div>
 </div>
 <div id="occupancy-predictors-aggregated-effect" class="section level2">
-<h2><span class="header-section-number">7.4</span> Occupancy predictors’ aggregated effect</h2>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1"><span class="co"># read from file</span></a>
-<a class="sourceLine" id="cb57-2" title="2">model_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/results/data_predictor_effect.csv&quot;</span>)</a></code></pre></div>
+<h2><span class="header-section-number">7.6</span> Occupancy predictors’ aggregated effect</h2>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" title="1"><span class="co"># read from file</span></a>
+<a class="sourceLine" id="cb69-2" title="2">model_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/results/data_predictor_effect.csv&quot;</span>)</a></code></pre></div>
 <p>Plot the number of species affected and the direction of the effect, for each predictor.
 Split the data along the axes of range size, migratory status, and habitat.</p>
 <div id="add-trait-data-and-clean" class="section level3">
-<h3><span class="header-section-number">7.4.1</span> Add trait data and clean</h3>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1"><span class="co"># add trait by joining</span></a>
-<a class="sourceLine" id="cb58-2" title="2">data_predictor_effect &lt;-<span class="st"> </span>data_predictor_effect <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb58-3" title="3"><span class="st">  </span><span class="kw">left_join</span>(species_trait, <span class="dt">by =</span> <span class="st">&quot;scientific_name&quot;</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" title="1"><span class="co"># remove .y from predictors</span></a>
-<a class="sourceLine" id="cb59-2" title="2">data_predictor_effect &lt;-<span class="st"> </span>data_predictor_effect <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb59-3" title="3"><span class="st">  </span><span class="kw">mutate_at</span>(<span class="dt">.vars =</span> <span class="kw">c</span>(<span class="st">&quot;predictor&quot;</span>), <span class="dt">.funs =</span> <span class="cf">function</span>(x){</a>
-<a class="sourceLine" id="cb59-4" title="4">    stringr<span class="op">::</span><span class="kw">str_remove</span>(x, <span class="st">&quot;.y&quot;</span>)</a>
-<a class="sourceLine" id="cb59-5" title="5">  })</a></code></pre></div>
-<p>What is the direction of the predictor effect for each subset of the data by the distribution, habitat, and migratory status?</p>
+<h3><span class="header-section-number">7.6.1</span> Add trait data and clean</h3>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1"><span class="co"># add trait by joining</span></a>
+<a class="sourceLine" id="cb70-2" title="2">model_data &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb70-3" title="3"><span class="st">  </span><span class="kw">left_join</span>(species_trait, <span class="dt">by =</span> <span class="st">&quot;scientific_name&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" title="1"><span class="co"># remove .y from predictors</span></a>
+<a class="sourceLine" id="cb71-2" title="2">model_data &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb71-3" title="3"><span class="st">  </span><span class="kw">mutate_at</span>(<span class="dt">.vars =</span> <span class="kw">c</span>(<span class="st">&quot;predictor&quot;</span>), <span class="dt">.funs =</span> <span class="cf">function</span>(x){</a>
+<a class="sourceLine" id="cb71-4" title="4">    stringr<span class="op">::</span><span class="kw">str_remove</span>(x, <span class="st">&quot;.y&quot;</span>)</a>
+<a class="sourceLine" id="cb71-5" title="5">  })</a></code></pre></div>
+<p>What is the direction of the predictor effect for each subset of the data by the distribution, habitat, elevation, and migratory status?</p>
 </div>
 <div id="get-predictor-effects" class="section level3">
-<h3><span class="header-section-number">7.4.2</span> Get predictor effects</h3>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1"><span class="co"># first pivot the data longer</span></a>
-<a class="sourceLine" id="cb60-2" title="2">data_predictor_long &lt;-<span class="st"> </span>data_predictor_effect <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb60-3" title="3"><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols =</span> <span class="kw">c</span>(<span class="st">&quot;range_size&quot;</span>, <span class="st">&quot;migratory_status&quot;</span>, </a>
-<a class="sourceLine" id="cb60-4" title="4">                        <span class="st">&quot;habitat&quot;</span>, <span class="st">&quot;elev&quot;</span>), </a>
-<a class="sourceLine" id="cb60-5" title="5">               <span class="dt">names_to =</span> <span class="st">&quot;trait&quot;</span>)</a>
-<a class="sourceLine" id="cb60-6" title="6"></a>
-<a class="sourceLine" id="cb60-7" title="7"><span class="co"># reorder scale</span></a>
-<a class="sourceLine" id="cb60-8" title="8">data_predictor_long &lt;-<span class="st"> </span>data_predictor_long <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb60-9" title="9"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">scale =</span> <span class="kw">fct_relevel</span>(scale, <span class="st">&quot;2.5km&quot;</span>, <span class="st">&quot;10km&quot;</span>))</a>
-<a class="sourceLine" id="cb60-10" title="10"></a>
-<a class="sourceLine" id="cb60-11" title="11"><span class="co"># is the coeff positive? how many positive per scale per predictor per axis of split?</span></a>
-<a class="sourceLine" id="cb60-12" title="12">data_predictor_long &lt;-<span class="st"> </span><span class="kw">mutate</span>(data_predictor_long, </a>
-<a class="sourceLine" id="cb60-13" title="13">                                <span class="dt">direction =</span> coefficient <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb60-14" title="14"><span class="st">  </span><span class="kw">count</span>(scale, predictor, </a>
-<a class="sourceLine" id="cb60-15" title="15">        trait, value, direction) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb60-16" title="16"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">mag =</span> n <span class="op">*</span><span class="st"> </span>(<span class="kw">if_else</span>(direction, <span class="dv">1</span>, <span class="dv">-1</span>)))</a>
-<a class="sourceLine" id="cb60-17" title="17"></a>
-<a class="sourceLine" id="cb60-18" title="18"><span class="co"># wrangle data to get nice bars</span></a>
-<a class="sourceLine" id="cb60-19" title="19">data_predictor_long &lt;-<span class="st"> </span>data_predictor_long <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb60-20" title="20"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>n) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb60-21" title="21"><span class="st">  </span><span class="kw">drop_na</span>(direction, value) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb60-22" title="22"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">direction =</span> <span class="kw">ifelse</span>(direction, <span class="st">&quot;positive&quot;</span>, <span class="st">&quot;negative&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb60-23" title="23"><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">values_from =</span> <span class="st">&quot;mag&quot;</span>, <span class="dt">names_from =</span> <span class="st">&quot;direction&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb60-24" title="24"><span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(positive, negative),</a>
-<a class="sourceLine" id="cb60-25" title="25">            <span class="op">~</span><span class="kw">if_else</span>(<span class="kw">is.na</span>(.), <span class="dv">0</span>, .))</a>
-<a class="sourceLine" id="cb60-26" title="26"></a>
-<a class="sourceLine" id="cb60-27" title="27">data_predictor_long &lt;-<span class="st"> </span>data_predictor_long <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb60-28" title="28"><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols =</span> <span class="kw">c</span>(<span class="st">&quot;negative&quot;</span>, <span class="st">&quot;positive&quot;</span>),</a>
-<a class="sourceLine" id="cb60-29" title="29">               <span class="dt">names_to =</span> <span class="st">&quot;effect&quot;</span>,</a>
-<a class="sourceLine" id="cb60-30" title="30">               <span class="dt">values_to =</span> <span class="st">&quot;magnitude&quot;</span>)</a>
-<a class="sourceLine" id="cb60-31" title="31"></a>
-<a class="sourceLine" id="cb60-32" title="32"><span class="co"># write</span></a>
-<a class="sourceLine" id="cb60-33" title="33"><span class="kw">write_csv</span>(data_predictor_long,</a>
-<a class="sourceLine" id="cb60-34" title="34">          <span class="dt">path =</span> <span class="st">&quot;data/results/data_predictor_long.csv&quot;</span>)</a>
-<a class="sourceLine" id="cb60-35" title="35"></a>
-<a class="sourceLine" id="cb60-36" title="36"><span class="co"># nest the data by trait</span></a>
-<a class="sourceLine" id="cb60-37" title="37">data_predictor_long &lt;-<span class="st"> </span>data_predictor_long <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb60-38" title="38"><span class="st">  </span><span class="kw">nest</span>(<span class="dt">data =</span> <span class="op">-</span>trait)</a></code></pre></div>
+<h3><span class="header-section-number">7.6.2</span> Get predictor effects</h3>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1"><span class="co"># first pivot the data longer</span></a>
+<a class="sourceLine" id="cb72-2" title="2">data_predictor_long &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb72-3" title="3"><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols =</span> <span class="kw">c</span>(<span class="st">&quot;range_size&quot;</span>, <span class="st">&quot;migratory_status&quot;</span>, </a>
+<a class="sourceLine" id="cb72-4" title="4">                        <span class="st">&quot;habitat&quot;</span>, <span class="st">&quot;elev&quot;</span>), </a>
+<a class="sourceLine" id="cb72-5" title="5">               <span class="dt">names_to =</span> <span class="st">&quot;trait&quot;</span>,</a>
+<a class="sourceLine" id="cb72-6" title="6">               <span class="dt">values_to =</span> <span class="st">&quot;Class&quot;</span>)</a>
+<a class="sourceLine" id="cb72-7" title="7"></a>
+<a class="sourceLine" id="cb72-8" title="8"><span class="co"># reorder scale</span></a>
+<a class="sourceLine" id="cb72-9" title="9">data_predictor_long &lt;-<span class="st"> </span>data_predictor_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb72-10" title="10"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">scale =</span> <span class="kw">fct_relevel</span>(scale, <span class="st">&quot;2.5km&quot;</span>, <span class="st">&quot;10km&quot;</span>))</a>
+<a class="sourceLine" id="cb72-11" title="11"></a>
+<a class="sourceLine" id="cb72-12" title="12"><span class="co"># is the coeff positive? how many positive per scale per predictor per axis of split?</span></a>
+<a class="sourceLine" id="cb72-13" title="13">data_predictor_long &lt;-<span class="st"> </span><span class="kw">mutate</span>(data_predictor_long, </a>
+<a class="sourceLine" id="cb72-14" title="14">                                <span class="dt">direction =</span> coefficient <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb72-15" title="15"><span class="st">  </span><span class="kw">count</span>(scale, predictor, </a>
+<a class="sourceLine" id="cb72-16" title="16">        trait, Class, direction) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb72-17" title="17"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">mag =</span> n <span class="op">*</span><span class="st"> </span>(<span class="kw">if_else</span>(direction, <span class="dv">1</span>, <span class="dv">-1</span>)))</a>
+<a class="sourceLine" id="cb72-18" title="18"></a>
+<a class="sourceLine" id="cb72-19" title="19"><span class="co"># wrangle data to get nice bars</span></a>
+<a class="sourceLine" id="cb72-20" title="20">data_predictor_long &lt;-<span class="st"> </span>data_predictor_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb72-21" title="21"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>n) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb72-22" title="22"><span class="st">  </span><span class="kw">drop_na</span>(direction, Class) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb72-23" title="23"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">direction =</span> <span class="kw">ifelse</span>(direction, <span class="st">&quot;positive&quot;</span>, <span class="st">&quot;negative&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb72-24" title="24"><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">values_from =</span> <span class="st">&quot;mag&quot;</span>, <span class="dt">names_from =</span> <span class="st">&quot;direction&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb72-25" title="25"><span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(positive, negative),</a>
+<a class="sourceLine" id="cb72-26" title="26">            <span class="op">~</span><span class="kw">if_else</span>(<span class="kw">is.na</span>(.), <span class="dv">0</span>, .))</a>
+<a class="sourceLine" id="cb72-27" title="27"></a>
+<a class="sourceLine" id="cb72-28" title="28">data_predictor_long &lt;-<span class="st"> </span>data_predictor_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb72-29" title="29"><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols =</span> <span class="kw">c</span>(<span class="st">&quot;negative&quot;</span>, <span class="st">&quot;positive&quot;</span>),</a>
+<a class="sourceLine" id="cb72-30" title="30">               <span class="dt">names_to =</span> <span class="st">&quot;effect&quot;</span>,</a>
+<a class="sourceLine" id="cb72-31" title="31">               <span class="dt">values_to =</span> <span class="st">&quot;magnitude&quot;</span>)</a>
+<a class="sourceLine" id="cb72-32" title="32"></a>
+<a class="sourceLine" id="cb72-33" title="33"><span class="co"># write</span></a>
+<a class="sourceLine" id="cb72-34" title="34"><span class="kw">write_csv</span>(data_predictor_long,</a>
+<a class="sourceLine" id="cb72-35" title="35">          <span class="dt">path =</span> <span class="st">&quot;data/results/data_predictor_long.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb72-36" title="36"></a>
+<a class="sourceLine" id="cb72-37" title="37"><span class="co"># nest the data by trait</span></a>
+<a class="sourceLine" id="cb72-38" title="38">data_predictor_long &lt;-<span class="st"> </span>data_predictor_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb72-39" title="39"><span class="st">  </span><span class="kw">nest</span>(<span class="dt">data =</span> <span class="op">-</span>trait)</a></code></pre></div>
 </div>
 <div id="manual-edits-to-levels" class="section level3">
-<h3><span class="header-section-number">7.4.3</span> Manual edits to levels</h3>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" title="1"><span class="co"># arrange data predictor long elevation in order of values</span></a>
-<a class="sourceLine" id="cb61-2" title="2">data_predictor_long<span class="op">$</span>data[[<span class="dv">1</span>]]<span class="op">$</span>value &lt;-<span class="st"> </span><span class="kw">as.factor</span>(data_predictor_long<span class="op">$</span>data[[<span class="dv">1</span>]]<span class="op">$</span>value)</a>
-<a class="sourceLine" id="cb61-3" title="3"><span class="kw">levels</span>(data_predictor_long<span class="op">$</span>data[[<span class="dv">1</span>]]<span class="op">$</span>value) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Low&quot;</span>, <span class="st">&quot;Mid&quot;</span>, <span class="st">&quot;High&quot;</span>)</a></code></pre></div>
+<h3><span class="header-section-number">7.6.3</span> Manual edits to levels</h3>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" title="1"><span class="co"># arrange data predictor long elevation in order of values</span></a>
+<a class="sourceLine" id="cb73-2" title="2">data_predictor_long<span class="op">$</span>data[[<span class="dv">1</span>]]<span class="op">$</span>Class &lt;-<span class="st"> </span><span class="kw">as.factor</span>(data_predictor_long<span class="op">$</span>data[[<span class="dv">1</span>]]<span class="op">$</span>Class)</a>
+<a class="sourceLine" id="cb73-3" title="3"><span class="kw">levels</span>(data_predictor_long<span class="op">$</span>data[[<span class="dv">1</span>]]<span class="op">$</span>Class) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Low&quot;</span>, <span class="st">&quot;Mid&quot;</span>, <span class="st">&quot;High&quot;</span>)</a>
+<a class="sourceLine" id="cb73-4" title="4"></a>
+<a class="sourceLine" id="cb73-5" title="5"><span class="co"># fix trait values</span></a>
+<a class="sourceLine" id="cb73-6" title="6">data_predictor_long<span class="op">$</span>trait &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Elevation range&quot;</span>,</a>
+<a class="sourceLine" id="cb73-7" title="7">                               <span class="st">&quot;Habitat type&quot;</span>,</a>
+<a class="sourceLine" id="cb73-8" title="8">                               <span class="st">&quot;Migratory status&quot;</span>,</a>
+<a class="sourceLine" id="cb73-9" title="9">                               <span class="st">&quot;Range size&quot;</span>)</a></code></pre></div>
 </div>
 <div id="make-figures-for-predictor-effects" class="section level3">
-<h3><span class="header-section-number">7.4.4</span> Make figures for predictor effects</h3>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1"><span class="co"># visualise the data by mapping over the nested list</span></a>
-<a class="sourceLine" id="cb62-2" title="2">data_predictor_long &lt;-<span class="st"> </span><span class="kw">mutate</span>(data_predictor_long,</a>
-<a class="sourceLine" id="cb62-3" title="3">        <span class="dt">figs =</span> <span class="kw">map2</span>(data, trait, <span class="cf">function</span>(df, tr){</a>
-<a class="sourceLine" id="cb62-4" title="4">          <span class="kw">ggplot</span>(df)<span class="op">+</span></a>
-<a class="sourceLine" id="cb62-5" title="5"><span class="st">            </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>,</a>
-<a class="sourceLine" id="cb62-6" title="6">                       <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">lwd =</span> <span class="fl">0.2</span>,</a>
-<a class="sourceLine" id="cb62-7" title="7">                       <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb62-8" title="8"><span class="st">            </span></a>
-<a class="sourceLine" id="cb62-9" title="9"><span class="st">            </span><span class="kw">geom_col</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">factor</span>(predictor),</a>
-<a class="sourceLine" id="cb62-10" title="10">                         <span class="dt">y =</span> magnitude,</a>
-<a class="sourceLine" id="cb62-11" title="11">                         <span class="dt">fill =</span> effect))<span class="op">+</span></a>
-<a class="sourceLine" id="cb62-12" title="12"><span class="st">            </span></a>
-<a class="sourceLine" id="cb62-13" title="13"><span class="st">            </span><span class="kw">scale_x_discrete</span>(<span class="dt">guide =</span> <span class="kw">guide_axis</span>(<span class="dt">n.dodge =</span> <span class="dv">2</span>)<span class="co">#,</span></a>
-<a class="sourceLine" id="cb62-14" title="14">                             <span class="co"># label = 1:length(unique(df$predictor))</span></a>
-<a class="sourceLine" id="cb62-15" title="15">            )<span class="op">+</span></a>
-<a class="sourceLine" id="cb62-16" title="16"><span class="st">            </span></a>
-<a class="sourceLine" id="cb62-17" title="17"><span class="st">            </span>scico<span class="op">::</span><span class="kw">scale_fill_scico_d</span>(<span class="dt">palette =</span> <span class="st">&quot;berlin&quot;</span>,</a>
-<a class="sourceLine" id="cb62-18" title="18">                                     <span class="dt">direction =</span> <span class="dv">-1</span>,</a>
-<a class="sourceLine" id="cb62-19" title="19">                                     <span class="dt">begin =</span> <span class="fl">0.1</span>,</a>
-<a class="sourceLine" id="cb62-20" title="20">                                     <span class="dt">end =</span> <span class="fl">0.9</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb62-21" title="21"><span class="st">            </span></a>
-<a class="sourceLine" id="cb62-22" title="22"><span class="st">            </span><span class="kw">theme_grey</span>(<span class="dt">base_family =</span> <span class="st">&quot;TT Arial&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb62-23" title="23"><span class="st">            </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb62-24" title="24"><span class="st">            </span><span class="kw">facet_grid</span>(value <span class="op">~</span><span class="st"> </span>scale, </a>
-<a class="sourceLine" id="cb62-25" title="25">                       <span class="dt">labeller =</span> label_both)<span class="op">+</span></a>
-<a class="sourceLine" id="cb62-26" title="26"><span class="st">            </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;predictor&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;species&quot;</span>,</a>
-<a class="sourceLine" id="cb62-27" title="27">                 <span class="dt">title =</span> glue<span class="op">::</span><span class="kw">glue</span>(<span class="st">&#39;trait: {tr}&#39;</span>))</a>
-<a class="sourceLine" id="cb62-28" title="28">        }))</a>
-<a class="sourceLine" id="cb62-29" title="29"></a>
-<a class="sourceLine" id="cb62-30" title="30">fig_predictor_effect &lt;-<span class="st"> </span>patchwork<span class="op">::</span><span class="kw">wrap_plots</span>(data_predictor_long<span class="op">$</span>figs,</a>
-<a class="sourceLine" id="cb62-31" title="31">                                              <span class="dt">nrow =</span> <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb62-32" title="32"></a>
-<a class="sourceLine" id="cb62-33" title="33"><span class="co"># save plot</span></a>
-<a class="sourceLine" id="cb62-34" title="34"><span class="kw">ggsave</span>(fig_predictor_effect, <span class="dt">filename =</span> <span class="st">&quot;figs/fig_predictor_effect.png&quot;</span>,</a>
-<a class="sourceLine" id="cb62-35" title="35">       <span class="dt">dpi =</span> <span class="dv">300</span>,</a>
-<a class="sourceLine" id="cb62-36" title="36">       <span class="dt">width =</span> <span class="dv">12</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" title="1">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;figs/fig_predictor_effect.png&quot;</span>)</a></code></pre></div>
+<h3><span class="header-section-number">7.6.4</span> Make figures for predictor effects</h3>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1"><span class="co"># visualise the data by mapping over the nested list</span></a>
+<a class="sourceLine" id="cb74-2" title="2">data_predictor_long &lt;-<span class="st"> </span><span class="kw">mutate</span>(data_predictor_long,</a>
+<a class="sourceLine" id="cb74-3" title="3">        <span class="dt">figs =</span> <span class="kw">map2</span>(data, trait, <span class="cf">function</span>(df, tr){</a>
+<a class="sourceLine" id="cb74-4" title="4">          <span class="kw">ggplot</span>(df)<span class="op">+</span></a>
+<a class="sourceLine" id="cb74-5" title="5"><span class="st">            </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb74-6" title="6">                       <span class="dt">lwd =</span> <span class="fl">0.2</span>,</a>
+<a class="sourceLine" id="cb74-7" title="7">                       <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb74-8" title="8"><span class="st">            </span><span class="kw">geom_col</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">factor</span>(predictor),</a>
+<a class="sourceLine" id="cb74-9" title="9">                         <span class="dt">y =</span> magnitude,</a>
+<a class="sourceLine" id="cb74-10" title="10">                         <span class="dt">group =</span> <span class="kw">interaction</span>(effect, scale)),</a>
+<a class="sourceLine" id="cb74-11" title="11">                     <span class="co"># position = position_dodge(width = 1),</span></a>
+<a class="sourceLine" id="cb74-12" title="12">                     <span class="dt">width =</span> <span class="fl">0.05</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb74-13" title="13"><span class="st">            </span></a>
+<a class="sourceLine" id="cb74-14" title="14"><span class="st">            </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">factor</span>(predictor),</a>
+<a class="sourceLine" id="cb74-15" title="15">                         <span class="dt">y =</span> magnitude,</a>
+<a class="sourceLine" id="cb74-16" title="16">                         <span class="dt">fill =</span> <span class="kw">interaction</span>(effect, scale)),</a>
+<a class="sourceLine" id="cb74-17" title="17">                     <span class="co"># position = position_dodge(width = 1),</span></a>
+<a class="sourceLine" id="cb74-18" title="18">                     <span class="dt">size =</span> <span class="dv">3</span>,</a>
+<a class="sourceLine" id="cb74-19" title="19">                     <span class="dt">shape =</span> <span class="dv">21</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb74-20" title="20"><span class="st">            </span></a>
+<a class="sourceLine" id="cb74-21" title="21"><span class="st">            </span><span class="kw">scale_x_discrete</span>(<span class="dt">labels =</span> <span class="kw">names</span>(predictor_name))<span class="op">+</span></a>
+<a class="sourceLine" id="cb74-22" title="22"><span class="st">            </span><span class="kw">scale_y_continuous</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb74-23" title="23"><span class="st">            </span></a>
+<a class="sourceLine" id="cb74-24" title="24"><span class="st">            </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> </a>
+<a class="sourceLine" id="cb74-25" title="25">                                RColorBrewer<span class="op">::</span><span class="kw">brewer.pal</span>(<span class="dv">5</span>, <span class="st">&quot;RdBu&quot;</span>)[<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">4</span>,</a>
+<a class="sourceLine" id="cb74-26" title="26">                                                                      <span class="dv">2</span>, <span class="dv">5</span>)])<span class="op">+</span></a>
+<a class="sourceLine" id="cb74-27" title="27"><span class="st">            </span></a>
+<a class="sourceLine" id="cb74-28" title="28"><span class="st">            </span><span class="kw">theme_test</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb74-29" title="29"><span class="st">            </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb74-30" title="30"><span class="st">            </span><span class="kw">facet_grid</span>(Class <span class="op">~</span><span class="st"> </span>scale, </a>
+<a class="sourceLine" id="cb74-31" title="31">                       <span class="dt">labeller =</span> label_both)<span class="op">+</span></a>
+<a class="sourceLine" id="cb74-32" title="32"><span class="st">            </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Predictor&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;# Species&quot;</span>,</a>
+<a class="sourceLine" id="cb74-33" title="33">                 <span class="dt">title =</span> glue<span class="op">::</span><span class="kw">glue</span>(<span class="st">&#39;Trait: {tr}&#39;</span>))</a>
+<a class="sourceLine" id="cb74-34" title="34">        }))</a>
+<a class="sourceLine" id="cb74-35" title="35"></a>
+<a class="sourceLine" id="cb74-36" title="36">fig_predictor_effect &lt;-<span class="st"> </span>patchwork<span class="op">::</span><span class="kw">wrap_plots</span>(data_predictor_long<span class="op">$</span>figs,</a>
+<a class="sourceLine" id="cb74-37" title="37">                                              <span class="dt">nrow =</span> <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb74-38" title="38"></a>
+<a class="sourceLine" id="cb74-39" title="39"><span class="co"># save plot</span></a>
+<a class="sourceLine" id="cb74-40" title="40"><span class="kw">ggsave</span>(fig_predictor_effect, <span class="dt">filename =</span> <span class="st">&quot;figs/fig_predictor_effect.png&quot;</span>,</a>
+<a class="sourceLine" id="cb74-41" title="41">       <span class="dt">dpi =</span> <span class="dv">300</span>,</a>
+<a class="sourceLine" id="cb74-42" title="42">       <span class="dt">width =</span> <span class="dv">12</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" title="1">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;figs/fig_predictor_effect.png&quot;</span>)</a></code></pre></div>
 <p><img src="figs/fig_predictor_effect.png" width="\textwidth" style="display: block; margin: auto;" /></p>
 </div>
 <div id="tabulate-predictor-effect" class="section level3">
-<h3><span class="header-section-number">7.4.5</span> Tabulate predictor effect</h3>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" title="1"><span class="co"># read again and nest</span></a>
-<a class="sourceLine" id="cb64-2" title="2">data_predictor_long &lt;-<span class="st"> </span>readr<span class="op">::</span><span class="kw">read_csv</span>(<span class="st">&quot;data/results/data_predictor_long.csv&quot;</span>)</a>
-<a class="sourceLine" id="cb64-3" title="3"></a>
-<a class="sourceLine" id="cb64-4" title="4"><span class="co"># nest the data by trait</span></a>
-<a class="sourceLine" id="cb64-5" title="5">data_predictor_long &lt;-<span class="st"> </span>tidyr<span class="op">::</span><span class="kw">nest</span>(data_predictor_long,</a>
-<a class="sourceLine" id="cb64-6" title="6">                                   <span class="dt">data =</span> <span class="op">-</span>trait)</a>
-<a class="sourceLine" id="cb64-7" title="7"></a>
-<a class="sourceLine" id="cb64-8" title="8"><span class="co"># first pivot the data columns</span></a>
-<a class="sourceLine" id="cb64-9" title="9">purrr<span class="op">::</span><span class="kw">pwalk</span>(data_predictor_long, <span class="cf">function</span>(trait, data) {</a>
-<a class="sourceLine" id="cb64-10" title="10">  predictors &lt;-<span class="st"> </span><span class="kw">unique</span>(data<span class="op">$</span>predictor)</a>
-<a class="sourceLine" id="cb64-11" title="11">  headers &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">2</span>, <span class="kw">length</span>(predictors)))</a>
-<a class="sourceLine" id="cb64-12" title="12">  <span class="kw">names</span>(headers) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot; &quot;</span>, <span class="dv">2</span>), predictors)</a>
-<a class="sourceLine" id="cb64-13" title="13">  </a>
-<a class="sourceLine" id="cb64-14" title="14">  data <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb64-15" title="15"><span class="st">    </span>tidyr<span class="op">::</span><span class="kw">drop_na</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb64-16" title="16"><span class="st">    </span>tidyr<span class="op">::</span><span class="kw">pivot_wider</span>(<span class="dt">names_from =</span> <span class="kw">c</span>(<span class="st">&quot;predictor&quot;</span>, <span class="st">&quot;effect&quot;</span>), </a>
-<a class="sourceLine" id="cb64-17" title="17">                <span class="dt">values_from =</span> <span class="st">&quot;magnitude&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb64-18" title="18"><span class="st">    </span></a>
-<a class="sourceLine" id="cb64-19" title="19"><span class="st">    </span></a>
-<a class="sourceLine" id="cb64-20" title="20"><span class="st">    `</span><span class="dt">colnames&lt;-</span><span class="st">`</span>(<span class="kw">c</span>(<span class="st">&quot;spatial scale&quot;</span>, glue<span class="op">::</span><span class="kw">glue</span>(<span class="st">&quot;{trait} class&quot;</span>),</a>
-<a class="sourceLine" id="cb64-21" title="21">                 <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;+ve&quot;</span>, <span class="st">&quot;-ve&quot;</span>), <span class="kw">length</span>(predictors)))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb64-22" title="22"><span class="st">    </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">caption =</span> glue<span class="op">::</span><span class="kw">glue</span>(<span class="st">&quot;Predictor effects for {trait}&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb64-23" title="23"><span class="st">    </span>kableExtra<span class="op">::</span><span class="kw">kable_styling</span>(<span class="st">&quot;striped&quot;</span>, <span class="dt">full_width =</span> F,</a>
-<a class="sourceLine" id="cb64-24" title="24">                              <span class="dt">font_size =</span> <span class="dv">8</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb64-25" title="25"><span class="st">    </span>kableExtra<span class="op">::</span><span class="kw">add_header_above</span>(headers) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb64-26" title="26"><span class="st">    </span><span class="kw">print</span>()</a>
-<a class="sourceLine" id="cb64-27" title="27">  <span class="kw">cat</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
-<a class="sourceLine" id="cb64-28" title="28">})</a></code></pre></div>
+<h3><span class="header-section-number">7.6.5</span> Tabulate predictor effect</h3>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" title="1"><span class="co"># read again and nest</span></a>
+<a class="sourceLine" id="cb76-2" title="2">data_predictor_long &lt;-<span class="st"> </span>readr<span class="op">::</span><span class="kw">read_csv</span>(<span class="st">&quot;data/results/data_predictor_long.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb76-3" title="3"></a>
+<a class="sourceLine" id="cb76-4" title="4"><span class="co"># nest the data by trait</span></a>
+<a class="sourceLine" id="cb76-5" title="5">data_predictor_long &lt;-<span class="st"> </span>tidyr<span class="op">::</span><span class="kw">nest</span>(data_predictor_long,</a>
+<a class="sourceLine" id="cb76-6" title="6">                                   <span class="dt">data =</span> <span class="op">-</span>trait)</a>
+<a class="sourceLine" id="cb76-7" title="7"></a>
+<a class="sourceLine" id="cb76-8" title="8"><span class="co"># first pivot the data columns</span></a>
+<a class="sourceLine" id="cb76-9" title="9">purrr<span class="op">::</span><span class="kw">pwalk</span>(data_predictor_long, <span class="cf">function</span>(trait, data) {</a>
+<a class="sourceLine" id="cb76-10" title="10">  predictors &lt;-<span class="st"> </span><span class="kw">unique</span>(data<span class="op">$</span>predictor)</a>
+<a class="sourceLine" id="cb76-11" title="11">  headers &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">2</span>, <span class="kw">length</span>(predictors)))</a>
+<a class="sourceLine" id="cb76-12" title="12">  <span class="kw">names</span>(headers) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot; &quot;</span>, <span class="dv">2</span>), predictors)</a>
+<a class="sourceLine" id="cb76-13" title="13">  </a>
+<a class="sourceLine" id="cb76-14" title="14">  data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb76-15" title="15"><span class="st">    </span>tidyr<span class="op">::</span><span class="kw">drop_na</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb76-16" title="16"><span class="st">    </span>tidyr<span class="op">::</span><span class="kw">pivot_wider</span>(<span class="dt">names_from =</span> <span class="kw">c</span>(<span class="st">&quot;predictor&quot;</span>, <span class="st">&quot;effect&quot;</span>), </a>
+<a class="sourceLine" id="cb76-17" title="17">                <span class="dt">values_from =</span> <span class="st">&quot;magnitude&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb76-18" title="18"><span class="st">    </span></a>
+<a class="sourceLine" id="cb76-19" title="19"><span class="st">    </span></a>
+<a class="sourceLine" id="cb76-20" title="20"><span class="st">    `</span><span class="dt">colnames&lt;-</span><span class="st">`</span>(<span class="kw">c</span>(<span class="st">&quot;spatial scale&quot;</span>, glue<span class="op">::</span><span class="kw">glue</span>(<span class="st">&quot;{trait} class&quot;</span>),</a>
+<a class="sourceLine" id="cb76-21" title="21">                 <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;-ve&quot;</span>, <span class="st">&quot;+ve&quot;</span>), <span class="kw">length</span>(predictors)))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb76-22" title="22"><span class="st">    </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">caption =</span> glue<span class="op">::</span><span class="kw">glue</span>(<span class="st">&quot;Predictor effects for {trait}&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb76-23" title="23"><span class="st">    </span>kableExtra<span class="op">::</span><span class="kw">kable_styling</span>(<span class="st">&quot;striped&quot;</span>, <span class="dt">full_width =</span> F,</a>
+<a class="sourceLine" id="cb76-24" title="24">                              <span class="dt">font_size =</span> <span class="dv">8</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb76-25" title="25"><span class="st">    </span>kableExtra<span class="op">::</span><span class="kw">add_header_above</span>(headers) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb76-26" title="26"><span class="st">    </span><span class="kw">print</span>()</a>
+<a class="sourceLine" id="cb76-27" title="27">  <span class="kw">cat</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
+<a class="sourceLine" id="cb76-28" title="28">})</a></code></pre></div>
 <table class="table table-striped" style="font-size: 8px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-17">Table 7.1: </span>Predictor effects for elev
+<span id="tab:unnamed-chunk-28">Table 7.1: </span>Predictor effects for elev
 </caption>
 <thead>
 <tr>
@@ -544,9 +770,6 @@ spatial scale
 elev class
 </th>
 <th style="text-align:right;">
-+ve
-</th>
-<th style="text-align:right;">
 -ve
 </th>
 <th style="text-align:right;">
@@ -590,6 +813,9 @@ elev class
 </th>
 <th style="text-align:right;">
 -ve
+</th>
+<th style="text-align:right;">
++ve
 </th>
 </tr>
 </thead>
@@ -659,13 +885,13 @@ LOW
 0
 </td>
 <td style="text-align:right;">
-29
+31
 </td>
 <td style="text-align:right;">
--14
+-15
 </td>
 <td style="text-align:right;">
-11
+14
 </td>
 <td style="text-align:right;">
 0
@@ -677,22 +903,22 @@ LOW
 -7
 </td>
 <td style="text-align:right;">
-10
+11
 </td>
 <td style="text-align:right;">
--3
+-4
 </td>
 <td style="text-align:right;">
 0
 </td>
 <td style="text-align:right;">
--11
+-12
 </td>
 <td style="text-align:right;">
 1
 </td>
 <td style="text-align:right;">
--13
+-18
 </td>
 <td style="text-align:right;">
 3
@@ -712,7 +938,7 @@ LOW
 MID
 </td>
 <td style="text-align:right;">
--20
+-21
 </td>
 <td style="text-align:right;">
 4
@@ -721,7 +947,7 @@ MID
 -6
 </td>
 <td style="text-align:right;">
-18
+19
 </td>
 <td style="text-align:right;">
 -8
@@ -736,7 +962,7 @@ MID
 10
 </td>
 <td style="text-align:right;">
--10
+-11
 </td>
 <td style="text-align:right;">
 2
@@ -748,7 +974,7 @@ MID
 1
 </td>
 <td style="text-align:right;">
--10
+-11
 </td>
 <td style="text-align:right;">
 5
@@ -822,31 +1048,37 @@ HIGH
 LOW
 </td>
 <td style="text-align:right;">
-0
+-1
 </td>
 <td style="text-align:right;">
-23
+25
 </td>
 <td style="text-align:right;">
--15
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
--4
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
--8
+-16
 </td>
 <td style="text-align:right;">
 7
 </td>
 <td style="text-align:right;">
--8
+-4
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+-10
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+-11
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+-19
 </td>
 <td style="text-align:right;">
 0
@@ -855,16 +1087,10 @@ LOW
 -16
 </td>
 <td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
--12
-</td>
-<td style="text-align:right;">
 3
 </td>
 <td style="text-align:right;">
--7
+-8
 </td>
 <td style="text-align:right;">
 3
@@ -878,7 +1104,7 @@ LOW
 MID
 </td>
 <td style="text-align:right;">
--21
+-22
 </td>
 <td style="text-align:right;">
 4
@@ -887,7 +1113,7 @@ MID
 -6
 </td>
 <td style="text-align:right;">
-12
+13
 </td>
 <td style="text-align:right;">
 -6
@@ -902,7 +1128,7 @@ MID
 13
 </td>
 <td style="text-align:right;">
--15
+-16
 </td>
 <td style="text-align:right;">
 2
@@ -914,7 +1140,7 @@ MID
 3
 </td>
 <td style="text-align:right;">
--13
+-14
 </td>
 <td style="text-align:right;">
 6
@@ -930,7 +1156,7 @@ MID
 </table>
 <table class="table table-striped" style="font-size: 8px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-17">Table 7.1: </span>Predictor effects for habitat
+<span id="tab:unnamed-chunk-28">Table 7.1: </span>Predictor effects for habitat
 </caption>
 <thead>
 <tr>
@@ -987,9 +1213,6 @@ spatial scale
 habitat class
 </th>
 <th style="text-align:right;">
-+ve
-</th>
-<th style="text-align:right;">
 -ve
 </th>
 <th style="text-align:right;">
@@ -1033,6 +1256,9 @@ habitat class
 </th>
 <th style="text-align:right;">
 -ve
+</th>
+<th style="text-align:right;">
++ve
 </th>
 </tr>
 </thead>
@@ -1054,7 +1280,7 @@ FOR
 -5
 </td>
 <td style="text-align:right;">
-26
+29
 </td>
 <td style="text-align:right;">
 -9
@@ -1066,10 +1292,10 @@ FOR
 -3
 </td>
 <td style="text-align:right;">
-15
+16
 </td>
 <td style="text-align:right;">
--4
+-5
 </td>
 <td style="text-align:right;">
 2
@@ -1081,7 +1307,7 @@ FOR
 0
 </td>
 <td style="text-align:right;">
--13
+-16
 </td>
 <td style="text-align:right;">
 3
@@ -1101,16 +1327,16 @@ FOR
 OC
 </td>
 <td style="text-align:right;">
--13
+-14
 </td>
 <td style="text-align:right;">
-20
+22
 </td>
 <td style="text-align:right;">
--16
+-17
 </td>
 <td style="text-align:right;">
-7
+8
 </td>
 <td style="text-align:right;">
 -4
@@ -1125,19 +1351,19 @@ OC
 5
 </td>
 <td style="text-align:right;">
--10
+-11
 </td>
 <td style="text-align:right;">
 1
 </td>
 <td style="text-align:right;">
--9
+-10
 </td>
 <td style="text-align:right;">
 2
 </td>
 <td style="text-align:right;">
--12
+-15
 </td>
 <td style="text-align:right;">
 6
@@ -1157,7 +1383,7 @@ OC
 FOR
 </td>
 <td style="text-align:right;">
--16
+-17
 </td>
 <td style="text-align:right;">
 9
@@ -1166,7 +1392,7 @@ FOR
 -6
 </td>
 <td style="text-align:right;">
-12
+14
 </td>
 <td style="text-align:right;">
 -11
@@ -1175,25 +1401,25 @@ FOR
 2
 </td>
 <td style="text-align:right;">
--4
+-5
 </td>
 <td style="text-align:right;">
 13
 </td>
 <td style="text-align:right;">
--8
+-10
 </td>
 <td style="text-align:right;">
 1
 </td>
 <td style="text-align:right;">
--12
+-14
 </td>
 <td style="text-align:right;">
 0
 </td>
 <td style="text-align:right;">
--15
+-16
 </td>
 <td style="text-align:right;">
 5
@@ -1213,49 +1439,49 @@ FOR
 OC
 </td>
 <td style="text-align:right;">
--14
+-15
 </td>
 <td style="text-align:right;">
-18
+20
 </td>
 <td style="text-align:right;">
--18
-</td>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:right;">
--4
-</td>
-<td style="text-align:right;">
-12
-</td>
-<td style="text-align:right;">
--9
+-19
 </td>
 <td style="text-align:right;">
 7
 </td>
 <td style="text-align:right;">
--16
+-4
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+-10
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+-18
 </td>
 <td style="text-align:right;">
 2
 </td>
 <td style="text-align:right;">
--13
+-14
 </td>
 <td style="text-align:right;">
 4
 </td>
 <td style="text-align:right;">
--13
+-17
 </td>
 <td style="text-align:right;">
 5
 </td>
 <td style="text-align:right;">
--10
+-11
 </td>
 <td style="text-align:right;">
 0
@@ -1265,7 +1491,7 @@ OC
 </table>
 <table class="table table-striped" style="font-size: 8px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-17">Table 7.1: </span>Predictor effects for migratory_status
+<span id="tab:unnamed-chunk-28">Table 7.1: </span>Predictor effects for migratory_status
 </caption>
 <thead>
 <tr>
@@ -1322,9 +1548,6 @@ spatial scale
 migratory_status class
 </th>
 <th style="text-align:right;">
-+ve
-</th>
-<th style="text-align:right;">
 -ve
 </th>
 <th style="text-align:right;">
@@ -1368,6 +1591,9 @@ migratory_status class
 </th>
 <th style="text-align:right;">
 -ve
+</th>
+<th style="text-align:right;">
++ve
 </th>
 </tr>
 </thead>
@@ -1436,16 +1662,16 @@ MIG
 RES
 </td>
 <td style="text-align:right;">
--24
+-25
 </td>
 <td style="text-align:right;">
-29
+31
 </td>
 <td style="text-align:right;">
--21
+-22
 </td>
 <td style="text-align:right;">
-28
+32
 </td>
 <td style="text-align:right;">
 -9
@@ -1457,22 +1683,22 @@ RES
 -14
 </td>
 <td style="text-align:right;">
-18
+19
 </td>
 <td style="text-align:right;">
--12
+-14
 </td>
 <td style="text-align:right;">
 3
 </td>
 <td style="text-align:right;">
--18
+-19
 </td>
 <td style="text-align:right;">
 2
 </td>
 <td style="text-align:right;">
--23
+-29
 </td>
 <td style="text-align:right;">
 9
@@ -1548,49 +1774,49 @@ MIG
 RES
 </td>
 <td style="text-align:right;">
+-26
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
 -24
 </td>
 <td style="text-align:right;">
-23
-</td>
-<td style="text-align:right;">
--23
-</td>
-<td style="text-align:right;">
-14
+17
 </td>
 <td style="text-align:right;">
 -12
 </td>
 <td style="text-align:right;">
-14
+16
 </td>
 <td style="text-align:right;">
--12
+-14
 </td>
 <td style="text-align:right;">
 20
 </td>
 <td style="text-align:right;">
--21
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
--24
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
 -25
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+-27
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+-30
 </td>
 <td style="text-align:right;">
 10
 </td>
 <td style="text-align:right;">
--11
+-12
 </td>
 <td style="text-align:right;">
 10
@@ -1600,7 +1826,7 @@ RES
 </table>
 <table class="table table-striped" style="font-size: 8px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-17">Table 7.1: </span>Predictor effects for range_size
+<span id="tab:unnamed-chunk-28">Table 7.1: </span>Predictor effects for range_size
 </caption>
 <thead>
 <tr>
@@ -1657,9 +1883,6 @@ spatial scale
 range_size class
 </th>
 <th style="text-align:right;">
-+ve
-</th>
-<th style="text-align:right;">
 -ve
 </th>
 <th style="text-align:right;">
@@ -1703,6 +1926,9 @@ range_size class
 </th>
 <th style="text-align:right;">
 -ve
+</th>
+<th style="text-align:right;">
++ve
 </th>
 </tr>
 </thead>
@@ -1724,7 +1950,7 @@ LAR
 -8
 </td>
 <td style="text-align:right;">
-14
+15
 </td>
 <td style="text-align:right;">
 -4
@@ -1751,7 +1977,7 @@ LAR
 1
 </td>
 <td style="text-align:right;">
--7
+-8
 </td>
 <td style="text-align:right;">
 4
@@ -1771,7 +1997,7 @@ LAR
 MOD
 </td>
 <td style="text-align:right;">
--9
+-10
 </td>
 <td style="text-align:right;">
 2
@@ -1780,7 +2006,7 @@ MOD
 0
 </td>
 <td style="text-align:right;">
-15
+18
 </td>
 <td style="text-align:right;">
 -5
@@ -1792,10 +2018,10 @@ MOD
 0
 </td>
 <td style="text-align:right;">
-10
+11
 </td>
 <td style="text-align:right;">
--3
+-5
 </td>
 <td style="text-align:right;">
 1
@@ -1807,7 +2033,7 @@ MOD
 0
 </td>
 <td style="text-align:right;">
--9
+-12
 </td>
 <td style="text-align:right;">
 1
@@ -1830,10 +2056,10 @@ VLAR
 -7
 </td>
 <td style="text-align:right;">
-13
+15
 </td>
 <td style="text-align:right;">
--13
+-14
 </td>
 <td style="text-align:right;">
 4
@@ -1857,13 +2083,13 @@ VLAR
 0
 </td>
 <td style="text-align:right;">
--9
+-10
 </td>
 <td style="text-align:right;">
 1
 </td>
 <td style="text-align:right;">
--9
+-11
 </td>
 <td style="text-align:right;">
 4
@@ -1939,7 +2165,7 @@ LAR
 MOD
 </td>
 <td style="text-align:right;">
--10
+-12
 </td>
 <td style="text-align:right;">
 1
@@ -1948,7 +2174,7 @@ MOD
 -1
 </td>
 <td style="text-align:right;">
-7
+10
 </td>
 <td style="text-align:right;">
 -7
@@ -1957,25 +2183,25 @@ MOD
 1
 </td>
 <td style="text-align:right;">
--2
+-3
 </td>
 <td style="text-align:right;">
 7
 </td>
 <td style="text-align:right;">
--5
+-8
 </td>
 <td style="text-align:right;">
 1
 </td>
 <td style="text-align:right;">
--5
+-7
 </td>
 <td style="text-align:right;">
 0
 </td>
 <td style="text-align:right;">
--12
+-14
 </td>
 <td style="text-align:right;">
 2
@@ -1998,10 +2224,10 @@ VLAR
 -8
 </td>
 <td style="text-align:right;">
-12
+14
 </td>
 <td style="text-align:right;">
--13
+-14
 </td>
 <td style="text-align:right;">
 5
@@ -2010,34 +2236,34 @@ VLAR
 -4
 </td>
 <td style="text-align:right;">
-8
+10
 </td>
 <td style="text-align:right;">
--7
+-8
 </td>
 <td style="text-align:right;">
 5
 </td>
 <td style="text-align:right;">
--12
+-13
 </td>
 <td style="text-align:right;">
 1
 </td>
 <td style="text-align:right;">
--12
+-13
 </td>
 <td style="text-align:right;">
 3
 </td>
 <td style="text-align:right;">
--11
+-14
 </td>
 <td style="text-align:right;">
 3
 </td>
 <td style="text-align:right;">
--9
+-10
 </td>
 <td style="text-align:right;">
 0
@@ -2048,109 +2274,685 @@ VLAR
 </div>
 </div>
 <div id="land-cover-or-climate" class="section level2">
-<h2><span class="header-section-number">7.5</span> Land cover or climate?</h2>
+<h2><span class="header-section-number">7.7</span> Land cover or climate?</h2>
 <p>Group the predictor data by two broad classes, landcover or climate.</p>
 <div id="get-the-effect-of-landcover-or-climate" class="section level3">
-<h3><span class="header-section-number">7.5.1</span> Get the effect of landcover or climate</h3>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" title="1"><span class="co"># remove figs and unnest</span></a>
-<a class="sourceLine" id="cb65-2" title="2">data_predictor_long &lt;-<span class="st"> </span>data_predictor_long <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb65-3" title="3"><span class="st">  </span><span class="kw">select</span>(<span class="op">!</span><span class="kw">matches</span>(<span class="st">&quot;figs&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb65-4" title="4"><span class="st">  </span><span class="kw">unnest</span>(data)</a>
-<a class="sourceLine" id="cb65-5" title="5"></a>
-<a class="sourceLine" id="cb65-6" title="6"><span class="co"># group by predictor</span></a>
-<a class="sourceLine" id="cb65-7" title="7">data_lc_v_clim &lt;-<span class="st"> </span>data_predictor_long <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb65-8" title="8"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">predictor =</span> <span class="kw">if_else</span>(<span class="kw">str_detect</span>(predictor, <span class="st">&quot;bio&quot;</span>), </a>
-<a class="sourceLine" id="cb65-9" title="9">                             <span class="st">&quot;climate&quot;</span>, <span class="st">&quot;landcover&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb65-10" title="10"><span class="st">  </span><span class="kw">group_by</span>(trait, scale, predictor, value, effect) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb65-11" title="11"><span class="st">  </span><span class="kw">summarise_at</span>(<span class="dt">.vars =</span> <span class="kw">c</span>(<span class="st">&quot;magnitude&quot;</span>),</a>
-<a class="sourceLine" id="cb65-12" title="12">               <span class="dt">.funs =</span> <span class="kw">list</span>(sum))</a></code></pre></div>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" title="1"><span class="co"># nest on trait</span></a>
-<a class="sourceLine" id="cb66-2" title="2">data_lc_v_clim &lt;-<span class="st"> </span><span class="kw">nest</span>(data_lc_v_clim,</a>
-<a class="sourceLine" id="cb66-3" title="3">                       <span class="dt">cols =</span> <span class="op">-</span>trait)</a></code></pre></div>
+<h3><span class="header-section-number">7.7.1</span> Get the effect of landcover or climate</h3>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" title="1"><span class="co"># remove figs and unnest</span></a>
+<a class="sourceLine" id="cb77-2" title="2">data_predictor_long &lt;-<span class="st"> </span>data_predictor_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb77-3" title="3"><span class="st">  </span><span class="kw">select</span>(<span class="op">!</span><span class="kw">matches</span>(<span class="st">&quot;figs&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb77-4" title="4"><span class="st">  </span><span class="kw">unnest</span>(data)</a>
+<a class="sourceLine" id="cb77-5" title="5"></a>
+<a class="sourceLine" id="cb77-6" title="6"><span class="co"># group by predictor</span></a>
+<a class="sourceLine" id="cb77-7" title="7">data_lc_v_clim &lt;-<span class="st"> </span>data_predictor_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb77-8" title="8"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">predictor =</span> <span class="kw">if_else</span>(<span class="kw">str_detect</span>(predictor, <span class="st">&quot;bio&quot;</span>), </a>
+<a class="sourceLine" id="cb77-9" title="9">                             <span class="st">&quot;climate&quot;</span>, <span class="st">&quot;landcover&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb77-10" title="10"><span class="st">  </span><span class="kw">group_by</span>(trait, scale, predictor, Class, effect) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb77-11" title="11"><span class="st">  </span><span class="kw">summarise_at</span>(<span class="dt">.vars =</span> <span class="kw">c</span>(<span class="st">&quot;magnitude&quot;</span>),</a>
+<a class="sourceLine" id="cb77-12" title="12">               <span class="dt">.funs =</span> <span class="kw">list</span>(sum))</a>
+<a class="sourceLine" id="cb77-13" title="13"></a>
+<a class="sourceLine" id="cb77-14" title="14"><span class="co"># save for later use</span></a>
+<a class="sourceLine" id="cb77-15" title="15"><span class="kw">write_csv</span>(data_lc_v_clim, <span class="dt">path =</span> <span class="st">&quot;data/data_lc_v_clim.csv&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" title="1"><span class="co"># nest on trait</span></a>
+<a class="sourceLine" id="cb78-2" title="2">data_lc_v_clim &lt;-<span class="st"> </span><span class="kw">nest</span>(data_lc_v_clim,</a>
+<a class="sourceLine" id="cb78-3" title="3">                       <span class="dt">cols =</span> <span class="op">-</span>trait)</a></code></pre></div>
 </div>
 <div id="plot-a-figure" class="section level3">
-<h3><span class="header-section-number">7.5.2</span> Plot a figure</h3>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" title="1"><span class="co"># make list of figures</span></a>
-<a class="sourceLine" id="cb67-2" title="2">data_lc_v_clim<span class="op">$</span>figs &lt;-<span class="st"> </span><span class="kw">pmap</span>(data_lc_v_clim[,<span class="kw">c</span>(<span class="st">&quot;trait&quot;</span>, <span class="st">&quot;cols&quot;</span>)],</a>
-<a class="sourceLine" id="cb67-3" title="3">                           <span class="cf">function</span>(trait, cols) {</a>
-<a class="sourceLine" id="cb67-4" title="4">                             <span class="kw">ggplot</span>(cols) <span class="op">+</span></a>
-<a class="sourceLine" id="cb67-5" title="5"><span class="st">                               </span><span class="kw">geom_col</span>(<span class="kw">aes</span>(predictor, magnitude,</a>
-<a class="sourceLine" id="cb67-6" title="6">                                            <span class="dt">fill =</span> effect),</a>
-<a class="sourceLine" id="cb67-7" title="7">                                        <span class="dt">width =</span> <span class="fl">0.4</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb67-8" title="8"><span class="st">                               </span></a>
-<a class="sourceLine" id="cb67-9" title="9"><span class="st">                               </span>scico<span class="op">::</span><span class="kw">scale_fill_scico_d</span>(<span class="dt">palette =</span> <span class="st">&quot;berlin&quot;</span>,</a>
-<a class="sourceLine" id="cb67-10" title="10">                                                      <span class="dt">direction =</span> <span class="dv">-1</span>,</a>
-<a class="sourceLine" id="cb67-11" title="11">                                                      <span class="dt">begin =</span> <span class="fl">0.1</span>, <span class="dt">end =</span> <span class="fl">0.9</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb67-12" title="12"><span class="st">                               </span><span class="kw">theme_grey</span>(<span class="dt">base_family =</span> <span class="st">&quot;TT Arial&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb67-13" title="13"><span class="st">                               </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb67-14" title="14"><span class="st">                               </span></a>
-<a class="sourceLine" id="cb67-15" title="15"><span class="st">                               </span><span class="kw">facet_grid</span>(value <span class="op">~</span><span class="st"> </span>scale,</a>
-<a class="sourceLine" id="cb67-16" title="16">                                          <span class="dt">labeller =</span> label_both) <span class="op">+</span></a>
-<a class="sourceLine" id="cb67-17" title="17"><span class="st">                               </span><span class="kw">labs</span>(<span class="dt">title =</span> glue<span class="op">::</span><span class="kw">glue</span>(<span class="st">&#39;trait: {trait}&#39;</span>))</a>
-<a class="sourceLine" id="cb67-18" title="18">                           })</a>
-<a class="sourceLine" id="cb67-19" title="19">fig_lc_v_clim &lt;-<span class="st"> </span>patchwork<span class="op">::</span><span class="kw">wrap_plots</span>(data_lc_v_clim<span class="op">$</span>figs,</a>
-<a class="sourceLine" id="cb67-20" title="20">                                       <span class="dt">nrow =</span> <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb67-21" title="21"></a>
-<a class="sourceLine" id="cb67-22" title="22"><span class="co"># save plot</span></a>
-<a class="sourceLine" id="cb67-23" title="23"><span class="kw">ggsave</span>(fig_lc_v_clim, <span class="dt">filename =</span> <span class="st">&quot;figs/fig_lc_v_clim.png&quot;</span>,</a>
-<a class="sourceLine" id="cb67-24" title="24">       <span class="dt">dpi =</span> <span class="dv">300</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" title="1">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;figs/fig_lc_v_clim.png&quot;</span>)</a></code></pre></div>
+<h3><span class="header-section-number">7.7.2</span> Plot a figure</h3>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" title="1"><span class="co"># make list of figures</span></a>
+<a class="sourceLine" id="cb79-2" title="2">data_lc_v_clim<span class="op">$</span>figs &lt;-<span class="st"> </span><span class="kw">pmap</span>(data_lc_v_clim[,<span class="kw">c</span>(<span class="st">&quot;trait&quot;</span>, <span class="st">&quot;cols&quot;</span>)],</a>
+<a class="sourceLine" id="cb79-3" title="3">                           <span class="cf">function</span>(trait, cols) {</a>
+<a class="sourceLine" id="cb79-4" title="4">                             <span class="kw">ggplot</span>(cols) <span class="op">+</span></a>
+<a class="sourceLine" id="cb79-5" title="5"><span class="st">                               </span></a>
+<a class="sourceLine" id="cb79-6" title="6"><span class="st">                               </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb79-7" title="7">                                          <span class="dt">lwd =</span> <span class="fl">0.2</span>,</a>
+<a class="sourceLine" id="cb79-8" title="8">                                          <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb79-9" title="9"><span class="st">                               </span><span class="kw">geom_col</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">factor</span>(predictor),</a>
+<a class="sourceLine" id="cb79-10" title="10">                                            <span class="dt">y =</span> magnitude,</a>
+<a class="sourceLine" id="cb79-11" title="11">                                            <span class="dt">group =</span> <span class="kw">interaction</span>(effect, scale)),</a>
+<a class="sourceLine" id="cb79-12" title="12">                                        <span class="co"># position = position_dodge(width = 1),</span></a>
+<a class="sourceLine" id="cb79-13" title="13">                                        <span class="dt">width =</span> <span class="fl">0.01</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb79-14" title="14"><span class="st">                               </span></a>
+<a class="sourceLine" id="cb79-15" title="15"><span class="st">                               </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">factor</span>(predictor),</a>
+<a class="sourceLine" id="cb79-16" title="16">                                              <span class="dt">y =</span> magnitude,</a>
+<a class="sourceLine" id="cb79-17" title="17">                                              <span class="dt">fill =</span> <span class="kw">interaction</span>(effect, scale)),</a>
+<a class="sourceLine" id="cb79-18" title="18">                                          <span class="co"># position = position_dodge(width = 1),</span></a>
+<a class="sourceLine" id="cb79-19" title="19">                                          <span class="dt">size =</span> <span class="dv">3</span>,</a>
+<a class="sourceLine" id="cb79-20" title="20">                                          <span class="dt">shape =</span> <span class="dv">21</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb79-21" title="21"><span class="st">                               </span></a>
+<a class="sourceLine" id="cb79-22" title="22"><span class="st">                               </span>scico<span class="op">::</span><span class="kw">scale_fill_scico_d</span>(<span class="dt">palette =</span> <span class="st">&quot;berlin&quot;</span>,</a>
+<a class="sourceLine" id="cb79-23" title="23">                                                      <span class="dt">direction =</span> <span class="dv">-1</span>,</a>
+<a class="sourceLine" id="cb79-24" title="24">                                                      <span class="dt">begin =</span> <span class="fl">0.1</span>, <span class="dt">end =</span> <span class="fl">0.9</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb79-25" title="25"><span class="st">                               </span><span class="kw">theme_test</span>(<span class="dt">base_family =</span> <span class="st">&quot;TT Arial&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb79-26" title="26"><span class="st">                               </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb79-27" title="27"><span class="st">                               </span></a>
+<a class="sourceLine" id="cb79-28" title="28"><span class="st">                               </span><span class="kw">facet_grid</span>(Class <span class="op">~</span><span class="st"> </span>scale,</a>
+<a class="sourceLine" id="cb79-29" title="29">                                          <span class="dt">labeller =</span> label_both) <span class="op">+</span></a>
+<a class="sourceLine" id="cb79-30" title="30"><span class="st">                               </span><span class="kw">labs</span>(<span class="dt">title =</span> glue<span class="op">::</span><span class="kw">glue</span>(<span class="st">&#39;trait: {trait}&#39;</span>),</a>
+<a class="sourceLine" id="cb79-31" title="31">                                    <span class="dt">x =</span> <span class="ot">NULL</span>,</a>
+<a class="sourceLine" id="cb79-32" title="32">                                    <span class="dt">y =</span> <span class="st">&quot;# species with signed effect&quot;</span>)</a>
+<a class="sourceLine" id="cb79-33" title="33">                           })</a>
+<a class="sourceLine" id="cb79-34" title="34">fig_lc_v_clim &lt;-<span class="st"> </span>patchwork<span class="op">::</span><span class="kw">wrap_plots</span>(data_lc_v_clim<span class="op">$</span>figs,</a>
+<a class="sourceLine" id="cb79-35" title="35">                                       <span class="dt">nrow =</span> <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb79-36" title="36"></a>
+<a class="sourceLine" id="cb79-37" title="37"><span class="co"># save plot</span></a>
+<a class="sourceLine" id="cb79-38" title="38"><span class="kw">ggsave</span>(fig_lc_v_clim, <span class="dt">filename =</span> <span class="st">&quot;figs/fig_lc_v_clim.png&quot;</span>,</a>
+<a class="sourceLine" id="cb79-39" title="39">       <span class="dt">dpi =</span> <span class="dv">300</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" title="1">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;figs/fig_lc_v_clim.png&quot;</span>)</a></code></pre></div>
+<p><img src="figs/fig_lc_v_clim.png" width="\textwidth" style="display: block; margin: auto;" /></p>
 </div>
+<div id="tabulate-landcover-vs-climate" class="section level3">
+<h3><span class="header-section-number">7.7.3</span> Tabulate landcover vs climate</h3>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" title="1"><span class="co"># read again and nest</span></a>
+<a class="sourceLine" id="cb81-2" title="2">data_lc_v_clim &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/data_lc_v_clim.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb81-3" title="3"></a>
+<a class="sourceLine" id="cb81-4" title="4"><span class="co"># nest again</span></a>
+<a class="sourceLine" id="cb81-5" title="5">data_lc_v_clim &lt;-<span class="st"> </span><span class="kw">nest</span>(data_lc_v_clim,</a>
+<a class="sourceLine" id="cb81-6" title="6">                       <span class="dt">data =</span> <span class="op">-</span>trait)</a>
+<a class="sourceLine" id="cb81-7" title="7"></a>
+<a class="sourceLine" id="cb81-8" title="8"><span class="co"># first pivot the data columns</span></a>
+<a class="sourceLine" id="cb81-9" title="9">purrr<span class="op">::</span><span class="kw">pwalk</span>(data_lc_v_clim, <span class="cf">function</span>(trait, data) {</a>
+<a class="sourceLine" id="cb81-10" title="10">  predictors &lt;-<span class="st"> </span><span class="kw">unique</span>(data<span class="op">$</span>predictor)</a>
+<a class="sourceLine" id="cb81-11" title="11">  headers &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">2</span>, <span class="kw">length</span>(predictors)))</a>
+<a class="sourceLine" id="cb81-12" title="12">  <span class="kw">names</span>(headers) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot; &quot;</span>, <span class="dv">2</span>), predictors)</a>
+<a class="sourceLine" id="cb81-13" title="13">  </a>
+<a class="sourceLine" id="cb81-14" title="14">  data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb81-15" title="15"><span class="st">    </span>tidyr<span class="op">::</span><span class="kw">drop_na</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb81-16" title="16"><span class="st">    </span>tidyr<span class="op">::</span><span class="kw">pivot_wider</span>(<span class="dt">names_from =</span> <span class="kw">c</span>(<span class="st">&quot;predictor&quot;</span>, <span class="st">&quot;effect&quot;</span>), </a>
+<a class="sourceLine" id="cb81-17" title="17">                <span class="dt">values_from =</span> <span class="st">&quot;magnitude&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb81-18" title="18"><span class="st">    </span></a>
+<a class="sourceLine" id="cb81-19" title="19"><span class="st">    </span></a>
+<a class="sourceLine" id="cb81-20" title="20"><span class="st">    `</span><span class="dt">colnames&lt;-</span><span class="st">`</span>(<span class="kw">c</span>(<span class="st">&quot;spatial scale&quot;</span>, glue<span class="op">::</span><span class="kw">glue</span>(<span class="st">&quot;{trait} class&quot;</span>),</a>
+<a class="sourceLine" id="cb81-21" title="21">                 <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;-ve&quot;</span>, <span class="st">&quot;+ve&quot;</span>), <span class="kw">length</span>(predictors)))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb81-22" title="22"><span class="st">    </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">caption =</span> glue<span class="op">::</span><span class="kw">glue</span>(<span class="st">&quot;Predictor effects for {trait}&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb81-23" title="23"><span class="st">    </span>kableExtra<span class="op">::</span><span class="kw">kable_styling</span>(<span class="st">&quot;striped&quot;</span>, <span class="dt">full_width =</span> F,</a>
+<a class="sourceLine" id="cb81-24" title="24">                              <span class="dt">font_size =</span> <span class="dv">8</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb81-25" title="25"><span class="st">    </span>kableExtra<span class="op">::</span><span class="kw">add_header_above</span>(headers) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb81-26" title="26"><span class="st">    </span><span class="kw">print</span>()</a>
+<a class="sourceLine" id="cb81-27" title="27">  <span class="kw">cat</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
+<a class="sourceLine" id="cb81-28" title="28">})</a></code></pre></div>
+<table class="table table-striped" style="font-size: 8px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-33">Table 7.2: </span>Predictor effects for Elevation range
+</caption>
+<thead>
+<tr>
+<th style="border-bottom:hidden" colspan="1">
+</th>
+<th style="border-bottom:hidden" colspan="1">
+</th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+climate
 </div>
-<div id="elevation-summary-this-needs-to-be-removed" class="section level2">
-<h2><span class="header-section-number">7.6</span> Elevation summary THIS NEEDS TO BE REMOVED</h2>
-<p>Plot elevation summaries faceted by scale and predictors.
-Read species elevation summaries.</p>
-<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" title="1"><span class="co"># add elevation data</span></a>
-<a class="sourceLine" id="cb69-2" title="2">elev_summary &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;data/data_species_elevation.xlsx&quot;</span>)</a>
-<a class="sourceLine" id="cb69-3" title="3"></a>
-<a class="sourceLine" id="cb69-4" title="4"><span class="co"># link to species</span></a>
-<a class="sourceLine" id="cb69-5" title="5">elev_summary &lt;-<span class="st"> </span>elev_summary <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb69-6" title="6"><span class="st">  </span><span class="kw">left_join</span>(data_predictor_effect)</a>
-<a class="sourceLine" id="cb69-7" title="7"></a>
-<a class="sourceLine" id="cb69-8" title="8"><span class="co"># arrange in plot order</span></a>
-<a class="sourceLine" id="cb69-9" title="9">elev_summary &lt;-<span class="st"> </span>elev_summary <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb69-10" title="10"><span class="st">  </span><span class="kw">group_by</span>(scale, scientific_name) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb69-11" title="11"><span class="st">  </span><span class="kw">arrange</span>(median) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb69-12" title="12"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">plot_order =</span> <span class="kw">seq_len</span>(<span class="kw">n</span>()))</a>
-<a class="sourceLine" id="cb69-13" title="13"></a>
-<a class="sourceLine" id="cb69-14" title="14"><span class="co"># remove NAs and order scale</span></a>
-<a class="sourceLine" id="cb69-15" title="15">elev_summary &lt;-<span class="st"> </span><span class="kw">select</span>(elev_summary,</a>
-<a class="sourceLine" id="cb69-16" title="16">                       <span class="op">-</span><span class="st">`</span><span class="dt">Body mass</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb69-17" title="17"><span class="st">  </span><span class="kw">drop_na</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb69-18" title="18"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">scale =</span> <span class="kw">fct_relevel</span>(scale,</a>
-<a class="sourceLine" id="cb69-19" title="19">                             <span class="st">&quot;2.5km&quot;</span>, <span class="st">&quot;10km&quot;</span>))</a>
-<a class="sourceLine" id="cb69-20" title="20"></a>
-<a class="sourceLine" id="cb69-21" title="21"><span class="co"># rename median</span></a>
-<a class="sourceLine" id="cb69-22" title="22">elev_summary &lt;-<span class="st"> </span><span class="kw">rename</span>(elev_summary,</a>
-<a class="sourceLine" id="cb69-23" title="23">                       <span class="dt">median_elev =</span> median)</a>
-<a class="sourceLine" id="cb69-24" title="24"></a>
-<a class="sourceLine" id="cb69-25" title="25"><span class="co"># order</span></a>
-<a class="sourceLine" id="cb69-26" title="26">elev_summary &lt;-<span class="st"> </span>elev_summary <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb69-27" title="27"><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb69-28" title="28"><span class="st">  </span><span class="kw">arrange</span>(<span class="op">-</span>median_elev) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb69-29" title="29"><span class="st">  </span><span class="kw">group_by</span>(scientific_name)</a></code></pre></div>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1"><span class="co"># plot elevation pointranges</span></a>
-<a class="sourceLine" id="cb70-2" title="2"><span class="kw">ggplot</span>(elev_summary)<span class="op">+</span></a>
-<a class="sourceLine" id="cb70-3" title="3"><span class="st">  </span><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(plot_order, </a>
-<a class="sourceLine" id="cb70-4" title="4">                    <span class="dt">ymin =</span> q1, <span class="dt">ymax =</span> q3),</a>
-<a class="sourceLine" id="cb70-5" title="5">                <span class="dt">size =</span> <span class="fl">0.3</span>, <span class="dt">width =</span> <span class="fl">0.4</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb70-6" title="6"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(plot_order, median_elev),</a>
-<a class="sourceLine" id="cb70-7" title="7">             <span class="dt">shape =</span> <span class="dv">21</span>, <span class="dt">col =</span> <span class="st">&quot;grey20&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb70-8" title="8"><span class="st">  </span><span class="kw">facet_grid</span>(scale <span class="op">~</span><span class="st"> </span>predictor, </a>
-<a class="sourceLine" id="cb70-9" title="9">             <span class="dt">scales =</span> <span class="st">&quot;fixed&quot;</span>,</a>
-<a class="sourceLine" id="cb70-10" title="10">             <span class="dt">labeller =</span> label_both,</a>
-<a class="sourceLine" id="cb70-11" title="11">             <span class="dt">as.table =</span> <span class="ot">FALSE</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb70-12" title="12"><span class="st">  </span><span class="kw">theme_test</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb70-13" title="13"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>,</a>
-<a class="sourceLine" id="cb70-14" title="14">        <span class="dt">legend.key =</span> <span class="kw">element_rect</span>(<span class="dt">colour =</span> <span class="st">&quot;white&quot;</span>,</a>
-<a class="sourceLine" id="cb70-15" title="15">                                  <span class="dt">size =</span> <span class="fl">0.3</span>),</a>
-<a class="sourceLine" id="cb70-16" title="16">        <span class="co"># axis.text.y = element_blank(),</span></a>
-<a class="sourceLine" id="cb70-17" title="17">        <span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>())<span class="co">#+</span></a>
-<a class="sourceLine" id="cb70-18" title="18">  <span class="co"># coord_flip()+</span></a>
-<a class="sourceLine" id="cb70-19" title="19">  <span class="co"># labs(x = &quot;Species&quot;,</span></a>
-<a class="sourceLine" id="cb70-20" title="20">       <span class="co"># colour = &quot;synthesis_var&quot;)</span></a></code></pre></div>
+</th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+landcover
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+spatial scale
+</th>
+<th style="text-align:left;">
+Elevation range class
+</th>
+<th style="text-align:right;">
+-ve
+</th>
+<th style="text-align:right;">
++ve
+</th>
+<th style="text-align:right;">
+-ve
+</th>
+<th style="text-align:right;">
++ve
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+2.5km
+</td>
+<td style="text-align:left;">
+High
+</td>
+<td style="text-align:right;">
+-27
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+-46
+</td>
+<td style="text-align:right;">
+27
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2.5km
+</td>
+<td style="text-align:left;">
+Low
+</td>
+<td style="text-align:right;">
+-10
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+-11
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2.5km
+</td>
+<td style="text-align:left;">
+Mid
+</td>
+<td style="text-align:right;">
+-15
+</td>
+<td style="text-align:right;">
+45
+</td>
+<td style="text-align:right;">
+-44
+</td>
+<td style="text-align:right;">
+19
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10km
+</td>
+<td style="text-align:left;">
+High
+</td>
+<td style="text-align:right;">
+-28
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+-53
+</td>
+<td style="text-align:right;">
+38
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10km
+</td>
+<td style="text-align:left;">
+Low
+</td>
+<td style="text-align:right;">
+-12
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-10
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10km
+</td>
+<td style="text-align:left;">
+Mid
+</td>
+<td style="text-align:right;">
+-17
+</td>
+<td style="text-align:right;">
+32
+</td>
+<td style="text-align:right;">
+-68
+</td>
+<td style="text-align:right;">
+20
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-striped" style="font-size: 8px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-33">Table 7.2: </span>Predictor effects for Habitat type
+</caption>
+<thead>
+<tr>
+<th style="border-bottom:hidden" colspan="1">
+</th>
+<th style="border-bottom:hidden" colspan="1">
+</th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+climate
+</div>
+</th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+landcover
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+spatial scale
+</th>
+<th style="text-align:left;">
+Habitat type class
+</th>
+<th style="text-align:right;">
+-ve
+</th>
+<th style="text-align:right;">
++ve
+</th>
+<th style="text-align:right;">
+-ve
+</th>
+<th style="text-align:right;">
++ve
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+2.5km
+</td>
+<td style="text-align:left;">
+FOR
+</td>
+<td style="text-align:right;">
+-21
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+-46
+</td>
+<td style="text-align:right;">
+25
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2.5km
+</td>
+<td style="text-align:left;">
+OC
+</td>
+<td style="text-align:right;">
+-31
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+-55
+</td>
+<td style="text-align:right;">
+24
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10km
+</td>
+<td style="text-align:left;">
+FOR
+</td>
+<td style="text-align:right;">
+-23
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+-57
+</td>
+<td style="text-align:right;">
+32
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10km
+</td>
+<td style="text-align:left;">
+OC
+</td>
+<td style="text-align:right;">
+-34
+</td>
+<td style="text-align:right;">
+27
+</td>
+<td style="text-align:right;">
+-74
+</td>
+<td style="text-align:right;">
+32
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-striped" style="font-size: 8px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-33">Table 7.2: </span>Predictor effects for Migratory status
+</caption>
+<thead>
+<tr>
+<th style="border-bottom:hidden" colspan="1">
+</th>
+<th style="border-bottom:hidden" colspan="1">
+</th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+climate
+</div>
+</th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+landcover
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+spatial scale
+</th>
+<th style="text-align:left;">
+Migratory status class
+</th>
+<th style="text-align:right;">
+-ve
+</th>
+<th style="text-align:right;">
++ve
+</th>
+<th style="text-align:right;">
+-ve
+</th>
+<th style="text-align:right;">
++ve
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+2.5km
+</td>
+<td style="text-align:left;">
+MIG
+</td>
+<td style="text-align:right;">
+-5
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+-10
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2.5km
+</td>
+<td style="text-align:left;">
+RES
+</td>
+<td style="text-align:right;">
+-47
+</td>
+<td style="text-align:right;">
+63
+</td>
+<td style="text-align:right;">
+-91
+</td>
+<td style="text-align:right;">
+46
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10km
+</td>
+<td style="text-align:left;">
+MIG
+</td>
+<td style="text-align:right;">
+-7
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+-11
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10km
+</td>
+<td style="text-align:left;">
+RES
+</td>
+<td style="text-align:right;">
+-50
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+-120
+</td>
+<td style="text-align:right;">
+62
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-striped" style="font-size: 8px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-33">Table 7.2: </span>Predictor effects for Range size
+</caption>
+<thead>
+<tr>
+<th style="border-bottom:hidden" colspan="1">
+</th>
+<th style="border-bottom:hidden" colspan="1">
+</th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+climate
+</div>
+</th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+landcover
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+spatial scale
+</th>
+<th style="text-align:left;">
+Range size class
+</th>
+<th style="text-align:right;">
+-ve
+</th>
+<th style="text-align:right;">
++ve
+</th>
+<th style="text-align:right;">
+-ve
+</th>
+<th style="text-align:right;">
++ve
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+2.5km
+</td>
+<td style="text-align:left;">
+LAR
+</td>
+<td style="text-align:right;">
+-21
+</td>
+<td style="text-align:right;">
+33
+</td>
+<td style="text-align:right;">
+-32
+</td>
+<td style="text-align:right;">
+18
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2.5km
+</td>
+<td style="text-align:left;">
+MOD
+</td>
+<td style="text-align:right;">
+-10
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+-25
+</td>
+<td style="text-align:right;">
+15
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2.5km
+</td>
+<td style="text-align:left;">
+VLAR
+</td>
+<td style="text-align:right;">
+-21
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+-44
+</td>
+<td style="text-align:right;">
+16
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10km
+</td>
+<td style="text-align:left;">
+LAR
+</td>
+<td style="text-align:right;">
+-22
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+-30
+</td>
+<td style="text-align:right;">
+25
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10km
+</td>
+<td style="text-align:left;">
+MOD
+</td>
+<td style="text-align:right;">
+-13
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+-39
+</td>
+<td style="text-align:right;">
+17
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10km
+</td>
+<td style="text-align:left;">
+VLAR
+</td>
+<td style="text-align:right;">
+-22
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+-62
+</td>
+<td style="text-align:right;">
+22
+</td>
+</tr>
+</tbody>
+</table>
 
+</div>
 </div>
 </div>
             </section>
@@ -2159,7 +2961,7 @@ Read species elevation summaries.</p>
         </div>
       </div>
 <a href="occupancy-modelling.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="results-occupancy-predictors-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="results-occupancy-predictors-by-species.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

@@ -4,27 +4,27 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Section 8 Results: Occupancy predictors | Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient</title>
-  <meta name="description" content="Section 8 Results: Occupancy predictors | Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient" />
+  <title>Section 8 Results: Occupancy predictors by species | Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient</title>
+  <meta name="description" content="Section 8 Results: Occupancy predictors by species | Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient" />
   <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Section 8 Results: Occupancy predictors | Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient" />
+  <meta property="og:title" content="Section 8 Results: Occupancy predictors by species | Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="Section 8 Results: Occupancy predictors | Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient" />
+  <meta property="og:description" content="Section 8 Results: Occupancy predictors by species | Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient" />
   <meta name="github-repo" content="pratikunterwegs/eBirdOccupancy" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Section 8 Results: Occupancy predictors | Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient" />
+  <meta name="twitter:title" content="Section 8 Results: Occupancy predictors by species | Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient" />
   
-  <meta name="twitter:description" content="Section 8 Results: Occupancy predictors | Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient" />
+  <meta name="twitter:description" content="Section 8 Results: Occupancy predictors by species | Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient" />
   
 
 <meta name="author" content="Vijay Ramesh, Pratik R Gupte, and Morgan Tingley" />
 
 
-<meta name="date" content="2020-07-25" />
+<meta name="date" content="2020-08-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -194,25 +194,39 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html"><i class="fa fa-check"></i><b>7</b> Results: Occupancy predictors</a><ul>
 <li class="chapter" data-level="7.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#prepare-libraries-2"><i class="fa fa-check"></i><b>7.1</b> Prepare libraries</a></li>
 <li class="chapter" data-level="7.2" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#read-species-trait-data-and-the-final-list-of-species"><i class="fa fa-check"></i><b>7.2</b> Read species trait data and the final list of species</a></li>
-<li class="chapter" data-level="7.3" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#read-model-estimates"><i class="fa fa-check"></i><b>7.3</b> Read model estimates</a><ul>
-<li class="chapter" data-level="7.3.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#export-data-to-file"><i class="fa fa-check"></i><b>7.3.1</b> Export data to file</a></li>
+<li class="chapter" data-level="7.3" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#show-aic-weights"><i class="fa fa-check"></i><b>7.3</b> Show AIC weights</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#read-in-weight-data"><i class="fa fa-check"></i><b>7.3.1</b> Read in weight data</a></li>
+<li class="chapter" data-level="7.3.2" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#show-cumulative-weights-as-plot"><i class="fa fa-check"></i><b>7.3.2</b> Show cumulative weights as plot</a></li>
+<li class="chapter" data-level="7.3.3" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#make-plot"><i class="fa fa-check"></i><b>7.3.3</b> Make plot</a></li>
 </ul></li>
-<li class="chapter" data-level="7.4" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#occupancy-predictors-aggregated-effect"><i class="fa fa-check"></i><b>7.4</b> Occupancy predictors’ aggregated effect</a><ul>
-<li class="chapter" data-level="7.4.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#add-trait-data-and-clean"><i class="fa fa-check"></i><b>7.4.1</b> Add trait data and clean</a></li>
-<li class="chapter" data-level="7.4.2" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#get-predictor-effects"><i class="fa fa-check"></i><b>7.4.2</b> Get predictor effects</a></li>
-<li class="chapter" data-level="7.4.3" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#manual-edits-to-levels"><i class="fa fa-check"></i><b>7.4.3</b> Manual edits to levels</a></li>
-<li class="chapter" data-level="7.4.4" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#make-figures-for-predictor-effects"><i class="fa fa-check"></i><b>7.4.4</b> Make figures for predictor effects</a></li>
-<li class="chapter" data-level="7.4.5" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#tabulate-predictor-effect"><i class="fa fa-check"></i><b>7.4.5</b> Tabulate predictor effect</a></li>
+<li class="chapter" data-level="7.4" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#read-model-estimates"><i class="fa fa-check"></i><b>7.4</b> Read model estimates</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#export-data-to-file"><i class="fa fa-check"></i><b>7.4.1</b> Export data to file</a></li>
 </ul></li>
-<li class="chapter" data-level="7.5" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#land-cover-or-climate"><i class="fa fa-check"></i><b>7.5</b> Land cover or climate?</a><ul>
-<li class="chapter" data-level="7.5.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#get-the-effect-of-landcover-or-climate"><i class="fa fa-check"></i><b>7.5.1</b> Get the effect of landcover or climate</a></li>
-<li class="chapter" data-level="7.5.2" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#plot-a-figure"><i class="fa fa-check"></i><b>7.5.2</b> Plot a figure</a></li>
+<li class="chapter" data-level="7.5" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#occupancy-coefficients-in-relation-with-species-elevation"><i class="fa fa-check"></i><b>7.5</b> Occupancy coefficients in relation with species elevation</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#species-offset-from-median-elevation"><i class="fa fa-check"></i><b>7.5.1</b> Species offset from median elevation</a></li>
+<li class="chapter" data-level="7.5.2" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#species-body-mass"><i class="fa fa-check"></i><b>7.5.2</b> Species body mass</a></li>
+<li class="chapter" data-level="7.5.3" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#species-range-size"><i class="fa fa-check"></i><b>7.5.3</b> Species range size</a></li>
+<li class="chapter" data-level="7.5.4" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#prepare-divisions-by-trait-for-plotting"><i class="fa fa-check"></i><b>7.5.4</b> Prepare divisions by trait for plotting</a></li>
+<li class="chapter" data-level="7.5.5" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#effect-of-traits-as-continuous-variables"><i class="fa fa-check"></i><b>7.5.5</b> Effect of traits as continuous variables</a></li>
 </ul></li>
-<li class="chapter" data-level="7.6" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#elevation-summary-this-needs-to-be-removed"><i class="fa fa-check"></i><b>7.6</b> Elevation summary THIS NEEDS TO BE REMOVED</a></li>
+<li class="chapter" data-level="7.6" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#occupancy-predictors-aggregated-effect"><i class="fa fa-check"></i><b>7.6</b> Occupancy predictors’ aggregated effect</a><ul>
+<li class="chapter" data-level="7.6.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#add-trait-data-and-clean"><i class="fa fa-check"></i><b>7.6.1</b> Add trait data and clean</a></li>
+<li class="chapter" data-level="7.6.2" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#get-predictor-effects"><i class="fa fa-check"></i><b>7.6.2</b> Get predictor effects</a></li>
+<li class="chapter" data-level="7.6.3" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#manual-edits-to-levels"><i class="fa fa-check"></i><b>7.6.3</b> Manual edits to levels</a></li>
+<li class="chapter" data-level="7.6.4" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#make-figures-for-predictor-effects"><i class="fa fa-check"></i><b>7.6.4</b> Make figures for predictor effects</a></li>
+<li class="chapter" data-level="7.6.5" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#tabulate-predictor-effect"><i class="fa fa-check"></i><b>7.6.5</b> Tabulate predictor effect</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="results-occupancy-predictors-1.html"><a href="results-occupancy-predictors-1.html"><i class="fa fa-check"></i><b>8</b> Results: Occupancy predictors</a><ul>
-<li class="chapter" data-level="8.1" data-path="results-occupancy-predictors-1.html"><a href="results-occupancy-predictors-1.html#prepare-libraries-3"><i class="fa fa-check"></i><b>8.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="8.2" data-path="results-occupancy-predictors-1.html"><a href="results-occupancy-predictors-1.html#read-data"><i class="fa fa-check"></i><b>8.2</b> Read data</a></li>
+<li class="chapter" data-level="7.7" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#land-cover-or-climate"><i class="fa fa-check"></i><b>7.7</b> Land cover or climate?</a><ul>
+<li class="chapter" data-level="7.7.1" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#get-the-effect-of-landcover-or-climate"><i class="fa fa-check"></i><b>7.7.1</b> Get the effect of landcover or climate</a></li>
+<li class="chapter" data-level="7.7.2" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#plot-a-figure"><i class="fa fa-check"></i><b>7.7.2</b> Plot a figure</a></li>
+<li class="chapter" data-level="7.7.3" data-path="results-occupancy-predictors.html"><a href="results-occupancy-predictors.html#tabulate-landcover-vs-climate"><i class="fa fa-check"></i><b>7.7.3</b> Tabulate landcover vs climate</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="results-occupancy-predictors-by-species.html"><a href="results-occupancy-predictors-by-species.html"><i class="fa fa-check"></i><b>8</b> Results: Occupancy predictors by species</a><ul>
+<li class="chapter" data-level="8.1" data-path="results-occupancy-predictors-by-species.html"><a href="results-occupancy-predictors-by-species.html#prepare-libraries-3"><i class="fa fa-check"></i><b>8.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="8.2" data-path="results-occupancy-predictors-by-species.html"><a href="results-occupancy-predictors-by-species.html#read-data"><i class="fa fa-check"></i><b>8.2</b> Read data</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="results-occupancy-predictors-by-species.html"><a href="results-occupancy-predictors-by-species.html#show-an-example-here"><i class="fa fa-check"></i><b>8.2.1</b> Show an example here</a></li>
+</ul></li>
 </ul></li>
 </ul>
 
@@ -231,55 +245,58 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="results-occupancy-predictors-1" class="section level1">
-<h1><span class="header-section-number">Section 8</span> Results: Occupancy predictors</h1>
+<div id="results-occupancy-predictors-by-species" class="section level1">
+<h1><span class="header-section-number">Section 8</span> Results: Occupancy predictors by species</h1>
 <div id="prepare-libraries-3" class="section level2">
 <h2><span class="header-section-number">8.1</span> Prepare libraries</h2>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" title="1"><span class="co"># to load data</span></a>
-<a class="sourceLine" id="cb71-2" title="2"><span class="kw">library</span>(readxl)</a>
-<a class="sourceLine" id="cb71-3" title="3"></a>
-<a class="sourceLine" id="cb71-4" title="4"><span class="co"># to handle data</span></a>
-<a class="sourceLine" id="cb71-5" title="5"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb71-6" title="6"><span class="kw">library</span>(readr)</a>
-<a class="sourceLine" id="cb71-7" title="7"><span class="kw">library</span>(forcats)</a>
-<a class="sourceLine" id="cb71-8" title="8"><span class="kw">library</span>(tidyr)</a>
-<a class="sourceLine" id="cb71-9" title="9"><span class="kw">library</span>(purrr)</a>
-<a class="sourceLine" id="cb71-10" title="10"><span class="kw">library</span>(stringr)</a>
-<a class="sourceLine" id="cb71-11" title="11"></a>
-<a class="sourceLine" id="cb71-12" title="12"><span class="co"># plotting</span></a>
-<a class="sourceLine" id="cb71-13" title="13"><span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb71-14" title="14"><span class="kw">library</span>(patchwork)</a></code></pre></div>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" title="1"><span class="co"># to load data</span></a>
+<a class="sourceLine" id="cb82-2" title="2"><span class="kw">library</span>(readxl)</a>
+<a class="sourceLine" id="cb82-3" title="3"></a>
+<a class="sourceLine" id="cb82-4" title="4"><span class="co"># to handle data</span></a>
+<a class="sourceLine" id="cb82-5" title="5"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb82-6" title="6"><span class="kw">library</span>(readr)</a>
+<a class="sourceLine" id="cb82-7" title="7"><span class="kw">library</span>(forcats)</a>
+<a class="sourceLine" id="cb82-8" title="8"><span class="kw">library</span>(tidyr)</a>
+<a class="sourceLine" id="cb82-9" title="9"><span class="kw">library</span>(purrr)</a>
+<a class="sourceLine" id="cb82-10" title="10"><span class="kw">library</span>(stringr)</a>
+<a class="sourceLine" id="cb82-11" title="11"></a>
+<a class="sourceLine" id="cb82-12" title="12"><span class="co"># plotting</span></a>
+<a class="sourceLine" id="cb82-13" title="13"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb82-14" title="14"><span class="kw">library</span>(patchwork)</a></code></pre></div>
 </div>
 <div id="read-data" class="section level2">
 <h2><span class="header-section-number">8.2</span> Read data</h2>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1"><span class="co"># read data</span></a>
-<a class="sourceLine" id="cb72-2" title="2">data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/results/data_occupancy_predictors.csv&quot;</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" title="1"><span class="co"># drop na</span></a>
-<a class="sourceLine" id="cb73-2" title="2">data &lt;-<span class="st"> </span><span class="kw">select</span>(data,</a>
-<a class="sourceLine" id="cb73-3" title="3">               <span class="op">-</span>ci) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb73-4" title="4"><span class="st">  </span><span class="kw">drop_na</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb73-5" title="5"><span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>scientific_name)</a></code></pre></div>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1">fig_occupancy &lt;-<span class="st"> </span><span class="kw">map2</span>(data<span class="op">$</span>data, data<span class="op">$</span>scientific_name,</a>
-<a class="sourceLine" id="cb74-2" title="2">                      <span class="cf">function</span>(df, name) {</a>
-<a class="sourceLine" id="cb74-3" title="3">  <span class="kw">ggplot</span>(df)<span class="op">+</span></a>
-<a class="sourceLine" id="cb74-4" title="4"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(seq_x, mean,</a>
-<a class="sourceLine" id="cb74-5" title="5">                <span class="dt">col =</span> predictor))<span class="op">+</span></a>
-<a class="sourceLine" id="cb74-6" title="6"><span class="st">  </span><span class="kw">facet_grid</span>(<span class="op">~</span><span class="st"> </span>scale,</a>
-<a class="sourceLine" id="cb74-7" title="7">             <span class="dt">labeller =</span> label_both) <span class="op">+</span></a>
-<a class="sourceLine" id="cb74-8" title="8"><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb74-9" title="9">                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))<span class="op">+</span></a>
-<a class="sourceLine" id="cb74-10" title="10"><span class="st">                          </span><span class="kw">theme_grey</span>(<span class="dt">base_size =</span> <span class="dv">6</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb74-11" title="11"><span class="st">                          </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;top&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb74-12" title="12"><span class="st">                          </span><span class="kw">scale_colour_manual</span>(<span class="dt">values =</span> pals<span class="op">::</span><span class="kw">kovesi.rainbow</span>(<span class="dv">8</span>))<span class="op">+</span></a>
-<a class="sourceLine" id="cb74-13" title="13"><span class="st">                          </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;scaled predictor value&quot;</span>,</a>
-<a class="sourceLine" id="cb74-14" title="14">                               <span class="dt">y =</span> <span class="st">&quot;p(occupancy)&quot;</span>,</a>
-<a class="sourceLine" id="cb74-15" title="15">                               <span class="dt">title =</span> name)</a>
-<a class="sourceLine" id="cb74-16" title="16">})</a></code></pre></div>
-<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" title="1"><span class="kw">cairo_pdf</span>(<span class="dt">filename =</span> <span class="st">&quot;figs/fig_occupancy_predictors.pdf&quot;</span>,</a>
-<a class="sourceLine" id="cb75-2" title="2">          <span class="dt">onefile =</span> <span class="ot">TRUE</span>, <span class="dt">width =</span> <span class="dv">6</span>, <span class="dt">height =</span> <span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb75-3" title="3">fig_occupancy</a>
-<a class="sourceLine" id="cb75-4" title="4"><span class="kw">dev.off</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb83-1" title="1"><span class="co"># read data</span></a>
+<a class="sourceLine" id="cb83-2" title="2">data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/results/data_occupancy_predictors.csv&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb84-1" title="1"><span class="co"># drop na</span></a>
+<a class="sourceLine" id="cb84-2" title="2">data &lt;-<span class="st"> </span><span class="kw">select</span>(data,</a>
+<a class="sourceLine" id="cb84-3" title="3">               <span class="op">-</span>ci) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb84-4" title="4"><span class="st">  </span><span class="kw">drop_na</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb84-5" title="5"><span class="st">  </span><span class="kw">nest</span>(<span class="dt">data =</span> <span class="kw">c</span>(predictor, m_group, seq_x, mean, scale))</a></code></pre></div>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb85-1" title="1">fig_occupancy &lt;-<span class="st"> </span><span class="kw">map2</span>(data<span class="op">$</span>data, data<span class="op">$</span>scientific_name,</a>
+<a class="sourceLine" id="cb85-2" title="2">                      <span class="cf">function</span>(df, name) {</a>
+<a class="sourceLine" id="cb85-3" title="3">  <span class="kw">ggplot</span>(df)<span class="op">+</span></a>
+<a class="sourceLine" id="cb85-4" title="4"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(seq_x, mean,</a>
+<a class="sourceLine" id="cb85-5" title="5">                <span class="dt">col =</span> predictor))<span class="op">+</span></a>
+<a class="sourceLine" id="cb85-6" title="6"><span class="st">  </span><span class="kw">facet_grid</span>(<span class="op">~</span><span class="st"> </span>scale,</a>
+<a class="sourceLine" id="cb85-7" title="7">             <span class="dt">labeller =</span> label_both) <span class="op">+</span></a>
+<a class="sourceLine" id="cb85-8" title="8"><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb85-9" title="9">                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))<span class="op">+</span></a>
+<a class="sourceLine" id="cb85-10" title="10"><span class="st">                          </span><span class="kw">theme_grey</span>(<span class="dt">base_size =</span> <span class="dv">6</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb85-11" title="11"><span class="st">                          </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;top&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb85-12" title="12"><span class="st">                          </span><span class="kw">scale_colour_manual</span>(<span class="dt">values =</span> pals<span class="op">::</span><span class="kw">kovesi.rainbow</span>(<span class="dv">8</span>))<span class="op">+</span></a>
+<a class="sourceLine" id="cb85-13" title="13"><span class="st">                          </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;scaled predictor value&quot;</span>,</a>
+<a class="sourceLine" id="cb85-14" title="14">                               <span class="dt">y =</span> <span class="st">&quot;p(occupancy)&quot;</span>,</a>
+<a class="sourceLine" id="cb85-15" title="15">                               <span class="dt">title =</span> name)</a>
+<a class="sourceLine" id="cb85-16" title="16">})</a></code></pre></div>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" title="1"><span class="kw">cairo_pdf</span>(<span class="dt">filename =</span> <span class="st">&quot;figs/fig_occupancy_predictors.pdf&quot;</span>,</a>
+<a class="sourceLine" id="cb86-2" title="2">          <span class="dt">onefile =</span> <span class="ot">TRUE</span>, <span class="dt">width =</span> <span class="dv">6</span>, <span class="dt">height =</span> <span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb86-3" title="3">fig_occupancy</a>
+<a class="sourceLine" id="cb86-4" title="4"><span class="kw">dev.off</span>()</a></code></pre></div>
+<div id="show-an-example-here" class="section level3">
+<h3><span class="header-section-number">8.2.1</span> Show an example here</h3>
 
+</div>
 </div>
 </div>
             </section>

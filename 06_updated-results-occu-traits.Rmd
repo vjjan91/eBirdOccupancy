@@ -41,7 +41,7 @@ species <- read_csv("data/species_list.csv")
 list_of_species <- as.character(species$scientific_name)
 
 # trait data
-species_trait <- read_csv("data/data_species_traits.csv")
+species_trait <- read_csv("data/data_species_trait.csv")
 ```
 
 ## Show AIC weights
@@ -108,27 +108,50 @@ model_imp <- group_by(model_imp, predictor, scale) %>%
   summarise(AIC_weight_cumulative = sum(AIC_weight))
 ```
 
+
+
+```{r}
+predictor_name <- c("Temp" = "Mean annual temp.",
+                    "Ppt" = "Mean annual ppt.",
+                    "LC 1" = "% agriculture",
+                    "LC 2" = "% forests",
+                    "LC 3" = "% plantations",
+                    "LC 4" = "% settlements",
+                    "LC 5" = "% tea",
+                    "LC 6" = "% water bodies")
+```
+
+
 ### Make plot
 
 ```{r}
 ggplot(model_imp)+
   geom_point(aes(predictor, AIC_weight_cumulative,
-               col = scale),
+               fill = scale),
              size = 3,
-           position = position_dodge(width = 0.5))+
+           position = position_dodge(width = 0.5),
+           shape = 21)+
   geom_col(aes(predictor, AIC_weight_cumulative,
                fill = scale),
            colour = NA,
-           width = 0.1,
+           width = 0.05,
            alpha = 0.5,
            position = position_dodge(width = 0.5))+
-  theme_minimal()+
-  theme(legend.position = "top")
+  scale_y_continuous(breaks = seq(45, 75, 10))+
+  scale_x_discrete(labels = names(predictor_name))+
+  # scale_color_brewer(palette = "RdBu", values = c(0.5, 1))+
+  scale_fill_brewer(palette = "BuPu")+
+  coord_cartesian(ylim = c(45, 75))+
+  theme_test(base_size = 10)+
+  theme(legend.position = "none")+
+  labs(x = "Predictor",
+       y = "Cumulative AIC weight")
 
-ggsave("figs/fig_aic_weight.png", dpi = 300)
+ggsave("figs/fig_aic_weight.png", dpi = 300,
+       width = 4, height = 4)
 ```
 
-![Cumulative AIC weights.](figs/fig_aic_weight.png)
+![Cumulative AIC weights for each predictor, where _Temp_ is the mean annual temperature, _Ppt_ is the mean annual precipitation, and LC 1 -- LC 6 are the proportions of agriculture, forest, plantation, settlement, tea, and water bodies, respectively."](figs/fig_aic_weight.png)
 
 ## Read model estimates
 
@@ -220,6 +243,132 @@ write_csv(model_data_to_file,
           "data/results/data_occupancy_predictors.csv")
 ```
 
+## Occupancy coefficients in relation with species elevation
+
+How does species' displacement from the median elevation of the study area relate with the coefficient of each predictor of occupancy?
+
+First get the saved model data.
+
+```{r}
+# read from file
+model_data <- read_csv("data/results/data_predictor_effect.csv")
+```
+
+### Species offset from median elevation
+
+```{r}
+# add trait by joining
+model_data <- model_data %>% 
+  left_join(species_trait, by = "scientific_name")
+
+# add elevation data
+elev_summary <- read_excel("data/data_species_elevation.xlsx")
+model_data <- left_join(model_data, elev_summary)
+
+model_data <- rename(model_data,
+                     median_elev = median)
+```
+
+```{r elev_of_area}
+# what is the median elevation of the study area?
+elev <- raster::stack("data/spatial/landscape_resamp01km.tif")[[1]]
+
+# mask the raster by the hills shapefile
+library(sf)
+hills <- sf::st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>% 
+  sf::`st_crs<-`(4326) %>% 
+  sf::st_transform(32643)
+
+# get masked elevation
+elev <- raster::mask(elev, sf::as_Spatial(hills))
+
+# get median elevation
+median(raster::values(elev), na.rm = TRUE)
+```
+
+The median elevation is 686.0872 metres, which we will round to 685 metres for convenience.
+
+```{r}
+med_elev <- 685
+```
+
+Subtract species' median elevation from the study area median elevation.
+
+```{r}
+model_data$diff_elev <- model_data$median_elev - med_elev
+
+model_data <- drop_na(model_data)
+```
+
+### Species body mass
+
+Already included in the data.
+
+### Species range size
+
+This data is added from the State of India's Birds report.
+
+```{r}
+soib <- read_csv("data/2020_state-india-birds-trait-dat - Information.csv")
+soib <- select(soib,
+               scientific_name = `Scientific Name (India Checklist)`,
+               range_size = `Distribution Range Size (units of 10,000 sq. km.)`)
+
+# join with model data
+model_data <- left_join(model_data, soib,
+                        by = "scientific_name")
+```
+
+### Prepare divisions by trait for plotting
+
+```{r}
+model_data <- select(model_data,
+                     scientific_name, predictor, coefficient,
+                     scale, 
+                     range_size = range_size.y,
+                     diff_elev,
+                     body_mass)
+
+model_data_long <- pivot_longer(model_data,
+                           cols = c("range_size", "diff_elev", "body_mass"),
+                           names_to = "trait",
+                           values_to = "trait_value")
+
+# no peacock!
+model_data_long <- filter(model_data_long,
+                          scientific_name != "Pavo cristatus")
+```
+
+
+### Effect of traits as continuous variables
+
+```{r}
+ggplot(model_data_long)+
+  geom_hline(yintercept = 0, size = 0.2)+
+  geom_vline(xintercept = 0,
+             size = 0.1)+
+  geom_point(aes(trait_value, coefficient,
+                 col = predictor),
+             size = 0.5, shape = 4)+
+  geom_smooth(aes(trait_value, coefficient,
+                  col = predictor),
+              method = "glm", 
+              se = F, size = 0.5)+
+  scale_x_continuous(labels = scales::comma)+
+  scale_colour_manual(values = pals::kovesi.rainbow(8))+
+  facet_grid(scale ~ trait, scales = "free_x",
+             labeller = label_both)+
+  ylim(-5, 5)+
+  # coord_cartesian(xlim = c(-500, 1000),
+                  # ylim = c(-5, 5))+
+  theme_test()
+
+# export
+ggsave("figs/fig_trait_coeff.png", dpi = 300)
+```
+
+---
+
 ## Occupancy predictors' aggregated effect
 
 ```{r}
@@ -234,29 +383,30 @@ Split the data along the axes of range size, migratory status, and habitat.
 
 ```{r}
 # add trait by joining
-data_predictor_effect <- data_predictor_effect %>% 
+model_data <- model_data %>% 
   left_join(species_trait, by = "scientific_name")
 ```
 
 
 ```{r}
 # remove .y from predictors
-data_predictor_effect <- data_predictor_effect %>%
+model_data <- model_data %>%
   mutate_at(.vars = c("predictor"), .funs = function(x){
     stringr::str_remove(x, ".y")
   })
 ```
 
-What is the direction of the predictor effect for each subset of the data by the distribution, habitat, and migratory status?
+What is the direction of the predictor effect for each subset of the data by the distribution, habitat, elevation, and migratory status?
 
 ### Get predictor effects
 
 ```{r}
 # first pivot the data longer
-data_predictor_long <- data_predictor_effect %>% 
+data_predictor_long <- model_data %>% 
   pivot_longer(cols = c("range_size", "migratory_status", 
                         "habitat", "elev"), 
-               names_to = "trait")
+               names_to = "trait",
+               values_to = "Class")
 
 # reorder scale
 data_predictor_long <- data_predictor_long %>% 
@@ -266,13 +416,13 @@ data_predictor_long <- data_predictor_long %>%
 data_predictor_long <- mutate(data_predictor_long, 
                                 direction = coefficient > 0) %>% 
   count(scale, predictor, 
-        trait, value, direction) %>% 
+        trait, Class, direction) %>% 
   mutate(mag = n * (if_else(direction, 1, -1)))
 
 # wrangle data to get nice bars
 data_predictor_long <- data_predictor_long %>% 
   select(-n) %>% 
-  drop_na(direction, value) %>% 
+  drop_na(direction, Class) %>% 
   mutate(direction = ifelse(direction, "positive", "negative")) %>% 
   pivot_wider(values_from = "mag", names_from = "direction") %>% 
   mutate_at(vars(positive, negative),
@@ -296,8 +446,14 @@ data_predictor_long <- data_predictor_long %>%
 
 ```{r}
 # arrange data predictor long elevation in order of values
-data_predictor_long$data[[1]]$value <- as.factor(data_predictor_long$data[[1]]$value)
-levels(data_predictor_long$data[[1]]$value) <- c("Low", "Mid", "High")
+data_predictor_long$data[[1]]$Class <- as.factor(data_predictor_long$data[[1]]$Class)
+levels(data_predictor_long$data[[1]]$Class) <- c("Low", "Mid", "High")
+
+# fix trait values
+data_predictor_long$trait <- c("Elevation range",
+                               "Habitat type",
+                               "Migratory status",
+                               "Range size")
 ```
 
 
@@ -309,28 +465,34 @@ data_predictor_long <- mutate(data_predictor_long,
         figs = map2(data, trait, function(df, tr){
           ggplot(df)+
             geom_hline(yintercept = 0,
-                       lty = 2, lwd = 0.2,
+                       lwd = 0.2,
                        col = "grey")+
-            
             geom_col(aes(x = factor(predictor),
                          y = magnitude,
-                         fill = effect))+
+                         group = interaction(effect, scale)),
+                     # position = position_dodge(width = 1),
+                     width = 0.05)+
             
-            scale_x_discrete(guide = guide_axis(n.dodge = 2)#,
-                             # label = 1:length(unique(df$predictor))
-            )+
+            geom_point(aes(x = factor(predictor),
+                         y = magnitude,
+                         fill = interaction(effect, scale)),
+                     # position = position_dodge(width = 1),
+                     size = 3,
+                     shape = 21)+
             
-            scico::scale_fill_scico_d(palette = "berlin",
-                                     direction = -1,
-                                     begin = 0.1,
-                                     end = 0.9)+
+            scale_x_discrete(labels = names(predictor_name))+
+            scale_y_continuous()+
             
-            theme_grey(base_family = "TT Arial")+
+            scale_fill_manual(values = 
+                                RColorBrewer::brewer.pal(5, "RdBu")[c(1, 4,
+                                                                      2, 5)])+
+            
+            theme_test()+
             theme(legend.position = "none")+
-            facet_grid(value ~ scale, 
+            facet_grid(Class ~ scale, 
                        labeller = label_both)+
-            labs(x = "predictor", y = "species",
-                 title = glue::glue('trait: {tr}'))
+            labs(x = "Predictor", y = "# Species",
+                 title = glue::glue('Trait: {tr}'))
         }))
 
 fig_predictor_effect <- patchwork::wrap_plots(data_predictor_long$figs,
@@ -369,7 +531,7 @@ purrr::pwalk(data_predictor_long, function(trait, data) {
     
     
     `colnames<-`(c("spatial scale", glue::glue("{trait} class"),
-                 rep(c("+ve", "-ve"), length(predictors)))) %>% 
+                 rep(c("-ve", "+ve"), length(predictors)))) %>% 
     knitr::kable(caption = glue::glue("Predictor effects for {trait}")) %>% 
     kableExtra::kable_styling("striped", full_width = F,
                               font_size = 8) %>% 
@@ -396,9 +558,12 @@ data_predictor_long <- data_predictor_long %>%
 data_lc_v_clim <- data_predictor_long %>% 
   mutate(predictor = if_else(str_detect(predictor, "bio"), 
                              "climate", "landcover")) %>% 
-  group_by(trait, scale, predictor, value, effect) %>%
+  group_by(trait, scale, predictor, Class, effect) %>%
   summarise_at(.vars = c("magnitude"),
                .funs = list(sum))
+
+# save for later use
+write_csv(data_lc_v_clim, path = "data/data_lc_v_clim.csv")
 ```
 
 ```{r}
@@ -415,19 +580,34 @@ data_lc_v_clim <- nest(data_lc_v_clim,
 data_lc_v_clim$figs <- pmap(data_lc_v_clim[,c("trait", "cols")],
                            function(trait, cols) {
                              ggplot(cols) +
-                               geom_col(aes(predictor, magnitude,
-                                            fill = effect),
-                                        width = 0.4) +
+                               
+                               geom_hline(yintercept = 0,
+                                          lwd = 0.2,
+                                          col = "grey")+
+                               geom_col(aes(x = factor(predictor),
+                                            y = magnitude,
+                                            group = interaction(effect, scale)),
+                                        # position = position_dodge(width = 1),
+                                        width = 0.01)+
+                               
+                               geom_point(aes(x = factor(predictor),
+                                              y = magnitude,
+                                              fill = interaction(effect, scale)),
+                                          # position = position_dodge(width = 1),
+                                          size = 3,
+                                          shape = 21)+
                                
                                scico::scale_fill_scico_d(palette = "berlin",
                                                       direction = -1,
                                                       begin = 0.1, end = 0.9)+
-                               theme_grey(base_family = "TT Arial") +
+                               theme_test(base_family = "TT Arial") +
                                theme(legend.position = "none") +
                                
-                               facet_grid(value ~ scale,
+                               facet_grid(Class ~ scale,
                                           labeller = label_both) +
-                               labs(title = glue::glue('trait: {trait}'))
+                               labs(title = glue::glue('trait: {trait}'),
+                                    x = NULL,
+                                    y = "# species with signed effect")
                            })
 fig_lc_v_clim <- patchwork::wrap_plots(data_lc_v_clim$figs,
                                        nrow = 2)
@@ -437,67 +617,39 @@ ggsave(fig_lc_v_clim, filename = "figs/fig_lc_v_clim.png",
        dpi = 300)
 ```
 
-```{r}
+```{r eval=TRUE}
 knitr::include_graphics("figs/fig_lc_v_clim.png")
 ```
 
-## Elevation summary THIS NEEDS TO BE REMOVED
+### Tabulate landcover vs climate
 
-Plot elevation summaries faceted by scale and predictors.
-Read species elevation summaries.
+```{r eval=TRUE, results="asis"}
+# read again and nest
+data_lc_v_clim <- read_csv("data/data_lc_v_clim.csv")
 
-```{r}
-# add elevation data
-elev_summary <- read_excel("data/data_species_elevation.xlsx")
+# nest again
+data_lc_v_clim <- nest(data_lc_v_clim,
+                       data = -trait)
 
-# link to species
-elev_summary <- elev_summary %>% 
-  left_join(data_predictor_effect)
-
-# arrange in plot order
-elev_summary <- elev_summary %>% 
-  group_by(scale, scientific_name) %>% 
-  arrange(median) %>% 
-  mutate(plot_order = seq_len(n()))
-
-# remove NAs and order scale
-elev_summary <- select(elev_summary,
-                       -`Body mass`) %>% 
-  drop_na() %>% 
-  mutate(scale = fct_relevel(scale,
-                             "2.5km", "10km"))
-
-# rename median
-elev_summary <- rename(elev_summary,
-                       median_elev = median)
-
-# order
-elev_summary <- elev_summary %>% 
-  ungroup() %>% 
-  arrange(-median_elev) %>% 
-  group_by(scientific_name)
+# first pivot the data columns
+purrr::pwalk(data_lc_v_clim, function(trait, data) {
+  predictors <- unique(data$predictor)
+  headers <- c(1, 1, rep(2, length(predictors)))
+  names(headers) <- c(rep(" ", 2), predictors)
+  
+  data %>% 
+    tidyr::drop_na() %>% 
+    tidyr::pivot_wider(names_from = c("predictor", "effect"), 
+                values_from = "magnitude") %>% 
+    
+    
+    `colnames<-`(c("spatial scale", glue::glue("{trait} class"),
+                 rep(c("-ve", "+ve"), length(predictors)))) %>% 
+    knitr::kable(caption = glue::glue("Predictor effects for {trait}")) %>% 
+    kableExtra::kable_styling("striped", full_width = F,
+                              font_size = 8) %>% 
+    kableExtra::add_header_above(headers) %>% 
+    print()
+  cat("\n")
+})
 ```
-
-```{r}
-# plot elevation pointranges
-ggplot(elev_summary)+
-  geom_errorbar(aes(plot_order, 
-                    ymin = q1, ymax = q3),
-                size = 0.3, width = 0.4)+
-  geom_point(aes(plot_order, median_elev),
-             shape = 21, col = "grey20")+
-  facet_grid(scale ~ predictor, 
-             scales = "fixed",
-             labeller = label_both,
-             as.table = FALSE)+
-  theme_test()+
-  theme(legend.position = "none",
-        legend.key = element_rect(colour = "white",
-                                  size = 0.3),
-        # axis.text.y = element_blank(),
-        axis.ticks.y = element_blank())#+
-  # coord_flip()+
-  # labs(x = "Species",
-       # colour = "synthesis_var")
-```
-
