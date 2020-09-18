@@ -50,7 +50,7 @@ species_trait <- read_excel("data/species-trait-dat-ver01.xlsx")
 
 ```{r}
 # which files to read
-file_names <- c("data/results/occu-2.5km/occuCovs/modelImp/lc-clim-imp.xlsx")
+file_names <- c("data/results/occuCovs/modelImp/lc-clim-imp.xlsx")
 
 # read in sheets by species
 model_imp <- map(file_names, function(f) {
@@ -108,14 +108,14 @@ model_imp <- group_by(model_imp, predictor, scale) %>%
 ```
 
 ```{r}
-predictor_name <- c("Temp" = "Mean annual temp.",
-                    "Ppt" = "Mean annual ppt.",
+predictor_name <- c("Temp" = "Mean annual temperature",
+                    "Ppt" = "Mean annual precipitation",
                     "LC 1" = "% agriculture",
                     "LC 2" = "% forests",
-                    "LC 3" = "% plantations",
-                    "LC 4" = "% settlements",
-                    "LC 5" = "% tea",
-                    "LC 6" = "% water bodies")
+                    "LC 4" = "% plantations",
+                    "LC 5" = "% settlements",
+                    "LC 6" = "% tea",
+                    "LC 7" = "% water bodies")
 ```
 
 ### Make plot
@@ -146,12 +146,12 @@ ggsave("figs/fig_aic_weight.png", dpi = 300,
        width = 4, height = 4)
 ```
 
-![Cumulative AIC weights for each predictor, where _Temp_ is the mean annual temperature, _Ppt_ is the mean annual precipitation, and LC 1 -- LC 6 are the proportions of agriculture, forest, plantation, settlement, tea, and water bodies, respectively."](figs/fig_aic_weight.png)
+![Cumulative AIC weights for each predictor, where _Temp_ is the mean annual temperature, _Ppt_ is the mean annual precipitation, and LC 1 -- LC 7 are the proportions of agriculture, forests, plantations, settlements, tea, and water bodies, respectively."](figs/fig_aic_weight.png)
 
 ## Read model estimates
 
 ```{r read_model_estimates, eval=FALSE}
-file_read <- c("data/results/occu-2.5km/occuCovs/modelEst/lc-clim-modelEst.xlsx")
+file_read <- c("data/results/occuCovs/modelEst/lc-clim-modelEst.xlsx")
 
 # read data as list column
 model_est <- map(file_read, function(fr) {
@@ -165,8 +165,8 @@ model_est <- map(file_read, function(fr) {
 
 # prepare model data
 scales = c("2.5km")
-model_data <- tibble(crossing(scale = scales, 
-                              scientific_name = list_of_species)) %>% 
+model_data <- tibble(scale = scales, 
+                              scientific_name = list_of_species) %>%
   arrange(desc(scale))
 
 # rename model data components and separate predictors
