@@ -12,7 +12,7 @@ make_response_data <- function(df){
   # define internal function
   ci <- function(x){qnorm(0.975)*sd(x, na.rm = TRUE)/sqrt(length(x))}
   
-  df <- filter(df, p_value <= 0.05 | predictor == "Int" | is.na(modulator))
+  df <- filter(df, predictor == "Int" | is.na(modulator))
   
   intercept <- dplyr::filter(df, predictor == "Int") %>% .$coefficient
   
@@ -103,6 +103,6 @@ make_response_data <- function(df){
                  return(data_resp)
                }))
   # now filter again on p_value
-  df <- filter(df, p_value <= 0.05, predictor != "Int")
+  df <- filter(df, predictor != "Int")
   return(df)
 }
