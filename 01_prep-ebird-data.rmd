@@ -28,7 +28,7 @@ f_in_sampling <- file.path("data/ebd_sampling_relApr-2020.txt")
 
 ```{r soi, eval=FALSE, message=FALSE, warning=FALSE}
 # add species of interest
-specieslist <- read.csv("data/4_List_of_species_final.csv")
+specieslist <- read.csv("data/species_list.csv")
 speciesOfInterest <- as.character(specieslist$scientific_name)
 ```
 

@@ -89,7 +89,7 @@ dat.scaled <- dat.1
 dat.scaled[,c(1,2,11,16:25)] <- scale(dat.scaled[,c(1,2,11,16:25)]) # Scaling and standardizing detection and site-level covariates
 fwrite(dat.scaled, file = "data/scaledCovs_10km.csv")
 
-dat.scaled <- fread("data/scaledCovs_2.5km.csv",header=T)
+dat.scaled <- fread("data/05_scaled-covars-10km.csv",header=T)
 setDF(dat.scaled)
 head(dat.scaled)
 
@@ -315,7 +315,7 @@ pb <- txtProgressBar(min = 0, max = length(unique(dat.scaled$scientific_name)), 
 
 for(i in 1:length(unique(dat.scaled$scientific_name))){
   
-  data <- dat.scaled %>% filter(dat.scaled$scientific_name==unique(dat.scaled$scientific_name)[i]) 
+  data <- dat.scaled %>% filter(dat.scaled$scientific_name==unique(dat.scaled$scientific_name)[1]) 
 
   # Preparing data for the unmarked model
   occ <- filter_repeat_visits(data, 
@@ -429,5 +429,68 @@ write.xlsx(lc_clim_modelEst, file = "C:\\Users\\vr235\\Downloads\\lc_modelEst.xl
 
 ```
 
+#### goodness-of-fit tests
 
+```{r}
 
+goodness_of_fit <- data.frame()
+
+# Add a progress bar for the loop
+pb <- txtProgressBar(min = 0, max = length(unique(dat.scaled$scientific_name)), style = 3) #text based bar
+
+for(i in 1:length(unique(dat.scaled$scientific_name))){
+  
+  data <- dat.scaled %>% filter(dat.scaled$scientific_name==unique(dat.scaled$scientific_name)[i]) 
+
+  # Preparing data for the unmarked model
+  occ <- filter_repeat_visits(data, 
+                              min_obs = 1, max_obs = 10,
+                              annual_closure = FALSE,
+                              n_days = 2600, # 6 years is considered a period of closure
+                              date_var = "observation_date",
+                              site_vars = c("locality_id"))
+  
+  obs_covs <- c("min_obs_started", 
+                "duration_minutes", 
+                "effort_distance_km", 
+                "number_observers", 
+                "protocol_type",
+                "expertise",
+                "julian_date")
+  
+  # format for unmarked
+  occ_wide <- format_unmarked_occu(occ, 
+                                   site_id = "site", 
+                                   response = "pres_abs",
+                                   site_covs = c( "locality_id","lc_01.y","lc_02.y","lc_04.y",                         "lc_05.y", "lc_06.y", "lc_07.y","bio_1.y", "bio_12.y"),
+                                   obs_covs = obs_covs)
+  
+  # Convert this dataframe of observations into an unmarked object to start fitting occupancy models
+  occ_um <- formatWide(occ_wide, type = "unmarkedFrameOccu")
+
+  model_lc_clim <- occu(~min_obs_started+
+                   julian_date +
+                   duration_minutes + 
+                   effort_distance_km + 
+                   number_observers + 
+                   protocol_type +
+                   expertise~lc_01.y+lc_02.y+lc_04.y+
+                   lc_05.y+ lc_06.y+ lc_07.y+bio_1.y+bio_12.y, data = occ_um)
+  
+  occ_gof <- mb.gof.test(model_lc_clim, nsim = 1000, plot.hist = FALSE)
+  
+  p.value <- occ_gof$p.value
+  c.hat <- occ_gof$c.hat.est
+  scientific_name <- unique(data$scientific_name)
+  
+  a <- data.frame(scientific_name, p.value, c.hat)
+  
+  goodness_of_fit <- rbind(a,goodness_of_fit)
+  
+  setTxtProgressBar(pb, i)
+}
+close(pb) 
+
+write.csv(goodness_of_fit, "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\output\\05_goodness-of-fit-10km.csv")
+
+```
