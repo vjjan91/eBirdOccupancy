@@ -1,7 +1,7 @@
 --- 
 knit: "bookdown::render_book"
 title: "Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient"
-author: "Vijay Ramesh, Pratik R Gupte, and Morgan Tingley"
+author: "Vijay Ramesh, Pratik Rajan Gupte, Morgan W Tingley, VV Robin, Ruth DeFries"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 output: 
@@ -28,8 +28,6 @@ Please contact the following in case of interest in the project.
 
 - Pratik Gupte (repo maintainer)
     - PhD student, University of Groningen
-
-- [Morgan Tingley (PI)](https://www.morgantingley.com)
 
 ## Data access
 
