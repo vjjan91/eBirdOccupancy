@@ -101,6 +101,10 @@ levels(model_imp$scale) <- c("2.5km")
 # sum by scale and predictor
 model_imp <- group_by(model_imp, predictor, scale) %>% 
   summarise(AIC_weight_cumulative = sum(AIC_weight))
+
+# write to file
+write_csv(model_imp,
+          path = "data/results/cumulative_AIC_weights.csv")
 ```
 
 ```{r}
@@ -200,6 +204,11 @@ model_est <- bind_rows(model_est) %>%
 # join data to species name
 model_data <- model_data %>% 
   left_join(model_est)
+
+# Keep only those predictors whose p-vlaues are significant:
+model_data <- model_data %>%
+  filter(p_value<0.05)
+
 ```
 
 ### Export data to file

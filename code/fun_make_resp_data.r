@@ -6,7 +6,7 @@
 #' @export
 #' @import magrittr
 make_response_data <- function(df){
-  # df <- dplyr::filter(df, p_value <= 0.05 | predictor == "Int")
+   df <- dplyr::filter(df, p_value <= 0.05 | predictor == "Int")
   # keep all single predictors, Intercept, and interactions with significant p_val
   
   # define internal function
