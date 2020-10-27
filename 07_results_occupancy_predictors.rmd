@@ -65,9 +65,6 @@ fig_occupancy
 dev.off()
 ```
 
-### Show an example here
 
-```{r}
 
-```
 

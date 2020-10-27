@@ -3,7 +3,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Results: Occupancy predictors
+In this section, we will visualize the cumulative AIC weights and the magnitude and direction of species-specific probability of occupancy
 
 ## Prepare libraries
 
@@ -33,15 +33,13 @@ library(patchwork)
 source("code/fun_plot_interaction.r")
 ```
 
-## Read species trait data and the final list of species
+## Read the final list of species
 
 ```{r eval=FALSE}
 # list of species
 species <- read_csv("data/species_list.csv")
 list_of_species <- as.character(species$scientific_name)
 
-# trait data
-species_trait <- read_excel("data/species-trait-dat-ver01.xlsx")
 ```
 
 ## Show AIC weights
@@ -50,7 +48,7 @@ species_trait <- read_excel("data/species-trait-dat-ver01.xlsx")
 
 ```{r}
 # which files to read
-file_names <- c("data/results/occuCovs/modelImp/lc-clim-imp.xlsx")
+file_names <- c("data/results/lc-clim-imp.xlsx")
 
 # read in sheets by species
 model_imp <- map(file_names, function(f) {
@@ -80,12 +78,10 @@ model_imp <- map(file_names, function(f) {
 })
 ```
 
-Sheets for one laughingthrush _Montecincla fairbankii_ and one barbet _Psilopogon viridis_ are not found at both scales.
-
 ### Show cumulative weights as plot
 
 ```{r}
-# assign scale
+# assign scale - minimum spatial scale at which the analysis was carried out to account for observer effort
 names(model_imp) <- c("2.5km")
 model_imp <- imap(model_imp, function(.x, .y) {
   .x <- bind_rows(.x)
@@ -102,9 +98,13 @@ model_imp$AIC_weight <- as.numeric(model_imp$AIC_weight)
 model_imp$scale <- as.factor(model_imp$scale)
 levels(model_imp$scale) <- c("2.5km")
 
-# summ by scale and predictor
+# sum by scale and predictor
 model_imp <- group_by(model_imp, predictor, scale) %>% 
   summarise(AIC_weight_cumulative = sum(AIC_weight))
+
+# write to file
+write_csv(model_imp,
+          path = "data/results/cumulative_AIC_weights.csv")
 ```
 
 ```{r}
@@ -135,7 +135,7 @@ ggplot(model_imp)+
   scale_y_continuous(breaks = seq(45, 75, 10))+
   scale_x_discrete(labels = names(predictor_name))+
   # scale_color_brewer(palette = "RdBu", values = c(0.5, 1))+
-  scale_fill_brewer(palette = "BuPu")+
+  scale_fill_brewer(palette = "RdBu")+
   coord_cartesian(ylim = c(45, 75))+
   theme_test(base_size = 10)+
   theme(legend.position = "none")+
@@ -151,7 +151,7 @@ ggsave("figs/fig_aic_weight.png", dpi = 300,
 ## Read model estimates
 
 ```{r read_model_estimates, eval=FALSE}
-file_read <- c("data/results/occuCovs/modelEst/lc-clim-modelEst.xlsx")
+file_read <- c("data/results/lc-clim-modelEst.xlsx")
 
 # read data as list column
 model_est <- map(file_read, function(fr) {
@@ -204,6 +204,11 @@ model_est <- bind_rows(model_est) %>%
 # join data to species name
 model_data <- model_data %>% 
   left_join(model_est)
+
+# Keep only those predictors whose p-vlaues are significant:
+model_data <- model_data %>%
+  filter(p_value<0.05)
+
 ```
 
 ### Export data to file
@@ -238,72 +243,77 @@ write_csv(model_data_to_file,
           "data/results/data_occupancy_predictors.csv")
 ```
 
-## Occupancy coefficients in relation with species traits
-
-How do species' traits relate with the coefficient of each predictor of occupancy?
-
-First get the saved model data and add trait data.
-
+Summarizing results of species-specific probability of occupancy as a function of the direction of coefficients
 ```{r}
 # read from file
 model_data <- read_csv("data/results/data_predictor_effect.csv")
-
-# add weight as inverse of standard error
-model_data$weight <- 1 / model_data$se
 ```
+
+Plot the number of species affected and the direction of the effect, for each predictor.
 
 ```{r}
-# add trait by joining
-model_data <- model_data %>% 
-  left_join(species_trait, by = "scientific_name")
-
-# remove orders which only have 2 species or fewer
-# model_data <- model_data %>% 
-#   group_by(order) %>% 
-#   mutate(order_count = length(unique(scientific_name))) %>% 
-#   ungroup() %>% 
-#   filter(order_count > 3, !is.na(order)) %>% 
-#   select(-order_count)
-
-# count order again
-model_data %>% 
-  count(order, wt = length(unique(scientific_name)))
-
-# rename because of course
-model_data <- rename(model_data, mass = "Body mass", niche = "TrophicNiche")
-
-# fix variable classes
-model_data$order <- as.factor(model_data$order)
-model_data$niche <- as.factor(model_data$niche)
+# remove .y from predictors
+model_data <- model_data %>%
+  mutate_at(.vars = c("predictor"), .funs = function(x){
+    stringr::str_remove(x, ".y")
+  })
 ```
 
-### Split data by predictor
-
+### Get predictor effects
 ```{r}
-# nest by predictor name
-model_data <- model_data %>% 
-  group_by(predictor) %>% 
-  nest()
+# is the coeff positive? how many positive per scale per predictor per axis of split?
+data_predictor <- mutate(model_data, 
+                                direction = coefficient > 0) %>% 
+  count(predictor, 
+        direction) %>% 
+  mutate(mag = n * (if_else(direction, 1, -1)))
+
+# wrangle data to get nice bars
+data_predictor_long <- data_predictor%>% 
+  select(-n) %>% 
+  drop_na(direction) %>% 
+  mutate(direction = ifelse(direction, "positive", "negative")) %>% 
+  pivot_wider(values_from = "mag", names_from = "direction") %>% 
+  mutate_at(vars(positive, negative),
+            ~if_else(is.na(.), 0, .))
+
+data_predictor_long <- data_predictor_long %>% 
+  pivot_longer(cols = c("negative", "positive"),
+               names_to = "effect",
+               values_to = "magnitude")
+
+# write
+write_csv(data_predictor_long,
+          path = "data/results/data_predictor_direction_nSpecies.csv")
 ```
 
-### Set up the models
-
+Plot the above data: Species-specific prob of occupancy ~ direction
 ```{r}
-# trait models
-library(lmerTest)
-model_data$model <- map(model_data$data, function(df) {
-  lmer(coefficient ~ HWI + mass + (1|niche), 
-        weights = weight, 
-        data = df)
-})
+fig_predictor <- ggplot(data_predictor_long)+
+            geom_hline(yintercept = 0,
+                       lwd = 0.2,
+                       col = "grey")+
+            geom_col(aes(x = factor(predictor),
+                         y = magnitude),
+                     colour=NA,
+                     # position = position_dodge(width = 1),
+                     width = 0.05)+
+            geom_point(aes(x = factor(predictor),
+                         y = magnitude),
+                     # position = position_dodge(width = 1),
+                     size = 3,
+                     shape = 21)+
+            scale_x_discrete(labels = names(predictor_name))+
+            scale_y_continuous()+
+            scale_fill_brewer(palette =  "RdBu")+
+            theme_test()+
+            theme(legend.position = "none")+
+            labs(x = "Predictor", y = "# Species",
+                 title = 'Magnitude and direction of Species-specific probability of occupancy')
+
+ggsave("figs/fig_prob_occupancy_dir.png", dpi = 300,
+       width = 4, height = 4)
+    
 ```
 
-```{r}
-walk2(model_data$predictor, model_data$model, function(pred, mod) {
-  mod_out <- capture.output(pred, summary(mod))
-  # save it to file
-  write_lines(x = mod_out,
-              path = "data/results/model_output_coeff.txt", 
-              append = TRUE)
-})
-```
+

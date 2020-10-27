@@ -1,7 +1,6 @@
 #Remove data files
 *ebd*.txt
 
-
 data/spatial/*
 data/results/*
 data/eBird*
