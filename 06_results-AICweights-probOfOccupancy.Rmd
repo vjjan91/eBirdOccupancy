@@ -40,6 +40,8 @@ source("code/fun_plot_interaction.r")
 species <- read_csv("data/species_list.csv")
 list_of_species <- as.character(species$scientific_name)
 
+# trait data
+species_trait <- read_csv("data/species-trait-dat.csv")
 ```
 
 ## Show AIC weights
@@ -312,7 +314,7 @@ fig_predictor <- ggplot(data_predictor_long)+
                  title = 'Magnitude and direction of Species-specific probability of occupancy')
 
 ggsave("figs/fig_prob_occupancy_dir.png", dpi = 300,
-       width = 4, height = 4)
+       width = 12, height = 7)
     
 ```
 
