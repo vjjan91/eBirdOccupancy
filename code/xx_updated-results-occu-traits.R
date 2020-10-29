@@ -1,13 +1,4 @@
----
-editor_options: 
-  chunk_output_type: console
----
-
-# Results: Occupancy predictors
-
-## Prepare libraries
-
-```{r load_libs_results01, eval=FALSE}
+## ----load_libs_results01--------------------------------------------------------------------------------------------------------------------------------
 # to load data
 library(readxl)
 
@@ -31,24 +22,18 @@ library(kableExtra)
 library(ggplot2)
 library(patchwork)
 source("code/fun_plot_interaction.r")
-```
 
-## Read species trait data and the final list of species
 
-```{r eval=FALSE}
+## -------------------------------------------------------------------------------------------------------------------------------------------------------
 # list of species
 species <- read_csv("data/species_list.csv")
 list_of_species <- as.character(species$scientific_name)
 
 # trait data
 species_trait <- read_csv("data/data_species_trait.csv")
-```
 
-## Show AIC weights
 
-### Read in weight data
-
-```{r}
+## -------------------------------------------------------------------------------------------------------------------------------------------------------
 # which files to read
 file_names <- c("data/results/occu-2.5km/occuCovs/modelImp/lc-clim-imp.xlsx",
                 "data/results/occu-10km/occuCovs/modelImp/lc-clim-imp.xlsx")
@@ -79,13 +64,9 @@ model_imp <- map(file_names, function(f) {
   
   return(md_list)
 })
-```
 
-Sheets for one laughingthrush _Montecincla fairbankii_ and one barbet _Psilopogon viridis_ are not found at both scales.
 
-### Show cumulative weights as plot
-
-```{r}
+## -------------------------------------------------------------------------------------------------------------------------------------------------------
 # assign scale
 names(model_imp) <- c("2.5km", "10km")
 model_imp <- imap(model_imp, function(.x, .y) {
@@ -106,11 +87,9 @@ levels(model_imp$scale) <- c("2.5km", "10km")
 # summ by scale and predictor
 model_imp <- group_by(model_imp, predictor, scale) %>% 
   summarise(AIC_weight_cumulative = sum(AIC_weight))
-```
 
 
-
-```{r}
+## -------------------------------------------------------------------------------------------------------------------------------------------------------
 predictor_name <- c("Temp" = "Mean annual temp.",
                     "Ppt" = "Mean annual ppt.",
                     "LC 1" = "% agriculture",
@@ -119,12 +98,9 @@ predictor_name <- c("Temp" = "Mean annual temp.",
                     "LC 4" = "% settlements",
                     "LC 5" = "% tea",
                     "LC 6" = "% water bodies")
-```
 
 
-### Make plot
-
-```{r}
+## -------------------------------------------------------------------------------------------------------------------------------------------------------
 ggplot(model_imp)+
   geom_point(aes(predictor, AIC_weight_cumulative,
                fill = scale),
@@ -149,74 +125,66 @@ ggplot(model_imp)+
 
 ggsave("figs/fig_aic_weight.png", dpi = 300,
        width = 4, height = 4)
-```
 
-![Cumulative AIC weights for each predictor, where _Temp_ is the mean annual temperature, _Ppt_ is the mean annual precipitation, and LC 1 -- LC 6 are the proportions of agriculture, forest, plantation, settlement, tea, and water bodies, respectively."](figs/fig_aic_weight.png)
 
-## Read model estimates
+## ----read_model_estimates, eval=FALSE-------------------------------------------------------------------------------------------------------------------
+## file_read <- c("data/results/occu-2.5km/occuCovs/modelEst/lc-clim-modelEst.xlsx",
+##                "data/results/occu-10km/occuCovs/modelEst/lc-clim-modelEst.xlsx")
+## 
+## # read data as list column
+## model_est <- map(file_read, function(fr) {
+##   md_list <- map(list_of_species, function(sn) {
+##     readxl::read_excel(fr, sheet = sn)
+##   })
+##   names(md_list) <- list_of_species
+## 
+##   return(md_list)
+## })
+## 
+## # prepare model data
+## scales = c("2.5km", "10km")
+## model_data <- tibble(crossing(scale = scales,
+##                               scientific_name = list_of_species)) %>%
+##   arrange(desc(scale))
+## 
+## # rename model data components and separate predictors
+## names <- c("predictor", "coefficient", "se", "ci_lower",
+##            "ci_higher", "z_value", "p_value")
+## 
+## # get data for plotting:
+## model_est <- map(model_est, function(l) {
+##   map(l, function(df) {
+##     colnames(df) <- names
+##     df <- separate_interaction_terms(df)
+##     df <- make_response_data(df)
+##     return(df)
+##   })
+## })
+## 
+## # add names and scales
+## model_est <- map(model_est, function(l) {
+##   imap(l, function(.x, .y) {
+##     mutate(.x, scientific_name = .y)
+##   })
+## })
+## 
+## # add names to model estimates
+## names(model_est) <- scales
+## model_est <- imap(model_est, function(.x, .y) {
+##   bind_rows(.x) %>%
+##     mutate(scale = .y)
+## })
+## 
+## # remove modulators
+## model_est <- bind_rows(model_est) %>%
+##   select(-matches("modulator"))
+## 
+## # join data to species name
+## model_data <- model_data %>%
+##   left_join(model_est)
 
-```{r read_model_estimates, eval=FALSE}
-file_read <- c("data/results/occu-2.5km/occuCovs/modelEst/lc-clim-modelEst.xlsx",
-               "data/results/occu-10km/occuCovs/modelEst/lc-clim-modelEst.xlsx")
 
-# read data as list column
-model_est <- map(file_read, function(fr) {
-  md_list <- map(list_of_species, function(sn) {
-    readxl::read_excel(fr, sheet = sn)
-  })
-  names(md_list) <- list_of_species
-  
-  return(md_list)
-})
-
-# prepare model data
-scales = c("2.5km", "10km")
-model_data <- tibble(crossing(scale = scales, 
-                              scientific_name = list_of_species)) %>% 
-  arrange(desc(scale))
-
-# rename model data components and separate predictors
-names <- c("predictor", "coefficient", "se", "ci_lower", 
-           "ci_higher", "z_value", "p_value")
-
-# get data for plotting:
-model_est <- map(model_est, function(l) {
-  map(l, function(df) {
-    colnames(df) <- names
-    df <- separate_interaction_terms(df)
-    df <- make_response_data(df) 
-    return(df)
-  })
-})
-
-# add names and scales
-model_est <- map(model_est, function(l) {
-  imap(l, function(.x, .y) {
-    mutate(.x, scientific_name = .y)
-  })
-})
-
-# add names to model estimates
-names(model_est) <- scales
-model_est <- imap(model_est, function(.x, .y) {
-  bind_rows(.x) %>% 
-    mutate(scale = .y)
-})
-
-# remove modulators
-model_est <- bind_rows(model_est) %>% 
-  select(-matches("modulator"))
-
-# join data to species name
-model_data <- model_data %>% 
-  left_join(model_est)
-```
-
-### Export data to file
-
-Export predictor effects.
-
-```{r}
+## -------------------------------------------------------------------------------------------------------------------------------------------------------
 # get predictor effect data
 data_predictor_effect <- distinct(model_data, 
                                   scientific_name, scale, 
@@ -225,11 +193,9 @@ data_predictor_effect <- distinct(model_data,
 # write to file
 write_csv(data_predictor_effect,
           path = "data/results/data_predictor_effect.csv")
-```
 
-Export model data.
 
-```{r}
+## -------------------------------------------------------------------------------------------------------------------------------------------------------
 model_data_to_file <- model_data %>% 
   select(predictor, data,
          scientific_name, scale) %>% 
@@ -241,22 +207,14 @@ model_data_to_file <- model_data_to_file %>%
 
 write_csv(model_data_to_file,
           "data/results/data_occupancy_predictors.csv")
-```
 
-## Occupancy coefficients in relation with species elevation
 
-How does species' displacement from the median elevation of the study area relate with the coefficient of each predictor of occupancy?
-
-First get the saved model data.
-
-```{r}
+## -------------------------------------------------------------------------------------------------------------------------------------------------------
 # read from file
 model_data <- read_csv("data/results/data_predictor_effect.csv")
-```
 
-### Species offset from median elevation
 
-```{r}
+## -------------------------------------------------------------------------------------------------------------------------------------------------------
 # add trait by joining
 model_data <- model_data %>% 
   left_join(species_trait, by = "scientific_name")
@@ -267,9 +225,9 @@ model_data <- left_join(model_data, elev_summary)
 
 model_data <- rename(model_data,
                      median_elev = median)
-```
 
-```{r elev_of_area}
+
+## ----elev_of_area---------------------------------------------------------------------------------------------------------------------------------------
 # what is the median elevation of the study area?
 elev <- raster::stack("data/spatial/landscape_resamp01km.tif")[[1]]
 
@@ -284,31 +242,19 @@ elev <- raster::mask(elev, sf::as_Spatial(hills))
 
 # get median elevation
 median(raster::values(elev), na.rm = TRUE)
-```
 
-The median elevation is 686.0872 metres, which we will round to 685 metres for convenience.
 
-```{r}
+## -------------------------------------------------------------------------------------------------------------------------------------------------------
 med_elev <- 685
-```
 
-Subtract species' median elevation from the study area median elevation.
 
-```{r}
+## -------------------------------------------------------------------------------------------------------------------------------------------------------
 model_data$diff_elev <- model_data$median_elev - med_elev
 
 model_data <- drop_na(model_data)
-```
 
-### Species body mass
 
-Already included in the data.
-
-### Species range size
-
-This data is added from the State of India's Birds report.
-
-```{r}
+## -------------------------------------------------------------------------------------------------------------------------------------------------------
 soib <- read_csv("data/2020_state-india-birds-trait-dat - Information.csv")
 soib <- select(soib,
                scientific_name = `Scientific Name (India Checklist)`,
@@ -317,11 +263,9 @@ soib <- select(soib,
 # join with model data
 model_data <- left_join(model_data, soib,
                         by = "scientific_name")
-```
 
-### Prepare divisions by trait for plotting
 
-```{r}
+## -------------------------------------------------------------------------------------------------------------------------------------------------------
 model_data <- select(model_data,
                      scientific_name, predictor, coefficient,
                      scale, 
@@ -337,12 +281,9 @@ model_data_long <- pivot_longer(model_data,
 # no peacock!
 model_data_long <- filter(model_data_long,
                           scientific_name != "Pavo cristatus")
-```
 
 
-### Effect of traits as continuous variables
-
-```{r}
+## -------------------------------------------------------------------------------------------------------------------------------------------------------
 ggplot(model_data_long)+
   geom_hline(yintercept = 0, size = 0.2)+
   geom_vline(xintercept = 0,
@@ -365,42 +306,28 @@ ggplot(model_data_long)+
 
 # export
 ggsave("figs/fig_trait_coeff.png", dpi = 300)
-```
 
----
 
-## Occupancy predictors' aggregated effect
-
-```{r}
+## -------------------------------------------------------------------------------------------------------------------------------------------------------
 # read from file
 model_data <- read_csv("data/results/data_predictor_effect.csv")
-```
 
-Plot the number of species affected and the direction of the effect, for each predictor.
-Split the data along the axes of range size, migratory status, and habitat.
 
-### Add trait data and clean
-
-```{r}
+## -------------------------------------------------------------------------------------------------------------------------------------------------------
 # add trait by joining
 model_data <- model_data %>% 
   left_join(species_trait, by = "scientific_name")
-```
 
 
-```{r}
+## -------------------------------------------------------------------------------------------------------------------------------------------------------
 # remove .y from predictors
 model_data <- model_data %>%
   mutate_at(.vars = c("predictor"), .funs = function(x){
     stringr::str_remove(x, ".y")
   })
-```
 
-What is the direction of the predictor effect for each subset of the data by the distribution, habitat, elevation, and migratory status?
 
-### Get predictor effects
-
-```{r}
+## -------------------------------------------------------------------------------------------------------------------------------------------------------
 # first pivot the data longer
 data_predictor_long <- model_data %>% 
   pivot_longer(cols = c("range_size", "migratory_status", 
@@ -440,11 +367,9 @@ write_csv(data_predictor_long,
 # nest the data by trait
 data_predictor_long <- data_predictor_long %>% 
   nest(data = -trait)
-```
 
-### Manual edits to levels
 
-```{r}
+## -------------------------------------------------------------------------------------------------------------------------------------------------------
 # arrange data predictor long elevation in order of values
 data_predictor_long$data[[1]]$Class <- as.factor(data_predictor_long$data[[1]]$Class)
 levels(data_predictor_long$data[[1]]$Class) <- c("Low", "Mid", "High")
@@ -454,12 +379,9 @@ data_predictor_long$trait <- c("Elevation range",
                                "Habitat type",
                                "Migratory status",
                                "Range size")
-```
 
 
-### Make figures for predictor effects
-
-```{r}
+## -------------------------------------------------------------------------------------------------------------------------------------------------------
 # visualise the data by mapping over the nested list
 data_predictor_long <- mutate(data_predictor_long,
         figs = map2(data, trait, function(df, tr){
@@ -502,15 +424,13 @@ fig_predictor_effect <- patchwork::wrap_plots(data_predictor_long$figs,
 ggsave(fig_predictor_effect, filename = "figs/fig_predictor_effect.png",
        dpi = 300,
        width = 12)
-```
 
-```{r show_reverse_bar, eval=TRUE}
+
+## ----show_reverse_bar, eval=TRUE------------------------------------------------------------------------------------------------------------------------
 knitr::include_graphics("figs/fig_predictor_effect.png")
-```
 
-### Tabulate predictor effect
 
-```{r eval=TRUE, results="asis"}
+## ----eval=TRUE, results="asis"--------------------------------------------------------------------------------------------------------------------------
 # read again and nest
 data_predictor_long <- readr::read_csv("data/results/data_predictor_long.csv")
 
@@ -539,16 +459,9 @@ purrr::pwalk(data_predictor_long, function(trait, data) {
     print()
   cat("\n")
 })
-```
 
 
-## Land cover or climate?
-
-Group the predictor data by two broad classes, landcover or climate.
-
-### Get the effect of landcover or climate
-
-```{r}
+## -------------------------------------------------------------------------------------------------------------------------------------------------------
 # remove figs and unnest
 data_predictor_long <- data_predictor_long %>% 
   select(!matches("figs")) %>% 
@@ -564,18 +477,15 @@ data_lc_v_clim <- data_predictor_long %>%
 
 # save for later use
 write_csv(data_lc_v_clim, path = "data/data_lc_v_clim.csv")
-```
 
-```{r}
+
+## -------------------------------------------------------------------------------------------------------------------------------------------------------
 # nest on trait
 data_lc_v_clim <- nest(data_lc_v_clim,
                        cols = -trait)
-```
 
 
-### Plot a figure
-
-```{r}
+## -------------------------------------------------------------------------------------------------------------------------------------------------------
 # make list of figures
 data_lc_v_clim$figs <- pmap(data_lc_v_clim[,c("trait", "cols")],
                            function(trait, cols) {
@@ -615,15 +525,13 @@ fig_lc_v_clim <- patchwork::wrap_plots(data_lc_v_clim$figs,
 # save plot
 ggsave(fig_lc_v_clim, filename = "figs/fig_lc_v_clim.png",
        dpi = 300)
-```
 
-```{r eval=TRUE}
+
+## ----eval=TRUE------------------------------------------------------------------------------------------------------------------------------------------
 knitr::include_graphics("figs/fig_lc_v_clim.png")
-```
 
-### Tabulate landcover vs climate
 
-```{r eval=TRUE, results="asis"}
+## ----eval=TRUE, results="asis"--------------------------------------------------------------------------------------------------------------------------
 # read again and nest
 data_lc_v_clim <- read_csv("data/data_lc_v_clim.csv")
 
@@ -652,4 +560,4 @@ purrr::pwalk(data_lc_v_clim, function(trait, data) {
     print()
   cat("\n")
 })
-```
+
