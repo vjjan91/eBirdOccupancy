@@ -3,42 +3,58 @@
 
 library(openxlsx)
 library(dplyr)
-library(tidyselect)
+library(tidyverse)
 library(stringr)
 library(purrr)
 library(ggplot2)
 library(data.table)
+library(gridExtra)
 
 # Load the individual model estimates 
 modEstSheets <- getSheetNames("data/results/lc-clim-modelEst.xlsx")
 modEst <-lapply(modEstSheets,openxlsx::read.xlsx, xlsxFile = "data/results/lc-clim-modelEst.xlsx")
 names(modEst) <- modEstSheets
 
+# Store the results in a list for plotting
+model <- list()
+
 # Making all plots
 for(i in 1:length(modEst)){
     names(modEst[[i]]) <- c("Predictor","Coefficient" ,"SE" ,"lowerCI" , "upperCI" ,"z_value"  ,"Pr_z")
     plot <-  modEst[[i]] %>% filter(Pr_z<0.05)
+    plot <- plot %>%
+      filter(str_detect(Predictor,'psi')) %>%
+      filter(!str_detect(Predictor,'Int'))
+    
     if(dim(plot)[1]==0){
       next
     } else {
-    model <- data.frame(Predictor = plot$Predictor,
+    model[[i]] <- data.frame(Predictor = plot$Predictor,
                         Coefficient = plot$Coefficient,
                         SE = plot$SE,
                         lowerCI = plot$lowerCI,
                         upperCI = plot$upperCI,
                         Species = names(modEst)[i])
     
-    p1 <- ggplot(model, aes(colour = Species)) +
-      geom_hline(yintercept = 0, colour = gray(1/2), lty = 2) +
-      geom_linerange(aes(x = Predictor, ymin = lowerCI,ymax = upperCI),
-                     lwd = 1, position = position_dodge(width = 1/2)) +
-      geom_pointrange(aes(x = Predictor, y = Coefficient, ymin = lowerCI,ymax = upperCI),
-                      lwd = 1/2, position = position_dodge(width = 1/2),
-                      shape = 21, fill = "WHITE") + theme_bw() + coord_flip()
-    
-    dirname <- "C:\\Users\\vr235\\Downloads\\coefPlots\\"
-    
-    ggsave(filename="",
-           plot=p1, device="png", dpi=300,path = paste(dirname, paste(names(modEst)[i], ".png", sep=""), sep=""))
+    names(model)[i] <- names(modEst)[i]
     }
 }
+
+# Plot should be outside the loop
+allModelFrame <- rbindlist(model)
+
+fig_coefPlot <- ggplot(allModelFrame) +
+  geom_hline(yintercept = 0, colour = gray(1/2), lty = 2) +
+  geom_linerange(aes(x = Predictor, ymin = lowerCI,ymax = upperCI),
+                 lwd = 1, position = position_dodge(width = 1/2)) +
+  geom_pointrange(aes(x = Predictor, y = Coefficient, ymin = lowerCI,ymax = upperCI),
+                  lwd = 1/2, position = position_dodge(width = 1/2),
+                  shape = 21, fill = "WHITE") + coord_flip() +
+  facet_wrap(~Species,scales="free_y") +
+  theme_bw() +
+  theme(legend.position = "right",
+        strip.text = element_text(face = "italic"),
+        axis.title = element_blank())
+
+ggsave(fig_coefPlot, filename = "figs/fig_coefPlot.png",height = 17,
+       width = 25, device = png(), dpi = 300); dev.off()
