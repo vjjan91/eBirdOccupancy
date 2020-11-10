@@ -45,7 +45,7 @@ ebd_filters <- auk_ebd(f_in_ebd, f_in_sampling) %>%
   auk_country(country = "IN") %>%
   auk_state(c("IN-KL","IN-TN", "IN-KA")) %>% 
   # Restricting geography to TamilNadu, Kerala & Karnataka
-  auk_date(c("2013-01-01", "2018-12-31")) %>%
+  auk_date(c("2013-01-01", "2019-12-31")) %>%
   auk_complete()
 
 # check filters
@@ -79,7 +79,7 @@ columnsOfInterest <- c("checklist_id","scientific_name","observation_count",
 
 ebd <- setDF(ebd) %>% 
   as_tibble() %>% 
-  select(one_of(columnsOfInterest))
+  dplyr::select(one_of(columnsOfInterest))
 
 setDT(ebd)
 ```
@@ -102,7 +102,7 @@ to_keep <- unlist(st_contains(wg, ebd_locs))
 
 # filter locs
 ebd_locs <- filter(ebd_locs, id %in% to_keep) %>% 
-  bind_cols(as_tibble(st_coordinates(.))) %>% 
+  bind_cols(as_tibble(st_coordinates(st_as_sf(.)))) %>% 
   st_drop_geometry()
 ```
 
