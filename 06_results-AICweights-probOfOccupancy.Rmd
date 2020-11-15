@@ -161,7 +161,6 @@ model_est <- map(file_read, function(fr) {
     readxl::read_excel(fr, sheet = sn)
   })
   names(md_list) <- list_of_species
-  
   return(md_list)
 })
 
