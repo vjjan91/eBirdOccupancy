@@ -71,7 +71,7 @@ chelsaData <- purrr::map(chelsaFiles, function(chr){
   return(a)
 })
 
-# is this in reference to precipitation?
+# is this in reference to temp?
 chelsaData[[1]] <- chelsaData[[1]]/10
 
 # stack chelsa data
@@ -192,9 +192,6 @@ writeRaster(land_stack, filename = as.character(land_names), overwrite=TRUE)
 
 ```{r prep_libs_supp03, eval=FALSE}
 # load libs
-library(raster)
-library(glue)
-library(purrr)
 library(dplyr)
 library(tidyr)
 
@@ -244,8 +241,8 @@ land_data <- drop_na(land_data) %>%
 
 ```{r plot_clim_elev, eval=FALSE}
 # make labeller
-chelsa <- c(bio_01 = "precipitation 1979 -- 2013",
-            bio_12 = "temperature 1979 -- 2013")
+chelsa <- c(bio_01 = "mean ann. temp. (°C)",
+            bio_12 = "annual precip. (mm)")
 
 fig_climate_elev <-
   ggplot(land_data)+
@@ -256,9 +253,13 @@ fig_climate_elev <-
   scale_x_continuous(labels = scales::comma)+
   scale_y_continuous(labels = scales::comma)+
   facet_wrap(~clim_var, scales = "free_y",
-             labeller = labeller(clim_var = chelsa))+
+             labeller = labeller(clim_var = chelsa), 
+             strip.position = "left")+
   theme_test()+
-  labs(x = "Elevation (m)", y = "CHELSA interannual variation")
+  theme(strip.placement = "outside",
+        strip.background = element_blank(),
+        strip.text = element_text(size = 11))+
+  labs(x = "Elevation (m)", y = NULL)
 
 # save as png
 ggsave(fig_climate_elev, filename = "figs/fig_climate_elev.png", 
@@ -307,7 +308,7 @@ fig_lc_elev <-
 
 # export figure
 ggsave(fig_lc_elev, filename = "figs/fig_lc_elev.png", 
-       height = 3, width = 6, device = png(), dpi = 300); dev.off()
+       height = 2, width = 6, device = png(), dpi = 300); dev.off()
 ```
 
 ![Proportional landcover, as a function of elevation in the study site. Data represent elevation in increments of 100m.](figs/fig_lc_elev.png)
@@ -319,7 +320,7 @@ library(patchwork)
 ```
 
 ```{r}
-fig_clim_lc_elev <- 
+fig_clim_lc_elev <-
   wrap_plots(fig_climate_elev, fig_lc_elev, ncol = 1,
              design = "AA\nAA\nBB")+
   plot_annotation(tag_levels = "a",
