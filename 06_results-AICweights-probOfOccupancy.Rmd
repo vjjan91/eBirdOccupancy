@@ -106,10 +106,20 @@ write_csv(model_imp,
           file = "data/results/cumulative_AIC_weights.csv")
 ```
 
+Read data back in.
+
+```{r}
+# read data and make factor
+model_imp <- read_csv("data/results/cumulative_AIC_weights.csv")
+model_imp$predictor <- as_factor(model_imp$predictor)
+```
+
+
 ```{r}
 # make nice names
 predictor_name <- tibble(predictor = levels(model_imp$predictor),
-                         pred_name = c("precip. '79 -- '13", "temp. '79 -- '13",
+                         pred_name = c("mean ann. temp. (°C)", 
+                                       "annual precip. (mm)",
                                        "% agriculture", "% forests",
                                        "% plantations", "% settlements", 
                                        "% tea", "% water bodies"))
@@ -212,7 +222,7 @@ model_data <- model_data %>%
 
 # Keep only those predictors whose p-vlaues are significant:
 model_data <- model_data %>%
-  filter(p_value<0.05)
+  filter(p_value < 0.05)
 
 ```
 
