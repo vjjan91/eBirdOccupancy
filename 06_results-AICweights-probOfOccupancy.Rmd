@@ -118,11 +118,11 @@ model_imp$predictor <- as_factor(model_imp$predictor)
 ```{r}
 # make nice names
 predictor_name <- tibble(predictor = levels(model_imp$predictor),
-                         pred_name = c("mean ann. temp. (°C)", 
-                                       "annual precip. (mm)",
-                                       "% agriculture", "% forests",
-                                       "% plantations", "% settlements", 
-                                       "% tea", "% water bodies"))
+                         pred_name = c("Annual Mean Temperature (°C)", 
+                                       "Annual Precipitation (mm)",
+                                       "% Agriculture", "% Forests",
+                                       "% Plantations", "% Settlements", 
+                                       "% Tea", "% Water Bodies"))
 
 # rename predictor
 model_imp <- left_join(model_imp, predictor_name)
