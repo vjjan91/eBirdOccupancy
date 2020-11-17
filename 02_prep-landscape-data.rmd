@@ -241,8 +241,8 @@ land_data <- drop_na(land_data) %>%
 
 ```{r plot_clim_elev, eval=FALSE}
 # make labeller
-chelsa <- c(bio_01 = "mean ann. temp. (°C)",
-            bio_12 = "annual precip. (mm)")
+chelsa <- c(bio_01 = "Mean Annual Temperature (°C)",
+            bio_12 = "Annual Precipitation (mm)")
 
 fig_climate_elev <-
   ggplot(land_data)+
@@ -301,7 +301,7 @@ fig_lc_elev <-
   scale_x_continuous(breaks = seq(0, 2500, 500), labels = comma)+
   scale_alpha_continuous(range = c(0.3, 1))+
   labs(x = "Elevation (m)", 
-       y = "Landcover class")+
+       y = "Land Cover Type")+
   theme_test()+
   theme(legend.key.width = unit(2, units = "mm"))+
   labs(fill = NULL)
