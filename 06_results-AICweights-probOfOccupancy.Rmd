@@ -18,6 +18,7 @@ library(forcats)
 library(tidyr)
 library(purrr)
 library(stringr)
+library(data.table)
 
 # to wrangle models
 source("code/fun_model_estimate_collection.r")
@@ -103,10 +104,6 @@ model_imp <-group_by(model_imp, predictor) %>%
             min_AIC = min(AIC_weight),
             max_AIC = max(AIC_weight),
             med_AIC = median(AIC_weight))
-
-# sum by scale and predictor
-model_imp <- group_by(model_imp, predictor, scale) %>% 
-  summarise(AIC_weight_cumulative = sum(AIC_weight))
 
 # write to file
 write_csv(model_imp,
