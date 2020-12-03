@@ -64,7 +64,3 @@ cairo_pdf(filename = "figs/fig_occupancy_predictors.pdf",
 fig_occupancy
 dev.off()
 ```
-
-
-
-
