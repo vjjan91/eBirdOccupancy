@@ -100,6 +100,13 @@ model_imp$AIC_weight <- as.numeric(model_imp$AIC_weight)
 model_imp$scale <- as.factor(model_imp$scale)
 levels(model_imp$scale) <- c("2.5km")
 
+# Let's get a summary of cumulative variable importance
+model_imp <-group_by(model_imp, predictor) %>%
+  summarise(mean_AIC = mean(AIC_weight), sd_AIC=sd(AIC_weight),
+            min_AIC = min(AIC_weight),
+            max_AIC = max(AIC_weight),
+            med_AIC = median(AIC_weight))
+
 # sum by scale and predictor
 model_imp <- group_by(model_imp, predictor, scale) %>% 
   summarise(AIC_weight_cumulative = sum(AIC_weight))
