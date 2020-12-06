@@ -24,7 +24,16 @@ for(i in 1:length(modEst)){
     plot <-  modEst[[i]] %>% filter(Pr_z<0.05)
     plot <- plot %>%
       filter(str_detect(Predictor,'psi')) %>%
-      filter(!str_detect(Predictor,'Int'))
+      filter(!str_detect(Predictor,'Int')) %>%
+      mutate(Predictor = recode(Predictor, 'psi(bio_12.y)' = 'Mean Annual Precipitation', 
+                                'psi(bio_1.y)' = 'Mean Annual Temperature',
+                                'psi(lc_01.y)' = 'Proportion of Agriculture',
+                                'psi(lc_02.y)' = 'Proportion of Forests',
+                                'psi(lc_04.y)' = 'Proportion of Plantations',
+                                'psi(lc_05.y)' = 'Proportion of Settlements',
+                                'psi(lc_06.y)' = 'Proportion of Tea',
+                                'psi(lc_07.y)' = 'Proportion of Water Bodies'
+      ))
     
     if(dim(plot)[1]==0){
       next
@@ -75,11 +84,19 @@ model <- list()
 # Making all plots
 for(i in 1:length(modEst)){
   names(modEst[[i]]) <- c("Predictor","Coefficient" ,"SE" ,"lowerCI" , "upperCI" ,"z_value"  ,"Pr_z")
-  plot <-  modEst[[i]] %>% filter(Pr_z<0.05)
+  plot <-  modEst[[i]] %>% filter(Pr_z<0.05) 
   plot <- plot %>%
     filter(str_detect(Predictor,'psi')) %>%
-    filter(!str_detect(Predictor,'Int'))
-  
+    filter(!str_detect(Predictor,'Int')) %>%
+    mutate(Predictor = recode(Predictor, 'psi(bio_12.y)' = 'Mean Annual Precipitation', 
+                              'psi(bio_1.y)' = 'Mean Annual Temperature',
+                              'psi(lc_01.y)' = 'Proportion of Agriculture',
+                              'psi(lc_02.y)' = 'Proportion of Forests',
+                              'psi(lc_04.y)' = 'Proportion of Plantations',
+                              'psi(lc_05.y)' = 'Proportion of Settlements',
+                              'psi(lc_06.y)' = 'Proportion of Tea',
+                              'psi(lc_07.y)' = 'Proportion of Water Bodies'
+                            ))
   if(dim(plot)[1]==0){
     next
   } else {
@@ -110,8 +127,8 @@ fig_coefPlot_endemics <- ggplot(allModelFrame) +
         strip.text = element_text(face = "italic"),
         axis.title = element_blank())
 
-ggsave(fig_coefPlot_endemics, filename = "figs/fig_coefPlot_endemics.png",height = 12,
-       width = 14, device = png(), dpi = 300); dev.off()
+ggsave(fig_coefPlot_endemics, filename = "figs/fig_coefPlot_endemics.svg",height = 12,
+       width = 17, device = svg(), dpi = 300); dev.off()
 
 
 
