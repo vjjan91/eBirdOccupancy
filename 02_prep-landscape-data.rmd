@@ -279,11 +279,21 @@ lc_elev <- tibble(elev = getValues(landscape[["elev"]]),
 
 # process data for proportions
 lc_elev <- lc_elev %>% 
-  filter(!is.na(landcover), landcover != 0) %>% 
+  filter(!is.na(landcover), !is.na(elev)) %>% 
   mutate(elev = plyr::round_any(elev, 100)) %>% 
   count(elev, landcover) %>%
   group_by(elev) %>% 
   mutate(prop = n/sum(n))
+
+# fill out lc elev
+lc_elev_canon <- crossing(elev = unique(lc_elev$elev),
+                          landcover = unique(lc_elev$landcover))
+
+# bind with lcelev
+lc_elev <- full_join(lc_elev, lc_elev_canon)
+
+# convert NA to zero
+lc_elev <- replace_na(lc_elev, replace = list(n = 0, prop = 0))
 ```
 
 ### Plot proportional landcover in elevation
@@ -293,13 +303,24 @@ lc_elev <- lc_elev %>%
 fig_lc_elev <-
   ggplot(lc_elev)+
   geom_tile(aes(x = elev, y = factor(landcover), 
-                fill = prop))+
+                fill = prop),
+            col = "grey")+
   scale_fill_distiller(palette = "OrRd",
                        direction = 1,
+                       na.value = "grey",
                        values = c(0, 1),
-                       labels = scales::percent)+
-  scale_x_continuous(breaks = seq(0, 2500, 500), labels = comma)+
+                       labels = scales::percent,
+                       name = "% area")+
+  scale_y_discrete(
+    labels = c("Agri.", "Forest",
+               "Grassland", "Plantation",
+               "Settlement", "Tea",
+               "Water")
+  )+
+  scale_x_continuous(breaks = seq(0, 2500, 500), 
+                     labels = comma)+
   scale_alpha_continuous(range = c(0.3, 1))+
+  coord_cartesian(expand = F)+
   labs(x = "Elevation (m)", 
        y = "Land Cover Type")+
   theme_test()+
