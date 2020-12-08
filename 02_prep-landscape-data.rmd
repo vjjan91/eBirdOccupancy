@@ -312,7 +312,7 @@ fig_lc_elev <-
                        labels = scales::percent,
                        name = "% area")+
   scale_y_discrete(
-    labels = c("Agri.", "Forest",
+    labels = c("Agriculture", "Forest",
                "Grassland", "Plantation",
                "Settlement", "Tea",
                "Water")
