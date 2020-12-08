@@ -138,10 +138,10 @@ model_imp <- left_join(model_imp, predictor_name)
 ```{r}
 fig_aic <-
   ggplot(model_imp)+
-  geom_pointrange(aes(x = reorder(predictor, med_AIC),
-                      y = med_AIC,
-                      ymin = med_AIC - sd_AIC,
-                      ymax = med_AIC + sd_AIC))+
+  geom_pointrange(aes(x = reorder(predictor, mean_AIC),
+                      y = mean_AIC,
+                      ymin = mean_AIC - sd_AIC,
+                      ymax = mean_AIC + sd_AIC))+
   geom_text(aes(x = predictor, 
                 y = 0.2,
                 label = pred_name),
@@ -323,7 +323,7 @@ fig_predictor <-
              lwd = 0.2,
              col = "grey")+
   geom_col(data = data_predictor_long,
-           aes(x = reorder(predictor, med_AIC),
+           aes(x = reorder(predictor, mean_AIC),
                y = magnitude,
                fill = effect),
            # position = position_dodge(width = 1),
