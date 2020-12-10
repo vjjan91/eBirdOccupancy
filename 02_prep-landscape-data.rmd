@@ -241,7 +241,7 @@ land_data <- drop_na(land_data) %>%
 
 ```{r plot_clim_elev, eval=FALSE}
 # make labeller
-chelsa <- c(bio_01 = "Mean Annual Temperature (°C)",
+chelsa <- c(bio_01 = "Annual Mean Temperature (°C)",
             bio_12 = "Annual Precipitation (mm)")
 
 fig_climate_elev <-
@@ -313,9 +313,9 @@ fig_lc_elev <-
                        name = "% area")+
   scale_y_discrete(
     labels = c("Agriculture", "Forest",
-               "Grassland", "Plantation",
-               "Settlement", "Tea",
-               "Water")
+               "Grassland", "Plantations",
+               "Settlements", "Tea",
+               "Water Bodies")
   )+
   scale_x_continuous(breaks = seq(0, 2500, 500), 
                      labels = comma)+
