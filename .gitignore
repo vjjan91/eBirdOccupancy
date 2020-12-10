@@ -5,6 +5,7 @@ data/spatial/*
 data/results/*
 data/eBird*
 data/ebird_*
+data/for-map
 !data/spatial/00_data_exists.txt
 !data/results/00_data_exists.txt
 
