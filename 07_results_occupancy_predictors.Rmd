@@ -1,0 +1,78 @@
+---
+editor_options: 
+  chunk_output_type: console
+---
+
+# Results: Occupancy predictors by species
+
+## Prepare libraries
+
+```{r load_libs_results02, eval=FALSE}
+# to load data
+library(readxl)
+
+# to handle data
+library(dplyr)
+library(readr)
+library(forcats)
+library(tidyr)
+library(purrr)
+library(stringr)
+
+# plotting
+library(ggplot2)
+library(patchwork)
+```
+
+## Read data
+
+```{r}
+# read data
+data <- read_csv("data/results/data_occupancy_predictors.csv")
+```
+
+```{r}
+# drop na
+data <- select(
+  data,
+  -ci
+) %>%
+  drop_na() %>%
+  nest(data = c(predictor, m_group, seq_x, mean, scale))
+```
+
+```{r}
+fig_occupancy <- map2(
+  data$data, data$scientific_name,
+  function(df, name) {
+    ggplot(df) +
+      geom_line(aes(seq_x, mean,
+        col = predictor
+      )) +
+      facet_grid(~scale,
+        labeller = label_both
+      ) +
+      coord_cartesian(
+        xlim = c(0, 1),
+        ylim = c(0, 1)
+      ) +
+      theme_grey(base_size = 6) +
+      theme(legend.position = "top") +
+      scale_colour_manual(values = pals::kovesi.rainbow(8)) +
+      labs(
+        x = "scaled predictor value",
+        y = "p(occupancy)",
+        title = name
+      )
+  }
+)
+```
+
+```{r}
+cairo_pdf(
+  filename = "figs/fig_occupancy_predictors.pdf",
+  onefile = TRUE, width = 6, height = 4
+)
+fig_occupancy
+dev.off()
+```
