@@ -39,5 +39,3 @@ rsconnect/
 
 # pdf files
 *.pdf
-
-!data/species_list.csv

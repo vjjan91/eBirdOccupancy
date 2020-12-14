@@ -5,7 +5,7 @@ editor_options:
 
 # Prepare observer expertise
 
-## Prepare libraries
+### Prepare libraries
 
 ```{r load_libs3, eval=FALSE, message=FALSE, warning=FALSE}
 
@@ -26,7 +26,7 @@ time_to_decimal <- function(x) {
 }
 ```
 
-## Prepare data
+### Prepare data
 
 Here, we go through the data preparation process again because we might want to assess observer expertise over a larger area than the study site.
 
@@ -88,7 +88,7 @@ ebd <- setDF(ebd) %>%
 setDT(ebd)
 ```
 
-## Explicit spatial subset
+### Explicit spatial subset
 
 ```{r hills_subset_exp, eval=FALSE}
 # get checklist locations
@@ -116,7 +116,7 @@ ebd <- ebd[longitude %in% ebd_locs$X & latitude %in% ebd_locs$Y, ]
 ```
 
 
-## Prepare species of interest
+### Prepare species of interest
 
 ```{r soi_score, eval=FALSE}
 # read in species list
@@ -136,7 +136,7 @@ by = list(sampling_event_identifier)
 fwrite(ebdSpSum, file = "data/dataChecklistSpecies.csv")
 ```
 
-## Prepare checklists for observer score
+### Prepare checklists for observer score
 
 ```{r prepare_chk_covars, eval=FALSE}
 # 1. add new columns of decimal time and julian date
@@ -172,7 +172,7 @@ rm(ebd)
 gc()
 ```
 
-## Get landcover
+### Get landcover
 
 Using the landcover 1km resolution here.
 
@@ -202,7 +202,7 @@ landcoverVec <- raster::extract(
 setDT(ebdChkSummary)[, landcover := landcoverVec]
 ```
 
-## Filter data for stats
+### Filter data for stats
 
 ```{r filter_data2, eval=FALSE}
 # change names for easy handling
@@ -243,9 +243,9 @@ ebdChkSummary <- ebdChkSummary %>%
 fwrite(ebdChkSummary, file = "data/eBirdChecklistVars.csv")
 ```
 
-## Run observer expertise model
+### Run observer expertise model
 
-Our observer expertise model aims to include the random intercpet effect of observer identity, with a random slope effect of duration. This models the different rate of species accumulation by different observers, as well as their different starting points.
+Our observer expertise model aims to include the random intercept effect of observer identity, with a random slope effect of duration. This models the different rate of species accumulation by different observers, as well as their different starting points.
 
 ```{r run_model, eval=FALSE}
 # uses either a subset or all data
@@ -264,7 +264,7 @@ data = ebdChkSummary, family = "poisson"
 )
 ``` 
 
-## Write model to file
+### Write model to file
 
 ```{r write_obsexp_model, eval=FALSE}
 # make dir if absent
@@ -280,7 +280,7 @@ if (!dir.exists("data/modOutput")) {
 }
 ```
 
-## Get observer expertise as species in 60 mins
+### Get observer expertise as species in 60 mins
 
 ```{r obsexp_ranef, eval=FALSE}
 # make df with means
@@ -303,7 +303,7 @@ dfPredict <- mutate(dfPredict,
   mutate(score = scales::rescale(score))
 ```
 
-## Write observer expertise to file
+### Write observer expertise to file
 
 ```{r write_obsexp, eval=FALSE}
 fwrite(dfPredict %>% dplyr::select(observer, score),

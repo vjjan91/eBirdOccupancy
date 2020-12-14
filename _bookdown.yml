@@ -1,4 +1,4 @@
-book_filename: "ebird_nilgiris_2019"
+book_filename: "code and analysis"
 output: 
   html_document: 
     fig_caption: yes
