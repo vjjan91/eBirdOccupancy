@@ -5,7 +5,7 @@ editor_options:
 
 # Prepare landscape data
 
-## Prepare libraries
+### Prepare libraries
 
 ```{r load_libs2, eval=FALSE, message=FALSE, warning=FALSE}
 
@@ -26,8 +26,6 @@ funcMode <- function(x, na.rm = T) {
 assertthat::assert_that(funcMode(c(2,2,2,2,3,3,3,4)) == as.character(2), 
                         msg = "problem in the mode function") # works
 ```
-
-## Prepare initial data
 
 ### Prepare spatial extent
 
@@ -266,7 +264,7 @@ ggsave(fig_climate_elev, filename = "figs/fig_climate_elev.png",
        height = 3, width = 6, device = png(), dpi = 300)
 ```
 
-![CHELSA climatic variables as a function of elevation, in increments of 200m. Points represent means, while vertical lines show 95% confidence intervals.]("figs/fig_climate_elev.png")
+![Climatic variables as a function of elevation, in increments of 200m. Points represent means, while vertical lines show 95% confidence intervals.]("figs/fig_climate_elev.png")
 
 ## Landcover in relation to elevation
 

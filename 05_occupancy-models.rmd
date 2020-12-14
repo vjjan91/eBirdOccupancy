@@ -5,9 +5,8 @@ editor_options:
 
 # Occupancy modelling 
 
-## Load necessary libraries
+### Load necessary libraries
 ```{r load_libraries, eval=FALSE, message=FALSE, warning=FALSE}
-
 # Load libraries
 library(auk)
 library(lubridate)
@@ -29,12 +28,11 @@ library(ecodist)
 # Source necessary functions
 source("code/fun_screen_cor.R")
 source("code/fun_model_estimate_collection.r")
-
 ```
 
 ## Load dataframe and scale covariates
 
-Here, we load the required dataframe that contains 10 random visits to a site. Please note that this process is repeated for each dataframe where environmental covariates were prepared at a spatial scale of 2.5 and 10 sq.km around each unique locality. We also scaled all covariates (mean around 0 and standard deviation of 1)
+Here, we load the required dataframe that contains 10 random visits to a site. Please note that this process is repeated for each dataframe where environmental covariates were prepared at a spatial scale of 2.5 sq.km around each unique locality. We also scaled all covariates (mean around 0 and standard deviation of 1)
 
 ```{r load_dataframe, eval=FALSE}
 # Load in the prepared dataframe that contains 10 random visits to each site
@@ -82,14 +80,15 @@ dat.1 <- dat %>%
   mutate(year = year(observation_date),
          pres_abs = as.integer(pres_abs)) # occupancy modeling requires an integer response
 
+# Dividing Annual Mean Temperature by 10 to arrive at accurate values of temperature
 dat.1$bio_1.y <- dat.1$bio_1.y/10
 
 # Scaling detection and occupancy covariates
 dat.scaled <- dat.1
 dat.scaled[,c(1,2,11,16:25)] <- scale(dat.scaled[,c(1,2,11,16:25)]) # Scaling and standardizing detection and site-level covariates
-fwrite(dat.scaled, file = "data/scaledCovs_10km.csv")
+fwrite(dat.scaled, file = "data/scaledCovs_2.5km.csv")
 
-dat.scaled <- fread("data/05_scaled-covars-10km.csv",header=T)
+dat.scaled <- fread("data/05_scaled-covars-2.5km.csv",header=T)
 setDF(dat.scaled)
 head(dat.scaled)
 
@@ -141,11 +140,10 @@ for(i in 1:length(unique(dat.scaled$scientific_name))){
   occ_wide <- format_unmarked_occu(occ, 
                                    site_id = "site", 
                                    response = "pres_abs",
-                                   site_covs = c( "locality_id","lc_01.y","lc_02.y", "lc_04.y",             
-                                   "lc_05.y", "lc_06.y", "lc_07.y","bio_1.y", "bio_12.y"),
+                                   site_covs = c( "locality_id","lc_01.y","lc_02.y","lc_04.y",                                       "lc_05.y", "lc_06.y", "lc_07.y","bio_1.y", "bio_12.y"),
                                    obs_covs = obs_covs)
   
-  # Convert this dataframe of observations into an unmarked object to start fitting occupancy models
+# Convert this dataframe of observations into an unmarked object to start fitting occupancy models
   occ_um <- formatWide(occ_wide, type = "unmarkedFrameOccu")
   
   # Set up the model 
@@ -157,7 +155,6 @@ close(pb)
 
 # Store all the  model outputs for each species
 capture.output(all_null ,file="C:\\Users\\vr235\\Downloads\\null_models.csv")
-
 ```
 
 
@@ -429,10 +426,9 @@ write.xlsx(lc_clim_modelEst, file = "C:\\Users\\vr235\\Downloads\\lc_modelEst.xl
 
 ```
 
-#### goodness-of-fit tests
+## Goodness-of-fit tests
 
 ```{r}
-
 goodness_of_fit <- data.frame()
 
 # Add a progress bar for the loop
@@ -477,7 +473,7 @@ for(i in 1:length(unique(dat.scaled$scientific_name))){
                    expertise~lc_01.y+lc_02.y+lc_04.y+
                    lc_05.y+ lc_06.y+ lc_07.y+bio_1.y+bio_12.y, data = occ_um)
   
-  occ_gof <- mb.gof.test(model_lc_clim, nsim = 1000, plot.hist = FALSE)
+  occ_gof <- mb.gof.test(model_lc_clim, nsim = 5000, plot.hist = FALSE)
   
   p.value <- occ_gof$p.value
   c.hat <- occ_gof$c.hat.est
@@ -491,6 +487,5 @@ for(i in 1:length(unique(dat.scaled$scientific_name))){
 }
 close(pb) 
 
-write.csv(goodness_of_fit, "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\output\\05_goodness-of-fit-10km.csv")
-
+write.csv(goodness_of_fit, "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\output\\05_goodness-of-fit-2.5km.csv")
 ```

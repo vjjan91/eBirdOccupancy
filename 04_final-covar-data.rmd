@@ -5,7 +5,7 @@ editor_options:
 
 # Add covariates to subsampled data
 
-## Prepare libraries and data
+### Prepare libraries and data
 
 ```{r load_libs_data, eval=FALSE, message=FALSE, warning=FALSE}
 
@@ -23,7 +23,7 @@ library(sf)
 load("data/data_prelim_processing.rdata")
 ```
 
-## Spatial subsampling
+### Spatial subsampling
 
 ```{r spatial_thinning, eval=FALSE}
 # grid based spatial thinning
@@ -76,7 +76,7 @@ rm(dataGrouped)
 ```
 
 
-## Temporal subsampling
+### Temporal subsampling
 
 Get 10 random (if available) observations of each species at each locality.
 
@@ -99,7 +99,7 @@ dataSubsample <- bind_rows(dataSubsample)
 rm(data_spatial_thin)
 ```
 
-## Add expertise score
+### Add expertise score
 
 ```{r add_expertise, eval=FALSE}
 # read in obs score and extract numbers
@@ -138,7 +138,7 @@ dataSubsample <- filter(dataSubsample, !is.na(expertise))
 
 ```
 
-## Add landscape covariates
+### Add landscape covariates
 
 ```{r add_landcovars, eval=FALSE}
 
@@ -150,18 +150,16 @@ landscape_data <- stack(landscape_files)
 
 # get proper names
 elev_names <- c("elev", "slope", "aspect")
-chelsa_names <- c("bio1","bio2","bio3","bio4","bio5","bio6","bio7","bio8","bio9",
-                  "bio10","bio11","bio12","bio13","bio14","bio15","bio16","bio17",
-                  "bio18","bio19")
+chelsa_names <- c("bio1","bio12")
 
 names(landscape_data) <- as.character(glue('{c(elev_names, chelsa_names, "landcover")}'))
 ```
 
-## Construct buffers around subsampled points
+### Construct buffers around subsampled points
 
 ```{r point_buffer, eval=FALSE}
 # assign neighbourhood radius in m
-sample_radius <- c(2.5, 10) * 1e3
+sample_radius <- 2.5 * 1e3
 
 # get distinct points and make buffer
 ebird_buff <- dataSubsample %>%
@@ -246,7 +244,7 @@ ebird_buff <- ebird_buff %>%
   mutate(data = map2(data, lc_area_prop, inner_join, by = "id"))
 ```
 
-## Join landscape data to obs data
+### Join landscape data to obs data
 
 ```{r land_to_obs, eval=FALSE}
 # duplicate scale data
@@ -261,7 +259,7 @@ data_at_scale$data <- map(data_at_scale$data, function(df){
 ```
 
 
-## Write data to files
+### Write data to files
 
 ```{r spit_scale, eval=FALSE}
 # write to file

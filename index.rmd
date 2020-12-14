@@ -1,7 +1,12 @@
 --- 
 knit: "bookdown::render_book"
-title: "Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient"
-author: "Vijay Ramesh, Pratik Rajan Gupte, Morgan W Tingley, VV Robin, Ruth DeFries"
+title: "Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot"
+author:
+    - Vijay Ramesh
+    - Pratik R. Gupte
+    - Morgan W. Tingley
+    - VV Robin
+    - Ruth DeFries
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 output: 
@@ -12,12 +17,14 @@ biblio-style: apalike
 link-citations: yes
 github-repo: pratikunterwegs/eBirdOccupancy
 description: "Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient"
+
 ---
 
 # Introduction
 
-This is the `bookdown` version of a project in preparation that models occupancy for birds in the Nilgiri hills. 
-Methods and format are derived from [Strimas-Mackey et al.](https://cornelllabofornithology.github.io/ebird-best-practices/), the supplement to [Johnston et al. (2019)](https://www.biorxiv.org/content/10.1101/574392v1).
+This is the `bookdown` version containing analysis that models associations between environmental predictors (climate and landcover) and citizen science observations of birds across the Nilgiri and Anamalai hills of the Western Ghats Biodiversity Hotspot. 
+
+Methods and format are derived from [Strimas-Mackey et al.](https://cornelllabofornithology.github.io/ebird-best-practices/).
 
 ## Attribution
 
@@ -31,7 +38,7 @@ Please contact the following in case of interest in the project.
 
 ## Data access
 
-The data used in this work are available from eBird.
+The data used in this work are available from [eBird](http://ebird.org/data/download).
 
 ## Data processing
 

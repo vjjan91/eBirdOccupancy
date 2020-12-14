@@ -3,9 +3,11 @@ editor_options:
   chunk_output_type: console
 ---
 
+# Visualizing results
+
 In this section, we will visualize the cumulative AIC weights and the magnitude and direction of species-specific probability of occupancy
 
-## Prepare libraries
+### Prepare libraries
 
 ```{r load_libs_results01, eval=FALSE}
 # to load data
