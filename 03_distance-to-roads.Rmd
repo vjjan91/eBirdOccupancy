@@ -5,6 +5,10 @@ editor_options:
 
 # Distance to roads
 
+The goal of this section is to determine how far each checklist location is from the nearest road, and how far each site is from its nearest neighbour. This involves finding the pairwise distance between a large number of unique checklist locations to a vast number of roads, as well as to each other.
+
+Parts of this section are thus implemented in Python, using the R-Python interface package, `reticulate`.
+
 ## Prepare libraries
 
 ```{r setup_python, eval=FALSE}
@@ -34,7 +38,7 @@ ci <- function(x) {
 use_python("/usr/bin/python3")
 ```
 
-Importing python libraries.
+Importing python libraries. These libraries need to be installed before use.
 
 ```{python prepare_py_libs, eval=FALSE}
 # import classic python libs
@@ -58,6 +62,16 @@ from shapely.geometry import Point, MultiPoint, LineString, MultiLineString
 ```
 
 ## Prepare data for processing
+
+First we read in the roads shapefile, which is obtained from the Open Street Map database.
+Then we read in the checklsit covariates, and extract the unique coordinate pairs.
+All data are reprojected to be in the UTM 43N system.
+
+We define a custom Python function to separate multi-feature geometries (here, roads which are in parts) into single feature geometries.
+Then we define a function to use the K-dimensional trees method from `scipy` to find the distance between two geometries, here, the distance between the locations and the nearest road.
+We define another function to find the distance between checklist locations and all other checklist locations.
+
+We use these functions to find the distance between each checklist location and the nearest road and the next nearest site.
 
 ```{python read_spatial_data, eval=FALSE}
 # read in roads shapefile
@@ -97,7 +111,7 @@ def simplify_roads(complex_roads):
     return simpleRoads
 
 
-# function to use ckdtrees for nearest point finding
+# function to use ckdtrees to find the nearest road
 def ckdnearest(gdfA, gdfB):
     A = np.concatenate(
     [np.array(geom.coords) for geom in gdfA.geometry.to_list()])
@@ -109,7 +123,7 @@ def ckdnearest(gdfA, gdfB):
     return dist
 
 
-# function to use ckdtrees for nearest point finding
+# function to use ckdtrees for nearest other checklist point
 def ckdnearest_point(gdfA, gdfB):
     A = np.concatenate(
     [np.array(geom.coords) for geom in gdfA.geometry.to_list()])
@@ -141,40 +155,44 @@ chkCovars = chkCovars.merge(unique_locs, on=['latitude',
 
 ## Species specific nearest sites
 
-```{r load_ebd_data_nnb, eval=FALSE}
-# load data and send to python
-load("data_prelim_processing.rdata")
-py$data <- dataGrouped
-```
+This section is commented out.
+
+ ```{r load_ebd_data_nnb, eval=FALSE}
+# # load data and send to python
+# load("data_prelim_processing.rdata")
+# py$data <- dataGrouped
+ ```
 
 
-```{python sp_spec_nnb, eval=FALSE}
-# split data by species
-datalist = [pd.DataFrame(y) for x, y in data.groupby('scientific_name', 
-                                                      as_index=False)]
+ ```{python sp_spec_nnb, eval=FALSE}
+# # split data by species
+# datalist = [pd.DataFrame(y) for x, y in data.groupby('scientific_name', 
+#                                                       as_index=False)]
 
 
-# function to get unique vals anc convert to gpd
-def convData(somedata):
-    somedata = somedata.drop_duplicates(subset=
-    ['longitude','latitude'])[['longitude', 'latitude', 'scientific_name']]
-    unique_locs = gpd.GeoDataFrame(somedata,
-                                  geometry=gpd.points_from_xy(somedata.longitude, 
-                                  somedata.latitude))
-    unique_locs.crs = {'init' :'epsg:4326'}
-    unique_locs = unique_locs.to_crs({'init': 'epsg:32643'})
-    dists = ckdnearest_point(unique_locs, unique_locs)
-    unique_locs = pd.DataFrame(unique_locs.drop(columns='geometry'))
-    unique_locs['nnb'] = dists
-    return unique_locs
+# # function to get unique vals anc convert to gpd
+# def convData(somedata):
+#     somedata = somedata.drop_duplicates(subset=
+#     ['longitude','latitude'])[['longitude', 'latitude', 'scientific_name']]
+#     unique_locs = gpd.GeoDataFrame(somedata,
+#                                   geometry=gpd.points_from_xy(somedata.longitude, 
+#                                   somedata.latitude))
+#     unique_locs.crs = {'init' :'epsg:4326'}
+#     unique_locs = unique_locs.to_crs({'init': 'epsg:32643'})
+#     dists = ckdnearest_point(unique_locs, unique_locs)
+#     unique_locs = pd.DataFrame(unique_locs.drop(columns='geometry'))
+#     unique_locs['nnb'] = dists
+#     return unique_locs
 
 
-# apply function to datalist
-datalist = list(map(convData, datalist))
-```
+# # apply function to datalist
+# datalist = list(map(convData, datalist))
+ ```
 
 
 ## Explicit spatial filter
+
+We filter the checklists by the boundary of the study area. This is *not* the extent.
 
 ```{r spatial_filter_supp01, eval=FALSE}
 # extract data from python
@@ -195,25 +213,27 @@ chkCovars <- chkCovars %>%
 
 ## Species specific filter
 
+This section also commented out.
+
 ```{r sp_spec_filt, eval=FALSE}
-# extract values from python
-sp_spec_data <- py$datalist
+# # extract values from python
+# sp_spec_data <- py$datalist
 
-sp_spec_data <- map(sp_spec_data, function(df) {
-  df <- as_tibble(df) %>%
-    st_as_sf(coords = c("longitude", "latitude")) %>%
-    `st_crs<-`(4326) %>%
-    st_transform(32643) %>%
-    mutate(id = 1:nrow(.)) %>%
-    filter(id %in% unlist(st_contains(wg, .))) %>%
-    st_drop_geometry()
-})
+# sp_spec_data <- map(sp_spec_data, function(df) {
+#   df <- as_tibble(df) %>%
+#     st_as_sf(coords = c("longitude", "latitude")) %>%
+#     `st_crs<-`(4326) %>%
+#     st_transform(32643) %>%
+#     mutate(id = 1:nrow(.)) %>%
+#     filter(id %in% unlist(st_contains(wg, .))) %>%
+#     st_drop_geometry()
+# })
 
-sp_spec_data <- bind_rows(sp_spec_data)
+# sp_spec_data <- bind_rows(sp_spec_data)
 ```
 
 
-## Plot histogram: distance to roads
+## Main Text Figure 3
 
 ```{r plot_histogram, eval=FALSE, echo=FALSE}
 
@@ -264,8 +284,6 @@ library(magrittr)
 readr::read_csv("data/results/distance_roads_sites.csv") %>%
   knitr::kable()
 ```
-
-**Does this table need a caption?**
 
 ## Histograms of distance to nearest site
 
@@ -342,10 +360,6 @@ sp_spec_data %>%
 readr::read_csv("data/results/dist_nnb_species_specific.csv") %>%
   knitr::kable()
 ```
-
-**Is this figure necessary here?**
-
-![Histograms showing the species-specific distances to nearest neighbouring site.](figs/fig_nnb_species.png)
 
 ## Visualise distance to roads and nearest site
 
