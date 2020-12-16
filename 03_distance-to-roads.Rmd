@@ -215,7 +215,7 @@ sp_spec_data <- bind_rows(sp_spec_data)
 
 ## Plot histogram: distance to roads
 
-```{r plot_histogram, eval=FALSE}
+```{r plot_histogram, eval=FALSE, echo=FALSE}
 
 # make histogram
 hist_roads <- ggplot(chkCovars) +
@@ -258,19 +258,23 @@ chkCovars %>%
   write_csv("data/results/distance_roads_sites.csv")
 ```
 
-```{r show_dist_roads_nnb, eval=TRUE, message=FALSE}
+```{r show_dist_roads_nnb, eval=TRUE, message=FALSE, echo=FALSE}
 # read in and show
 library(magrittr)
 readr::read_csv("data/results/distance_roads_sites.csv") %>%
   knitr::kable()
 ```
 
-## Plot histogram: distance to nearest site
+**Does this table need a caption?**
 
-```{r plot_nn_site, eval=FALSE}
+## Histograms of distance to nearest site
+
+```{r get_nn_site, eval=FALSE}
 # get unique locations
 locs <- py$unique_locs
+```
 
+```{r echo=FALSE}
 # make histogram of nearest neighbours
 hist_sites <-
   ggplot(locs) +
@@ -293,9 +297,7 @@ hist_sites <-
   )
 ```
 
-## Plot species specific histograms: distance to nearest site
-
-```{r plot_nn_site_sp, eval=FALSE}
+```{r plot_nn_site_sp, eval=FALSE, echo=FALSE}
 # plot histograms by species
 hist_sites_sp <-
   ggplot(sp_spec_data) +
@@ -322,7 +324,7 @@ hist_sites_sp <-
 ggsave(hist_sites_sp, filename = "figs/fig_nnb_species.png")
 ```
 
-## Table: Species specific nearest site
+## Table: Nearest site where the species was seen
 
 ```{r save_sp_mean_nnb, eval=FALSE}
 # write the mean and ci95 to file
@@ -335,17 +337,17 @@ sp_spec_data %>%
   write_csv("data/results/dist_nnb_species_specific.csv")
 ```
 
-```{r show_sp_nnb, eval=TRUE, message=FALSE}
+```{r show_sp_nnb, eval=TRUE, message=FALSE, echo=FALSE}
 # show table of distance to nearest site for each species
 readr::read_csv("data/results/dist_nnb_species_specific.csv") %>%
   knitr::kable()
 ```
 
-Histograms showing the species-specific distances to nearest neighbouring site.
+**Is this figure necessary here?**
 
-![](figs/fig_nnb_species.png)
+![Histograms showing the species-specific distances to nearest neighbouring site.](figs/fig_nnb_species.png)
 
-## Plot map: points on roads
+## Visualise distance to roads and nearest site
 
 ```{r load_data_in_r, eval=FALSE}
 roads <- st_read("data/spatial/roads_studysite_2019/roads_studysite_2019.shp") %>%
@@ -369,7 +371,7 @@ land <- ne_countries(
 bbox <- st_bbox(wg)
 ```
 
-```{r plot_map_dist_roads, eval=FALSE}
+```{r plot_map_dist_roads, eval=FALSE, echo=FALSE}
 # plot on maps
 ggplot() +
   geom_sf(data = land, fill = "grey90", col = NA) +
@@ -413,7 +415,7 @@ ggsave(filename = "figs/fig_distRoads.png", device = png())
 dev.off()
 ```
 
-```{r plot_map_nnb, eval=FALSE}
+```{r plot_map_nnb, eval=FALSE, echo=FALSE}
 # transform points to utm
 locs <- locs %>%
   st_as_sf(coords = c("longitude", "latitude")) %>%
@@ -458,4 +460,4 @@ ggplot() +
   labs(fill = "checklists", colour = NULL)
 ```
 
-![Checklist locations across the Nilgiris, Anamalais and the Palani hills. Inset histogram shows checklists' distance to the nearest road, with the X-axis on a log-scale.](figs/fig_distRoads.png)
+![Distribution of checklist locations across the Nilgiri, Anamalai and Palani Hills. Inset histogram shows the distribution of checklists' distance to the nearest road, with the X-axis on a log-scale.](figs/fig_distRoads.png)
