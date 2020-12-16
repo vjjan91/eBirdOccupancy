@@ -30,7 +30,7 @@
 \usepackage{hyperref}
 \hypersetup{
             pdftitle={Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot},
-            pdfauthor={Vijay Ramesh; Pratik R. Gupte; Morgan W. Tingley; VV Robin; Ruth DeFries},
+            pdfauthor={Vijay Ramesh,; Pratik R. Gupte; Morgan W. Tingley; VV Robin; Ruth DeFries},
             pdfborder={0 0 0},
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
@@ -106,7 +106,7 @@
 
 
 \title{Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot}
-\author{Vijay Ramesh \and Pratik R. Gupte \and Morgan W. Tingley \and VV Robin \and Ruth DeFries}
+\author{Vijay Ramesh, \and Pratik R. Gupte \and Morgan W. Tingley \and VV Robin \and Ruth DeFries}
 \date{2020-12-16}
 
 \begin{document}
@@ -2293,7 +2293,8 @@ Here, we load the required dataframe that contains 10 random visits to a site. P
 \NormalTok{) }\CommentTok{# text based bar}
 
 \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(}\KeywordTok{unique}\NormalTok{(dat.scaled}\OperatorTok{$}\NormalTok{scientific_name))) \{}
-\NormalTok{  data <-}\StringTok{ }\NormalTok{dat.scaled }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(dat.scaled}\OperatorTok{$}\NormalTok{scientific_name }\OperatorTok{==}\StringTok{ }\KeywordTok{unique}\NormalTok{(dat.scaled}\OperatorTok{$}\NormalTok{scientific_name)[i])}
+\NormalTok{  data <-}\StringTok{ }\NormalTok{dat.scaled }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(dat.scaled}\OperatorTok{$}\NormalTok{scientific_name }\OperatorTok{==}\StringTok{ }\KeywordTok{unique}\NormalTok{(dat.scaled}\OperatorTok{$}\NormalTok{scientific_name)[i])}
 
   \CommentTok{# Preparing data for the unmarked model}
 \NormalTok{  occ <-}\StringTok{ }\KeywordTok{filter_repeat_visits}\NormalTok{(data,}
@@ -2318,7 +2319,8 @@ Here, we load the required dataframe that contains 10 random visits to a site. P
 \NormalTok{  occ_wide <-}\StringTok{ }\KeywordTok{format_unmarked_occu}\NormalTok{(occ,}
     \DataTypeTok{site_id =} \StringTok{"site"}\NormalTok{,}
     \DataTypeTok{response =} \StringTok{"pres_abs"}\NormalTok{,}
-    \DataTypeTok{site_covs =} \KeywordTok{c}\NormalTok{(}\StringTok{"locality_id"}\NormalTok{, }\StringTok{"lc_01.y"}\NormalTok{, }\StringTok{"lc_02.y"}\NormalTok{, }\StringTok{"lc_04.y"}\NormalTok{, }\StringTok{"lc_05.y"}\NormalTok{, }\StringTok{"lc_06.y"}\NormalTok{, }\StringTok{"lc_07.y"}\NormalTok{, }\StringTok{"bio_1.y"}\NormalTok{, }\StringTok{"bio_12.y"}\NormalTok{),}
+    \DataTypeTok{site_covs =} \KeywordTok{c}\NormalTok{(}\StringTok{"locality_id"}\NormalTok{, }\StringTok{"lc_01.y"}\NormalTok{, }\StringTok{"lc_02.y"}\NormalTok{, }\StringTok{"lc_04.y"}\NormalTok{, }
+    \StringTok{"lc_05.y"}\NormalTok{, }\StringTok{"lc_06.y"}\NormalTok{, }\StringTok{"lc_07.y"}\NormalTok{, }\StringTok{"bio_1.y"}\NormalTok{, }\StringTok{"bio_12.y"}\NormalTok{),}
     \DataTypeTok{obs_covs =}\NormalTok{ obs_covs}
 \NormalTok{  )}
 
@@ -2359,10 +2361,12 @@ Here, we use the \texttt{unmarked} package in R (Fiske and Chandler 2019) to ide
 \NormalTok{det_modelEst <-}\StringTok{ }\KeywordTok{list}\NormalTok{()}
 
 \CommentTok{# Add a progress bar for the loop}
-\NormalTok{pb <-}\StringTok{ }\KeywordTok{txtProgressBar}\NormalTok{(}\DataTypeTok{min =} \DecValTok{0}\NormalTok{, }\DataTypeTok{max =} \KeywordTok{length}\NormalTok{(}\KeywordTok{unique}\NormalTok{(dat.scaled}\OperatorTok{$}\NormalTok{scientific_name)), }\DataTypeTok{style =} \DecValTok{3}\NormalTok{) }\CommentTok{# text based bar}
+\NormalTok{pb <-}\StringTok{ }\KeywordTok{txtProgressBar}\NormalTok{(}\DataTypeTok{min =} \DecValTok{0}\NormalTok{, }
+  \DataTypeTok{max =} \KeywordTok{length}\NormalTok{(}\KeywordTok{unique}\NormalTok{(dat.scaled}\OperatorTok{$}\NormalTok{scientific_name)), }\DataTypeTok{style =} \DecValTok{3}\NormalTok{) }\CommentTok{# text based bar}
 
 \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(}\KeywordTok{unique}\NormalTok{(dat.scaled}\OperatorTok{$}\NormalTok{scientific_name))) \{}
-\NormalTok{  data <-}\StringTok{ }\NormalTok{dat.scaled }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(dat.scaled}\OperatorTok{$}\NormalTok{scientific_name }\OperatorTok{==}\StringTok{ }\KeywordTok{unique}\NormalTok{(dat.scaled}\OperatorTok{$}\NormalTok{scientific_name)[i])}
+\NormalTok{  data <-}\StringTok{ }\NormalTok{dat.scaled }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{filter}\NormalTok{(dat.scaled}\OperatorTok{$}\NormalTok{scientific_name }\OperatorTok{==}\StringTok{ }\KeywordTok{unique}\NormalTok{(dat.scaled}\OperatorTok{$}\NormalTok{scientific_name)[i])}
 
   \CommentTok{# Preparing data for the unmarked model}
 \NormalTok{  occ <-}\StringTok{ }\KeywordTok{filter_repeat_visits}\NormalTok{(data,}
@@ -2387,7 +2391,9 @@ Here, we use the \texttt{unmarked} package in R (Fiske and Chandler 2019) to ide
 \NormalTok{  occ_wide <-}\StringTok{ }\KeywordTok{format_unmarked_occu}\NormalTok{(occ,}
     \DataTypeTok{site_id =} \StringTok{"site"}\NormalTok{,}
     \DataTypeTok{response =} \StringTok{"pres_abs"}\NormalTok{,}
-    \DataTypeTok{site_covs =} \KeywordTok{c}\NormalTok{(}\StringTok{"locality_id"}\NormalTok{, }\StringTok{"lc_01.y"}\NormalTok{, }\StringTok{"lc_02.y"}\NormalTok{, }\StringTok{"lc_04.y"}\NormalTok{, }\StringTok{"lc_05.y"}\NormalTok{, }\StringTok{"lc_06.y"}\NormalTok{, }\StringTok{"lc_07.y"}\NormalTok{, }\StringTok{"bio_1.y"}\NormalTok{, }\StringTok{"bio_12.y"}\NormalTok{), }\DataTypeTok{obs_covs =}\NormalTok{ obs_covs}
+    \DataTypeTok{site_covs =} \KeywordTok{c}\NormalTok{(}\StringTok{"locality_id"}\NormalTok{, }\StringTok{"lc_01.y"}\NormalTok{, }\StringTok{"lc_02.y"}\NormalTok{, }\StringTok{"lc_04.y"}\NormalTok{, }
+      \StringTok{"lc_05.y"}\NormalTok{, }\StringTok{"lc_06.y"}\NormalTok{, }\StringTok{"lc_07.y"}\NormalTok{, }\StringTok{"bio_1.y"}\NormalTok{, }\StringTok{"bio_12.y"}\NormalTok{), }
+      \DataTypeTok{obs_covs =}\NormalTok{ obs_covs}
 \NormalTok{  )}
 
   \CommentTok{# Convert this dataframe of observations into an unmarked object to start fitting occupancy models}
@@ -2525,7 +2531,8 @@ Here, we use the \texttt{unmarked} package in R (Fiske and Chandler 2019) to ide
 \NormalTok{  occ_wide <-}\StringTok{ }\KeywordTok{format_unmarked_occu}\NormalTok{(occ,}
     \DataTypeTok{site_id =} \StringTok{"site"}\NormalTok{,}
     \DataTypeTok{response =} \StringTok{"pres_abs"}\NormalTok{,}
-    \DataTypeTok{site_covs =} \KeywordTok{c}\NormalTok{(}\StringTok{"locality_id"}\NormalTok{, }\StringTok{"lc_01.y"}\NormalTok{, }\StringTok{"lc_02.y"}\NormalTok{, }\StringTok{"lc_04.y"}\NormalTok{, }\StringTok{"lc_05.y"}\NormalTok{, }\StringTok{"lc_06.y"}\NormalTok{, }\StringTok{"lc_07.y"}\NormalTok{, }\StringTok{"bio_1.y"}\NormalTok{, }\StringTok{"bio_12.y"}\NormalTok{),}
+    \DataTypeTok{site_covs =} \KeywordTok{c}\NormalTok{(}\StringTok{"locality_id"}\NormalTok{, }\StringTok{"lc_01.y"}\NormalTok{, }\StringTok{"lc_02.y"}\NormalTok{, }\StringTok{"lc_04.y"}\NormalTok{, }\StringTok{"lc_05.y"}\NormalTok{, }
+      \StringTok{"lc_06.y"}\NormalTok{, }\StringTok{"lc_07.y"}\NormalTok{, }\StringTok{"bio_1.y"}\NormalTok{, }\StringTok{"bio_12.y"}\NormalTok{),}
     \DataTypeTok{obs_covs =}\NormalTok{ obs_covs}
 \NormalTok{  )}
 
@@ -2550,7 +2557,8 @@ Here, we use the \texttt{unmarked} package in R (Fiske and Chandler 2019) to ide
 
   \CommentTok{# Detection terms are fixed}
 \NormalTok{  det_terms <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}
-    \StringTok{"p(duration_minutes)"}\NormalTok{, }\StringTok{"p(effort_distance_km)"}\NormalTok{, }\StringTok{"p(expertise)"}\NormalTok{, }\StringTok{"p(julian_date)"}\NormalTok{, }\StringTok{"p(min_obs_started)"}\NormalTok{,}
+    \StringTok{"p(duration_minutes)"}\NormalTok{, }\StringTok{"p(effort_distance_km)"}\NormalTok{, }\StringTok{"p(expertise)"}\NormalTok{, }
+    \StringTok{"p(julian_date)"}\NormalTok{, }\StringTok{"p(min_obs_started)"}\NormalTok{,}
     \StringTok{"p(number_observers)"}\NormalTok{, }\StringTok{"p(protocol_type)"}
 \NormalTok{  )}
 
