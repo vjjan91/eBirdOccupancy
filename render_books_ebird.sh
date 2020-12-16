@@ -1,3 +1,3 @@
 #!/bin/bash
-Rscript --slave -e 'bookdown::render_book("index.rmd")'
-Rscript --slave -e 'bookdown::render_book("index.rmd", "bookdown::pdf_book"); warnings()'
+Rscript --slave -e 'bookdown::render_book("index.Rmd")'
+Rscript --slave -e 'bookdown::render_book("index.Rmd", "bookdown::pdf_document2")'
