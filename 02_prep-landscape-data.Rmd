@@ -5,7 +5,13 @@ editor_options:
 
 # Prepare landscape data
 
-### Prepare libraries
+Here, we prepare environmental layers which we have accessed as raster images from remote sensing platforms using Google Earth Engine.
+The GEE code can be found in a separate file.
+The goal here is to resample all rasters so that they have the same resolution of 1km cells.
+
+## Prepare libraries
+
+We load some common libraries for raster processing and define a custom mode function.
 
 ```{r load_libs2, eval=FALSE, message=FALSE, warning=FALSE}
 
@@ -28,7 +34,10 @@ assertthat::assert_that(funcMode(c(2, 2, 2, 2, 3, 3, 3, 4)) == as.character(2),
 ) # works
 ```
 
-### Prepare spatial extent
+## Prepare spatial extent
+
+We prepare a 30km buffer around the boundary of the study area. This buffer will be used to mask the landscape rasters.
+The buffer procedure is done on data transformed to the UTM 43N CRS to avoid distortions.
 
 ```{r load_hills, eval=FALSE, message=FALSE, warning=FALSE}
 # load hills
@@ -39,8 +48,9 @@ buffer <- st_buffer(hills, 3e4) %>%
   st_transform(4326)
 ```
 
+## Prepare terrain rasters
 
-### Prepare terrain rasters
+We prepare the elevation data which is an SRTM raster layer, and derive the slope and aspect from it after cropping it to the extent of the study site buffer.
 
 ```{r terrain_raster, eval=FALSE, message=FALSE, warning=FALSE}
 # load elevation and crop to hills size, then mask by hills
@@ -56,7 +66,9 @@ rm(alt.hills)
 gc()
 ```
 
-### Prepare CHELSA rasters
+## Prepare CHELSA rasters
+
+We prepare the CHELSA rasters for annual temperature and annual precipitation in the same way, reading them in, cropping them to the study site buffer extent, and handling the temperature layer values which we divide by 10.
 
 ```{r chelsa_rasters, eval=FALSE, message=FALSE, warning=FALSE}
 # list chelsa files
@@ -73,7 +85,7 @@ chelsaData <- purrr::map(chelsaFiles, function(chr) {
   return(a)
 })
 
-# is this in reference to temp?
+# divide temperature by 10
 chelsaData[[1]] <- chelsaData[[1]] / 10
 
 # stack chelsa data
@@ -82,12 +94,16 @@ chelsaData <- raster::stack(chelsaData)
 
 ### Stack prepared rasters
 
+We stack the terrain and climatic rasters.
+
 ```{r stack_rasters, eval=FALSE, message=FALSE, warning=FALSE}
 # stack rasters for efficient reprojection later
 env_data <- stack(elevData, chelsaData)
 ```
 
-### Prepare landcover
+## Resample landcover from 10m to 1km
+
+We read in a land cover classified image and resample that using the mode function to a 1km resolution.
 
 ```{r landcover_raster, eval=FALSE, message=FALSE, warning=FALSE, message=FALSE}
 # read in landcover raster location
@@ -111,9 +127,9 @@ gdalUtils::gdalwarp(
 )
 ```
 
-### Show resampled landcover
+We compare the frequency of landcover classes between the original 10m and the resampled 1km raster to be certain that the resampling has not resulted in drastic misrepresentation of the frequency of any landcover type. This comparison is made using the figure below.
 
-```{r get_resampled_lc, eval=FALSE}
+```{r get_resampled_lc, eval=FALSE, echo=FALSE}
 # mask by study area
 landcover <- raster(landcover)
 # landcover <- mask(landcover, mask = as(hills, "Spatial"))
@@ -132,9 +148,7 @@ data10m <- data10m[data10m > 0]
 data10m <- tibble(value = data10m)
 data10m <- dplyr::count(data10m, value) %>% dplyr::mutate(n = n / sum(n))
 data10m <- xtabs(n ~ value, data10m)
-```
 
-```{r echo=FALSE}
 # map rasters
 {
   png(
@@ -171,11 +185,12 @@ data10m <- xtabs(n ~ value, data10m)
 }
 ```
 
-![This is the wrong figure for sure.](figs/figLandcoverResample.png)
 
-## Resample rasters
+## Resample other rasters to 1km
 
-### Read landcover as list
+We now resample all other rasters to a resolution of 1km.
+
+### Read in resampled landcover
 
 Here, we read in the 1km landcover raster and set 0 to NA.
 
@@ -184,7 +199,7 @@ lc_data <- raster("data/landUseClassification/lc_01000m.tif")
 lc_data[lc_data == 0] <- NA
 ```
 
-### Reproject environmental data to landcover
+### Reproject environmental data using landcover as a template
 
 ```{r resample_env_data, eval=FALSE, message=FALSE, warning=FALSE}
 
@@ -204,7 +219,7 @@ land_names <- glue('data/spatial/landscape_resamp{c("01")}_km.tif')
 writeRaster(land_stack, filename = as.character(land_names), overwrite = TRUE)
 ```
 
-## Climate in relation to elevation
+## Temperature and rainfall in relation to elevation
 
 ### Prepare libraries and CI function
 
@@ -222,7 +237,7 @@ ci <- function(x) {
 }
 ```
 
-### Load resampled landscape
+### Load resampled environmental rasters
 
 ```{r load_rasters_supp3, eval=FALSE}
 # read landscape prepare for plotting
@@ -258,8 +273,6 @@ land_data <- drop_na(land_data) %>%
   group_by(elev_round, clim_var) %>%
   summarise_all(.funs = list(~ mean(.), ~ ci(.)))
 ```
-
-### Plot climatic variables over elevation
 
 ```{r plot_clim_elev, eval=FALSE, echo=FALSE}
 # make labeller
@@ -298,9 +311,7 @@ ggsave(fig_climate_elev,
 )
 ```
 
-## Landcover in relation to elevation
-
-### Get data from landscape rasters
+## Land cover type in relation to elevation
 
 ```{r prep_lc_elev, eval=FALSE, message=FALSE}
 # get data from landscape rasters
@@ -329,8 +340,6 @@ lc_elev <- full_join(lc_elev, lc_elev_canon)
 # convert NA to zero
 lc_elev <- replace_na(lc_elev, replace = list(n = 0, prop = 0))
 ```
-
-### Plot proportional landcover in elevation
 
 ```{r fig_lc_elev, eval=FALSE, message=FALSE, echo=FALSE}
 # plot figure as tilemap
@@ -380,7 +389,7 @@ ggsave(fig_lc_elev,
 dev.off()
 ```
 
-### Figure 2: Climate ~ elevation and landcover ~ elevation
+## Main Text Figure 2
 
 ```{r}
 library(patchwork)
