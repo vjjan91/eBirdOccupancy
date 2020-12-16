@@ -113,7 +113,7 @@ gdalUtils::gdalwarp(
 
 ### Show resampled landcover
 
-```{r show_resampled_lc, eval=FALSE}
+```{r get_resampled_lc, eval=FALSE}
 # mask by study area
 landcover <- raster(landcover)
 # landcover <- mask(landcover, mask = as(hills, "Spatial"))
@@ -132,7 +132,9 @@ data10m <- data10m[data10m > 0]
 data10m <- tibble(value = data10m)
 data10m <- dplyr::count(data10m, value) %>% dplyr::mutate(n = n / sum(n))
 data10m <- xtabs(n ~ value, data10m)
+```
 
+```{r echo=FALSE}
 # map rasters
 {
   png(
@@ -169,9 +171,7 @@ data10m <- xtabs(n ~ value, data10m)
 }
 ```
 
-```{r show_resampling, eval=TRUE, fig.caption="Resampling of Sentinel data from 10m to 1km."}
-knitr::include_graphics("figs/figLandcoverResample.png")
-```
+![This is the wrong figure for sure.](figs/figLandcoverResample.png)
 
 ## Resample rasters
 
@@ -261,7 +261,7 @@ land_data <- drop_na(land_data) %>%
 
 ### Plot climatic variables over elevation
 
-```{r plot_clim_elev, eval=FALSE}
+```{r plot_clim_elev, eval=FALSE, echo=FALSE}
 # make labeller
 chelsa <- c(
   bio_01 = "Annual Mean Temperature (°C)",
@@ -298,8 +298,6 @@ ggsave(fig_climate_elev,
 )
 ```
 
-![Climatic variables as a function of elevation, in increments of 200m. Points represent means, while vertical lines show 95% confidence intervals.]("figs/fig_climate_elev.png")
-
 ## Landcover in relation to elevation
 
 ### Get data from landscape rasters
@@ -334,7 +332,7 @@ lc_elev <- replace_na(lc_elev, replace = list(n = 0, prop = 0))
 
 ### Plot proportional landcover in elevation
 
-```{r fig_lc_elev, eval=FALSE, message=FALSE}
+```{r fig_lc_elev, eval=FALSE, message=FALSE, echo=FALSE}
 # plot figure as tilemap
 fig_lc_elev <-
   ggplot(lc_elev) +
@@ -382,15 +380,13 @@ ggsave(fig_lc_elev,
 dev.off()
 ```
 
-![Proportional landcover, as a function of elevation in the study site. Data represent elevation in increments of 100m.](figs/fig_lc_elev.png)
-
 ### Figure 2: Climate ~ elevation and landcover ~ elevation
 
 ```{r}
 library(patchwork)
 ```
 
-```{r}
+```{r echo=FALSE}
 fig_clim_lc_elev <-
   wrap_plots(fig_climate_elev, fig_lc_elev,
     ncol = 1,
