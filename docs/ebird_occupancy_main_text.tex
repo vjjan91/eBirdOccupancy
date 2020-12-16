@@ -30,7 +30,7 @@
 \usepackage{hyperref}
 \hypersetup{
             pdftitle={Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot},
-            pdfauthor={Vijay Ramesh,; Pratik R. Gupte; Morgan W. Tingley; VV Robin; Ruth DeFries},
+            pdfauthor={Vijay Ramesh; Pratik R. Gupte; Morgan W. Tingley; VV Robin; Ruth DeFries},
             pdfborder={0 0 0},
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
@@ -106,7 +106,7 @@
 
 
 \title{Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot}
-\author{Vijay Ramesh, \and Pratik R. Gupte \and Morgan W. Tingley \and VV Robin \and Ruth DeFries}
+\author{Vijay Ramesh \and Pratik R. Gupte \and Morgan W. Tingley \and VV Robin \and Ruth DeFries}
 \date{2020-12-16}
 
 \begin{document}
@@ -572,51 +572,14 @@ Below code need not be run if it has been filtered once already and the above pa
 \NormalTok{data10m <-}\StringTok{ }\KeywordTok{tibble}\NormalTok{(}\DataTypeTok{value =}\NormalTok{ data10m)}
 \NormalTok{data10m <-}\StringTok{ }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{count}\NormalTok{(data10m, value) }\OperatorTok{%>%}\StringTok{ }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{n =}\NormalTok{ n }\OperatorTok{/}\StringTok{ }\KeywordTok{sum}\NormalTok{(n))}
 \NormalTok{data10m <-}\StringTok{ }\KeywordTok{xtabs}\NormalTok{(n }\OperatorTok{~}\StringTok{ }\NormalTok{value, data10m)}
-
-\CommentTok{# map rasters}
-\NormalTok{\{}
-  \KeywordTok{png}\NormalTok{(}
-    \DataTypeTok{filename =} \StringTok{"figs/figLandcoverResample.png"}\NormalTok{, }\DataTypeTok{width =} \DecValTok{1200}\NormalTok{, }\DataTypeTok{height =} \DecValTok{1200}\NormalTok{,}
-    \DataTypeTok{res =} \DecValTok{150}
-\NormalTok{  )}
-  \KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow =} \KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{))}
-  \CommentTok{# rasterplots}
-\NormalTok{  raster}\OperatorTok{::}\KeywordTok{plot}\NormalTok{(landcover,}
-    \DataTypeTok{col =} \KeywordTok{c}\NormalTok{(}\StringTok{"white"}\NormalTok{, scico}\OperatorTok{::}\KeywordTok{scico}\NormalTok{(}\DataTypeTok{palette =} \StringTok{"batlow"}\NormalTok{, }\DecValTok{7}\NormalTok{)),}
-    \DataTypeTok{main =} \StringTok{"10m sentinel data"}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{"longitude"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"latitude"}
-\NormalTok{  )}
-  \KeywordTok{plot}\NormalTok{(hills, }\DataTypeTok{add =}\NormalTok{ T, }\DataTypeTok{border =} \StringTok{"red"}\NormalTok{, }\DataTypeTok{col =} \StringTok{"transparent"}\NormalTok{)}
-\NormalTok{  raster}\OperatorTok{::}\KeywordTok{plot}\NormalTok{(rasterAgg1km,}
-    \DataTypeTok{col =} \KeywordTok{c}\NormalTok{(}\StringTok{"white"}\NormalTok{, scico}\OperatorTok{::}\KeywordTok{scico}\NormalTok{(}\DataTypeTok{palette =} \StringTok{"batlow"}\NormalTok{, }\DecValTok{7}\NormalTok{)),}
-    \DataTypeTok{main =} \StringTok{"1km resampled data"}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{"longitude"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"latitude"}
-\NormalTok{  )}
-  \KeywordTok{plot}\NormalTok{(hills, }\DataTypeTok{add =}\NormalTok{ T, }\DataTypeTok{border =} \StringTok{"red"}\NormalTok{, }\DataTypeTok{col =} \StringTok{"transparent"}\NormalTok{)}
-
-  \CommentTok{# barplots}
-  \KeywordTok{barplot}\NormalTok{(data10m,}
-    \DataTypeTok{xlab =} \KeywordTok{c}\NormalTok{(}\StringTok{"landcover class"}\NormalTok{), }\DataTypeTok{ylab =} \StringTok{"prop."}\NormalTok{,}
-    \DataTypeTok{col =}\NormalTok{ scico}\OperatorTok{::}\KeywordTok{scico}\NormalTok{(}\DataTypeTok{palette =} \StringTok{"batlow"}\NormalTok{, }\DecValTok{7}\NormalTok{)}
-\NormalTok{  )}
-  \KeywordTok{barplot}\NormalTok{(data1km,}
-    \DataTypeTok{xlab =} \KeywordTok{c}\NormalTok{(}\StringTok{"landcover class"}\NormalTok{), }\DataTypeTok{ylab =} \StringTok{"prop."}\NormalTok{,}
-    \DataTypeTok{col =}\NormalTok{ scico}\OperatorTok{::}\KeywordTok{scico}\NormalTok{(}\DataTypeTok{palette =} \StringTok{"batlow"}\NormalTok{, }\DecValTok{7}\NormalTok{), }\DataTypeTok{alpha =} \FloatTok{0.8}\NormalTok{, }\DataTypeTok{add =}\NormalTok{ F}
-\NormalTok{  )}
-  \KeywordTok{barplot}\NormalTok{(data10m,}
-    \DataTypeTok{xlab =} \KeywordTok{c}\NormalTok{(}\StringTok{"landcover class"}\NormalTok{), }\DataTypeTok{ylab =} \StringTok{"prop."}\NormalTok{,}
-    \DataTypeTok{col =} \StringTok{"grey20"}\NormalTok{, }\DataTypeTok{border =} \OtherTok{NA}\NormalTok{, }\DataTypeTok{density =} \DecValTok{30}\NormalTok{, }\DataTypeTok{add =}\NormalTok{ T}
-\NormalTok{  )}
-  \KeywordTok{dev.off}\NormalTok{()}
-\NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{knitr}\OperatorTok{::}\KeywordTok{include_graphics}\NormalTok{(}\StringTok{"figs/figLandcoverResample.png"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{center}\includegraphics[width=\textwidth]{figs/figLandcoverResample} \end{center}
+\begin{figure}
+\centering
+\includegraphics{figs/figLandcoverResample.png}
+\caption{This is the wrong figure for sure.}
+\end{figure}
 
 \hypertarget{resample-rasters}{%
 \subsection{Resample rasters}\label{resample-rasters}}
@@ -723,51 +686,6 @@ Here, we read in the 1km landcover raster and set 0 to NA.
 \hypertarget{plot-climatic-variables-over-elevation}{%
 \subsubsection{Plot climatic variables over elevation}\label{plot-climatic-variables-over-elevation}}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# make labeller}
-\NormalTok{chelsa <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}
-  \DataTypeTok{bio_01 =} \StringTok{"Annual Mean Temperature (°C)"}\NormalTok{,}
-  \DataTypeTok{bio_12 =} \StringTok{"Annual Precipitation (mm)"}
-\NormalTok{)}
-
-\NormalTok{fig_climate_elev <-}
-\StringTok{  }\KeywordTok{ggplot}\NormalTok{(land_data) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ elev_round, }\DataTypeTok{y =}\NormalTok{ mean),}
-    \DataTypeTok{size =} \FloatTok{0.2}\NormalTok{, }\DataTypeTok{col =} \StringTok{"grey"}
-\NormalTok{  ) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_pointrange}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ elev_round, }\DataTypeTok{y =}\NormalTok{ mean, }\DataTypeTok{ymin =}\NormalTok{ mean }\OperatorTok{-}\StringTok{ }\NormalTok{ci, }\DataTypeTok{ymax =}\NormalTok{ mean }\OperatorTok{+}\StringTok{ }\NormalTok{ci),}
-    \DataTypeTok{size =} \FloatTok{0.3}
-\NormalTok{  ) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{scale_x_continuous}\NormalTok{(}\DataTypeTok{labels =}\NormalTok{ scales}\OperatorTok{::}\NormalTok{comma) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{scale_y_continuous}\NormalTok{(}\DataTypeTok{labels =}\NormalTok{ scales}\OperatorTok{::}\NormalTok{comma) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{facet_wrap}\NormalTok{(}\OperatorTok{~}\NormalTok{clim_var,}
-    \DataTypeTok{scales =} \StringTok{"free_y"}\NormalTok{,}
-    \DataTypeTok{labeller =} \KeywordTok{labeller}\NormalTok{(}\DataTypeTok{clim_var =}\NormalTok{ chelsa),}
-    \DataTypeTok{strip.position =} \StringTok{"left"}
-\NormalTok{  ) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme_test}\NormalTok{() }\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme}\NormalTok{(}
-    \DataTypeTok{strip.placement =} \StringTok{"outside"}\NormalTok{,}
-    \DataTypeTok{strip.background =} \KeywordTok{element_blank}\NormalTok{(),}
-    \DataTypeTok{strip.text =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =} \DecValTok{11}\NormalTok{)}
-\NormalTok{  ) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Elevation (m)"}\NormalTok{, }\DataTypeTok{y =} \OtherTok{NULL}\NormalTok{)}
-
-\CommentTok{# save as png}
-\KeywordTok{ggsave}\NormalTok{(fig_climate_elev,}
-  \DataTypeTok{filename =} \StringTok{"figs/fig_climate_elev.png"}\NormalTok{,}
-  \DataTypeTok{height =} \DecValTok{3}\NormalTok{, }\DataTypeTok{width =} \DecValTok{6}\NormalTok{, }\DataTypeTok{device =} \KeywordTok{png}\NormalTok{(), }\DataTypeTok{dpi =} \DecValTok{300}
-\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{figure}
-\centering
-\includegraphics{"figs/fig_climate_elev.png"}
-\caption{Climatic variables as a function of elevation, in increments of 200m. Points represent means, while vertical lines show 95\% confidence intervals.}
-\end{figure}
-
 \hypertarget{landcover-in-relation-to-elevation}{%
 \subsection{Landcover in relation to elevation}\label{landcover-in-relation-to-elevation}}
 
@@ -807,90 +725,12 @@ Here, we read in the 1km landcover raster and set 0 to NA.
 \hypertarget{plot-proportional-landcover-in-elevation}{%
 \subsubsection{Plot proportional landcover in elevation}\label{plot-proportional-landcover-in-elevation}}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# plot figure as tilemap}
-\NormalTok{fig_lc_elev <-}
-\StringTok{  }\KeywordTok{ggplot}\NormalTok{(lc_elev) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_tile}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}
-    \DataTypeTok{x =}\NormalTok{ elev, }\DataTypeTok{y =} \KeywordTok{factor}\NormalTok{(landcover),}
-    \DataTypeTok{fill =}\NormalTok{ prop}
-\NormalTok{  ),}
-  \DataTypeTok{col =} \StringTok{"grey"}
-\NormalTok{  ) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{scale_fill_distiller}\NormalTok{(}
-    \DataTypeTok{palette =} \StringTok{"OrRd"}\NormalTok{,}
-    \DataTypeTok{direction =} \DecValTok{1}\NormalTok{,}
-    \DataTypeTok{na.value =} \StringTok{"grey"}\NormalTok{,}
-    \DataTypeTok{values =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{),}
-    \DataTypeTok{labels =}\NormalTok{ scales}\OperatorTok{::}\NormalTok{percent,}
-    \DataTypeTok{name =} \StringTok{"% area"}
-\NormalTok{  ) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{scale_y_discrete}\NormalTok{(}
-    \DataTypeTok{labels =} \KeywordTok{c}\NormalTok{(}
-      \StringTok{"Agriculture"}\NormalTok{, }\StringTok{"Forest"}\NormalTok{,}
-      \StringTok{"Grassland"}\NormalTok{, }\StringTok{"Plantations"}\NormalTok{,}
-      \StringTok{"Settlements"}\NormalTok{, }\StringTok{"Tea"}\NormalTok{,}
-      \StringTok{"Water Bodies"}
-\NormalTok{    )}
-\NormalTok{  ) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{scale_x_continuous}\NormalTok{(}
-    \DataTypeTok{breaks =} \KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{2500}\NormalTok{, }\DecValTok{500}\NormalTok{),}
-    \DataTypeTok{labels =}\NormalTok{ comma}
-\NormalTok{  ) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{scale_alpha_continuous}\NormalTok{(}\DataTypeTok{range =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.3}\NormalTok{, }\DecValTok{1}\NormalTok{)) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{coord_cartesian}\NormalTok{(}\DataTypeTok{expand =}\NormalTok{ F) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}
-    \DataTypeTok{x =} \StringTok{"Elevation (m)"}\NormalTok{,}
-    \DataTypeTok{y =} \StringTok{"Land Cover Type"}
-\NormalTok{  ) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme_test}\NormalTok{() }\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.key.width =} \KeywordTok{unit}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DataTypeTok{units =} \StringTok{"mm"}\NormalTok{)) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{fill =} \OtherTok{NULL}\NormalTok{)}
-
-\CommentTok{# export figure}
-\KeywordTok{ggsave}\NormalTok{(fig_lc_elev,}
-  \DataTypeTok{filename =} \StringTok{"figs/fig_lc_elev.png"}\NormalTok{,}
-  \DataTypeTok{height =} \DecValTok{2}\NormalTok{, }\DataTypeTok{width =} \DecValTok{6}\NormalTok{, }\DataTypeTok{device =} \KeywordTok{png}\NormalTok{(), }\DataTypeTok{dpi =} \DecValTok{300}
-\NormalTok{)}
-\KeywordTok{dev.off}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{figure}
-\centering
-\includegraphics{figs/fig_lc_elev.png}
-\caption{Proportional landcover, as a function of elevation in the study site. Data represent elevation in increments of 100m.}
-\end{figure}
-
 \hypertarget{figure-2-climate-elevation-and-landcover-elevation}{%
 \subsubsection{Figure 2: Climate \textasciitilde{} elevation and landcover \textasciitilde{} elevation}\label{figure-2-climate-elevation-and-landcover-elevation}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(patchwork)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{fig_clim_lc_elev <-}
-\StringTok{  }\KeywordTok{wrap_plots}\NormalTok{(fig_climate_elev, fig_lc_elev,}
-    \DataTypeTok{ncol =} \DecValTok{1}\NormalTok{,}
-    \DataTypeTok{design =} \StringTok{"AA}\CharTok{\textbackslash{}n}\StringTok{AA}\CharTok{\textbackslash{}n}\StringTok{BB"}
-\NormalTok{  ) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{plot_annotation}\NormalTok{(}
-    \DataTypeTok{tag_levels =} \StringTok{"a"}\NormalTok{,}
-    \DataTypeTok{tag_prefix =} \StringTok{"("}\NormalTok{,}
-    \DataTypeTok{tag_suffix =} \StringTok{")"}
-\NormalTok{  )}
-
-\CommentTok{# save}
-\KeywordTok{ggsave}\NormalTok{(fig_clim_lc_elev,}
-  \DataTypeTok{filename =} \StringTok{"figs/fig_02_clim_lc_elev.png"}\NormalTok{,}
-  \DataTypeTok{dpi =} \DecValTok{300}\NormalTok{,}
-  \DataTypeTok{height =} \DecValTok{120}\NormalTok{, }\DataTypeTok{width =} \DecValTok{168}\NormalTok{, }\DataTypeTok{units =} \StringTok{"mm"}
-\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1126,32 +966,6 @@ Importing python libraries.
 \hypertarget{plot-histogram-distance-to-roads}{%
 \subsection{Plot histogram: distance to roads}\label{plot-histogram-distance-to-roads}}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-
-\CommentTok{# make histogram}
-\NormalTok{hist_roads <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(chkCovars) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_histogram}\NormalTok{(}\KeywordTok{aes}\NormalTok{(dist_road }\OperatorTok{/}\StringTok{ }\FloatTok{1e3}\NormalTok{),}
-    \DataTypeTok{bins =} \DecValTok{20}\NormalTok{, }\DataTypeTok{size =} \FloatTok{0.2}\NormalTok{, }\DataTypeTok{fill =} \StringTok{"steelblue"}
-\NormalTok{  ) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"distance to roads (km)"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"# checklists"}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{scale_x_log10}\NormalTok{(}
-    \DataTypeTok{label =} \KeywordTok{label_number}\NormalTok{(}\DataTypeTok{accuracy =} \FloatTok{0.1}\NormalTok{),}
-    \DataTypeTok{breaks =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{10}\NormalTok{)}
-\NormalTok{  ) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{scale_y_continuous}\NormalTok{(}\DataTypeTok{label =} \KeywordTok{label_number}\NormalTok{(}
-    \DataTypeTok{scale =} \FloatTok{0.001}\NormalTok{,}
-    \DataTypeTok{accuracy =} \DecValTok{1}\NormalTok{, }\DataTypeTok{suffix =} \StringTok{"K"}
-\NormalTok{  )) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme_few}\NormalTok{() }\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme}\NormalTok{(}
-    \DataTypeTok{plot.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{, }\DataTypeTok{colour =} \DecValTok{1}\NormalTok{),}
-    \DataTypeTok{panel.background =} \KeywordTok{element_blank}\NormalTok{(),}
-    \DataTypeTok{panel.border =} \KeywordTok{element_blank}\NormalTok{(), }\DataTypeTok{axis.line =} \KeywordTok{element_blank}\NormalTok{()}
-\NormalTok{  )}
-\end{Highlighting}
-\end{Shaded}
-
 \hypertarget{table-distance-to-roads}{%
 \subsection{Table: Distance to roads}\label{table-distance-to-roads}}
 
@@ -1174,15 +988,6 @@ Importing python libraries.
 \end{Highlighting}
 \end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# read in and show}
-\KeywordTok{library}\NormalTok{(magrittr)}
-\NormalTok{readr}\OperatorTok{::}\KeywordTok{read_csv}\NormalTok{(}\StringTok{"data/results/distance_roads_sites.csv"}\NormalTok{) }\OperatorTok{%>%}
-\StringTok{  }\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
-
 \begin{tabular}{l|r|r|r|r}
 \hline
 variable & mean & sd & min & max\\
@@ -1193,71 +998,20 @@ nnb & 297 & 553 & 0.137 & 12850\\
 \hline
 \end{tabular}
 
-\hypertarget{plot-histogram-distance-to-nearest-site}{%
-\subsection{Plot histogram: distance to nearest site}\label{plot-histogram-distance-to-nearest-site}}
+\textbf{Does this table need a caption?}
+
+\hypertarget{histograms-of-distance-to-nearest-site}{%
+\subsection{Histograms of distance to nearest site}\label{histograms-of-distance-to-nearest-site}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# get unique locations}
 \NormalTok{locs <-}\StringTok{ }\NormalTok{py}\OperatorTok{$}\NormalTok{unique_locs}
-
-\CommentTok{# make histogram of nearest neighbours}
-\NormalTok{hist_sites <-}
-\StringTok{  }\KeywordTok{ggplot}\NormalTok{(locs) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_histogram}\NormalTok{(}\KeywordTok{aes}\NormalTok{(nnb }\OperatorTok{/}\StringTok{ }\FloatTok{1e3}\NormalTok{),}
-    \DataTypeTok{bins =} \DecValTok{100}\NormalTok{, }\DataTypeTok{size =} \FloatTok{0.2}\NormalTok{, }\DataTypeTok{fill =} \StringTok{"steelblue"}
-\NormalTok{  ) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"dist. nearest site (km)"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"# sites"}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\CommentTok{# scale_x_log10(label=label_number(accuracy = 0.1),}
-\StringTok{  }\CommentTok{#               breaks = c(0.1, 1, 10))+}
-\StringTok{  }\KeywordTok{coord_cartesian}\NormalTok{(}\DataTypeTok{xlim =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{10}\NormalTok{)) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{scale_y_continuous}\NormalTok{(}\DataTypeTok{label =} \KeywordTok{label_number}\NormalTok{(}
-    \DataTypeTok{scale =} \FloatTok{0.001}\NormalTok{, }\DataTypeTok{accuracy =} \DecValTok{1}\NormalTok{,}
-    \DataTypeTok{suffix =} \StringTok{"K"}
-\NormalTok{  )) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme_few}\NormalTok{() }\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme}\NormalTok{(}
-    \DataTypeTok{plot.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{, }\DataTypeTok{colour =} \DecValTok{1}\NormalTok{),}
-    \DataTypeTok{panel.background =} \KeywordTok{element_blank}\NormalTok{(),}
-    \DataTypeTok{panel.border =} \KeywordTok{element_blank}\NormalTok{(), }\DataTypeTok{axis.line =} \KeywordTok{element_blank}\NormalTok{()}
-\NormalTok{  )}
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{plot-species-specific-histograms-distance-to-nearest-site}{%
-\subsection{Plot species specific histograms: distance to nearest site}\label{plot-species-specific-histograms-distance-to-nearest-site}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# plot histograms by species}
-\NormalTok{hist_sites_sp <-}
-\StringTok{  }\KeywordTok{ggplot}\NormalTok{(sp_spec_data) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_histogram}\NormalTok{(}\KeywordTok{aes}\NormalTok{(nnb }\OperatorTok{/}\StringTok{ }\FloatTok{1e3}\NormalTok{),}
-    \DataTypeTok{bins =} \DecValTok{100}\NormalTok{, }\DataTypeTok{size =} \FloatTok{0.2}\NormalTok{, }\DataTypeTok{fill =} \StringTok{"steelblue"}
-\NormalTok{  ) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"dist. nearest site (km)"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"# sites"}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\CommentTok{# scale_x_log10(label=label_number(accuracy = 0.1),}
-\StringTok{  }\CommentTok{#               breaks = c(0.1, 1, 10))+}
-\StringTok{  }\KeywordTok{facet_wrap}\NormalTok{(}\OperatorTok{~}\NormalTok{scientific_name) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{scale_x_log10}\NormalTok{() }\OperatorTok{+}
-\StringTok{  }\CommentTok{# coord_cartesian(xlim=c(0,10))+}
-\StringTok{  }\KeywordTok{scale_y_continuous}\NormalTok{(}\DataTypeTok{label =} \KeywordTok{label_number}\NormalTok{(}
-    \DataTypeTok{scale =} \FloatTok{0.001}\NormalTok{, }\DataTypeTok{accuracy =} \DecValTok{1}\NormalTok{,}
-    \DataTypeTok{suffix =} \StringTok{"K"}
-\NormalTok{  )) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme_few}\NormalTok{() }\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme}\NormalTok{(}
-    \DataTypeTok{plot.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{, }\DataTypeTok{colour =} \DecValTok{1}\NormalTok{),}
-    \DataTypeTok{panel.background =} \KeywordTok{element_blank}\NormalTok{(),}
-    \DataTypeTok{panel.border =} \KeywordTok{element_blank}\NormalTok{(), }\DataTypeTok{axis.line =} \KeywordTok{element_blank}\NormalTok{()}
-\NormalTok{  )}
-
-\KeywordTok{ggsave}\NormalTok{(hist_sites_sp, }\DataTypeTok{filename =} \StringTok{"figs/fig_nnb_species.png"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\hypertarget{table-species-specific-nearest-site}{%
-\subsection{Table: Species specific nearest site}\label{table-species-specific-nearest-site}}
+\hypertarget{table-nearest-site-where-the-species-was-seen}{%
+\subsection{Table: Nearest site where the species was seen}\label{table-nearest-site-where-the-species-was-seen}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1269,14 +1023,6 @@ nnb & 297 & 553 & 0.137 & 12850\\
     \KeywordTok{list}\NormalTok{(}\OperatorTok{~}\StringTok{ }\KeywordTok{mean}\NormalTok{(.), }\OperatorTok{~}\StringTok{ }\KeywordTok{sd}\NormalTok{(.), }\OperatorTok{~}\StringTok{ }\KeywordTok{ci}\NormalTok{(.), }\OperatorTok{~}\StringTok{ }\KeywordTok{min}\NormalTok{(.), }\OperatorTok{~}\StringTok{ }\KeywordTok{max}\NormalTok{(.))}
 \NormalTok{  ) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{write_csv}\NormalTok{(}\StringTok{"data/results/dist_nnb_species_specific.csv"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# show table of distance to nearest site for each species}
-\NormalTok{readr}\OperatorTok{::}\KeywordTok{read_csv}\NormalTok{(}\StringTok{"data/results/dist_nnb_species_specific.csv"}\NormalTok{) }\OperatorTok{%>%}
-\StringTok{  }\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1370,12 +1116,16 @@ Zosterops palpebrosus & 417 & 808 & 25.0 & 0.137 & 16461\\
 \hline
 \end{tabular}
 
-Histograms showing the species-specific distances to nearest neighbouring site.
+\textbf{Is this figure necessary here?}
 
+\begin{figure}
+\centering
 \includegraphics{figs/fig_nnb_species.png}
+\caption{Histograms showing the species-specific distances to nearest neighbouring site.}
+\end{figure}
 
-\hypertarget{plot-map-points-on-roads}{%
-\subsection{Plot map: points on roads}\label{plot-map-points-on-roads}}
+\hypertarget{visualise-distance-to-roads-and-nearest-site}{%
+\subsection{Visualise distance to roads and nearest site}\label{visualise-distance-to-roads-and-nearest-site}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1401,103 +1151,10 @@ Histograms showing the species-specific distances to nearest neighbouring site.
 \end{Highlighting}
 \end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# plot on maps}
-\KeywordTok{ggplot}\NormalTok{() }\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ land, }\DataTypeTok{fill =} \StringTok{"grey90"}\NormalTok{, }\DataTypeTok{col =} \OtherTok{NA}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ wg, }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{, }\DataTypeTok{col =} \DecValTok{1}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{annotation_custom}\NormalTok{(}
-    \DataTypeTok{grob =}\NormalTok{ hist_roads }\OperatorTok{%>%}\StringTok{ }\KeywordTok{ggplotGrob}\NormalTok{(),}
-    \DataTypeTok{xmin =}\NormalTok{ bbox[}\StringTok{"xmax"}\NormalTok{] }\OperatorTok{-}\StringTok{ }\NormalTok{(bbox[}\StringTok{"xmax"}\NormalTok{] }\OperatorTok{-}\StringTok{ }\NormalTok{bbox[}\StringTok{"xmin"}\NormalTok{]) }\OperatorTok{/}\StringTok{ }\FloatTok{2.5}\NormalTok{,}
-    \DataTypeTok{xmax =}\NormalTok{ bbox[}\StringTok{"xmax"}\NormalTok{],}
-    \DataTypeTok{ymin =}\NormalTok{ bbox[}\StringTok{"ymax"}\NormalTok{] }\OperatorTok{-}\StringTok{ }\NormalTok{(bbox[}\StringTok{"ymax"}\NormalTok{] }\OperatorTok{-}\StringTok{ }\NormalTok{bbox[}\StringTok{"ymin"}\NormalTok{]) }\OperatorTok{/}\StringTok{ }\DecValTok{3}\NormalTok{,}
-    \DataTypeTok{ymax =}\NormalTok{ bbox[}\StringTok{"ymax"}\NormalTok{]}
-\NormalTok{  ) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_tile}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ points, }\KeywordTok{aes}\NormalTok{(X, Y, }\DataTypeTok{fill =}\NormalTok{ n), }\DataTypeTok{col =} \StringTok{"grey90"}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ roads, }\DataTypeTok{size =} \FloatTok{0.2}\NormalTok{, }\DataTypeTok{col =} \StringTok{"steelblue"}\NormalTok{) }\OperatorTok{+}
-
-\StringTok{  }\CommentTok{# scale_colour_manual(values = "steelblue", labels = "roads")+}
-
-\StringTok{  }\KeywordTok{scale_fill_scico}\NormalTok{(}\DataTypeTok{trans =} \StringTok{"log10"}\NormalTok{, }\DataTypeTok{palette =} \StringTok{"lajolla"}\NormalTok{, }\DataTypeTok{values =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{)) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{annotation_north_arrow}\NormalTok{(}
-    \DataTypeTok{location =} \StringTok{"br"}\NormalTok{, }\DataTypeTok{which_north =} \StringTok{"true"}\NormalTok{,}
-    \DataTypeTok{pad_x =} \KeywordTok{unit}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\StringTok{"in"}\NormalTok{), }\DataTypeTok{pad_y =} \KeywordTok{unit}\NormalTok{(}\FloatTok{0.5}\NormalTok{, }\StringTok{"in"}\NormalTok{),}
-    \DataTypeTok{style =}\NormalTok{ north_arrow_fancy_orienteering}
-\NormalTok{  ) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{annotation_scale}\NormalTok{(}\DataTypeTok{location =} \StringTok{"br"}\NormalTok{, }\DataTypeTok{width_hint =} \FloatTok{0.4}\NormalTok{, }\DataTypeTok{text_cex =} \DecValTok{1}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme_few}\NormalTok{() }\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme}\NormalTok{(}
-    \DataTypeTok{legend.position =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.9}\NormalTok{, }\FloatTok{0.55}\NormalTok{),}
-    \DataTypeTok{legend.background =} \KeywordTok{element_blank}\NormalTok{(),}
-    \DataTypeTok{legend.key =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"grey90"}\NormalTok{),}
-    \DataTypeTok{axis.title =} \KeywordTok{element_blank}\NormalTok{(),}
-    \DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"lightblue"}\NormalTok{)}
-\NormalTok{  ) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{coord_sf}\NormalTok{(}
-    \DataTypeTok{expand =} \OtherTok{FALSE}\NormalTok{,}
-    \DataTypeTok{xlim =}\NormalTok{ bbox[}\KeywordTok{c}\NormalTok{(}\StringTok{"xmin"}\NormalTok{, }\StringTok{"xmax"}\NormalTok{)],}
-    \DataTypeTok{ylim =}\NormalTok{ bbox[}\KeywordTok{c}\NormalTok{(}\StringTok{"ymin"}\NormalTok{, }\StringTok{"ymax"}\NormalTok{)]}
-\NormalTok{  ) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"checklists"}\NormalTok{, }\DataTypeTok{colour =} \OtherTok{NULL}\NormalTok{)}
-
-\CommentTok{# save figure}
-\KeywordTok{ggsave}\NormalTok{(}\DataTypeTok{filename =} \StringTok{"figs/fig_distRoads.png"}\NormalTok{, }\DataTypeTok{device =} \KeywordTok{png}\NormalTok{())}
-\KeywordTok{dev.off}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# transform points to utm}
-\NormalTok{locs <-}\StringTok{ }\NormalTok{locs }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{st_as_sf}\NormalTok{(}\DataTypeTok{coords =} \KeywordTok{c}\NormalTok{(}\StringTok{"longitude"}\NormalTok{, }\StringTok{"latitude"}\NormalTok{)) }\OperatorTok{%>%}
-\StringTok{  `}\DataTypeTok{st_crs<-}\StringTok{`}\NormalTok{(}\DecValTok{4326}\NormalTok{) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{st_transform}\NormalTok{(}\DecValTok{32643}\NormalTok{)}
-
-\CommentTok{# add nnb to locations}
-\KeywordTok{ggplot}\NormalTok{() }\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ land, }\DataTypeTok{fill =} \StringTok{"grey90"}\NormalTok{, }\DataTypeTok{col =} \OtherTok{NA}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ wg, }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{, }\DataTypeTok{col =} \DecValTok{1}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{annotation_custom}\NormalTok{(}
-    \DataTypeTok{grob =}\NormalTok{ hist_sites }\OperatorTok{%>%}\StringTok{ }\KeywordTok{ggplotGrob}\NormalTok{(),}
-    \DataTypeTok{xmin =}\NormalTok{ bbox[}\StringTok{"xmax"}\NormalTok{] }\OperatorTok{-}\StringTok{ }\NormalTok{(bbox[}\StringTok{"xmax"}\NormalTok{] }\OperatorTok{-}\StringTok{ }\NormalTok{bbox[}\StringTok{"xmin"}\NormalTok{]) }\OperatorTok{/}\StringTok{ }\FloatTok{2.5}\NormalTok{,}
-    \DataTypeTok{xmax =}\NormalTok{ bbox[}\StringTok{"xmax"}\NormalTok{],}
-    \DataTypeTok{ymin =}\NormalTok{ bbox[}\StringTok{"ymax"}\NormalTok{] }\OperatorTok{-}\StringTok{ }\NormalTok{(bbox[}\StringTok{"ymax"}\NormalTok{] }\OperatorTok{-}\StringTok{ }\NormalTok{bbox[}\StringTok{"ymin"}\NormalTok{]) }\OperatorTok{/}\StringTok{ }\DecValTok{3}\NormalTok{,}
-    \DataTypeTok{ymax =}\NormalTok{ bbox[}\StringTok{"ymax"}\NormalTok{]}
-\NormalTok{  ) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ roads, }\DataTypeTok{size =} \FloatTok{0.2}\NormalTok{, }\DataTypeTok{col =} \StringTok{"steelblue"}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ locs, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{col =}\NormalTok{ nnb }\OperatorTok{/}\StringTok{ }\DecValTok{1000}\NormalTok{)) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{scale_colour_scico}\NormalTok{(}
-    \DataTypeTok{palette =} \StringTok{"oslo"}\NormalTok{, }\DataTypeTok{values =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{), }\DataTypeTok{direction =} \DecValTok{-1}\NormalTok{, }\DataTypeTok{limits =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{5}\NormalTok{),}
-    \DataTypeTok{na.value =} \StringTok{"indianred"}
-\NormalTok{  ) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{annotation_north_arrow}\NormalTok{(}
-    \DataTypeTok{location =} \StringTok{"br"}\NormalTok{, }\DataTypeTok{which_north =} \StringTok{"true"}\NormalTok{,}
-    \DataTypeTok{pad_x =} \KeywordTok{unit}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\StringTok{"in"}\NormalTok{), }\DataTypeTok{pad_y =} \KeywordTok{unit}\NormalTok{(}\FloatTok{0.5}\NormalTok{, }\StringTok{"in"}\NormalTok{),}
-    \DataTypeTok{style =}\NormalTok{ north_arrow_fancy_orienteering}
-\NormalTok{  ) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{annotation_scale}\NormalTok{(}\DataTypeTok{location =} \StringTok{"br"}\NormalTok{, }\DataTypeTok{width_hint =} \FloatTok{0.4}\NormalTok{, }\DataTypeTok{text_cex =} \DecValTok{1}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme_few}\NormalTok{() }\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme}\NormalTok{(}
-    \DataTypeTok{legend.position =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.9}\NormalTok{, }\FloatTok{0.55}\NormalTok{),}
-    \DataTypeTok{legend.background =} \KeywordTok{element_blank}\NormalTok{(),}
-    \DataTypeTok{legend.key =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"grey90"}\NormalTok{),}
-    \DataTypeTok{axis.title =} \KeywordTok{element_blank}\NormalTok{(),}
-    \DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"lightblue"}\NormalTok{)}
-\NormalTok{  ) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{coord_sf}\NormalTok{(}
-    \DataTypeTok{expand =} \OtherTok{FALSE}\NormalTok{, }\DataTypeTok{xlim =}\NormalTok{ bbox[}\KeywordTok{c}\NormalTok{(}\StringTok{"xmin"}\NormalTok{, }\StringTok{"xmax"}\NormalTok{)],}
-    \DataTypeTok{ylim =}\NormalTok{ bbox[}\KeywordTok{c}\NormalTok{(}\StringTok{"ymin"}\NormalTok{, }\StringTok{"ymax"}\NormalTok{)]}
-\NormalTok{  ) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"checklists"}\NormalTok{, }\DataTypeTok{colour =} \OtherTok{NULL}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
 \begin{figure}
 \centering
 \includegraphics{figs/fig_distRoads.png}
-\caption{Checklist locations across the Nilgiris, Anamalais and the Palani hills. Inset histogram shows checklists' distance to the nearest road, with the X-axis on a log-scale.}
+\caption{Distribution of checklist locations across the Nilgiri, Anamalai and Palani Hills. Inset histogram shows the distribution of checklists' distance to the nearest road, with the X-axis on a log-scale.}
 \end{figure}
 
 \hypertarget{prepare-observer-expertise}{%

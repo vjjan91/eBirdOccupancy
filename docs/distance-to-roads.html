@@ -177,10 +177,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.5" data-path="distance-to-roads.html"><a href="distance-to-roads.html#species-specific-filter"><i class="fa fa-check"></i><b>4.5</b> Species specific filter</a></li>
 <li class="chapter" data-level="4.6" data-path="distance-to-roads.html"><a href="distance-to-roads.html#plot-histogram-distance-to-roads"><i class="fa fa-check"></i><b>4.6</b> Plot histogram: distance to roads</a></li>
 <li class="chapter" data-level="4.7" data-path="distance-to-roads.html"><a href="distance-to-roads.html#table-distance-to-roads"><i class="fa fa-check"></i><b>4.7</b> Table: Distance to roads</a></li>
-<li class="chapter" data-level="4.8" data-path="distance-to-roads.html"><a href="distance-to-roads.html#plot-histogram-distance-to-nearest-site"><i class="fa fa-check"></i><b>4.8</b> Plot histogram: distance to nearest site</a></li>
-<li class="chapter" data-level="4.9" data-path="distance-to-roads.html"><a href="distance-to-roads.html#plot-species-specific-histograms-distance-to-nearest-site"><i class="fa fa-check"></i><b>4.9</b> Plot species specific histograms: distance to nearest site</a></li>
-<li class="chapter" data-level="4.10" data-path="distance-to-roads.html"><a href="distance-to-roads.html#table-species-specific-nearest-site"><i class="fa fa-check"></i><b>4.10</b> Table: Species specific nearest site</a></li>
-<li class="chapter" data-level="4.11" data-path="distance-to-roads.html"><a href="distance-to-roads.html#plot-map-points-on-roads"><i class="fa fa-check"></i><b>4.11</b> Plot map: points on roads</a></li>
+<li class="chapter" data-level="4.8" data-path="distance-to-roads.html"><a href="distance-to-roads.html#histograms-of-distance-to-nearest-site"><i class="fa fa-check"></i><b>4.8</b> Histograms of distance to nearest site</a></li>
+<li class="chapter" data-level="4.9" data-path="distance-to-roads.html"><a href="distance-to-roads.html#table-nearest-site-where-the-species-was-seen"><i class="fa fa-check"></i><b>4.9</b> Table: Nearest site where the species was seen</a></li>
+<li class="chapter" data-level="4.10" data-path="distance-to-roads.html"><a href="distance-to-roads.html#visualise-distance-to-roads-and-nearest-site"><i class="fa fa-check"></i><b>4.10</b> Visualise distance to roads and nearest site</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="prepare-observer-expertise.html"><a href="prepare-observer-expertise.html"><i class="fa fa-check"></i><b>5</b> Prepare observer expertise</a><ul>
 <li class="chapter" data-level="5.0.1" data-path="prepare-observer-expertise.html"><a href="prepare-observer-expertise.html#prepare-libraries-2"><i class="fa fa-check"></i><b>5.0.1</b> Prepare libraries</a></li>
@@ -252,236 +251,211 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Section 4</span> Distance to roads</h1>
 <div id="prepare-libraries-1" class="section level2">
 <h2><span class="header-section-number">4.1</span> Prepare libraries</h2>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1"><span class="co"># load libraries</span></a>
-<a class="sourceLine" id="cb32-2" title="2"><span class="kw">library</span>(reticulate)</a>
-<a class="sourceLine" id="cb32-3" title="3"><span class="kw">library</span>(sf)</a>
-<a class="sourceLine" id="cb32-4" title="4"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb32-5" title="5"><span class="kw">library</span>(scales)</a>
-<a class="sourceLine" id="cb32-6" title="6"><span class="kw">library</span>(readr)</a>
-<a class="sourceLine" id="cb32-7" title="7"><span class="kw">library</span>(purrr)</a>
-<a class="sourceLine" id="cb32-8" title="8"></a>
-<a class="sourceLine" id="cb32-9" title="9"><span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb32-10" title="10"><span class="kw">library</span>(ggthemes)</a>
-<a class="sourceLine" id="cb32-11" title="11"><span class="kw">library</span>(ggspatial)</a>
-<a class="sourceLine" id="cb32-12" title="12"><span class="kw">library</span>(scico)</a>
-<a class="sourceLine" id="cb32-13" title="13"></a>
-<a class="sourceLine" id="cb32-14" title="14"><span class="co"># round any function</span></a>
-<a class="sourceLine" id="cb32-15" title="15">round_any &lt;-<span class="st"> </span><span class="cf">function</span>(x, <span class="dt">accuracy =</span> <span class="dv">20000</span>) {</a>
-<a class="sourceLine" id="cb32-16" title="16">  <span class="kw">round</span>(x <span class="op">/</span><span class="st"> </span>accuracy) <span class="op">*</span><span class="st"> </span>accuracy</a>
-<a class="sourceLine" id="cb32-17" title="17">}</a>
-<a class="sourceLine" id="cb32-18" title="18"><span class="co"># ci function</span></a>
-<a class="sourceLine" id="cb32-19" title="19">ci &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</a>
-<a class="sourceLine" id="cb32-20" title="20">  <span class="kw">qnorm</span>(<span class="fl">0.975</span>) <span class="op">*</span><span class="st"> </span><span class="kw">sd</span>(x, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">length</span>(x))</a>
-<a class="sourceLine" id="cb32-21" title="21">}</a>
-<a class="sourceLine" id="cb32-22" title="22"></a>
-<a class="sourceLine" id="cb32-23" title="23"><span class="co"># set python path</span></a>
-<a class="sourceLine" id="cb32-24" title="24"><span class="kw">use_python</span>(<span class="st">&quot;/usr/bin/python3&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1"><span class="co"># load libraries</span></a>
+<a class="sourceLine" id="cb28-2" title="2"><span class="kw">library</span>(reticulate)</a>
+<a class="sourceLine" id="cb28-3" title="3"><span class="kw">library</span>(sf)</a>
+<a class="sourceLine" id="cb28-4" title="4"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb28-5" title="5"><span class="kw">library</span>(scales)</a>
+<a class="sourceLine" id="cb28-6" title="6"><span class="kw">library</span>(readr)</a>
+<a class="sourceLine" id="cb28-7" title="7"><span class="kw">library</span>(purrr)</a>
+<a class="sourceLine" id="cb28-8" title="8"></a>
+<a class="sourceLine" id="cb28-9" title="9"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb28-10" title="10"><span class="kw">library</span>(ggthemes)</a>
+<a class="sourceLine" id="cb28-11" title="11"><span class="kw">library</span>(ggspatial)</a>
+<a class="sourceLine" id="cb28-12" title="12"><span class="kw">library</span>(scico)</a>
+<a class="sourceLine" id="cb28-13" title="13"></a>
+<a class="sourceLine" id="cb28-14" title="14"><span class="co"># round any function</span></a>
+<a class="sourceLine" id="cb28-15" title="15">round_any &lt;-<span class="st"> </span><span class="cf">function</span>(x, <span class="dt">accuracy =</span> <span class="dv">20000</span>) {</a>
+<a class="sourceLine" id="cb28-16" title="16">  <span class="kw">round</span>(x <span class="op">/</span><span class="st"> </span>accuracy) <span class="op">*</span><span class="st"> </span>accuracy</a>
+<a class="sourceLine" id="cb28-17" title="17">}</a>
+<a class="sourceLine" id="cb28-18" title="18"><span class="co"># ci function</span></a>
+<a class="sourceLine" id="cb28-19" title="19">ci &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb28-20" title="20">  <span class="kw">qnorm</span>(<span class="fl">0.975</span>) <span class="op">*</span><span class="st"> </span><span class="kw">sd</span>(x, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">length</span>(x))</a>
+<a class="sourceLine" id="cb28-21" title="21">}</a>
+<a class="sourceLine" id="cb28-22" title="22"></a>
+<a class="sourceLine" id="cb28-23" title="23"><span class="co"># set python path</span></a>
+<a class="sourceLine" id="cb28-24" title="24"><span class="kw">use_python</span>(<span class="st">&quot;/usr/bin/python3&quot;</span>)</a></code></pre></div>
 <p>Importing python libraries.</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb33-1" title="1"><span class="co"># import classic python libs</span></a>
-<a class="sourceLine" id="cb33-2" title="2"><span class="im">import</span> itertools</a>
-<a class="sourceLine" id="cb33-3" title="3"><span class="im">from</span> operator <span class="im">import</span> itemgetter</a>
-<a class="sourceLine" id="cb33-4" title="4"><span class="im">import</span> numpy <span class="im">as</span> np</a>
-<a class="sourceLine" id="cb33-5" title="5"><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</a>
-<a class="sourceLine" id="cb33-6" title="6"><span class="im">import</span> math</a>
-<a class="sourceLine" id="cb33-7" title="7"></a>
-<a class="sourceLine" id="cb33-8" title="8"><span class="co"># libs for dataframes</span></a>
-<a class="sourceLine" id="cb33-9" title="9"><span class="im">import</span> pandas <span class="im">as</span> pd</a>
-<a class="sourceLine" id="cb33-10" title="10"></a>
-<a class="sourceLine" id="cb33-11" title="11"><span class="co"># import libs for geodata</span></a>
-<a class="sourceLine" id="cb33-12" title="12"><span class="im">from</span> shapely.ops <span class="im">import</span> nearest_points</a>
-<a class="sourceLine" id="cb33-13" title="13"><span class="im">import</span> geopandas <span class="im">as</span> gpd</a>
-<a class="sourceLine" id="cb33-14" title="14"><span class="im">import</span> rasterio</a>
-<a class="sourceLine" id="cb33-15" title="15"></a>
-<a class="sourceLine" id="cb33-16" title="16"><span class="co"># import ckdtree</span></a>
-<a class="sourceLine" id="cb33-17" title="17"><span class="im">from</span> scipy.spatial <span class="im">import</span> cKDTree</a>
-<a class="sourceLine" id="cb33-18" title="18"><span class="im">from</span> shapely.geometry <span class="im">import</span> Point, MultiPoint, LineString, MultiLineString</a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb29-1" title="1"><span class="co"># import classic python libs</span></a>
+<a class="sourceLine" id="cb29-2" title="2"><span class="im">import</span> itertools</a>
+<a class="sourceLine" id="cb29-3" title="3"><span class="im">from</span> operator <span class="im">import</span> itemgetter</a>
+<a class="sourceLine" id="cb29-4" title="4"><span class="im">import</span> numpy <span class="im">as</span> np</a>
+<a class="sourceLine" id="cb29-5" title="5"><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</a>
+<a class="sourceLine" id="cb29-6" title="6"><span class="im">import</span> math</a>
+<a class="sourceLine" id="cb29-7" title="7"></a>
+<a class="sourceLine" id="cb29-8" title="8"><span class="co"># libs for dataframes</span></a>
+<a class="sourceLine" id="cb29-9" title="9"><span class="im">import</span> pandas <span class="im">as</span> pd</a>
+<a class="sourceLine" id="cb29-10" title="10"></a>
+<a class="sourceLine" id="cb29-11" title="11"><span class="co"># import libs for geodata</span></a>
+<a class="sourceLine" id="cb29-12" title="12"><span class="im">from</span> shapely.ops <span class="im">import</span> nearest_points</a>
+<a class="sourceLine" id="cb29-13" title="13"><span class="im">import</span> geopandas <span class="im">as</span> gpd</a>
+<a class="sourceLine" id="cb29-14" title="14"><span class="im">import</span> rasterio</a>
+<a class="sourceLine" id="cb29-15" title="15"></a>
+<a class="sourceLine" id="cb29-16" title="16"><span class="co"># import ckdtree</span></a>
+<a class="sourceLine" id="cb29-17" title="17"><span class="im">from</span> scipy.spatial <span class="im">import</span> cKDTree</a>
+<a class="sourceLine" id="cb29-18" title="18"><span class="im">from</span> shapely.geometry <span class="im">import</span> Point, MultiPoint, LineString, MultiLineString</a></code></pre></div>
 </div>
 <div id="prepare-data-for-processing" class="section level2">
 <h2><span class="header-section-number">4.2</span> Prepare data for processing</h2>
-<div class="sourceCode" id="cb34"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb34-1" title="1"><span class="co"># read in roads shapefile</span></a>
-<a class="sourceLine" id="cb34-2" title="2">roads <span class="op">=</span> gpd.read_file(<span class="st">&quot;data/spatial/roads_studysite_2019/roads_studysite_2019.shp&quot;</span>)</a>
-<a class="sourceLine" id="cb34-3" title="3">roads.head()</a>
-<a class="sourceLine" id="cb34-4" title="4"></a>
-<a class="sourceLine" id="cb34-5" title="5"><span class="co"># read in checklist covariates for conversion to gpd</span></a>
-<a class="sourceLine" id="cb34-6" title="6"><span class="co"># get unique coordinates, assign them to the df</span></a>
-<a class="sourceLine" id="cb34-7" title="7"><span class="co"># convert df to geo-df</span></a>
-<a class="sourceLine" id="cb34-8" title="8">chkCovars <span class="op">=</span> pd.read_csv(<span class="st">&quot;data/eBirdChecklistVars.csv&quot;</span>)</a>
-<a class="sourceLine" id="cb34-9" title="9">unique_locs <span class="op">=</span> chkCovars.drop_duplicates(subset<span class="op">=</span>[<span class="st">&#39;longitude&#39;</span>,</a>
-<a class="sourceLine" id="cb34-10" title="10">                                         <span class="st">&#39;latitude&#39;</span>])[[<span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;latitude&#39;</span>]]</a>
-<a class="sourceLine" id="cb34-11" title="11">unique_locs[<span class="st">&#39;coordId&#39;</span>] <span class="op">=</span> np.arange(<span class="dv">1</span>, unique_locs.shape[<span class="dv">0</span>]<span class="op">+</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb34-12" title="12">chkCovars <span class="op">=</span> chkCovars.merge(unique_locs, on<span class="op">=</span>[<span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;latitude&#39;</span>])</a>
-<a class="sourceLine" id="cb34-13" title="13"></a>
-<a class="sourceLine" id="cb34-14" title="14">unique_locs <span class="op">=</span> gpd.GeoDataFrame(</a>
-<a class="sourceLine" id="cb34-15" title="15">unique_locs, </a>
-<a class="sourceLine" id="cb34-16" title="16">geometry <span class="op">=</span> gpd.points_from_xy(unique_locs.longitude, unique_locs.latitude))</a>
-<a class="sourceLine" id="cb34-17" title="17">unique_locs.crs <span class="op">=</span> {<span class="st">&#39;init&#39;</span> :<span class="st">&#39;epsg:4326&#39;</span>}</a>
-<a class="sourceLine" id="cb34-18" title="18"></a>
-<a class="sourceLine" id="cb34-19" title="19"><span class="co"># reproject spatials to 43n epsg 32643</span></a>
-<a class="sourceLine" id="cb34-20" title="20"></a>
-<a class="sourceLine" id="cb34-21" title="21">roads <span class="op">=</span> roads.to_crs({<span class="st">&#39;init&#39;</span>: <span class="st">&#39;epsg:32643&#39;</span>})</a>
-<a class="sourceLine" id="cb34-22" title="22">unique_locs <span class="op">=</span> unique_locs.to_crs({<span class="st">&#39;init&#39;</span>: <span class="st">&#39;epsg:32643&#39;</span>})</a>
-<a class="sourceLine" id="cb34-23" title="23"></a>
-<a class="sourceLine" id="cb34-24" title="24"></a>
-<a class="sourceLine" id="cb34-25" title="25"><span class="co"># function to simplify multilinestrings</span></a>
-<a class="sourceLine" id="cb34-26" title="26"><span class="kw">def</span> simplify_roads(complex_roads):</a>
-<a class="sourceLine" id="cb34-27" title="27">    simpleRoads <span class="op">=</span> []</a>
-<a class="sourceLine" id="cb34-28" title="28">    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(complex_roads.geometry)):</a>
-<a class="sourceLine" id="cb34-29" title="29">        feature <span class="op">=</span> complex_roads.geometry.iloc[i]</a>
-<a class="sourceLine" id="cb34-30" title="30">        <span class="cf">if</span> feature.geom_type <span class="op">==</span> <span class="st">&quot;LineString&quot;</span>:</a>
-<a class="sourceLine" id="cb34-31" title="31">            simpleRoads.append(feature)</a>
-<a class="sourceLine" id="cb34-32" title="32">        <span class="cf">elif</span> feature.geom_type <span class="op">==</span> <span class="st">&quot;MultiLineString&quot;</span>:</a>
-<a class="sourceLine" id="cb34-33" title="33">            <span class="cf">for</span> road_level2 <span class="kw">in</span> feature:</a>
-<a class="sourceLine" id="cb34-34" title="34">                simpleRoads.append(road_level2)</a>
-<a class="sourceLine" id="cb34-35" title="35">    <span class="cf">return</span> simpleRoads</a>
-<a class="sourceLine" id="cb34-36" title="36"></a>
-<a class="sourceLine" id="cb34-37" title="37"></a>
-<a class="sourceLine" id="cb34-38" title="38"><span class="co"># function to use ckdtrees for nearest point finding</span></a>
-<a class="sourceLine" id="cb34-39" title="39"><span class="kw">def</span> ckdnearest(gdfA, gdfB):</a>
-<a class="sourceLine" id="cb34-40" title="40">    A <span class="op">=</span> np.concatenate(</a>
-<a class="sourceLine" id="cb34-41" title="41">    [np.array(geom.coords) <span class="cf">for</span> geom <span class="kw">in</span> gdfA.geometry.to_list()])</a>
-<a class="sourceLine" id="cb34-42" title="42">    simplified_features <span class="op">=</span> simplify_roads(gdfB)</a>
-<a class="sourceLine" id="cb34-43" title="43">    B <span class="op">=</span> [np.array(geom.coords) <span class="cf">for</span> geom <span class="kw">in</span> simplified_features]</a>
-<a class="sourceLine" id="cb34-44" title="44">    B <span class="op">=</span> np.concatenate(B)</a>
-<a class="sourceLine" id="cb34-45" title="45">    ckd_tree <span class="op">=</span> cKDTree(B)</a>
-<a class="sourceLine" id="cb34-46" title="46">    dist, idx <span class="op">=</span> ckd_tree.query(A, k<span class="op">=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb34-47" title="47">    <span class="cf">return</span> dist</a>
-<a class="sourceLine" id="cb34-48" title="48"></a>
-<a class="sourceLine" id="cb34-49" title="49"></a>
-<a class="sourceLine" id="cb34-50" title="50"><span class="co"># function to use ckdtrees for nearest point finding</span></a>
-<a class="sourceLine" id="cb34-51" title="51"><span class="kw">def</span> ckdnearest_point(gdfA, gdfB):</a>
-<a class="sourceLine" id="cb34-52" title="52">    A <span class="op">=</span> np.concatenate(</a>
-<a class="sourceLine" id="cb34-53" title="53">    [np.array(geom.coords) <span class="cf">for</span> geom <span class="kw">in</span> gdfA.geometry.to_list()])</a>
-<a class="sourceLine" id="cb34-54" title="54">    <span class="co">#simplified_features = simplify_roads(gdfB)</span></a>
-<a class="sourceLine" id="cb34-55" title="55">    B <span class="op">=</span> np.concatenate(</a>
-<a class="sourceLine" id="cb34-56" title="56">    [np.array(geom.coords) <span class="cf">for</span> geom <span class="kw">in</span> gdfB.geometry.to_list()])</a>
-<a class="sourceLine" id="cb34-57" title="57">    <span class="co">#B = np.concatenate(B)</span></a>
-<a class="sourceLine" id="cb34-58" title="58">    ckd_tree <span class="op">=</span> cKDTree(B)</a>
-<a class="sourceLine" id="cb34-59" title="59">    dist, idx <span class="op">=</span> ckd_tree.query(A, k<span class="op">=</span>[<span class="dv">2</span>])</a>
-<a class="sourceLine" id="cb34-60" title="60">    <span class="cf">return</span> dist</a>
-<a class="sourceLine" id="cb34-61" title="61"></a>
-<a class="sourceLine" id="cb34-62" title="62"></a>
-<a class="sourceLine" id="cb34-63" title="63"><span class="co"># get distance to nearest road</span></a>
-<a class="sourceLine" id="cb34-64" title="64">unique_locs[<span class="st">&#39;dist_road&#39;</span>] <span class="op">=</span> ckdnearest(unique_locs, roads)</a>
-<a class="sourceLine" id="cb34-65" title="65"></a>
-<a class="sourceLine" id="cb34-66" title="66"><span class="co"># get distance to nearest other site</span></a>
-<a class="sourceLine" id="cb34-67" title="67">unique_locs[<span class="st">&#39;nnb&#39;</span>] <span class="op">=</span> ckdnearest_point(unique_locs, unique_locs)</a>
-<a class="sourceLine" id="cb34-68" title="68"></a>
-<a class="sourceLine" id="cb34-69" title="69"><span class="co"># write to file</span></a>
-<a class="sourceLine" id="cb34-70" title="70">unique_locs <span class="op">=</span> pd.DataFrame(unique_locs.drop(columns<span class="op">=</span><span class="st">&#39;geometry&#39;</span>))</a>
-<a class="sourceLine" id="cb34-71" title="71">unique_locs[<span class="st">&#39;dist_road&#39;</span>] <span class="op">=</span> unique_locs[<span class="st">&#39;dist_road&#39;</span>]</a>
-<a class="sourceLine" id="cb34-72" title="72">unique_locs[<span class="st">&#39;nnb&#39;</span>] <span class="op">=</span> unique_locs[<span class="st">&#39;nnb&#39;</span>]</a>
-<a class="sourceLine" id="cb34-73" title="73">unique_locs.to_csv(path_or_buf <span class="op">=</span> <span class="st">&quot;data/locs_dist_to_road.csv&quot;</span>, index<span class="op">=</span><span class="va">False</span>)</a>
-<a class="sourceLine" id="cb34-74" title="74"></a>
-<a class="sourceLine" id="cb34-75" title="75"><span class="co"># merge unique locs with chkCovars</span></a>
-<a class="sourceLine" id="cb34-76" title="76">chkCovars <span class="op">=</span> chkCovars.merge(unique_locs, on<span class="op">=</span>[<span class="st">&#39;latitude&#39;</span>, </a>
-<a class="sourceLine" id="cb34-77" title="77">                                             <span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;coordId&#39;</span>])</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb30-1" title="1"><span class="co"># read in roads shapefile</span></a>
+<a class="sourceLine" id="cb30-2" title="2">roads <span class="op">=</span> gpd.read_file(<span class="st">&quot;data/spatial/roads_studysite_2019/roads_studysite_2019.shp&quot;</span>)</a>
+<a class="sourceLine" id="cb30-3" title="3">roads.head()</a>
+<a class="sourceLine" id="cb30-4" title="4"></a>
+<a class="sourceLine" id="cb30-5" title="5"><span class="co"># read in checklist covariates for conversion to gpd</span></a>
+<a class="sourceLine" id="cb30-6" title="6"><span class="co"># get unique coordinates, assign them to the df</span></a>
+<a class="sourceLine" id="cb30-7" title="7"><span class="co"># convert df to geo-df</span></a>
+<a class="sourceLine" id="cb30-8" title="8">chkCovars <span class="op">=</span> pd.read_csv(<span class="st">&quot;data/eBirdChecklistVars.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb30-9" title="9">unique_locs <span class="op">=</span> chkCovars.drop_duplicates(subset<span class="op">=</span>[<span class="st">&#39;longitude&#39;</span>,</a>
+<a class="sourceLine" id="cb30-10" title="10">                                         <span class="st">&#39;latitude&#39;</span>])[[<span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;latitude&#39;</span>]]</a>
+<a class="sourceLine" id="cb30-11" title="11">unique_locs[<span class="st">&#39;coordId&#39;</span>] <span class="op">=</span> np.arange(<span class="dv">1</span>, unique_locs.shape[<span class="dv">0</span>]<span class="op">+</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb30-12" title="12">chkCovars <span class="op">=</span> chkCovars.merge(unique_locs, on<span class="op">=</span>[<span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;latitude&#39;</span>])</a>
+<a class="sourceLine" id="cb30-13" title="13"></a>
+<a class="sourceLine" id="cb30-14" title="14">unique_locs <span class="op">=</span> gpd.GeoDataFrame(</a>
+<a class="sourceLine" id="cb30-15" title="15">unique_locs, </a>
+<a class="sourceLine" id="cb30-16" title="16">geometry <span class="op">=</span> gpd.points_from_xy(unique_locs.longitude, unique_locs.latitude))</a>
+<a class="sourceLine" id="cb30-17" title="17">unique_locs.crs <span class="op">=</span> {<span class="st">&#39;init&#39;</span> :<span class="st">&#39;epsg:4326&#39;</span>}</a>
+<a class="sourceLine" id="cb30-18" title="18"></a>
+<a class="sourceLine" id="cb30-19" title="19"><span class="co"># reproject spatials to 43n epsg 32643</span></a>
+<a class="sourceLine" id="cb30-20" title="20"></a>
+<a class="sourceLine" id="cb30-21" title="21">roads <span class="op">=</span> roads.to_crs({<span class="st">&#39;init&#39;</span>: <span class="st">&#39;epsg:32643&#39;</span>})</a>
+<a class="sourceLine" id="cb30-22" title="22">unique_locs <span class="op">=</span> unique_locs.to_crs({<span class="st">&#39;init&#39;</span>: <span class="st">&#39;epsg:32643&#39;</span>})</a>
+<a class="sourceLine" id="cb30-23" title="23"></a>
+<a class="sourceLine" id="cb30-24" title="24"></a>
+<a class="sourceLine" id="cb30-25" title="25"><span class="co"># function to simplify multilinestrings</span></a>
+<a class="sourceLine" id="cb30-26" title="26"><span class="kw">def</span> simplify_roads(complex_roads):</a>
+<a class="sourceLine" id="cb30-27" title="27">    simpleRoads <span class="op">=</span> []</a>
+<a class="sourceLine" id="cb30-28" title="28">    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(complex_roads.geometry)):</a>
+<a class="sourceLine" id="cb30-29" title="29">        feature <span class="op">=</span> complex_roads.geometry.iloc[i]</a>
+<a class="sourceLine" id="cb30-30" title="30">        <span class="cf">if</span> feature.geom_type <span class="op">==</span> <span class="st">&quot;LineString&quot;</span>:</a>
+<a class="sourceLine" id="cb30-31" title="31">            simpleRoads.append(feature)</a>
+<a class="sourceLine" id="cb30-32" title="32">        <span class="cf">elif</span> feature.geom_type <span class="op">==</span> <span class="st">&quot;MultiLineString&quot;</span>:</a>
+<a class="sourceLine" id="cb30-33" title="33">            <span class="cf">for</span> road_level2 <span class="kw">in</span> feature:</a>
+<a class="sourceLine" id="cb30-34" title="34">                simpleRoads.append(road_level2)</a>
+<a class="sourceLine" id="cb30-35" title="35">    <span class="cf">return</span> simpleRoads</a>
+<a class="sourceLine" id="cb30-36" title="36"></a>
+<a class="sourceLine" id="cb30-37" title="37"></a>
+<a class="sourceLine" id="cb30-38" title="38"><span class="co"># function to use ckdtrees for nearest point finding</span></a>
+<a class="sourceLine" id="cb30-39" title="39"><span class="kw">def</span> ckdnearest(gdfA, gdfB):</a>
+<a class="sourceLine" id="cb30-40" title="40">    A <span class="op">=</span> np.concatenate(</a>
+<a class="sourceLine" id="cb30-41" title="41">    [np.array(geom.coords) <span class="cf">for</span> geom <span class="kw">in</span> gdfA.geometry.to_list()])</a>
+<a class="sourceLine" id="cb30-42" title="42">    simplified_features <span class="op">=</span> simplify_roads(gdfB)</a>
+<a class="sourceLine" id="cb30-43" title="43">    B <span class="op">=</span> [np.array(geom.coords) <span class="cf">for</span> geom <span class="kw">in</span> simplified_features]</a>
+<a class="sourceLine" id="cb30-44" title="44">    B <span class="op">=</span> np.concatenate(B)</a>
+<a class="sourceLine" id="cb30-45" title="45">    ckd_tree <span class="op">=</span> cKDTree(B)</a>
+<a class="sourceLine" id="cb30-46" title="46">    dist, idx <span class="op">=</span> ckd_tree.query(A, k<span class="op">=</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb30-47" title="47">    <span class="cf">return</span> dist</a>
+<a class="sourceLine" id="cb30-48" title="48"></a>
+<a class="sourceLine" id="cb30-49" title="49"></a>
+<a class="sourceLine" id="cb30-50" title="50"><span class="co"># function to use ckdtrees for nearest point finding</span></a>
+<a class="sourceLine" id="cb30-51" title="51"><span class="kw">def</span> ckdnearest_point(gdfA, gdfB):</a>
+<a class="sourceLine" id="cb30-52" title="52">    A <span class="op">=</span> np.concatenate(</a>
+<a class="sourceLine" id="cb30-53" title="53">    [np.array(geom.coords) <span class="cf">for</span> geom <span class="kw">in</span> gdfA.geometry.to_list()])</a>
+<a class="sourceLine" id="cb30-54" title="54">    <span class="co">#simplified_features = simplify_roads(gdfB)</span></a>
+<a class="sourceLine" id="cb30-55" title="55">    B <span class="op">=</span> np.concatenate(</a>
+<a class="sourceLine" id="cb30-56" title="56">    [np.array(geom.coords) <span class="cf">for</span> geom <span class="kw">in</span> gdfB.geometry.to_list()])</a>
+<a class="sourceLine" id="cb30-57" title="57">    <span class="co">#B = np.concatenate(B)</span></a>
+<a class="sourceLine" id="cb30-58" title="58">    ckd_tree <span class="op">=</span> cKDTree(B)</a>
+<a class="sourceLine" id="cb30-59" title="59">    dist, idx <span class="op">=</span> ckd_tree.query(A, k<span class="op">=</span>[<span class="dv">2</span>])</a>
+<a class="sourceLine" id="cb30-60" title="60">    <span class="cf">return</span> dist</a>
+<a class="sourceLine" id="cb30-61" title="61"></a>
+<a class="sourceLine" id="cb30-62" title="62"></a>
+<a class="sourceLine" id="cb30-63" title="63"><span class="co"># get distance to nearest road</span></a>
+<a class="sourceLine" id="cb30-64" title="64">unique_locs[<span class="st">&#39;dist_road&#39;</span>] <span class="op">=</span> ckdnearest(unique_locs, roads)</a>
+<a class="sourceLine" id="cb30-65" title="65"></a>
+<a class="sourceLine" id="cb30-66" title="66"><span class="co"># get distance to nearest other site</span></a>
+<a class="sourceLine" id="cb30-67" title="67">unique_locs[<span class="st">&#39;nnb&#39;</span>] <span class="op">=</span> ckdnearest_point(unique_locs, unique_locs)</a>
+<a class="sourceLine" id="cb30-68" title="68"></a>
+<a class="sourceLine" id="cb30-69" title="69"><span class="co"># write to file</span></a>
+<a class="sourceLine" id="cb30-70" title="70">unique_locs <span class="op">=</span> pd.DataFrame(unique_locs.drop(columns<span class="op">=</span><span class="st">&#39;geometry&#39;</span>))</a>
+<a class="sourceLine" id="cb30-71" title="71">unique_locs[<span class="st">&#39;dist_road&#39;</span>] <span class="op">=</span> unique_locs[<span class="st">&#39;dist_road&#39;</span>]</a>
+<a class="sourceLine" id="cb30-72" title="72">unique_locs[<span class="st">&#39;nnb&#39;</span>] <span class="op">=</span> unique_locs[<span class="st">&#39;nnb&#39;</span>]</a>
+<a class="sourceLine" id="cb30-73" title="73">unique_locs.to_csv(path_or_buf <span class="op">=</span> <span class="st">&quot;data/locs_dist_to_road.csv&quot;</span>, index<span class="op">=</span><span class="va">False</span>)</a>
+<a class="sourceLine" id="cb30-74" title="74"></a>
+<a class="sourceLine" id="cb30-75" title="75"><span class="co"># merge unique locs with chkCovars</span></a>
+<a class="sourceLine" id="cb30-76" title="76">chkCovars <span class="op">=</span> chkCovars.merge(unique_locs, on<span class="op">=</span>[<span class="st">&#39;latitude&#39;</span>, </a>
+<a class="sourceLine" id="cb30-77" title="77">                                             <span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;coordId&#39;</span>])</a></code></pre></div>
 </div>
 <div id="species-specific-nearest-sites" class="section level2">
 <h2><span class="header-section-number">4.3</span> Species specific nearest sites</h2>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1"><span class="co"># load data and send to python</span></a>
-<a class="sourceLine" id="cb35-2" title="2"><span class="kw">load</span>(<span class="st">&quot;data_prelim_processing.rdata&quot;</span>)</a>
-<a class="sourceLine" id="cb35-3" title="3">py<span class="op">$</span>data &lt;-<span class="st"> </span>dataGrouped</a></code></pre></div>
-<div class="sourceCode" id="cb36"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb36-1" title="1"><span class="co"># split data by species</span></a>
-<a class="sourceLine" id="cb36-2" title="2">datalist <span class="op">=</span> [pd.DataFrame(y) <span class="cf">for</span> x, y <span class="kw">in</span> data.groupby(<span class="st">&#39;scientific_name&#39;</span>, </a>
-<a class="sourceLine" id="cb36-3" title="3">                                                      as_index<span class="op">=</span><span class="va">False</span>)]</a>
-<a class="sourceLine" id="cb36-4" title="4"></a>
-<a class="sourceLine" id="cb36-5" title="5"></a>
-<a class="sourceLine" id="cb36-6" title="6"><span class="co"># function to get unique vals anc convert to gpd</span></a>
-<a class="sourceLine" id="cb36-7" title="7"><span class="kw">def</span> convData(somedata):</a>
-<a class="sourceLine" id="cb36-8" title="8">    somedata <span class="op">=</span> somedata.drop_duplicates(subset<span class="op">=</span></a>
-<a class="sourceLine" id="cb36-9" title="9">    [<span class="st">&#39;longitude&#39;</span>,<span class="st">&#39;latitude&#39;</span>])[[<span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;latitude&#39;</span>, <span class="st">&#39;scientific_name&#39;</span>]]</a>
-<a class="sourceLine" id="cb36-10" title="10">    unique_locs <span class="op">=</span> gpd.GeoDataFrame(somedata,</a>
-<a class="sourceLine" id="cb36-11" title="11">                                  geometry<span class="op">=</span>gpd.points_from_xy(somedata.longitude, </a>
-<a class="sourceLine" id="cb36-12" title="12">                                  somedata.latitude))</a>
-<a class="sourceLine" id="cb36-13" title="13">    unique_locs.crs <span class="op">=</span> {<span class="st">&#39;init&#39;</span> :<span class="st">&#39;epsg:4326&#39;</span>}</a>
-<a class="sourceLine" id="cb36-14" title="14">    unique_locs <span class="op">=</span> unique_locs.to_crs({<span class="st">&#39;init&#39;</span>: <span class="st">&#39;epsg:32643&#39;</span>})</a>
-<a class="sourceLine" id="cb36-15" title="15">    dists <span class="op">=</span> ckdnearest_point(unique_locs, unique_locs)</a>
-<a class="sourceLine" id="cb36-16" title="16">    unique_locs <span class="op">=</span> pd.DataFrame(unique_locs.drop(columns<span class="op">=</span><span class="st">&#39;geometry&#39;</span>))</a>
-<a class="sourceLine" id="cb36-17" title="17">    unique_locs[<span class="st">&#39;nnb&#39;</span>] <span class="op">=</span> dists</a>
-<a class="sourceLine" id="cb36-18" title="18">    <span class="cf">return</span> unique_locs</a>
-<a class="sourceLine" id="cb36-19" title="19"></a>
-<a class="sourceLine" id="cb36-20" title="20"></a>
-<a class="sourceLine" id="cb36-21" title="21"><span class="co"># apply function to datalist</span></a>
-<a class="sourceLine" id="cb36-22" title="22">datalist <span class="op">=</span> <span class="bu">list</span>(<span class="bu">map</span>(convData, datalist))</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="co"># load data and send to python</span></a>
+<a class="sourceLine" id="cb31-2" title="2"><span class="kw">load</span>(<span class="st">&quot;data_prelim_processing.rdata&quot;</span>)</a>
+<a class="sourceLine" id="cb31-3" title="3">py<span class="op">$</span>data &lt;-<span class="st"> </span>dataGrouped</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb32-1" title="1"><span class="co"># split data by species</span></a>
+<a class="sourceLine" id="cb32-2" title="2">datalist <span class="op">=</span> [pd.DataFrame(y) <span class="cf">for</span> x, y <span class="kw">in</span> data.groupby(<span class="st">&#39;scientific_name&#39;</span>, </a>
+<a class="sourceLine" id="cb32-3" title="3">                                                      as_index<span class="op">=</span><span class="va">False</span>)]</a>
+<a class="sourceLine" id="cb32-4" title="4"></a>
+<a class="sourceLine" id="cb32-5" title="5"></a>
+<a class="sourceLine" id="cb32-6" title="6"><span class="co"># function to get unique vals anc convert to gpd</span></a>
+<a class="sourceLine" id="cb32-7" title="7"><span class="kw">def</span> convData(somedata):</a>
+<a class="sourceLine" id="cb32-8" title="8">    somedata <span class="op">=</span> somedata.drop_duplicates(subset<span class="op">=</span></a>
+<a class="sourceLine" id="cb32-9" title="9">    [<span class="st">&#39;longitude&#39;</span>,<span class="st">&#39;latitude&#39;</span>])[[<span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;latitude&#39;</span>, <span class="st">&#39;scientific_name&#39;</span>]]</a>
+<a class="sourceLine" id="cb32-10" title="10">    unique_locs <span class="op">=</span> gpd.GeoDataFrame(somedata,</a>
+<a class="sourceLine" id="cb32-11" title="11">                                  geometry<span class="op">=</span>gpd.points_from_xy(somedata.longitude, </a>
+<a class="sourceLine" id="cb32-12" title="12">                                  somedata.latitude))</a>
+<a class="sourceLine" id="cb32-13" title="13">    unique_locs.crs <span class="op">=</span> {<span class="st">&#39;init&#39;</span> :<span class="st">&#39;epsg:4326&#39;</span>}</a>
+<a class="sourceLine" id="cb32-14" title="14">    unique_locs <span class="op">=</span> unique_locs.to_crs({<span class="st">&#39;init&#39;</span>: <span class="st">&#39;epsg:32643&#39;</span>})</a>
+<a class="sourceLine" id="cb32-15" title="15">    dists <span class="op">=</span> ckdnearest_point(unique_locs, unique_locs)</a>
+<a class="sourceLine" id="cb32-16" title="16">    unique_locs <span class="op">=</span> pd.DataFrame(unique_locs.drop(columns<span class="op">=</span><span class="st">&#39;geometry&#39;</span>))</a>
+<a class="sourceLine" id="cb32-17" title="17">    unique_locs[<span class="st">&#39;nnb&#39;</span>] <span class="op">=</span> dists</a>
+<a class="sourceLine" id="cb32-18" title="18">    <span class="cf">return</span> unique_locs</a>
+<a class="sourceLine" id="cb32-19" title="19"></a>
+<a class="sourceLine" id="cb32-20" title="20"></a>
+<a class="sourceLine" id="cb32-21" title="21"><span class="co"># apply function to datalist</span></a>
+<a class="sourceLine" id="cb32-22" title="22">datalist <span class="op">=</span> <span class="bu">list</span>(<span class="bu">map</span>(convData, datalist))</a></code></pre></div>
 </div>
 <div id="explicit-spatial-filter" class="section level2">
 <h2><span class="header-section-number">4.4</span> Explicit spatial filter</h2>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1"><span class="co"># extract data from python</span></a>
-<a class="sourceLine" id="cb37-2" title="2">chkCovars &lt;-<span class="st"> </span>py<span class="op">$</span>chkCovars</a>
-<a class="sourceLine" id="cb37-3" title="3">chkCovars &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(chkCovars, <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb37-4" title="4"><span class="st">  `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb37-5" title="5"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
-<a class="sourceLine" id="cb37-6" title="6"></a>
-<a class="sourceLine" id="cb37-7" title="7"><span class="co"># read wg</span></a>
-<a class="sourceLine" id="cb37-8" title="8">wg &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb37-9" title="9"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
-<a class="sourceLine" id="cb37-10" title="10"></a>
-<a class="sourceLine" id="cb37-11" title="11"><span class="co"># spatial subset</span></a>
-<a class="sourceLine" id="cb37-12" title="12">chkCovars &lt;-<span class="st"> </span>chkCovars <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb37-13" title="13"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(.)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb37-14" title="14"><span class="st">  </span><span class="kw">filter</span>(id <span class="op">%in%</span><span class="st"> </span><span class="kw">unlist</span>(<span class="kw">st_contains</span>(wg, chkCovars)))</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1"><span class="co"># extract data from python</span></a>
+<a class="sourceLine" id="cb33-2" title="2">chkCovars &lt;-<span class="st"> </span>py<span class="op">$</span>chkCovars</a>
+<a class="sourceLine" id="cb33-3" title="3">chkCovars &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(chkCovars, <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb33-4" title="4"><span class="st">  `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb33-5" title="5"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
+<a class="sourceLine" id="cb33-6" title="6"></a>
+<a class="sourceLine" id="cb33-7" title="7"><span class="co"># read wg</span></a>
+<a class="sourceLine" id="cb33-8" title="8">wg &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb33-9" title="9"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
+<a class="sourceLine" id="cb33-10" title="10"></a>
+<a class="sourceLine" id="cb33-11" title="11"><span class="co"># spatial subset</span></a>
+<a class="sourceLine" id="cb33-12" title="12">chkCovars &lt;-<span class="st"> </span>chkCovars <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb33-13" title="13"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(.)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb33-14" title="14"><span class="st">  </span><span class="kw">filter</span>(id <span class="op">%in%</span><span class="st"> </span><span class="kw">unlist</span>(<span class="kw">st_contains</span>(wg, chkCovars)))</a></code></pre></div>
 </div>
 <div id="species-specific-filter" class="section level2">
 <h2><span class="header-section-number">4.5</span> Species specific filter</h2>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1"><span class="co"># extract values from python</span></a>
-<a class="sourceLine" id="cb38-2" title="2">sp_spec_data &lt;-<span class="st"> </span>py<span class="op">$</span>datalist</a>
-<a class="sourceLine" id="cb38-3" title="3"></a>
-<a class="sourceLine" id="cb38-4" title="4">sp_spec_data &lt;-<span class="st"> </span><span class="kw">map</span>(sp_spec_data, <span class="cf">function</span>(df) {</a>
-<a class="sourceLine" id="cb38-5" title="5">  df &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(df) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb38-6" title="6"><span class="st">    </span><span class="kw">st_as_sf</span>(<span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb38-7" title="7"><span class="st">    `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb38-8" title="8"><span class="st">    </span><span class="kw">st_transform</span>(<span class="dv">32643</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb38-9" title="9"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(.)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb38-10" title="10"><span class="st">    </span><span class="kw">filter</span>(id <span class="op">%in%</span><span class="st"> </span><span class="kw">unlist</span>(<span class="kw">st_contains</span>(wg, .))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb38-11" title="11"><span class="st">    </span><span class="kw">st_drop_geometry</span>()</a>
-<a class="sourceLine" id="cb38-12" title="12">})</a>
-<a class="sourceLine" id="cb38-13" title="13"></a>
-<a class="sourceLine" id="cb38-14" title="14">sp_spec_data &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(sp_spec_data)</a></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1"><span class="co"># extract values from python</span></a>
+<a class="sourceLine" id="cb34-2" title="2">sp_spec_data &lt;-<span class="st"> </span>py<span class="op">$</span>datalist</a>
+<a class="sourceLine" id="cb34-3" title="3"></a>
+<a class="sourceLine" id="cb34-4" title="4">sp_spec_data &lt;-<span class="st"> </span><span class="kw">map</span>(sp_spec_data, <span class="cf">function</span>(df) {</a>
+<a class="sourceLine" id="cb34-5" title="5">  df &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(df) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb34-6" title="6"><span class="st">    </span><span class="kw">st_as_sf</span>(<span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb34-7" title="7"><span class="st">    `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb34-8" title="8"><span class="st">    </span><span class="kw">st_transform</span>(<span class="dv">32643</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb34-9" title="9"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(.)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb34-10" title="10"><span class="st">    </span><span class="kw">filter</span>(id <span class="op">%in%</span><span class="st"> </span><span class="kw">unlist</span>(<span class="kw">st_contains</span>(wg, .))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb34-11" title="11"><span class="st">    </span><span class="kw">st_drop_geometry</span>()</a>
+<a class="sourceLine" id="cb34-12" title="12">})</a>
+<a class="sourceLine" id="cb34-13" title="13"></a>
+<a class="sourceLine" id="cb34-14" title="14">sp_spec_data &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(sp_spec_data)</a></code></pre></div>
 </div>
 <div id="plot-histogram-distance-to-roads" class="section level2">
 <h2><span class="header-section-number">4.6</span> Plot histogram: distance to roads</h2>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1"></a>
-<a class="sourceLine" id="cb39-2" title="2"><span class="co"># make histogram</span></a>
-<a class="sourceLine" id="cb39-3" title="3">hist_roads &lt;-<span class="st"> </span><span class="kw">ggplot</span>(chkCovars) <span class="op">+</span></a>
-<a class="sourceLine" id="cb39-4" title="4"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(dist_road <span class="op">/</span><span class="st"> </span><span class="fl">1e3</span>),</a>
-<a class="sourceLine" id="cb39-5" title="5">    <span class="dt">bins =</span> <span class="dv">20</span>, <span class="dt">size =</span> <span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">&quot;steelblue&quot;</span></a>
-<a class="sourceLine" id="cb39-6" title="6">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb39-7" title="7"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;distance to roads (km)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;# checklists&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb39-8" title="8"><span class="st">  </span><span class="kw">scale_x_log10</span>(</a>
-<a class="sourceLine" id="cb39-9" title="9">    <span class="dt">label =</span> <span class="kw">label_number</span>(<span class="dt">accuracy =</span> <span class="fl">0.1</span>),</a>
-<a class="sourceLine" id="cb39-10" title="10">    <span class="dt">breaks =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="dv">1</span>, <span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb39-11" title="11">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb39-12" title="12"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">label =</span> <span class="kw">label_number</span>(</a>
-<a class="sourceLine" id="cb39-13" title="13">    <span class="dt">scale =</span> <span class="fl">0.001</span>,</a>
-<a class="sourceLine" id="cb39-14" title="14">    <span class="dt">accuracy =</span> <span class="dv">1</span>, <span class="dt">suffix =</span> <span class="st">&quot;K&quot;</span></a>
-<a class="sourceLine" id="cb39-15" title="15">  )) <span class="op">+</span></a>
-<a class="sourceLine" id="cb39-16" title="16"><span class="st">  </span><span class="kw">theme_few</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb39-17" title="17"><span class="st">  </span><span class="kw">theme</span>(</a>
-<a class="sourceLine" id="cb39-18" title="18">    <span class="dt">plot.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">colour =</span> <span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb39-19" title="19">    <span class="dt">panel.background =</span> <span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb39-20" title="20">    <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.line =</span> <span class="kw">element_blank</span>()</a>
-<a class="sourceLine" id="cb39-21" title="21">  )</a></code></pre></div>
 </div>
 <div id="table-distance-to-roads" class="section level2">
 <h2><span class="header-section-number">4.7</span> Table: Distance to roads</h2>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1"><span class="co"># write the mean and ci95 to file</span></a>
-<a class="sourceLine" id="cb40-2" title="2">chkCovars <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb40-3" title="3"><span class="st">  </span><span class="kw">st_drop_geometry</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb40-4" title="4"><span class="st">  </span><span class="kw">select</span>(dist_road, nnb) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb40-5" title="5"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">pivot_longer</span>(</a>
-<a class="sourceLine" id="cb40-6" title="6">    <span class="dt">cols =</span> <span class="kw">c</span>(<span class="st">&quot;dist_road&quot;</span>, <span class="st">&quot;nnb&quot;</span>),</a>
-<a class="sourceLine" id="cb40-7" title="7">    <span class="dt">names_to =</span> <span class="st">&quot;variable&quot;</span></a>
-<a class="sourceLine" id="cb40-8" title="8">  ) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb40-9" title="9"><span class="st">  </span><span class="kw">group_by</span>(variable) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb40-10" title="10"><span class="st">  </span><span class="kw">summarise_at</span>(</a>
-<a class="sourceLine" id="cb40-11" title="11">    <span class="kw">vars</span>(value),</a>
-<a class="sourceLine" id="cb40-12" title="12">    <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span><span class="kw">mean</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">sd</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">min</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">max</span>(.))</a>
-<a class="sourceLine" id="cb40-13" title="13">  ) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb40-14" title="14"><span class="st">  </span><span class="kw">write_csv</span>(<span class="st">&quot;data/results/distance_roads_sites.csv&quot;</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1"><span class="co"># read in and show</span></a>
-<a class="sourceLine" id="cb41-2" title="2"><span class="kw">library</span>(magrittr)</a>
-<a class="sourceLine" id="cb41-3" title="3">readr<span class="op">::</span><span class="kw">read_csv</span>(<span class="st">&quot;data/results/distance_roads_sites.csv&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb41-4" title="4"><span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1"><span class="co"># write the mean and ci95 to file</span></a>
+<a class="sourceLine" id="cb35-2" title="2">chkCovars <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb35-3" title="3"><span class="st">  </span><span class="kw">st_drop_geometry</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb35-4" title="4"><span class="st">  </span><span class="kw">select</span>(dist_road, nnb) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb35-5" title="5"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">pivot_longer</span>(</a>
+<a class="sourceLine" id="cb35-6" title="6">    <span class="dt">cols =</span> <span class="kw">c</span>(<span class="st">&quot;dist_road&quot;</span>, <span class="st">&quot;nnb&quot;</span>),</a>
+<a class="sourceLine" id="cb35-7" title="7">    <span class="dt">names_to =</span> <span class="st">&quot;variable&quot;</span></a>
+<a class="sourceLine" id="cb35-8" title="8">  ) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb35-9" title="9"><span class="st">  </span><span class="kw">group_by</span>(variable) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb35-10" title="10"><span class="st">  </span><span class="kw">summarise_at</span>(</a>
+<a class="sourceLine" id="cb35-11" title="11">    <span class="kw">vars</span>(value),</a>
+<a class="sourceLine" id="cb35-12" title="12">    <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span><span class="kw">mean</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">sd</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">min</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">max</span>(.))</a>
+<a class="sourceLine" id="cb35-13" title="13">  ) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb35-14" title="14"><span class="st">  </span><span class="kw">write_csv</span>(<span class="st">&quot;data/results/distance_roads_sites.csv&quot;</span>)</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -509,73 +483,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 </tbody>
 </table>
+<p><strong>Does this table need a caption?</strong></p>
 </div>
-<div id="plot-histogram-distance-to-nearest-site" class="section level2">
-<h2><span class="header-section-number">4.8</span> Plot histogram: distance to nearest site</h2>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1"><span class="co"># get unique locations</span></a>
-<a class="sourceLine" id="cb42-2" title="2">locs &lt;-<span class="st"> </span>py<span class="op">$</span>unique_locs</a>
-<a class="sourceLine" id="cb42-3" title="3"></a>
-<a class="sourceLine" id="cb42-4" title="4"><span class="co"># make histogram of nearest neighbours</span></a>
-<a class="sourceLine" id="cb42-5" title="5">hist_sites &lt;-</a>
-<a class="sourceLine" id="cb42-6" title="6"><span class="st">  </span><span class="kw">ggplot</span>(locs) <span class="op">+</span></a>
-<a class="sourceLine" id="cb42-7" title="7"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(nnb <span class="op">/</span><span class="st"> </span><span class="fl">1e3</span>),</a>
-<a class="sourceLine" id="cb42-8" title="8">    <span class="dt">bins =</span> <span class="dv">100</span>, <span class="dt">size =</span> <span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">&quot;steelblue&quot;</span></a>
-<a class="sourceLine" id="cb42-9" title="9">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb42-10" title="10"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;dist. nearest site (km)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;# sites&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb42-11" title="11"><span class="st">  </span><span class="co"># scale_x_log10(label=label_number(accuracy = 0.1),</span></a>
-<a class="sourceLine" id="cb42-12" title="12"><span class="st">  </span><span class="co">#               breaks = c(0.1, 1, 10))+</span></a>
-<a class="sourceLine" id="cb42-13" title="13"><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb42-14" title="14"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">label =</span> <span class="kw">label_number</span>(</a>
-<a class="sourceLine" id="cb42-15" title="15">    <span class="dt">scale =</span> <span class="fl">0.001</span>, <span class="dt">accuracy =</span> <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb42-16" title="16">    <span class="dt">suffix =</span> <span class="st">&quot;K&quot;</span></a>
-<a class="sourceLine" id="cb42-17" title="17">  )) <span class="op">+</span></a>
-<a class="sourceLine" id="cb42-18" title="18"><span class="st">  </span><span class="kw">theme_few</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb42-19" title="19"><span class="st">  </span><span class="kw">theme</span>(</a>
-<a class="sourceLine" id="cb42-20" title="20">    <span class="dt">plot.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">colour =</span> <span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb42-21" title="21">    <span class="dt">panel.background =</span> <span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb42-22" title="22">    <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.line =</span> <span class="kw">element_blank</span>()</a>
-<a class="sourceLine" id="cb42-23" title="23">  )</a></code></pre></div>
+<div id="histograms-of-distance-to-nearest-site" class="section level2">
+<h2><span class="header-section-number">4.8</span> Histograms of distance to nearest site</h2>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1"><span class="co"># get unique locations</span></a>
+<a class="sourceLine" id="cb36-2" title="2">locs &lt;-<span class="st"> </span>py<span class="op">$</span>unique_locs</a></code></pre></div>
 </div>
-<div id="plot-species-specific-histograms-distance-to-nearest-site" class="section level2">
-<h2><span class="header-section-number">4.9</span> Plot species specific histograms: distance to nearest site</h2>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1"><span class="co"># plot histograms by species</span></a>
-<a class="sourceLine" id="cb43-2" title="2">hist_sites_sp &lt;-</a>
-<a class="sourceLine" id="cb43-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(sp_spec_data) <span class="op">+</span></a>
-<a class="sourceLine" id="cb43-4" title="4"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(nnb <span class="op">/</span><span class="st"> </span><span class="fl">1e3</span>),</a>
-<a class="sourceLine" id="cb43-5" title="5">    <span class="dt">bins =</span> <span class="dv">100</span>, <span class="dt">size =</span> <span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">&quot;steelblue&quot;</span></a>
-<a class="sourceLine" id="cb43-6" title="6">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb43-7" title="7"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;dist. nearest site (km)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;# sites&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb43-8" title="8"><span class="st">  </span><span class="co"># scale_x_log10(label=label_number(accuracy = 0.1),</span></a>
-<a class="sourceLine" id="cb43-9" title="9"><span class="st">  </span><span class="co">#               breaks = c(0.1, 1, 10))+</span></a>
-<a class="sourceLine" id="cb43-10" title="10"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>scientific_name) <span class="op">+</span></a>
-<a class="sourceLine" id="cb43-11" title="11"><span class="st">  </span><span class="kw">scale_x_log10</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb43-12" title="12"><span class="st">  </span><span class="co"># coord_cartesian(xlim=c(0,10))+</span></a>
-<a class="sourceLine" id="cb43-13" title="13"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">label =</span> <span class="kw">label_number</span>(</a>
-<a class="sourceLine" id="cb43-14" title="14">    <span class="dt">scale =</span> <span class="fl">0.001</span>, <span class="dt">accuracy =</span> <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb43-15" title="15">    <span class="dt">suffix =</span> <span class="st">&quot;K&quot;</span></a>
-<a class="sourceLine" id="cb43-16" title="16">  )) <span class="op">+</span></a>
-<a class="sourceLine" id="cb43-17" title="17"><span class="st">  </span><span class="kw">theme_few</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb43-18" title="18"><span class="st">  </span><span class="kw">theme</span>(</a>
-<a class="sourceLine" id="cb43-19" title="19">    <span class="dt">plot.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">colour =</span> <span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb43-20" title="20">    <span class="dt">panel.background =</span> <span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb43-21" title="21">    <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.line =</span> <span class="kw">element_blank</span>()</a>
-<a class="sourceLine" id="cb43-22" title="22">  )</a>
-<a class="sourceLine" id="cb43-23" title="23"></a>
-<a class="sourceLine" id="cb43-24" title="24"><span class="kw">ggsave</span>(hist_sites_sp, <span class="dt">filename =</span> <span class="st">&quot;figs/fig_nnb_species.png&quot;</span>)</a></code></pre></div>
-</div>
-<div id="table-species-specific-nearest-site" class="section level2">
-<h2><span class="header-section-number">4.10</span> Table: Species specific nearest site</h2>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1"><span class="co"># write the mean and ci95 to file</span></a>
-<a class="sourceLine" id="cb44-2" title="2">sp_spec_data <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb44-3" title="3"><span class="st">  </span><span class="kw">group_by</span>(scientific_name) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb44-4" title="4"><span class="st">  </span><span class="kw">summarise_at</span>(</a>
-<a class="sourceLine" id="cb44-5" title="5">    <span class="kw">vars</span>(nnb),</a>
-<a class="sourceLine" id="cb44-6" title="6">    <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span><span class="kw">mean</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">sd</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">ci</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">min</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">max</span>(.))</a>
-<a class="sourceLine" id="cb44-7" title="7">  ) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb44-8" title="8"><span class="st">  </span><span class="kw">write_csv</span>(<span class="st">&quot;data/results/dist_nnb_species_specific.csv&quot;</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1"><span class="co"># show table of distance to nearest site for each species</span></a>
-<a class="sourceLine" id="cb45-2" title="2">readr<span class="op">::</span><span class="kw">read_csv</span>(<span class="st">&quot;data/results/dist_nnb_species_specific.csv&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb45-3" title="3"><span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>()</a></code></pre></div>
+<div id="table-nearest-site-where-the-species-was-seen" class="section level2">
+<h2><span class="header-section-number">4.9</span> Table: Nearest site where the species was seen</h2>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1"><span class="co"># write the mean and ci95 to file</span></a>
+<a class="sourceLine" id="cb37-2" title="2">sp_spec_data <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb37-3" title="3"><span class="st">  </span><span class="kw">group_by</span>(scientific_name) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb37-4" title="4"><span class="st">  </span><span class="kw">summarise_at</span>(</a>
+<a class="sourceLine" id="cb37-5" title="5">    <span class="kw">vars</span>(nnb),</a>
+<a class="sourceLine" id="cb37-6" title="6">    <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span><span class="kw">mean</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">sd</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">ci</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">min</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">max</span>(.))</a>
+<a class="sourceLine" id="cb37-7" title="7">  ) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb37-8" title="8"><span class="st">  </span><span class="kw">write_csv</span>(<span class="st">&quot;data/results/dist_nnb_species_specific.csv&quot;</span>)</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -926,116 +850,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 </tbody>
 </table>
-<p>Histograms showing the species-specific distances to nearest neighbouring site.</p>
-<p><img src="figs/fig_nnb_species.png" /></p>
-</div>
-<div id="plot-map-points-on-roads" class="section level2">
-<h2><span class="header-section-number">4.11</span> Plot map: points on roads</h2>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1">roads &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/roads_studysite_2019/roads_studysite_2019.shp&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb46-2" title="2"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
-<a class="sourceLine" id="cb46-3" title="3">points &lt;-<span class="st"> </span>chkCovars <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb46-4" title="4"><span class="st">  </span><span class="kw">bind_cols</span>(<span class="kw">as_tibble</span>(<span class="kw">st_coordinates</span>(.))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb46-5" title="5"><span class="st">  </span><span class="kw">st_drop_geometry</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb46-6" title="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">X =</span> <span class="kw">round_any</span>(X, <span class="dv">2500</span>), <span class="dt">Y =</span> <span class="kw">round_any</span>(Y, <span class="dv">2500</span>))</a>
-<a class="sourceLine" id="cb46-7" title="7"></a>
-<a class="sourceLine" id="cb46-8" title="8">points &lt;-<span class="st"> </span><span class="kw">count</span>(points, X, Y)</a>
-<a class="sourceLine" id="cb46-9" title="9"></a>
-<a class="sourceLine" id="cb46-10" title="10"><span class="co"># add land</span></a>
-<a class="sourceLine" id="cb46-11" title="11"><span class="kw">library</span>(rnaturalearth)</a>
-<a class="sourceLine" id="cb46-12" title="12">land &lt;-<span class="st"> </span><span class="kw">ne_countries</span>(</a>
-<a class="sourceLine" id="cb46-13" title="13">  <span class="dt">scale =</span> <span class="dv">50</span>, <span class="dt">type =</span> <span class="st">&quot;countries&quot;</span>, <span class="dt">continent =</span> <span class="st">&quot;asia&quot;</span>,</a>
-<a class="sourceLine" id="cb46-14" title="14">  <span class="dt">country =</span> <span class="st">&quot;india&quot;</span>,</a>
-<a class="sourceLine" id="cb46-15" title="15">  <span class="dt">returnclass =</span> <span class="kw">c</span>(<span class="st">&quot;sf&quot;</span>)</a>
-<a class="sourceLine" id="cb46-16" title="16">) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb46-17" title="17"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
-<a class="sourceLine" id="cb46-18" title="18"></a>
-<a class="sourceLine" id="cb46-19" title="19">bbox &lt;-<span class="st"> </span><span class="kw">st_bbox</span>(wg)</a></code></pre></div>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1"><span class="co"># plot on maps</span></a>
-<a class="sourceLine" id="cb47-2" title="2"><span class="kw">ggplot</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb47-3" title="3"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> land, <span class="dt">fill =</span> <span class="st">&quot;grey90&quot;</span>, <span class="dt">col =</span> <span class="ot">NA</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb47-4" title="4"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> wg, <span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">col =</span> <span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb47-5" title="5"><span class="st">  </span><span class="kw">annotation_custom</span>(</a>
-<a class="sourceLine" id="cb47-6" title="6">    <span class="dt">grob =</span> hist_roads <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplotGrob</span>(),</a>
-<a class="sourceLine" id="cb47-7" title="7">    <span class="dt">xmin =</span> bbox[<span class="st">&quot;xmax&quot;</span>] <span class="op">-</span><span class="st"> </span>(bbox[<span class="st">&quot;xmax&quot;</span>] <span class="op">-</span><span class="st"> </span>bbox[<span class="st">&quot;xmin&quot;</span>]) <span class="op">/</span><span class="st"> </span><span class="fl">2.5</span>,</a>
-<a class="sourceLine" id="cb47-8" title="8">    <span class="dt">xmax =</span> bbox[<span class="st">&quot;xmax&quot;</span>],</a>
-<a class="sourceLine" id="cb47-9" title="9">    <span class="dt">ymin =</span> bbox[<span class="st">&quot;ymax&quot;</span>] <span class="op">-</span><span class="st"> </span>(bbox[<span class="st">&quot;ymax&quot;</span>] <span class="op">-</span><span class="st"> </span>bbox[<span class="st">&quot;ymin&quot;</span>]) <span class="op">/</span><span class="st"> </span><span class="dv">3</span>,</a>
-<a class="sourceLine" id="cb47-10" title="10">    <span class="dt">ymax =</span> bbox[<span class="st">&quot;ymax&quot;</span>]</a>
-<a class="sourceLine" id="cb47-11" title="11">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb47-12" title="12"><span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">data =</span> points, <span class="kw">aes</span>(X, Y, <span class="dt">fill =</span> n), <span class="dt">col =</span> <span class="st">&quot;grey90&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb47-13" title="13"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> roads, <span class="dt">size =</span> <span class="fl">0.2</span>, <span class="dt">col =</span> <span class="st">&quot;steelblue&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb47-14" title="14"></a>
-<a class="sourceLine" id="cb47-15" title="15"><span class="st">  </span><span class="co"># scale_colour_manual(values = &quot;steelblue&quot;, labels = &quot;roads&quot;)+</span></a>
-<a class="sourceLine" id="cb47-16" title="16"></a>
-<a class="sourceLine" id="cb47-17" title="17"><span class="st">  </span><span class="kw">scale_fill_scico</span>(<span class="dt">trans =</span> <span class="st">&quot;log10&quot;</span>, <span class="dt">palette =</span> <span class="st">&quot;lajolla&quot;</span>, <span class="dt">values =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb47-18" title="18"><span class="st">  </span><span class="kw">annotation_north_arrow</span>(</a>
-<a class="sourceLine" id="cb47-19" title="19">    <span class="dt">location =</span> <span class="st">&quot;br&quot;</span>, <span class="dt">which_north =</span> <span class="st">&quot;true&quot;</span>,</a>
-<a class="sourceLine" id="cb47-20" title="20">    <span class="dt">pad_x =</span> <span class="kw">unit</span>(<span class="fl">0.1</span>, <span class="st">&quot;in&quot;</span>), <span class="dt">pad_y =</span> <span class="kw">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;in&quot;</span>),</a>
-<a class="sourceLine" id="cb47-21" title="21">    <span class="dt">style =</span> north_arrow_fancy_orienteering</a>
-<a class="sourceLine" id="cb47-22" title="22">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb47-23" title="23"><span class="st">  </span><span class="kw">annotation_scale</span>(<span class="dt">location =</span> <span class="st">&quot;br&quot;</span>, <span class="dt">width_hint =</span> <span class="fl">0.4</span>, <span class="dt">text_cex =</span> <span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb47-24" title="24"><span class="st">  </span><span class="kw">theme_few</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb47-25" title="25"><span class="st">  </span><span class="kw">theme</span>(</a>
-<a class="sourceLine" id="cb47-26" title="26">    <span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="fl">0.9</span>, <span class="fl">0.55</span>),</a>
-<a class="sourceLine" id="cb47-27" title="27">    <span class="dt">legend.background =</span> <span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb47-28" title="28">    <span class="dt">legend.key =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;grey90&quot;</span>),</a>
-<a class="sourceLine" id="cb47-29" title="29">    <span class="dt">axis.title =</span> <span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb47-30" title="30">    <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;lightblue&quot;</span>)</a>
-<a class="sourceLine" id="cb47-31" title="31">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb47-32" title="32"><span class="st">  </span><span class="kw">coord_sf</span>(</a>
-<a class="sourceLine" id="cb47-33" title="33">    <span class="dt">expand =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb47-34" title="34">    <span class="dt">xlim =</span> bbox[<span class="kw">c</span>(<span class="st">&quot;xmin&quot;</span>, <span class="st">&quot;xmax&quot;</span>)],</a>
-<a class="sourceLine" id="cb47-35" title="35">    <span class="dt">ylim =</span> bbox[<span class="kw">c</span>(<span class="st">&quot;ymin&quot;</span>, <span class="st">&quot;ymax&quot;</span>)]</a>
-<a class="sourceLine" id="cb47-36" title="36">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb47-37" title="37"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;checklists&quot;</span>, <span class="dt">colour =</span> <span class="ot">NULL</span>)</a>
-<a class="sourceLine" id="cb47-38" title="38"></a>
-<a class="sourceLine" id="cb47-39" title="39"><span class="co"># save figure</span></a>
-<a class="sourceLine" id="cb47-40" title="40"><span class="kw">ggsave</span>(<span class="dt">filename =</span> <span class="st">&quot;figs/fig_distRoads.png&quot;</span>, <span class="dt">device =</span> <span class="kw">png</span>())</a>
-<a class="sourceLine" id="cb47-41" title="41"><span class="kw">dev.off</span>()</a></code></pre></div>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1"><span class="co"># transform points to utm</span></a>
-<a class="sourceLine" id="cb48-2" title="2">locs &lt;-<span class="st"> </span>locs <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb48-3" title="3"><span class="st">  </span><span class="kw">st_as_sf</span>(<span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb48-4" title="4"><span class="st">  `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb48-5" title="5"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
-<a class="sourceLine" id="cb48-6" title="6"></a>
-<a class="sourceLine" id="cb48-7" title="7"><span class="co"># add nnb to locations</span></a>
-<a class="sourceLine" id="cb48-8" title="8"><span class="kw">ggplot</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb48-9" title="9"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> land, <span class="dt">fill =</span> <span class="st">&quot;grey90&quot;</span>, <span class="dt">col =</span> <span class="ot">NA</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb48-10" title="10"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> wg, <span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">col =</span> <span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb48-11" title="11"><span class="st">  </span><span class="kw">annotation_custom</span>(</a>
-<a class="sourceLine" id="cb48-12" title="12">    <span class="dt">grob =</span> hist_sites <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplotGrob</span>(),</a>
-<a class="sourceLine" id="cb48-13" title="13">    <span class="dt">xmin =</span> bbox[<span class="st">&quot;xmax&quot;</span>] <span class="op">-</span><span class="st"> </span>(bbox[<span class="st">&quot;xmax&quot;</span>] <span class="op">-</span><span class="st"> </span>bbox[<span class="st">&quot;xmin&quot;</span>]) <span class="op">/</span><span class="st"> </span><span class="fl">2.5</span>,</a>
-<a class="sourceLine" id="cb48-14" title="14">    <span class="dt">xmax =</span> bbox[<span class="st">&quot;xmax&quot;</span>],</a>
-<a class="sourceLine" id="cb48-15" title="15">    <span class="dt">ymin =</span> bbox[<span class="st">&quot;ymax&quot;</span>] <span class="op">-</span><span class="st"> </span>(bbox[<span class="st">&quot;ymax&quot;</span>] <span class="op">-</span><span class="st"> </span>bbox[<span class="st">&quot;ymin&quot;</span>]) <span class="op">/</span><span class="st"> </span><span class="dv">3</span>,</a>
-<a class="sourceLine" id="cb48-16" title="16">    <span class="dt">ymax =</span> bbox[<span class="st">&quot;ymax&quot;</span>]</a>
-<a class="sourceLine" id="cb48-17" title="17">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb48-18" title="18"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> roads, <span class="dt">size =</span> <span class="fl">0.2</span>, <span class="dt">col =</span> <span class="st">&quot;steelblue&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb48-19" title="19"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> locs, <span class="kw">aes</span>(<span class="dt">col =</span> nnb <span class="op">/</span><span class="st"> </span><span class="dv">1000</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb48-20" title="20"><span class="st">  </span><span class="kw">scale_colour_scico</span>(</a>
-<a class="sourceLine" id="cb48-21" title="21">    <span class="dt">palette =</span> <span class="st">&quot;oslo&quot;</span>, <span class="dt">values =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">direction =</span> <span class="dv">-1</span>, <span class="dt">limits =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">5</span>),</a>
-<a class="sourceLine" id="cb48-22" title="22">    <span class="dt">na.value =</span> <span class="st">&quot;indianred&quot;</span></a>
-<a class="sourceLine" id="cb48-23" title="23">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb48-24" title="24"><span class="st">  </span><span class="kw">annotation_north_arrow</span>(</a>
-<a class="sourceLine" id="cb48-25" title="25">    <span class="dt">location =</span> <span class="st">&quot;br&quot;</span>, <span class="dt">which_north =</span> <span class="st">&quot;true&quot;</span>,</a>
-<a class="sourceLine" id="cb48-26" title="26">    <span class="dt">pad_x =</span> <span class="kw">unit</span>(<span class="fl">0.1</span>, <span class="st">&quot;in&quot;</span>), <span class="dt">pad_y =</span> <span class="kw">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;in&quot;</span>),</a>
-<a class="sourceLine" id="cb48-27" title="27">    <span class="dt">style =</span> north_arrow_fancy_orienteering</a>
-<a class="sourceLine" id="cb48-28" title="28">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb48-29" title="29"><span class="st">  </span><span class="kw">annotation_scale</span>(<span class="dt">location =</span> <span class="st">&quot;br&quot;</span>, <span class="dt">width_hint =</span> <span class="fl">0.4</span>, <span class="dt">text_cex =</span> <span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb48-30" title="30"><span class="st">  </span><span class="kw">theme_few</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb48-31" title="31"><span class="st">  </span><span class="kw">theme</span>(</a>
-<a class="sourceLine" id="cb48-32" title="32">    <span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="fl">0.9</span>, <span class="fl">0.55</span>),</a>
-<a class="sourceLine" id="cb48-33" title="33">    <span class="dt">legend.background =</span> <span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb48-34" title="34">    <span class="dt">legend.key =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;grey90&quot;</span>),</a>
-<a class="sourceLine" id="cb48-35" title="35">    <span class="dt">axis.title =</span> <span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb48-36" title="36">    <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;lightblue&quot;</span>)</a>
-<a class="sourceLine" id="cb48-37" title="37">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb48-38" title="38"><span class="st">  </span><span class="kw">coord_sf</span>(</a>
-<a class="sourceLine" id="cb48-39" title="39">    <span class="dt">expand =</span> <span class="ot">FALSE</span>, <span class="dt">xlim =</span> bbox[<span class="kw">c</span>(<span class="st">&quot;xmin&quot;</span>, <span class="st">&quot;xmax&quot;</span>)],</a>
-<a class="sourceLine" id="cb48-40" title="40">    <span class="dt">ylim =</span> bbox[<span class="kw">c</span>(<span class="st">&quot;ymin&quot;</span>, <span class="st">&quot;ymax&quot;</span>)]</a>
-<a class="sourceLine" id="cb48-41" title="41">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb48-42" title="42"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;checklists&quot;</span>, <span class="dt">colour =</span> <span class="ot">NULL</span>)</a></code></pre></div>
+<p><strong>Is this figure necessary here?</strong></p>
 <div class="figure">
-<img src="figs/fig_distRoads.png" alt="Checklist locations across the Nilgiris, Anamalais and the Palani hills. Inset histogram shows checklists’ distance to the nearest road, with the X-axis on a log-scale." />
-<p class="caption">Checklist locations across the Nilgiris, Anamalais and the Palani hills. Inset histogram shows checklists’ distance to the nearest road, with the X-axis on a log-scale.</p>
+<img src="figs/fig_nnb_species.png" alt="Histograms showing the species-specific distances to nearest neighbouring site." />
+<p class="caption">Histograms showing the species-specific distances to nearest neighbouring site.</p>
+</div>
+</div>
+<div id="visualise-distance-to-roads-and-nearest-site" class="section level2">
+<h2><span class="header-section-number">4.10</span> Visualise distance to roads and nearest site</h2>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1">roads &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/roads_studysite_2019/roads_studysite_2019.shp&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb38-2" title="2"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
+<a class="sourceLine" id="cb38-3" title="3">points &lt;-<span class="st"> </span>chkCovars <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb38-4" title="4"><span class="st">  </span><span class="kw">bind_cols</span>(<span class="kw">as_tibble</span>(<span class="kw">st_coordinates</span>(.))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb38-5" title="5"><span class="st">  </span><span class="kw">st_drop_geometry</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb38-6" title="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">X =</span> <span class="kw">round_any</span>(X, <span class="dv">2500</span>), <span class="dt">Y =</span> <span class="kw">round_any</span>(Y, <span class="dv">2500</span>))</a>
+<a class="sourceLine" id="cb38-7" title="7"></a>
+<a class="sourceLine" id="cb38-8" title="8">points &lt;-<span class="st"> </span><span class="kw">count</span>(points, X, Y)</a>
+<a class="sourceLine" id="cb38-9" title="9"></a>
+<a class="sourceLine" id="cb38-10" title="10"><span class="co"># add land</span></a>
+<a class="sourceLine" id="cb38-11" title="11"><span class="kw">library</span>(rnaturalearth)</a>
+<a class="sourceLine" id="cb38-12" title="12">land &lt;-<span class="st"> </span><span class="kw">ne_countries</span>(</a>
+<a class="sourceLine" id="cb38-13" title="13">  <span class="dt">scale =</span> <span class="dv">50</span>, <span class="dt">type =</span> <span class="st">&quot;countries&quot;</span>, <span class="dt">continent =</span> <span class="st">&quot;asia&quot;</span>,</a>
+<a class="sourceLine" id="cb38-14" title="14">  <span class="dt">country =</span> <span class="st">&quot;india&quot;</span>,</a>
+<a class="sourceLine" id="cb38-15" title="15">  <span class="dt">returnclass =</span> <span class="kw">c</span>(<span class="st">&quot;sf&quot;</span>)</a>
+<a class="sourceLine" id="cb38-16" title="16">) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb38-17" title="17"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
+<a class="sourceLine" id="cb38-18" title="18"></a>
+<a class="sourceLine" id="cb38-19" title="19">bbox &lt;-<span class="st"> </span><span class="kw">st_bbox</span>(wg)</a></code></pre></div>
+<div class="figure">
+<img src="figs/fig_distRoads.png" alt="Distribution of checklist locations across the Nilgiri, Anamalai and Palani Hills. Inset histogram shows the distribution of checklists’ distance to the nearest road, with the X-axis on a log-scale." />
+<p class="caption">Distribution of checklist locations across the Nilgiri, Anamalai and Palani Hills. Inset histogram shows the distribution of checklists’ distance to the nearest road, with the X-axis on a log-scale.</p>
 </div>
 
 </div>
@@ -1079,7 +923,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["ebird_occupancy_main_text.pdf"],
+"download": null,
 "toc": {
 "collapse": "section"
 }

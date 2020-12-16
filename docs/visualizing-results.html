@@ -177,10 +177,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.5" data-path="distance-to-roads.html"><a href="distance-to-roads.html#species-specific-filter"><i class="fa fa-check"></i><b>4.5</b> Species specific filter</a></li>
 <li class="chapter" data-level="4.6" data-path="distance-to-roads.html"><a href="distance-to-roads.html#plot-histogram-distance-to-roads"><i class="fa fa-check"></i><b>4.6</b> Plot histogram: distance to roads</a></li>
 <li class="chapter" data-level="4.7" data-path="distance-to-roads.html"><a href="distance-to-roads.html#table-distance-to-roads"><i class="fa fa-check"></i><b>4.7</b> Table: Distance to roads</a></li>
-<li class="chapter" data-level="4.8" data-path="distance-to-roads.html"><a href="distance-to-roads.html#plot-histogram-distance-to-nearest-site"><i class="fa fa-check"></i><b>4.8</b> Plot histogram: distance to nearest site</a></li>
-<li class="chapter" data-level="4.9" data-path="distance-to-roads.html"><a href="distance-to-roads.html#plot-species-specific-histograms-distance-to-nearest-site"><i class="fa fa-check"></i><b>4.9</b> Plot species specific histograms: distance to nearest site</a></li>
-<li class="chapter" data-level="4.10" data-path="distance-to-roads.html"><a href="distance-to-roads.html#table-species-specific-nearest-site"><i class="fa fa-check"></i><b>4.10</b> Table: Species specific nearest site</a></li>
-<li class="chapter" data-level="4.11" data-path="distance-to-roads.html"><a href="distance-to-roads.html#plot-map-points-on-roads"><i class="fa fa-check"></i><b>4.11</b> Plot map: points on roads</a></li>
+<li class="chapter" data-level="4.8" data-path="distance-to-roads.html"><a href="distance-to-roads.html#histograms-of-distance-to-nearest-site"><i class="fa fa-check"></i><b>4.8</b> Histograms of distance to nearest site</a></li>
+<li class="chapter" data-level="4.9" data-path="distance-to-roads.html"><a href="distance-to-roads.html#table-nearest-site-where-the-species-was-seen"><i class="fa fa-check"></i><b>4.9</b> Table: Nearest site where the species was seen</a></li>
+<li class="chapter" data-level="4.10" data-path="distance-to-roads.html"><a href="distance-to-roads.html#visualise-distance-to-roads-and-nearest-site"><i class="fa fa-check"></i><b>4.10</b> Visualise distance to roads and nearest site</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="prepare-observer-expertise.html"><a href="prepare-observer-expertise.html"><i class="fa fa-check"></i><b>5</b> Prepare observer expertise</a><ul>
 <li class="chapter" data-level="5.0.1" data-path="prepare-observer-expertise.html"><a href="prepare-observer-expertise.html#prepare-libraries-2"><i class="fa fa-check"></i><b>5.0.1</b> Prepare libraries</a></li>
@@ -253,146 +252,146 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>In this section, we will visualize the cumulative AIC weights and the magnitude and direction of species-specific probability of occupancy</p>
 <div id="prepare-libraries-3" class="section level3">
 <h3><span class="header-section-number">8.0.1</span> Prepare libraries</h3>
-<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" title="1"><span class="co"># to load data</span></a>
-<a class="sourceLine" id="cb78-2" title="2"><span class="kw">library</span>(readxl)</a>
-<a class="sourceLine" id="cb78-3" title="3"></a>
-<a class="sourceLine" id="cb78-4" title="4"><span class="co"># to handle data</span></a>
-<a class="sourceLine" id="cb78-5" title="5"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb78-6" title="6"><span class="kw">library</span>(readr)</a>
-<a class="sourceLine" id="cb78-7" title="7"><span class="kw">library</span>(forcats)</a>
-<a class="sourceLine" id="cb78-8" title="8"><span class="kw">library</span>(tidyr)</a>
-<a class="sourceLine" id="cb78-9" title="9"><span class="kw">library</span>(purrr)</a>
-<a class="sourceLine" id="cb78-10" title="10"><span class="kw">library</span>(stringr)</a>
-<a class="sourceLine" id="cb78-11" title="11"><span class="kw">library</span>(data.table)</a>
-<a class="sourceLine" id="cb78-12" title="12"></a>
-<a class="sourceLine" id="cb78-13" title="13"><span class="co"># to wrangle models</span></a>
-<a class="sourceLine" id="cb78-14" title="14"><span class="kw">source</span>(<span class="st">&quot;code/fun_model_estimate_collection.r&quot;</span>)</a>
-<a class="sourceLine" id="cb78-15" title="15"><span class="kw">source</span>(<span class="st">&quot;code/fun_make_resp_data.r&quot;</span>)</a>
-<a class="sourceLine" id="cb78-16" title="16"></a>
-<a class="sourceLine" id="cb78-17" title="17"><span class="co"># nice tables</span></a>
-<a class="sourceLine" id="cb78-18" title="18"><span class="kw">library</span>(knitr)</a>
-<a class="sourceLine" id="cb78-19" title="19"><span class="kw">library</span>(kableExtra)</a>
-<a class="sourceLine" id="cb78-20" title="20"></a>
-<a class="sourceLine" id="cb78-21" title="21"><span class="co"># plotting</span></a>
-<a class="sourceLine" id="cb78-22" title="22"><span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb78-23" title="23"><span class="kw">library</span>(patchwork)</a>
-<a class="sourceLine" id="cb78-24" title="24"><span class="kw">source</span>(<span class="st">&quot;code/fun_plot_interaction.r&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" title="1"><span class="co"># to load data</span></a>
+<a class="sourceLine" id="cb68-2" title="2"><span class="kw">library</span>(readxl)</a>
+<a class="sourceLine" id="cb68-3" title="3"></a>
+<a class="sourceLine" id="cb68-4" title="4"><span class="co"># to handle data</span></a>
+<a class="sourceLine" id="cb68-5" title="5"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb68-6" title="6"><span class="kw">library</span>(readr)</a>
+<a class="sourceLine" id="cb68-7" title="7"><span class="kw">library</span>(forcats)</a>
+<a class="sourceLine" id="cb68-8" title="8"><span class="kw">library</span>(tidyr)</a>
+<a class="sourceLine" id="cb68-9" title="9"><span class="kw">library</span>(purrr)</a>
+<a class="sourceLine" id="cb68-10" title="10"><span class="kw">library</span>(stringr)</a>
+<a class="sourceLine" id="cb68-11" title="11"><span class="kw">library</span>(data.table)</a>
+<a class="sourceLine" id="cb68-12" title="12"></a>
+<a class="sourceLine" id="cb68-13" title="13"><span class="co"># to wrangle models</span></a>
+<a class="sourceLine" id="cb68-14" title="14"><span class="kw">source</span>(<span class="st">&quot;code/fun_model_estimate_collection.r&quot;</span>)</a>
+<a class="sourceLine" id="cb68-15" title="15"><span class="kw">source</span>(<span class="st">&quot;code/fun_make_resp_data.r&quot;</span>)</a>
+<a class="sourceLine" id="cb68-16" title="16"></a>
+<a class="sourceLine" id="cb68-17" title="17"><span class="co"># nice tables</span></a>
+<a class="sourceLine" id="cb68-18" title="18"><span class="kw">library</span>(knitr)</a>
+<a class="sourceLine" id="cb68-19" title="19"><span class="kw">library</span>(kableExtra)</a>
+<a class="sourceLine" id="cb68-20" title="20"></a>
+<a class="sourceLine" id="cb68-21" title="21"><span class="co"># plotting</span></a>
+<a class="sourceLine" id="cb68-22" title="22"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb68-23" title="23"><span class="kw">library</span>(patchwork)</a>
+<a class="sourceLine" id="cb68-24" title="24"><span class="kw">source</span>(<span class="st">&quot;code/fun_plot_interaction.r&quot;</span>)</a></code></pre></div>
 </div>
 <div id="read-the-final-list-of-species" class="section level2">
 <h2><span class="header-section-number">8.1</span> Read the final list of species</h2>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" title="1"><span class="co"># list of species</span></a>
-<a class="sourceLine" id="cb79-2" title="2">species &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/species_list.csv&quot;</span>)</a>
-<a class="sourceLine" id="cb79-3" title="3">list_of_species &lt;-<span class="st"> </span><span class="kw">as.character</span>(species<span class="op">$</span>scientific_name)</a></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" title="1"><span class="co"># list of species</span></a>
+<a class="sourceLine" id="cb69-2" title="2">species &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/species_list.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb69-3" title="3">list_of_species &lt;-<span class="st"> </span><span class="kw">as.character</span>(species<span class="op">$</span>scientific_name)</a></code></pre></div>
 </div>
 <div id="show-aic-weights" class="section level2">
 <h2><span class="header-section-number">8.2</span> Show AIC weights</h2>
 <div id="read-in-weight-data" class="section level3">
 <h3><span class="header-section-number">8.2.1</span> Read in weight data</h3>
-<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" title="1"><span class="co"># which files to read</span></a>
-<a class="sourceLine" id="cb80-2" title="2">file_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;data/results/occu-2.5km/occuCovs/modelImp/lc-clim-imp.xlsx&quot;</span>)</a>
-<a class="sourceLine" id="cb80-3" title="3"></a>
-<a class="sourceLine" id="cb80-4" title="4"><span class="co"># read in sheets by species</span></a>
-<a class="sourceLine" id="cb80-5" title="5">model_imp &lt;-<span class="st"> </span><span class="kw">map</span>(file_names, <span class="cf">function</span>(f) {</a>
-<a class="sourceLine" id="cb80-6" title="6">  md_list &lt;-<span class="st"> </span><span class="kw">map</span>(list_of_species, <span class="cf">function</span>(sn) {</a>
-<a class="sourceLine" id="cb80-7" title="7">    </a>
-<a class="sourceLine" id="cb80-8" title="8">    <span class="co"># some sheets are not found</span></a>
-<a class="sourceLine" id="cb80-9" title="9">    </a>
-<a class="sourceLine" id="cb80-10" title="10">    <span class="kw">tryCatch</span>({</a>
-<a class="sourceLine" id="cb80-11" title="11">      </a>
-<a class="sourceLine" id="cb80-12" title="12">      readxl<span class="op">::</span><span class="kw">read_excel</span>(f, <span class="dt">sheet =</span> sn) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb80-13" title="13"><span class="st">        `</span><span class="dt">colnames&lt;-</span><span class="st">`</span>(<span class="kw">c</span>(<span class="st">&quot;predictor&quot;</span>, <span class="st">&quot;AIC_weight&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb80-14" title="14"><span class="st">        </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(predictor, <span class="st">&quot;psi&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb80-15" title="15"><span class="st">        </span><span class="kw">mutate</span>(<span class="dt">predictor =</span> stringr<span class="op">::</span><span class="kw">str_extract</span>(predictor, </a>
-<a class="sourceLine" id="cb80-16" title="16">                                <span class="dt">pattern =</span> stringr<span class="op">::</span><span class="kw">regex</span>(<span class="st">&quot;</span><span class="ch">\\</span><span class="st">((.*?)</span><span class="ch">\\</span><span class="st">)&quot;</span>)),</a>
-<a class="sourceLine" id="cb80-17" title="17">               <span class="dt">predictor =</span> stringr<span class="op">::</span><span class="kw">str_replace_all</span>(predictor, <span class="st">&quot;[//(//)]&quot;</span>, <span class="st">&quot;&quot;</span>),</a>
-<a class="sourceLine" id="cb80-18" title="18">               <span class="dt">predictor =</span> stringr<span class="op">::</span><span class="kw">str_remove</span>(predictor, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">.y&quot;</span>))</a>
-<a class="sourceLine" id="cb80-19" title="19">      </a>
-<a class="sourceLine" id="cb80-20" title="20">      },</a>
-<a class="sourceLine" id="cb80-21" title="21">      <span class="dt">error =</span> <span class="cf">function</span>(e) {</a>
-<a class="sourceLine" id="cb80-22" title="22">        <span class="kw">message</span>(<span class="kw">as.character</span>(e))</a>
-<a class="sourceLine" id="cb80-23" title="23">      }</a>
-<a class="sourceLine" id="cb80-24" title="24">    )</a>
-<a class="sourceLine" id="cb80-25" title="25">  })</a>
-<a class="sourceLine" id="cb80-26" title="26">  <span class="kw">names</span>(md_list) &lt;-<span class="st"> </span>list_of_species</a>
-<a class="sourceLine" id="cb80-27" title="27">  </a>
-<a class="sourceLine" id="cb80-28" title="28">  <span class="kw">return</span>(md_list)</a>
-<a class="sourceLine" id="cb80-29" title="29">})</a></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1"><span class="co"># which files to read</span></a>
+<a class="sourceLine" id="cb70-2" title="2">file_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;data/results/occu-2.5km/occuCovs/modelImp/lc-clim-imp.xlsx&quot;</span>)</a>
+<a class="sourceLine" id="cb70-3" title="3"></a>
+<a class="sourceLine" id="cb70-4" title="4"><span class="co"># read in sheets by species</span></a>
+<a class="sourceLine" id="cb70-5" title="5">model_imp &lt;-<span class="st"> </span><span class="kw">map</span>(file_names, <span class="cf">function</span>(f) {</a>
+<a class="sourceLine" id="cb70-6" title="6">  md_list &lt;-<span class="st"> </span><span class="kw">map</span>(list_of_species, <span class="cf">function</span>(sn) {</a>
+<a class="sourceLine" id="cb70-7" title="7">    </a>
+<a class="sourceLine" id="cb70-8" title="8">    <span class="co"># some sheets are not found</span></a>
+<a class="sourceLine" id="cb70-9" title="9">    </a>
+<a class="sourceLine" id="cb70-10" title="10">    <span class="kw">tryCatch</span>({</a>
+<a class="sourceLine" id="cb70-11" title="11">      </a>
+<a class="sourceLine" id="cb70-12" title="12">      readxl<span class="op">::</span><span class="kw">read_excel</span>(f, <span class="dt">sheet =</span> sn) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb70-13" title="13"><span class="st">        `</span><span class="dt">colnames&lt;-</span><span class="st">`</span>(<span class="kw">c</span>(<span class="st">&quot;predictor&quot;</span>, <span class="st">&quot;AIC_weight&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb70-14" title="14"><span class="st">        </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(predictor, <span class="st">&quot;psi&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb70-15" title="15"><span class="st">        </span><span class="kw">mutate</span>(<span class="dt">predictor =</span> stringr<span class="op">::</span><span class="kw">str_extract</span>(predictor, </a>
+<a class="sourceLine" id="cb70-16" title="16">                                <span class="dt">pattern =</span> stringr<span class="op">::</span><span class="kw">regex</span>(<span class="st">&quot;</span><span class="ch">\\</span><span class="st">((.*?)</span><span class="ch">\\</span><span class="st">)&quot;</span>)),</a>
+<a class="sourceLine" id="cb70-17" title="17">               <span class="dt">predictor =</span> stringr<span class="op">::</span><span class="kw">str_replace_all</span>(predictor, <span class="st">&quot;[//(//)]&quot;</span>, <span class="st">&quot;&quot;</span>),</a>
+<a class="sourceLine" id="cb70-18" title="18">               <span class="dt">predictor =</span> stringr<span class="op">::</span><span class="kw">str_remove</span>(predictor, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">.y&quot;</span>))</a>
+<a class="sourceLine" id="cb70-19" title="19">      </a>
+<a class="sourceLine" id="cb70-20" title="20">      },</a>
+<a class="sourceLine" id="cb70-21" title="21">      <span class="dt">error =</span> <span class="cf">function</span>(e) {</a>
+<a class="sourceLine" id="cb70-22" title="22">        <span class="kw">message</span>(<span class="kw">as.character</span>(e))</a>
+<a class="sourceLine" id="cb70-23" title="23">      }</a>
+<a class="sourceLine" id="cb70-24" title="24">    )</a>
+<a class="sourceLine" id="cb70-25" title="25">  })</a>
+<a class="sourceLine" id="cb70-26" title="26">  <span class="kw">names</span>(md_list) &lt;-<span class="st"> </span>list_of_species</a>
+<a class="sourceLine" id="cb70-27" title="27">  </a>
+<a class="sourceLine" id="cb70-28" title="28">  <span class="kw">return</span>(md_list)</a>
+<a class="sourceLine" id="cb70-29" title="29">})</a></code></pre></div>
 </div>
 <div id="show-cumulative-weights-as-plot" class="section level3">
 <h3><span class="header-section-number">8.2.2</span> Show cumulative weights as plot</h3>
-<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" title="1"><span class="co"># assign scale - minimum spatial scale at which the analysis was carried out to account for observer effort</span></a>
-<a class="sourceLine" id="cb81-2" title="2"><span class="kw">names</span>(model_imp) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2.5km&quot;</span>)</a>
-<a class="sourceLine" id="cb81-3" title="3">model_imp &lt;-<span class="st"> </span><span class="kw">imap</span>(model_imp, <span class="cf">function</span>(.x, .y) {</a>
-<a class="sourceLine" id="cb81-4" title="4">  .x &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(.x)</a>
-<a class="sourceLine" id="cb81-5" title="5">  .x<span class="op">$</span>scale &lt;-<span class="st"> </span>.y</a>
-<a class="sourceLine" id="cb81-6" title="6">  <span class="kw">return</span>(.x)</a>
-<a class="sourceLine" id="cb81-7" title="7">})</a>
-<a class="sourceLine" id="cb81-8" title="8"></a>
-<a class="sourceLine" id="cb81-9" title="9"><span class="co"># bind rows</span></a>
-<a class="sourceLine" id="cb81-10" title="10">model_imp &lt;-<span class="st"> </span><span class="kw">map</span>(model_imp, bind_rows) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb81-11" title="11"><span class="st">  </span><span class="kw">bind_rows</span>()</a>
-<a class="sourceLine" id="cb81-12" title="12"></a>
-<a class="sourceLine" id="cb81-13" title="13"><span class="co"># convert to numeric</span></a>
-<a class="sourceLine" id="cb81-14" title="14">model_imp<span class="op">$</span>AIC_weight &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(model_imp<span class="op">$</span>AIC_weight)</a>
-<a class="sourceLine" id="cb81-15" title="15">model_imp<span class="op">$</span>scale &lt;-<span class="st"> </span><span class="kw">as.factor</span>(model_imp<span class="op">$</span>scale)</a>
-<a class="sourceLine" id="cb81-16" title="16"><span class="kw">levels</span>(model_imp<span class="op">$</span>scale) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2.5km&quot;</span>)</a>
-<a class="sourceLine" id="cb81-17" title="17"></a>
-<a class="sourceLine" id="cb81-18" title="18"><span class="co"># Let&#39;s get a summary of cumulative variable importance</span></a>
-<a class="sourceLine" id="cb81-19" title="19">model_imp &lt;-<span class="kw">group_by</span>(model_imp, predictor) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb81-20" title="20"><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">mean_AIC =</span> <span class="kw">mean</span>(AIC_weight),</a>
-<a class="sourceLine" id="cb81-21" title="21">            <span class="dt">sd_AIC=</span><span class="kw">sd</span>(AIC_weight),</a>
-<a class="sourceLine" id="cb81-22" title="22">            <span class="dt">min_AIC =</span> <span class="kw">min</span>(AIC_weight),</a>
-<a class="sourceLine" id="cb81-23" title="23">            <span class="dt">max_AIC =</span> <span class="kw">max</span>(AIC_weight),</a>
-<a class="sourceLine" id="cb81-24" title="24">            <span class="dt">med_AIC =</span> <span class="kw">median</span>(AIC_weight))</a>
-<a class="sourceLine" id="cb81-25" title="25"></a>
-<a class="sourceLine" id="cb81-26" title="26"><span class="co"># write to file</span></a>
-<a class="sourceLine" id="cb81-27" title="27"><span class="kw">write_csv</span>(model_imp,</a>
-<a class="sourceLine" id="cb81-28" title="28">          <span class="dt">file =</span> <span class="st">&quot;data/results/cumulative_AIC_weights.csv&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" title="1"><span class="co"># assign scale - minimum spatial scale at which the analysis was carried out to account for observer effort</span></a>
+<a class="sourceLine" id="cb71-2" title="2"><span class="kw">names</span>(model_imp) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2.5km&quot;</span>)</a>
+<a class="sourceLine" id="cb71-3" title="3">model_imp &lt;-<span class="st"> </span><span class="kw">imap</span>(model_imp, <span class="cf">function</span>(.x, .y) {</a>
+<a class="sourceLine" id="cb71-4" title="4">  .x &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(.x)</a>
+<a class="sourceLine" id="cb71-5" title="5">  .x<span class="op">$</span>scale &lt;-<span class="st"> </span>.y</a>
+<a class="sourceLine" id="cb71-6" title="6">  <span class="kw">return</span>(.x)</a>
+<a class="sourceLine" id="cb71-7" title="7">})</a>
+<a class="sourceLine" id="cb71-8" title="8"></a>
+<a class="sourceLine" id="cb71-9" title="9"><span class="co"># bind rows</span></a>
+<a class="sourceLine" id="cb71-10" title="10">model_imp &lt;-<span class="st"> </span><span class="kw">map</span>(model_imp, bind_rows) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb71-11" title="11"><span class="st">  </span><span class="kw">bind_rows</span>()</a>
+<a class="sourceLine" id="cb71-12" title="12"></a>
+<a class="sourceLine" id="cb71-13" title="13"><span class="co"># convert to numeric</span></a>
+<a class="sourceLine" id="cb71-14" title="14">model_imp<span class="op">$</span>AIC_weight &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(model_imp<span class="op">$</span>AIC_weight)</a>
+<a class="sourceLine" id="cb71-15" title="15">model_imp<span class="op">$</span>scale &lt;-<span class="st"> </span><span class="kw">as.factor</span>(model_imp<span class="op">$</span>scale)</a>
+<a class="sourceLine" id="cb71-16" title="16"><span class="kw">levels</span>(model_imp<span class="op">$</span>scale) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2.5km&quot;</span>)</a>
+<a class="sourceLine" id="cb71-17" title="17"></a>
+<a class="sourceLine" id="cb71-18" title="18"><span class="co"># Let&#39;s get a summary of cumulative variable importance</span></a>
+<a class="sourceLine" id="cb71-19" title="19">model_imp &lt;-<span class="kw">group_by</span>(model_imp, predictor) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb71-20" title="20"><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">mean_AIC =</span> <span class="kw">mean</span>(AIC_weight),</a>
+<a class="sourceLine" id="cb71-21" title="21">            <span class="dt">sd_AIC=</span><span class="kw">sd</span>(AIC_weight),</a>
+<a class="sourceLine" id="cb71-22" title="22">            <span class="dt">min_AIC =</span> <span class="kw">min</span>(AIC_weight),</a>
+<a class="sourceLine" id="cb71-23" title="23">            <span class="dt">max_AIC =</span> <span class="kw">max</span>(AIC_weight),</a>
+<a class="sourceLine" id="cb71-24" title="24">            <span class="dt">med_AIC =</span> <span class="kw">median</span>(AIC_weight))</a>
+<a class="sourceLine" id="cb71-25" title="25"></a>
+<a class="sourceLine" id="cb71-26" title="26"><span class="co"># write to file</span></a>
+<a class="sourceLine" id="cb71-27" title="27"><span class="kw">write_csv</span>(model_imp,</a>
+<a class="sourceLine" id="cb71-28" title="28">          <span class="dt">file =</span> <span class="st">&quot;data/results/cumulative_AIC_weights.csv&quot;</span>)</a></code></pre></div>
 <p>Read data back in.</p>
-<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" title="1"><span class="co"># read data and make factor</span></a>
-<a class="sourceLine" id="cb82-2" title="2">model_imp &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/results/cumulative_AIC_weights.csv&quot;</span>)</a>
-<a class="sourceLine" id="cb82-3" title="3">model_imp<span class="op">$</span>predictor &lt;-<span class="st"> </span><span class="kw">as_factor</span>(model_imp<span class="op">$</span>predictor)</a></code></pre></div>
-<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb83-1" title="1"><span class="co"># make nice names</span></a>
-<a class="sourceLine" id="cb83-2" title="2">predictor_name &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">predictor =</span> <span class="kw">levels</span>(model_imp<span class="op">$</span>predictor),</a>
-<a class="sourceLine" id="cb83-3" title="3">                         <span class="dt">pred_name =</span> <span class="kw">c</span>(<span class="st">&quot;Annual Mean Temperature (°C)&quot;</span>, </a>
-<a class="sourceLine" id="cb83-4" title="4">                                       <span class="st">&quot;Annual Precipitation (mm)&quot;</span>,</a>
-<a class="sourceLine" id="cb83-5" title="5">                                       <span class="st">&quot;% Agriculture&quot;</span>, <span class="st">&quot;% Forests&quot;</span>,</a>
-<a class="sourceLine" id="cb83-6" title="6">                                       <span class="st">&quot;% Plantations&quot;</span>, <span class="st">&quot;% Settlements&quot;</span>, </a>
-<a class="sourceLine" id="cb83-7" title="7">                                       <span class="st">&quot;% Tea&quot;</span>, <span class="st">&quot;% Water Bodies&quot;</span>))</a>
-<a class="sourceLine" id="cb83-8" title="8"></a>
-<a class="sourceLine" id="cb83-9" title="9"><span class="co"># rename predictor</span></a>
-<a class="sourceLine" id="cb83-10" title="10">model_imp &lt;-<span class="st"> </span><span class="kw">left_join</span>(model_imp, predictor_name)</a></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1"><span class="co"># read data and make factor</span></a>
+<a class="sourceLine" id="cb72-2" title="2">model_imp &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/results/cumulative_AIC_weights.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb72-3" title="3">model_imp<span class="op">$</span>predictor &lt;-<span class="st"> </span><span class="kw">as_factor</span>(model_imp<span class="op">$</span>predictor)</a></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" title="1"><span class="co"># make nice names</span></a>
+<a class="sourceLine" id="cb73-2" title="2">predictor_name &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">predictor =</span> <span class="kw">levels</span>(model_imp<span class="op">$</span>predictor),</a>
+<a class="sourceLine" id="cb73-3" title="3">                         <span class="dt">pred_name =</span> <span class="kw">c</span>(<span class="st">&quot;Annual Mean Temperature (°C)&quot;</span>, </a>
+<a class="sourceLine" id="cb73-4" title="4">                                       <span class="st">&quot;Annual Precipitation (mm)&quot;</span>,</a>
+<a class="sourceLine" id="cb73-5" title="5">                                       <span class="st">&quot;% Agriculture&quot;</span>, <span class="st">&quot;% Forests&quot;</span>,</a>
+<a class="sourceLine" id="cb73-6" title="6">                                       <span class="st">&quot;% Plantations&quot;</span>, <span class="st">&quot;% Settlements&quot;</span>, </a>
+<a class="sourceLine" id="cb73-7" title="7">                                       <span class="st">&quot;% Tea&quot;</span>, <span class="st">&quot;% Water Bodies&quot;</span>))</a>
+<a class="sourceLine" id="cb73-8" title="8"></a>
+<a class="sourceLine" id="cb73-9" title="9"><span class="co"># rename predictor</span></a>
+<a class="sourceLine" id="cb73-10" title="10">model_imp &lt;-<span class="st"> </span><span class="kw">left_join</span>(model_imp, predictor_name)</a></code></pre></div>
 </div>
 <div id="make-plot" class="section level3">
 <h3><span class="header-section-number">8.2.3</span> Make plot</h3>
-<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb84-1" title="1">fig_aic &lt;-</a>
-<a class="sourceLine" id="cb84-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(model_imp)<span class="op">+</span></a>
-<a class="sourceLine" id="cb84-3" title="3"><span class="st">  </span><span class="kw">geom_pointrange</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">reorder</span>(predictor, mean_AIC),</a>
-<a class="sourceLine" id="cb84-4" title="4">                      <span class="dt">y =</span> mean_AIC,</a>
-<a class="sourceLine" id="cb84-5" title="5">                      <span class="dt">ymin =</span> mean_AIC <span class="op">-</span><span class="st"> </span>sd_AIC,</a>
-<a class="sourceLine" id="cb84-6" title="6">                      <span class="dt">ymax =</span> mean_AIC <span class="op">+</span><span class="st"> </span>sd_AIC))<span class="op">+</span></a>
-<a class="sourceLine" id="cb84-7" title="7"><span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">x =</span> predictor, </a>
-<a class="sourceLine" id="cb84-8" title="8">                <span class="dt">y =</span> <span class="fl">0.2</span>,</a>
-<a class="sourceLine" id="cb84-9" title="9">                <span class="dt">label =</span> pred_name),</a>
-<a class="sourceLine" id="cb84-10" title="10">            <span class="dt">angle =</span> <span class="dv">0</span>,</a>
-<a class="sourceLine" id="cb84-11" title="11">            <span class="dt">hjust =</span> <span class="st">&quot;inward&quot;</span>,</a>
-<a class="sourceLine" id="cb84-12" title="12">            <span class="dt">vjust =</span> <span class="dv">2</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb84-13" title="13"><span class="st">  </span><span class="co"># scale_y_continuous(breaks = seq(45, 75, 10))+</span></a>
-<a class="sourceLine" id="cb84-14" title="14"><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">labels =</span> <span class="ot">NULL</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb84-15" title="15"><span class="st">  </span><span class="co"># scale_color_brewer(palette = &quot;RdBu&quot;, values = c(0.5, 1))+</span></a>
-<a class="sourceLine" id="cb84-16" title="16"><span class="st">  </span><span class="kw">coord_flip</span>(</a>
-<a class="sourceLine" id="cb84-17" title="17">    <span class="co"># ylim = c(45, 75)</span></a>
-<a class="sourceLine" id="cb84-18" title="18">  )<span class="op">+</span></a>
-<a class="sourceLine" id="cb84-19" title="19"><span class="st">  </span><span class="kw">theme_test</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb84-20" title="20"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb84-21" title="21"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Predictor&quot;</span>,</a>
-<a class="sourceLine" id="cb84-22" title="22">       <span class="dt">y =</span> <span class="st">&quot;Cumulative AIC weight&quot;</span>)</a>
-<a class="sourceLine" id="cb84-23" title="23"></a>
-<a class="sourceLine" id="cb84-24" title="24"><span class="kw">ggsave</span>(fig_aic,</a>
-<a class="sourceLine" id="cb84-25" title="25">       <span class="dt">filename =</span> <span class="st">&quot;figs/fig_aic_weight.png&quot;</span>, </a>
-<a class="sourceLine" id="cb84-26" title="26">       <span class="dt">device =</span> <span class="kw">png</span>(),</a>
-<a class="sourceLine" id="cb84-27" title="27">       <span class="dt">dpi =</span> <span class="dv">300</span>,</a>
-<a class="sourceLine" id="cb84-28" title="28">       <span class="dt">width =</span> <span class="dv">79</span>, <span class="dt">height =</span> <span class="dv">120</span>, <span class="dt">units =</span> <span class="st">&quot;mm&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1">fig_aic &lt;-</a>
+<a class="sourceLine" id="cb74-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(model_imp)<span class="op">+</span></a>
+<a class="sourceLine" id="cb74-3" title="3"><span class="st">  </span><span class="kw">geom_pointrange</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">reorder</span>(predictor, mean_AIC),</a>
+<a class="sourceLine" id="cb74-4" title="4">                      <span class="dt">y =</span> mean_AIC,</a>
+<a class="sourceLine" id="cb74-5" title="5">                      <span class="dt">ymin =</span> mean_AIC <span class="op">-</span><span class="st"> </span>sd_AIC,</a>
+<a class="sourceLine" id="cb74-6" title="6">                      <span class="dt">ymax =</span> mean_AIC <span class="op">+</span><span class="st"> </span>sd_AIC))<span class="op">+</span></a>
+<a class="sourceLine" id="cb74-7" title="7"><span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">x =</span> predictor, </a>
+<a class="sourceLine" id="cb74-8" title="8">                <span class="dt">y =</span> <span class="fl">0.2</span>,</a>
+<a class="sourceLine" id="cb74-9" title="9">                <span class="dt">label =</span> pred_name),</a>
+<a class="sourceLine" id="cb74-10" title="10">            <span class="dt">angle =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb74-11" title="11">            <span class="dt">hjust =</span> <span class="st">&quot;inward&quot;</span>,</a>
+<a class="sourceLine" id="cb74-12" title="12">            <span class="dt">vjust =</span> <span class="dv">2</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb74-13" title="13"><span class="st">  </span><span class="co"># scale_y_continuous(breaks = seq(45, 75, 10))+</span></a>
+<a class="sourceLine" id="cb74-14" title="14"><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">labels =</span> <span class="ot">NULL</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb74-15" title="15"><span class="st">  </span><span class="co"># scale_color_brewer(palette = &quot;RdBu&quot;, values = c(0.5, 1))+</span></a>
+<a class="sourceLine" id="cb74-16" title="16"><span class="st">  </span><span class="kw">coord_flip</span>(</a>
+<a class="sourceLine" id="cb74-17" title="17">    <span class="co"># ylim = c(45, 75)</span></a>
+<a class="sourceLine" id="cb74-18" title="18">  )<span class="op">+</span></a>
+<a class="sourceLine" id="cb74-19" title="19"><span class="st">  </span><span class="kw">theme_test</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb74-20" title="20"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb74-21" title="21"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Predictor&quot;</span>,</a>
+<a class="sourceLine" id="cb74-22" title="22">       <span class="dt">y =</span> <span class="st">&quot;Cumulative AIC weight&quot;</span>)</a>
+<a class="sourceLine" id="cb74-23" title="23"></a>
+<a class="sourceLine" id="cb74-24" title="24"><span class="kw">ggsave</span>(fig_aic,</a>
+<a class="sourceLine" id="cb74-25" title="25">       <span class="dt">filename =</span> <span class="st">&quot;figs/fig_aic_weight.png&quot;</span>, </a>
+<a class="sourceLine" id="cb74-26" title="26">       <span class="dt">device =</span> <span class="kw">png</span>(),</a>
+<a class="sourceLine" id="cb74-27" title="27">       <span class="dt">dpi =</span> <span class="dv">300</span>,</a>
+<a class="sourceLine" id="cb74-28" title="28">       <span class="dt">width =</span> <span class="dv">79</span>, <span class="dt">height =</span> <span class="dv">120</span>, <span class="dt">units =</span> <span class="st">&quot;mm&quot;</span>)</a></code></pre></div>
 <div class="figure">
 <img src="figs/fig_aic_weight.png" alt="Cumulative AIC weights for each predictor, where Temp is the mean annual temperature, Ppt is the mean annual precipitation, and LC 1 – LC 7 are the proportions of agriculture, forests, plantations, settlements, tea, and water bodies, respectively.&quot;" />
 <p class="caption">Cumulative AIC weights for each predictor, where <em>Temp</em> is the mean annual temperature, <em>Ppt</em> is the mean annual precipitation, and LC 1 – LC 7 are the proportions of agriculture, forests, plantations, settlements, tea, and water bodies, respectively."</p>
@@ -401,171 +400,171 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="read-model-estimates" class="section level2">
 <h2><span class="header-section-number">8.3</span> Read model estimates</h2>
-<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb85-1" title="1">file_read &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;data/results/occu-2.5km/occuCovs/modelEst/lc-clim-modelEst.xlsx&quot;</span>)</a>
-<a class="sourceLine" id="cb85-2" title="2"></a>
-<a class="sourceLine" id="cb85-3" title="3"><span class="co"># read data as list column</span></a>
-<a class="sourceLine" id="cb85-4" title="4">model_est &lt;-<span class="st"> </span><span class="kw">map</span>(file_read, <span class="cf">function</span>(fr) {</a>
-<a class="sourceLine" id="cb85-5" title="5">  md_list &lt;-<span class="st"> </span><span class="kw">map</span>(list_of_species, <span class="cf">function</span>(sn) {</a>
-<a class="sourceLine" id="cb85-6" title="6">    readxl<span class="op">::</span><span class="kw">read_excel</span>(fr, <span class="dt">sheet =</span> sn)</a>
-<a class="sourceLine" id="cb85-7" title="7">  })</a>
-<a class="sourceLine" id="cb85-8" title="8">  <span class="kw">names</span>(md_list) &lt;-<span class="st"> </span>list_of_species</a>
-<a class="sourceLine" id="cb85-9" title="9">  <span class="kw">return</span>(md_list)</a>
-<a class="sourceLine" id="cb85-10" title="10">})</a>
-<a class="sourceLine" id="cb85-11" title="11"></a>
-<a class="sourceLine" id="cb85-12" title="12"><span class="co"># prepare model data</span></a>
-<a class="sourceLine" id="cb85-13" title="13">scales =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2.5km&quot;</span>)</a>
-<a class="sourceLine" id="cb85-14" title="14">model_data &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">scale =</span> scales, </a>
-<a class="sourceLine" id="cb85-15" title="15">                              <span class="dt">scientific_name =</span> list_of_species) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb85-16" title="16"><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(scale))</a>
-<a class="sourceLine" id="cb85-17" title="17"></a>
-<a class="sourceLine" id="cb85-18" title="18"><span class="co"># rename model data components and separate predictors</span></a>
-<a class="sourceLine" id="cb85-19" title="19">names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;predictor&quot;</span>, <span class="st">&quot;coefficient&quot;</span>, <span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci_lower&quot;</span>, </a>
-<a class="sourceLine" id="cb85-20" title="20">           <span class="st">&quot;ci_higher&quot;</span>, <span class="st">&quot;z_value&quot;</span>, <span class="st">&quot;p_value&quot;</span>)</a>
-<a class="sourceLine" id="cb85-21" title="21"></a>
-<a class="sourceLine" id="cb85-22" title="22"><span class="co"># get data for plotting:</span></a>
-<a class="sourceLine" id="cb85-23" title="23">model_est &lt;-<span class="st"> </span><span class="kw">map</span>(model_est, <span class="cf">function</span>(l) {</a>
-<a class="sourceLine" id="cb85-24" title="24">  <span class="kw">map</span>(l, <span class="cf">function</span>(df) {</a>
-<a class="sourceLine" id="cb85-25" title="25">    <span class="kw">colnames</span>(df) &lt;-<span class="st"> </span>names</a>
-<a class="sourceLine" id="cb85-26" title="26">    df &lt;-<span class="st"> </span><span class="kw">separate_interaction_terms</span>(df)</a>
-<a class="sourceLine" id="cb85-27" title="27">    df &lt;-<span class="st"> </span><span class="kw">make_response_data</span>(df) </a>
-<a class="sourceLine" id="cb85-28" title="28">    <span class="kw">return</span>(df)</a>
-<a class="sourceLine" id="cb85-29" title="29">  })</a>
-<a class="sourceLine" id="cb85-30" title="30">})</a>
-<a class="sourceLine" id="cb85-31" title="31"></a>
-<a class="sourceLine" id="cb85-32" title="32"><span class="co"># add names and scales</span></a>
-<a class="sourceLine" id="cb85-33" title="33">model_est &lt;-<span class="st"> </span><span class="kw">map</span>(model_est, <span class="cf">function</span>(l) {</a>
-<a class="sourceLine" id="cb85-34" title="34">  <span class="kw">imap</span>(l, <span class="cf">function</span>(.x, .y) {</a>
-<a class="sourceLine" id="cb85-35" title="35">    <span class="kw">mutate</span>(.x, <span class="dt">scientific_name =</span> .y)</a>
-<a class="sourceLine" id="cb85-36" title="36">  })</a>
-<a class="sourceLine" id="cb85-37" title="37">})</a>
-<a class="sourceLine" id="cb85-38" title="38"></a>
-<a class="sourceLine" id="cb85-39" title="39"><span class="co"># add names to model estimates</span></a>
-<a class="sourceLine" id="cb85-40" title="40"><span class="kw">names</span>(model_est) &lt;-<span class="st"> </span>scales</a>
-<a class="sourceLine" id="cb85-41" title="41">model_est &lt;-<span class="st"> </span><span class="kw">imap</span>(model_est, <span class="cf">function</span>(.x, .y) {</a>
-<a class="sourceLine" id="cb85-42" title="42">  <span class="kw">bind_rows</span>(.x) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb85-43" title="43"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">scale =</span> .y)</a>
-<a class="sourceLine" id="cb85-44" title="44">})</a>
-<a class="sourceLine" id="cb85-45" title="45"></a>
-<a class="sourceLine" id="cb85-46" title="46"><span class="co"># remove modulators</span></a>
-<a class="sourceLine" id="cb85-47" title="47">model_est &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(model_est) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb85-48" title="48"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">matches</span>(<span class="st">&quot;modulator&quot;</span>))</a>
-<a class="sourceLine" id="cb85-49" title="49"></a>
-<a class="sourceLine" id="cb85-50" title="50"><span class="co"># join data to species name</span></a>
-<a class="sourceLine" id="cb85-51" title="51">model_data &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb85-52" title="52"><span class="st">  </span><span class="kw">left_join</span>(model_est)</a>
-<a class="sourceLine" id="cb85-53" title="53"></a>
-<a class="sourceLine" id="cb85-54" title="54"><span class="co"># Keep only those predictors whose p-vlaues are significant:</span></a>
-<a class="sourceLine" id="cb85-55" title="55">model_data &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb85-56" title="56"><span class="st">  </span><span class="kw">filter</span>(p_value <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" title="1">file_read &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;data/results/occu-2.5km/occuCovs/modelEst/lc-clim-modelEst.xlsx&quot;</span>)</a>
+<a class="sourceLine" id="cb75-2" title="2"></a>
+<a class="sourceLine" id="cb75-3" title="3"><span class="co"># read data as list column</span></a>
+<a class="sourceLine" id="cb75-4" title="4">model_est &lt;-<span class="st"> </span><span class="kw">map</span>(file_read, <span class="cf">function</span>(fr) {</a>
+<a class="sourceLine" id="cb75-5" title="5">  md_list &lt;-<span class="st"> </span><span class="kw">map</span>(list_of_species, <span class="cf">function</span>(sn) {</a>
+<a class="sourceLine" id="cb75-6" title="6">    readxl<span class="op">::</span><span class="kw">read_excel</span>(fr, <span class="dt">sheet =</span> sn)</a>
+<a class="sourceLine" id="cb75-7" title="7">  })</a>
+<a class="sourceLine" id="cb75-8" title="8">  <span class="kw">names</span>(md_list) &lt;-<span class="st"> </span>list_of_species</a>
+<a class="sourceLine" id="cb75-9" title="9">  <span class="kw">return</span>(md_list)</a>
+<a class="sourceLine" id="cb75-10" title="10">})</a>
+<a class="sourceLine" id="cb75-11" title="11"></a>
+<a class="sourceLine" id="cb75-12" title="12"><span class="co"># prepare model data</span></a>
+<a class="sourceLine" id="cb75-13" title="13">scales =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2.5km&quot;</span>)</a>
+<a class="sourceLine" id="cb75-14" title="14">model_data &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">scale =</span> scales, </a>
+<a class="sourceLine" id="cb75-15" title="15">                              <span class="dt">scientific_name =</span> list_of_species) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb75-16" title="16"><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(scale))</a>
+<a class="sourceLine" id="cb75-17" title="17"></a>
+<a class="sourceLine" id="cb75-18" title="18"><span class="co"># rename model data components and separate predictors</span></a>
+<a class="sourceLine" id="cb75-19" title="19">names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;predictor&quot;</span>, <span class="st">&quot;coefficient&quot;</span>, <span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci_lower&quot;</span>, </a>
+<a class="sourceLine" id="cb75-20" title="20">           <span class="st">&quot;ci_higher&quot;</span>, <span class="st">&quot;z_value&quot;</span>, <span class="st">&quot;p_value&quot;</span>)</a>
+<a class="sourceLine" id="cb75-21" title="21"></a>
+<a class="sourceLine" id="cb75-22" title="22"><span class="co"># get data for plotting:</span></a>
+<a class="sourceLine" id="cb75-23" title="23">model_est &lt;-<span class="st"> </span><span class="kw">map</span>(model_est, <span class="cf">function</span>(l) {</a>
+<a class="sourceLine" id="cb75-24" title="24">  <span class="kw">map</span>(l, <span class="cf">function</span>(df) {</a>
+<a class="sourceLine" id="cb75-25" title="25">    <span class="kw">colnames</span>(df) &lt;-<span class="st"> </span>names</a>
+<a class="sourceLine" id="cb75-26" title="26">    df &lt;-<span class="st"> </span><span class="kw">separate_interaction_terms</span>(df)</a>
+<a class="sourceLine" id="cb75-27" title="27">    df &lt;-<span class="st"> </span><span class="kw">make_response_data</span>(df) </a>
+<a class="sourceLine" id="cb75-28" title="28">    <span class="kw">return</span>(df)</a>
+<a class="sourceLine" id="cb75-29" title="29">  })</a>
+<a class="sourceLine" id="cb75-30" title="30">})</a>
+<a class="sourceLine" id="cb75-31" title="31"></a>
+<a class="sourceLine" id="cb75-32" title="32"><span class="co"># add names and scales</span></a>
+<a class="sourceLine" id="cb75-33" title="33">model_est &lt;-<span class="st"> </span><span class="kw">map</span>(model_est, <span class="cf">function</span>(l) {</a>
+<a class="sourceLine" id="cb75-34" title="34">  <span class="kw">imap</span>(l, <span class="cf">function</span>(.x, .y) {</a>
+<a class="sourceLine" id="cb75-35" title="35">    <span class="kw">mutate</span>(.x, <span class="dt">scientific_name =</span> .y)</a>
+<a class="sourceLine" id="cb75-36" title="36">  })</a>
+<a class="sourceLine" id="cb75-37" title="37">})</a>
+<a class="sourceLine" id="cb75-38" title="38"></a>
+<a class="sourceLine" id="cb75-39" title="39"><span class="co"># add names to model estimates</span></a>
+<a class="sourceLine" id="cb75-40" title="40"><span class="kw">names</span>(model_est) &lt;-<span class="st"> </span>scales</a>
+<a class="sourceLine" id="cb75-41" title="41">model_est &lt;-<span class="st"> </span><span class="kw">imap</span>(model_est, <span class="cf">function</span>(.x, .y) {</a>
+<a class="sourceLine" id="cb75-42" title="42">  <span class="kw">bind_rows</span>(.x) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb75-43" title="43"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">scale =</span> .y)</a>
+<a class="sourceLine" id="cb75-44" title="44">})</a>
+<a class="sourceLine" id="cb75-45" title="45"></a>
+<a class="sourceLine" id="cb75-46" title="46"><span class="co"># remove modulators</span></a>
+<a class="sourceLine" id="cb75-47" title="47">model_est &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(model_est) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb75-48" title="48"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">matches</span>(<span class="st">&quot;modulator&quot;</span>))</a>
+<a class="sourceLine" id="cb75-49" title="49"></a>
+<a class="sourceLine" id="cb75-50" title="50"><span class="co"># join data to species name</span></a>
+<a class="sourceLine" id="cb75-51" title="51">model_data &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb75-52" title="52"><span class="st">  </span><span class="kw">left_join</span>(model_est)</a>
+<a class="sourceLine" id="cb75-53" title="53"></a>
+<a class="sourceLine" id="cb75-54" title="54"><span class="co"># Keep only those predictors whose p-vlaues are significant:</span></a>
+<a class="sourceLine" id="cb75-55" title="55">model_data &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb75-56" title="56"><span class="st">  </span><span class="kw">filter</span>(p_value <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>)</a></code></pre></div>
 <div id="export-data-to-file" class="section level3">
 <h3><span class="header-section-number">8.3.1</span> Export data to file</h3>
 <p>Export predictor effects.</p>
-<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" title="1"><span class="co"># get predictor effect data</span></a>
-<a class="sourceLine" id="cb86-2" title="2">data_predictor_effect &lt;-<span class="st"> </span><span class="kw">distinct</span>(model_data, </a>
-<a class="sourceLine" id="cb86-3" title="3">                                  scientific_name, </a>
-<a class="sourceLine" id="cb86-4" title="4">                                  se,</a>
-<a class="sourceLine" id="cb86-5" title="5">                                  predictor, coefficient)</a>
-<a class="sourceLine" id="cb86-6" title="6"></a>
-<a class="sourceLine" id="cb86-7" title="7"><span class="co"># write to file</span></a>
-<a class="sourceLine" id="cb86-8" title="8"><span class="kw">write_csv</span>(data_predictor_effect,</a>
-<a class="sourceLine" id="cb86-9" title="9">          <span class="dt">path =</span> <span class="st">&quot;data/results/data_predictor_effect.csv&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" title="1"><span class="co"># get predictor effect data</span></a>
+<a class="sourceLine" id="cb76-2" title="2">data_predictor_effect &lt;-<span class="st"> </span><span class="kw">distinct</span>(model_data, </a>
+<a class="sourceLine" id="cb76-3" title="3">                                  scientific_name, </a>
+<a class="sourceLine" id="cb76-4" title="4">                                  se,</a>
+<a class="sourceLine" id="cb76-5" title="5">                                  predictor, coefficient)</a>
+<a class="sourceLine" id="cb76-6" title="6"></a>
+<a class="sourceLine" id="cb76-7" title="7"><span class="co"># write to file</span></a>
+<a class="sourceLine" id="cb76-8" title="8"><span class="kw">write_csv</span>(data_predictor_effect,</a>
+<a class="sourceLine" id="cb76-9" title="9">          <span class="dt">path =</span> <span class="st">&quot;data/results/data_predictor_effect.csv&quot;</span>)</a></code></pre></div>
 <p>Export model data.</p>
-<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb87-1" title="1">model_data_to_file &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb87-2" title="2"><span class="st">  </span><span class="kw">select</span>(predictor, data,</a>
-<a class="sourceLine" id="cb87-3" title="3">         scientific_name, scale) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb87-4" title="4"><span class="st">  </span><span class="kw">unnest</span>(<span class="dt">cols =</span> <span class="st">&quot;data&quot;</span>)</a>
-<a class="sourceLine" id="cb87-5" title="5"></a>
-<a class="sourceLine" id="cb87-6" title="6"><span class="co"># remove .y</span></a>
-<a class="sourceLine" id="cb87-7" title="7">model_data_to_file &lt;-<span class="st"> </span>model_data_to_file <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb87-8" title="8"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">predictor =</span> <span class="kw">str_remove</span>(predictor, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">.y&quot;</span>))</a>
-<a class="sourceLine" id="cb87-9" title="9"></a>
-<a class="sourceLine" id="cb87-10" title="10"><span class="kw">write_csv</span>(model_data_to_file,</a>
-<a class="sourceLine" id="cb87-11" title="11">          <span class="st">&quot;data/results/data_occupancy_predictors.csv&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" title="1">model_data_to_file &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb77-2" title="2"><span class="st">  </span><span class="kw">select</span>(predictor, data,</a>
+<a class="sourceLine" id="cb77-3" title="3">         scientific_name, scale) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb77-4" title="4"><span class="st">  </span><span class="kw">unnest</span>(<span class="dt">cols =</span> <span class="st">&quot;data&quot;</span>)</a>
+<a class="sourceLine" id="cb77-5" title="5"></a>
+<a class="sourceLine" id="cb77-6" title="6"><span class="co"># remove .y</span></a>
+<a class="sourceLine" id="cb77-7" title="7">model_data_to_file &lt;-<span class="st"> </span>model_data_to_file <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb77-8" title="8"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">predictor =</span> <span class="kw">str_remove</span>(predictor, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">.y&quot;</span>))</a>
+<a class="sourceLine" id="cb77-9" title="9"></a>
+<a class="sourceLine" id="cb77-10" title="10"><span class="kw">write_csv</span>(model_data_to_file,</a>
+<a class="sourceLine" id="cb77-11" title="11">          <span class="st">&quot;data/results/data_occupancy_predictors.csv&quot;</span>)</a></code></pre></div>
 <p>Summarizing results of species-specific probability of occupancy as a function of the direction of coefficients</p>
-<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" title="1"><span class="co"># read from file</span></a>
-<a class="sourceLine" id="cb88-2" title="2">model_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/results/data_predictor_effect.csv&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" title="1"><span class="co"># read from file</span></a>
+<a class="sourceLine" id="cb78-2" title="2">model_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/results/data_predictor_effect.csv&quot;</span>)</a></code></pre></div>
 <p>Plot the number of species affected and the direction of the effect, for each predictor.</p>
-<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb89-1" title="1"><span class="co"># remove .y from predictors</span></a>
-<a class="sourceLine" id="cb89-2" title="2">model_data &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb89-3" title="3"><span class="st">  </span><span class="kw">mutate_at</span>(<span class="dt">.vars =</span> <span class="kw">c</span>(<span class="st">&quot;predictor&quot;</span>), <span class="dt">.funs =</span> <span class="cf">function</span>(x){</a>
-<a class="sourceLine" id="cb89-4" title="4">    stringr<span class="op">::</span><span class="kw">str_remove</span>(x, <span class="st">&quot;.y&quot;</span>)</a>
-<a class="sourceLine" id="cb89-5" title="5">  })</a></code></pre></div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" title="1"><span class="co"># remove .y from predictors</span></a>
+<a class="sourceLine" id="cb79-2" title="2">model_data &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb79-3" title="3"><span class="st">  </span><span class="kw">mutate_at</span>(<span class="dt">.vars =</span> <span class="kw">c</span>(<span class="st">&quot;predictor&quot;</span>), <span class="dt">.funs =</span> <span class="cf">function</span>(x){</a>
+<a class="sourceLine" id="cb79-4" title="4">    stringr<span class="op">::</span><span class="kw">str_remove</span>(x, <span class="st">&quot;.y&quot;</span>)</a>
+<a class="sourceLine" id="cb79-5" title="5">  })</a></code></pre></div>
 </div>
 <div id="get-predictor-effects" class="section level3">
 <h3><span class="header-section-number">8.3.2</span> Get predictor effects</h3>
-<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb90-1" title="1"><span class="co"># is the coeff positive? how many positive per scale per predictor per axis of split?</span></a>
-<a class="sourceLine" id="cb90-2" title="2">data_predictor &lt;-<span class="st"> </span><span class="kw">mutate</span>(model_data, </a>
-<a class="sourceLine" id="cb90-3" title="3">                                <span class="dt">direction =</span> coefficient <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb90-4" title="4"><span class="st">  </span><span class="kw">count</span>(predictor, </a>
-<a class="sourceLine" id="cb90-5" title="5">        direction) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb90-6" title="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">mag =</span> n <span class="op">*</span><span class="st"> </span>(<span class="kw">if_else</span>(direction, <span class="dv">1</span>, <span class="dv">-1</span>)))</a>
-<a class="sourceLine" id="cb90-7" title="7"></a>
-<a class="sourceLine" id="cb90-8" title="8"><span class="co"># wrangle data to get nice bars</span></a>
-<a class="sourceLine" id="cb90-9" title="9">data_predictor &lt;-<span class="st"> </span>data_predictor<span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb90-10" title="10"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>n) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb90-11" title="11"><span class="st">  </span><span class="kw">drop_na</span>(direction) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb90-12" title="12"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">direction =</span> <span class="kw">ifelse</span>(direction, <span class="st">&quot;positive&quot;</span>, <span class="st">&quot;negative&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb90-13" title="13"><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">values_from =</span> <span class="st">&quot;mag&quot;</span>, <span class="dt">names_from =</span> <span class="st">&quot;direction&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb90-14" title="14"><span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(positive, negative),</a>
-<a class="sourceLine" id="cb90-15" title="15">            <span class="op">~</span><span class="kw">if_else</span>(<span class="kw">is.na</span>(.), <span class="dv">0</span>, .))</a>
-<a class="sourceLine" id="cb90-16" title="16"></a>
-<a class="sourceLine" id="cb90-17" title="17">data_predictor_long &lt;-<span class="st"> </span>data_predictor <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb90-18" title="18"><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols =</span> <span class="kw">c</span>(<span class="st">&quot;negative&quot;</span>, <span class="st">&quot;positive&quot;</span>),</a>
-<a class="sourceLine" id="cb90-19" title="19">               <span class="dt">names_to =</span> <span class="st">&quot;effect&quot;</span>,</a>
-<a class="sourceLine" id="cb90-20" title="20">               <span class="dt">values_to =</span> <span class="st">&quot;magnitude&quot;</span>)</a>
-<a class="sourceLine" id="cb90-21" title="21"></a>
-<a class="sourceLine" id="cb90-22" title="22"><span class="co"># write</span></a>
-<a class="sourceLine" id="cb90-23" title="23"><span class="kw">write_csv</span>(data_predictor_long,</a>
-<a class="sourceLine" id="cb90-24" title="24">          <span class="dt">path =</span> <span class="st">&quot;data/results/data_predictor_direction_nSpecies.csv&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" title="1"><span class="co"># is the coeff positive? how many positive per scale per predictor per axis of split?</span></a>
+<a class="sourceLine" id="cb80-2" title="2">data_predictor &lt;-<span class="st"> </span><span class="kw">mutate</span>(model_data, </a>
+<a class="sourceLine" id="cb80-3" title="3">                                <span class="dt">direction =</span> coefficient <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb80-4" title="4"><span class="st">  </span><span class="kw">count</span>(predictor, </a>
+<a class="sourceLine" id="cb80-5" title="5">        direction) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb80-6" title="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">mag =</span> n <span class="op">*</span><span class="st"> </span>(<span class="kw">if_else</span>(direction, <span class="dv">1</span>, <span class="dv">-1</span>)))</a>
+<a class="sourceLine" id="cb80-7" title="7"></a>
+<a class="sourceLine" id="cb80-8" title="8"><span class="co"># wrangle data to get nice bars</span></a>
+<a class="sourceLine" id="cb80-9" title="9">data_predictor &lt;-<span class="st"> </span>data_predictor<span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb80-10" title="10"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>n) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb80-11" title="11"><span class="st">  </span><span class="kw">drop_na</span>(direction) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb80-12" title="12"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">direction =</span> <span class="kw">ifelse</span>(direction, <span class="st">&quot;positive&quot;</span>, <span class="st">&quot;negative&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb80-13" title="13"><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">values_from =</span> <span class="st">&quot;mag&quot;</span>, <span class="dt">names_from =</span> <span class="st">&quot;direction&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb80-14" title="14"><span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(positive, negative),</a>
+<a class="sourceLine" id="cb80-15" title="15">            <span class="op">~</span><span class="kw">if_else</span>(<span class="kw">is.na</span>(.), <span class="dv">0</span>, .))</a>
+<a class="sourceLine" id="cb80-16" title="16"></a>
+<a class="sourceLine" id="cb80-17" title="17">data_predictor_long &lt;-<span class="st"> </span>data_predictor <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb80-18" title="18"><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols =</span> <span class="kw">c</span>(<span class="st">&quot;negative&quot;</span>, <span class="st">&quot;positive&quot;</span>),</a>
+<a class="sourceLine" id="cb80-19" title="19">               <span class="dt">names_to =</span> <span class="st">&quot;effect&quot;</span>,</a>
+<a class="sourceLine" id="cb80-20" title="20">               <span class="dt">values_to =</span> <span class="st">&quot;magnitude&quot;</span>)</a>
+<a class="sourceLine" id="cb80-21" title="21"></a>
+<a class="sourceLine" id="cb80-22" title="22"><span class="co"># write</span></a>
+<a class="sourceLine" id="cb80-23" title="23"><span class="kw">write_csv</span>(data_predictor_long,</a>
+<a class="sourceLine" id="cb80-24" title="24">          <span class="dt">path =</span> <span class="st">&quot;data/results/data_predictor_direction_nSpecies.csv&quot;</span>)</a></code></pre></div>
 <p>Plot the above data: Species-specific prob of occupancy ~ direction</p>
-<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb91-1" title="1"><span class="co"># join with predictor names and relative AIC</span></a>
-<a class="sourceLine" id="cb91-2" title="2">data_predictor_long &lt;-<span class="st"> </span><span class="kw">left_join</span>(data_predictor_long, model_imp)</a></code></pre></div>
-<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb92-1" title="1">fig_predictor &lt;-</a>
-<a class="sourceLine" id="cb92-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(model_imp)<span class="op">+</span></a>
-<a class="sourceLine" id="cb92-3" title="3"><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>,</a>
-<a class="sourceLine" id="cb92-4" title="4">             <span class="dt">lwd =</span> <span class="fl">0.2</span>,</a>
-<a class="sourceLine" id="cb92-5" title="5">             <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb92-6" title="6"><span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">data =</span> data_predictor_long,</a>
-<a class="sourceLine" id="cb92-7" title="7">           <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">reorder</span>(predictor, mean_AIC),</a>
-<a class="sourceLine" id="cb92-8" title="8">               <span class="dt">y =</span> magnitude,</a>
-<a class="sourceLine" id="cb92-9" title="9">               <span class="dt">fill =</span> effect),</a>
-<a class="sourceLine" id="cb92-10" title="10">           <span class="co"># position = position_dodge(width = 1),</span></a>
-<a class="sourceLine" id="cb92-11" title="11">           <span class="dt">width =</span> <span class="fl">0.3</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb92-12" title="12"><span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">x =</span> predictor, </a>
-<a class="sourceLine" id="cb92-13" title="13">                <span class="dt">y =</span> <span class="dv">0</span>,</a>
-<a class="sourceLine" id="cb92-14" title="14">                <span class="dt">label =</span> pred_name),</a>
-<a class="sourceLine" id="cb92-15" title="15">            <span class="dt">angle =</span> <span class="dv">0</span>,</a>
-<a class="sourceLine" id="cb92-16" title="16">            <span class="dt">vjust =</span> <span class="dv">2</span>,</a>
-<a class="sourceLine" id="cb92-17" title="17">            <span class="dt">size =</span> <span class="dv">4</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb92-18" title="18"><span class="st">  </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette =</span> <span class="st">&quot;Set1&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb92-19" title="19"><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">labels =</span> <span class="ot">NULL</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb92-20" title="20"><span class="st">  </span><span class="kw">coord_flip</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb92-21" title="21"><span class="st">  </span><span class="kw">theme_test</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb92-22" title="22"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb92-23" title="23"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Predictor&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;# Species&quot;</span>)</a>
-<a class="sourceLine" id="cb92-24" title="24"></a>
-<a class="sourceLine" id="cb92-25" title="25"><span class="kw">ggsave</span>(fig_predictor,</a>
-<a class="sourceLine" id="cb92-26" title="26">       <span class="dt">filename =</span> <span class="st">&quot;figs/fig_predictor_effect.png&quot;</span>, </a>
-<a class="sourceLine" id="cb92-27" title="27">       <span class="dt">dpi =</span> <span class="dv">300</span>,</a>
-<a class="sourceLine" id="cb92-28" title="28">       <span class="dt">width =</span> <span class="dv">79</span>, <span class="dt">height =</span> <span class="dv">120</span>, <span class="dt">units =</span> <span class="st">&quot;mm&quot;</span>)</a>
-<a class="sourceLine" id="cb92-29" title="29">    </a></code></pre></div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" title="1"><span class="co"># join with predictor names and relative AIC</span></a>
+<a class="sourceLine" id="cb81-2" title="2">data_predictor_long &lt;-<span class="st"> </span><span class="kw">left_join</span>(data_predictor_long, model_imp)</a></code></pre></div>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" title="1">fig_predictor &lt;-</a>
+<a class="sourceLine" id="cb82-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(model_imp)<span class="op">+</span></a>
+<a class="sourceLine" id="cb82-3" title="3"><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb82-4" title="4">             <span class="dt">lwd =</span> <span class="fl">0.2</span>,</a>
+<a class="sourceLine" id="cb82-5" title="5">             <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb82-6" title="6"><span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">data =</span> data_predictor_long,</a>
+<a class="sourceLine" id="cb82-7" title="7">           <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">reorder</span>(predictor, mean_AIC),</a>
+<a class="sourceLine" id="cb82-8" title="8">               <span class="dt">y =</span> magnitude,</a>
+<a class="sourceLine" id="cb82-9" title="9">               <span class="dt">fill =</span> effect),</a>
+<a class="sourceLine" id="cb82-10" title="10">           <span class="co"># position = position_dodge(width = 1),</span></a>
+<a class="sourceLine" id="cb82-11" title="11">           <span class="dt">width =</span> <span class="fl">0.3</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb82-12" title="12"><span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">x =</span> predictor, </a>
+<a class="sourceLine" id="cb82-13" title="13">                <span class="dt">y =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb82-14" title="14">                <span class="dt">label =</span> pred_name),</a>
+<a class="sourceLine" id="cb82-15" title="15">            <span class="dt">angle =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb82-16" title="16">            <span class="dt">vjust =</span> <span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb82-17" title="17">            <span class="dt">size =</span> <span class="dv">4</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb82-18" title="18"><span class="st">  </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette =</span> <span class="st">&quot;Set1&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb82-19" title="19"><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">labels =</span> <span class="ot">NULL</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb82-20" title="20"><span class="st">  </span><span class="kw">coord_flip</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb82-21" title="21"><span class="st">  </span><span class="kw">theme_test</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb82-22" title="22"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb82-23" title="23"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Predictor&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;# Species&quot;</span>)</a>
+<a class="sourceLine" id="cb82-24" title="24"></a>
+<a class="sourceLine" id="cb82-25" title="25"><span class="kw">ggsave</span>(fig_predictor,</a>
+<a class="sourceLine" id="cb82-26" title="26">       <span class="dt">filename =</span> <span class="st">&quot;figs/fig_predictor_effect.png&quot;</span>, </a>
+<a class="sourceLine" id="cb82-27" title="27">       <span class="dt">dpi =</span> <span class="dv">300</span>,</a>
+<a class="sourceLine" id="cb82-28" title="28">       <span class="dt">width =</span> <span class="dv">79</span>, <span class="dt">height =</span> <span class="dv">120</span>, <span class="dt">units =</span> <span class="st">&quot;mm&quot;</span>)</a>
+<a class="sourceLine" id="cb82-29" title="29">    </a></code></pre></div>
 </div>
 <div id="predictor-importance-and-effect" class="section level3">
 <h3><span class="header-section-number">8.3.3</span> Predictor importance and effect</h3>
-<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb93-1" title="1"><span class="kw">library</span>(patchwork)</a>
-<a class="sourceLine" id="cb93-2" title="2"></a>
-<a class="sourceLine" id="cb93-3" title="3"><span class="co"># wrap</span></a>
-<a class="sourceLine" id="cb93-4" title="4">fig_predictor_effect &lt;-<span class="st"> </span></a>
-<a class="sourceLine" id="cb93-5" title="5"><span class="st">  </span><span class="kw">wrap_plots</span>(fig_aic, fig_predictor)<span class="op">+</span></a>
-<a class="sourceLine" id="cb93-6" title="6"><span class="st">  </span><span class="kw">plot_annotation</span>(<span class="dt">tag_levels =</span> <span class="st">&quot;a&quot;</span>,</a>
-<a class="sourceLine" id="cb93-7" title="7">                  <span class="dt">tag_prefix =</span> <span class="st">&quot;(&quot;</span>,</a>
-<a class="sourceLine" id="cb93-8" title="8">                  <span class="dt">tag_suffix =</span> <span class="st">&quot;)&quot;</span>)</a>
-<a class="sourceLine" id="cb93-9" title="9"></a>
-<a class="sourceLine" id="cb93-10" title="10"><span class="co"># save</span></a>
-<a class="sourceLine" id="cb93-11" title="11"><span class="kw">ggsave</span>(fig_predictor_effect,</a>
-<a class="sourceLine" id="cb93-12" title="12">       <span class="dt">filename =</span> <span class="st">&quot;figs/fig_03_aic_weight_effect.png&quot;</span>,</a>
-<a class="sourceLine" id="cb93-13" title="13">       <span class="dt">dpi =</span> <span class="dv">300</span>,</a>
-<a class="sourceLine" id="cb93-14" title="14">       <span class="dt">width =</span> <span class="dv">168</span>, <span class="dt">height =</span> <span class="dv">130</span>, <span class="dt">units =</span> <span class="st">&quot;mm&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb83-1" title="1"><span class="kw">library</span>(patchwork)</a>
+<a class="sourceLine" id="cb83-2" title="2"></a>
+<a class="sourceLine" id="cb83-3" title="3"><span class="co"># wrap</span></a>
+<a class="sourceLine" id="cb83-4" title="4">fig_predictor_effect &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb83-5" title="5"><span class="st">  </span><span class="kw">wrap_plots</span>(fig_aic, fig_predictor)<span class="op">+</span></a>
+<a class="sourceLine" id="cb83-6" title="6"><span class="st">  </span><span class="kw">plot_annotation</span>(<span class="dt">tag_levels =</span> <span class="st">&quot;a&quot;</span>,</a>
+<a class="sourceLine" id="cb83-7" title="7">                  <span class="dt">tag_prefix =</span> <span class="st">&quot;(&quot;</span>,</a>
+<a class="sourceLine" id="cb83-8" title="8">                  <span class="dt">tag_suffix =</span> <span class="st">&quot;)&quot;</span>)</a>
+<a class="sourceLine" id="cb83-9" title="9"></a>
+<a class="sourceLine" id="cb83-10" title="10"><span class="co"># save</span></a>
+<a class="sourceLine" id="cb83-11" title="11"><span class="kw">ggsave</span>(fig_predictor_effect,</a>
+<a class="sourceLine" id="cb83-12" title="12">       <span class="dt">filename =</span> <span class="st">&quot;figs/fig_03_aic_weight_effect.png&quot;</span>,</a>
+<a class="sourceLine" id="cb83-13" title="13">       <span class="dt">dpi =</span> <span class="dv">300</span>,</a>
+<a class="sourceLine" id="cb83-14" title="14">       <span class="dt">width =</span> <span class="dv">168</span>, <span class="dt">height =</span> <span class="dv">130</span>, <span class="dt">units =</span> <span class="st">&quot;mm&quot;</span>)</a></code></pre></div>
 
 </div>
 </div>
@@ -609,7 +608,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["ebird_occupancy_main_text.pdf"],
+"download": null,
 "toc": {
 "collapse": "section"
 }
