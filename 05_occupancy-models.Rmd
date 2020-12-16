@@ -129,7 +129,8 @@ pb <- txtProgressBar(
 ) # text based bar
 
 for (i in 1:length(unique(dat.scaled$scientific_name))) {
-  data <- dat.scaled %>% filter(dat.scaled$scientific_name == unique(dat.scaled$scientific_name)[i])
+  data <- dat.scaled %>% 
+  filter(dat.scaled$scientific_name == unique(dat.scaled$scientific_name)[i])
 
   # Preparing data for the unmarked model
   occ <- filter_repeat_visits(data,
@@ -154,7 +155,8 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
   occ_wide <- format_unmarked_occu(occ,
     site_id = "site",
     response = "pres_abs",
-    site_covs = c("locality_id", "lc_01.y", "lc_02.y", "lc_04.y", "lc_05.y", "lc_06.y", "lc_07.y", "bio_1.y", "bio_12.y"),
+    site_covs = c("locality_id", "lc_01.y", "lc_02.y", "lc_04.y", 
+    "lc_05.y", "lc_06.y", "lc_07.y", "bio_1.y", "bio_12.y"),
     obs_covs = obs_covs
   )
 
@@ -193,10 +195,12 @@ det_imp <- list()
 det_modelEst <- list()
 
 # Add a progress bar for the loop
-pb <- txtProgressBar(min = 0, max = length(unique(dat.scaled$scientific_name)), style = 3) # text based bar
+pb <- txtProgressBar(min = 0, 
+  max = length(unique(dat.scaled$scientific_name)), style = 3) # text based bar
 
 for (i in 1:length(unique(dat.scaled$scientific_name))) {
-  data <- dat.scaled %>% filter(dat.scaled$scientific_name == unique(dat.scaled$scientific_name)[i])
+  data <- dat.scaled %>% 
+    filter(dat.scaled$scientific_name == unique(dat.scaled$scientific_name)[i])
 
   # Preparing data for the unmarked model
   occ <- filter_repeat_visits(data,
@@ -221,7 +225,9 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
   occ_wide <- format_unmarked_occu(occ,
     site_id = "site",
     response = "pres_abs",
-    site_covs = c("locality_id", "lc_01.y", "lc_02.y", "lc_04.y", "lc_05.y", "lc_06.y", "lc_07.y", "bio_1.y", "bio_12.y"), obs_covs = obs_covs
+    site_covs = c("locality_id", "lc_01.y", "lc_02.y", "lc_04.y", 
+      "lc_05.y", "lc_06.y", "lc_07.y", "bio_1.y", "bio_12.y"), 
+      obs_covs = obs_covs
   )
 
   # Convert this dataframe of observations into an unmarked object to start fitting occupancy models
@@ -357,7 +363,8 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
   occ_wide <- format_unmarked_occu(occ,
     site_id = "site",
     response = "pres_abs",
-    site_covs = c("locality_id", "lc_01.y", "lc_02.y", "lc_04.y", "lc_05.y", "lc_06.y", "lc_07.y", "bio_1.y", "bio_12.y"),
+    site_covs = c("locality_id", "lc_01.y", "lc_02.y", "lc_04.y", "lc_05.y", 
+      "lc_06.y", "lc_07.y", "bio_1.y", "bio_12.y"),
     obs_covs = obs_covs
   )
 
@@ -382,7 +389,8 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
 
   # Detection terms are fixed
   det_terms <- c(
-    "p(duration_minutes)", "p(effort_distance_km)", "p(expertise)", "p(julian_date)", "p(min_obs_started)",
+    "p(duration_minutes)", "p(effort_distance_km)", "p(expertise)", 
+    "p(julian_date)", "p(min_obs_started)",
     "p(number_observers)", "p(protocol_type)"
   )
 
