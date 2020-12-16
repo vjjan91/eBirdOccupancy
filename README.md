@@ -1,6 +1,6 @@
-# Code for: _Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot_
+# Source code for _Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot_
 
-This repository contains code and analysis for a manuscript *in review* that uses citizen science data to parse the role of climate and land cover on avian occupancy across the Western Ghats. 
+This repository contains code and analysis for a manuscript that uses citizen science data to parse the role of climate and land cover on avian occupancy across the Western Ghats.
 
 ## [Readable version](https://pratikunterwegs.github.io/eBirdOccupancy/)
 
