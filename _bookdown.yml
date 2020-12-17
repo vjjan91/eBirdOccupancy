@@ -1,11 +1,11 @@
-book_filename: "code and analysis"
+book_filename: "ebird_occupancy_main_text"
 output: 
   html_document: 
     fig_caption: yes
   pdf_document:
     keep_tex: yes
 delete_merged_file: true
-before_chapter_script: "common.r"
+before_chapter_script: "common.R"
 output_dir: "docs"
 language:
   ui:

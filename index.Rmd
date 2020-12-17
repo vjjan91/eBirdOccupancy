@@ -12,6 +12,11 @@ site: bookdown::bookdown_site
 output: 
   bookdown::gitbook:
     fig_caption: yes
+  bookdown::pdf_document2:
+    documentclass: scrreprt
+    toc-depth: 1
+    secnumdepth: 2
+    geometry: "left=4cm, right=3cm, top=2.5cm, bottom=2.5cm"
 bibliography: [refs.bib]
 biblio-style: apalike
 link-citations: yes
@@ -22,7 +27,7 @@ description: "Influence of land cover and climate on the occupancy of avian dist
 
 # Introduction
 
-This is the `bookdown` version containing analysis that models associations between environmental predictors (climate and landcover) and citizen science observations of birds across the Nilgiri and Anamalai hills of the Western Ghats Biodiversity Hotspot. 
+This is the readable version containing analysis that models associations between environmental predictors (climate and landcover) and citizen science observations of birds across the Nilgiri and Anamalai Hills of the Western Ghats Biodiversity Hotspot. 
 
 Methods and format are derived from [Strimas-Mackey et al.](https://cornelllabofornithology.github.io/ebird-best-practices/).
 

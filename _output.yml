@@ -12,3 +12,19 @@ bookdown::gitbook:
     sharing: no
   includes:
 #    in_header: ga.html
+bookdown::pdf_document2:
+  keep_tex: true
+  fontsize: 10pt
+  toc-depth: 1
+  papersize: a4
+  latex_engine: xelatex
+  highlight: haddock
+  # includes:
+    # in_header: latex/preamble.tex
+    # before_body: before-body.tex
+    # after_body: latex/after_body.tex
+  secnumdepth: 1
+  lof: True
+  lot: True
+  documentclass: scrreprt
+  geometry: "left=4cm, right=3cm, top=2.5cm, bottom=2.5cm"
