@@ -50,7 +50,7 @@ list_of_species <- as.character(species$scientific_name)
 
 ```{r}
 # which files to read
-file_names <- c("data/results/occu-2.5km/occuCovs/modelImp/lc-clim-imp.xlsx")
+file_names <- c("data/results/lc-clim-imp.xlsx")
 
 # read in sheets by species
 model_imp <- map(file_names, function(f) {
@@ -173,7 +173,7 @@ ggsave(fig_aic,
 ## Read model estimates
 
 ```{r read_model_estimates, eval=FALSE}
-file_read <- c("data/results/occu-2.5km/occuCovs/modelEst/lc-clim-modelEst.xlsx")
+file_read <- c("data/results/lc-clim-modelEst.xlsx")
 
 # read data as list column
 model_est <- map(file_read, function(fr) {

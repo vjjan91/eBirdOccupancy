@@ -36,7 +36,7 @@ Here, we load the required dataframe that contains 10 random visits to a site. P
 
 ```{r load_dataframe, eval=FALSE}
 # Load in the prepared dataframe that contains 10 random visits to each site
-dat <- fread("data/dataCovars_10km.csv", header = T)
+dat <- fread("data/dataCovars_2.5km.csv", header = T)
 setDF(dat)
 head(dat)
 
@@ -93,7 +93,7 @@ dat.1$bio_1.y <- dat.1$bio_1.y / 10
 # Scaling detection and occupancy covariates
 dat.scaled <- dat.1
 dat.scaled[, c(1, 2, 11, 16:25)] <- scale(dat.scaled[, c(1, 2, 11, 16:25)]) # Scaling and standardizing detection and site-level covariates
-fwrite(dat.scaled, file = "data/scaledCovs_2.5km.csv")
+fwrite(dat.scaled, file = "data/scaled-covars-2.5km.csv")
 
 dat.scaled <- fread("data/05_scaled-covars-2.5km.csv", header = T)
 setDF(dat.scaled)
@@ -171,7 +171,7 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
 close(pb)
 
 # Store all the  model outputs for each species
-capture.output(all_null, file = "C:\\Users\\vr235\\Downloads\\null_models.csv")
+capture.output(all_null, file = "data\results\null_models.csv")
 ```
 
 
@@ -308,13 +308,13 @@ close(pb)
 ## Storing output from the above models in excel sheets
 
 # 1. Store all the dredged model outputs for each species (variable: det_dred() - see above)
-write.xlsx(det_dred, file = "C:\\Users\\vr235\\Downloads\\det_dred.xlsx")
+write.xlsx(det_dred, file = "data\results\det_dred.xlsx")
 
 # 2. Store all the model averaged outputs for each species and the relative importance score
-write.xlsx(det_avg, file = "C:\\Users\\vr235\\Downloads\\det_avg.xlsx", rowNames = T, colNames = T)
-write.xlsx(det_imp, file = "C:\\Users\\vr235\\Downloads\\det_imp.xlsx", rowNames = T, colNames = T)
+write.xlsx(det_avg, file = "data\results\det_avg.xlsx", rowNames = T, colNames = T)
+write.xlsx(det_imp, file = "data\results\det_imp.xlsx", rowNames = T, colNames = T)
 
-write.xlsx(det_modelEst, file = "C:\\Users\\vr235\\Downloads\\det_modelEst.xlsx", rowNames = T, colNames = T)
+write.xlsx(det_modelEst, file = "data\results\det_modelEst.xlsx", rowNames = T, colNames = T)
 ```
 
 ## Land Cover and Climate
@@ -452,14 +452,14 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
 close(pb)
 
 # 1. Store all the dredged model outputs for each species (for both landcover and climate)
-write.xlsx(lc_clim, file = "C:\\Users\\vr235\\Downloads\\lc_clim.xlsx")
+write.xlsx(lc_clim, file = "data\results\lc-clim.xlsx")
 
 # 2. Store all the model averaged outputs for each species and relative importance scores
-write.xlsx(lc_clim_avg, file = "C:\\Users\\vr235\\Downloads\\lc_avg.xlsx", rowNames = T, colNames = T)
-write.xlsx(lc_clim_imp, file = "C:\\Users\\vr235\\Downloads\\lc_imp.xlsx", rowNames = T, colNames = T)
+write.xlsx(lc_clim_avg, file = "data\results\lc-clim-avg.xlsx", rowNames = T, colNames = T)
+write.xlsx(lc_clim_imp, file = "data\results\lc-clim-imp.xlsx", rowNames = T, colNames = T)
 
 # 3. Store all model estimates
-write.xlsx(lc_clim_modelEst, file = "C:\\Users\\vr235\\Downloads\\lc_modelEst.xlsx", rowNames = T, colNames = T)
+write.xlsx(lc_clim_modelEst, file = "data\results\lc-clim-modelEst.xlsx", rowNames = T, colNames = T)
 ```
 
 ## Goodness-of-fit tests
@@ -526,5 +526,5 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
 }
 close(pb)
 
-write.csv(goodness_of_fit, "C:\\Users\\vr235\\Desktop\\Occupancy Runs\\output\\05_goodness-of-fit-2.5km.csv")
+write.csv(goodness_of_fit, "data\results\05_goodness-of-fit-2.5km.csv")
 ```
