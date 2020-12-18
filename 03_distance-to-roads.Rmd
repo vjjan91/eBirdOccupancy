@@ -383,4 +383,4 @@ dev.off()
 
 
 
-![Distribution of checklist locations across the Nilgiri, Anamalai and Palani Hills. Inset histogram shows the distribution of checklists' distance to the nearest road, with the X-axis on a log-scale.](figs/fig_03_distance_to_roads.png)
+![Spatial sampling bias of eBird observations across the Nilgiri and the Anamalai hills. A large proportion of localities/sites were next to roads and were on average only ~300m from another locality/site.](figs/fig_03_distance_to_roads.png)
