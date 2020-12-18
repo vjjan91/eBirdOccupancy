@@ -360,8 +360,9 @@ fig_predictor_effect <-
 
 # save
 ggsave(fig_predictor_effect,
-       filename = "figs/fig_03_aic_weight_effect.png",
+       filename = "figs/fig_04_aic_weight_effect.png",
        dpi = 300,
        width = 168, height = 130, units = "mm")
 ```
 
+![(a) Cumulative AIC weights suggest that climatic predictors have higher relative importance when compared to landscape predictors. (b) The direction of association between species-specific probability of occupancy and climatic and landscape is shown here. While climatic predictors were both positively and negatively associated with the probability of occupancy for a number of species, human-associated land cover types were largely negatively associated with species-specific probability of occupancy.](figs/fig_04_aic_weight_effect.png)
