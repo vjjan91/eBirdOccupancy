@@ -11,6 +11,7 @@ knitr::opts_chunk$set(
   error = FALSE,
   message = FALSE,
   out.width = "\\textwidth", 
+  attr.source = ".numberLines",
   fig.align = "center",
   fig.width = 7,
   fig.asp = 0.618,  # 1 / phi
