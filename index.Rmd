@@ -48,3 +48,7 @@ The data used in this work are available from [eBird](http://ebird.org/data/down
 ## Data processing
 
 The data processing for this project is described in the following sections. Navigate through them using the links in the sidebar.
+
+## Main Text Figure 1
+
+![](figs/fig_01_elevation.png)
