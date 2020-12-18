@@ -51,4 +51,6 @@ The data processing for this project is described in the following sections. Nav
 
 ## Main Text Figure 1
 
+Figure prepared in QGIS 3.10.
+
 ![A shaded relief of the study area - the Nilgiri and the Anamalai hills are shown in this figure. This map was made using the SRTM digital elevation model at a spatial resolution of 1km and data from Natural Earth were used to outline boundaries of water bodies.](figs/fig_01_elevation.png)

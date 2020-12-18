@@ -230,7 +230,8 @@ chkCovars %>%
 library(magrittr)
 readr::read_csv("data/results/distance_roads_sites.csv") %>%
   knitr::kable(
-    caption = "Distance to roads: Summary statistics"
+    caption = "Distance to roads: Summary statistics",
+    booktabs = TRUE
   )
 ```
 
@@ -380,7 +381,5 @@ ggplot() +
 ggsave(filename = "figs/fig_distRoads.png", device = png())
 dev.off()
 ```
-
-
 
 ![Spatial sampling bias of eBird observations across the Nilgiri and the Anamalai hills. A large proportion of localities/sites were next to roads and were on average only ~300m from another locality/site.](figs/fig_03_distance_to_roads.png)
