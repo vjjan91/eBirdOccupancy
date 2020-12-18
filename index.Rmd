@@ -1,6 +1,6 @@
 --- 
 knit: "bookdown::render_book"
-title: "Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot"
+title: "Source code for _Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot_"
 author:
     - Vijay Ramesh
     - Pratik R. Gupte
@@ -17,12 +17,10 @@ output:
     toc-depth: 1
     secnumdepth: 2
     geometry: "left=4cm, right=3cm, top=2.5cm, bottom=2.5cm"
-bibliography: [refs.bib]
-biblio-style: apalike
-link-citations: yes
+# bibliography: [refs.bib]
+# biblio-style: apalike
+# link-citations: yes
 github-repo: pratikunterwegs/eBirdOccupancy
-description: "Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient"
-
 ---
 
 # Introduction
