@@ -161,6 +161,8 @@ The data processing for this project is described in the following sections. Nav
 \hypertarget{main-text-figure-1}{%
 \subsection{Main Text Figure 1}\label{main-text-figure-1}}
 
+Figure prepared in QGIS 3.10.
+
 \begin{figure}
 \centering
 \includegraphics{figs/fig_01_elevation.png}
@@ -717,12 +719,6 @@ Figure code is hidden in versions rendered as HTML and PDF.
 \hypertarget{main-text-figure-2}{%
 \subsection{Main Text Figure 2}\label{main-text-figure-2}}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(patchwork)}
-\end{Highlighting}
-\end{Shaded}
-
 \begin{figure}
 \centering
 \includegraphics{figs/fig_02_clim_lc_elev.png}
@@ -950,14 +946,13 @@ Figure code is hidden in versions rendered as HTML or PDF.
 \textbackslash{}caption\{(\#tab:show\_dist\_roads\_nnb)Distance to roads: Summary statistics\}
 \centering
 
-\begin{tabular}[t]{l|r|r|r|r}
-\hline
+\begin{tabular}[t]{lrrrr}
+\toprule
 variable & mean & sd & min & max\\
-\hline
+\midrule
 dist\_road & 390 & 859 & 0.279 & 7637\\
-\hline
 nnb & 297 & 553 & 0.137 & 12850\\
-\hline
+\bottomrule
 \end{tabular}
 
 \textbackslash{}end\{table\}

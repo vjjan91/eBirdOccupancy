@@ -262,7 +262,8 @@
 library(magrittr)
 readr::read_csv("data/results/distance_roads_sites.csv") %>%
   knitr::kable(
-    caption = "Distance to roads: Summary statistics"
+    caption = "Distance to roads: Summary statistics",
+    booktabs = TRUE
   )
 
 
