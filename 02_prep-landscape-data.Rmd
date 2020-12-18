@@ -416,4 +416,4 @@ ggsave(fig_clim_lc_elev,
 )
 ```
 
-![](figs/fig_02_clim_lc_elev.png)
+![Annual Mean Temperature varied from ~28C in the plains to <14C at higher elevations. Annual precipitation increased at lower elevations (in the plains) to ~3000mm and ranged between 1500mm and 2200mm at mid- and high elevations across the Nilgiri and the Anamalai hills. (b) The proportion of land cover types varied across the study area as shown in this panel (1 = agriculture; 2 = forest; 3 = grassland; 4 = plantations; 5 = settlements; 6 = tea; 7 = water bodies).](figs/fig_02_clim_lc_elev.png)
