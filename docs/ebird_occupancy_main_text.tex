@@ -158,6 +158,11 @@ The data used in this work are available from \href{http://ebird.org/data/downlo
 
 The data processing for this project is described in the following sections. Navigate through them using the links in the sidebar.
 
+\hypertarget{main-text-figure-1}{%
+\subsection{Main Text Figure 1}\label{main-text-figure-1}}
+
+\includegraphics{figs/fig_01_elevation.png}
+
 \hypertarget{preparing-ebird-data}{%
 \section{Preparing eBird Data}\label{preparing-ebird-data}}
 
@@ -714,7 +719,11 @@ Figure code is hidden in versions rendered as HTML and PDF.
 \end{Highlighting}
 \end{Shaded}
 
+\begin{figure}
+\centering
 \includegraphics{figs/fig_02_clim_lc_elev.png}
+\caption{Annual Mean Temperature varied from \textasciitilde{}28C in the plains to \textless{}14C at higher elevations. Annual precipitation increased at lower elevations (in the plains) to \textasciitilde{}3000mm and ranged between 1500mm and 2200mm at mid- and high elevations across the Nilgiri and the Anamalai hills. (b) The proportion of land cover types varied across the study area as shown in this panel (1 = agriculture; 2 = forest; 3 = grassland; 4 = plantations; 5 = settlements; 6 = tea; 7 = water bodies).}
+\end{figure}
 
 \hypertarget{examining-spatial-sampling-bias}{%
 \section{Examining Spatial Sampling Bias}\label{examining-spatial-sampling-bias}}
@@ -993,7 +1002,7 @@ Figure code is hidden in versions rendered as HTML and PDF.
 \begin{figure}
 \centering
 \includegraphics{figs/fig_03_distance_to_roads.png}
-\caption{Distribution of checklist locations across the Nilgiri, Anamalai and Palani Hills. Inset histogram shows the distribution of checklists' distance to the nearest road, with the X-axis on a log-scale.}
+\caption{Spatial sampling bias of eBird observations across the Nilgiri and the Anamalai hills. A large proportion of localities/sites were next to roads and were on average only \textasciitilde{}300m from another locality/site.}
 \end{figure}
 
 \hypertarget{preparing-observer-expertise-scores}{%
@@ -2549,10 +2558,16 @@ Prepare figure of the number of species affected in each direction. Figure code 
 
 \CommentTok{# save}
 \KeywordTok{ggsave}\NormalTok{(fig_predictor_effect,}
-       \DataTypeTok{filename =} \StringTok{"figs/fig_03_aic_weight_effect.png"}\NormalTok{,}
+       \DataTypeTok{filename =} \StringTok{"figs/fig_04_aic_weight_effect.png"}\NormalTok{,}
        \DataTypeTok{dpi =} \DecValTok{300}\NormalTok{,}
        \DataTypeTok{width =} \DecValTok{168}\NormalTok{, }\DataTypeTok{height =} \DecValTok{130}\NormalTok{, }\DataTypeTok{units =} \StringTok{"mm"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
+
+\begin{figure}
+\centering
+\includegraphics{figs/fig_04_aic_weight_effect.png}
+\caption{(a) Cumulative AIC weights suggest that climatic predictors have higher relative importance when compared to landscape predictors. (b) The direction of association between species-specific probability of occupancy and climatic and landscape is shown here. While climatic predictors were both positively and negatively associated with the probability of occupancy for a number of species, human-associated land cover types were largely negatively associated with species-specific probability of occupancy.}
+\end{figure}
 
 \end{document}

@@ -319,7 +319,7 @@ fig_predictor_effect <-
 
 # save
 ggsave(fig_predictor_effect,
-       filename = "figs/fig_03_aic_weight_effect.png",
+       filename = "figs/fig_04_aic_weight_effect.png",
        dpi = 300,
        width = 168, height = 130, units = "mm")
 
