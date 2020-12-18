@@ -3,7 +3,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Prepare landscape data
+# Preparing Landscape Data
 
 Here, we prepare environmental layers which we have accessed as raster images from remote sensing platforms using Google Earth Engine.
 The GEE code can be found in a separate file.
@@ -91,8 +91,6 @@ chelsaData[[1]] <- chelsaData[[1]] / 10
 # stack chelsa data
 chelsaData <- raster::stack(chelsaData)
 ```
-
-### Stack prepared rasters
 
 We stack the terrain and climatic rasters.
 
@@ -185,7 +183,6 @@ data10m <- xtabs(n ~ value, data10m)
 }
 ```
 
-
 ## Resample other rasters to 1km
 
 We now resample all other rasters to a resolution of 1km.
@@ -274,6 +271,8 @@ land_data <- drop_na(land_data) %>%
   summarise_all(.funs = list(~ mean(.), ~ ci(.)))
 ```
 
+Figure code is hidden in versions rendered as HTML or PDF.
+
 ```{r plot_clim_elev, eval=FALSE, echo=FALSE}
 # make labeller
 chelsa <- c(
@@ -341,6 +340,8 @@ lc_elev <- full_join(lc_elev, lc_elev_canon)
 lc_elev <- replace_na(lc_elev, replace = list(n = 0, prop = 0))
 ```
 
+Figure code is hidden in versions rendered as HTML and PDF.
+
 ```{r fig_lc_elev, eval=FALSE, message=FALSE, echo=FALSE}
 # plot figure as tilemap
 fig_lc_elev <-
@@ -391,7 +392,7 @@ dev.off()
 
 ## Main Text Figure 2
 
-```{r}
+```{r echo=FALSE}
 library(patchwork)
 ```
 
@@ -415,4 +416,4 @@ ggsave(fig_clim_lc_elev,
 )
 ```
 
-![](figs/fig_02_clim_lc_elev.png)
+![Annual Mean Temperature varied from ~28C in the plains to <14C at higher elevations. Annual precipitation increased at lower elevations (in the plains) to ~3000mm and ranged between 1500mm and 2200mm at mid- and high elevations across the Nilgiri and the Anamalai hills. (b) The proportion of land cover types varied across the study area as shown in this panel (1 = agriculture; 2 = forest; 3 = grassland; 4 = plantations; 5 = settlements; 6 = tea; 7 = water bodies).](figs/fig_02_clim_lc_elev.png)

@@ -107,7 +107,7 @@
 
 \title{Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot}
 \author{Vijay Ramesh \and Pratik R. Gupte \and Morgan W. Tingley \and VV Robin \and Ruth DeFries}
-\date{2020-12-16}
+\date{2020-12-18}
 
 \begin{document}
 \maketitle
@@ -158,11 +158,22 @@ The data used in this work are available from \href{http://ebird.org/data/downlo
 
 The data processing for this project is described in the following sections. Navigate through them using the links in the sidebar.
 
+\hypertarget{main-text-figure-1}{%
+\subsection{Main Text Figure 1}\label{main-text-figure-1}}
+
+Figure prepared in QGIS 3.10.
+
+\begin{figure}
+\centering
+\includegraphics{figs/fig_01_elevation.png}
+\caption{A shaded relief of the study area - the Nilgiri and the Anamalai hills are shown in this figure. This map was made using the SRTM digital elevation model at a spatial resolution of 1km and data from Natural Earth were used to outline boundaries of water bodies.}
+\end{figure}
+
 \hypertarget{preparing-ebird-data}{%
-\section{Preparing eBird data}\label{preparing-ebird-data}}
+\section{Preparing eBird Data}\label{preparing-ebird-data}}
 
 \hypertarget{prepare-libraries-and-data-sources}{%
-\subsubsection{Prepare libraries and data sources}\label{prepare-libraries-and-data-sources}}
+\subsection{Prepare libraries and data sources}\label{prepare-libraries-and-data-sources}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -186,7 +197,7 @@ The data processing for this project is described in the following sections. Nav
 \end{Shaded}
 
 \hypertarget{filter-data}{%
-\subsubsection{Filter data}\label{filter-data}}
+\subsection{Filter data}\label{filter-data}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -233,7 +244,7 @@ Below code need not be run if it has been filtered once already and the above pa
 \end{Shaded}
 
 \hypertarget{process-filtered-data}{%
-\subsubsection{Process filtered data}\label{process-filtered-data}}
+\subsection{Process filtered data}\label{process-filtered-data}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -281,7 +292,7 @@ Below code need not be run if it has been filtered once already and the above pa
 \end{Shaded}
 
 \hypertarget{spatial-filter}{%
-\subsubsection{Spatial filter}\label{spatial-filter}}
+\subsection{Spatial filter}\label{spatial-filter}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -329,7 +340,7 @@ Below code need not be run if it has been filtered once already and the above pa
 \end{Shaded}
 
 \hypertarget{handle-presence-data}{%
-\subsubsection{Handle presence data}\label{handle-presence-data}}
+\subsection{Handle presence data}\label{handle-presence-data}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -389,7 +400,7 @@ Below code need not be run if it has been filtered once already and the above pa
 \end{Shaded}
 
 \hypertarget{add-decimal-time}{%
-\subsubsection{Add decimal time}\label{add-decimal-time}}
+\subsection{Add decimal time}\label{add-decimal-time}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -412,8 +423,7 @@ Below code need not be run if it has been filtered once already and the above pa
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{write-data}{%
-\subsubsection{Write data}\label{write-data}}
+This data is saved to file.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -423,11 +433,17 @@ Below code need not be run if it has been filtered once already and the above pa
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{prepare-landscape-data}{%
-\section{Prepare landscape data}\label{prepare-landscape-data}}
+\hypertarget{preparing-landscape-data}{%
+\section{Preparing Landscape Data}\label{preparing-landscape-data}}
+
+Here, we prepare environmental layers which we have accessed as raster images from remote sensing platforms using Google Earth Engine.
+The GEE code can be found in a separate file.
+The goal here is to resample all rasters so that they have the same resolution of 1km cells.
 
 \hypertarget{prepare-libraries}{%
-\subsubsection{Prepare libraries}\label{prepare-libraries}}
+\subsection{Prepare libraries}\label{prepare-libraries}}
+
+We load some common libraries for raster processing and define a custom mode function.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -453,7 +469,10 @@ Below code need not be run if it has been filtered once already and the above pa
 \end{Shaded}
 
 \hypertarget{prepare-spatial-extent}{%
-\subsubsection{Prepare spatial extent}\label{prepare-spatial-extent}}
+\subsection{Prepare spatial extent}\label{prepare-spatial-extent}}
+
+We prepare a 30km buffer around the boundary of the study area. This buffer will be used to mask the landscape rasters.
+The buffer procedure is done on data transformed to the UTM 43N CRS to avoid distortions.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -467,7 +486,9 @@ Below code need not be run if it has been filtered once already and the above pa
 \end{Shaded}
 
 \hypertarget{prepare-terrain-rasters}{%
-\subsubsection{Prepare terrain rasters}\label{prepare-terrain-rasters}}
+\subsection{Prepare terrain rasters}\label{prepare-terrain-rasters}}
+
+We prepare the elevation data which is an SRTM raster layer, and derive the slope and aspect from it after cropping it to the extent of the study site buffer.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -486,7 +507,9 @@ Below code need not be run if it has been filtered once already and the above pa
 \end{Shaded}
 
 \hypertarget{prepare-chelsa-rasters}{%
-\subsubsection{Prepare CHELSA rasters}\label{prepare-chelsa-rasters}}
+\subsection{Prepare CHELSA rasters}\label{prepare-chelsa-rasters}}
+
+We prepare the CHELSA rasters for annual temperature and annual precipitation in the same way, reading them in, cropping them to the study site buffer extent, and handling the temperature layer values which we divide by 10.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -504,7 +527,7 @@ Below code need not be run if it has been filtered once already and the above pa
   \KeywordTok{return}\NormalTok{(a)}
 \NormalTok{\})}
 
-\CommentTok{# is this in reference to temp?}
+\CommentTok{# divide temperature by 10}
 \NormalTok{chelsaData[[}\DecValTok{1}\NormalTok{]] <-}\StringTok{ }\NormalTok{chelsaData[[}\DecValTok{1}\NormalTok{]] }\OperatorTok{/}\StringTok{ }\DecValTok{10}
 
 \CommentTok{# stack chelsa data}
@@ -512,8 +535,7 @@ Below code need not be run if it has been filtered once already and the above pa
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{stack-prepared-rasters}{%
-\subsubsection{Stack prepared rasters}\label{stack-prepared-rasters}}
+We stack the terrain and climatic rasters.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -522,8 +544,10 @@ Below code need not be run if it has been filtered once already and the above pa
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{prepare-landcover}{%
-\subsubsection{Prepare landcover}\label{prepare-landcover}}
+\hypertarget{resample-landcover-from-10m-to-1km}{%
+\subsection{Resample landcover from 10m to 1km}\label{resample-landcover-from-10m-to-1km}}
+
+We read in a land cover classified image and resample that using the mode function to a 1km resolution.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -549,43 +573,15 @@ Below code need not be run if it has been filtered once already and the above pa
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{show-resampled-landcover}{%
-\subsubsection{Show resampled landcover}\label{show-resampled-landcover}}
+We compare the frequency of landcover classes between the original 10m and the resampled 1km raster to be certain that the resampling has not resulted in drastic misrepresentation of the frequency of any landcover type. This comparison is made using the figure below.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# mask by study area}
-\NormalTok{landcover <-}\StringTok{ }\KeywordTok{raster}\NormalTok{(landcover)}
-\CommentTok{# landcover <- mask(landcover, mask = as(hills, "Spatial"))}
-\NormalTok{lc_data <-}\StringTok{ }\KeywordTok{raster}\NormalTok{(}\StringTok{"data/landUseClassification/lc_01000m.tif"}\NormalTok{)}
-\CommentTok{# lc_data <- mask(lc_data, mask = as(hills, "Spatial"))}
-\NormalTok{lc_data[lc_data }\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{] <-}\StringTok{ }\OtherTok{NA}
+\hypertarget{resample-other-rasters-to-1km}{%
+\subsection{Resample other rasters to 1km}\label{resample-other-rasters-to-1km}}
 
-\CommentTok{# make raster barplot data}
-\NormalTok{data1km <-}\StringTok{ }\NormalTok{raster}\OperatorTok{::}\KeywordTok{getValues}\NormalTok{(lc_data)}
-\NormalTok{data1km <-}\StringTok{ }\NormalTok{data1km[data1km }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{]}
-\NormalTok{data1km <-}\StringTok{ }\KeywordTok{table}\NormalTok{(data1km)}
-\NormalTok{data1km <-}\StringTok{ }\NormalTok{data1km }\OperatorTok{/}\StringTok{ }\KeywordTok{sum}\NormalTok{(data1km)}
+We now resample all other rasters to a resolution of 1km.
 
-\NormalTok{data10m <-}\StringTok{ }\NormalTok{raster}\OperatorTok{::}\KeywordTok{getValues}\NormalTok{(landcover)}
-\NormalTok{data10m <-}\StringTok{ }\NormalTok{data10m[data10m }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{]}
-\NormalTok{data10m <-}\StringTok{ }\KeywordTok{tibble}\NormalTok{(}\DataTypeTok{value =}\NormalTok{ data10m)}
-\NormalTok{data10m <-}\StringTok{ }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{count}\NormalTok{(data10m, value) }\OperatorTok{%>%}\StringTok{ }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{n =}\NormalTok{ n }\OperatorTok{/}\StringTok{ }\KeywordTok{sum}\NormalTok{(n))}
-\NormalTok{data10m <-}\StringTok{ }\KeywordTok{xtabs}\NormalTok{(n }\OperatorTok{~}\StringTok{ }\NormalTok{value, data10m)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{figure}
-\centering
-\includegraphics{figs/figLandcoverResample.png}
-\caption{This is the wrong figure for sure.}
-\end{figure}
-
-\hypertarget{resample-rasters}{%
-\subsection{Resample rasters}\label{resample-rasters}}
-
-\hypertarget{read-landcover-as-list}{%
-\subsubsection{Read landcover as list}\label{read-landcover-as-list}}
+\hypertarget{read-in-resampled-landcover}{%
+\subsubsection{Read in resampled landcover}\label{read-in-resampled-landcover}}
 
 Here, we read in the 1km landcover raster and set 0 to NA.
 
@@ -596,8 +592,8 @@ Here, we read in the 1km landcover raster and set 0 to NA.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{reproject-environmental-data-to-landcover}{%
-\subsubsection{Reproject environmental data to landcover}\label{reproject-environmental-data-to-landcover}}
+\hypertarget{reproject-environmental-data-using-landcover-as-a-template}{%
+\subsubsection{Reproject environmental data using landcover as a template}\label{reproject-environmental-data-using-landcover-as-a-template}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -619,8 +615,8 @@ Here, we read in the 1km landcover raster and set 0 to NA.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{climate-in-relation-to-elevation}{%
-\subsection{Climate in relation to elevation}\label{climate-in-relation-to-elevation}}
+\hypertarget{temperature-and-rainfall-in-relation-to-elevation}{%
+\subsection{Temperature and rainfall in relation to elevation}\label{temperature-and-rainfall-in-relation-to-elevation}}
 
 \hypertarget{prepare-libraries-and-ci-function}{%
 \subsubsection{Prepare libraries and CI function}\label{prepare-libraries-and-ci-function}}
@@ -641,8 +637,8 @@ Here, we read in the 1km landcover raster and set 0 to NA.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{load-resampled-landscape}{%
-\subsubsection{Load resampled landscape}\label{load-resampled-landscape}}
+\hypertarget{load-resampled-environmental-rasters}{%
+\subsubsection{Load resampled environmental rasters}\label{load-resampled-environmental-rasters}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -683,14 +679,10 @@ Here, we read in the 1km landcover raster and set 0 to NA.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{plot-climatic-variables-over-elevation}{%
-\subsubsection{Plot climatic variables over elevation}\label{plot-climatic-variables-over-elevation}}
+Figure code is hidden in versions rendered as HTML or PDF.
 
-\hypertarget{landcover-in-relation-to-elevation}{%
-\subsection{Landcover in relation to elevation}\label{landcover-in-relation-to-elevation}}
-
-\hypertarget{get-data-from-landscape-rasters}{%
-\subsubsection{Get data from landscape rasters}\label{get-data-from-landscape-rasters}}
+\hypertarget{land-cover-type-in-relation-to-elevation}{%
+\subsection{Land cover type in relation to elevation}\label{land-cover-type-in-relation-to-elevation}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -722,22 +714,23 @@ Here, we read in the 1km landcover raster and set 0 to NA.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{plot-proportional-landcover-in-elevation}{%
-\subsubsection{Plot proportional landcover in elevation}\label{plot-proportional-landcover-in-elevation}}
+Figure code is hidden in versions rendered as HTML and PDF.
 
-\hypertarget{figure-2-climate-elevation-and-landcover-elevation}{%
-\subsubsection{Figure 2: Climate \textasciitilde{} elevation and landcover \textasciitilde{} elevation}\label{figure-2-climate-elevation-and-landcover-elevation}}
+\hypertarget{main-text-figure-2}{%
+\subsection{Main Text Figure 2}\label{main-text-figure-2}}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(patchwork)}
-\end{Highlighting}
-\end{Shaded}
-
+\begin{figure}
+\centering
 \includegraphics{figs/fig_02_clim_lc_elev.png}
+\caption{Annual Mean Temperature varied from \textasciitilde{}28C in the plains to \textless{}14C at higher elevations. Annual precipitation increased at lower elevations (in the plains) to \textasciitilde{}3000mm and ranged between 1500mm and 2200mm at mid- and high elevations across the Nilgiri and the Anamalai hills. (b) The proportion of land cover types varied across the study area as shown in this panel (1 = agriculture; 2 = forest; 3 = grassland; 4 = plantations; 5 = settlements; 6 = tea; 7 = water bodies).}
+\end{figure}
 
-\hypertarget{distance-to-roads}{%
-\section{Distance to roads}\label{distance-to-roads}}
+\hypertarget{examining-spatial-sampling-bias}{%
+\section{Examining Spatial Sampling Bias}\label{examining-spatial-sampling-bias}}
+
+The goal of this section is to determine how far each checklist location is from the nearest road, and how far each site is from its nearest neighbour. This involves finding the pairwise distance between a large number of unique checklist locations to a vast number of roads, as well as to each other.
+
+Parts of this section are thus implemented in Python, using the R-Python interface package, \texttt{reticulate}.
 
 \hypertarget{prepare-libraries-1}{%
 \subsection{Prepare libraries}\label{prepare-libraries-1}}
@@ -771,7 +764,7 @@ Here, we read in the 1km landcover raster and set 0 to NA.
 \end{Highlighting}
 \end{Shaded}
 
-Importing python libraries.
+Importing python libraries. These libraries need to be installed before use.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -798,6 +791,19 @@ Importing python libraries.
 
 \hypertarget{prepare-data-for-processing}{%
 \subsection{Prepare data for processing}\label{prepare-data-for-processing}}
+
+First we read in the roads shapefile, which is obtained from the Open Street Map database.
+Then we read in the checklsit covariates, and extract the unique coordinate pairs.
+All data are reprojected to be in the UTM 43N system.
+
+We define a custom Python function to separate multi-feature geometries (here, roads which are in parts) into single feature geometries.
+Then we define a function to use the K-dimensional trees method from \texttt{scipy} to find the distance between two geometries, here, the distance between the locations and the nearest road.
+We define another function to find the distance between checklist locations and all other checklist locations.
+
+We use these functions to find the distance between each checklist location and the nearest road and the next nearest site.
+
+\hypertarget{python-functions-and-distance-calculations}{%
+\subsubsection{Python functions and distance calculations}\label{python-functions-and-distance-calculations}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -838,7 +844,7 @@ Importing python libraries.
     \ControlFlowTok{return}\NormalTok{ simpleRoads}
 
 
-\CommentTok{# function to use ckdtrees for nearest point finding}
+\CommentTok{# function to use ckdtrees to find the nearest road}
 \KeywordTok{def}\NormalTok{ ckdnearest(gdfA, gdfB):}
 \NormalTok{    A }\OperatorTok{=}\NormalTok{ np.concatenate(}
 \NormalTok{    [np.array(geom.coords) }\ControlFlowTok{for}\NormalTok{ geom }\KeywordTok{in}\NormalTok{ gdfA.geometry.to_list()])}
@@ -850,7 +856,7 @@ Importing python libraries.
     \ControlFlowTok{return}\NormalTok{ dist}
 
 
-\CommentTok{# function to use ckdtrees for nearest point finding}
+\CommentTok{# function to use ckdtrees for nearest other checklist point}
 \KeywordTok{def}\NormalTok{ ckdnearest_point(gdfA, gdfB):}
 \NormalTok{    A }\OperatorTok{=}\NormalTok{ np.concatenate(}
 \NormalTok{    [np.array(geom.coords) }\ControlFlowTok{for}\NormalTok{ geom }\KeywordTok{in}\NormalTok{ gdfA.geometry.to_list()])}
@@ -881,46 +887,10 @@ Importing python libraries.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{species-specific-nearest-sites}{%
-\subsection{Species specific nearest sites}\label{species-specific-nearest-sites}}
+\hypertarget{spatially-explicit-filter-on-checklists}{%
+\subsubsection{Spatially explicit filter on checklists}\label{spatially-explicit-filter-on-checklists}}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# load data and send to python}
-\KeywordTok{load}\NormalTok{(}\StringTok{"data_prelim_processing.rdata"}\NormalTok{)}
-\NormalTok{py}\OperatorTok{$}\NormalTok{data <-}\StringTok{ }\NormalTok{dataGrouped}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# split data by species}
-\NormalTok{datalist }\OperatorTok{=}\NormalTok{ [pd.DataFrame(y) }\ControlFlowTok{for}\NormalTok{ x, y }\KeywordTok{in}\NormalTok{ data.groupby(}\StringTok{'scientific_name'}\NormalTok{, }
-\NormalTok{                                                      as_index}\OperatorTok{=}\VariableTok{False}\NormalTok{)]}
-
-
-\CommentTok{# function to get unique vals anc convert to gpd}
-\KeywordTok{def}\NormalTok{ convData(somedata):}
-\NormalTok{    somedata }\OperatorTok{=}\NormalTok{ somedata.drop_duplicates(subset}\OperatorTok{=}
-\NormalTok{    [}\StringTok{'longitude'}\NormalTok{,}\StringTok{'latitude'}\NormalTok{])[[}\StringTok{'longitude'}\NormalTok{, }\StringTok{'latitude'}\NormalTok{, }\StringTok{'scientific_name'}\NormalTok{]]}
-\NormalTok{    unique_locs }\OperatorTok{=}\NormalTok{ gpd.GeoDataFrame(somedata,}
-\NormalTok{                                  geometry}\OperatorTok{=}\NormalTok{gpd.points_from_xy(somedata.longitude, }
-\NormalTok{                                  somedata.latitude))}
-\NormalTok{    unique_locs.crs }\OperatorTok{=}\NormalTok{ \{}\StringTok{'init'}\NormalTok{ :}\StringTok{'epsg:4326'}\NormalTok{\}}
-\NormalTok{    unique_locs }\OperatorTok{=}\NormalTok{ unique_locs.to_crs(\{}\StringTok{'init'}\NormalTok{: }\StringTok{'epsg:32643'}\NormalTok{\})}
-\NormalTok{    dists }\OperatorTok{=}\NormalTok{ ckdnearest_point(unique_locs, unique_locs)}
-\NormalTok{    unique_locs }\OperatorTok{=}\NormalTok{ pd.DataFrame(unique_locs.drop(columns}\OperatorTok{=}\StringTok{'geometry'}\NormalTok{))}
-\NormalTok{    unique_locs[}\StringTok{'nnb'}\NormalTok{] }\OperatorTok{=}\NormalTok{ dists}
-    \ControlFlowTok{return}\NormalTok{ unique_locs}
-
-
-\CommentTok{# apply function to datalist}
-\NormalTok{datalist }\OperatorTok{=} \BuiltInTok{list}\NormalTok{(}\BuiltInTok{map}\NormalTok{(convData, datalist))}
-\end{Highlighting}
-\end{Shaded}
-
-\hypertarget{explicit-spatial-filter}{%
-\subsection{Explicit spatial filter}\label{explicit-spatial-filter}}
+We filter the checklists by the boundary of the study area. This is \emph{not} the extent.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -941,33 +911,16 @@ Importing python libraries.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{species-specific-filter}{%
-\subsection{Species specific filter}\label{species-specific-filter}}
+\hypertarget{main-text-figure-3}{%
+\subsection{Main Text Figure 3}\label{main-text-figure-3}}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# extract values from python}
-\NormalTok{sp_spec_data <-}\StringTok{ }\NormalTok{py}\OperatorTok{$}\NormalTok{datalist}
+\hypertarget{prepare-histogram-of-distance-to-roads}{%
+\subsubsection{Prepare histogram of distance to roads}\label{prepare-histogram-of-distance-to-roads}}
 
-\NormalTok{sp_spec_data <-}\StringTok{ }\KeywordTok{map}\NormalTok{(sp_spec_data, }\ControlFlowTok{function}\NormalTok{(df) \{}
-\NormalTok{  df <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(df) }\OperatorTok{%>%}
-\StringTok{    }\KeywordTok{st_as_sf}\NormalTok{(}\DataTypeTok{coords =} \KeywordTok{c}\NormalTok{(}\StringTok{"longitude"}\NormalTok{, }\StringTok{"latitude"}\NormalTok{)) }\OperatorTok{%>%}
-\StringTok{    `}\DataTypeTok{st_crs<-}\StringTok{`}\NormalTok{(}\DecValTok{4326}\NormalTok{) }\OperatorTok{%>%}
-\StringTok{    }\KeywordTok{st_transform}\NormalTok{(}\DecValTok{32643}\NormalTok{) }\OperatorTok{%>%}
-\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{id =} \DecValTok{1}\OperatorTok{:}\KeywordTok{nrow}\NormalTok{(.)) }\OperatorTok{%>%}
-\StringTok{    }\KeywordTok{filter}\NormalTok{(id }\OperatorTok{%in%}\StringTok{ }\KeywordTok{unlist}\NormalTok{(}\KeywordTok{st_contains}\NormalTok{(wg, .))) }\OperatorTok{%>%}
-\StringTok{    }\KeywordTok{st_drop_geometry}\NormalTok{()}
-\NormalTok{\})}
-
-\NormalTok{sp_spec_data <-}\StringTok{ }\KeywordTok{bind_rows}\NormalTok{(sp_spec_data)}
-\end{Highlighting}
-\end{Shaded}
-
-\hypertarget{plot-histogram-distance-to-roads}{%
-\subsection{Plot histogram: distance to roads}\label{plot-histogram-distance-to-roads}}
+Figure code is hidden in versions rendered as HTML or PDF.
 
 \hypertarget{table-distance-to-roads}{%
-\subsection{Table: Distance to roads}\label{table-distance-to-roads}}
+\subsubsection{Table: Distance to roads}\label{table-distance-to-roads}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -988,20 +941,8 @@ Importing python libraries.
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tabular}{l|r|r|r|r}
-\hline
-variable & mean & sd & min & max\\
-\hline
-dist\_road & 390 & 859 & 0.279 & 7637\\
-\hline
-nnb & 297 & 553 & 0.137 & 12850\\
-\hline
-\end{tabular}
-
-\textbf{Does this table need a caption?}
-
-\hypertarget{histograms-of-distance-to-nearest-site}{%
-\subsection{Histograms of distance to nearest site}\label{histograms-of-distance-to-nearest-site}}
+\hypertarget{distance-to-nearest-neighbouring-site}{%
+\subsection{Distance to nearest neighbouring site}\label{distance-to-nearest-neighbouring-site}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1010,122 +951,10 @@ nnb & 297 & 553 & 0.137 & 12850\\
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{table-nearest-site-where-the-species-was-seen}{%
-\subsection{Table: Nearest site where the species was seen}\label{table-nearest-site-where-the-species-was-seen}}
+Figure code is hidden in versions rendered as HTML and PDF.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# write the mean and ci95 to file}
-\NormalTok{sp_spec_data }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{group_by}\NormalTok{(scientific_name) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{summarise_at}\NormalTok{(}
-    \KeywordTok{vars}\NormalTok{(nnb),}
-    \KeywordTok{list}\NormalTok{(}\OperatorTok{~}\StringTok{ }\KeywordTok{mean}\NormalTok{(.), }\OperatorTok{~}\StringTok{ }\KeywordTok{sd}\NormalTok{(.), }\OperatorTok{~}\StringTok{ }\KeywordTok{ci}\NormalTok{(.), }\OperatorTok{~}\StringTok{ }\KeywordTok{min}\NormalTok{(.), }\OperatorTok{~}\StringTok{ }\KeywordTok{max}\NormalTok{(.))}
-\NormalTok{  ) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{write_csv}\NormalTok{(}\StringTok{"data/results/dist_nnb_species_specific.csv"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{tabular}{l|r|r|r|r|r}
-\hline
-scientific\_name & mean & sd & ci & min & max\\
-\hline
-Alcippe poioicephala & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Carpodacus erythrinus & 416 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Centropus sinensis & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Chalcophaps indica & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Chloropsis aurifrons & 417 & 809 & 25.0 & 0.137 & 16461\\
-\hline
-Chrysocolaptes guttacristatus & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Cinnyris asiaticus & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Copsychus fulicatus & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Copsychus saularis & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Culicicapa ceylonensis & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Cyornis tickelliae & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Dicaeum erythrorhynchos & 416 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Eumyias albicaudatus & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Hierococcyx varius & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Hypsipetes ganeesa & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Iole indica & 418 & 810 & 25.1 & 0.137 & 16461\\
-\hline
-Irena puella & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Lanius schach & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Leptocoma minima & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Leptocoma zeylonica & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Motacilla maderaspatensis & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Myophonus horsfieldii & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Orthotomus sutorius & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Parus cinereus & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Passer domesticus & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Pellorneum ruficeps & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Pericrocotus cinnamomeus & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Pericrocotus flammeus & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Picus xanthopygaeus & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Pomatorhinus horsfieldii & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Psilopogon viridis & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Psittacula columboides & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Psittacula cyanocephala & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Pycnonotus cafer & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Pycnonotus jocosus & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Saxicola caprata & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Sitta frontalis & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Streptopelia chinensis & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Turdoides striata & 418 & 810 & 25.1 & 0.137 & 16461\\
-\hline
-Turdus simillimus & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Upupa epops & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-Zosterops palpebrosus & 417 & 808 & 25.0 & 0.137 & 16461\\
-\hline
-\end{tabular}
-
-\textbf{Is this figure necessary here?}
-
-\begin{figure}
-\centering
-\includegraphics{figs/fig_nnb_species.png}
-\caption{Histograms showing the species-specific distances to nearest neighbouring site.}
-\end{figure}
-
-\hypertarget{visualise-distance-to-roads-and-nearest-site}{%
-\subsection{Visualise distance to roads and nearest site}\label{visualise-distance-to-roads-and-nearest-site}}
+\hypertarget{main-text-figure-3-1}{%
+\subsection{Main Text Figure 3}\label{main-text-figure-3-1}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1151,17 +980,19 @@ Zosterops palpebrosus & 417 & 808 & 25.0 & 0.137 & 16461\\
 \end{Highlighting}
 \end{Shaded}
 
+Figure code is hidden in versions rendered as HTML and PDF.
+
 \begin{figure}
 \centering
-\includegraphics{figs/fig_distRoads.png}
-\caption{Distribution of checklist locations across the Nilgiri, Anamalai and Palani Hills. Inset histogram shows the distribution of checklists' distance to the nearest road, with the X-axis on a log-scale.}
+\includegraphics{figs/fig_03_distance_to_roads.png}
+\caption{Spatial sampling bias of eBird observations across the Nilgiri and the Anamalai hills. A large proportion of localities/sites were next to roads and were on average only \textasciitilde{}300m from another locality/site.}
 \end{figure}
 
-\hypertarget{prepare-observer-expertise}{%
-\section{Prepare observer expertise}\label{prepare-observer-expertise}}
+\hypertarget{preparing-observer-expertise-scores}{%
+\section{Preparing Observer Expertise Scores}\label{preparing-observer-expertise-scores}}
 
 \hypertarget{prepare-libraries-2}{%
-\subsubsection{Prepare libraries}\label{prepare-libraries-2}}
+\subsection{Prepare libraries}\label{prepare-libraries-2}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1185,7 +1016,7 @@ Zosterops palpebrosus & 417 & 808 & 25.0 & 0.137 & 16461\\
 \end{Shaded}
 
 \hypertarget{prepare-data}{%
-\subsubsection{Prepare data}\label{prepare-data}}
+\subsection{Prepare data}\label{prepare-data}}
 
 Here, we go through the data preparation process again because we might want to assess observer expertise over a larger area than the study site.
 
@@ -1251,8 +1082,8 @@ Here, we go through the data preparation process again because we might want to 
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{explicit-spatial-subset}{%
-\subsubsection{Explicit spatial subset}\label{explicit-spatial-subset}}
+\hypertarget{spatially-explicit-filter-on-checklists-1}{%
+\subsection{Spatially explicit filter on checklists}\label{spatially-explicit-filter-on-checklists-1}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1284,7 +1115,7 @@ Here, we go through the data preparation process again because we might want to 
 \end{Shaded}
 
 \hypertarget{prepare-species-of-interest}{%
-\subsubsection{Prepare species of interest}\label{prepare-species-of-interest}}
+\subsection{Prepare species of interest}\label{prepare-species-of-interest}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1307,7 +1138,7 @@ Here, we go through the data preparation process again because we might want to 
 \end{Shaded}
 
 \hypertarget{prepare-checklists-for-observer-score}{%
-\subsubsection{Prepare checklists for observer score}\label{prepare-checklists-for-observer-score}}
+\subsection{Prepare checklists for observer score}\label{prepare-checklists-for-observer-score}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1346,9 +1177,9 @@ Here, we go through the data preparation process again because we might want to 
 \end{Shaded}
 
 \hypertarget{get-landcover}{%
-\subsubsection{Get landcover}\label{get-landcover}}
+\subsection{Get landcover}\label{get-landcover}}
 
-Using the landcover 1km resolution here.
+Read in land cover type data resampled at 1km resolution.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1378,8 +1209,8 @@ Using the landcover 1km resolution here.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{filter-data-for-stats}{%
-\subsubsection{Filter data for stats}\label{filter-data-for-stats}}
+\hypertarget{filter-checklist-data}{%
+\subsection{Filter checklist data}\label{filter-checklist-data}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1422,8 +1253,8 @@ Using the landcover 1km resolution here.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{run-observer-expertise-model}{%
-\subsubsection{Run observer expertise model}\label{run-observer-expertise-model}}
+\hypertarget{model-observer-expertise}{%
+\subsection{Model observer expertise}\label{model-observer-expertise}}
 
 Our observer expertise model aims to include the random intercept effect of observer identity, with a random slope effect of duration. This models the different rate of species accumulation by different observers, as well as their different starting points.
 
@@ -1446,9 +1277,6 @@ Our observer expertise model aims to include the random intercept effect of obse
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{write-model-to-file}{%
-\subsubsection{Write model to file}\label{write-model-to-file}}
-
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# make dir if absent}
@@ -1464,9 +1292,6 @@ Our observer expertise model aims to include the random intercept effect of obse
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
-
-\hypertarget{get-observer-expertise-as-species-in-60-mins}{%
-\subsubsection{Get observer expertise as species in 60 mins}\label{get-observer-expertise-as-species-in-60-mins}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1491,9 +1316,6 @@ Our observer expertise model aims to include the random intercept effect of obse
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{write-observer-expertise-to-file}{%
-\subsubsection{Write observer expertise to file}\label{write-observer-expertise-to-file}}
-
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{fwrite}\NormalTok{(dfPredict }\OperatorTok{%>%}\StringTok{ }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{select}\NormalTok{(observer, score),}
@@ -1502,11 +1324,11 @@ Our observer expertise model aims to include the random intercept effect of obse
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{add-covariates-to-subsampled-data}{%
-\section{Add covariates to subsampled data}\label{add-covariates-to-subsampled-data}}
+\hypertarget{adding-covariates-to-checklist-data}{%
+\section{Adding Covariates to Checklist Data}\label{adding-covariates-to-checklist-data}}
 
 \hypertarget{prepare-libraries-and-data}{%
-\subsubsection{Prepare libraries and data}\label{prepare-libraries-and-data}}
+\subsection{Prepare libraries and data}\label{prepare-libraries-and-data}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1528,7 +1350,7 @@ Our observer expertise model aims to include the random intercept effect of obse
 \end{Shaded}
 
 \hypertarget{spatial-subsampling}{%
-\subsubsection{Spatial subsampling}\label{spatial-subsampling}}
+\subsection{Spatial subsampling}\label{spatial-subsampling}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1584,7 +1406,7 @@ Our observer expertise model aims to include the random intercept effect of obse
 \end{Shaded}
 
 \hypertarget{temporal-subsampling}{%
-\subsubsection{Temporal subsampling}\label{temporal-subsampling}}
+\subsection{Temporal subsampling}\label{temporal-subsampling}}
 
 Get 10 random (if available) observations of each species at each locality.
 
@@ -1613,8 +1435,8 @@ Get 10 random (if available) observations of each species at each locality.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{add-expertise-score}{%
-\subsubsection{Add expertise score}\label{add-expertise-score}}
+\hypertarget{add-checklist-calibration-index}{%
+\subsection{Add checklist calibration index}\label{add-checklist-calibration-index}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1659,7 +1481,7 @@ Get 10 random (if available) observations of each species at each locality.
 \end{Shaded}
 
 \hypertarget{add-landscape-covariates}{%
-\subsubsection{Add landscape covariates}\label{add-landscape-covariates}}
+\subsection{Add landscape covariates}\label{add-landscape-covariates}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1678,8 +1500,8 @@ Get 10 random (if available) observations of each species at each locality.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{construct-buffers-around-subsampled-points}{%
-\subsubsection{Construct buffers around subsampled points}\label{construct-buffers-around-subsampled-points}}
+\hypertarget{spatial-buffers-around-selected-checklists}{%
+\subsection{Spatial buffers around selected checklists}\label{spatial-buffers-around-selected-checklists}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1717,8 +1539,8 @@ Get 10 random (if available) observations of each species at each locality.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{getting-area-means}{%
-\subsection{Getting area means}\label{getting-area-means}}
+\hypertarget{spatial-buffer-wide-covariates}{%
+\subsection{Spatial buffer-wide covariates}\label{spatial-buffer-wide-covariates}}
 
 \hypertarget{mean-environmental-covariates}{%
 \subsubsection{Mean environmental covariates}\label{mean-environmental-covariates}}
@@ -1747,8 +1569,8 @@ All covariates are 2.5km mean values and prefixed ``am\_''.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{proportional-landcover}{%
-\subsubsection{Proportional landcover}\label{proportional-landcover}}
+\hypertarget{proportions-of-land-cover-type}{%
+\subsubsection{Proportions of land cover type}\label{proportions-of-land-cover-type}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1784,8 +1606,8 @@ All covariates are 2.5km mean values and prefixed ``am\_''.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{join-landscape-data-to-obs-data}{%
-\subsubsection{Join landscape data to obs data}\label{join-landscape-data-to-obs-data}}
+\hypertarget{link-landscape-covariates-to-checklists}{%
+\subsubsection{Link landscape covariates to checklists}\label{link-landscape-covariates-to-checklists}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1801,8 +1623,7 @@ All covariates are 2.5km mean values and prefixed ``am\_''.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{write-data-to-files}{%
-\subsubsection{Write data to files}\label{write-data-to-files}}
+Save data to file.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1814,8 +1635,8 @@ All covariates are 2.5km mean values and prefixed ``am\_''.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{occupancy-modelling}{%
-\section{Occupancy modelling}\label{occupancy-modelling}}
+\hypertarget{modelling-species-occupancy}{%
+\section{Modelling Species Occupancy}\label{modelling-species-occupancy}}
 
 \hypertarget{load-necessary-libraries}{%
 \subsubsection{Load necessary libraries}\label{load-necessary-libraries}}
@@ -1854,7 +1675,7 @@ Here, we load the required dataframe that contains 10 random visits to a site. P
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# Load in the prepared dataframe that contains 10 random visits to each site}
-\NormalTok{dat <-}\StringTok{ }\KeywordTok{fread}\NormalTok{(}\StringTok{"data/dataCovars_10km.csv"}\NormalTok{, }\DataTypeTok{header =}\NormalTok{ T)}
+\NormalTok{dat <-}\StringTok{ }\KeywordTok{fread}\NormalTok{(}\StringTok{"data/dataCovars_2.5km.csv"}\NormalTok{, }\DataTypeTok{header =}\NormalTok{ T)}
 \KeywordTok{setDF}\NormalTok{(dat)}
 \KeywordTok{head}\NormalTok{(dat)}
 
@@ -1911,7 +1732,7 @@ Here, we load the required dataframe that contains 10 random visits to a site. P
 \CommentTok{# Scaling detection and occupancy covariates}
 \NormalTok{dat.scaled <-}\StringTok{ }\NormalTok{dat}\FloatTok{.1}
 \NormalTok{dat.scaled[, }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{11}\NormalTok{, }\DecValTok{16}\OperatorTok{:}\DecValTok{25}\NormalTok{)] <-}\StringTok{ }\KeywordTok{scale}\NormalTok{(dat.scaled[, }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{11}\NormalTok{, }\DecValTok{16}\OperatorTok{:}\DecValTok{25}\NormalTok{)]) }\CommentTok{# Scaling and standardizing detection and site-level covariates}
-\KeywordTok{fwrite}\NormalTok{(dat.scaled, }\DataTypeTok{file =} \StringTok{"data/scaledCovs_2.5km.csv"}\NormalTok{)}
+\KeywordTok{fwrite}\NormalTok{(dat.scaled, }\DataTypeTok{file =} \StringTok{"data/scaled-covars-2.5km.csv"}\NormalTok{)}
 
 \NormalTok{dat.scaled <-}\StringTok{ }\KeywordTok{fread}\NormalTok{(}\StringTok{"data/05_scaled-covars-2.5km.csv"}\NormalTok{, }\DataTypeTok{header =}\NormalTok{ T)}
 \KeywordTok{setDF}\NormalTok{(dat.scaled)}
@@ -1992,7 +1813,7 @@ Here, we load the required dataframe that contains 10 random visits to a site. P
 \KeywordTok{close}\NormalTok{(pb)}
 
 \CommentTok{# Store all the  model outputs for each species}
-\KeywordTok{capture.output}\NormalTok{(all_null, }\DataTypeTok{file =} \StringTok{"C:}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Users}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{vr235}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Downloads}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{null_models.csv"}\NormalTok{)}
+\KeywordTok{capture.output}\NormalTok{(all_null, }\DataTypeTok{file =} \StringTok{"data}\CharTok{\textbackslash{}r}\StringTok{esults}\CharTok{\textbackslash{}n}\StringTok{ull_models.csv"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2130,13 +1951,13 @@ Here, we use the \texttt{unmarked} package in R (Fiske and Chandler 2019) to ide
 \CommentTok{## Storing output from the above models in excel sheets}
 
 \CommentTok{# 1. Store all the dredged model outputs for each species (variable: det_dred() - see above)}
-\KeywordTok{write.xlsx}\NormalTok{(det_dred, }\DataTypeTok{file =} \StringTok{"C:}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Users}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{vr235}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Downloads}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{det_dred.xlsx"}\NormalTok{)}
+\KeywordTok{write.xlsx}\NormalTok{(det_dred, }\DataTypeTok{file =} \StringTok{"data}\CharTok{\textbackslash{}r}\StringTok{esults\textbackslash{}det_dred.xlsx"}\NormalTok{)}
 
 \CommentTok{# 2. Store all the model averaged outputs for each species and the relative importance score}
-\KeywordTok{write.xlsx}\NormalTok{(det_avg, }\DataTypeTok{file =} \StringTok{"C:}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Users}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{vr235}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Downloads}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{det_avg.xlsx"}\NormalTok{, }\DataTypeTok{rowNames =}\NormalTok{ T, }\DataTypeTok{colNames =}\NormalTok{ T)}
-\KeywordTok{write.xlsx}\NormalTok{(det_imp, }\DataTypeTok{file =} \StringTok{"C:}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Users}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{vr235}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Downloads}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{det_imp.xlsx"}\NormalTok{, }\DataTypeTok{rowNames =}\NormalTok{ T, }\DataTypeTok{colNames =}\NormalTok{ T)}
+\KeywordTok{write.xlsx}\NormalTok{(det_avg, }\DataTypeTok{file =} \StringTok{"data}\CharTok{\textbackslash{}r}\StringTok{esults\textbackslash{}det_avg.xlsx"}\NormalTok{, }\DataTypeTok{rowNames =}\NormalTok{ T, }\DataTypeTok{colNames =}\NormalTok{ T)}
+\KeywordTok{write.xlsx}\NormalTok{(det_imp, }\DataTypeTok{file =} \StringTok{"data}\CharTok{\textbackslash{}r}\StringTok{esults\textbackslash{}det_imp.xlsx"}\NormalTok{, }\DataTypeTok{rowNames =}\NormalTok{ T, }\DataTypeTok{colNames =}\NormalTok{ T)}
 
-\KeywordTok{write.xlsx}\NormalTok{(det_modelEst, }\DataTypeTok{file =} \StringTok{"C:}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Users}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{vr235}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Downloads}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{det_modelEst.xlsx"}\NormalTok{, }\DataTypeTok{rowNames =}\NormalTok{ T, }\DataTypeTok{colNames =}\NormalTok{ T)}
+\KeywordTok{write.xlsx}\NormalTok{(det_modelEst, }\DataTypeTok{file =} \StringTok{"data}\CharTok{\textbackslash{}r}\StringTok{esults\textbackslash{}det_modelEst.xlsx"}\NormalTok{, }\DataTypeTok{rowNames =}\NormalTok{ T, }\DataTypeTok{colNames =}\NormalTok{ T)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2277,14 +2098,14 @@ Here, we use the \texttt{unmarked} package in R (Fiske and Chandler 2019) to ide
 \KeywordTok{close}\NormalTok{(pb)}
 
 \CommentTok{# 1. Store all the dredged model outputs for each species (for both landcover and climate)}
-\KeywordTok{write.xlsx}\NormalTok{(lc_clim, }\DataTypeTok{file =} \StringTok{"C:}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Users}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{vr235}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Downloads}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{lc_clim.xlsx"}\NormalTok{)}
+\KeywordTok{write.xlsx}\NormalTok{(lc_clim, }\DataTypeTok{file =} \StringTok{"data}\CharTok{\textbackslash{}r}\StringTok{esults\textbackslash{}lc-clim.xlsx"}\NormalTok{)}
 
 \CommentTok{# 2. Store all the model averaged outputs for each species and relative importance scores}
-\KeywordTok{write.xlsx}\NormalTok{(lc_clim_avg, }\DataTypeTok{file =} \StringTok{"C:}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Users}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{vr235}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Downloads}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{lc_avg.xlsx"}\NormalTok{, }\DataTypeTok{rowNames =}\NormalTok{ T, }\DataTypeTok{colNames =}\NormalTok{ T)}
-\KeywordTok{write.xlsx}\NormalTok{(lc_clim_imp, }\DataTypeTok{file =} \StringTok{"C:}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Users}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{vr235}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Downloads}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{lc_imp.xlsx"}\NormalTok{, }\DataTypeTok{rowNames =}\NormalTok{ T, }\DataTypeTok{colNames =}\NormalTok{ T)}
+\KeywordTok{write.xlsx}\NormalTok{(lc_clim_avg, }\DataTypeTok{file =} \StringTok{"data}\CharTok{\textbackslash{}r}\StringTok{esults\textbackslash{}lc-clim-avg.xlsx"}\NormalTok{, }\DataTypeTok{rowNames =}\NormalTok{ T, }\DataTypeTok{colNames =}\NormalTok{ T)}
+\KeywordTok{write.xlsx}\NormalTok{(lc_clim_imp, }\DataTypeTok{file =} \StringTok{"data}\CharTok{\textbackslash{}r}\StringTok{esults\textbackslash{}lc-clim-imp.xlsx"}\NormalTok{, }\DataTypeTok{rowNames =}\NormalTok{ T, }\DataTypeTok{colNames =}\NormalTok{ T)}
 
 \CommentTok{# 3. Store all model estimates}
-\KeywordTok{write.xlsx}\NormalTok{(lc_clim_modelEst, }\DataTypeTok{file =} \StringTok{"C:}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Users}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{vr235}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Downloads}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{lc_modelEst.xlsx"}\NormalTok{, }\DataTypeTok{rowNames =}\NormalTok{ T, }\DataTypeTok{colNames =}\NormalTok{ T)}
+\KeywordTok{write.xlsx}\NormalTok{(lc_clim_modelEst, }\DataTypeTok{file =} \StringTok{"data}\CharTok{\textbackslash{}r}\StringTok{esults\textbackslash{}lc-clim-modelEst.xlsx"}\NormalTok{, }\DataTypeTok{rowNames =}\NormalTok{ T, }\DataTypeTok{colNames =}\NormalTok{ T)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2354,17 +2175,17 @@ Here, we use the \texttt{unmarked} package in R (Fiske and Chandler 2019) to ide
 \NormalTok{\}}
 \KeywordTok{close}\NormalTok{(pb)}
 
-\KeywordTok{write.csv}\NormalTok{(goodness_of_fit, }\StringTok{"C:}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Users}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{vr235}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Desktop}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Occupancy Runs}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{output}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{05_goodness-of-fit-2.5km.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(goodness_of_fit, }\StringTok{"data}\CharTok{\textbackslash{}r}\StringTok{esults}\CharTok{\textbackslash{}05}\StringTok{_goodness-of-fit-2.5km.csv"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{visualizing-results}{%
-\section{Visualizing results}\label{visualizing-results}}
+\hypertarget{visualizing-occupancy-predictor-effects}{%
+\section{Visualizing Occupancy Predictor Effects}\label{visualizing-occupancy-predictor-effects}}
 
 In this section, we will visualize the cumulative AIC weights and the magnitude and direction of species-specific probability of occupancy
 
 \hypertarget{prepare-libraries-3}{%
-\subsubsection{Prepare libraries}\label{prepare-libraries-3}}
+\subsection{Prepare libraries}\label{prepare-libraries-3}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2395,8 +2216,8 @@ In this section, we will visualize the cumulative AIC weights and the magnitude 
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{read-the-final-list-of-species}{%
-\subsection{Read the final list of species}\label{read-the-final-list-of-species}}
+\hypertarget{load-species-list}{%
+\subsection{Load species list}\label{load-species-list}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2406,16 +2227,16 @@ In this section, we will visualize the cumulative AIC weights and the magnitude 
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{show-aic-weights}{%
-\subsection{Show AIC weights}\label{show-aic-weights}}
+\hypertarget{show-aic-weight-importance}{%
+\subsection{Show AIC weight importance}\label{show-aic-weight-importance}}
 
-\hypertarget{read-in-weight-data}{%
-\subsubsection{Read in weight data}\label{read-in-weight-data}}
+\hypertarget{read-in-aic-weight-data}{%
+\subsubsection{Read in AIC weight data}\label{read-in-aic-weight-data}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# which files to read}
-\NormalTok{file_names <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"data/results/occu-2.5km/occuCovs/modelImp/lc-clim-imp.xlsx"}\NormalTok{)}
+\NormalTok{file_names <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"data/results/lc-clim-imp.xlsx"}\NormalTok{)}
 
 \CommentTok{# read in sheets by species}
 \NormalTok{model_imp <-}\StringTok{ }\KeywordTok{map}\NormalTok{(file_names, }\ControlFlowTok{function}\NormalTok{(f) \{}
@@ -2446,8 +2267,8 @@ In this section, we will visualize the cumulative AIC weights and the magnitude 
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{show-cumulative-weights-as-plot}{%
-\subsubsection{Show cumulative weights as plot}\label{show-cumulative-weights-as-plot}}
+\hypertarget{prepare-cumulative-aic-weight-data}{%
+\subsubsection{Prepare cumulative AIC weight data}\label{prepare-cumulative-aic-weight-data}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2507,8 +2328,7 @@ Read data back in.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{make-plot}{%
-\subsubsection{Make plot}\label{make-plot}}
+Prepare figure for cumulative AIC weight. Figure code is hidden in versions rendered as HTML and PDF.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2543,18 +2363,12 @@ Read data back in.
 \end{Highlighting}
 \end{Shaded}
 
-\begin{figure}
-\centering
-\includegraphics{figs/fig_aic_weight.png}
-\caption{Cumulative AIC weights for each predictor, where \emph{Temp} is the mean annual temperature, \emph{Ppt} is the mean annual precipitation, and LC 1 -- LC 7 are the proportions of agriculture, forests, plantations, settlements, tea, and water bodies, respectively."}
-\end{figure}
-
-\hypertarget{read-model-estimates}{%
-\subsection{Read model estimates}\label{read-model-estimates}}
+\hypertarget{prepare-model-coefficient-data}{%
+\subsection{Prepare model coefficient data}\label{prepare-model-coefficient-data}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{file_read <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"data/results/occu-2.5km/occuCovs/modelEst/lc-clim-modelEst.xlsx"}\NormalTok{)}
+\NormalTok{file_read <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"data/results/lc-clim-modelEst.xlsx"}\NormalTok{)}
 
 \CommentTok{# read data as list column}
 \NormalTok{model_est <-}\StringTok{ }\KeywordTok{map}\NormalTok{(file_read, }\ControlFlowTok{function}\NormalTok{(fr) \{}
@@ -2613,9 +2427,6 @@ Read data back in.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{export-data-to-file}{%
-\subsubsection{Export data to file}\label{export-data-to-file}}
-
 Export predictor effects.
 
 \begin{Shaded}
@@ -2650,7 +2461,7 @@ Export model data.
 \end{Highlighting}
 \end{Shaded}
 
-Summarizing results of species-specific probability of occupancy as a function of the direction of coefficients
+Read in data after clearing R session.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2659,7 +2470,7 @@ Summarizing results of species-specific probability of occupancy as a function o
 \end{Highlighting}
 \end{Shaded}
 
-Plot the number of species affected and the direction of the effect, for each predictor.
+Fix predictor name.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2672,7 +2483,7 @@ Plot the number of species affected and the direction of the effect, for each pr
 \end{Shaded}
 
 \hypertarget{get-predictor-effects}{%
-\subsubsection{Get predictor effects}\label{get-predictor-effects}}
+\subsection{Get predictor effects}\label{get-predictor-effects}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2703,7 +2514,7 @@ Plot the number of species affected and the direction of the effect, for each pr
 \end{Highlighting}
 \end{Shaded}
 
-Plot the above data: Species-specific prob of occupancy \textasciitilde{} direction
+Prepare data to determine the direction (positive or negative) of the effect of each predictor. How many species are affected in either direction?
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2712,60 +2523,17 @@ Plot the above data: Species-specific prob of occupancy \textasciitilde{} direct
 \end{Highlighting}
 \end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{fig_predictor <-}
-\StringTok{  }\KeywordTok{ggplot}\NormalTok{(model_imp)}\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_hline}\NormalTok{(}\DataTypeTok{yintercept =} \DecValTok{0}\NormalTok{,}
-             \DataTypeTok{lwd =} \FloatTok{0.2}\NormalTok{,}
-             \DataTypeTok{col =} \StringTok{"grey"}\NormalTok{)}\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_col}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ data_predictor_long,}
-           \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{reorder}\NormalTok{(predictor, mean_AIC),}
-               \DataTypeTok{y =}\NormalTok{ magnitude,}
-               \DataTypeTok{fill =}\NormalTok{ effect),}
-           \CommentTok{# position = position_dodge(width = 1),}
-           \DataTypeTok{width =} \FloatTok{0.3}\NormalTok{)}\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_text}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ predictor, }
-                \DataTypeTok{y =} \DecValTok{0}\NormalTok{,}
-                \DataTypeTok{label =}\NormalTok{ pred_name),}
-            \DataTypeTok{angle =} \DecValTok{0}\NormalTok{,}
-            \DataTypeTok{vjust =} \DecValTok{2}\NormalTok{,}
-            \DataTypeTok{size =} \DecValTok{4}\NormalTok{)}\OperatorTok{+}
-\StringTok{  }\KeywordTok{scale_fill_brewer}\NormalTok{(}\DataTypeTok{palette =} \StringTok{"Set1"}\NormalTok{)}\OperatorTok{+}
-\StringTok{  }\KeywordTok{scale_x_discrete}\NormalTok{(}\DataTypeTok{labels =} \OtherTok{NULL}\NormalTok{)}\OperatorTok{+}
-\StringTok{  }\KeywordTok{coord_flip}\NormalTok{()}\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme_test}\NormalTok{()}\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"none"}\NormalTok{)}\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Predictor"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"# Species"}\NormalTok{)}
+Prepare figure of the number of species affected in each direction. Figure code is hidden in versions rendered as HTML and PDF.
 
-\KeywordTok{ggsave}\NormalTok{(fig_predictor,}
-       \DataTypeTok{filename =} \StringTok{"figs/fig_predictor_effect.png"}\NormalTok{, }
-       \DataTypeTok{dpi =} \DecValTok{300}\NormalTok{,}
-       \DataTypeTok{width =} \DecValTok{79}\NormalTok{, }\DataTypeTok{height =} \DecValTok{120}\NormalTok{, }\DataTypeTok{units =} \StringTok{"mm"}\NormalTok{)}
-    
-\end{Highlighting}
-\end{Shaded}
+\hypertarget{main-text-figure-4}{%
+\subsection{Main Text Figure 4}\label{main-text-figure-4}}
 
-\hypertarget{predictor-importance-and-effect}{%
-\subsubsection{Predictor importance and effect}\label{predictor-importance-and-effect}}
+Figure code is hidden in versions rendered as HTML and PDF.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(patchwork)}
-
-\CommentTok{# wrap}
-\NormalTok{fig_predictor_effect <-}\StringTok{ }
-\StringTok{  }\KeywordTok{wrap_plots}\NormalTok{(fig_aic, fig_predictor)}\OperatorTok{+}
-\StringTok{  }\KeywordTok{plot_annotation}\NormalTok{(}\DataTypeTok{tag_levels =} \StringTok{"a"}\NormalTok{,}
-                  \DataTypeTok{tag_prefix =} \StringTok{"("}\NormalTok{,}
-                  \DataTypeTok{tag_suffix =} \StringTok{")"}\NormalTok{)}
-
-\CommentTok{# save}
-\KeywordTok{ggsave}\NormalTok{(fig_predictor_effect,}
-       \DataTypeTok{filename =} \StringTok{"figs/fig_03_aic_weight_effect.png"}\NormalTok{,}
-       \DataTypeTok{dpi =} \DecValTok{300}\NormalTok{,}
-       \DataTypeTok{width =} \DecValTok{168}\NormalTok{, }\DataTypeTok{height =} \DecValTok{130}\NormalTok{, }\DataTypeTok{units =} \StringTok{"mm"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+\begin{figure}
+\centering
+\includegraphics{figs/fig_04_aic_weight_effect.png}
+\caption{(a) Cumulative AIC weights suggest that climatic predictors have higher relative importance when compared to landscape predictors. (b) The direction of association between species-specific probability of occupancy and climatic and landscape is shown here. While climatic predictors were both positively and negatively associated with the probability of occupancy for a number of species, human-associated land cover types were largely negatively associated with species-specific probability of occupancy.}
+\end{figure}
 
 \end{document}

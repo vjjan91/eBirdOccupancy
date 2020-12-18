@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Section 8 Visualizing Occupancy Predictor Effects | Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</title>
+  <meta name="description" content="Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Section 8 Visualizing Occupancy Predictor Effects | Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient" />
+  <meta name="github-repo" content="pratikunterwegs/eBirdOccupancy" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Section 8 Visualizing Occupancy Predictor Effects | Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  
+  <meta name="twitter:description" content="Influence of land cover and climate on the occupancy of avian distributions along a tropical montane gradient" />
+  
+
+<meta name="author" content="Vijay Ramesh" />
+<meta name="author" content="Pratik R. Gupte" />
+<meta name="author" content="Morgan W. Tingley" />
+<meta name="author" content="VV Robin" />
+<meta name="author" content="Ruth DeFries" />
+
+
+<meta name="date" content="2020-12-18" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="modelling-species-occupancy.html"/>
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#attribution"><i class="fa fa-check"></i><b>1.1</b> Attribution</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#data-access"><i class="fa fa-check"></i><b>1.2</b> Data access</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#data-processing"><i class="fa fa-check"></i><b>1.3</b> Data processing</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#main-text-figure-1"><i class="fa fa-check"></i><b>1.4</b> Main Text Figure 1</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html"><i class="fa fa-check"></i><b>2</b> Preparing eBird Data</a><ul>
+<li class="chapter" data-level="2.1" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#prepare-libraries-and-data-sources"><i class="fa fa-check"></i><b>2.1</b> Prepare libraries and data sources</a></li>
+<li class="chapter" data-level="2.2" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#filter-data"><i class="fa fa-check"></i><b>2.2</b> Filter data</a></li>
+<li class="chapter" data-level="2.3" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#process-filtered-data"><i class="fa fa-check"></i><b>2.3</b> Process filtered data</a></li>
+<li class="chapter" data-level="2.4" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#spatial-filter"><i class="fa fa-check"></i><b>2.4</b> Spatial filter</a></li>
+<li class="chapter" data-level="2.5" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#handle-presence-data"><i class="fa fa-check"></i><b>2.5</b> Handle presence data</a></li>
+<li class="chapter" data-level="2.6" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#add-decimal-time"><i class="fa fa-check"></i><b>2.6</b> Add decimal time</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="preparing-landscape-data.html"><a href="preparing-landscape-data.html"><i class="fa fa-check"></i><b>3</b> Preparing Landscape Data</a><ul>
+<li class="chapter" data-level="3.1" data-path="preparing-landscape-data.html"><a href="preparing-landscape-data.html#prepare-libraries"><i class="fa fa-check"></i><b>3.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="3.2" data-path="preparing-landscape-data.html"><a href="preparing-landscape-data.html#prepare-spatial-extent"><i class="fa fa-check"></i><b>3.2</b> Prepare spatial extent</a></li>
+<li class="chapter" data-level="3.3" data-path="preparing-landscape-data.html"><a href="preparing-landscape-data.html#prepare-terrain-rasters"><i class="fa fa-check"></i><b>3.3</b> Prepare terrain rasters</a></li>
+<li class="chapter" data-level="3.4" data-path="preparing-landscape-data.html"><a href="preparing-landscape-data.html#prepare-chelsa-rasters"><i class="fa fa-check"></i><b>3.4</b> Prepare CHELSA rasters</a></li>
+<li class="chapter" data-level="3.5" data-path="preparing-landscape-data.html"><a href="preparing-landscape-data.html#resample-landcover-from-10m-to-1km"><i class="fa fa-check"></i><b>3.5</b> Resample landcover from 10m to 1km</a></li>
+<li class="chapter" data-level="3.6" data-path="preparing-landscape-data.html"><a href="preparing-landscape-data.html#resample-other-rasters-to-1km"><i class="fa fa-check"></i><b>3.6</b> Resample other rasters to 1km</a><ul>
+<li class="chapter" data-level="3.6.1" data-path="preparing-landscape-data.html"><a href="preparing-landscape-data.html#read-in-resampled-landcover"><i class="fa fa-check"></i><b>3.6.1</b> Read in resampled landcover</a></li>
+<li class="chapter" data-level="3.6.2" data-path="preparing-landscape-data.html"><a href="preparing-landscape-data.html#reproject-environmental-data-using-landcover-as-a-template"><i class="fa fa-check"></i><b>3.6.2</b> Reproject environmental data using landcover as a template</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="preparing-landscape-data.html"><a href="preparing-landscape-data.html#temperature-and-rainfall-in-relation-to-elevation"><i class="fa fa-check"></i><b>3.7</b> Temperature and rainfall in relation to elevation</a><ul>
+<li class="chapter" data-level="3.7.1" data-path="preparing-landscape-data.html"><a href="preparing-landscape-data.html#prepare-libraries-and-ci-function"><i class="fa fa-check"></i><b>3.7.1</b> Prepare libraries and CI function</a></li>
+<li class="chapter" data-level="3.7.2" data-path="preparing-landscape-data.html"><a href="preparing-landscape-data.html#load-resampled-environmental-rasters"><i class="fa fa-check"></i><b>3.7.2</b> Load resampled environmental rasters</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="preparing-landscape-data.html"><a href="preparing-landscape-data.html#land-cover-type-in-relation-to-elevation"><i class="fa fa-check"></i><b>3.8</b> Land cover type in relation to elevation</a></li>
+<li class="chapter" data-level="3.9" data-path="preparing-landscape-data.html"><a href="preparing-landscape-data.html#main-text-figure-2"><i class="fa fa-check"></i><b>3.9</b> Main Text Figure 2</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html"><i class="fa fa-check"></i><b>4</b> Examining Spatial Sampling Bias</a><ul>
+<li class="chapter" data-level="4.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-libraries-1"><i class="fa fa-check"></i><b>4.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="4.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-data-for-processing"><i class="fa fa-check"></i><b>4.2</b> Prepare data for processing</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#python-functions-and-distance-calculations"><i class="fa fa-check"></i><b>4.2.1</b> Python functions and distance calculations</a></li>
+<li class="chapter" data-level="4.2.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#spatially-explicit-filter-on-checklists"><i class="fa fa-check"></i><b>4.2.2</b> Spatially explicit filter on checklists</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#main-text-figure-3"><i class="fa fa-check"></i><b>4.3</b> Main Text Figure 3</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-histogram-of-distance-to-roads"><i class="fa fa-check"></i><b>4.3.1</b> Prepare histogram of distance to roads</a></li>
+<li class="chapter" data-level="4.3.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#table-distance-to-roads"><i class="fa fa-check"></i><b>4.3.2</b> Table: Distance to roads</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#distance-to-nearest-neighbouring-site"><i class="fa fa-check"></i><b>4.4</b> Distance to nearest neighbouring site</a></li>
+<li class="chapter" data-level="4.5" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#main-text-figure-3-1"><i class="fa fa-check"></i><b>4.5</b> Main Text Figure 3</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html"><i class="fa fa-check"></i><b>5</b> Preparing Observer Expertise Scores</a><ul>
+<li class="chapter" data-level="5.1" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#prepare-libraries-2"><i class="fa fa-check"></i><b>5.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="5.2" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#prepare-data"><i class="fa fa-check"></i><b>5.2</b> Prepare data</a></li>
+<li class="chapter" data-level="5.3" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#spatially-explicit-filter-on-checklists-1"><i class="fa fa-check"></i><b>5.3</b> Spatially explicit filter on checklists</a></li>
+<li class="chapter" data-level="5.4" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#prepare-species-of-interest"><i class="fa fa-check"></i><b>5.4</b> Prepare species of interest</a></li>
+<li class="chapter" data-level="5.5" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#prepare-checklists-for-observer-score"><i class="fa fa-check"></i><b>5.5</b> Prepare checklists for observer score</a></li>
+<li class="chapter" data-level="5.6" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#get-landcover"><i class="fa fa-check"></i><b>5.6</b> Get landcover</a></li>
+<li class="chapter" data-level="5.7" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#filter-checklist-data"><i class="fa fa-check"></i><b>5.7</b> Filter checklist data</a></li>
+<li class="chapter" data-level="5.8" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#model-observer-expertise"><i class="fa fa-check"></i><b>5.8</b> Model observer expertise</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html"><i class="fa fa-check"></i><b>6</b> Adding Covariates to Checklist Data</a><ul>
+<li class="chapter" data-level="6.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#prepare-libraries-and-data"><i class="fa fa-check"></i><b>6.1</b> Prepare libraries and data</a></li>
+<li class="chapter" data-level="6.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-subsampling"><i class="fa fa-check"></i><b>6.2</b> Spatial subsampling</a></li>
+<li class="chapter" data-level="6.3" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#temporal-subsampling"><i class="fa fa-check"></i><b>6.3</b> Temporal subsampling</a></li>
+<li class="chapter" data-level="6.4" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#add-checklist-calibration-index"><i class="fa fa-check"></i><b>6.4</b> Add checklist calibration index</a></li>
+<li class="chapter" data-level="6.5" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#add-landscape-covariates"><i class="fa fa-check"></i><b>6.5</b> Add landscape covariates</a></li>
+<li class="chapter" data-level="6.6" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-buffers-around-selected-checklists"><i class="fa fa-check"></i><b>6.6</b> Spatial buffers around selected checklists</a></li>
+<li class="chapter" data-level="6.7" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-buffer-wide-covariates"><i class="fa fa-check"></i><b>6.7</b> Spatial buffer-wide covariates</a><ul>
+<li class="chapter" data-level="6.7.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#mean-environmental-covariates"><i class="fa fa-check"></i><b>6.7.1</b> Mean environmental covariates</a></li>
+<li class="chapter" data-level="6.7.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#proportions-of-land-cover-type"><i class="fa fa-check"></i><b>6.7.2</b> Proportions of land cover type</a></li>
+<li class="chapter" data-level="6.7.3" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#link-landscape-covariates-to-checklists"><i class="fa fa-check"></i><b>6.7.3</b> Link landscape covariates to checklists</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html"><i class="fa fa-check"></i><b>7</b> Modelling Species Occupancy</a><ul>
+<li class="chapter" data-level="7.0.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#load-necessary-libraries"><i class="fa fa-check"></i><b>7.0.1</b> Load necessary libraries</a></li>
+<li class="chapter" data-level="7.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#load-dataframe-and-scale-covariates"><i class="fa fa-check"></i><b>7.1</b> Load dataframe and scale covariates</a></li>
+<li class="chapter" data-level="7.2" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#running-a-null-model"><i class="fa fa-check"></i><b>7.2</b> Running a null model</a></li>
+<li class="chapter" data-level="7.3" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#identifying-covariates-necessary-to-model-the-detection-process"><i class="fa fa-check"></i><b>7.3</b> Identifying covariates necessary to model the detection process</a></li>
+<li class="chapter" data-level="7.4" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#land-cover-and-climate"><i class="fa fa-check"></i><b>7.4</b> Land Cover and Climate</a></li>
+<li class="chapter" data-level="7.5" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#goodness-of-fit-tests"><i class="fa fa-check"></i><b>7.5</b> Goodness-of-fit tests</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html"><i class="fa fa-check"></i><b>8</b> Visualizing Occupancy Predictor Effects</a><ul>
+<li class="chapter" data-level="8.1" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-libraries-3"><i class="fa fa-check"></i><b>8.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="8.2" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#load-species-list"><i class="fa fa-check"></i><b>8.2</b> Load species list</a></li>
+<li class="chapter" data-level="8.3" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#show-aic-weight-importance"><i class="fa fa-check"></i><b>8.3</b> Show AIC weight importance</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#read-in-aic-weight-data"><i class="fa fa-check"></i><b>8.3.1</b> Read in AIC weight data</a></li>
+<li class="chapter" data-level="8.3.2" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-cumulative-aic-weight-data"><i class="fa fa-check"></i><b>8.3.2</b> Prepare cumulative AIC weight data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-model-coefficient-data"><i class="fa fa-check"></i><b>8.4</b> Prepare model coefficient data</a></li>
+<li class="chapter" data-level="8.5" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#get-predictor-effects"><i class="fa fa-check"></i><b>8.5</b> Get predictor effects</a></li>
+<li class="chapter" data-level="8.6" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#main-text-figure-4"><i class="fa fa-check"></i><b>8.6</b> Main Text Figure 4</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="visualizing-occupancy-predictor-effects" class="section level1">
+<h1><span class="header-section-number">Section 8</span> Visualizing Occupancy Predictor Effects</h1>
+<p>In this section, we will visualize the cumulative AIC weights and the magnitude and direction of species-specific probability of occupancy</p>
+<div id="prepare-libraries-3" class="section level2">
+<h2><span class="header-section-number">8.1</span> Prepare libraries</h2>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1"><span class="co"># to load data</span></a>
+<a class="sourceLine" id="cb62-2" title="2"><span class="kw">library</span>(readxl)</a>
+<a class="sourceLine" id="cb62-3" title="3"></a>
+<a class="sourceLine" id="cb62-4" title="4"><span class="co"># to handle data</span></a>
+<a class="sourceLine" id="cb62-5" title="5"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb62-6" title="6"><span class="kw">library</span>(readr)</a>
+<a class="sourceLine" id="cb62-7" title="7"><span class="kw">library</span>(forcats)</a>
+<a class="sourceLine" id="cb62-8" title="8"><span class="kw">library</span>(tidyr)</a>
+<a class="sourceLine" id="cb62-9" title="9"><span class="kw">library</span>(purrr)</a>
+<a class="sourceLine" id="cb62-10" title="10"><span class="kw">library</span>(stringr)</a>
+<a class="sourceLine" id="cb62-11" title="11"><span class="kw">library</span>(data.table)</a>
+<a class="sourceLine" id="cb62-12" title="12"></a>
+<a class="sourceLine" id="cb62-13" title="13"><span class="co"># to wrangle models</span></a>
+<a class="sourceLine" id="cb62-14" title="14"><span class="kw">source</span>(<span class="st">&quot;code/fun_model_estimate_collection.r&quot;</span>)</a>
+<a class="sourceLine" id="cb62-15" title="15"><span class="kw">source</span>(<span class="st">&quot;code/fun_make_resp_data.r&quot;</span>)</a>
+<a class="sourceLine" id="cb62-16" title="16"></a>
+<a class="sourceLine" id="cb62-17" title="17"><span class="co"># nice tables</span></a>
+<a class="sourceLine" id="cb62-18" title="18"><span class="kw">library</span>(knitr)</a>
+<a class="sourceLine" id="cb62-19" title="19"><span class="kw">library</span>(kableExtra)</a>
+<a class="sourceLine" id="cb62-20" title="20"></a>
+<a class="sourceLine" id="cb62-21" title="21"><span class="co"># plotting</span></a>
+<a class="sourceLine" id="cb62-22" title="22"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb62-23" title="23"><span class="kw">library</span>(patchwork)</a>
+<a class="sourceLine" id="cb62-24" title="24"><span class="kw">source</span>(<span class="st">&quot;code/fun_plot_interaction.r&quot;</span>)</a></code></pre></div>
+</div>
+<div id="load-species-list" class="section level2">
+<h2><span class="header-section-number">8.2</span> Load species list</h2>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" title="1"><span class="co"># list of species</span></a>
+<a class="sourceLine" id="cb63-2" title="2">species &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/species_list.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb63-3" title="3">list_of_species &lt;-<span class="st"> </span><span class="kw">as.character</span>(species<span class="op">$</span>scientific_name)</a></code></pre></div>
+</div>
+<div id="show-aic-weight-importance" class="section level2">
+<h2><span class="header-section-number">8.3</span> Show AIC weight importance</h2>
+<div id="read-in-aic-weight-data" class="section level3">
+<h3><span class="header-section-number">8.3.1</span> Read in AIC weight data</h3>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" title="1"><span class="co"># which files to read</span></a>
+<a class="sourceLine" id="cb64-2" title="2">file_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;data/results/lc-clim-imp.xlsx&quot;</span>)</a>
+<a class="sourceLine" id="cb64-3" title="3"></a>
+<a class="sourceLine" id="cb64-4" title="4"><span class="co"># read in sheets by species</span></a>
+<a class="sourceLine" id="cb64-5" title="5">model_imp &lt;-<span class="st"> </span><span class="kw">map</span>(file_names, <span class="cf">function</span>(f) {</a>
+<a class="sourceLine" id="cb64-6" title="6">  md_list &lt;-<span class="st"> </span><span class="kw">map</span>(list_of_species, <span class="cf">function</span>(sn) {</a>
+<a class="sourceLine" id="cb64-7" title="7">    </a>
+<a class="sourceLine" id="cb64-8" title="8">    <span class="co"># some sheets are not found</span></a>
+<a class="sourceLine" id="cb64-9" title="9">    </a>
+<a class="sourceLine" id="cb64-10" title="10">    <span class="kw">tryCatch</span>({</a>
+<a class="sourceLine" id="cb64-11" title="11">      </a>
+<a class="sourceLine" id="cb64-12" title="12">      readxl<span class="op">::</span><span class="kw">read_excel</span>(f, <span class="dt">sheet =</span> sn) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb64-13" title="13"><span class="st">        `</span><span class="dt">colnames&lt;-</span><span class="st">`</span>(<span class="kw">c</span>(<span class="st">&quot;predictor&quot;</span>, <span class="st">&quot;AIC_weight&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb64-14" title="14"><span class="st">        </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(predictor, <span class="st">&quot;psi&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb64-15" title="15"><span class="st">        </span><span class="kw">mutate</span>(<span class="dt">predictor =</span> stringr<span class="op">::</span><span class="kw">str_extract</span>(predictor, </a>
+<a class="sourceLine" id="cb64-16" title="16">                                <span class="dt">pattern =</span> stringr<span class="op">::</span><span class="kw">regex</span>(<span class="st">&quot;</span><span class="ch">\\</span><span class="st">((.*?)</span><span class="ch">\\</span><span class="st">)&quot;</span>)),</a>
+<a class="sourceLine" id="cb64-17" title="17">               <span class="dt">predictor =</span> stringr<span class="op">::</span><span class="kw">str_replace_all</span>(predictor, <span class="st">&quot;[//(//)]&quot;</span>, <span class="st">&quot;&quot;</span>),</a>
+<a class="sourceLine" id="cb64-18" title="18">               <span class="dt">predictor =</span> stringr<span class="op">::</span><span class="kw">str_remove</span>(predictor, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">.y&quot;</span>))</a>
+<a class="sourceLine" id="cb64-19" title="19">      </a>
+<a class="sourceLine" id="cb64-20" title="20">      },</a>
+<a class="sourceLine" id="cb64-21" title="21">      <span class="dt">error =</span> <span class="cf">function</span>(e) {</a>
+<a class="sourceLine" id="cb64-22" title="22">        <span class="kw">message</span>(<span class="kw">as.character</span>(e))</a>
+<a class="sourceLine" id="cb64-23" title="23">      }</a>
+<a class="sourceLine" id="cb64-24" title="24">    )</a>
+<a class="sourceLine" id="cb64-25" title="25">  })</a>
+<a class="sourceLine" id="cb64-26" title="26">  <span class="kw">names</span>(md_list) &lt;-<span class="st"> </span>list_of_species</a>
+<a class="sourceLine" id="cb64-27" title="27">  </a>
+<a class="sourceLine" id="cb64-28" title="28">  <span class="kw">return</span>(md_list)</a>
+<a class="sourceLine" id="cb64-29" title="29">})</a></code></pre></div>
+</div>
+<div id="prepare-cumulative-aic-weight-data" class="section level3">
+<h3><span class="header-section-number">8.3.2</span> Prepare cumulative AIC weight data</h3>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" title="1"><span class="co"># assign scale - minimum spatial scale at which the analysis was carried out to account for observer effort</span></a>
+<a class="sourceLine" id="cb65-2" title="2"><span class="kw">names</span>(model_imp) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2.5km&quot;</span>)</a>
+<a class="sourceLine" id="cb65-3" title="3">model_imp &lt;-<span class="st"> </span><span class="kw">imap</span>(model_imp, <span class="cf">function</span>(.x, .y) {</a>
+<a class="sourceLine" id="cb65-4" title="4">  .x &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(.x)</a>
+<a class="sourceLine" id="cb65-5" title="5">  .x<span class="op">$</span>scale &lt;-<span class="st"> </span>.y</a>
+<a class="sourceLine" id="cb65-6" title="6">  <span class="kw">return</span>(.x)</a>
+<a class="sourceLine" id="cb65-7" title="7">})</a>
+<a class="sourceLine" id="cb65-8" title="8"></a>
+<a class="sourceLine" id="cb65-9" title="9"><span class="co"># bind rows</span></a>
+<a class="sourceLine" id="cb65-10" title="10">model_imp &lt;-<span class="st"> </span><span class="kw">map</span>(model_imp, bind_rows) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb65-11" title="11"><span class="st">  </span><span class="kw">bind_rows</span>()</a>
+<a class="sourceLine" id="cb65-12" title="12"></a>
+<a class="sourceLine" id="cb65-13" title="13"><span class="co"># convert to numeric</span></a>
+<a class="sourceLine" id="cb65-14" title="14">model_imp<span class="op">$</span>AIC_weight &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(model_imp<span class="op">$</span>AIC_weight)</a>
+<a class="sourceLine" id="cb65-15" title="15">model_imp<span class="op">$</span>scale &lt;-<span class="st"> </span><span class="kw">as.factor</span>(model_imp<span class="op">$</span>scale)</a>
+<a class="sourceLine" id="cb65-16" title="16"><span class="kw">levels</span>(model_imp<span class="op">$</span>scale) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2.5km&quot;</span>)</a>
+<a class="sourceLine" id="cb65-17" title="17"></a>
+<a class="sourceLine" id="cb65-18" title="18"><span class="co"># Let&#39;s get a summary of cumulative variable importance</span></a>
+<a class="sourceLine" id="cb65-19" title="19">model_imp &lt;-<span class="kw">group_by</span>(model_imp, predictor) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb65-20" title="20"><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">mean_AIC =</span> <span class="kw">mean</span>(AIC_weight),</a>
+<a class="sourceLine" id="cb65-21" title="21">            <span class="dt">sd_AIC=</span><span class="kw">sd</span>(AIC_weight),</a>
+<a class="sourceLine" id="cb65-22" title="22">            <span class="dt">min_AIC =</span> <span class="kw">min</span>(AIC_weight),</a>
+<a class="sourceLine" id="cb65-23" title="23">            <span class="dt">max_AIC =</span> <span class="kw">max</span>(AIC_weight),</a>
+<a class="sourceLine" id="cb65-24" title="24">            <span class="dt">med_AIC =</span> <span class="kw">median</span>(AIC_weight))</a>
+<a class="sourceLine" id="cb65-25" title="25"></a>
+<a class="sourceLine" id="cb65-26" title="26"><span class="co"># write to file</span></a>
+<a class="sourceLine" id="cb65-27" title="27"><span class="kw">write_csv</span>(model_imp,</a>
+<a class="sourceLine" id="cb65-28" title="28">          <span class="dt">file =</span> <span class="st">&quot;data/results/cumulative_AIC_weights.csv&quot;</span>)</a></code></pre></div>
+<p>Read data back in.</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" title="1"><span class="co"># read data and make factor</span></a>
+<a class="sourceLine" id="cb66-2" title="2">model_imp &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/results/cumulative_AIC_weights.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb66-3" title="3">model_imp<span class="op">$</span>predictor &lt;-<span class="st"> </span><span class="kw">as_factor</span>(model_imp<span class="op">$</span>predictor)</a></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" title="1"><span class="co"># make nice names</span></a>
+<a class="sourceLine" id="cb67-2" title="2">predictor_name &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">predictor =</span> <span class="kw">levels</span>(model_imp<span class="op">$</span>predictor),</a>
+<a class="sourceLine" id="cb67-3" title="3">                         <span class="dt">pred_name =</span> <span class="kw">c</span>(<span class="st">&quot;Annual Mean Temperature (°C)&quot;</span>, </a>
+<a class="sourceLine" id="cb67-4" title="4">                                       <span class="st">&quot;Annual Precipitation (mm)&quot;</span>,</a>
+<a class="sourceLine" id="cb67-5" title="5">                                       <span class="st">&quot;% Agriculture&quot;</span>, <span class="st">&quot;% Forests&quot;</span>,</a>
+<a class="sourceLine" id="cb67-6" title="6">                                       <span class="st">&quot;% Plantations&quot;</span>, <span class="st">&quot;% Settlements&quot;</span>, </a>
+<a class="sourceLine" id="cb67-7" title="7">                                       <span class="st">&quot;% Tea&quot;</span>, <span class="st">&quot;% Water Bodies&quot;</span>))</a>
+<a class="sourceLine" id="cb67-8" title="8"></a>
+<a class="sourceLine" id="cb67-9" title="9"><span class="co"># rename predictor</span></a>
+<a class="sourceLine" id="cb67-10" title="10">model_imp &lt;-<span class="st"> </span><span class="kw">left_join</span>(model_imp, predictor_name)</a></code></pre></div>
+<p>Prepare figure for cumulative AIC weight. Figure code is hidden in versions rendered as HTML and PDF.</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" title="1">fig_aic &lt;-</a>
+<a class="sourceLine" id="cb68-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(model_imp)<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-3" title="3"><span class="st">  </span><span class="kw">geom_pointrange</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">reorder</span>(predictor, mean_AIC),</a>
+<a class="sourceLine" id="cb68-4" title="4">                      <span class="dt">y =</span> mean_AIC,</a>
+<a class="sourceLine" id="cb68-5" title="5">                      <span class="dt">ymin =</span> mean_AIC <span class="op">-</span><span class="st"> </span>sd_AIC,</a>
+<a class="sourceLine" id="cb68-6" title="6">                      <span class="dt">ymax =</span> mean_AIC <span class="op">+</span><span class="st"> </span>sd_AIC))<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-7" title="7"><span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">x =</span> predictor, </a>
+<a class="sourceLine" id="cb68-8" title="8">                <span class="dt">y =</span> <span class="fl">0.2</span>,</a>
+<a class="sourceLine" id="cb68-9" title="9">                <span class="dt">label =</span> pred_name),</a>
+<a class="sourceLine" id="cb68-10" title="10">            <span class="dt">angle =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb68-11" title="11">            <span class="dt">hjust =</span> <span class="st">&quot;inward&quot;</span>,</a>
+<a class="sourceLine" id="cb68-12" title="12">            <span class="dt">vjust =</span> <span class="dv">2</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-13" title="13"><span class="st">  </span><span class="co"># scale_y_continuous(breaks = seq(45, 75, 10))+</span></a>
+<a class="sourceLine" id="cb68-14" title="14"><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">labels =</span> <span class="ot">NULL</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-15" title="15"><span class="st">  </span><span class="co"># scale_color_brewer(palette = &quot;RdBu&quot;, values = c(0.5, 1))+</span></a>
+<a class="sourceLine" id="cb68-16" title="16"><span class="st">  </span><span class="kw">coord_flip</span>(</a>
+<a class="sourceLine" id="cb68-17" title="17">    <span class="co"># ylim = c(45, 75)</span></a>
+<a class="sourceLine" id="cb68-18" title="18">  )<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-19" title="19"><span class="st">  </span><span class="kw">theme_test</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-20" title="20"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb68-21" title="21"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Predictor&quot;</span>,</a>
+<a class="sourceLine" id="cb68-22" title="22">       <span class="dt">y =</span> <span class="st">&quot;Cumulative AIC weight&quot;</span>)</a>
+<a class="sourceLine" id="cb68-23" title="23"></a>
+<a class="sourceLine" id="cb68-24" title="24"><span class="kw">ggsave</span>(fig_aic,</a>
+<a class="sourceLine" id="cb68-25" title="25">       <span class="dt">filename =</span> <span class="st">&quot;figs/fig_aic_weight.png&quot;</span>, </a>
+<a class="sourceLine" id="cb68-26" title="26">       <span class="dt">device =</span> <span class="kw">png</span>(),</a>
+<a class="sourceLine" id="cb68-27" title="27">       <span class="dt">dpi =</span> <span class="dv">300</span>,</a>
+<a class="sourceLine" id="cb68-28" title="28">       <span class="dt">width =</span> <span class="dv">79</span>, <span class="dt">height =</span> <span class="dv">120</span>, <span class="dt">units =</span> <span class="st">&quot;mm&quot;</span>)</a></code></pre></div>
+</div>
+</div>
+<div id="prepare-model-coefficient-data" class="section level2">
+<h2><span class="header-section-number">8.4</span> Prepare model coefficient data</h2>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" title="1">file_read &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;data/results/lc-clim-modelEst.xlsx&quot;</span>)</a>
+<a class="sourceLine" id="cb69-2" title="2"></a>
+<a class="sourceLine" id="cb69-3" title="3"><span class="co"># read data as list column</span></a>
+<a class="sourceLine" id="cb69-4" title="4">model_est &lt;-<span class="st"> </span><span class="kw">map</span>(file_read, <span class="cf">function</span>(fr) {</a>
+<a class="sourceLine" id="cb69-5" title="5">  md_list &lt;-<span class="st"> </span><span class="kw">map</span>(list_of_species, <span class="cf">function</span>(sn) {</a>
+<a class="sourceLine" id="cb69-6" title="6">    readxl<span class="op">::</span><span class="kw">read_excel</span>(fr, <span class="dt">sheet =</span> sn)</a>
+<a class="sourceLine" id="cb69-7" title="7">  })</a>
+<a class="sourceLine" id="cb69-8" title="8">  <span class="kw">names</span>(md_list) &lt;-<span class="st"> </span>list_of_species</a>
+<a class="sourceLine" id="cb69-9" title="9">  <span class="kw">return</span>(md_list)</a>
+<a class="sourceLine" id="cb69-10" title="10">})</a>
+<a class="sourceLine" id="cb69-11" title="11"></a>
+<a class="sourceLine" id="cb69-12" title="12"><span class="co"># prepare model data</span></a>
+<a class="sourceLine" id="cb69-13" title="13">scales =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2.5km&quot;</span>)</a>
+<a class="sourceLine" id="cb69-14" title="14">model_data &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">scale =</span> scales, </a>
+<a class="sourceLine" id="cb69-15" title="15">                              <span class="dt">scientific_name =</span> list_of_species) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb69-16" title="16"><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(scale))</a>
+<a class="sourceLine" id="cb69-17" title="17"></a>
+<a class="sourceLine" id="cb69-18" title="18"><span class="co"># rename model data components and separate predictors</span></a>
+<a class="sourceLine" id="cb69-19" title="19">names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;predictor&quot;</span>, <span class="st">&quot;coefficient&quot;</span>, <span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci_lower&quot;</span>, </a>
+<a class="sourceLine" id="cb69-20" title="20">           <span class="st">&quot;ci_higher&quot;</span>, <span class="st">&quot;z_value&quot;</span>, <span class="st">&quot;p_value&quot;</span>)</a>
+<a class="sourceLine" id="cb69-21" title="21"></a>
+<a class="sourceLine" id="cb69-22" title="22"><span class="co"># get data for plotting:</span></a>
+<a class="sourceLine" id="cb69-23" title="23">model_est &lt;-<span class="st"> </span><span class="kw">map</span>(model_est, <span class="cf">function</span>(l) {</a>
+<a class="sourceLine" id="cb69-24" title="24">  <span class="kw">map</span>(l, <span class="cf">function</span>(df) {</a>
+<a class="sourceLine" id="cb69-25" title="25">    <span class="kw">colnames</span>(df) &lt;-<span class="st"> </span>names</a>
+<a class="sourceLine" id="cb69-26" title="26">    df &lt;-<span class="st"> </span><span class="kw">separate_interaction_terms</span>(df)</a>
+<a class="sourceLine" id="cb69-27" title="27">    df &lt;-<span class="st"> </span><span class="kw">make_response_data</span>(df) </a>
+<a class="sourceLine" id="cb69-28" title="28">    <span class="kw">return</span>(df)</a>
+<a class="sourceLine" id="cb69-29" title="29">  })</a>
+<a class="sourceLine" id="cb69-30" title="30">})</a>
+<a class="sourceLine" id="cb69-31" title="31"></a>
+<a class="sourceLine" id="cb69-32" title="32"><span class="co"># add names and scales</span></a>
+<a class="sourceLine" id="cb69-33" title="33">model_est &lt;-<span class="st"> </span><span class="kw">map</span>(model_est, <span class="cf">function</span>(l) {</a>
+<a class="sourceLine" id="cb69-34" title="34">  <span class="kw">imap</span>(l, <span class="cf">function</span>(.x, .y) {</a>
+<a class="sourceLine" id="cb69-35" title="35">    <span class="kw">mutate</span>(.x, <span class="dt">scientific_name =</span> .y)</a>
+<a class="sourceLine" id="cb69-36" title="36">  })</a>
+<a class="sourceLine" id="cb69-37" title="37">})</a>
+<a class="sourceLine" id="cb69-38" title="38"></a>
+<a class="sourceLine" id="cb69-39" title="39"><span class="co"># add names to model estimates</span></a>
+<a class="sourceLine" id="cb69-40" title="40"><span class="kw">names</span>(model_est) &lt;-<span class="st"> </span>scales</a>
+<a class="sourceLine" id="cb69-41" title="41">model_est &lt;-<span class="st"> </span><span class="kw">imap</span>(model_est, <span class="cf">function</span>(.x, .y) {</a>
+<a class="sourceLine" id="cb69-42" title="42">  <span class="kw">bind_rows</span>(.x) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb69-43" title="43"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">scale =</span> .y)</a>
+<a class="sourceLine" id="cb69-44" title="44">})</a>
+<a class="sourceLine" id="cb69-45" title="45"></a>
+<a class="sourceLine" id="cb69-46" title="46"><span class="co"># remove modulators</span></a>
+<a class="sourceLine" id="cb69-47" title="47">model_est &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(model_est) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb69-48" title="48"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">matches</span>(<span class="st">&quot;modulator&quot;</span>))</a>
+<a class="sourceLine" id="cb69-49" title="49"></a>
+<a class="sourceLine" id="cb69-50" title="50"><span class="co"># join data to species name</span></a>
+<a class="sourceLine" id="cb69-51" title="51">model_data &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb69-52" title="52"><span class="st">  </span><span class="kw">left_join</span>(model_est)</a>
+<a class="sourceLine" id="cb69-53" title="53"></a>
+<a class="sourceLine" id="cb69-54" title="54"><span class="co"># Keep only those predictors whose p-vlaues are significant:</span></a>
+<a class="sourceLine" id="cb69-55" title="55">model_data &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb69-56" title="56"><span class="st">  </span><span class="kw">filter</span>(p_value <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>)</a></code></pre></div>
+<p>Export predictor effects.</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1"><span class="co"># get predictor effect data</span></a>
+<a class="sourceLine" id="cb70-2" title="2">data_predictor_effect &lt;-<span class="st"> </span><span class="kw">distinct</span>(model_data, </a>
+<a class="sourceLine" id="cb70-3" title="3">                                  scientific_name, </a>
+<a class="sourceLine" id="cb70-4" title="4">                                  se,</a>
+<a class="sourceLine" id="cb70-5" title="5">                                  predictor, coefficient)</a>
+<a class="sourceLine" id="cb70-6" title="6"></a>
+<a class="sourceLine" id="cb70-7" title="7"><span class="co"># write to file</span></a>
+<a class="sourceLine" id="cb70-8" title="8"><span class="kw">write_csv</span>(data_predictor_effect,</a>
+<a class="sourceLine" id="cb70-9" title="9">          <span class="dt">path =</span> <span class="st">&quot;data/results/data_predictor_effect.csv&quot;</span>)</a></code></pre></div>
+<p>Export model data.</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" title="1">model_data_to_file &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb71-2" title="2"><span class="st">  </span><span class="kw">select</span>(predictor, data,</a>
+<a class="sourceLine" id="cb71-3" title="3">         scientific_name, scale) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb71-4" title="4"><span class="st">  </span><span class="kw">unnest</span>(<span class="dt">cols =</span> <span class="st">&quot;data&quot;</span>)</a>
+<a class="sourceLine" id="cb71-5" title="5"></a>
+<a class="sourceLine" id="cb71-6" title="6"><span class="co"># remove .y</span></a>
+<a class="sourceLine" id="cb71-7" title="7">model_data_to_file &lt;-<span class="st"> </span>model_data_to_file <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb71-8" title="8"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">predictor =</span> <span class="kw">str_remove</span>(predictor, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">.y&quot;</span>))</a>
+<a class="sourceLine" id="cb71-9" title="9"></a>
+<a class="sourceLine" id="cb71-10" title="10"><span class="kw">write_csv</span>(model_data_to_file,</a>
+<a class="sourceLine" id="cb71-11" title="11">          <span class="st">&quot;data/results/data_occupancy_predictors.csv&quot;</span>)</a></code></pre></div>
+<p>Read in data after clearing R session.</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1"><span class="co"># read from file</span></a>
+<a class="sourceLine" id="cb72-2" title="2">model_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/results/data_predictor_effect.csv&quot;</span>)</a></code></pre></div>
+<p>Fix predictor name.</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" title="1"><span class="co"># remove .y from predictors</span></a>
+<a class="sourceLine" id="cb73-2" title="2">model_data &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb73-3" title="3"><span class="st">  </span><span class="kw">mutate_at</span>(<span class="dt">.vars =</span> <span class="kw">c</span>(<span class="st">&quot;predictor&quot;</span>), <span class="dt">.funs =</span> <span class="cf">function</span>(x){</a>
+<a class="sourceLine" id="cb73-4" title="4">    stringr<span class="op">::</span><span class="kw">str_remove</span>(x, <span class="st">&quot;.y&quot;</span>)</a>
+<a class="sourceLine" id="cb73-5" title="5">  })</a></code></pre></div>
+</div>
+<div id="get-predictor-effects" class="section level2">
+<h2><span class="header-section-number">8.5</span> Get predictor effects</h2>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1"><span class="co"># is the coeff positive? how many positive per scale per predictor per axis of split?</span></a>
+<a class="sourceLine" id="cb74-2" title="2">data_predictor &lt;-<span class="st"> </span><span class="kw">mutate</span>(model_data, </a>
+<a class="sourceLine" id="cb74-3" title="3">                                <span class="dt">direction =</span> coefficient <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb74-4" title="4"><span class="st">  </span><span class="kw">count</span>(predictor, </a>
+<a class="sourceLine" id="cb74-5" title="5">        direction) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb74-6" title="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">mag =</span> n <span class="op">*</span><span class="st"> </span>(<span class="kw">if_else</span>(direction, <span class="dv">1</span>, <span class="dv">-1</span>)))</a>
+<a class="sourceLine" id="cb74-7" title="7"></a>
+<a class="sourceLine" id="cb74-8" title="8"><span class="co"># wrangle data to get nice bars</span></a>
+<a class="sourceLine" id="cb74-9" title="9">data_predictor &lt;-<span class="st"> </span>data_predictor<span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb74-10" title="10"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>n) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb74-11" title="11"><span class="st">  </span><span class="kw">drop_na</span>(direction) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb74-12" title="12"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">direction =</span> <span class="kw">ifelse</span>(direction, <span class="st">&quot;positive&quot;</span>, <span class="st">&quot;negative&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb74-13" title="13"><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">values_from =</span> <span class="st">&quot;mag&quot;</span>, <span class="dt">names_from =</span> <span class="st">&quot;direction&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb74-14" title="14"><span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(positive, negative),</a>
+<a class="sourceLine" id="cb74-15" title="15">            <span class="op">~</span><span class="kw">if_else</span>(<span class="kw">is.na</span>(.), <span class="dv">0</span>, .))</a>
+<a class="sourceLine" id="cb74-16" title="16"></a>
+<a class="sourceLine" id="cb74-17" title="17">data_predictor_long &lt;-<span class="st"> </span>data_predictor <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb74-18" title="18"><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols =</span> <span class="kw">c</span>(<span class="st">&quot;negative&quot;</span>, <span class="st">&quot;positive&quot;</span>),</a>
+<a class="sourceLine" id="cb74-19" title="19">               <span class="dt">names_to =</span> <span class="st">&quot;effect&quot;</span>,</a>
+<a class="sourceLine" id="cb74-20" title="20">               <span class="dt">values_to =</span> <span class="st">&quot;magnitude&quot;</span>)</a>
+<a class="sourceLine" id="cb74-21" title="21"></a>
+<a class="sourceLine" id="cb74-22" title="22"><span class="co"># write</span></a>
+<a class="sourceLine" id="cb74-23" title="23"><span class="kw">write_csv</span>(data_predictor_long,</a>
+<a class="sourceLine" id="cb74-24" title="24">          <span class="dt">path =</span> <span class="st">&quot;data/results/data_predictor_direction_nSpecies.csv&quot;</span>)</a></code></pre></div>
+<p>Prepare data to determine the direction (positive or negative) of the effect of each predictor. How many species are affected in either direction?</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" title="1"><span class="co"># join with predictor names and relative AIC</span></a>
+<a class="sourceLine" id="cb75-2" title="2">data_predictor_long &lt;-<span class="st"> </span><span class="kw">left_join</span>(data_predictor_long, model_imp)</a></code></pre></div>
+<p>Prepare figure of the number of species affected in each direction. Figure code is hidden in versions rendered as HTML and PDF.</p>
+</div>
+<div id="main-text-figure-4" class="section level2">
+<h2><span class="header-section-number">8.6</span> Main Text Figure 4</h2>
+<p>Figure code is hidden in versions rendered as HTML and PDF.</p>
+<div class="figure">
+<img src="figs/fig_04_aic_weight_effect.png" alt="(a) Cumulative AIC weights suggest that climatic predictors have higher relative importance when compared to landscape predictors. (b) The direction of association between species-specific probability of occupancy and climatic and landscape is shown here. While climatic predictors were both positively and negatively associated with the probability of occupancy for a number of species, human-associated land cover types were largely negatively associated with species-specific probability of occupancy." />
+<p class="caption">(a) Cumulative AIC weights suggest that climatic predictors have higher relative importance when compared to landscape predictors. (b) The direction of association between species-specific probability of occupancy and climatic and landscape is shown here. While climatic predictors were both positively and negatively associated with the probability of occupancy for a number of species, human-associated land cover types were largely negatively associated with species-specific probability of occupancy.</p>
+</div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="modelling-species-occupancy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": false,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/pratikunterwegs/eBirdOccupancy/edit/master/06_results-AICweights-probOfOccupancy.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
