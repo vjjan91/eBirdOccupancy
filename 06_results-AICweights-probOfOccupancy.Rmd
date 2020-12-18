@@ -348,7 +348,9 @@ ggsave(fig_predictor,
 
 ## Main Text Figure 4
 
-```{r}
+Figure code is hidden in versions rendered as HTML and PDF.
+
+```{r echo=FALSE}
 library(patchwork)
 
 # wrap

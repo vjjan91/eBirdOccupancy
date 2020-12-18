@@ -257,14 +257,14 @@
 ##   write_csv("data/results/distance_roads_sites.csv")
 
 
-## ----show_dist_roads_nnb, eval=TRUE, message=FALSE, echo=FALSE----------------
-# read in and show
-library(magrittr)
-readr::read_csv("data/results/distance_roads_sites.csv") %>%
-  knitr::kable(
-    caption = "Distance to roads: Summary statistics",
-    booktabs = TRUE
-  )
+## ----show_dist_roads_nnb, eval=FALSE, message=FALSE, echo=FALSE---------------
+## # read in and show
+## library(magrittr)
+## readr::read_csv("data/results/distance_roads_sites.csv") %>%
+##   kableExtra::kbl(
+##    booktabs = TRUE
+##   ) %>%
+##   kableExtra::kable_styling(latex_options = c("hold_position"))
 
 
 ## ----get_nn_site, eval=FALSE--------------------------------------------------

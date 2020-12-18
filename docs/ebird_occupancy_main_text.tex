@@ -941,22 +941,6 @@ Figure code is hidden in versions rendered as HTML or PDF.
 \end{Highlighting}
 \end{Shaded}
 
-\textbackslash{}begin\{table\}
-
-\textbackslash{}caption\{(\#tab:show\_dist\_roads\_nnb)Distance to roads: Summary statistics\}
-\centering
-
-\begin{tabular}[t]{lrrrr}
-\toprule
-variable & mean & sd & min & max\\
-\midrule
-dist\_road & 390 & 859 & 0.279 & 7637\\
-nnb & 297 & 553 & 0.137 & 12850\\
-\bottomrule
-\end{tabular}
-
-\textbackslash{}end\{table\}
-
 \hypertarget{distance-to-nearest-neighbouring-site}{%
 \subsection{Distance to nearest neighbouring site}\label{distance-to-nearest-neighbouring-site}}
 
@@ -2544,24 +2528,7 @@ Prepare figure of the number of species affected in each direction. Figure code 
 \hypertarget{main-text-figure-4}{%
 \subsection{Main Text Figure 4}\label{main-text-figure-4}}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(patchwork)}
-
-\CommentTok{# wrap}
-\NormalTok{fig_predictor_effect <-}\StringTok{ }
-\StringTok{  }\KeywordTok{wrap_plots}\NormalTok{(fig_aic, fig_predictor)}\OperatorTok{+}
-\StringTok{  }\KeywordTok{plot_annotation}\NormalTok{(}\DataTypeTok{tag_levels =} \StringTok{"a"}\NormalTok{,}
-                  \DataTypeTok{tag_prefix =} \StringTok{"("}\NormalTok{,}
-                  \DataTypeTok{tag_suffix =} \StringTok{")"}\NormalTok{)}
-
-\CommentTok{# save}
-\KeywordTok{ggsave}\NormalTok{(fig_predictor_effect,}
-       \DataTypeTok{filename =} \StringTok{"figs/fig_04_aic_weight_effect.png"}\NormalTok{,}
-       \DataTypeTok{dpi =} \DecValTok{300}\NormalTok{,}
-       \DataTypeTok{width =} \DecValTok{168}\NormalTok{, }\DataTypeTok{height =} \DecValTok{130}\NormalTok{, }\DataTypeTok{units =} \StringTok{"mm"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+Figure code is hidden in versions rendered as HTML and PDF.
 
 \begin{figure}
 \centering
