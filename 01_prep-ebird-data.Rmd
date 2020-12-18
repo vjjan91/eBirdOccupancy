@@ -3,7 +3,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Preparing eBird data
+# Preparing eBird Data
 
 ## Prepare libraries and data sources
 

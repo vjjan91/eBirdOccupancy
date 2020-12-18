@@ -3,7 +3,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Prepare observer expertise
+# Preparing Observer Expertise Scores
 
 ## Prepare libraries
 

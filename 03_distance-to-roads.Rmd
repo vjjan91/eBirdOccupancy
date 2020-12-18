@@ -3,7 +3,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Distance to roads
+# Examining Spatial Sampling Bias
 
 The goal of this section is to determine how far each checklist location is from the nearest road, and how far each site is from its nearest neighbour. This involves finding the pairwise distance between a large number of unique checklist locations to a vast number of roads, as well as to each other.
 

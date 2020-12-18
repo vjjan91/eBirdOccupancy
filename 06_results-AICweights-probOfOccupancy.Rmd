@@ -3,7 +3,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Visualizing results
+# Visualizing Occupancy Predictor Effects
 
 In this section, we will visualize the cumulative AIC weights and the magnitude and direction of species-specific probability of occupancy
 

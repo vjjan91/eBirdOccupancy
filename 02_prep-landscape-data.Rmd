@@ -3,7 +3,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Prepare landscape data
+# Preparing Landscape Data
 
 Here, we prepare environmental layers which we have accessed as raster images from remote sensing platforms using Google Earth Engine.
 The GEE code can be found in a separate file.

@@ -3,7 +3,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Add covariates to checklist data
+# Adding Covariates to Checklist Data
 
 ## Prepare libraries and data
 
