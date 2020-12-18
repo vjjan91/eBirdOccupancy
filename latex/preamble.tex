@@ -1,0 +1,12 @@
+
+\usepackage{fontspec}
+% use nice fonts if available else use boring defaults
+
+\usepackage{lineno}
+% \KOMAoption{fontsize}{10pt}
+
+\IfFontExistsTF{Times New Roman}{\setmainfont[]{Times New Roman}}{} 
+% \IfFontExistsTF{Arial}{\setsansfont[]{Arial}}{}
+\IfFontExistsTF{Inconsolata}{\setmonofont{Inconsolata}}
+
+\linenumbers
