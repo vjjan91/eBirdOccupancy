@@ -105,6 +105,18 @@
 \makeatother
 
 
+\usepackage{fontspec}
+% use nice fonts if available else use boring defaults
+
+\usepackage{lineno}
+% \KOMAoption{fontsize}{10pt}
+
+\IfFontExistsTF{Times New Roman}{\setmainfont[]{Times New Roman}}{} 
+% \IfFontExistsTF{Arial}{\setsansfont[]{Arial}}{}
+\IfFontExistsTF{Inconsolata}{\setmonofont{Inconsolata}}
+
+\linenumbers
+
 \title{Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot}
 \author{Vijay Ramesh \and Pratik R. Gupte \and Morgan W. Tingley \and VV Robin \and Ruth DeFries}
 \date{2020-12-18}
@@ -176,7 +188,7 @@ Figure prepared in QGIS 3.10.
 \subsection{Prepare libraries and data sources}\label{prepare-libraries-and-data-sources}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 
 \CommentTok{# load libs}
 \KeywordTok{library}\NormalTok{(tidyverse)}
@@ -200,7 +212,7 @@ Figure prepared in QGIS 3.10.
 \subsection{Filter data}\label{filter-data}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# add species of interest}
 \NormalTok{specieslist <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"data/species_list.csv"}\NormalTok{)}
 \NormalTok{speciesOfInterest <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(specieslist}\OperatorTok{$}\NormalTok{scientific_name)}
@@ -208,7 +220,7 @@ Figure prepared in QGIS 3.10.
 \end{Shaded}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 
 \CommentTok{# run filters using auk packages}
 \NormalTok{ebd_filters <-}\StringTok{ }\KeywordTok{auk_ebd}\NormalTok{(f_in_ebd, f_in_sampling) }\OperatorTok{%>%}
@@ -226,7 +238,7 @@ Figure prepared in QGIS 3.10.
 Below code need not be run if it has been filtered once already and the above path leads to the right dataset. NB: This is a computation heavy process, run with caution.
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 
 \CommentTok{# specify output location and perform filter}
 \NormalTok{f_out_ebd <-}\StringTok{ "data/eBirdDataWG_filtered.txt"}
@@ -235,7 +247,7 @@ Below code need not be run if it has been filtered once already and the above pa
 \end{Shaded}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \NormalTok{ebd_filtered <-}\StringTok{ }\KeywordTok{auk_filter}\NormalTok{(ebd_filters,}
   \DataTypeTok{file =}\NormalTok{ f_out_ebd,}
   \DataTypeTok{file_sampling =}\NormalTok{ f_out_sampling, }\DataTypeTok{overwrite =} \OtherTok{TRUE}
@@ -247,14 +259,14 @@ Below code need not be run if it has been filtered once already and the above pa
 \subsection{Process filtered data}\label{process-filtered-data}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# read in the data}
 \NormalTok{ebd <-}\StringTok{ }\KeywordTok{read_ebd}\NormalTok{(f_out_ebd)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# fill zeroes}
 \NormalTok{zf <-}\StringTok{ }\KeywordTok{auk_zerofill}\NormalTok{(f_out_ebd, f_out_sampling)}
 \NormalTok{new_zf <-}\StringTok{ }\KeywordTok{collapse_zerofill}\NormalTok{(zf) }\CommentTok{# Creates a new zero-filled dataframe with a 0 marked for each checklist when the bird was not observed}
@@ -262,7 +274,7 @@ Below code need not be run if it has been filtered once already and the above pa
 \end{Shaded}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# choose columns of interest}
 \NormalTok{columnsOfInterest <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}
   \StringTok{"checklist_id"}\NormalTok{, }\StringTok{"scientific_name"}\NormalTok{, }\StringTok{"common_name"}\NormalTok{,}
@@ -295,7 +307,7 @@ Below code need not be run if it has been filtered once already and the above pa
 \subsection{Spatial filter}\label{spatial-filter}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 
 \CommentTok{# load shapefiles of hill ranges}
 \KeywordTok{library}\NormalTok{(sf)}
@@ -333,7 +345,7 @@ Below code need not be run if it has been filtered once already and the above pa
 \end{Shaded}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# save a temp data file}
 \KeywordTok{save}\NormalTok{(data, }\DataTypeTok{file =} \StringTok{"data/data_temp.rdata"}\NormalTok{)}
 \end{Highlighting}
@@ -343,7 +355,7 @@ Below code need not be run if it has been filtered once already and the above pa
 \subsection{Handle presence data}\label{handle-presence-data}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 
 \CommentTok{# in the first set, replace X, for presences, with 1}
 \NormalTok{data[[}\DecValTok{1}\NormalTok{]] <-}\StringTok{ }\NormalTok{data[[}\DecValTok{1}\NormalTok{]] }\OperatorTok{%>%}
@@ -403,7 +415,7 @@ Below code need not be run if it has been filtered once already and the above pa
 \subsection{Add decimal time}\label{add-decimal-time}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 
 \CommentTok{# assign present or not, and get time in decimal hours since midnight}
 \KeywordTok{library}\NormalTok{(lubridate)}
@@ -426,7 +438,7 @@ Below code need not be run if it has been filtered once already and the above pa
 This data is saved to file.
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 
 \CommentTok{# save a temp data file}
 \KeywordTok{save}\NormalTok{(dataGrouped, }\DataTypeTok{file =} \StringTok{"data/data_prelim_processing.rdata"}\NormalTok{)}
@@ -446,7 +458,7 @@ The goal here is to resample all rasters so that they have the same resolution o
 We load some common libraries for raster processing and define a custom mode function.
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 
 \CommentTok{# load libs}
 \KeywordTok{library}\NormalTok{(raster)}
@@ -475,7 +487,7 @@ We prepare a 30km buffer around the boundary of the study area. This buffer will
 The buffer procedure is done on data transformed to the UTM 43N CRS to avoid distortions.
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# load hills}
 \KeywordTok{library}\NormalTok{(sf)}
 \NormalTok{hills <-}\StringTok{ }\KeywordTok{st_read}\NormalTok{(}\StringTok{"data/spatial/hillsShapefile/Nil_Ana_Pal.shp"}\NormalTok{)}
@@ -491,7 +503,7 @@ The buffer procedure is done on data transformed to the UTM 43N CRS to avoid dis
 We prepare the elevation data which is an SRTM raster layer, and derive the slope and aspect from it after cropping it to the extent of the study site buffer.
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# load elevation and crop to hills size, then mask by hills}
 \NormalTok{alt <-}\StringTok{ }\KeywordTok{raster}\NormalTok{(}\StringTok{"data/spatial/Elevation/alt"}\NormalTok{)}
 \NormalTok{alt.hills <-}\StringTok{ }\KeywordTok{crop}\NormalTok{(alt, }\KeywordTok{as}\NormalTok{(buffer, }\StringTok{"Spatial"}\NormalTok{))}
@@ -512,7 +524,7 @@ We prepare the elevation data which is an SRTM raster layer, and derive the slop
 We prepare the CHELSA rasters for annual temperature and annual precipitation in the same way, reading them in, cropping them to the study site buffer extent, and handling the temperature layer values which we divide by 10.
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# list chelsa files}
 \NormalTok{chelsaFiles <-}\StringTok{ }\KeywordTok{list.files}\NormalTok{(}\StringTok{"data/chelsa/"}\NormalTok{,}
   \DataTypeTok{full.names =} \OtherTok{TRUE}\NormalTok{,}
@@ -538,7 +550,7 @@ We prepare the CHELSA rasters for annual temperature and annual precipitation in
 We stack the terrain and climatic rasters.
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# stack rasters for efficient reprojection later}
 \NormalTok{env_data <-}\StringTok{ }\KeywordTok{stack}\NormalTok{(elevData, chelsaData)}
 \end{Highlighting}
@@ -550,7 +562,7 @@ We stack the terrain and climatic rasters.
 We read in a land cover classified image and resample that using the mode function to a 1km resolution.
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# read in landcover raster location}
 \NormalTok{landcover <-}\StringTok{ "data/landUseClassification/Reprojected Image_26thJan2020_UTM_Ghats.tif"}
 
@@ -586,7 +598,7 @@ We now resample all other rasters to a resolution of 1km.
 Here, we read in the 1km landcover raster and set 0 to NA.
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \NormalTok{lc_data <-}\StringTok{ }\KeywordTok{raster}\NormalTok{(}\StringTok{"data/landUseClassification/lc_01000m.tif"}\NormalTok{)}
 \NormalTok{lc_data[lc_data }\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{] <-}\StringTok{ }\OtherTok{NA}
 \end{Highlighting}
@@ -596,7 +608,7 @@ Here, we read in the 1km landcover raster and set 0 to NA.
 \subsubsection{Reproject environmental data using landcover as a template}\label{reproject-environmental-data-using-landcover-as-a-template}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 
 \CommentTok{# resample to the corresponding landcover data}
 \NormalTok{env_data_resamp <-}\StringTok{ }\KeywordTok{projectRaster}\NormalTok{(}
@@ -622,7 +634,7 @@ Here, we read in the 1km landcover raster and set 0 to NA.
 \subsubsection{Prepare libraries and CI function}\label{prepare-libraries-and-ci-function}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# load libs}
 \KeywordTok{library}\NormalTok{(dplyr)}
 \KeywordTok{library}\NormalTok{(tidyr)}
@@ -641,7 +653,7 @@ Here, we read in the 1km landcover raster and set 0 to NA.
 \subsubsection{Load resampled environmental rasters}\label{load-resampled-environmental-rasters}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# read landscape prepare for plotting}
 \NormalTok{landscape <-}\StringTok{ }\KeywordTok{stack}\NormalTok{(}\StringTok{"data/spatial/landscape_resamp01_km.tif"}\NormalTok{)}
 
@@ -654,7 +666,7 @@ Here, we read in the 1km landcover raster and set 0 to NA.
 \end{Shaded}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# make duplicate stack}
 \NormalTok{land_data <-}\StringTok{ }\NormalTok{landscape[[}\KeywordTok{c}\NormalTok{(}\StringTok{"elev"}\NormalTok{, chelsa_names)]]}
 
@@ -685,7 +697,7 @@ Figure code is hidden in versions rendered as HTML or PDF.
 \subsection{Land cover type in relation to elevation}\label{land-cover-type-in-relation-to-elevation}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# get data from landscape rasters}
 \NormalTok{lc_elev <-}\StringTok{ }\KeywordTok{tibble}\NormalTok{(}
   \DataTypeTok{elev =} \KeywordTok{getValues}\NormalTok{(landscape[[}\StringTok{"elev"}\NormalTok{]]),}
@@ -736,7 +748,7 @@ Parts of this section are thus implemented in Python, using the R-Python interfa
 \subsection{Prepare libraries}\label{prepare-libraries-1}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# load libraries}
 \KeywordTok{library}\NormalTok{(reticulate)}
 \KeywordTok{library}\NormalTok{(sf)}
@@ -767,7 +779,7 @@ Parts of this section are thus implemented in Python, using the R-Python interfa
 Importing python libraries. These libraries need to be installed before use.
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# import classic python libs}
 \ImportTok{import}\NormalTok{ itertools}
 \ImportTok{from}\NormalTok{ operator }\ImportTok{import}\NormalTok{ itemgetter}
@@ -806,7 +818,7 @@ We use these functions to find the distance between each checklist location and 
 \subsubsection{Python functions and distance calculations}\label{python-functions-and-distance-calculations}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# read in roads shapefile}
 \NormalTok{roads }\OperatorTok{=}\NormalTok{ gpd.read_file(}\StringTok{"data/spatial/roads_studysite_2019/roads_studysite_2019.shp"}\NormalTok{)}
 \NormalTok{roads.head()}
@@ -893,7 +905,7 @@ We use these functions to find the distance between each checklist location and 
 We filter the checklists by the boundary of the study area. This is \emph{not} the extent.
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# extract data from python}
 \NormalTok{chkCovars <-}\StringTok{ }\NormalTok{py}\OperatorTok{$}\NormalTok{chkCovars}
 \NormalTok{chkCovars <-}\StringTok{ }\KeywordTok{st_as_sf}\NormalTok{(chkCovars, }\DataTypeTok{coords =} \KeywordTok{c}\NormalTok{(}\StringTok{"longitude"}\NormalTok{, }\StringTok{"latitude"}\NormalTok{)) }\OperatorTok{%>%}
@@ -923,7 +935,7 @@ Figure code is hidden in versions rendered as HTML or PDF.
 \subsubsection{Table: Distance to roads}\label{table-distance-to-roads}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# write the mean and ci95 to file}
 \NormalTok{chkCovars }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{st_drop_geometry}\NormalTok{() }\OperatorTok{%>%}
@@ -945,7 +957,7 @@ Figure code is hidden in versions rendered as HTML or PDF.
 \subsection{Distance to nearest neighbouring site}\label{distance-to-nearest-neighbouring-site}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# get unique locations}
 \NormalTok{locs <-}\StringTok{ }\NormalTok{py}\OperatorTok{$}\NormalTok{unique_locs}
 \end{Highlighting}
@@ -957,7 +969,7 @@ Figure code is hidden in versions rendered as HTML and PDF.
 \subsection{Main Text Figure 3}\label{main-text-figure-3-1}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \NormalTok{roads <-}\StringTok{ }\KeywordTok{st_read}\NormalTok{(}\StringTok{"data/spatial/roads_studysite_2019/roads_studysite_2019.shp"}\NormalTok{) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{st_transform}\NormalTok{(}\DecValTok{32643}\NormalTok{)}
 \NormalTok{points <-}\StringTok{ }\NormalTok{chkCovars }\OperatorTok{%>%}
@@ -995,7 +1007,7 @@ Figure code is hidden in versions rendered as HTML and PDF.
 \subsection{Prepare libraries}\label{prepare-libraries-2}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 
 \CommentTok{# load libs}
 \KeywordTok{library}\NormalTok{(data.table)}
@@ -1021,7 +1033,7 @@ Figure code is hidden in versions rendered as HTML and PDF.
 Here, we go through the data preparation process again because we might want to assess observer expertise over a larger area than the study site.
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# Read in shapefile of study area to subset by bounding box}
 \KeywordTok{library}\NormalTok{(sf)}
 \NormalTok{wg <-}\StringTok{ }\KeywordTok{st_read}\NormalTok{(}\StringTok{"data/spatial/hillsShapefile/Nil_Ana_Pal.shp"}\NormalTok{) }\OperatorTok{%>%}
@@ -1054,7 +1066,7 @@ Here, we go through the data preparation process again because we might want to 
 \end{Shaded}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{## Process filtered data}
 \CommentTok{# read in the data}
 \NormalTok{ebd <-}\StringTok{ }\KeywordTok{fread}\NormalTok{(f_out_ebd)}
@@ -1086,7 +1098,7 @@ Here, we go through the data preparation process again because we might want to 
 \subsection{Spatially explicit filter on checklists}\label{spatially-explicit-filter-on-checklists-1}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# get checklist locations}
 \NormalTok{ebd_locs <-}\StringTok{ }\NormalTok{ebd[, .(longitude, latitude)]}
 \NormalTok{ebd_locs <-}\StringTok{ }\KeywordTok{setDF}\NormalTok{(ebd_locs) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{distinct}\NormalTok{()}
@@ -1109,7 +1121,7 @@ Here, we go through the data preparation process again because we might want to 
 \end{Shaded}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \NormalTok{ebd <-}\StringTok{ }\NormalTok{ebd[longitude }\OperatorTok{%in%}\StringTok{ }\NormalTok{ebd_locs}\OperatorTok{$}\NormalTok{X }\OperatorTok{&}\StringTok{ }\NormalTok{latitude }\OperatorTok{%in%}\StringTok{ }\NormalTok{ebd_locs}\OperatorTok{$}\NormalTok{Y, ]}
 \end{Highlighting}
 \end{Shaded}
@@ -1118,7 +1130,7 @@ Here, we go through the data preparation process again because we might want to 
 \subsection{Prepare species of interest}\label{prepare-species-of-interest}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# read in species list}
 \NormalTok{specieslist <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"data/species_list.csv"}\NormalTok{)}
 
@@ -1141,7 +1153,7 @@ Here, we go through the data preparation process again because we might want to 
 \subsection{Prepare checklists for observer score}\label{prepare-checklists-for-observer-score}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# 1. add new columns of decimal time and julian date}
 \NormalTok{ebd[, }\StringTok{`}\DataTypeTok{:=}\StringTok{`}\NormalTok{(}
   \DataTypeTok{decimalTime =} \KeywordTok{time_to_decimal}\NormalTok{(time_observations_started),}
@@ -1182,7 +1194,7 @@ Here, we go through the data preparation process again because we might want to 
 Read in land cover type data resampled at 1km resolution.
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# read in 1km landcover and set 0 to NA}
 \KeywordTok{library}\NormalTok{(raster)}
 \NormalTok{landcover <-}\StringTok{ }\NormalTok{raster}\OperatorTok{::}\KeywordTok{raster}\NormalTok{(}\StringTok{"data/landUseClassification/lc_01000m.tif"}\NormalTok{)}
@@ -1213,7 +1225,7 @@ Read in land cover type data resampled at 1km resolution.
 \subsection{Filter checklist data}\label{filter-checklist-data}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# change names for easy handling}
 \KeywordTok{setnames}\NormalTok{(ebdChkSummary, }\KeywordTok{c}\NormalTok{(}
   \StringTok{"sei"}\NormalTok{, }\StringTok{"observer"}\NormalTok{, }\StringTok{"year"}\NormalTok{, }\StringTok{"duration"}\NormalTok{, }\StringTok{"distance"}\NormalTok{,}
@@ -1259,7 +1271,7 @@ Read in land cover type data resampled at 1km resolution.
 Our observer expertise model aims to include the random intercept effect of observer identity, with a random slope effect of duration. This models the different rate of species accumulation by different observers, as well as their different starting points.
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# uses either a subset or all data}
 \KeywordTok{library}\NormalTok{(lmerTest)}
 
@@ -1278,7 +1290,7 @@ Our observer expertise model aims to include the random intercept effect of obse
 \end{Shaded}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# make dir if absent}
 \ControlFlowTok{if}\NormalTok{ (}\OperatorTok{!}\KeywordTok{dir.exists}\NormalTok{(}\StringTok{"data/modOutput"}\NormalTok{)) \{}
   \KeywordTok{dir.create}\NormalTok{(}\StringTok{"data/modOutput"}\NormalTok{)}
@@ -1294,7 +1306,7 @@ Our observer expertise model aims to include the random intercept effect of obse
 \end{Shaded}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# make df with means}
 \NormalTok{observer <-}\StringTok{ }\KeywordTok{unique}\NormalTok{(ebdChkSummary}\OperatorTok{$}\NormalTok{observer)}
 
@@ -1317,7 +1329,7 @@ Our observer expertise model aims to include the random intercept effect of obse
 \end{Shaded}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \KeywordTok{fwrite}\NormalTok{(dfPredict }\OperatorTok{%>%}\StringTok{ }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{select}\NormalTok{(observer, score),}
   \DataTypeTok{file =} \StringTok{"data/dataObsExpScore.csv"}
 \NormalTok{)}
@@ -1331,7 +1343,7 @@ Our observer expertise model aims to include the random intercept effect of obse
 \subsection{Prepare libraries and data}\label{prepare-libraries-and-data}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 
 \CommentTok{# load libs}
 \KeywordTok{library}\NormalTok{(dplyr)}
@@ -1353,7 +1365,7 @@ Our observer expertise model aims to include the random intercept effect of obse
 \subsection{Spatial subsampling}\label{spatial-subsampling}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# grid based spatial thinning}
 \NormalTok{gridsize <-}\StringTok{ }\DecValTok{1000} \CommentTok{# grid size in metres}
 \NormalTok{effort_distance_max <-}\StringTok{ }\DecValTok{1000} \CommentTok{# removing checklists with this distance}
@@ -1411,7 +1423,7 @@ Our observer expertise model aims to include the random intercept effect of obse
 Get 10 random (if available) observations of each species at each locality.
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# subsample data for random 10 observations}
 \NormalTok{dataSubsample <-}\StringTok{ }\KeywordTok{map}\NormalTok{(data_spatial_thin, }\ControlFlowTok{function}\NormalTok{(df) \{}
 \NormalTok{  df <-}\StringTok{ }\KeywordTok{ungroup}\NormalTok{(df)}
@@ -1439,7 +1451,7 @@ Get 10 random (if available) observations of each species at each locality.
 \subsection{Add checklist calibration index}\label{add-checklist-calibration-index}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# read in obs score and extract numbers}
 \NormalTok{expertiseScore <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"data/dataObsExpScore.csv"}\NormalTok{) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{numObserver =} \KeywordTok{str_extract}\NormalTok{(observer, }\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{d+"}\NormalTok{)) }\OperatorTok{%>%}
@@ -1484,7 +1496,7 @@ Get 10 random (if available) observations of each species at each locality.
 \subsection{Add landscape covariates}\label{add-landscape-covariates}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 
 \CommentTok{# list landscape covariate stacks}
 \NormalTok{landscape_files <-}\StringTok{ "data/landcover}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{landscape_resamp01km.tif"}
@@ -1504,7 +1516,7 @@ Get 10 random (if available) observations of each species at each locality.
 \subsection{Spatial buffers around selected checklists}\label{spatial-buffers-around-selected-checklists}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# assign neighbourhood radius in m}
 \NormalTok{sample_radius <-}\StringTok{ }\FloatTok{2.5} \OperatorTok{*}\StringTok{ }\FloatTok{1e3}
 
@@ -1548,7 +1560,7 @@ Get 10 random (if available) observations of each species at each locality.
 All covariates are 2.5km mean values and prefixed ``am\_''.
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# get area mean for all preds except landcover, which is the last one}
 \NormalTok{env_area_mean <-}\StringTok{ }\NormalTok{purrr}\OperatorTok{::}\KeywordTok{map}\NormalTok{(ebird_buff}\OperatorTok{$}\NormalTok{data, }\ControlFlowTok{function}\NormalTok{(df) \{}
 \NormalTok{  stk <-}\StringTok{ }\NormalTok{landscape_data[[}\OperatorTok{-}\KeywordTok{dim}\NormalTok{(landscape_data)[}\DecValTok{3}\NormalTok{]]] }\CommentTok{# removing landcover here}
@@ -1573,7 +1585,7 @@ All covariates are 2.5km mean values and prefixed ``am\_''.
 \subsubsection{Proportions of land cover type}\label{proportions-of-land-cover-type}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# get the last element of each stack from the list}
 \CommentTok{# this is the landcover at that resolution}
 \NormalTok{lc_area_prop <-}\StringTok{ }\NormalTok{purrr}\OperatorTok{::}\KeywordTok{map}\NormalTok{(ebird_buff}\OperatorTok{$}\NormalTok{data, }\ControlFlowTok{function}\NormalTok{(df) \{}
@@ -1610,7 +1622,7 @@ All covariates are 2.5km mean values and prefixed ``am\_''.
 \subsubsection{Link landscape covariates to checklists}\label{link-landscape-covariates-to-checklists}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# duplicate scale data}
 \NormalTok{data_at_scale <-}\StringTok{ }\NormalTok{ebird_buff}
 
@@ -1626,7 +1638,7 @@ All covariates are 2.5km mean values and prefixed ``am\_''.
 Save data to file.
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# write to file}
 \KeywordTok{pmap}\NormalTok{(data_at_scale, }\ControlFlowTok{function}\NormalTok{(sample_radius, data) \{}
   \KeywordTok{write_csv}\NormalTok{(data, }\DataTypeTok{path =} \KeywordTok{glue}\NormalTok{(}\StringTok{'data/dataCovars_\{str_pad(sample_radius/1e3, 2, pad = "0")\}km.csv'}\NormalTok{))}
@@ -1642,7 +1654,7 @@ Save data to file.
 \subsubsection{Load necessary libraries}\label{load-necessary-libraries}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# Load libraries}
 \KeywordTok{library}\NormalTok{(auk)}
 \KeywordTok{library}\NormalTok{(lubridate)}
@@ -1673,7 +1685,7 @@ Save data to file.
 Here, we load the required dataframe that contains 10 random visits to a site. Please note that this process is repeated for each dataframe where environmental covariates were prepared at a spatial scale of 2.5 sq.km around each unique locality. We also scaled all covariates (mean around 0 and standard deviation of 1)
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# Load in the prepared dataframe that contains 10 random visits to each site}
 \NormalTok{dat <-}\StringTok{ }\KeywordTok{fread}\NormalTok{(}\StringTok{"data/dataCovars_2.5km.csv"}\NormalTok{, }\DataTypeTok{header =}\NormalTok{ T)}
 \KeywordTok{setDF}\NormalTok{(dat)}
@@ -1759,7 +1771,7 @@ Here, we load the required dataframe that contains 10 random visits to a site. P
 \subsection{Running a null model}\label{running-a-null-model}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# All null models are stored in lists below}
 \NormalTok{all_null <-}\StringTok{ }\KeywordTok{list}\NormalTok{()}
 
@@ -1823,7 +1835,7 @@ Here, we load the required dataframe that contains 10 random visits to a site. P
 Here, we use the \texttt{unmarked} package in R (Fiske and Chandler 2019) to identify detection level covariates that are important for each species
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 
 \CommentTok{# All models are stored in lists below}
 \NormalTok{det_dred <-}\StringTok{ }\KeywordTok{list}\NormalTok{()}
@@ -1965,7 +1977,7 @@ Here, we use the \texttt{unmarked} package in R (Fiske and Chandler 2019) to ide
 \subsection{Land Cover and Climate}\label{land-cover-and-climate}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 
 \CommentTok{# All dredged models are stored in lists below}
 \NormalTok{lc_clim <-}\StringTok{ }\KeywordTok{list}\NormalTok{()}
@@ -2113,7 +2125,7 @@ Here, we use the \texttt{unmarked} package in R (Fiske and Chandler 2019) to ide
 \subsection{Goodness-of-fit tests}\label{goodness-of-fit-tests}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \NormalTok{goodness_of_fit <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{()}
 
 \CommentTok{# Add a progress bar for the loop}
@@ -2188,7 +2200,7 @@ In this section, we will visualize the cumulative AIC weights and the magnitude 
 \subsection{Prepare libraries}\label{prepare-libraries-3}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# to load data}
 \KeywordTok{library}\NormalTok{(readxl)}
 
@@ -2220,7 +2232,7 @@ In this section, we will visualize the cumulative AIC weights and the magnitude 
 \subsection{Load species list}\label{load-species-list}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# list of species}
 \NormalTok{species <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"data/species_list.csv"}\NormalTok{)}
 \NormalTok{list_of_species <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(species}\OperatorTok{$}\NormalTok{scientific_name)}
@@ -2234,7 +2246,7 @@ In this section, we will visualize the cumulative AIC weights and the magnitude 
 \subsubsection{Read in AIC weight data}\label{read-in-aic-weight-data}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# which files to read}
 \NormalTok{file_names <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"data/results/lc-clim-imp.xlsx"}\NormalTok{)}
 
@@ -2271,7 +2283,7 @@ In this section, we will visualize the cumulative AIC weights and the magnitude 
 \subsubsection{Prepare cumulative AIC weight data}\label{prepare-cumulative-aic-weight-data}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# assign scale - minimum spatial scale at which the analysis was carried out to account for observer effort}
 \KeywordTok{names}\NormalTok{(model_imp) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"2.5km"}\NormalTok{)}
 \NormalTok{model_imp <-}\StringTok{ }\KeywordTok{imap}\NormalTok{(model_imp, }\ControlFlowTok{function}\NormalTok{(.x, .y) \{}
@@ -2306,7 +2318,7 @@ In this section, we will visualize the cumulative AIC weights and the magnitude 
 Read data back in.
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# read data and make factor}
 \NormalTok{model_imp <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"data/results/cumulative_AIC_weights.csv"}\NormalTok{)}
 \NormalTok{model_imp}\OperatorTok{$}\NormalTok{predictor <-}\StringTok{ }\KeywordTok{as_factor}\NormalTok{(model_imp}\OperatorTok{$}\NormalTok{predictor)}
@@ -2314,7 +2326,7 @@ Read data back in.
 \end{Shaded}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# make nice names}
 \NormalTok{predictor_name <-}\StringTok{ }\KeywordTok{tibble}\NormalTok{(}\DataTypeTok{predictor =} \KeywordTok{levels}\NormalTok{(model_imp}\OperatorTok{$}\NormalTok{predictor),}
                          \DataTypeTok{pred_name =} \KeywordTok{c}\NormalTok{(}\StringTok{"Annual Mean Temperature (°C)"}\NormalTok{, }
@@ -2331,7 +2343,7 @@ Read data back in.
 Prepare figure for cumulative AIC weight. Figure code is hidden in versions rendered as HTML and PDF.
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \NormalTok{fig_aic <-}
 \StringTok{  }\KeywordTok{ggplot}\NormalTok{(model_imp)}\OperatorTok{+}
 \StringTok{  }\KeywordTok{geom_pointrange}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{reorder}\NormalTok{(predictor, mean_AIC),}
@@ -2367,7 +2379,7 @@ Prepare figure for cumulative AIC weight. Figure code is hidden in versions rend
 \subsection{Prepare model coefficient data}\label{prepare-model-coefficient-data}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \NormalTok{file_read <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"data/results/lc-clim-modelEst.xlsx"}\NormalTok{)}
 
 \CommentTok{# read data as list column}
@@ -2430,7 +2442,7 @@ Prepare figure for cumulative AIC weight. Figure code is hidden in versions rend
 Export predictor effects.
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# get predictor effect data}
 \NormalTok{data_predictor_effect <-}\StringTok{ }\KeywordTok{distinct}\NormalTok{(model_data, }
 \NormalTok{                                  scientific_name, }
@@ -2446,7 +2458,7 @@ Export predictor effects.
 Export model data.
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \NormalTok{model_data_to_file <-}\StringTok{ }\NormalTok{model_data }\OperatorTok{%>%}\StringTok{ }
 \StringTok{  }\KeywordTok{select}\NormalTok{(predictor, data,}
 \NormalTok{         scientific_name, scale) }\OperatorTok{%>%}\StringTok{ }
@@ -2464,7 +2476,7 @@ Export model data.
 Read in data after clearing R session.
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# read from file}
 \NormalTok{model_data <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"data/results/data_predictor_effect.csv"}\NormalTok{)}
 \end{Highlighting}
@@ -2473,7 +2485,7 @@ Read in data after clearing R session.
 Fix predictor name.
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# remove .y from predictors}
 \NormalTok{model_data <-}\StringTok{ }\NormalTok{model_data }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{mutate_at}\NormalTok{(}\DataTypeTok{.vars =} \KeywordTok{c}\NormalTok{(}\StringTok{"predictor"}\NormalTok{), }\DataTypeTok{.funs =} \ControlFlowTok{function}\NormalTok{(x)\{}
@@ -2486,7 +2498,7 @@ Fix predictor name.
 \subsection{Get predictor effects}\label{get-predictor-effects}}
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# is the coeff positive? how many positive per scale per predictor per axis of split?}
 \NormalTok{data_predictor <-}\StringTok{ }\KeywordTok{mutate}\NormalTok{(model_data, }
                                 \DataTypeTok{direction =}\NormalTok{ coefficient }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
@@ -2517,7 +2529,7 @@ Fix predictor name.
 Prepare data to determine the direction (positive or negative) of the effect of each predictor. How many species are affected in either direction?
 
 \begin{Shaded}
-\begin{Highlighting}[]
+\begin{Highlighting}[numbers=left,,]
 \CommentTok{# join with predictor names and relative AIC}
 \NormalTok{data_predictor_long <-}\StringTok{ }\KeywordTok{left_join}\NormalTok{(data_predictor_long, model_imp)}
 \end{Highlighting}
