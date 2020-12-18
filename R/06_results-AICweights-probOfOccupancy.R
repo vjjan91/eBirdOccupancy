@@ -275,7 +275,7 @@ write_csv(data_predictor_long,
 data_predictor_long <- left_join(data_predictor_long, model_imp)
 
 
-## -----------------------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 fig_predictor <-
   ggplot(model_imp)+
   geom_hline(yintercept = 0,

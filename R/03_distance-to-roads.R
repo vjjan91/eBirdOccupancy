@@ -199,53 +199,6 @@
 ##                                              'longitude', 'coordId'])
 
 
-## ----load_ebd_data_nnb, eval=FALSE--------------------------------------------
-## # # load data and send to python
-## # load("data_prelim_processing.rdata")
-## # py$data <- dataGrouped
-
-
-## # # split data by species
-
-## # datalist = [pd.DataFrame(y) for x, y in data.groupby('scientific_name',
-
-## #                                                       as_index=False)]
-
-## 
-## 
-## # # function to get unique vals anc convert to gpd
-
-## # def convData(somedata):
-
-## #     somedata = somedata.drop_duplicates(subset=
-
-## #     ['longitude','latitude'])[['longitude', 'latitude', 'scientific_name']]
-
-## #     unique_locs = gpd.GeoDataFrame(somedata,
-
-## #                                   geometry=gpd.points_from_xy(somedata.longitude,
-
-## #                                   somedata.latitude))
-
-## #     unique_locs.crs = {'init' :'epsg:4326'}
-
-## #     unique_locs = unique_locs.to_crs({'init': 'epsg:32643'})
-
-## #     dists = ckdnearest_point(unique_locs, unique_locs)
-
-## #     unique_locs = pd.DataFrame(unique_locs.drop(columns='geometry'))
-
-## #     unique_locs['nnb'] = dists
-
-## #     return unique_locs
-
-## 
-## 
-## # # apply function to datalist
-
-## # datalist = list(map(convData, datalist))
-
-
 ## ----spatial_filter_supp01, eval=FALSE----------------------------------------
 ## # extract data from python
 ## chkCovars <- py$chkCovars
@@ -261,23 +214,6 @@
 ## chkCovars <- chkCovars %>%
 ##   mutate(id = 1:nrow(.)) %>%
 ##   filter(id %in% unlist(st_contains(wg, chkCovars)))
-
-
-## ----sp_spec_filt, eval=FALSE-------------------------------------------------
-## # # extract values from python
-## # sp_spec_data <- py$datalist
-## 
-## # sp_spec_data <- map(sp_spec_data, function(df) {
-## #   df <- as_tibble(df) %>%
-## #     st_as_sf(coords = c("longitude", "latitude")) %>%
-## #     `st_crs<-`(4326) %>%
-## #     st_transform(32643) %>%
-## #     mutate(id = 1:nrow(.)) %>%
-## #     filter(id %in% unlist(st_contains(wg, .))) %>%
-## #     st_drop_geometry()
-## # })
-## 
-## # sp_spec_data <- bind_rows(sp_spec_data)
 
 
 ## ----plot_histogram, eval=FALSE, echo=FALSE-----------------------------------
@@ -325,7 +261,9 @@
 # read in and show
 library(magrittr)
 readr::read_csv("data/results/distance_roads_sites.csv") %>%
-  knitr::kable()
+  knitr::kable(
+    caption = "Distance to roads: Summary statistics"
+  )
 
 
 ## ----get_nn_site, eval=FALSE--------------------------------------------------
@@ -356,48 +294,49 @@ hist_sites <-
   )
 
 
-## ----plot_nn_site_sp, eval=FALSE, echo=FALSE----------------------------------
-## # plot histograms by species
-## hist_sites_sp <-
-##   ggplot(sp_spec_data) +
-##   geom_histogram(aes(nnb / 1e3),
-##     bins = 100, size = 0.2, fill = "steelblue"
+## ----plot_map_nnb, eval=FALSE, echo=FALSE-------------------------------------
+## # transform points to utm
+## locs <- locs %>%
+##   st_as_sf(coords = c("longitude", "latitude")) %>%
+##   `st_crs<-`(4326) %>%
+##   st_transform(32643)
+## 
+## # add nnb to locations
+## ggplot() +
+##   geom_sf(data = land, fill = "grey90", col = NA) +
+##   geom_sf(data = wg, fill = NA, col = 1) +
+##   annotation_custom(
+##     grob = hist_sites %>% ggplotGrob(),
+##     xmin = bbox["xmax"] - (bbox["xmax"] - bbox["xmin"]) / 2.5,
+##     xmax = bbox["xmax"],
+##     ymin = bbox["ymax"] - (bbox["ymax"] - bbox["ymin"]) / 3,
+##     ymax = bbox["ymax"]
 ##   ) +
-##   labs(x = "dist. nearest site (km)", y = "# sites") +
-##   # scale_x_log10(label=label_number(accuracy = 0.1),
-##   #               breaks = c(0.1, 1, 10))+
-##   facet_wrap(~scientific_name) +
-##   scale_x_log10() +
-##   # coord_cartesian(xlim=c(0,10))+
-##   scale_y_continuous(label = label_number(
-##     scale = 0.001, accuracy = 1,
-##     suffix = "K"
-##   )) +
+##   geom_sf(data = roads, size = 0.2, col = "steelblue") +
+##   geom_sf(data = locs, aes(col = nnb / 1000)) +
+##   scale_colour_scico(
+##     palette = "oslo", values = c(0, 1), direction = -1, limits = c(0, 5),
+##     na.value = "indianred"
+##   ) +
+##   annotation_north_arrow(
+##     location = "br", which_north = "true",
+##     pad_x = unit(0.1, "in"), pad_y = unit(0.5, "in"),
+##     style = north_arrow_fancy_orienteering
+##   ) +
+##   annotation_scale(location = "br", width_hint = 0.4, text_cex = 1) +
 ##   theme_few() +
 ##   theme(
-##     plot.background = element_rect(fill = NA, colour = 1),
-##     panel.background = element_blank(),
-##     panel.border = element_blank(), axis.line = element_blank()
-##   )
-## 
-## ggsave(hist_sites_sp, filename = "figs/fig_nnb_species.png")
-
-
-## ----save_sp_mean_nnb, eval=FALSE---------------------------------------------
-## # write the mean and ci95 to file
-## sp_spec_data %>%
-##   group_by(scientific_name) %>%
-##   summarise_at(
-##     vars(nnb),
-##     list(~ mean(.), ~ sd(.), ~ ci(.), ~ min(.), ~ max(.))
-##   ) %>%
-##   write_csv("data/results/dist_nnb_species_specific.csv")
-
-
-## ----show_sp_nnb, eval=TRUE, message=FALSE, echo=FALSE------------------------
-# show table of distance to nearest site for each species
-readr::read_csv("data/results/dist_nnb_species_specific.csv") %>%
-  knitr::kable()
+##     legend.position = c(0.9, 0.55),
+##     legend.background = element_blank(),
+##     legend.key = element_rect(fill = "grey90"),
+##     axis.title = element_blank(),
+##     panel.background = element_rect(fill = "lightblue")
+##   ) +
+##   coord_sf(
+##     expand = FALSE, xlim = bbox[c("xmin", "xmax")],
+##     ylim = bbox[c("ymin", "ymax")]
+##   ) +
+##   labs(fill = "checklists", colour = NULL)
 
 
 ## ----load_data_in_r, eval=FALSE-----------------------------------------------
@@ -464,49 +403,4 @@ readr::read_csv("data/results/dist_nnb_species_specific.csv") %>%
 ## # save figure
 ## ggsave(filename = "figs/fig_distRoads.png", device = png())
 ## dev.off()
-
-
-## ----plot_map_nnb, eval=FALSE, echo=FALSE-------------------------------------
-## # transform points to utm
-## locs <- locs %>%
-##   st_as_sf(coords = c("longitude", "latitude")) %>%
-##   `st_crs<-`(4326) %>%
-##   st_transform(32643)
-## 
-## # add nnb to locations
-## ggplot() +
-##   geom_sf(data = land, fill = "grey90", col = NA) +
-##   geom_sf(data = wg, fill = NA, col = 1) +
-##   annotation_custom(
-##     grob = hist_sites %>% ggplotGrob(),
-##     xmin = bbox["xmax"] - (bbox["xmax"] - bbox["xmin"]) / 2.5,
-##     xmax = bbox["xmax"],
-##     ymin = bbox["ymax"] - (bbox["ymax"] - bbox["ymin"]) / 3,
-##     ymax = bbox["ymax"]
-##   ) +
-##   geom_sf(data = roads, size = 0.2, col = "steelblue") +
-##   geom_sf(data = locs, aes(col = nnb / 1000)) +
-##   scale_colour_scico(
-##     palette = "oslo", values = c(0, 1), direction = -1, limits = c(0, 5),
-##     na.value = "indianred"
-##   ) +
-##   annotation_north_arrow(
-##     location = "br", which_north = "true",
-##     pad_x = unit(0.1, "in"), pad_y = unit(0.5, "in"),
-##     style = north_arrow_fancy_orienteering
-##   ) +
-##   annotation_scale(location = "br", width_hint = 0.4, text_cex = 1) +
-##   theme_few() +
-##   theme(
-##     legend.position = c(0.9, 0.55),
-##     legend.background = element_blank(),
-##     legend.key = element_rect(fill = "grey90"),
-##     axis.title = element_blank(),
-##     panel.background = element_rect(fill = "lightblue")
-##   ) +
-##   coord_sf(
-##     expand = FALSE, xlim = bbox[c("xmin", "xmax")],
-##     ylim = bbox[c("ymin", "ymax")]
-##   ) +
-##   labs(fill = "checklists", colour = NULL)
 
