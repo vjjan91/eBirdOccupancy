@@ -47,10 +47,10 @@ buffer <- st_buffer(hills, 3e4) %>%
 
 ## Prepare terrain rasters
 
-We prepare the elevation data which is an SRTM raster layer, and derive the slope and aspect from it after cropping it to the extent of the study site buffer.
+We prepare the elevation data which is an SRTM raster layer, and derive the slope and aspect from it after cropping it to the extent of the study site buffer. Please download the latest version of the SRTM raster layer from https://www.worldclim.org/data/worldclim21.html 
 ```{r terrain_raster, eval=FALSE, message=FALSE, warning=FALSE}
 # load elevation and crop to hills size, then mask by hills
-alt <- raster("data/spatial/Elevation/alt")
+alt <- raster("data/spatial/Elevation/alt") # this layer is not added to github as a result of its large size and can be downloaded from the above link
 alt.hills <- crop(alt, as(buffer, "Spatial"))
 rm(alt)
 gc()
@@ -64,9 +64,10 @@ gc()
 
 ## Prepare CHELSA rasters
 
-We prepare the CHELSA rasters for annual temperature and annual precipitation in the same way, reading them in, cropping them to the study site buffer extent, and handling the temperature layer values which we divide by 10.
+We prepare the CHELSA rasters for annual temperature and annual precipitation in the same way, reading them in, cropping them to the study site buffer extent, and handling the temperature layer values which we divide by 10. The CHELSA rasters can be downloaded from https://chelsa-climate.org/bioclim/
 ```{r chelsa_rasters, eval=FALSE, message=FALSE, warning=FALSE}
 # list chelsa files
+# the chelsa data for Annual mean temperature and annual precipitation can be downloaded from the aforementioned link. They haven't been uploaded to github as a result of its large size.
 chelsaFiles <- list.files("data/chelsa/",
   full.names = TRUE,
   pattern = "*.tif"
@@ -95,7 +96,7 @@ env_data <- stack(elevData, chelsaData)
 
 ## Resample landcover from 10m to 1km
 
-We read in a land cover classified image and resample that using the mode function to a 1km resolution.
+We read in a land cover classified image and resample that using the mode function to a 1km resolution. Please note that the resampling process need not be carried out as it has been done already and the resampled raster can be loaded with the subsequent code chunk. 
 ```{r landcover_raster, eval=FALSE, message=FALSE, warning=FALSE, message=FALSE}
 # read in landcover raster location
 landcover <- "data/landUseClassification/classifiedImage-UTM.tif"

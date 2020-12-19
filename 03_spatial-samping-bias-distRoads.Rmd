@@ -82,7 +82,7 @@ roads.head()
 # read in checklist covariates for conversion to gpd
 # get unique coordinates, assign them to the df
 # convert df to geo-df
-chkCovars = pd.read_csv("data/eBirdChecklistVars.csv")
+chkCovars = pd.read_csv("data/03_data-covars-perChklist.csv")
 unique_locs = chkCovars.drop_duplicates(subset=['longitude',
                                          'latitude'])[['longitude', 'latitude']]
 unique_locs['coordId'] = np.arange(1, unique_locs.shape[0]+1)
@@ -98,7 +98,6 @@ unique_locs.crs = {'init' :'epsg:4326'}
 roads = roads.to_crs({'init': 'epsg:32643'})
 unique_locs = unique_locs.to_crs({'init': 'epsg:32643'})
 
-
 # function to simplify multilinestrings
 def simplify_roads(complex_roads):
     simpleRoads = []
@@ -111,7 +110,6 @@ def simplify_roads(complex_roads):
                 simpleRoads.append(road_level2)
     return simpleRoads
 
-
 # function to use ckdtrees to find the nearest road
 def ckdnearest(gdfA, gdfB):
     A = np.concatenate(
@@ -122,7 +120,6 @@ def ckdnearest(gdfA, gdfB):
     ckd_tree = cKDTree(B)
     dist, idx = ckd_tree.query(A, k=1)
     return dist
-
 
 # function to use ckdtrees for nearest other checklist point
 def ckdnearest_point(gdfA, gdfB):

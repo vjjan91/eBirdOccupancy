@@ -133,8 +133,8 @@ ebdSpSum <- ebd[, .(
 by = list(sampling_event_identifier)
 ]
 
-# write to file and link with checklsit id later
-fwrite(ebdSpSum, file = "data/dataChecklistSpecies.csv")
+# write to file and link with checklist id later
+fwrite(ebdSpSum, file = "data/03_data-nspp-per-chk.csv")
 ```
 
 ## Prepare checklists for observer score
@@ -240,7 +240,7 @@ ebdChkSummary <- ebdChkSummary %>%
 
 
 # save to file for later reuse
-fwrite(ebdChkSummary, file = "data/eBirdChecklistVars.csv")
+fwrite(ebdChkSummary, file = "data/03_data-covars-perChklist.csv")
 ```
 
 ## Model observer expertise
@@ -300,6 +300,6 @@ dfPredict <- mutate(dfPredict,
 
 ```{r write_obsexp, eval=FALSE}
 fwrite(dfPredict %>% dplyr::select(observer, score),
-  file = "data/dataObsExpScore.csv"
+  file = "data/03_data-obsExpertise-score.csv"
 )
 ```
