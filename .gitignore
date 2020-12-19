@@ -9,6 +9,11 @@ data/for-map
 !data/spatial/00_data_exists.txt
 !data/results/00_data_exists.txt
 
+docs/*.aux
+docs/*.fdb_latexmk
+docs/*.fls
+docs/*.log
+
 *.tif*
 *.shp
 *.dbf
