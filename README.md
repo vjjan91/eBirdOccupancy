@@ -8,6 +8,8 @@ A human-readable version of this analysis is available in bookdown format by cli
 
 Methods and format are derived from [Strimas-Mackey et al.](https://cornelllabofornithology.github.io/ebird-best-practices/), the supplement to [Johnston et al. (2019)](https://www.biorxiv.org/content/10.1101/574392v1).
 
+The manuscript's supplementary material can be found at https://github.com/pratikunterwegs/ebird-wghats-supplement  
+
 ## Attribution
 
 Please contact the following in case of interest in the project.

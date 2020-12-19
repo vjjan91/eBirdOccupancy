@@ -39,7 +39,6 @@ use_python("/usr/bin/python3")
 ```
 
 Importing python libraries. These libraries need to be installed before use.
-
 ```{python prepare_py_libs, eval=FALSE}
 # import classic python libs
 import itertools
@@ -64,8 +63,8 @@ from shapely.geometry import Point, MultiPoint, LineString, MultiLineString
 ## Prepare data for processing
 
 First we read in the roads shapefile, which is obtained from the Open Street Map database.
-Then we read in the checklsit covariates, and extract the unique coordinate pairs.
-All data are reprojected to be in the UTM 43N system.
+Then we read in the checklist covariates, and extract the unique coordinate pairs.
+All data are reprojected to be in the UTM 43N coordinate system.
 
 We define a custom Python function to separate multi-feature geometries (here, roads which are in parts) into single feature geometries.
 Then we define a function to use the K-dimensional trees method from `scipy` to find the distance between two geometries, here, the distance between the locations and the nearest road.
@@ -158,7 +157,6 @@ chkCovars = chkCovars.merge(unique_locs, on=['latitude',
 ### Spatially explicit filter on checklists
 
 We filter the checklists by the boundary of the study area. This is *not* the extent.
-
 ```{r spatial_filter_supp01, eval=FALSE}
 # extract data from python
 chkCovars <- py$chkCovars
@@ -181,9 +179,7 @@ chkCovars <- chkCovars %>%
 ### Prepare histogram of distance to roads
 
 Figure code is hidden in versions rendered as HTML or PDF.
-
 ```{r plot_histogram, eval=FALSE, echo=FALSE}
-
 # make histogram
 hist_roads <- ggplot(chkCovars) +
   geom_histogram(aes(dist_road / 1e3),
@@ -243,7 +239,6 @@ locs <- py$unique_locs
 ```
 
 Figure code is hidden in versions rendered as HTML and PDF.
-
 ```{r echo=FALSE}
 # make histogram of nearest neighbours
 hist_sites <-
@@ -337,7 +332,6 @@ bbox <- st_bbox(wg)
 ```
 
 Figure code is hidden in versions rendered as HTML and PDF.
-
 ```{r plot_map_dist_roads, eval=FALSE, echo=FALSE}
 # plot on maps
 ggplot() +
@@ -382,4 +376,4 @@ ggsave(filename = "figs/fig_distRoads.png", device = png())
 dev.off()
 ```
 
-![Spatial sampling bias of eBird observations across the Nilgiri and the Anamalai hills. A large proportion of localities/sites were next to roads and were on average only ~300m from another locality/site.](figs/fig_03_distance_to_roads.png)
+![Spatial sampling bias of eBird observations across the Nilgiri and the Anamalai hills. A large proportion of localities/sites were next to roads and were on average only ~300m from another locality/site. Each cell here is 2.5km x 2.5km](figs/fig_03_distance_to_roads.png)

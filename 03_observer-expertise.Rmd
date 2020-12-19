@@ -5,6 +5,8 @@ editor_options:
 
 # Preparing Observer Expertise Scores
 
+Differences in local avifaunal expertise among citizen scientists can lead to biased species detection when compared with data collected by a consistent set of trained observers (van Strien et al., 2013). Including observer expertise as a detection covariate in occupancy models using eBird data can help account for this variation (Johnston et al., 2018). Observer-specific expertise in local avifauna was calculated following (Kelling et al., 2015) as the normalized predicted number of species reported by an observer after 60 minutes of sampling across the most common land cover type within the study area. This score was calculated by examining checklists from anonymized observers across the study area. We modified (Kelling et al., 2015) formulation by including only observations of the 93 species of interest in our calculations. An observer with a higher number of species of interest reported within 60 minutes would have a higher observer-specific expertise score, with respect to the study area
+
 ## Prepare libraries
 
 ```{r load_libs3, eval=FALSE, message=FALSE, warning=FALSE}
@@ -29,7 +31,6 @@ time_to_decimal <- function(x) {
 ## Prepare data
 
 Here, we go through the data preparation process again because we might want to assess observer expertise over a larger area than the study site.
-
 ```{r load_raw_data, eval=FALSE}
 # Read in shapefile of study area to subset by bounding box
 library(sf)
@@ -61,6 +62,7 @@ ebd_filtered <- auk_filter(ebd_filters,
 )
 ```
 
+Load in the filtered data and columns of interest. 
 ```{r read_all_ebd, eval=FALSE}
 ## Process filtered data
 # read in the data
@@ -174,7 +176,6 @@ gc()
 ## Get landcover
 
 Read in land cover type data resampled at 1km resolution.
-
 ```{r chk_covar_landuse, eval=FALSE}
 # read in 1km landcover and set 0 to NA
 library(raster)
@@ -245,7 +246,6 @@ fwrite(ebdChkSummary, file = "data/eBirdChecklistVars.csv")
 ## Model observer expertise
 
 Our observer expertise model aims to include the random intercept effect of observer identity, with a random slope effect of duration. This models the different rate of species accumulation by different observers, as well as their different starting points.
-
 ```{r run_model, eval=FALSE}
 # uses either a subset or all data
 library(lmerTest)
@@ -276,7 +276,6 @@ if (!dir.exists("data/modOutput")) {
   )
 }
 ```
-
 
 ```{r obsexp_ranef, eval=FALSE}
 # make df with means
