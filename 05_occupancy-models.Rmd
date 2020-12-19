@@ -32,8 +32,7 @@ source("code/fun_model_estimate_collection.r")
 
 ## Load dataframe and scale covariates
 
-Here, we load the required dataframe that contains 10 random visits to a site. Please note that this process is repeated for each dataframe where environmental covariates were prepared at a spatial scale of 2.5 sq.km around each unique locality. We also scaled all covariates (mean around 0 and standard deviation of 1)
-
+Here, we load the required dataframe that contains 10 random visits to a site and environmental covariates that were prepared at a spatial scale of 2.5 sq.km. We also scaled all covariates (mean around 0 and standard deviation of 1). Next, we ensured that only Traveling and Stationary checklists were considered. Even though stationary counts have no distance traveled, we defaulted all stationary accounts to an effective distance of 100m, which we consider the average maximum detection radius for most bird species in our area. Following this, we excluded predictors with a Pearson coefficient >0.5 which resulted in the removal of grasslands as it was highly negatively correlated with forests (r =-0.77).  
 ```{r load_dataframe, eval=FALSE}
 # Load in the prepared dataframe that contains 10 random visits to each site
 dat <- fread("data/dataCovars_2.5km.csv", header = T)
@@ -95,6 +94,7 @@ dat.scaled <- dat.1
 dat.scaled[, c(1, 2, 11, 16:25)] <- scale(dat.scaled[, c(1, 2, 11, 16:25)]) # Scaling and standardizing detection and site-level covariates
 fwrite(dat.scaled, file = "data/scaled-covars-2.5km.csv")
 
+# Reload the scaled covariate data
 dat.scaled <- fread("data/05_scaled-covars-2.5km.csv", header = T)
 setDF(dat.scaled)
 head(dat.scaled)
@@ -177,14 +177,13 @@ capture.output(all_null, file = "data\results\null_models.csv")
 
 ## Identifying covariates necessary to model the detection process
 
-Here, we use the `unmarked` package in R (Fiske and Chandler 2019) to identify detection level covariates that are important for each species
-
+Here, we use the `unmarked` package in R (Fiske and Chandler 2019) to identify detection level covariates that are important for each species.  
 ```{r prob_detection, eval=FALSE}
 
 # All models are stored in lists below
 det_dred <- list()
 
-# Subsetting those models whose deltaAIC<4 (Burnham et al., 2011)
+# Subsetting those models whose deltaAIC<2 (Burnham et al., 2011)
 top_det <- list()
 
 # Getting model averaged coefficients and relative importance scores
@@ -249,7 +248,6 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
   clusterEvalQ(clust, library(unmarked))
   clusterExport(clust, "occ_um")
 
-  # Dredging the same
   det_dred[[i]] <- pdredge(global_mod, clust)
   names(det_dred)[i] <- unique(dat.scaled$scientific_name)[i]
 
@@ -307,7 +305,7 @@ close(pb)
 
 ## Storing output from the above models in excel sheets
 
-# 1. Store all the dredged model outputs for each species (variable: det_dred() - see above)
+# 1. Store all the model outputs for each species (variable: det_dred() - see above)
 write.xlsx(det_dred, file = "data\results\det_dred.xlsx")
 
 # 2. Store all the model averaged outputs for each species and the relative importance score
@@ -319,9 +317,13 @@ write.xlsx(det_modelEst, file = "data\results\det_modelEst.xlsx", rowNames = T, 
 
 ## Land Cover and Climate
 
-```{r lc_clim, eval=FALSE}
+Occupancy models estimate the probability of occurrence of a given species while controlling for the probability of detection and allow us to model the factors affecting occurrence and detection independently (Johnston et al., 2018; Mackenzie et al., 2018). The flexible eBird observation process contributes to the largest source of variation in the likelihood of detecting a particular species (Johnston et al., 2019); hence, we included seven covariates that influence the probability of detection for each checklist: ordinal day of year, duration of observation, distance travelled, protocol type, time observations started, number of observers and the checklist calibration index (CCI). 
 
-# All dredged models are stored in lists below
+Using a multi-model information-theoretic approach, we tested how strongly our occurrence data fit our candidate set of environmental covariates (K.P. Burnham & Anderson, 2002). We fitted single-species occupancy models for each species, to simultaneously estimate a probability of detection (p) and a probability of occupancy (Ѱ) (Fiske & Chandler, 2011; Mackenzie et al., 2002). For each species, we fit 256 models, each with a unique combination of the eight (climate and land cover) occupancy covariates and all seven detection covariates (Appendix S5). 
+
+Across the 256 models tested for each species, the model with highest support was determined using AICc scores. However, across the majority of the species, no single model had overwhelming support. Hence, for each species, we examined those models which had ΔAICc < 2, as these top models were considered to explain a large proportion of the association between the species-specific probability of occupancy and environmental drivers (Kenneth P. Burnham et al., 2011; Elsen et al., 2017). Using these restricted model sets for each species; we created a model-averaged coefficient estimate for each predictor and assessed its direction and significance (Bartoń, 2009). We considered a predictor to be significantly associated with occupancy if the range of the 95% confidence interval around the model-averaged coefficient did not contain zero. Next, we obtained a measure of relative importance of climatic and landscape predictors by calculating cumulative variable importance scores. These scores were calculated by obtaining the sum of model weights (AIC weights) across all models (including the top models) for each predictor across all species.  
+```{r lc_clim, eval=FALSE}
+# All models are stored in lists below
 lc_clim <- list()
 
 # Subsetting those models whose deltaAIC<2 (Burnham et al., 2011)
@@ -394,7 +396,6 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
     "p(number_observers)", "p(protocol_type)"
   )
 
-  # Dredging
   lc_clim[[i]] <- pdredge(model_lc_clim, clust, fixed = det_terms)
   names(lc_clim)[i] <- unique(dat.scaled$scientific_name)[i]
 
@@ -451,7 +452,7 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
 }
 close(pb)
 
-# 1. Store all the dredged model outputs for each species (for both landcover and climate)
+# 1. Store all the model outputs for each species (for both landcover and climate)
 write.xlsx(lc_clim, file = "data\results\lc-clim.xlsx")
 
 # 2. Store all the model averaged outputs for each species and relative importance scores
@@ -464,6 +465,7 @@ write.xlsx(lc_clim_modelEst, file = "data\results\lc-clim-modelEst.xlsx", rowNam
 
 ## Goodness-of-fit tests
 
+Adequate model fit was assessed using a chi-square goodness-of-fit test using 5000 parametric bootstrap simulations on a global model that included all occupancy and detection covariates (MacKenzie & Bailey, 2004). 
 ```{r}
 goodness_of_fit <- data.frame()
 

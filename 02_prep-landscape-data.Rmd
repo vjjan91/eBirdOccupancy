@@ -12,7 +12,6 @@ The goal here is to resample all rasters so that they have the same resolution o
 ## Prepare libraries
 
 We load some common libraries for raster processing and define a custom mode function.
-
 ```{r load_libs2, eval=FALSE, message=FALSE, warning=FALSE}
 
 # load libs
@@ -36,9 +35,7 @@ assertthat::assert_that(funcMode(c(2, 2, 2, 2, 3, 3, 3, 4)) == as.character(2),
 
 ## Prepare spatial extent
 
-We prepare a 30km buffer around the boundary of the study area. This buffer will be used to mask the landscape rasters.
-The buffer procedure is done on data transformed to the UTM 43N CRS to avoid distortions.
-
+We prepare a 30km buffer around the boundary of the study area. This buffer will be used to mask the landscape rasters.The buffer procedure is done on data transformed to the UTM 43N CRS to avoid distortions.
 ```{r load_hills, eval=FALSE, message=FALSE, warning=FALSE}
 # load hills
 library(sf)
@@ -51,7 +48,6 @@ buffer <- st_buffer(hills, 3e4) %>%
 ## Prepare terrain rasters
 
 We prepare the elevation data which is an SRTM raster layer, and derive the slope and aspect from it after cropping it to the extent of the study site buffer.
-
 ```{r terrain_raster, eval=FALSE, message=FALSE, warning=FALSE}
 # load elevation and crop to hills size, then mask by hills
 alt <- raster("data/spatial/Elevation/alt")
@@ -69,7 +65,6 @@ gc()
 ## Prepare CHELSA rasters
 
 We prepare the CHELSA rasters for annual temperature and annual precipitation in the same way, reading them in, cropping them to the study site buffer extent, and handling the temperature layer values which we divide by 10.
-
 ```{r chelsa_rasters, eval=FALSE, message=FALSE, warning=FALSE}
 # list chelsa files
 chelsaFiles <- list.files("data/chelsa/",
@@ -93,7 +88,6 @@ chelsaData <- raster::stack(chelsaData)
 ```
 
 We stack the terrain and climatic rasters.
-
 ```{r stack_rasters, eval=FALSE, message=FALSE, warning=FALSE}
 # stack rasters for efficient reprojection later
 env_data <- stack(elevData, chelsaData)
@@ -102,10 +96,9 @@ env_data <- stack(elevData, chelsaData)
 ## Resample landcover from 10m to 1km
 
 We read in a land cover classified image and resample that using the mode function to a 1km resolution.
-
 ```{r landcover_raster, eval=FALSE, message=FALSE, warning=FALSE, message=FALSE}
 # read in landcover raster location
-landcover <- "data/landUseClassification/Reprojected Image_26thJan2020_UTM_Ghats.tif"
+landcover <- "data/landUseClassification/classifiedImage-UTM.tif"
 
 # get extent
 e <- bbox(raster(landcover))
@@ -126,7 +119,6 @@ gdalUtils::gdalwarp(
 ```
 
 We compare the frequency of landcover classes between the original 10m and the resampled 1km raster to be certain that the resampling has not resulted in drastic misrepresentation of the frequency of any landcover type. This comparison is made using the figure below.
-
 ```{r get_resampled_lc, eval=FALSE, echo=FALSE}
 # mask by study area
 landcover <- raster(landcover)
@@ -190,7 +182,6 @@ We now resample all other rasters to a resolution of 1km.
 ### Read in resampled landcover
 
 Here, we read in the 1km landcover raster and set 0 to NA.
-
 ```{r read_resamp_lc, eval=FALSE, message=FALSE, warning=FALSE}
 lc_data <- raster("data/landUseClassification/lc_01000m.tif")
 lc_data[lc_data == 0] <- NA
@@ -416,4 +407,4 @@ ggsave(fig_clim_lc_elev,
 )
 ```
 
-![Annual Mean Temperature varied from ~28C in the plains to <14C at higher elevations. Annual precipitation increased at lower elevations (in the plains) to ~3000mm and ranged between 1500mm and 2200mm at mid- and high elevations across the Nilgiri and the Anamalai hills. (b) The proportion of land cover types varied across the study area as shown in this panel (1 = agriculture; 2 = forest; 3 = grassland; 4 = plantations; 5 = settlements; 6 = tea; 7 = water bodies).](figs/fig_02_clim_lc_elev.png)
+![Annual Mean Temperature varied from ~28C in the plains to <14C at higher elevations. Annual precipitation increased at lower elevations (in the plains) to ~3000mm and ranged between 1500mm and 2200mm at mid- and high elevations across the Nilgiri and the Anamalai hills. (b) The proportion of land cover types varied across the study area as shown in this panel (1 = agriculture; 2 = forests; 3 = grasslands; 4 = plantations; 5 = settlements; 6 = tea; 7 = water bodies).](figs/fig_02_clim_lc_elev.png)
