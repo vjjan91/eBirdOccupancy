@@ -306,13 +306,13 @@ close(pb)
 ## Storing output from the above models in excel sheets
 
 # 1. Store all the model outputs for each species (variable: det_dred() - see above)
-write.xlsx(det_dred, file = "data\results\det_dred.xlsx")
+write.xlsx(det_dred, file = "data\results\det-dred.xlsx")
 
 # 2. Store all the model averaged outputs for each species and the relative importance score
-write.xlsx(det_avg, file = "data\results\det_avg.xlsx", rowNames = T, colNames = T)
-write.xlsx(det_imp, file = "data\results\det_imp.xlsx", rowNames = T, colNames = T)
+write.xlsx(det_avg, file = "data\results\det-avg.xlsx", rowNames = T, colNames = T)
+write.xlsx(det_imp, file = "data\results\det-imp.xlsx", rowNames = T, colNames = T)
 
-write.xlsx(det_modelEst, file = "data\results\det_modelEst.xlsx", rowNames = T, colNames = T)
+write.xlsx(det_modelEst, file = "data\results\det-modelEst.xlsx", rowNames = T, colNames = T)
 ```
 
 ## Land Cover and Climate

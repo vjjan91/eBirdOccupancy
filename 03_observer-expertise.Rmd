@@ -38,8 +38,8 @@ wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>%
   st_transform(32643)
 
 # set file paths for auk functions
-f_in_ebd <- file.path("data/eBirdDataWG_filtered.txt")
-f_in_sampling <- file.path("data/eBirdSamplingDataWG_filtered.txt")
+f_in_ebd <- file.path("data/01_ebird-filtered-EBD-westernGhats.txt")
+f_in_sampling <- file.path("data/01_ebird-filtered-sampling-westernGhats.txt")
 
 # run filters using auk packages
 ebd_filters <- auk_ebd(f_in_ebd, f_in_sampling) %>%
@@ -272,7 +272,7 @@ if (!dir.exists("data/modOutput")) {
 # write model output to text file
 {
   writeLines(R.utils::captureOutput(list(Sys.time(), summary(modObsExp))),
-    con = "data/modOutput/modOutExpertise.txt"
+    con = "data/modOutput/03_model-output-expertise.txt"
   )
 }
 ```

@@ -56,8 +56,8 @@ Below code need not be run if it has been filtered once already and the above pa
 
 ```{r output_loc, eval=FALSE}
 # specify output location and perform filter
-f_out_ebd <- "data/eBirdDataWG_filtered.txt"
-f_out_sampling <- "data/eBirdSamplingDataWG_filtered.txt"
+f_out_ebd <- "data/01_ebird-filtered-EBD-westernGhats.txt"
+f_out_sampling <- "data/01_ebird-filtered-sampling-westernGhats.txt"
 ```
 
 ```{r filter_data, eval=FALSE}
