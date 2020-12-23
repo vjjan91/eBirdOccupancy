@@ -7,7 +7,7 @@ editor_options:
 
 ## Prepare libraries and data sources
 
-Here, we will load the necessary libraries required for preparing the eBird data.  
+Here, we will load the necessary libraries required for preparing the eBird data. Please download the latest versions of the eBird Basic Dataset (for India) and the eBird Sampling dataset from https://ebird.org/data/download  
 ```{r load_libs, eval=FALSE, message=FALSE, warning=FALSE}
 # load libraries
 library(tidyverse)
@@ -22,6 +22,8 @@ sum.no.na <- function(x) {
 }
 
 # set file paths for auk functions
+# To use these two datasets, please download the latest versions from https://ebird.org/data/download and set the file path accordingly. Since these two datasets are extremely large, we have not uploaded the same on github. 
+
 f_in_ebd <- file.path("data/ebd_IN_relApr-2020.txt")
 f_in_sampling <- file.path("data/ebd_sampling_relApr-2020.txt")
 ```
@@ -54,8 +56,8 @@ Below code need not be run if it has been filtered once already and the above pa
 
 ```{r output_loc, eval=FALSE}
 # specify output location and perform filter
-f_out_ebd <- "data/eBirdDataWG_filtered.txt"
-f_out_sampling <- "data/eBirdSamplingDataWG_filtered.txt"
+f_out_ebd <- "data/01_ebird-filtered-EBD-westernGhats.txt"
+f_out_sampling <- "data/01_ebird-filtered-sampling-westernGhats.txt"
 ```
 
 ```{r filter_data, eval=FALSE}
@@ -113,7 +115,7 @@ data[[2]] <- data[[2]] %>% filter(species_observed == F)
 
 A spatial filter is now supplied to further restrict our list of observations to the confines of the Nilgiris and the Anamalai hills of the Western Ghats biodiversity hotspot.
 ```{r spatial_filters, eval=FALSE}
-# load shapefiles of hill ranges
+# load shapefile of the study area 
 library(sf)
 hills <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp")
 
@@ -150,7 +152,7 @@ data <- data %>%
 Save temporary data created so far.
 ```{r save_temp_data, eval=FALSE}
 # save a temp data file
-save(data, file = "data/data_temp.rdata")
+save(data, file = "data/01_data_temp.rdata")
 ```
 
 ## Handle presence data
@@ -235,5 +237,5 @@ The above data is saved to a file.
 ```{r write_clean_data, eval=FALSE}
 
 # save a temp data file
-save(dataGrouped, file = "data/data_prelim_processing.rdata")
+save(dataGrouped, file = "data/01_data_prelim_processing.rdata")
 ```
