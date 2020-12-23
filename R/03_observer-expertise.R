@@ -24,8 +24,8 @@
 ##   st_transform(32643)
 ## 
 ## # set file paths for auk functions
-## f_in_ebd <- file.path("data/eBirdDataWG_filtered.txt")
-## f_in_sampling <- file.path("data/eBirdSamplingDataWG_filtered.txt")
+## f_in_ebd <- file.path("data/01_ebird-filtered-EBD-westernGhats.txt")
+## f_in_sampling <- file.path("data/01_ebird-filtered-sampling-westernGhats.txt")
 ## 
 ## # run filters using auk packages
 ## ebd_filters <- auk_ebd(f_in_ebd, f_in_sampling) %>%
@@ -114,8 +114,8 @@
 ## by = list(sampling_event_identifier)
 ## ]
 ## 
-## # write to file and link with checklsit id later
-## fwrite(ebdSpSum, file = "data/dataChecklistSpecies.csv")
+## # write to file and link with checklist id later
+## fwrite(ebdSpSum, file = "data/03_data-nspp-per-chk.csv")
 
 
 ## ----prepare_chk_covars, eval=FALSE-------------------------------------------
@@ -214,7 +214,7 @@
 ## 
 ## 
 ## # save to file for later reuse
-## fwrite(ebdChkSummary, file = "data/eBirdChecklistVars.csv")
+## fwrite(ebdChkSummary, file = "data/03_data-covars-perChklist.csv")
 
 
 ## ----run_model, eval=FALSE----------------------------------------------------
@@ -243,7 +243,7 @@
 ## # write model output to text file
 ## {
 ##   writeLines(R.utils::captureOutput(list(Sys.time(), summary(modObsExp))),
-##     con = "data/modOutput/modOutExpertise.txt"
+##     con = "data/modOutput/03_model-output-expertise.txt"
 ##   )
 ## }
 
@@ -271,6 +271,6 @@
 
 ## ----write_obsexp, eval=FALSE-------------------------------------------------
 ## fwrite(dfPredict %>% dplyr::select(observer, score),
-##   file = "data/dataObsExpScore.csv"
+##   file = "data/03_data-obsExpertise-score.csv"
 ## )
 

@@ -12,7 +12,7 @@
 ## library(sf)
 ## 
 ## # load saved data object
-## load("data/data_prelim_processing.rdata")
+## load("data/01_ebird_data_prelim_processing.rdata")
 
 
 ## ----spatial_thinning, eval=FALSE---------------------------------------------
@@ -91,7 +91,7 @@
 
 ## ----add_expertise, eval=FALSE------------------------------------------------
 ## # read in obs score and extract numbers
-## expertiseScore <- read_csv("data/dataObsExpScore.csv") %>%
+## expertiseScore <- read_csv("data/03_data-obsExpertise-score.csv") %>%
 ##   mutate(numObserver = str_extract(observer, "\\d+")) %>%
 ##   dplyr::select(-observer)
 ## 
@@ -132,7 +132,7 @@
 ## ----add_landcovars, eval=FALSE-----------------------------------------------
 ## 
 ## # list landscape covariate stacks
-## landscape_files <- "data/landcover\\landscape_resamp01km.tif"
+## landscape_files <- "data/spatial/landscape_resamp01_km.tif"
 ## 
 ## # read in as stacks
 ## landscape_data <- stack(landscape_files)
@@ -245,7 +245,7 @@
 ## ----spit_scale, eval=FALSE---------------------------------------------------
 ## # write to file
 ## pmap(data_at_scale, function(sample_radius, data) {
-##   write_csv(data, path = glue('data/dataCovars_{str_pad(sample_radius/1e3, 2, pad = "0")}km.csv'))
-##   message(glue('export done: data/dataCovars_{str_pad(sample_radius/1e3, 2, pad = "0")}km.csv'))
+##   write_csv(data, path = glue('data/04_data-covars-{str_pad(sample_radius/1e3, 2, pad = "0")}km.csv'))
+##   message(glue('export done: data/04_data-covars-{str_pad(sample_radius/1e3, 2, pad = "0")}km.csv'))
 ## })
 

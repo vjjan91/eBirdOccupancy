@@ -30,7 +30,7 @@
 
 ## ----terrain_raster, eval=FALSE, message=FALSE, warning=FALSE-----------------
 ## # load elevation and crop to hills size, then mask by hills
-## alt <- raster("data/spatial/Elevation/alt")
+## alt <- raster("data/spatial/Elevation/alt") # this layer is not added to github as a result of its large size and can be downloaded from the above link
 ## alt.hills <- crop(alt, as(buffer, "Spatial"))
 ## rm(alt)
 ## gc()
@@ -44,6 +44,7 @@
 
 ## ----chelsa_rasters, eval=FALSE, message=FALSE, warning=FALSE-----------------
 ## # list chelsa files
+## # the chelsa data for Annual mean temperature and annual precipitation can be downloaded from the aforementioned link. They haven't been uploaded to github as a result of its large size.
 ## chelsaFiles <- list.files("data/chelsa/",
 ##   full.names = TRUE,
 ##   pattern = "*.tif"
@@ -71,7 +72,7 @@
 
 ## ----landcover_raster, eval=FALSE, message=FALSE, warning=FALSE, message=FALSE----
 ## # read in landcover raster location
-## landcover <- "data/landUseClassification/Reprojected Image_26thJan2020_UTM_Ghats.tif"
+## landcover <- "data/landUseClassification/classifiedImage-UTM.tif"
 ## 
 ## # get extent
 ## e <- bbox(raster(landcover))

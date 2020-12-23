@@ -29,7 +29,7 @@
 }
 \usepackage{hyperref}
 \hypersetup{
-            pdftitle={Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot},
+            pdftitle={Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot},
             pdfauthor={Vijay Ramesh; Pratik R. Gupte; Morgan W. Tingley; VV Robin; Ruth DeFries},
             pdfborder={0 0 0},
             breaklinks=true}
@@ -117,9 +117,9 @@
 
 \linenumbers
 
-\title{Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot}
+\title{Source code for \emph{Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot}}
 \author{Vijay Ramesh \and Pratik R. Gupte \and Morgan W. Tingley \and VV Robin \and Ruth DeFries}
-\date{2020-12-18}
+\date{2020-12-23}
 
 \begin{document}
 \maketitle
@@ -187,10 +187,11 @@ Figure prepared in QGIS 3.10.
 \hypertarget{prepare-libraries-and-data-sources}{%
 \subsection{Prepare libraries and data sources}\label{prepare-libraries-and-data-sources}}
 
+Here, we will load the necessary libraries required for preparing the eBird data. Please download the latest versions of the eBird Basic Dataset (for India) and the eBird Sampling dataset from \url{https://ebird.org/data/download}
+
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-
-\CommentTok{# load libs}
+\CommentTok{# load libraries}
 \KeywordTok{library}\NormalTok{(tidyverse)}
 \KeywordTok{library}\NormalTok{(readr)}
 \KeywordTok{library}\NormalTok{(sf)}
@@ -203,6 +204,8 @@ Figure prepared in QGIS 3.10.
 \NormalTok{\}}
 
 \CommentTok{# set file paths for auk functions}
+\CommentTok{# To use these two datasets, please download the latest versions from https://ebird.org/data/download and set the file path accordingly. Since these two datasets are extremely large, we have not uploaded the same on github. }
+
 \NormalTok{f_in_ebd <-}\StringTok{ }\KeywordTok{file.path}\NormalTok{(}\StringTok{"data/ebd_IN_relApr-2020.txt"}\NormalTok{)}
 \NormalTok{f_in_sampling <-}\StringTok{ }\KeywordTok{file.path}\NormalTok{(}\StringTok{"data/ebd_sampling_relApr-2020.txt"}\NormalTok{)}
 \end{Highlighting}
@@ -210,6 +213,8 @@ Figure prepared in QGIS 3.10.
 
 \hypertarget{filter-data}{%
 \subsection{Filter data}\label{filter-data}}
+
+Insert the list of species that we will be analyzing in this study.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -219,9 +224,10 @@ Figure prepared in QGIS 3.10.
 \end{Highlighting}
 \end{Shaded}
 
+Here, we set broad spatial filters for the states of Kerala, Tamil Nadu and Karnataka and keep only those checklists for our list of species that were reported between 1st Jan 2013 and 31st Dec 2019.
+
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-
 \CommentTok{# run filters using auk packages}
 \NormalTok{ebd_filters <-}\StringTok{ }\KeywordTok{auk_ebd}\NormalTok{(f_in_ebd, f_in_sampling) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{auk_species}\NormalTok{(speciesOfInterest) }\OperatorTok{%>%}
@@ -239,10 +245,9 @@ Below code need not be run if it has been filtered once already and the above pa
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-
 \CommentTok{# specify output location and perform filter}
-\NormalTok{f_out_ebd <-}\StringTok{ "data/eBirdDataWG_filtered.txt"}
-\NormalTok{f_out_sampling <-}\StringTok{ "data/eBirdSamplingDataWG_filtered.txt"}
+\NormalTok{f_out_ebd <-}\StringTok{ "data/01_ebird-filtered-EBD-westernGhats.txt"}
+\NormalTok{f_out_sampling <-}\StringTok{ "data/01_ebird-filtered-sampling-westernGhats.txt"}
 \end{Highlighting}
 \end{Shaded}
 
@@ -258,6 +263,8 @@ Below code need not be run if it has been filtered once already and the above pa
 \hypertarget{process-filtered-data}{%
 \subsection{Process filtered data}\label{process-filtered-data}}
 
+The data has been filtered above using the auk functions. We will now work with the filtered checklist observations (Please note that we have not yet spatially filtered the checklists to the confines of our study area, which is the Nilgiris and the Anamalai hills. This step is carried out further on).
+
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{# read in the data}
@@ -265,13 +272,17 @@ Below code need not be run if it has been filtered once already and the above pa
 \end{Highlighting}
 \end{Shaded}
 
+eBird checklists only suggest whether a species was reported at a particular location. To arrive at absence data, we use a process known as zero-filling (Johnston et al., 2019), wherein a new dataframe is created with a 0 marked for each checklist when the bird was not observed.
+
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{# fill zeroes}
 \NormalTok{zf <-}\StringTok{ }\KeywordTok{auk_zerofill}\NormalTok{(f_out_ebd, f_out_sampling)}
-\NormalTok{new_zf <-}\StringTok{ }\KeywordTok{collapse_zerofill}\NormalTok{(zf) }\CommentTok{# Creates a new zero-filled dataframe with a 0 marked for each checklist when the bird was not observed}
+\NormalTok{new_zf <-}\StringTok{ }\KeywordTok{collapse_zerofill}\NormalTok{(zf) }
 \end{Highlighting}
 \end{Shaded}
+
+Let us now choose specific columns necessary for further analysis.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -298,7 +309,7 @@ Below code need not be run if it has been filtered once already and the above pa
 \KeywordTok{rm}\NormalTok{(zf, new_zf)}
 \KeywordTok{gc}\NormalTok{()}
 
-\CommentTok{# check presence and absence in absences df, remove essentially the presences df}
+\CommentTok{# check for presences and absence in absences df, remove essentially the presences df which may lead to erroneous analysis}
 \NormalTok{data[[}\DecValTok{2}\NormalTok{]] <-}\StringTok{ }\NormalTok{data[[}\DecValTok{2}\NormalTok{]] }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(species_observed }\OperatorTok{==}\StringTok{ }\NormalTok{F)}
 \end{Highlighting}
 \end{Shaded}
@@ -306,10 +317,11 @@ Below code need not be run if it has been filtered once already and the above pa
 \hypertarget{spatial-filter}{%
 \subsection{Spatial filter}\label{spatial-filter}}
 
+A spatial filter is now supplied to further restrict our list of observations to the confines of the Nilgiris and the Anamalai hills of the Western Ghats biodiversity hotspot.
+
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-
-\CommentTok{# load shapefiles of hill ranges}
+\CommentTok{# load shapefile of the study area }
 \KeywordTok{library}\NormalTok{(sf)}
 \NormalTok{hills <-}\StringTok{ }\KeywordTok{st_read}\NormalTok{(}\StringTok{"data/spatial/hillsShapefile/Nil_Ana_Pal.shp"}\NormalTok{)}
 
@@ -344,19 +356,22 @@ Below code need not be run if it has been filtered once already and the above pa
 \end{Highlighting}
 \end{Shaded}
 
+Save temporary data created so far.
+
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{# save a temp data file}
-\KeywordTok{save}\NormalTok{(data, }\DataTypeTok{file =} \StringTok{"data/data_temp.rdata"}\NormalTok{)}
+\KeywordTok{save}\NormalTok{(data, }\DataTypeTok{file =} \StringTok{"data/01_data_temp.rdata"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \hypertarget{handle-presence-data}{%
 \subsection{Handle presence data}\label{handle-presence-data}}
 
+Further pre-processing is required in the case of many checklists where species abundance is often unknown and an `X' is denoted in such cases. Here, we convert all `X' notations to a 1, suggesting a presence (as we are not concerned with abundance data in this analysis). We also removed those checklists where the duration in minutes is either not recorded or listed as zero. Lastly, we added an sampling effort based filter following Johnston et al., 2019, wherein we considered only those checklists with duration in minutes is less than 300 and distance in kilometres traveled is less than 5km. Lastly, we excluded those group checklists where the number of observers was greater than 10.
+
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-
 \CommentTok{# in the first set, replace X, for presences, with 1}
 \NormalTok{data[[}\DecValTok{1}\NormalTok{]] <-}\StringTok{ }\NormalTok{data[[}\DecValTok{1}\NormalTok{]] }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{observation_count =} \KeywordTok{ifelse}\NormalTok{(observation_count }\OperatorTok{==}\StringTok{ "X"}\NormalTok{,}
@@ -414,9 +429,10 @@ Below code need not be run if it has been filtered once already and the above pa
 \hypertarget{add-decimal-time}{%
 \subsection{Add decimal time}\label{add-decimal-time}}
 
+We added a column where time is denoted in decimal hours since midnight.
+
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-
 \CommentTok{# assign present or not, and get time in decimal hours since midnight}
 \KeywordTok{library}\NormalTok{(lubridate)}
 \NormalTok{time_to_decimal <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) \{}
@@ -435,13 +451,13 @@ Below code need not be run if it has been filtered once already and the above pa
 \end{Highlighting}
 \end{Shaded}
 
-This data is saved to file.
+The above data is saved to a file.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 
 \CommentTok{# save a temp data file}
-\KeywordTok{save}\NormalTok{(dataGrouped, }\DataTypeTok{file =} \StringTok{"data/data_prelim_processing.rdata"}\NormalTok{)}
+\KeywordTok{save}\NormalTok{(dataGrouped, }\DataTypeTok{file =} \StringTok{"data/01_data_prelim_processing.rdata"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -483,8 +499,7 @@ We load some common libraries for raster processing and define a custom mode fun
 \hypertarget{prepare-spatial-extent}{%
 \subsection{Prepare spatial extent}\label{prepare-spatial-extent}}
 
-We prepare a 30km buffer around the boundary of the study area. This buffer will be used to mask the landscape rasters.
-The buffer procedure is done on data transformed to the UTM 43N CRS to avoid distortions.
+We prepare a 30km buffer around the boundary of the study area. This buffer will be used to mask the landscape rasters.The buffer procedure is done on data transformed to the UTM 43N CRS to avoid distortions.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -500,12 +515,12 @@ The buffer procedure is done on data transformed to the UTM 43N CRS to avoid dis
 \hypertarget{prepare-terrain-rasters}{%
 \subsection{Prepare terrain rasters}\label{prepare-terrain-rasters}}
 
-We prepare the elevation data which is an SRTM raster layer, and derive the slope and aspect from it after cropping it to the extent of the study site buffer.
+We prepare the elevation data which is an SRTM raster layer, and derive the slope and aspect from it after cropping it to the extent of the study site buffer. Please download the latest version of the SRTM raster layer from \url{https://www.worldclim.org/data/worldclim21.html}
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{# load elevation and crop to hills size, then mask by hills}
-\NormalTok{alt <-}\StringTok{ }\KeywordTok{raster}\NormalTok{(}\StringTok{"data/spatial/Elevation/alt"}\NormalTok{)}
+\NormalTok{alt <-}\StringTok{ }\KeywordTok{raster}\NormalTok{(}\StringTok{"data/spatial/Elevation/alt"}\NormalTok{) }\CommentTok{# this layer is not added to github as a result of its large size and can be downloaded from the above link}
 \NormalTok{alt.hills <-}\StringTok{ }\KeywordTok{crop}\NormalTok{(alt, }\KeywordTok{as}\NormalTok{(buffer, }\StringTok{"Spatial"}\NormalTok{))}
 \KeywordTok{rm}\NormalTok{(alt)}
 \KeywordTok{gc}\NormalTok{()}
@@ -521,11 +536,12 @@ We prepare the elevation data which is an SRTM raster layer, and derive the slop
 \hypertarget{prepare-chelsa-rasters}{%
 \subsection{Prepare CHELSA rasters}\label{prepare-chelsa-rasters}}
 
-We prepare the CHELSA rasters for annual temperature and annual precipitation in the same way, reading them in, cropping them to the study site buffer extent, and handling the temperature layer values which we divide by 10.
+We prepare the CHELSA rasters for annual temperature and annual precipitation in the same way, reading them in, cropping them to the study site buffer extent, and handling the temperature layer values which we divide by 10. The CHELSA rasters can be downloaded from \url{https://chelsa-climate.org/bioclim/}
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{# list chelsa files}
+\CommentTok{# the chelsa data for Annual mean temperature and annual precipitation can be downloaded from the aforementioned link. They haven't been uploaded to github as a result of its large size.}
 \NormalTok{chelsaFiles <-}\StringTok{ }\KeywordTok{list.files}\NormalTok{(}\StringTok{"data/chelsa/"}\NormalTok{,}
   \DataTypeTok{full.names =} \OtherTok{TRUE}\NormalTok{,}
   \DataTypeTok{pattern =} \StringTok{"*.tif"}
@@ -559,12 +575,12 @@ We stack the terrain and climatic rasters.
 \hypertarget{resample-landcover-from-10m-to-1km}{%
 \subsection{Resample landcover from 10m to 1km}\label{resample-landcover-from-10m-to-1km}}
 
-We read in a land cover classified image and resample that using the mode function to a 1km resolution.
+We read in a land cover classified image and resample that using the mode function to a 1km resolution. Please note that the resampling process need not be carried out as it has been done already and the resampled raster can be loaded with the subsequent code chunk.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{# read in landcover raster location}
-\NormalTok{landcover <-}\StringTok{ "data/landUseClassification/Reprojected Image_26thJan2020_UTM_Ghats.tif"}
+\NormalTok{landcover <-}\StringTok{ "data/landUseClassification/classifiedImage-UTM.tif"}
 
 \CommentTok{# get extent}
 \NormalTok{e <-}\StringTok{ }\KeywordTok{bbox}\NormalTok{(}\KeywordTok{raster}\NormalTok{(landcover))}
@@ -734,277 +750,16 @@ Figure code is hidden in versions rendered as HTML and PDF.
 \begin{figure}
 \centering
 \includegraphics{figs/fig_02_clim_lc_elev.png}
-\caption{Annual Mean Temperature varied from \textasciitilde{}28C in the plains to \textless{}14C at higher elevations. Annual precipitation increased at lower elevations (in the plains) to \textasciitilde{}3000mm and ranged between 1500mm and 2200mm at mid- and high elevations across the Nilgiri and the Anamalai hills. (b) The proportion of land cover types varied across the study area as shown in this panel (1 = agriculture; 2 = forest; 3 = grassland; 4 = plantations; 5 = settlements; 6 = tea; 7 = water bodies).}
-\end{figure}
-
-\hypertarget{examining-spatial-sampling-bias}{%
-\section{Examining Spatial Sampling Bias}\label{examining-spatial-sampling-bias}}
-
-The goal of this section is to determine how far each checklist location is from the nearest road, and how far each site is from its nearest neighbour. This involves finding the pairwise distance between a large number of unique checklist locations to a vast number of roads, as well as to each other.
-
-Parts of this section are thus implemented in Python, using the R-Python interface package, \texttt{reticulate}.
-
-\hypertarget{prepare-libraries-1}{%
-\subsection{Prepare libraries}\label{prepare-libraries-1}}
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\CommentTok{# load libraries}
-\KeywordTok{library}\NormalTok{(reticulate)}
-\KeywordTok{library}\NormalTok{(sf)}
-\KeywordTok{library}\NormalTok{(dplyr)}
-\KeywordTok{library}\NormalTok{(scales)}
-\KeywordTok{library}\NormalTok{(readr)}
-\KeywordTok{library}\NormalTok{(purrr)}
-
-\KeywordTok{library}\NormalTok{(ggplot2)}
-\KeywordTok{library}\NormalTok{(ggthemes)}
-\KeywordTok{library}\NormalTok{(ggspatial)}
-\KeywordTok{library}\NormalTok{(scico)}
-
-\CommentTok{# round any function}
-\NormalTok{round_any <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x, }\DataTypeTok{accuracy =} \DecValTok{20000}\NormalTok{) \{}
-  \KeywordTok{round}\NormalTok{(x }\OperatorTok{/}\StringTok{ }\NormalTok{accuracy) }\OperatorTok{*}\StringTok{ }\NormalTok{accuracy}
-\NormalTok{\}}
-\CommentTok{# ci function}
-\NormalTok{ci <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) \{}
-  \KeywordTok{qnorm}\NormalTok{(}\FloatTok{0.975}\NormalTok{) }\OperatorTok{*}\StringTok{ }\KeywordTok{sd}\NormalTok{(x, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{) }\OperatorTok{/}\StringTok{ }\KeywordTok{sqrt}\NormalTok{(}\KeywordTok{length}\NormalTok{(x))}
-\NormalTok{\}}
-
-\CommentTok{# set python path}
-\KeywordTok{use_python}\NormalTok{(}\StringTok{"/usr/bin/python3"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-Importing python libraries. These libraries need to be installed before use.
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\CommentTok{# import classic python libs}
-\ImportTok{import}\NormalTok{ itertools}
-\ImportTok{from}\NormalTok{ operator }\ImportTok{import}\NormalTok{ itemgetter}
-\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
-\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
-\ImportTok{import}\NormalTok{ math}
-
-\CommentTok{# libs for dataframes}
-\ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
-
-\CommentTok{# import libs for geodata}
-\ImportTok{from}\NormalTok{ shapely.ops }\ImportTok{import}\NormalTok{ nearest_points}
-\ImportTok{import}\NormalTok{ geopandas }\ImportTok{as}\NormalTok{ gpd}
-\ImportTok{import}\NormalTok{ rasterio}
-
-\CommentTok{# import ckdtree}
-\ImportTok{from}\NormalTok{ scipy.spatial }\ImportTok{import}\NormalTok{ cKDTree}
-\ImportTok{from}\NormalTok{ shapely.geometry }\ImportTok{import}\NormalTok{ Point, MultiPoint, LineString, MultiLineString}
-\end{Highlighting}
-\end{Shaded}
-
-\hypertarget{prepare-data-for-processing}{%
-\subsection{Prepare data for processing}\label{prepare-data-for-processing}}
-
-First we read in the roads shapefile, which is obtained from the Open Street Map database.
-Then we read in the checklsit covariates, and extract the unique coordinate pairs.
-All data are reprojected to be in the UTM 43N system.
-
-We define a custom Python function to separate multi-feature geometries (here, roads which are in parts) into single feature geometries.
-Then we define a function to use the K-dimensional trees method from \texttt{scipy} to find the distance between two geometries, here, the distance between the locations and the nearest road.
-We define another function to find the distance between checklist locations and all other checklist locations.
-
-We use these functions to find the distance between each checklist location and the nearest road and the next nearest site.
-
-\hypertarget{python-functions-and-distance-calculations}{%
-\subsubsection{Python functions and distance calculations}\label{python-functions-and-distance-calculations}}
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\CommentTok{# read in roads shapefile}
-\NormalTok{roads }\OperatorTok{=}\NormalTok{ gpd.read_file(}\StringTok{"data/spatial/roads_studysite_2019/roads_studysite_2019.shp"}\NormalTok{)}
-\NormalTok{roads.head()}
-
-\CommentTok{# read in checklist covariates for conversion to gpd}
-\CommentTok{# get unique coordinates, assign them to the df}
-\CommentTok{# convert df to geo-df}
-\NormalTok{chkCovars }\OperatorTok{=}\NormalTok{ pd.read_csv(}\StringTok{"data/eBirdChecklistVars.csv"}\NormalTok{)}
-\NormalTok{unique_locs }\OperatorTok{=}\NormalTok{ chkCovars.drop_duplicates(subset}\OperatorTok{=}\NormalTok{[}\StringTok{'longitude'}\NormalTok{,}
-                                         \StringTok{'latitude'}\NormalTok{])[[}\StringTok{'longitude'}\NormalTok{, }\StringTok{'latitude'}\NormalTok{]]}
-\NormalTok{unique_locs[}\StringTok{'coordId'}\NormalTok{] }\OperatorTok{=}\NormalTok{ np.arange(}\DecValTok{1}\NormalTok{, unique_locs.shape[}\DecValTok{0}\NormalTok{]}\OperatorTok{+}\DecValTok{1}\NormalTok{)}
-\NormalTok{chkCovars }\OperatorTok{=}\NormalTok{ chkCovars.merge(unique_locs, on}\OperatorTok{=}\NormalTok{[}\StringTok{'longitude'}\NormalTok{, }\StringTok{'latitude'}\NormalTok{])}
-
-\NormalTok{unique_locs }\OperatorTok{=}\NormalTok{ gpd.GeoDataFrame(}
-\NormalTok{unique_locs, }
-\NormalTok{geometry }\OperatorTok{=}\NormalTok{ gpd.points_from_xy(unique_locs.longitude, unique_locs.latitude))}
-\NormalTok{unique_locs.crs }\OperatorTok{=}\NormalTok{ \{}\StringTok{'init'}\NormalTok{ :}\StringTok{'epsg:4326'}\NormalTok{\}}
-
-\CommentTok{# reproject spatials to 43n epsg 32643}
-
-\NormalTok{roads }\OperatorTok{=}\NormalTok{ roads.to_crs(\{}\StringTok{'init'}\NormalTok{: }\StringTok{'epsg:32643'}\NormalTok{\})}
-\NormalTok{unique_locs }\OperatorTok{=}\NormalTok{ unique_locs.to_crs(\{}\StringTok{'init'}\NormalTok{: }\StringTok{'epsg:32643'}\NormalTok{\})}
-
-
-\CommentTok{# function to simplify multilinestrings}
-\KeywordTok{def}\NormalTok{ simplify_roads(complex_roads):}
-\NormalTok{    simpleRoads }\OperatorTok{=}\NormalTok{ []}
-    \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(complex_roads.geometry)):}
-\NormalTok{        feature }\OperatorTok{=}\NormalTok{ complex_roads.geometry.iloc[i]}
-        \ControlFlowTok{if}\NormalTok{ feature.geom_type }\OperatorTok{==} \StringTok{"LineString"}\NormalTok{:}
-\NormalTok{            simpleRoads.append(feature)}
-        \ControlFlowTok{elif}\NormalTok{ feature.geom_type }\OperatorTok{==} \StringTok{"MultiLineString"}\NormalTok{:}
-            \ControlFlowTok{for}\NormalTok{ road_level2 }\KeywordTok{in}\NormalTok{ feature:}
-\NormalTok{                simpleRoads.append(road_level2)}
-    \ControlFlowTok{return}\NormalTok{ simpleRoads}
-
-
-\CommentTok{# function to use ckdtrees to find the nearest road}
-\KeywordTok{def}\NormalTok{ ckdnearest(gdfA, gdfB):}
-\NormalTok{    A }\OperatorTok{=}\NormalTok{ np.concatenate(}
-\NormalTok{    [np.array(geom.coords) }\ControlFlowTok{for}\NormalTok{ geom }\KeywordTok{in}\NormalTok{ gdfA.geometry.to_list()])}
-\NormalTok{    simplified_features }\OperatorTok{=}\NormalTok{ simplify_roads(gdfB)}
-\NormalTok{    B }\OperatorTok{=}\NormalTok{ [np.array(geom.coords) }\ControlFlowTok{for}\NormalTok{ geom }\KeywordTok{in}\NormalTok{ simplified_features]}
-\NormalTok{    B }\OperatorTok{=}\NormalTok{ np.concatenate(B)}
-\NormalTok{    ckd_tree }\OperatorTok{=}\NormalTok{ cKDTree(B)}
-\NormalTok{    dist, idx }\OperatorTok{=}\NormalTok{ ckd_tree.query(A, k}\OperatorTok{=}\DecValTok{1}\NormalTok{)}
-    \ControlFlowTok{return}\NormalTok{ dist}
-
-
-\CommentTok{# function to use ckdtrees for nearest other checklist point}
-\KeywordTok{def}\NormalTok{ ckdnearest_point(gdfA, gdfB):}
-\NormalTok{    A }\OperatorTok{=}\NormalTok{ np.concatenate(}
-\NormalTok{    [np.array(geom.coords) }\ControlFlowTok{for}\NormalTok{ geom }\KeywordTok{in}\NormalTok{ gdfA.geometry.to_list()])}
-    \CommentTok{#simplified_features = simplify_roads(gdfB)}
-\NormalTok{    B }\OperatorTok{=}\NormalTok{ np.concatenate(}
-\NormalTok{    [np.array(geom.coords) }\ControlFlowTok{for}\NormalTok{ geom }\KeywordTok{in}\NormalTok{ gdfB.geometry.to_list()])}
-    \CommentTok{#B = np.concatenate(B)}
-\NormalTok{    ckd_tree }\OperatorTok{=}\NormalTok{ cKDTree(B)}
-\NormalTok{    dist, idx }\OperatorTok{=}\NormalTok{ ckd_tree.query(A, k}\OperatorTok{=}\NormalTok{[}\DecValTok{2}\NormalTok{])}
-    \ControlFlowTok{return}\NormalTok{ dist}
-
-
-\CommentTok{# get distance to nearest road}
-\NormalTok{unique_locs[}\StringTok{'dist_road'}\NormalTok{] }\OperatorTok{=}\NormalTok{ ckdnearest(unique_locs, roads)}
-
-\CommentTok{# get distance to nearest other site}
-\NormalTok{unique_locs[}\StringTok{'nnb'}\NormalTok{] }\OperatorTok{=}\NormalTok{ ckdnearest_point(unique_locs, unique_locs)}
-
-\CommentTok{# write to file}
-\NormalTok{unique_locs }\OperatorTok{=}\NormalTok{ pd.DataFrame(unique_locs.drop(columns}\OperatorTok{=}\StringTok{'geometry'}\NormalTok{))}
-\NormalTok{unique_locs[}\StringTok{'dist_road'}\NormalTok{] }\OperatorTok{=}\NormalTok{ unique_locs[}\StringTok{'dist_road'}\NormalTok{]}
-\NormalTok{unique_locs[}\StringTok{'nnb'}\NormalTok{] }\OperatorTok{=}\NormalTok{ unique_locs[}\StringTok{'nnb'}\NormalTok{]}
-\NormalTok{unique_locs.to_csv(path_or_buf }\OperatorTok{=} \StringTok{"data/locs_dist_to_road.csv"}\NormalTok{, index}\OperatorTok{=}\VariableTok{False}\NormalTok{)}
-
-\CommentTok{# merge unique locs with chkCovars}
-\NormalTok{chkCovars }\OperatorTok{=}\NormalTok{ chkCovars.merge(unique_locs, on}\OperatorTok{=}\NormalTok{[}\StringTok{'latitude'}\NormalTok{, }
-                                             \StringTok{'longitude'}\NormalTok{, }\StringTok{'coordId'}\NormalTok{])}
-\end{Highlighting}
-\end{Shaded}
-
-\hypertarget{spatially-explicit-filter-on-checklists}{%
-\subsubsection{Spatially explicit filter on checklists}\label{spatially-explicit-filter-on-checklists}}
-
-We filter the checklists by the boundary of the study area. This is \emph{not} the extent.
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\CommentTok{# extract data from python}
-\NormalTok{chkCovars <-}\StringTok{ }\NormalTok{py}\OperatorTok{$}\NormalTok{chkCovars}
-\NormalTok{chkCovars <-}\StringTok{ }\KeywordTok{st_as_sf}\NormalTok{(chkCovars, }\DataTypeTok{coords =} \KeywordTok{c}\NormalTok{(}\StringTok{"longitude"}\NormalTok{, }\StringTok{"latitude"}\NormalTok{)) }\OperatorTok{%>%}
-\StringTok{  `}\DataTypeTok{st_crs<-}\StringTok{`}\NormalTok{(}\DecValTok{4326}\NormalTok{) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{st_transform}\NormalTok{(}\DecValTok{32643}\NormalTok{)}
-
-\CommentTok{# read wg}
-\NormalTok{wg <-}\StringTok{ }\KeywordTok{st_read}\NormalTok{(}\StringTok{"data/spatial/hillsShapefile/Nil_Ana_Pal.shp"}\NormalTok{) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{st_transform}\NormalTok{(}\DecValTok{32643}\NormalTok{)}
-
-\CommentTok{# spatial subset}
-\NormalTok{chkCovars <-}\StringTok{ }\NormalTok{chkCovars }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{id =} \DecValTok{1}\OperatorTok{:}\KeywordTok{nrow}\NormalTok{(.)) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{filter}\NormalTok{(id }\OperatorTok{%in%}\StringTok{ }\KeywordTok{unlist}\NormalTok{(}\KeywordTok{st_contains}\NormalTok{(wg, chkCovars)))}
-\end{Highlighting}
-\end{Shaded}
-
-\hypertarget{main-text-figure-3}{%
-\subsection{Main Text Figure 3}\label{main-text-figure-3}}
-
-\hypertarget{prepare-histogram-of-distance-to-roads}{%
-\subsubsection{Prepare histogram of distance to roads}\label{prepare-histogram-of-distance-to-roads}}
-
-Figure code is hidden in versions rendered as HTML or PDF.
-
-\hypertarget{table-distance-to-roads}{%
-\subsubsection{Table: Distance to roads}\label{table-distance-to-roads}}
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\CommentTok{# write the mean and ci95 to file}
-\NormalTok{chkCovars }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{st_drop_geometry}\NormalTok{() }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{select}\NormalTok{(dist_road, nnb) }\OperatorTok{%>%}
-\StringTok{  }\NormalTok{tidyr}\OperatorTok{::}\KeywordTok{pivot_longer}\NormalTok{(}
-    \DataTypeTok{cols =} \KeywordTok{c}\NormalTok{(}\StringTok{"dist_road"}\NormalTok{, }\StringTok{"nnb"}\NormalTok{),}
-    \DataTypeTok{names_to =} \StringTok{"variable"}
-\NormalTok{  ) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{group_by}\NormalTok{(variable) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{summarise_at}\NormalTok{(}
-    \KeywordTok{vars}\NormalTok{(value),}
-    \KeywordTok{list}\NormalTok{(}\OperatorTok{~}\StringTok{ }\KeywordTok{mean}\NormalTok{(.), }\OperatorTok{~}\StringTok{ }\KeywordTok{sd}\NormalTok{(.), }\OperatorTok{~}\StringTok{ }\KeywordTok{min}\NormalTok{(.), }\OperatorTok{~}\StringTok{ }\KeywordTok{max}\NormalTok{(.))}
-\NormalTok{  ) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{write_csv}\NormalTok{(}\StringTok{"data/results/distance_roads_sites.csv"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\hypertarget{distance-to-nearest-neighbouring-site}{%
-\subsection{Distance to nearest neighbouring site}\label{distance-to-nearest-neighbouring-site}}
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\CommentTok{# get unique locations}
-\NormalTok{locs <-}\StringTok{ }\NormalTok{py}\OperatorTok{$}\NormalTok{unique_locs}
-\end{Highlighting}
-\end{Shaded}
-
-Figure code is hidden in versions rendered as HTML and PDF.
-
-\hypertarget{main-text-figure-3-1}{%
-\subsection{Main Text Figure 3}\label{main-text-figure-3-1}}
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\NormalTok{roads <-}\StringTok{ }\KeywordTok{st_read}\NormalTok{(}\StringTok{"data/spatial/roads_studysite_2019/roads_studysite_2019.shp"}\NormalTok{) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{st_transform}\NormalTok{(}\DecValTok{32643}\NormalTok{)}
-\NormalTok{points <-}\StringTok{ }\NormalTok{chkCovars }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{bind_cols}\NormalTok{(}\KeywordTok{as_tibble}\NormalTok{(}\KeywordTok{st_coordinates}\NormalTok{(.))) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{st_drop_geometry}\NormalTok{() }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{X =} \KeywordTok{round_any}\NormalTok{(X, }\DecValTok{2500}\NormalTok{), }\DataTypeTok{Y =} \KeywordTok{round_any}\NormalTok{(Y, }\DecValTok{2500}\NormalTok{))}
-
-\NormalTok{points <-}\StringTok{ }\KeywordTok{count}\NormalTok{(points, X, Y)}
-
-\CommentTok{# add land}
-\KeywordTok{library}\NormalTok{(rnaturalearth)}
-\NormalTok{land <-}\StringTok{ }\KeywordTok{ne_countries}\NormalTok{(}
-  \DataTypeTok{scale =} \DecValTok{50}\NormalTok{, }\DataTypeTok{type =} \StringTok{"countries"}\NormalTok{, }\DataTypeTok{continent =} \StringTok{"asia"}\NormalTok{,}
-  \DataTypeTok{country =} \StringTok{"india"}\NormalTok{,}
-  \DataTypeTok{returnclass =} \KeywordTok{c}\NormalTok{(}\StringTok{"sf"}\NormalTok{)}
-\NormalTok{) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{st_transform}\NormalTok{(}\DecValTok{32643}\NormalTok{)}
-
-\NormalTok{bbox <-}\StringTok{ }\KeywordTok{st_bbox}\NormalTok{(wg)}
-\end{Highlighting}
-\end{Shaded}
-
-Figure code is hidden in versions rendered as HTML and PDF.
-
-\begin{figure}
-\centering
-\includegraphics{figs/fig_03_distance_to_roads.png}
-\caption{Spatial sampling bias of eBird observations across the Nilgiri and the Anamalai hills. A large proportion of localities/sites were next to roads and were on average only \textasciitilde{}300m from another locality/site.}
+\caption{Annual Mean Temperature varied from \textasciitilde{}28C in the plains to \textless{}14C at higher elevations. Annual precipitation increased at lower elevations (in the plains) to \textasciitilde{}3000mm and ranged between 1500mm and 2200mm at mid- and high elevations across the Nilgiri and the Anamalai hills. (b) The proportion of land cover types varied across the study area as shown in this panel (1 = agriculture; 2 = forests; 3 = grasslands; 4 = plantations; 5 = settlements; 6 = tea; 7 = water bodies).}
 \end{figure}
 
 \hypertarget{preparing-observer-expertise-scores}{%
 \section{Preparing Observer Expertise Scores}\label{preparing-observer-expertise-scores}}
 
-\hypertarget{prepare-libraries-2}{%
-\subsection{Prepare libraries}\label{prepare-libraries-2}}
+Differences in local avifaunal expertise among citizen scientists can lead to biased species detection when compared with data collected by a consistent set of trained observers (van Strien et al., 2013). Including observer expertise as a detection covariate in occupancy models using eBird data can help account for this variation (Johnston et al., 2018). Observer-specific expertise in local avifauna was calculated following (Kelling et al., 2015) as the normalized predicted number of species reported by an observer after 60 minutes of sampling across the most common land cover type within the study area. This score was calculated by examining checklists from anonymized observers across the study area. We modified (Kelling et al., 2015) formulation by including only observations of the 93 species of interest in our calculations. An observer with a higher number of species of interest reported within 60 minutes would have a higher observer-specific expertise score, with respect to the study area
+
+\hypertarget{prepare-libraries-1}{%
+\subsection{Prepare libraries}\label{prepare-libraries-1}}
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -1040,8 +795,8 @@ Here, we go through the data preparation process again because we might want to 
 \StringTok{  }\KeywordTok{st_transform}\NormalTok{(}\DecValTok{32643}\NormalTok{)}
 
 \CommentTok{# set file paths for auk functions}
-\NormalTok{f_in_ebd <-}\StringTok{ }\KeywordTok{file.path}\NormalTok{(}\StringTok{"data/eBirdDataWG_filtered.txt"}\NormalTok{)}
-\NormalTok{f_in_sampling <-}\StringTok{ }\KeywordTok{file.path}\NormalTok{(}\StringTok{"data/eBirdSamplingDataWG_filtered.txt"}\NormalTok{)}
+\NormalTok{f_in_ebd <-}\StringTok{ }\KeywordTok{file.path}\NormalTok{(}\StringTok{"data/01_ebird-filtered-EBD-westernGhats.txt"}\NormalTok{)}
+\NormalTok{f_in_sampling <-}\StringTok{ }\KeywordTok{file.path}\NormalTok{(}\StringTok{"data/01_ebird-filtered-sampling-westernGhats.txt"}\NormalTok{)}
 
 \CommentTok{# run filters using auk packages}
 \NormalTok{ebd_filters <-}\StringTok{ }\KeywordTok{auk_ebd}\NormalTok{(f_in_ebd, f_in_sampling) }\OperatorTok{%>%}
@@ -1064,6 +819,8 @@ Here, we go through the data preparation process again because we might want to 
 \NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
+
+Load in the filtered data and columns of interest.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -1094,8 +851,8 @@ Here, we go through the data preparation process again because we might want to 
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{spatially-explicit-filter-on-checklists-1}{%
-\subsection{Spatially explicit filter on checklists}\label{spatially-explicit-filter-on-checklists-1}}
+\hypertarget{spatially-explicit-filter-on-checklists}{%
+\subsection{Spatially explicit filter on checklists}\label{spatially-explicit-filter-on-checklists}}
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -1144,8 +901,8 @@ Here, we go through the data preparation process again because we might want to 
 \NormalTok{by =}\StringTok{ }\KeywordTok{list}\NormalTok{(sampling_event_identifier)}
 \NormalTok{]}
 
-\CommentTok{# write to file and link with checklsit id later}
-\KeywordTok{fwrite}\NormalTok{(ebdSpSum, }\DataTypeTok{file =} \StringTok{"data/dataChecklistSpecies.csv"}\NormalTok{)}
+\CommentTok{# write to file and link with checklist id later}
+\KeywordTok{fwrite}\NormalTok{(ebdSpSum, }\DataTypeTok{file =} \StringTok{"data/03_data-nspp-per-chk.csv"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1261,7 +1018,7 @@ Read in land cover type data resampled at 1km resolution.
 
 
 \CommentTok{# save to file for later reuse}
-\KeywordTok{fwrite}\NormalTok{(ebdChkSummary, }\DataTypeTok{file =} \StringTok{"data/eBirdChecklistVars.csv"}\NormalTok{)}
+\KeywordTok{fwrite}\NormalTok{(ebdChkSummary, }\DataTypeTok{file =} \StringTok{"data/03_data-covars-perChklist.csv"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1299,7 +1056,7 @@ Our observer expertise model aims to include the random intercept effect of obse
 \CommentTok{# write model output to text file}
 \NormalTok{\{}
   \KeywordTok{writeLines}\NormalTok{(R.utils}\OperatorTok{::}\KeywordTok{captureOutput}\NormalTok{(}\KeywordTok{list}\NormalTok{(}\KeywordTok{Sys.time}\NormalTok{(), }\KeywordTok{summary}\NormalTok{(modObsExp))),}
-    \DataTypeTok{con =} \StringTok{"data/modOutput/modOutExpertise.txt"}
+    \DataTypeTok{con =} \StringTok{"data/modOutput/03_model-output-expertise.txt"}
 \NormalTok{  )}
 \NormalTok{\}}
 \end{Highlighting}
@@ -1331,16 +1088,276 @@ Our observer expertise model aims to include the random intercept effect of obse
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \KeywordTok{fwrite}\NormalTok{(dfPredict }\OperatorTok{%>%}\StringTok{ }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{select}\NormalTok{(observer, score),}
-  \DataTypeTok{file =} \StringTok{"data/dataObsExpScore.csv"}
+  \DataTypeTok{file =} \StringTok{"data/03_data-obsExpertise-score.csv"}
 \NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
+\hypertarget{examining-spatial-sampling-bias}{%
+\section{Examining Spatial Sampling Bias}\label{examining-spatial-sampling-bias}}
+
+The goal of this section is to determine how far each checklist location is from the nearest road, and how far each site is from its nearest neighbour. This involves finding the pairwise distance between a large number of unique checklist locations to a vast number of roads, as well as to each other.
+
+Parts of this section are thus implemented in Python, using the R-Python interface package, \texttt{reticulate}.
+
+\hypertarget{prepare-libraries-2}{%
+\subsection{Prepare libraries}\label{prepare-libraries-2}}
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\CommentTok{# load libraries}
+\KeywordTok{library}\NormalTok{(reticulate)}
+\KeywordTok{library}\NormalTok{(sf)}
+\KeywordTok{library}\NormalTok{(dplyr)}
+\KeywordTok{library}\NormalTok{(scales)}
+\KeywordTok{library}\NormalTok{(readr)}
+\KeywordTok{library}\NormalTok{(purrr)}
+
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\KeywordTok{library}\NormalTok{(ggthemes)}
+\KeywordTok{library}\NormalTok{(ggspatial)}
+\KeywordTok{library}\NormalTok{(scico)}
+
+\CommentTok{# round any function}
+\NormalTok{round_any <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x, }\DataTypeTok{accuracy =} \DecValTok{20000}\NormalTok{) \{}
+  \KeywordTok{round}\NormalTok{(x }\OperatorTok{/}\StringTok{ }\NormalTok{accuracy) }\OperatorTok{*}\StringTok{ }\NormalTok{accuracy}
+\NormalTok{\}}
+\CommentTok{# ci function}
+\NormalTok{ci <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) \{}
+  \KeywordTok{qnorm}\NormalTok{(}\FloatTok{0.975}\NormalTok{) }\OperatorTok{*}\StringTok{ }\KeywordTok{sd}\NormalTok{(x, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{) }\OperatorTok{/}\StringTok{ }\KeywordTok{sqrt}\NormalTok{(}\KeywordTok{length}\NormalTok{(x))}
+\NormalTok{\}}
+
+\CommentTok{# set python path}
+\KeywordTok{use_python}\NormalTok{(}\StringTok{"/usr/bin/python3"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Importing python libraries. These libraries need to be installed before use.
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\CommentTok{# import classic python libs}
+\ImportTok{import}\NormalTok{ itertools}
+\ImportTok{from}\NormalTok{ operator }\ImportTok{import}\NormalTok{ itemgetter}
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
+\ImportTok{import}\NormalTok{ math}
+
+\CommentTok{# libs for dataframes}
+\ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
+
+\CommentTok{# import libs for geodata}
+\ImportTok{from}\NormalTok{ shapely.ops }\ImportTok{import}\NormalTok{ nearest_points}
+\ImportTok{import}\NormalTok{ geopandas }\ImportTok{as}\NormalTok{ gpd}
+\ImportTok{import}\NormalTok{ rasterio}
+
+\CommentTok{# import ckdtree}
+\ImportTok{from}\NormalTok{ scipy.spatial }\ImportTok{import}\NormalTok{ cKDTree}
+\ImportTok{from}\NormalTok{ shapely.geometry }\ImportTok{import}\NormalTok{ Point, MultiPoint, LineString, MultiLineString}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{prepare-data-for-processing}{%
+\subsection{Prepare data for processing}\label{prepare-data-for-processing}}
+
+First we read in the roads shapefile, which is obtained from the Open Street Map database.
+Then we read in the checklist covariates, and extract the unique coordinate pairs.
+All data are reprojected to be in the UTM 43N coordinate system.
+
+We define a custom Python function to separate multi-feature geometries (here, roads which are in parts) into single feature geometries.
+Then we define a function to use the K-dimensional trees method from \texttt{scipy} to find the distance between two geometries, here, the distance between the locations and the nearest road.
+We define another function to find the distance between checklist locations and all other checklist locations.
+
+We use these functions to find the distance between each checklist location and the nearest road and the next nearest site.
+
+\hypertarget{python-functions-and-distance-calculations}{%
+\subsubsection{Python functions and distance calculations}\label{python-functions-and-distance-calculations}}
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\CommentTok{# read in roads shapefile}
+\NormalTok{roads }\OperatorTok{=}\NormalTok{ gpd.read_file(}\StringTok{"data/spatial/roads_studysite_2019/roads_studysite_2019.shp"}\NormalTok{)}
+\NormalTok{roads.head()}
+
+\CommentTok{# read in checklist covariates for conversion to gpd}
+\CommentTok{# get unique coordinates, assign them to the df}
+\CommentTok{# convert df to geo-df}
+\NormalTok{chkCovars }\OperatorTok{=}\NormalTok{ pd.read_csv(}\StringTok{"data/03_data-covars-perChklist.csv"}\NormalTok{)}
+\NormalTok{unique_locs }\OperatorTok{=}\NormalTok{ chkCovars.drop_duplicates(subset}\OperatorTok{=}\NormalTok{[}\StringTok{'longitude'}\NormalTok{,}
+                                         \StringTok{'latitude'}\NormalTok{])[[}\StringTok{'longitude'}\NormalTok{, }\StringTok{'latitude'}\NormalTok{]]}
+\NormalTok{unique_locs[}\StringTok{'coordId'}\NormalTok{] }\OperatorTok{=}\NormalTok{ np.arange(}\DecValTok{1}\NormalTok{, unique_locs.shape[}\DecValTok{0}\NormalTok{]}\OperatorTok{+}\DecValTok{1}\NormalTok{)}
+\NormalTok{chkCovars }\OperatorTok{=}\NormalTok{ chkCovars.merge(unique_locs, on}\OperatorTok{=}\NormalTok{[}\StringTok{'longitude'}\NormalTok{, }\StringTok{'latitude'}\NormalTok{])}
+
+\NormalTok{unique_locs }\OperatorTok{=}\NormalTok{ gpd.GeoDataFrame(}
+\NormalTok{unique_locs, }
+\NormalTok{geometry }\OperatorTok{=}\NormalTok{ gpd.points_from_xy(unique_locs.longitude, unique_locs.latitude))}
+\NormalTok{unique_locs.crs }\OperatorTok{=}\NormalTok{ \{}\StringTok{'init'}\NormalTok{ :}\StringTok{'epsg:4326'}\NormalTok{\}}
+
+\CommentTok{# reproject spatials to 43n epsg 32643}
+
+\NormalTok{roads }\OperatorTok{=}\NormalTok{ roads.to_crs(\{}\StringTok{'init'}\NormalTok{: }\StringTok{'epsg:32643'}\NormalTok{\})}
+\NormalTok{unique_locs }\OperatorTok{=}\NormalTok{ unique_locs.to_crs(\{}\StringTok{'init'}\NormalTok{: }\StringTok{'epsg:32643'}\NormalTok{\})}
+
+\CommentTok{# function to simplify multilinestrings}
+\KeywordTok{def}\NormalTok{ simplify_roads(complex_roads):}
+\NormalTok{    simpleRoads }\OperatorTok{=}\NormalTok{ []}
+    \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(complex_roads.geometry)):}
+\NormalTok{        feature }\OperatorTok{=}\NormalTok{ complex_roads.geometry.iloc[i]}
+        \ControlFlowTok{if}\NormalTok{ feature.geom_type }\OperatorTok{==} \StringTok{"LineString"}\NormalTok{:}
+\NormalTok{            simpleRoads.append(feature)}
+        \ControlFlowTok{elif}\NormalTok{ feature.geom_type }\OperatorTok{==} \StringTok{"MultiLineString"}\NormalTok{:}
+            \ControlFlowTok{for}\NormalTok{ road_level2 }\KeywordTok{in}\NormalTok{ feature:}
+\NormalTok{                simpleRoads.append(road_level2)}
+    \ControlFlowTok{return}\NormalTok{ simpleRoads}
+
+\CommentTok{# function to use ckdtrees to find the nearest road}
+\KeywordTok{def}\NormalTok{ ckdnearest(gdfA, gdfB):}
+\NormalTok{    A }\OperatorTok{=}\NormalTok{ np.concatenate(}
+\NormalTok{    [np.array(geom.coords) }\ControlFlowTok{for}\NormalTok{ geom }\KeywordTok{in}\NormalTok{ gdfA.geometry.to_list()])}
+\NormalTok{    simplified_features }\OperatorTok{=}\NormalTok{ simplify_roads(gdfB)}
+\NormalTok{    B }\OperatorTok{=}\NormalTok{ [np.array(geom.coords) }\ControlFlowTok{for}\NormalTok{ geom }\KeywordTok{in}\NormalTok{ simplified_features]}
+\NormalTok{    B }\OperatorTok{=}\NormalTok{ np.concatenate(B)}
+\NormalTok{    ckd_tree }\OperatorTok{=}\NormalTok{ cKDTree(B)}
+\NormalTok{    dist, idx }\OperatorTok{=}\NormalTok{ ckd_tree.query(A, k}\OperatorTok{=}\DecValTok{1}\NormalTok{)}
+    \ControlFlowTok{return}\NormalTok{ dist}
+
+\CommentTok{# function to use ckdtrees for nearest other checklist point}
+\KeywordTok{def}\NormalTok{ ckdnearest_point(gdfA, gdfB):}
+\NormalTok{    A }\OperatorTok{=}\NormalTok{ np.concatenate(}
+\NormalTok{    [np.array(geom.coords) }\ControlFlowTok{for}\NormalTok{ geom }\KeywordTok{in}\NormalTok{ gdfA.geometry.to_list()])}
+    \CommentTok{#simplified_features = simplify_roads(gdfB)}
+\NormalTok{    B }\OperatorTok{=}\NormalTok{ np.concatenate(}
+\NormalTok{    [np.array(geom.coords) }\ControlFlowTok{for}\NormalTok{ geom }\KeywordTok{in}\NormalTok{ gdfB.geometry.to_list()])}
+    \CommentTok{#B = np.concatenate(B)}
+\NormalTok{    ckd_tree }\OperatorTok{=}\NormalTok{ cKDTree(B)}
+\NormalTok{    dist, idx }\OperatorTok{=}\NormalTok{ ckd_tree.query(A, k}\OperatorTok{=}\NormalTok{[}\DecValTok{2}\NormalTok{])}
+    \ControlFlowTok{return}\NormalTok{ dist}
+
+
+\CommentTok{# get distance to nearest road}
+\NormalTok{unique_locs[}\StringTok{'dist_road'}\NormalTok{] }\OperatorTok{=}\NormalTok{ ckdnearest(unique_locs, roads)}
+
+\CommentTok{# get distance to nearest other site}
+\NormalTok{unique_locs[}\StringTok{'nnb'}\NormalTok{] }\OperatorTok{=}\NormalTok{ ckdnearest_point(unique_locs, unique_locs)}
+
+\CommentTok{# write to file}
+\NormalTok{unique_locs }\OperatorTok{=}\NormalTok{ pd.DataFrame(unique_locs.drop(columns}\OperatorTok{=}\StringTok{'geometry'}\NormalTok{))}
+\NormalTok{unique_locs[}\StringTok{'dist_road'}\NormalTok{] }\OperatorTok{=}\NormalTok{ unique_locs[}\StringTok{'dist_road'}\NormalTok{]}
+\NormalTok{unique_locs[}\StringTok{'nnb'}\NormalTok{] }\OperatorTok{=}\NormalTok{ unique_locs[}\StringTok{'nnb'}\NormalTok{]}
+\NormalTok{unique_locs.to_csv(path_or_buf }\OperatorTok{=} \StringTok{"data/locs_dist_to_road.csv"}\NormalTok{, index}\OperatorTok{=}\VariableTok{False}\NormalTok{)}
+
+\CommentTok{# merge unique locs with chkCovars}
+\NormalTok{chkCovars }\OperatorTok{=}\NormalTok{ chkCovars.merge(unique_locs, on}\OperatorTok{=}\NormalTok{[}\StringTok{'latitude'}\NormalTok{, }
+                                             \StringTok{'longitude'}\NormalTok{, }\StringTok{'coordId'}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{spatially-explicit-filter-on-checklists-1}{%
+\subsubsection{Spatially explicit filter on checklists}\label{spatially-explicit-filter-on-checklists-1}}
+
+We filter the checklists by the boundary of the study area. This is \emph{not} the extent.
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\CommentTok{# extract data from python}
+\NormalTok{chkCovars <-}\StringTok{ }\NormalTok{py}\OperatorTok{$}\NormalTok{chkCovars}
+\NormalTok{chkCovars <-}\StringTok{ }\KeywordTok{st_as_sf}\NormalTok{(chkCovars, }\DataTypeTok{coords =} \KeywordTok{c}\NormalTok{(}\StringTok{"longitude"}\NormalTok{, }\StringTok{"latitude"}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{  `}\DataTypeTok{st_crs<-}\StringTok{`}\NormalTok{(}\DecValTok{4326}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{st_transform}\NormalTok{(}\DecValTok{32643}\NormalTok{)}
+
+\CommentTok{# read wg}
+\NormalTok{wg <-}\StringTok{ }\KeywordTok{st_read}\NormalTok{(}\StringTok{"data/spatial/hillsShapefile/Nil_Ana_Pal.shp"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{st_transform}\NormalTok{(}\DecValTok{32643}\NormalTok{)}
+
+\CommentTok{# spatial subset}
+\NormalTok{chkCovars <-}\StringTok{ }\NormalTok{chkCovars }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{id =} \DecValTok{1}\OperatorTok{:}\KeywordTok{nrow}\NormalTok{(.)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(id }\OperatorTok{%in%}\StringTok{ }\KeywordTok{unlist}\NormalTok{(}\KeywordTok{st_contains}\NormalTok{(wg, chkCovars)))}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{main-text-figure-3}{%
+\subsection{Main Text Figure 3}\label{main-text-figure-3}}
+
+\hypertarget{prepare-histogram-of-distance-to-roads}{%
+\subsubsection{Prepare histogram of distance to roads}\label{prepare-histogram-of-distance-to-roads}}
+
+Figure code is hidden in versions rendered as HTML or PDF.
+
+\hypertarget{table-distance-to-roads}{%
+\subsubsection{Table: Distance to roads}\label{table-distance-to-roads}}
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\CommentTok{# write the mean and ci95 to file}
+\NormalTok{chkCovars }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{st_drop_geometry}\NormalTok{() }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(dist_road, nnb) }\OperatorTok{%>%}
+\StringTok{  }\NormalTok{tidyr}\OperatorTok{::}\KeywordTok{pivot_longer}\NormalTok{(}
+    \DataTypeTok{cols =} \KeywordTok{c}\NormalTok{(}\StringTok{"dist_road"}\NormalTok{, }\StringTok{"nnb"}\NormalTok{),}
+    \DataTypeTok{names_to =} \StringTok{"variable"}
+\NormalTok{  ) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(variable) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarise_at}\NormalTok{(}
+    \KeywordTok{vars}\NormalTok{(value),}
+    \KeywordTok{list}\NormalTok{(}\OperatorTok{~}\StringTok{ }\KeywordTok{mean}\NormalTok{(.), }\OperatorTok{~}\StringTok{ }\KeywordTok{sd}\NormalTok{(.), }\OperatorTok{~}\StringTok{ }\KeywordTok{min}\NormalTok{(.), }\OperatorTok{~}\StringTok{ }\KeywordTok{max}\NormalTok{(.))}
+\NormalTok{  ) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{write_csv}\NormalTok{(}\StringTok{"data/results/distance_roads_sites.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{distance-to-nearest-neighbouring-site}{%
+\subsection{Distance to nearest neighbouring site}\label{distance-to-nearest-neighbouring-site}}
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\CommentTok{# get unique locations}
+\NormalTok{locs <-}\StringTok{ }\NormalTok{py}\OperatorTok{$}\NormalTok{unique_locs}
+\end{Highlighting}
+\end{Shaded}
+
+Figure code is hidden in versions rendered as HTML and PDF.
+
+\hypertarget{main-text-figure-3-1}{%
+\subsection{Main Text Figure 3}\label{main-text-figure-3-1}}
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{roads <-}\StringTok{ }\KeywordTok{st_read}\NormalTok{(}\StringTok{"data/spatial/roads_studysite_2019/roads_studysite_2019.shp"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{st_transform}\NormalTok{(}\DecValTok{32643}\NormalTok{)}
+\NormalTok{points <-}\StringTok{ }\NormalTok{chkCovars }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{bind_cols}\NormalTok{(}\KeywordTok{as_tibble}\NormalTok{(}\KeywordTok{st_coordinates}\NormalTok{(.))) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{st_drop_geometry}\NormalTok{() }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{X =} \KeywordTok{round_any}\NormalTok{(X, }\DecValTok{2500}\NormalTok{), }\DataTypeTok{Y =} \KeywordTok{round_any}\NormalTok{(Y, }\DecValTok{2500}\NormalTok{))}
+
+\NormalTok{points <-}\StringTok{ }\KeywordTok{count}\NormalTok{(points, X, Y)}
+
+\CommentTok{# add land}
+\KeywordTok{library}\NormalTok{(rnaturalearth)}
+\NormalTok{land <-}\StringTok{ }\KeywordTok{ne_countries}\NormalTok{(}
+  \DataTypeTok{scale =} \DecValTok{50}\NormalTok{, }\DataTypeTok{type =} \StringTok{"countries"}\NormalTok{, }\DataTypeTok{continent =} \StringTok{"asia"}\NormalTok{,}
+  \DataTypeTok{country =} \StringTok{"india"}\NormalTok{,}
+  \DataTypeTok{returnclass =} \KeywordTok{c}\NormalTok{(}\StringTok{"sf"}\NormalTok{)}
+\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{st_transform}\NormalTok{(}\DecValTok{32643}\NormalTok{)}
+
+\NormalTok{bbox <-}\StringTok{ }\KeywordTok{st_bbox}\NormalTok{(wg)}
+\end{Highlighting}
+\end{Shaded}
+
+Figure code is hidden in versions rendered as HTML and PDF.
+
+\begin{figure}
+\centering
+\includegraphics{figs/fig_03_distance_to_roads.png}
+\caption{Spatial sampling bias of eBird observations across the Nilgiri and the Anamalai hills. A large proportion of localities/sites were next to roads and were on average only \textasciitilde{}300m from another locality/site. Each cell here is 2.5km x 2.5km}
+\end{figure}
+
 \hypertarget{adding-covariates-to-checklist-data}{%
 \section{Adding Covariates to Checklist Data}\label{adding-covariates-to-checklist-data}}
 
-\hypertarget{prepare-libraries-and-data}{%
-\subsection{Prepare libraries and data}\label{prepare-libraries-and-data}}
+In this section, we prepare a final list of covariates, after taking into account spatial sampling bias (examined in the previous section), temporal bias and observer expertise scores.
+\#\# Prepare libraries and data
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -1357,12 +1374,16 @@ Our observer expertise model aims to include the random intercept effect of obse
 \KeywordTok{library}\NormalTok{(sf)}
 
 \CommentTok{# load saved data object}
-\KeywordTok{load}\NormalTok{(}\StringTok{"data/data_prelim_processing.rdata"}\NormalTok{)}
+\KeywordTok{load}\NormalTok{(}\StringTok{"data/01_ebird_data_prelim_processing.rdata"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \hypertarget{spatial-subsampling}{%
 \subsection{Spatial subsampling}\label{spatial-subsampling}}
+
+Sampling bias can be introduced into citizen science due to the often ad-hoc nature of data collection (Sullivan et al., 2014). For eBird, this translates into checklists reported when convenient, rather than at regular or random points in time and space, leading to non-independence in the data if observations are spatio-temporally clustered (Johnston et al., 2019). Spatio-temporal autocorrelation in the data can be reduced by sub-sampling at an appropriate spatial resolution, and by avoiding temporal clustering. We estimated two simple measures of spatial clustering: the distance from each site to the nearest road (road data from OpenStreetMap; (OpenStreetMap contributors, 2017), and the nearest-neighbor distance for each site. Sites were strongly tied to roads (mean distance to road ± SD = 390.77 ± 859.15 m; range = 0.28 m -- 7.64 km) and were on average only 297 m away from another site (SD = 553 m; range = 0.14 m -- 12.85 km) (Figure 3). This analysis was done in the previous section.
+
+Here, to further reduce spatial autocorrelation, we divided the study area into a grid of 1km wide square cells and picked checklists from one site at random within each grid cell.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -1420,7 +1441,7 @@ Our observer expertise model aims to include the random intercept effect of obse
 \hypertarget{temporal-subsampling}{%
 \subsection{Temporal subsampling}\label{temporal-subsampling}}
 
-Get 10 random (if available) observations of each species at each locality.
+Additionally, from each selected site, we randomly selected a maximum of 10 checklists, which reduced temporal autocorrelation.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -1450,10 +1471,12 @@ Get 10 random (if available) observations of each species at each locality.
 \hypertarget{add-checklist-calibration-index}{%
 \subsection{Add checklist calibration index}\label{add-checklist-calibration-index}}
 
+Load the CCI computed in the previous section. The CCI was the lone observer's expertise score for single-observer checklists, and the highest expertise score among observers for group checklists.
+
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{# read in obs score and extract numbers}
-\NormalTok{expertiseScore <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"data/dataObsExpScore.csv"}\NormalTok{) }\OperatorTok{%>%}
+\NormalTok{expertiseScore <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"data/03_data-obsExpertise-score.csv"}\NormalTok{) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{numObserver =} \KeywordTok{str_extract}\NormalTok{(observer, }\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{d+"}\NormalTok{)) }\OperatorTok{%>%}
 \StringTok{  }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\NormalTok{observer)}
 
@@ -1492,14 +1515,16 @@ Get 10 random (if available) observations of each species at each locality.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{add-landscape-covariates}{%
-\subsection{Add landscape covariates}\label{add-landscape-covariates}}
+\hypertarget{add-climatic-and-landscape-covariates}{%
+\subsection{Add climatic and landscape covariates}\label{add-climatic-and-landscape-covariates}}
+
+Reload climate and land cover predictors prepared previously.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 
 \CommentTok{# list landscape covariate stacks}
-\NormalTok{landscape_files <-}\StringTok{ "data/landcover}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{landscape_resamp01km.tif"}
+\NormalTok{landscape_files <-}\StringTok{ "data/spatial/landscape_resamp01_km.tif"}
 
 \CommentTok{# read in as stacks}
 \NormalTok{landscape_data <-}\StringTok{ }\KeywordTok{stack}\NormalTok{(landscape_files)}
@@ -1514,6 +1539,8 @@ Get 10 random (if available) observations of each species at each locality.
 
 \hypertarget{spatial-buffers-around-selected-checklists}{%
 \subsection{Spatial buffers around selected checklists}\label{spatial-buffers-around-selected-checklists}}
+
+Every checklist on eBird is associated with a latitude and longitude. However, the coordinates entered by an observer may not accurately depict the location at which a species was detected. This can occur for two reasons: first, traveling checklists are often associated with a single location along the route travelled by observers; and second, checklist locations could be assigned to a `hotspot' -- a location that is marked by eBird as being frequented by multiple observers. In many cases, an observation might be assigned to a hotspot even though the observation was not made at the precise location of the hotspot (Praveen J, 2017). (Johnston et al., 2019) showed that a large proportion of observations occurred within a 3km grid, even for those checklists up to 5km in length. Hence to adjust for spatial precision, we considered a minimum radius of 2.5km around each unique locality when sampling environmental covariate values.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -1554,10 +1581,10 @@ Get 10 random (if available) observations of each species at each locality.
 \hypertarget{spatial-buffer-wide-covariates}{%
 \subsection{Spatial buffer-wide covariates}\label{spatial-buffer-wide-covariates}}
 
-\hypertarget{mean-environmental-covariates}{%
-\subsubsection{Mean environmental covariates}\label{mean-environmental-covariates}}
+\hypertarget{mean-climatic-covariates}{%
+\subsubsection{Mean climatic covariates}\label{mean-climatic-covariates}}
 
-All covariates are 2.5km mean values and prefixed ``am\_''.
+All climatic covariates are sampled by considering the mean values within a 2.5km radius as discussed above and prefixed ``am\_''.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -1583,6 +1610,8 @@ All covariates are 2.5km mean values and prefixed ``am\_''.
 
 \hypertarget{proportions-of-land-cover-type}{%
 \subsubsection{Proportions of land cover type}\label{proportions-of-land-cover-type}}
+
+All land cover covariates were sampled by considering the proportion of each land cover type within a 2.5km radius.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -1618,8 +1647,8 @@ All covariates are 2.5km mean values and prefixed ``am\_''.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{link-landscape-covariates-to-checklists}{%
-\subsubsection{Link landscape covariates to checklists}\label{link-landscape-covariates-to-checklists}}
+\hypertarget{link-environmental-covariates-to-checklists}{%
+\subsubsection{Link environmental covariates to checklists}\label{link-environmental-covariates-to-checklists}}
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -1641,8 +1670,8 @@ Save data to file.
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{# write to file}
 \KeywordTok{pmap}\NormalTok{(data_at_scale, }\ControlFlowTok{function}\NormalTok{(sample_radius, data) \{}
-  \KeywordTok{write_csv}\NormalTok{(data, }\DataTypeTok{path =} \KeywordTok{glue}\NormalTok{(}\StringTok{'data/dataCovars_\{str_pad(sample_radius/1e3, 2, pad = "0")\}km.csv'}\NormalTok{))}
-  \KeywordTok{message}\NormalTok{(}\KeywordTok{glue}\NormalTok{(}\StringTok{'export done: data/dataCovars_\{str_pad(sample_radius/1e3, 2, pad = "0")\}km.csv'}\NormalTok{))}
+  \KeywordTok{write_csv}\NormalTok{(data, }\DataTypeTok{path =} \KeywordTok{glue}\NormalTok{(}\StringTok{'data/04_data-covars-\{str_pad(sample_radius/1e3, 2, pad = "0")\}km.csv'}\NormalTok{))}
+  \KeywordTok{message}\NormalTok{(}\KeywordTok{glue}\NormalTok{(}\StringTok{'export done: data/04_data-covars-\{str_pad(sample_radius/1e3, 2, pad = "0")\}km.csv'}\NormalTok{))}
 \NormalTok{\})}
 \end{Highlighting}
 \end{Shaded}
@@ -1682,12 +1711,12 @@ Save data to file.
 \hypertarget{load-dataframe-and-scale-covariates}{%
 \subsection{Load dataframe and scale covariates}\label{load-dataframe-and-scale-covariates}}
 
-Here, we load the required dataframe that contains 10 random visits to a site. Please note that this process is repeated for each dataframe where environmental covariates were prepared at a spatial scale of 2.5 sq.km around each unique locality. We also scaled all covariates (mean around 0 and standard deviation of 1)
+Here, we load the required dataframe that contains 10 random visits to a site and environmental covariates that were prepared at a spatial scale of 2.5 sq.km. We also scaled all covariates (mean around 0 and standard deviation of 1). Next, we ensured that only Traveling and Stationary checklists were considered. Even though stationary counts have no distance traveled, we defaulted all stationary accounts to an effective distance of 100m, which we consider the average maximum detection radius for most bird species in our area. Following this, we excluded predictors with a Pearson coefficient \textgreater{}0.5 which resulted in the removal of grasslands as it was highly negatively correlated with forests (r =-0.77).
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{# Load in the prepared dataframe that contains 10 random visits to each site}
-\NormalTok{dat <-}\StringTok{ }\KeywordTok{fread}\NormalTok{(}\StringTok{"data/dataCovars_2.5km.csv"}\NormalTok{, }\DataTypeTok{header =}\NormalTok{ T)}
+\NormalTok{dat <-}\StringTok{ }\KeywordTok{fread}\NormalTok{(}\StringTok{"data/04_data-covars-2.5km.csv"}\NormalTok{, }\DataTypeTok{header =}\NormalTok{ T)}
 \KeywordTok{setDF}\NormalTok{(dat)}
 \KeywordTok{head}\NormalTok{(dat)}
 
@@ -1744,8 +1773,9 @@ Here, we load the required dataframe that contains 10 random visits to a site. P
 \CommentTok{# Scaling detection and occupancy covariates}
 \NormalTok{dat.scaled <-}\StringTok{ }\NormalTok{dat}\FloatTok{.1}
 \NormalTok{dat.scaled[, }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{11}\NormalTok{, }\DecValTok{16}\OperatorTok{:}\DecValTok{25}\NormalTok{)] <-}\StringTok{ }\KeywordTok{scale}\NormalTok{(dat.scaled[, }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{11}\NormalTok{, }\DecValTok{16}\OperatorTok{:}\DecValTok{25}\NormalTok{)]) }\CommentTok{# Scaling and standardizing detection and site-level covariates}
-\KeywordTok{fwrite}\NormalTok{(dat.scaled, }\DataTypeTok{file =} \StringTok{"data/scaled-covars-2.5km.csv"}\NormalTok{)}
+\KeywordTok{fwrite}\NormalTok{(dat.scaled, }\DataTypeTok{file =} \StringTok{"data/05_scaled-covars-2.5km.csv"}\NormalTok{)}
 
+\CommentTok{# Reload the scaled covariate data}
 \NormalTok{dat.scaled <-}\StringTok{ }\KeywordTok{fread}\NormalTok{(}\StringTok{"data/05_scaled-covars-2.5km.csv"}\NormalTok{, }\DataTypeTok{header =}\NormalTok{ T)}
 \KeywordTok{setDF}\NormalTok{(dat.scaled)}
 \KeywordTok{head}\NormalTok{(dat.scaled)}
@@ -1832,7 +1862,7 @@ Here, we load the required dataframe that contains 10 random visits to a site. P
 \hypertarget{identifying-covariates-necessary-to-model-the-detection-process}{%
 \subsection{Identifying covariates necessary to model the detection process}\label{identifying-covariates-necessary-to-model-the-detection-process}}
 
-Here, we use the \texttt{unmarked} package in R (Fiske and Chandler 2019) to identify detection level covariates that are important for each species
+Here, we use the \texttt{unmarked} package in R (Fiske and Chandler 2019) to identify detection level covariates that are important for each species.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -1840,7 +1870,7 @@ Here, we use the \texttt{unmarked} package in R (Fiske and Chandler 2019) to ide
 \CommentTok{# All models are stored in lists below}
 \NormalTok{det_dred <-}\StringTok{ }\KeywordTok{list}\NormalTok{()}
 
-\CommentTok{# Subsetting those models whose deltaAIC<4 (Burnham et al., 2011)}
+\CommentTok{# Subsetting those models whose deltaAIC<2 (Burnham et al., 2011)}
 \NormalTok{top_det <-}\StringTok{ }\KeywordTok{list}\NormalTok{()}
 
 \CommentTok{# Getting model averaged coefficients and relative importance scores}
@@ -1905,7 +1935,6 @@ Here, we use the \texttt{unmarked} package in R (Fiske and Chandler 2019) to ide
   \KeywordTok{clusterEvalQ}\NormalTok{(clust, }\KeywordTok{library}\NormalTok{(unmarked))}
   \KeywordTok{clusterExport}\NormalTok{(clust, }\StringTok{"occ_um"}\NormalTok{)}
 
-  \CommentTok{# Dredging the same}
 \NormalTok{  det_dred[[i]] <-}\StringTok{ }\KeywordTok{pdredge}\NormalTok{(global_mod, clust)}
   \KeywordTok{names}\NormalTok{(det_dred)[i] <-}\StringTok{ }\KeywordTok{unique}\NormalTok{(dat.scaled}\OperatorTok{$}\NormalTok{scientific_name)[i]}
 
@@ -1962,24 +1991,29 @@ Here, we use the \texttt{unmarked} package in R (Fiske and Chandler 2019) to ide
 
 \CommentTok{## Storing output from the above models in excel sheets}
 
-\CommentTok{# 1. Store all the dredged model outputs for each species (variable: det_dred() - see above)}
-\KeywordTok{write.xlsx}\NormalTok{(det_dred, }\DataTypeTok{file =} \StringTok{"data}\CharTok{\textbackslash{}r}\StringTok{esults\textbackslash{}det_dred.xlsx"}\NormalTok{)}
+\CommentTok{# 1. Store all the model outputs for each species (variable: det_dred() - see above)}
+\KeywordTok{write.xlsx}\NormalTok{(det_dred, }\DataTypeTok{file =} \StringTok{"data}\CharTok{\textbackslash{}r}\StringTok{esults\textbackslash{}det-dred.xlsx"}\NormalTok{)}
 
 \CommentTok{# 2. Store all the model averaged outputs for each species and the relative importance score}
-\KeywordTok{write.xlsx}\NormalTok{(det_avg, }\DataTypeTok{file =} \StringTok{"data}\CharTok{\textbackslash{}r}\StringTok{esults\textbackslash{}det_avg.xlsx"}\NormalTok{, }\DataTypeTok{rowNames =}\NormalTok{ T, }\DataTypeTok{colNames =}\NormalTok{ T)}
-\KeywordTok{write.xlsx}\NormalTok{(det_imp, }\DataTypeTok{file =} \StringTok{"data}\CharTok{\textbackslash{}r}\StringTok{esults\textbackslash{}det_imp.xlsx"}\NormalTok{, }\DataTypeTok{rowNames =}\NormalTok{ T, }\DataTypeTok{colNames =}\NormalTok{ T)}
+\KeywordTok{write.xlsx}\NormalTok{(det_avg, }\DataTypeTok{file =} \StringTok{"data}\CharTok{\textbackslash{}r}\StringTok{esults\textbackslash{}det-avg.xlsx"}\NormalTok{, }\DataTypeTok{rowNames =}\NormalTok{ T, }\DataTypeTok{colNames =}\NormalTok{ T)}
+\KeywordTok{write.xlsx}\NormalTok{(det_imp, }\DataTypeTok{file =} \StringTok{"data}\CharTok{\textbackslash{}r}\StringTok{esults\textbackslash{}det-imp.xlsx"}\NormalTok{, }\DataTypeTok{rowNames =}\NormalTok{ T, }\DataTypeTok{colNames =}\NormalTok{ T)}
 
-\KeywordTok{write.xlsx}\NormalTok{(det_modelEst, }\DataTypeTok{file =} \StringTok{"data}\CharTok{\textbackslash{}r}\StringTok{esults\textbackslash{}det_modelEst.xlsx"}\NormalTok{, }\DataTypeTok{rowNames =}\NormalTok{ T, }\DataTypeTok{colNames =}\NormalTok{ T)}
+\KeywordTok{write.xlsx}\NormalTok{(det_modelEst, }\DataTypeTok{file =} \StringTok{"data}\CharTok{\textbackslash{}r}\StringTok{esults\textbackslash{}det-modelEst.xlsx"}\NormalTok{, }\DataTypeTok{rowNames =}\NormalTok{ T, }\DataTypeTok{colNames =}\NormalTok{ T)}
 \end{Highlighting}
 \end{Shaded}
 
 \hypertarget{land-cover-and-climate}{%
 \subsection{Land Cover and Climate}\label{land-cover-and-climate}}
 
+Occupancy models estimate the probability of occurrence of a given species while controlling for the probability of detection and allow us to model the factors affecting occurrence and detection independently (Johnston et al., 2018; Mackenzie et al., 2018). The flexible eBird observation process contributes to the largest source of variation in the likelihood of detecting a particular species (Johnston et al., 2019); hence, we included seven covariates that influence the probability of detection for each checklist: ordinal day of year, duration of observation, distance travelled, protocol type, time observations started, number of observers and the checklist calibration index (CCI).
+
+Using a multi-model information-theoretic approach, we tested how strongly our occurrence data fit our candidate set of environmental covariates (K.P. Burnham \& Anderson, 2002). We fitted single-species occupancy models for each species, to simultaneously estimate a probability of detection (p) and a probability of occupancy (Ѱ) (Fiske \& Chandler, 2011; Mackenzie et al., 2002). For each species, we fit 256 models, each with a unique combination of the eight (climate and land cover) occupancy covariates and all seven detection covariates (Appendix S5).
+
+Across the 256 models tested for each species, the model with highest support was determined using AICc scores. However, across the majority of the species, no single model had overwhelming support. Hence, for each species, we examined those models which had ΔAICc \textless{} 2, as these top models were considered to explain a large proportion of the association between the species-specific probability of occupancy and environmental drivers (Kenneth P. Burnham et al., 2011; Elsen et al., 2017). Using these restricted model sets for each species; we created a model-averaged coefficient estimate for each predictor and assessed its direction and significance (Bartoń, 2009). We considered a predictor to be significantly associated with occupancy if the range of the 95\% confidence interval around the model-averaged coefficient did not contain zero. Next, we obtained a measure of relative importance of climatic and landscape predictors by calculating cumulative variable importance scores. These scores were calculated by obtaining the sum of model weights (AIC weights) across all models (including the top models) for each predictor across all species.
+
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-
-\CommentTok{# All dredged models are stored in lists below}
+\CommentTok{# All models are stored in lists below}
 \NormalTok{lc_clim <-}\StringTok{ }\KeywordTok{list}\NormalTok{()}
 
 \CommentTok{# Subsetting those models whose deltaAIC<2 (Burnham et al., 2011)}
@@ -2052,7 +2086,6 @@ Here, we use the \texttt{unmarked} package in R (Fiske and Chandler 2019) to ide
     \StringTok{"p(number_observers)"}\NormalTok{, }\StringTok{"p(protocol_type)"}
 \NormalTok{  )}
 
-  \CommentTok{# Dredging}
 \NormalTok{  lc_clim[[i]] <-}\StringTok{ }\KeywordTok{pdredge}\NormalTok{(model_lc_clim, clust, }\DataTypeTok{fixed =}\NormalTok{ det_terms)}
   \KeywordTok{names}\NormalTok{(lc_clim)[i] <-}\StringTok{ }\KeywordTok{unique}\NormalTok{(dat.scaled}\OperatorTok{$}\NormalTok{scientific_name)[i]}
 
@@ -2109,7 +2142,7 @@ Here, we use the \texttt{unmarked} package in R (Fiske and Chandler 2019) to ide
 \NormalTok{\}}
 \KeywordTok{close}\NormalTok{(pb)}
 
-\CommentTok{# 1. Store all the dredged model outputs for each species (for both landcover and climate)}
+\CommentTok{# 1. Store all the model outputs for each species (for both landcover and climate)}
 \KeywordTok{write.xlsx}\NormalTok{(lc_clim, }\DataTypeTok{file =} \StringTok{"data}\CharTok{\textbackslash{}r}\StringTok{esults\textbackslash{}lc-clim.xlsx"}\NormalTok{)}
 
 \CommentTok{# 2. Store all the model averaged outputs for each species and relative importance scores}
@@ -2123,6 +2156,8 @@ Here, we use the \texttt{unmarked} package in R (Fiske and Chandler 2019) to ide
 
 \hypertarget{goodness-of-fit-tests}{%
 \subsection{Goodness-of-fit tests}\label{goodness-of-fit-tests}}
+
+Adequate model fit was assessed using a chi-square goodness-of-fit test using 5000 parametric bootstrap simulations on a global model that included all occupancy and detection covariates (MacKenzie \& Bailey, 2004).
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -2194,7 +2229,9 @@ Here, we use the \texttt{unmarked} package in R (Fiske and Chandler 2019) to ide
 \hypertarget{visualizing-occupancy-predictor-effects}{%
 \section{Visualizing Occupancy Predictor Effects}\label{visualizing-occupancy-predictor-effects}}
 
-In this section, we will visualize the cumulative AIC weights and the magnitude and direction of species-specific probability of occupancy
+In this section, we will visualize the cumulative AIC weights and the magnitude and direction of species-specific probability of occupancy.
+
+To get cumulative AIC weights, we first obtained a measure of relative importance of climatic and landscape predictors by calculating cumulative variable importance scores. These scores were calculated by obtaining the sum of model weights (AIC weights) across all models (including the top models) for each predictor across all species. We then calculated the mean cumulative variable importance score and a standard deviation for each predictor (K.P. Burnham \& Anderson, 2002).
 
 \hypertarget{prepare-libraries-3}{%
 \subsection{Prepare libraries}\label{prepare-libraries-3}}
@@ -2378,6 +2415,8 @@ Prepare figure for cumulative AIC weight. Figure code is hidden in versions rend
 \hypertarget{prepare-model-coefficient-data}{%
 \subsection{Prepare model coefficient data}\label{prepare-model-coefficient-data}}
 
+For each species, we examined those models which had ΔAICc \textless{} 2, as these top models were considered to explain a large proportion of the association between the species-specific probability of occupancy and environmental drivers (Kenneth P. Burnham et al., 2011; Elsen et al., 2017). Using these restricted model sets for each species; we created a model-averaged coefficient estimate for each predictor and assessed its direction and significance (Bartoń, 2009). We considered a predictor to be significantly associated with occupancy if the range of the 95\% confidence interval around the model-averaged coefficient did not contain zero.
+
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \NormalTok{file_read <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"data/results/lc-clim-modelEst.xlsx"}\NormalTok{)}
@@ -2433,7 +2472,7 @@ Prepare figure for cumulative AIC weight. Figure code is hidden in versions rend
 \NormalTok{model_data <-}\StringTok{ }\NormalTok{model_data }\OperatorTok{%>%}\StringTok{ }
 \StringTok{  }\KeywordTok{left_join}\NormalTok{(model_est)}
 
-\CommentTok{# Keep only those predictors whose p-vlaues are significant:}
+\CommentTok{# Keep only those predictors whose p-values are significant:}
 \NormalTok{model_data <-}\StringTok{ }\NormalTok{model_data }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{filter}\NormalTok{(p_value }\OperatorTok{<}\StringTok{ }\FloatTok{0.05}\NormalTok{)}
 \end{Highlighting}
