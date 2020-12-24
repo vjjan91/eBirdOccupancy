@@ -24,7 +24,7 @@
 
 ## ----load_dataframe, eval=FALSE-----------------------------------------------
 ## # Load in the prepared dataframe that contains 10 random visits to each site
-## dat <- fread("data/dataCovars_2.5km.csv", header = T)
+## dat <- fread("data/04_data-covars-2.5km.csv", header = T)
 ## setDF(dat)
 ## head(dat)
 ## 
@@ -81,8 +81,9 @@
 ## # Scaling detection and occupancy covariates
 ## dat.scaled <- dat.1
 ## dat.scaled[, c(1, 2, 11, 16:25)] <- scale(dat.scaled[, c(1, 2, 11, 16:25)]) # Scaling and standardizing detection and site-level covariates
-## fwrite(dat.scaled, file = "data/scaled-covars-2.5km.csv")
+## fwrite(dat.scaled, file = "data/05_scaled-covars-2.5km.csv")
 ## 
+## # Reload the scaled covariate data
 ## dat.scaled <- fread("data/05_scaled-covars-2.5km.csv", header = T)
 ## setDF(dat.scaled)
 ## head(dat.scaled)
@@ -165,7 +166,7 @@
 ## # All models are stored in lists below
 ## det_dred <- list()
 ## 
-## # Subsetting those models whose deltaAIC<4 (Burnham et al., 2011)
+## # Subsetting those models whose deltaAIC<2 (Burnham et al., 2011)
 ## top_det <- list()
 ## 
 ## # Getting model averaged coefficients and relative importance scores
@@ -230,7 +231,6 @@
 ##   clusterEvalQ(clust, library(unmarked))
 ##   clusterExport(clust, "occ_um")
 ## 
-##   # Dredging the same
 ##   det_dred[[i]] <- pdredge(global_mod, clust)
 ##   names(det_dred)[i] <- unique(dat.scaled$scientific_name)[i]
 ## 
@@ -288,19 +288,18 @@
 ## 
 ## ## Storing output from the above models in excel sheets
 ## 
-## # 1. Store all the dredged model outputs for each species (variable: det_dred() - see above)
-## write.xlsx(det_dred, file = "data\results\det_dred.xlsx")
+## # 1. Store all the model outputs for each species (variable: det_dred() - see above)
+## write.xlsx(det_dred, file = "data\results\det-dred.xlsx")
 ## 
 ## # 2. Store all the model averaged outputs for each species and the relative importance score
-## write.xlsx(det_avg, file = "data\results\det_avg.xlsx", rowNames = T, colNames = T)
-## write.xlsx(det_imp, file = "data\results\det_imp.xlsx", rowNames = T, colNames = T)
+## write.xlsx(det_avg, file = "data\results\det-avg.xlsx", rowNames = T, colNames = T)
+## write.xlsx(det_imp, file = "data\results\det-imp.xlsx", rowNames = T, colNames = T)
 ## 
-## write.xlsx(det_modelEst, file = "data\results\det_modelEst.xlsx", rowNames = T, colNames = T)
+## write.xlsx(det_modelEst, file = "data\results\det-modelEst.xlsx", rowNames = T, colNames = T)
 
 
 ## ----lc_clim, eval=FALSE------------------------------------------------------
-## 
-## # All dredged models are stored in lists below
+## # All models are stored in lists below
 ## lc_clim <- list()
 ## 
 ## # Subsetting those models whose deltaAIC<2 (Burnham et al., 2011)
@@ -373,7 +372,6 @@
 ##     "p(number_observers)", "p(protocol_type)"
 ##   )
 ## 
-##   # Dredging
 ##   lc_clim[[i]] <- pdredge(model_lc_clim, clust, fixed = det_terms)
 ##   names(lc_clim)[i] <- unique(dat.scaled$scientific_name)[i]
 ## 
@@ -430,7 +428,7 @@
 ## }
 ## close(pb)
 ## 
-## # 1. Store all the dredged model outputs for each species (for both landcover and climate)
+## # 1. Store all the model outputs for each species (for both landcover and climate)
 ## write.xlsx(lc_clim, file = "data\results\lc-clim.xlsx")
 ## 
 ## # 2. Store all the model averaged outputs for each species and relative importance scores

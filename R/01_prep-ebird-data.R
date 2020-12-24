@@ -1,6 +1,5 @@
 ## ----load_libs, eval=FALSE, message=FALSE, warning=FALSE----------------------
-## 
-## # load libs
+## # load libraries
 ## library(tidyverse)
 ## library(readr)
 ## library(sf)
@@ -13,6 +12,8 @@
 ## }
 ## 
 ## # set file paths for auk functions
+## # To use these two datasets, please download the latest versions from https://ebird.org/data/download and set the file path accordingly. Since these two datasets are extremely large, we have not uploaded the same on github.
+## 
 ## f_in_ebd <- file.path("data/ebd_IN_relApr-2020.txt")
 ## f_in_sampling <- file.path("data/ebd_sampling_relApr-2020.txt")
 
@@ -24,7 +25,6 @@
 
 
 ## ----prep_ebd_filters, eval=FALSE---------------------------------------------
-## 
 ## # run filters using auk packages
 ## ebd_filters <- auk_ebd(f_in_ebd, f_in_sampling) %>%
 ##   auk_species(speciesOfInterest) %>%
@@ -38,10 +38,9 @@
 
 
 ## ----output_loc, eval=FALSE---------------------------------------------------
-## 
 ## # specify output location and perform filter
-## f_out_ebd <- "data/eBirdDataWG_filtered.txt"
-## f_out_sampling <- "data/eBirdSamplingDataWG_filtered.txt"
+## f_out_ebd <- "data/01_ebird-filtered-EBD-westernGhats.txt"
+## f_out_sampling <- "data/01_ebird-filtered-sampling-westernGhats.txt"
 
 
 ## ----filter_data, eval=FALSE--------------------------------------------------
@@ -59,7 +58,7 @@
 ## ----fill_zeroes, eval=FALSE--------------------------------------------------
 ## # fill zeroes
 ## zf <- auk_zerofill(f_out_ebd, f_out_sampling)
-## new_zf <- collapse_zerofill(zf) # Creates a new zero-filled dataframe with a 0 marked for each checklist when the bird was not observed
+## new_zf <- collapse_zerofill(zf)
 
 
 ## ----choose_cols, eval=FALSE--------------------------------------------------
@@ -86,13 +85,12 @@
 ## rm(zf, new_zf)
 ## gc()
 ## 
-## # check presence and absence in absences df, remove essentially the presences df
+## # check for presences and absence in absences df, remove essentially the presences df which may lead to erroneous analysis
 ## data[[2]] <- data[[2]] %>% filter(species_observed == F)
 
 
 ## ----spatial_filters, eval=FALSE----------------------------------------------
-## 
-## # load shapefiles of hill ranges
+## # load shapefile of the study area
 ## library(sf)
 ## hills <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp")
 ## 
@@ -128,11 +126,10 @@
 
 ## ----save_temp_data, eval=FALSE-----------------------------------------------
 ## # save a temp data file
-## save(data, file = "data/data_temp.rdata")
+## save(data, file = "data/01_data_temp.rdata")
 
 
 ## ----proc_presence_data, eval=FALSE-------------------------------------------
-## 
 ## # in the first set, replace X, for presences, with 1
 ## data[[1]] <- data[[1]] %>%
 ##   mutate(observation_count = ifelse(observation_count == "X",
@@ -187,7 +184,6 @@
 
 
 ## ----decimal_time, eval=FALSE-------------------------------------------------
-## 
 ## # assign present or not, and get time in decimal hours since midnight
 ## library(lubridate)
 ## time_to_decimal <- function(x) {
@@ -208,5 +204,5 @@
 ## ----write_clean_data, eval=FALSE---------------------------------------------
 ## 
 ## # save a temp data file
-## save(dataGrouped, file = "data/data_prelim_processing.rdata")
+## save(dataGrouped, file = "data/01_data_prelim_processing.rdata")
 

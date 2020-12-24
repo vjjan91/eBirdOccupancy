@@ -198,7 +198,7 @@ ggsave(fig_aic,
 ## model_data <- model_data %>%
 ##   left_join(model_est)
 ## 
-## # Keep only those predictors whose p-vlaues are significant:
+## # Keep only those predictors whose p-values are significant:
 ## model_data <- model_data %>%
 ##   filter(p_value < 0.05)
 ## 
