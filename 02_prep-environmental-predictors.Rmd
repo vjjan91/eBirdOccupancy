@@ -8,7 +8,7 @@ editor_options:
 In this script, we processed climatic and landscape predictors for occupancy modeling.
 
 All climatic data was obtained from https://chelsa-climate.org/bioclim/ 
-All landscape data was derived from a high resolution Sentinel-2 composite image that was classified using Google Earth Engine. This code can be accessed in Section 2 of the Supplementary Material. 
+All landscape data was derived from a high resolution Sentinel-2 composite image that was classified using Google Earth Engine. This code can be accessed in Section 2 of the Supplementary Material and here: https://code.earthengine.google.com/ec69fc4ffad32a532b25202009243d42. 
 
 The goal here is to resample all rasters so that they have the same resolution of 1km cells. We also tested for spatial autocorrelation among climatic predictors, which can be found in Section 3 of the Supplementary Material. 
 
@@ -100,6 +100,8 @@ env_data <- stack(elevData, chelsaData)
 ## Resample landcover from 10m to 1km
 
 We read in a land cover classified image and resample that using the mode function to a 1km resolution. Please note that the resampling process need not be carried out as it has been done already and the resampled raster can be loaded with the subsequent code chunk. 
+
+The classified image can be obtained from: https://code.earthengine.google.com/ec69fc4ffad32a532b25202009243d42. 
 ```{r landcover_raster, eval=FALSE, message=FALSE, warning=FALSE, message=FALSE}
 # read in landcover raster location
 landcover <- "data/landUseClassification/classifiedImage-UTM.tif"
