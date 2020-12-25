@@ -1,5 +1,10 @@
 # Source code for _Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot_
 
+<!-- badges: start -->
+  [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+  [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4393647.svg)](https://doi.org/10.5281/zenodo.4393647)
+<!-- badges: end -->
+
 This repository contains code and analysis for a manuscript that uses citizen science data to parse the role of climate and land cover on avian occupancy across the Western Ghats.
 
 ## [Readable version](https://pratikunterwegs.github.io/eBirdOccupancy/)
