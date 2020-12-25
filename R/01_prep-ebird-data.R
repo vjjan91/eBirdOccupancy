@@ -72,8 +72,7 @@
 ##   "protocol_type", "duration_minutes",
 ##   "effort_distance_km", "effort_area_ha",
 ##   "number_observers", "species_observed",
-##   "reviewed"
-## )
+##   "reviewed")
 ## 
 ## # make list of presence and absence data and choose cols of interest
 ## data <- list(ebd, new_zf) %>%

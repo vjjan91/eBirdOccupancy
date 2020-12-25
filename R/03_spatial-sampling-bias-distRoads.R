@@ -72,7 +72,7 @@
 
 ## # convert df to geo-df
 
-## chkCovars = pd.read_csv("data/eBirdChecklistVars.csv")
+## chkCovars = pd.read_csv("data/03_data-covars-perChklist.csv")
 
 ## unique_locs = chkCovars.drop_duplicates(subset=['longitude',
 
@@ -100,7 +100,6 @@
 ## unique_locs = unique_locs.to_crs({'init': 'epsg:32643'})
 
 ## 
-## 
 ## # function to simplify multilinestrings
 
 ## def simplify_roads(complex_roads):
@@ -124,7 +123,6 @@
 ##     return simpleRoads
 
 ## 
-## 
 ## # function to use ckdtrees to find the nearest road
 
 ## def ckdnearest(gdfA, gdfB):
@@ -145,7 +143,6 @@
 
 ##     return dist
 
-## 
 ## 
 ## # function to use ckdtrees for nearest other checklist point
 
@@ -169,7 +166,6 @@
 
 ##     return dist
 
-## 
 ## 
 ## # get distance to nearest road
 
@@ -217,7 +213,6 @@
 
 
 ## ----plot_histogram, eval=FALSE, echo=FALSE-----------------------------------
-## 
 ## # make histogram
 ## hist_roads <- ggplot(chkCovars) +
 ##   geom_histogram(aes(dist_road / 1e3),
