@@ -1,0 +1,17 @@
+predictor,effect,magnitude
+bio_1,negative,-30
+bio_1,positive,35
+bio_12,negative,-22
+bio_12,positive,37
+lc_01,negative,-13
+lc_01,positive,9
+lc_02,negative,-15
+lc_02,positive,21
+lc_04,negative,-16
+lc_04,positive,3
+lc_05,negative,-20
+lc_05,positive,2
+lc_06,negative,-31
+lc_06,positive,9
+lc_07,negative,-6
+lc_07,positive,5
