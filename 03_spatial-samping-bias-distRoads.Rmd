@@ -133,7 +133,6 @@ def ckdnearest_point(gdfA, gdfB):
     dist, idx = ckd_tree.query(A, k=[2])
     return dist
 
-
 # get distance to nearest road
 unique_locs['dist_road'] = ckdnearest(unique_locs, roads)
 

@@ -6,6 +6,7 @@ editor_options:
 # Adding Covariates to Checklist Data
 
 In this section, we prepare a final list of covariates, after taking into account spatial sampling bias (examined in the previous section), temporal bias and observer expertise scores. 
+
 ## Prepare libraries and data
 
 ```{r load_libs_data, eval=FALSE, message=FALSE, warning=FALSE}
@@ -30,6 +31,9 @@ load("data/01_ebird_data_prelim_processing.rdata")
 Sampling bias can be introduced into citizen science due to the often ad-hoc nature of data collection (Sullivan et al., 2014). For eBird, this translates into checklists reported when convenient, rather than at regular or random points in time and space, leading to non-independence in the data if observations are spatio-temporally clustered (Johnston et al., 2019). Spatio-temporal autocorrelation in the data can be reduced by sub-sampling at an appropriate spatial resolution, and by avoiding temporal clustering. We estimated two simple measures of spatial clustering: the distance from each site to the nearest road (road data from OpenStreetMap; (OpenStreetMap contributors, 2017), and the nearest-neighbor distance for each site. Sites were strongly tied to roads (mean distance to road ± SD = 390.77 ± 859.15 m; range = 0.28 m – 7.64 km) and were on average only 297 m away from another site (SD = 553 m; range = 0.14 m – 12.85 km) (Figure 3). This analysis was done in the previous section.  
 
 Here, to further reduce spatial autocorrelation, we divided the study area into a grid of 1km wide square cells and picked checklists from one site at random within each grid cell. 
+
+Prior to running this analysis, we checked how many checklists/data would be retained given a particular value of distance to account for spatial independence. This analysis can be accessed in Section X of the Supplementary Material. We show that over 80% of checklists are retained with a distance cutoff of 1km. In addition, a number of thinning approaches were tested to determine which method retained the highest proportion of points, while accounting for sampling effort (time and distance). This analysis can be accessed in Section Y of the Supplementary Material. 
+
 ```{r spatial_thinning, eval=FALSE}
 # grid based spatial thinning
 gridsize <- 1000 # grid size in metres

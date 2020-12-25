@@ -30,7 +30,7 @@ f_in_sampling <- file.path("data/ebd_sampling_relApr-2020.txt")
 
 ## Filter data
 
-Insert the list of species that we will be analyzing in this study.
+Insert the list of species that we will be analyzing in this study. We initially chose those species that occurred in at least 5% of all checklists across 50% of the 25 x 25 km cells from where they have been reported, resulting in a total of 93 species. To arrive at this final list of species, we carried out further pre-processing which can be found in Section 2 of the Supplementary material. 
 ```{r soi, eval=FALSE, message=FALSE, warning=FALSE}
 # add species of interest
 specieslist <- read.csv("data/species_list.csv")
@@ -94,8 +94,7 @@ columnsOfInterest <- c(
   "protocol_type", "duration_minutes",
   "effort_distance_km", "effort_area_ha",
   "number_observers", "species_observed",
-  "reviewed"
-)
+  "reviewed")
 
 # make list of presence and absence data and choose cols of interest
 data <- list(ebd, new_zf) %>%
@@ -115,7 +114,7 @@ data[[2]] <- data[[2]] %>% filter(species_observed == F)
 
 A spatial filter is now supplied to further restrict our list of observations to the confines of the Nilgiris and the Anamalai hills of the Western Ghats biodiversity hotspot.
 ```{r spatial_filters, eval=FALSE}
-# load shapefile of the study area 
+# load shapefile of the study area
 library(sf)
 hills <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp")
 

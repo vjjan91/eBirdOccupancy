@@ -15,15 +15,8 @@ docs/*.fls
 docs/*.log
 
 *.tif*
-*.shp
-*.dbf
-*.shx
 
 # Session Data files
-*.RData
-*.rda
-*.rdata
-
 /.Rproj.user
 
 *.Rhistory
@@ -32,15 +25,6 @@ docs/*.log
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
 .Rproj.user
-*.csv
-*.xl*
 
-# any zip or shapefile
-*.zip
-*.shp
-*.prj
-*.cpg
-*ini
-
-# pdf files
-*.pdf
+!data/04_data-covars-2.5km.csv
+!data/05_scaled-covars-2.5km.csv
