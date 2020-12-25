@@ -8,9 +8,9 @@ editor_options:
 In this script, we processed climatic and landscape predictors for occupancy modeling.
 
 All climatic data was obtained from https://chelsa-climate.org/bioclim/ 
-All landscape data was derived from a high resolution Sentinel-2 composite image that was classified using Google Earth Engine. This code can be accessed in Section X of the Supplementary Material. 
+All landscape data was derived from a high resolution Sentinel-2 composite image that was classified using Google Earth Engine. This code can be accessed in Section 2 of the Supplementary Material. 
 
-The goal here is to resample all rasters so that they have the same resolution of 1km cells. We also tested for spatial autocorrelation among climatic predictors, which can be found in Section X of the Supplementary Material. 
+The goal here is to resample all rasters so that they have the same resolution of 1km cells. We also tested for spatial autocorrelation among climatic predictors, which can be found in Section 3 of the Supplementary Material. 
 
 ## Prepare libraries
 

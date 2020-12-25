@@ -30,7 +30,7 @@ f_in_sampling <- file.path("data/ebd_sampling_relApr-2020.txt")
 
 ## Filter data
 
-Insert the list of species that we will be analyzing in this study. We initially chose those species that occurred in at least 5% of all checklists across 50% of the 25 x 25 km cells from where they have been reported, resulting in a total of 93 species. To arrive at this final list of species, we carried out further pre-processing which can be found in Section 2 of the Supplementary material. 
+Insert the list of species that we will be analyzing in this study. We initially chose those species that occurred in at least 5% of all checklists across 50% of the 25 x 25 km cells from where they have been reported, resulting in a total of 93 species. To arrive at this final list of species, we carried out further pre-processing which can be found in Section 1 of the Supplementary material. 
 ```{r soi, eval=FALSE, message=FALSE, warning=FALSE}
 # add species of interest
 specieslist <- read.csv("data/species_list.csv")

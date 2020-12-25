@@ -4,6 +4,8 @@
 data/eBird*
 data/ebird_*
 data/for-map
+data/spatial/elevation
+
 !data/spatial/00_data_exists.txt
 !data/results/00_data_exists.txt
 
@@ -24,5 +26,5 @@ docs/*.log
 rsconnect/
 .Rproj.user
 
-!data/04_data-covars-2.5km.csv
-!data/05_scaled-covars-2.5km.csv
+data/04_data-covars-2.5km.csv
+data/05_scaled-covars-2.5km.csv
