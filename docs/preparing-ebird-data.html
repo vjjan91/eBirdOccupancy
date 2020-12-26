@@ -28,7 +28,7 @@
 <meta name="author" content="Ruth DeFries" />
 
 
-<meta name="date" content="2020-12-25" />
+<meta name="date" content="2020-12-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -260,7 +260,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="filter-data" class="section level2">
 <h2><span class="header-section-number">2.2</span> Filter data</h2>
-<p>Insert the list of species that we will be analyzing in this study. We initially chose those species that occurred in at least 5% of all checklists across 50% of the 25 x 25 km cells from where they have been reported, resulting in a total of 93 species. To arrive at this final list of species, we carried out further pre-processing which can be found in Section 1 of the Supplementary material.</p>
+<p>Insert the list of species that we will be analyzing in this study. We initially chose those species that occurred in at least 5% of all checklists across 50% of the 25 x 25 km cells from where they have been reported, resulting in a total of 93 species. To arrive at this final list of species, we carried out further pre-processing which can be found in Section 2 of the Supplementary material.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># add species of interest</span></a>
 <a class="sourceLine" id="cb2-2" title="2">specieslist &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/species_list.csv&quot;</span>)</a>
 <a class="sourceLine" id="cb2-3" title="3">speciesOfInterest &lt;-<span class="st"> </span><span class="kw">as.character</span>(specieslist<span class="op">$</span>scientific_name)</a></code></pre></div>
@@ -477,7 +477,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": null,
+"download": ["ebird_occupancy_main_text.pdf"],
 "toc": {
 "collapse": "section"
 }

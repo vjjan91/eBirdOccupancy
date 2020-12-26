@@ -28,7 +28,7 @@
 <meta name="author" content="Ruth DeFries" />
 
 
-<meta name="date" content="2020-12-25" />
+<meta name="date" content="2020-12-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -259,7 +259,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">6.2</span> Spatial subsampling</h2>
 <p>Sampling bias can be introduced into citizen science due to the often ad-hoc nature of data collection (Sullivan et al., 2014). For eBird, this translates into checklists reported when convenient, rather than at regular or random points in time and space, leading to non-independence in the data if observations are spatio-temporally clustered (Johnston et al., 2019). Spatio-temporal autocorrelation in the data can be reduced by sub-sampling at an appropriate spatial resolution, and by avoiding temporal clustering. We estimated two simple measures of spatial clustering: the distance from each site to the nearest road (road data from OpenStreetMap; (OpenStreetMap contributors, 2017), and the nearest-neighbor distance for each site. Sites were strongly tied to roads (mean distance to road ± SD = 390.77 ± 859.15 m; range = 0.28 m – 7.64 km) and were on average only 297 m away from another site (SD = 553 m; range = 0.14 m – 12.85 km) (Figure 3). This analysis was done in the previous section.</p>
 <p>Here, to further reduce spatial autocorrelation, we divided the study area into a grid of 1km wide square cells and picked checklists from one site at random within each grid cell.</p>
-<p>Prior to running this analysis, we checked how many checklists/data would be retained given a particular value of distance to account for spatial independence. This analysis can be accessed in Section 6 of the Supplementary Material. We show that over 80% of checklists are retained with a distance cutoff of 1km. In addition, a number of thinning approaches were tested to determine which method retained the highest proportion of points, while accounting for sampling effort (time and distance). This analysis can be accessed in Section 7 of the Supplementary Material.</p>
+<p>Prior to running this analysis, we checked how many checklists/data would be retained given a particular value of distance to account for spatial independence. This analysis can be accessed in Section 8 of the Supplementary Material. We show that over 80% of checklists are retained with a distance cutoff of 1km. In addition, a number of thinning approaches were tested to determine which method retained the highest proportion of points, while accounting for sampling effort (time and distance). This analysis can be accessed in Section 9 of the Supplementary Material.</p>
 <div class="sourceCode" id="cb47"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1"><span class="co"># grid based spatial thinning</span></a>
 <a class="sourceLine" id="cb47-2" title="2">gridsize &lt;-<span class="st"> </span><span class="dv">1000</span> <span class="co"># grid size in metres</span></a>
 <a class="sourceLine" id="cb47-3" title="3">effort_distance_max &lt;-<span class="st"> </span><span class="dv">1000</span> <span class="co"># removing checklists with this distance</span></a>
@@ -541,7 +541,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": null,
+"download": ["ebird_occupancy_main_text.pdf"],
 "toc": {
 "collapse": "section"
 }

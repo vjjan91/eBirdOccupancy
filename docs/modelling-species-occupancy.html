@@ -28,7 +28,7 @@
 <meta name="author" content="Ruth DeFries" />
 
 
-<meta name="date" content="2020-12-25" />
+<meta name="date" content="2020-12-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -264,7 +264,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="load-dataframe-and-scale-covariates" class="section level2">
 <h2><span class="header-section-number">7.1</span> Load dataframe and scale covariates</h2>
 <p>Here, we load the required dataframe that contains 10 random visits to a site and environmental covariates that were prepared at a spatial scale of 2.5 sq.km. We also scaled all covariates (mean around 0 and standard deviation of 1). Next, we ensured that only Traveling and Stationary checklists were considered. Even though stationary counts have no distance traveled, we defaulted all stationary accounts to an effective distance of 100m, which we consider the average maximum detection radius for most bird species in our area. Following this, we excluded predictors with a Pearson coefficient &gt;0.5 which resulted in the removal of grasslands as it was highly negatively correlated with forests (r =-0.77).</p>
-<p>Please note that species-specific plots of probabilities of occupancy as a function of environmental data can be accessed in Section 8 of the Supplementary Material.</p>
+<p>Please note that species-specific plots of probabilities of occupancy as a function of environmental data can be accessed in Section 10 of the Supplementary Material.</p>
 <div class="sourceCode" id="cb57"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1"><span class="co"># Load in the prepared dataframe that contains 10 random visits to each site</span></a>
 <a class="sourceLine" id="cb57-2" title="2">dat &lt;-<span class="st"> </span><span class="kw">fread</span>(<span class="st">&quot;data/04_data-covars-2.5km.csv&quot;</span>, <span class="dt">header =</span> T)</a>
 <a class="sourceLine" id="cb57-3" title="3"><span class="kw">setDF</span>(dat)</a>
@@ -790,7 +790,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": null,
+"download": ["ebird_occupancy_main_text.pdf"],
 "toc": {
 "collapse": "section"
 }

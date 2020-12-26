@@ -119,7 +119,7 @@
 
 \title{Source code for \emph{Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot}}
 \author{Vijay Ramesh \and Pratik R. Gupte \and Morgan W. Tingley \and VV Robin \and Ruth DeFries}
-\date{2020-12-25}
+\date{2020-12-26}
 
 \begin{document}
 \maketitle
@@ -214,7 +214,7 @@ Here, we will load the necessary libraries required for preparing the eBird data
 \hypertarget{filter-data}{%
 \subsection{Filter data}\label{filter-data}}
 
-Insert the list of species that we will be analyzing in this study. We initially chose those species that occurred in at least 5\% of all checklists across 50\% of the 25 x 25 km cells from where they have been reported, resulting in a total of 93 species. To arrive at this final list of species, we carried out further pre-processing which can be found in Section 1 of the Supplementary material.
+Insert the list of species that we will be analyzing in this study. We initially chose those species that occurred in at least 5\% of all checklists across 50\% of the 25 x 25 km cells from where they have been reported, resulting in a total of 93 species. To arrive at this final list of species, we carried out further pre-processing which can be found in Section 2 of the Supplementary material.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -466,9 +466,9 @@ The above data is saved to a file.
 In this script, we processed climatic and landscape predictors for occupancy modeling.
 
 All climatic data was obtained from \url{https://chelsa-climate.org/bioclim/}
-All landscape data was derived from a high resolution Sentinel-2 composite image that was classified using Google Earth Engine. This code can be accessed in Section 2 of the Supplementary Material and here: \url{https://code.earthengine.google.com/ec69fc4ffad32a532b25202009243d42}.
+All landscape data was derived from a high resolution Sentinel-2 composite image that was classified using Google Earth Engine. This code can be accessed in Section 3 of the Supplementary Material and here: \url{https://code.earthengine.google.com/ec69fc4ffad32a532b25202009243d42}.
 
-The goal here is to resample all rasters so that they have the same resolution of 1km cells. We also tested for spatial autocorrelation among climatic predictors, which can be found in Section 3 of the Supplementary Material.
+The goal here is to resample all rasters so that they have the same resolution of 1km cells. We also tested for spatial autocorrelation among climatic predictors, which can be found in Section 4 of the Supplementary Material.
 
 \hypertarget{prepare-libraries}{%
 \subsection{Prepare libraries}\label{prepare-libraries}}
@@ -762,7 +762,7 @@ Figure code is hidden in versions rendered as HTML and PDF.
 
 Differences in local avifaunal expertise among citizen scientists can lead to biased species detection when compared with data collected by a consistent set of trained observers (van Strien et al., 2013). Including observer expertise as a detection covariate in occupancy models using eBird data can help account for this variation (Johnston et al., 2018). Observer-specific expertise in local avifauna was calculated following (Kelling et al., 2015) as the normalized predicted number of species reported by an observer after 60 minutes of sampling across the most common land cover type within the study area. This score was calculated by examining checklists from anonymized observers across the study area. We modified (Kelling et al., 2015) formulation by including only observations of the 93 species of interest in our calculations. An observer with a higher number of species of interest reported within 60 minutes would have a higher observer-specific expertise score, with respect to the study area.
 
-Plots with respect to how observer expertise varied over time (2013-2019) for the list of species considered in this study (across the study area alone) can be accessed in Section 5 of the Supplementary Material.
+Plots with respect to how observer expertise varied over time (2013-2019) for the list of species considered in this study (across the study area alone) can be accessed in Section 7 of the Supplementary Material.
 
 \hypertarget{prepare-libraries-1}{%
 \subsection{Prepare libraries}\label{prepare-libraries-1}}
@@ -1392,7 +1392,7 @@ Sampling bias can be introduced into citizen science due to the often ad-hoc nat
 
 Here, to further reduce spatial autocorrelation, we divided the study area into a grid of 1km wide square cells and picked checklists from one site at random within each grid cell.
 
-Prior to running this analysis, we checked how many checklists/data would be retained given a particular value of distance to account for spatial independence. This analysis can be accessed in Section 6 of the Supplementary Material. We show that over 80\% of checklists are retained with a distance cutoff of 1km. In addition, a number of thinning approaches were tested to determine which method retained the highest proportion of points, while accounting for sampling effort (time and distance). This analysis can be accessed in Section 7 of the Supplementary Material.
+Prior to running this analysis, we checked how many checklists/data would be retained given a particular value of distance to account for spatial independence. This analysis can be accessed in Section 8 of the Supplementary Material. We show that over 80\% of checklists are retained with a distance cutoff of 1km. In addition, a number of thinning approaches were tested to determine which method retained the highest proportion of points, while accounting for sampling effort (time and distance). This analysis can be accessed in Section 9 of the Supplementary Material.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -1722,7 +1722,7 @@ Save data to file.
 
 Here, we load the required dataframe that contains 10 random visits to a site and environmental covariates that were prepared at a spatial scale of 2.5 sq.km. We also scaled all covariates (mean around 0 and standard deviation of 1). Next, we ensured that only Traveling and Stationary checklists were considered. Even though stationary counts have no distance traveled, we defaulted all stationary accounts to an effective distance of 100m, which we consider the average maximum detection radius for most bird species in our area. Following this, we excluded predictors with a Pearson coefficient \textgreater{}0.5 which resulted in the removal of grasslands as it was highly negatively correlated with forests (r =-0.77).
 
-Please note that species-specific plots of probabilities of occupancy as a function of environmental data can be accessed in Section 8 of the Supplementary Material.
+Please note that species-specific plots of probabilities of occupancy as a function of environmental data can be accessed in Section 10 of the Supplementary Material.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
