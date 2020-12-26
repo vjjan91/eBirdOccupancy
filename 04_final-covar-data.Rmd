@@ -9,7 +9,7 @@ In this section, we prepare a final list of covariates, after taking into accoun
 
 ## Prepare libraries and data
 
-```{r load_libs_data, eval=FALSE, message=FALSE, warning=FALSE}
+```{r load_libs_data, , message=FALSE, warning=FALSE}
 
 # load libs
 library(dplyr)
@@ -34,7 +34,7 @@ Here, to further reduce spatial autocorrelation, we divided the study area into 
 
 Prior to running this analysis, we checked how many checklists/data would be retained given a particular value of distance to account for spatial independence. This analysis can be accessed in Section 8 of the Supplementary Material. We show that over 80% of checklists are retained with a distance cutoff of 1km. In addition, a number of thinning approaches were tested to determine which method retained the highest proportion of points, while accounting for sampling effort (time and distance). This analysis can be accessed in Section 9 of the Supplementary Material. 
 
-```{r spatial_thinning, eval=FALSE}
+```{r spatial_thinning}
 # grid based spatial thinning
 gridsize <- 1000 # grid size in metres
 effort_distance_max <- 1000 # removing checklists with this distance
@@ -88,7 +88,7 @@ rm(dataGrouped)
 ## Temporal subsampling
 
 Additionally, from each selected site, we randomly selected a maximum of 10 checklists, which reduced temporal autocorrelation.
-```{r subsample_data, eval=FALSE}
+```{r subsample_data}
 # subsample data for random 10 observations
 dataSubsample <- map(data_spatial_thin, function(df) {
   df <- ungroup(df)
@@ -114,7 +114,7 @@ rm(data_spatial_thin)
 ## Add checklist calibration index
 
 Load the CCI computed in the previous section. The CCI was the lone observer’s expertise score for single-observer checklists, and the highest expertise score among observers for group checklists. 
-```{r add_expertise, eval=FALSE}
+```{r add_expertise}
 # read in obs score and extract numbers
 expertiseScore <- read_csv("data/03_data-obsExpertise-score.csv") %>%
   mutate(numObserver = str_extract(observer, "\\d+")) %>%
@@ -157,7 +157,7 @@ dataSubsample <- filter(dataSubsample, !is.na(expertise))
 ## Add climatic and landscape covariates
 
 Reload climate and land cover predictors prepared previously. 
-```{r add_landcovars, eval=FALSE}
+```{r add_landcovars}
 
 # list landscape covariate stacks
 landscape_files <- "data/spatial/landscape_resamp01_km.tif"
@@ -175,7 +175,7 @@ names(landscape_data) <- as.character(glue('{c(elev_names, chelsa_names, "landco
 ## Spatial buffers around selected checklists
 
 Every checklist on eBird is associated with a latitude and longitude. However, the coordinates entered by an observer may not accurately depict the location at which a species was detected. This can occur for two reasons: first, traveling checklists are often associated with a single location along the route travelled by observers; and second, checklist locations could be assigned to a ‘hotspot’ – a location that is marked by eBird as being frequented by multiple observers. In many cases, an observation might be assigned to a hotspot even though the observation was not made at the precise location of the hotspot (Praveen J, 2017). (Johnston et al., 2019) showed that a large proportion of observations occurred within a 3km grid, even for those checklists up to 5km in length. Hence to adjust for spatial precision, we considered a minimum radius of 2.5km around each unique locality when sampling environmental covariate values. 
-```{r point_buffer, eval=FALSE}
+```{r point_buffer}
 # assign neighbourhood radius in m
 sample_radius <- 2.5 * 1e3
 
@@ -214,7 +214,7 @@ ebird_buff <- mutate(ebird_buff,
 ### Mean climatic covariates
 
 All climatic covariates are sampled by considering the mean values within a 2.5km radius as discussed above and prefixed "am_".
-```{r mean_landscape, eval=FALSE}
+```{r mean_landscape}
 # get area mean for all preds except landcover, which is the last one
 env_area_mean <- purrr::map(ebird_buff$data, function(df) {
   stk <- landscape_data[[-dim(landscape_data)[3]]] # removing landcover here
@@ -237,7 +237,7 @@ ebird_buff <- ebird_buff %>%
 ### Proportions of land cover type
 
 All land cover covariates were sampled by considering the proportion of each land cover type within a 2.5km radius. 
-```{r pland, eval=FALSE}
+```{r pland}
 # get the last element of each stack from the list
 # this is the landcover at that resolution
 lc_area_prop <- purrr::map(ebird_buff$data, function(df) {
@@ -271,7 +271,7 @@ ebird_buff <- ebird_buff %>%
 
 ### Link environmental covariates to checklists
 
-```{r land_to_obs, eval=FALSE}
+```{r land_to_obs}
 # duplicate scale data
 data_at_scale <- ebird_buff
 
@@ -284,7 +284,7 @@ data_at_scale$data <- map(data_at_scale$data, function(df) {
 ```
 
 Save data to file.
-```{r spit_scale, eval=FALSE}
+```{r spit_scale}
 # write to file
 pmap(data_at_scale, function(sample_radius, data) {
   write_csv(data, path = glue('data/04_data-covars-{str_pad(sample_radius/1e3, 2, pad = "0")}km.csv'))
