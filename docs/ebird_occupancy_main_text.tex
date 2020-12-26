@@ -204,7 +204,7 @@ Here, we will load the necessary libraries required for preparing the eBird data
 \NormalTok{\}}
 
 \CommentTok{# set file paths for auk functions}
-\CommentTok{# To use these two datasets, please download the latest versions from https://ebird.org/data/download and set the file path accordingly. Since these two datasets are extremely large, we have not uploaded the same on github. }
+\CommentTok{# To use these two datasets, please download the latest versions from https://ebird.org/data/download and set the file path accordingly. Since these two datasets are extremely large, we have not uploaded the same on github.}
 
 \NormalTok{f_in_ebd <-}\StringTok{ }\KeywordTok{file.path}\NormalTok{(}\StringTok{"data/ebd_IN_relApr-2020.txt"}\NormalTok{)}
 \NormalTok{f_in_sampling <-}\StringTok{ }\KeywordTok{file.path}\NormalTok{(}\StringTok{"data/ebd_sampling_relApr-2020.txt"}\NormalTok{)}
@@ -278,7 +278,7 @@ eBird checklists only suggest whether a species was reported at a particular loc
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{# fill zeroes}
 \NormalTok{zf <-}\StringTok{ }\KeywordTok{auk_zerofill}\NormalTok{(f_out_ebd, f_out_sampling)}
-\NormalTok{new_zf <-}\StringTok{ }\KeywordTok{collapse_zerofill}\NormalTok{(zf) }
+\NormalTok{new_zf <-}\StringTok{ }\KeywordTok{collapse_zerofill}\NormalTok{(zf)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -296,7 +296,8 @@ Let us now choose specific columns necessary for further analysis.
   \StringTok{"protocol_type"}\NormalTok{, }\StringTok{"duration_minutes"}\NormalTok{,}
   \StringTok{"effort_distance_km"}\NormalTok{, }\StringTok{"effort_area_ha"}\NormalTok{,}
   \StringTok{"number_observers"}\NormalTok{, }\StringTok{"species_observed"}\NormalTok{,}
-  \StringTok{"reviewed"}\NormalTok{)}
+  \StringTok{"reviewed"}
+\NormalTok{)}
 
 \CommentTok{# make list of presence and absence data and choose cols of interest}
 \NormalTok{data <-}\StringTok{ }\KeywordTok{list}\NormalTok{(ebd, new_zf) }\OperatorTok{%>%}
@@ -1540,7 +1541,7 @@ Reload climate and land cover predictors prepared previously.
 
 \CommentTok{# get proper names}
 \NormalTok{elev_names <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"elev"}\NormalTok{, }\StringTok{"slope"}\NormalTok{, }\StringTok{"aspect"}\NormalTok{)}
-\NormalTok{chelsa_names <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"bio1"}\NormalTok{,}\StringTok{"bio12"}\NormalTok{)}
+\NormalTok{chelsa_names <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"bio1"}\NormalTok{, }\StringTok{"bio12"}\NormalTok{)}
 
 \KeywordTok{names}\NormalTok{(landscape_data) <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(}\KeywordTok{glue}\NormalTok{(}\StringTok{'\{c(elev_names, chelsa_names, "landcover")\}'}\NormalTok{))}
 \end{Highlighting}
@@ -2301,19 +2302,21 @@ To get cumulative AIC weights, we first obtained a measure of relative importanc
 \CommentTok{# read in sheets by species}
 \NormalTok{model_imp <-}\StringTok{ }\KeywordTok{map}\NormalTok{(file_names, }\ControlFlowTok{function}\NormalTok{(f) \{}
 \NormalTok{  md_list <-}\StringTok{ }\KeywordTok{map}\NormalTok{(list_of_species, }\ControlFlowTok{function}\NormalTok{(sn) \{}
-    
+
     \CommentTok{# some sheets are not found}
-    
-    \KeywordTok{tryCatch}\NormalTok{(\{}
-      
-\NormalTok{      readxl}\OperatorTok{::}\KeywordTok{read_excel}\NormalTok{(f, }\DataTypeTok{sheet =}\NormalTok{ sn) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{        `}\DataTypeTok{colnames<-}\StringTok{`}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"predictor"}\NormalTok{, }\StringTok{"AIC_weight"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{        }\KeywordTok{filter}\NormalTok{(}\KeywordTok{str_detect}\NormalTok{(predictor, }\StringTok{"psi"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{        }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{predictor =}\NormalTok{ stringr}\OperatorTok{::}\KeywordTok{str_extract}\NormalTok{(predictor, }
-                                \DataTypeTok{pattern =}\NormalTok{ stringr}\OperatorTok{::}\KeywordTok{regex}\NormalTok{(}\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{((.*?)}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{)"}\NormalTok{)),}
-               \DataTypeTok{predictor =}\NormalTok{ stringr}\OperatorTok{::}\KeywordTok{str_replace_all}\NormalTok{(predictor, }\StringTok{"[//(//)]"}\NormalTok{, }\StringTok{""}\NormalTok{),}
-               \DataTypeTok{predictor =}\NormalTok{ stringr}\OperatorTok{::}\KeywordTok{str_remove}\NormalTok{(predictor, }\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.y"}\NormalTok{))}
-      
+
+    \KeywordTok{tryCatch}\NormalTok{(}
+\NormalTok{      \{}
+\NormalTok{        readxl}\OperatorTok{::}\KeywordTok{read_excel}\NormalTok{(f, }\DataTypeTok{sheet =}\NormalTok{ sn) }\OperatorTok{%>%}
+\StringTok{          `}\DataTypeTok{colnames<-}\StringTok{`}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"predictor"}\NormalTok{, }\StringTok{"AIC_weight"}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{          }\KeywordTok{filter}\NormalTok{(}\KeywordTok{str_detect}\NormalTok{(predictor, }\StringTok{"psi"}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{          }\KeywordTok{mutate}\NormalTok{(}
+            \DataTypeTok{predictor =}\NormalTok{ stringr}\OperatorTok{::}\KeywordTok{str_extract}\NormalTok{(predictor,}
+              \DataTypeTok{pattern =}\NormalTok{ stringr}\OperatorTok{::}\KeywordTok{regex}\NormalTok{(}\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{((.*?)}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{)"}\NormalTok{)}
+\NormalTok{            ),}
+            \DataTypeTok{predictor =}\NormalTok{ stringr}\OperatorTok{::}\KeywordTok{str_replace_all}\NormalTok{(predictor, }\StringTok{"[//(//)]"}\NormalTok{, }\StringTok{""}\NormalTok{),}
+            \DataTypeTok{predictor =}\NormalTok{ stringr}\OperatorTok{::}\KeywordTok{str_remove}\NormalTok{(predictor, }\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.y"}\NormalTok{)}
+\NormalTok{          )}
 \NormalTok{      \},}
       \DataTypeTok{error =} \ControlFlowTok{function}\NormalTok{(e) \{}
         \KeywordTok{message}\NormalTok{(}\KeywordTok{as.character}\NormalTok{(e))}
@@ -2321,7 +2324,7 @@ To get cumulative AIC weights, we first obtained a measure of relative importanc
 \NormalTok{    )}
 \NormalTok{  \})}
   \KeywordTok{names}\NormalTok{(md_list) <-}\StringTok{ }\NormalTok{list_of_species}
-  
+
   \KeywordTok{return}\NormalTok{(md_list)}
 \NormalTok{\})}
 \end{Highlighting}
@@ -2341,7 +2344,7 @@ To get cumulative AIC weights, we first obtained a measure of relative importanc
 \NormalTok{\})}
 
 \CommentTok{# bind rows}
-\NormalTok{model_imp <-}\StringTok{ }\KeywordTok{map}\NormalTok{(model_imp, bind_rows) }\OperatorTok{%>%}\StringTok{ }
+\NormalTok{model_imp <-}\StringTok{ }\KeywordTok{map}\NormalTok{(model_imp, bind_rows) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{bind_rows}\NormalTok{()}
 
 \CommentTok{# convert to numeric}
@@ -2350,16 +2353,19 @@ To get cumulative AIC weights, we first obtained a measure of relative importanc
 \KeywordTok{levels}\NormalTok{(model_imp}\OperatorTok{$}\NormalTok{scale) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"2.5km"}\NormalTok{)}
 
 \CommentTok{# Let's get a summary of cumulative variable importance}
-\NormalTok{model_imp <-}\KeywordTok{group_by}\NormalTok{(model_imp, predictor) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{mean_AIC =} \KeywordTok{mean}\NormalTok{(AIC_weight),}
-            \DataTypeTok{sd_AIC=}\KeywordTok{sd}\NormalTok{(AIC_weight),}
-            \DataTypeTok{min_AIC =} \KeywordTok{min}\NormalTok{(AIC_weight),}
-            \DataTypeTok{max_AIC =} \KeywordTok{max}\NormalTok{(AIC_weight),}
-            \DataTypeTok{med_AIC =} \KeywordTok{median}\NormalTok{(AIC_weight))}
+\NormalTok{model_imp <-}\StringTok{ }\KeywordTok{group_by}\NormalTok{(model_imp, predictor) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarise}\NormalTok{(}
+    \DataTypeTok{mean_AIC =} \KeywordTok{mean}\NormalTok{(AIC_weight),}
+    \DataTypeTok{sd_AIC =} \KeywordTok{sd}\NormalTok{(AIC_weight),}
+    \DataTypeTok{min_AIC =} \KeywordTok{min}\NormalTok{(AIC_weight),}
+    \DataTypeTok{max_AIC =} \KeywordTok{max}\NormalTok{(AIC_weight),}
+    \DataTypeTok{med_AIC =} \KeywordTok{median}\NormalTok{(AIC_weight)}
+\NormalTok{  )}
 
 \CommentTok{# write to file}
 \KeywordTok{write_csv}\NormalTok{(model_imp,}
-          \DataTypeTok{file =} \StringTok{"data/results/cumulative_AIC_weights.csv"}\NormalTok{)}
+  \DataTypeTok{file =} \StringTok{"data/results/cumulative_AIC_weights.csv"}
+\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2376,12 +2382,16 @@ Read data back in.
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{# make nice names}
-\NormalTok{predictor_name <-}\StringTok{ }\KeywordTok{tibble}\NormalTok{(}\DataTypeTok{predictor =} \KeywordTok{levels}\NormalTok{(model_imp}\OperatorTok{$}\NormalTok{predictor),}
-                         \DataTypeTok{pred_name =} \KeywordTok{c}\NormalTok{(}\StringTok{"Annual Mean Temperature (°C)"}\NormalTok{, }
-                                       \StringTok{"Annual Precipitation (mm)"}\NormalTok{,}
-                                       \StringTok{"% Agriculture"}\NormalTok{, }\StringTok{"% Forests"}\NormalTok{,}
-                                       \StringTok{"% Plantations"}\NormalTok{, }\StringTok{"% Settlements"}\NormalTok{, }
-                                       \StringTok{"% Tea"}\NormalTok{, }\StringTok{"% Water Bodies"}\NormalTok{))}
+\NormalTok{predictor_name <-}\StringTok{ }\KeywordTok{tibble}\NormalTok{(}
+  \DataTypeTok{predictor =} \KeywordTok{levels}\NormalTok{(model_imp}\OperatorTok{$}\NormalTok{predictor),}
+  \DataTypeTok{pred_name =} \KeywordTok{c}\NormalTok{(}
+    \StringTok{"Annual Mean Temperature (°C)"}\NormalTok{,}
+    \StringTok{"Annual Precipitation (mm)"}\NormalTok{,}
+    \StringTok{"% Agriculture"}\NormalTok{, }\StringTok{"% Forests"}\NormalTok{,}
+    \StringTok{"% Plantations"}\NormalTok{, }\StringTok{"% Settlements"}\NormalTok{,}
+    \StringTok{"% Tea"}\NormalTok{, }\StringTok{"% Water Bodies"}
+\NormalTok{  )}
+\NormalTok{)}
 
 \CommentTok{# rename predictor}
 \NormalTok{model_imp <-}\StringTok{ }\KeywordTok{left_join}\NormalTok{(model_imp, predictor_name)}
@@ -2393,33 +2403,41 @@ Prepare figure for cumulative AIC weight. Figure code is hidden in versions rend
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \NormalTok{fig_aic <-}
-\StringTok{  }\KeywordTok{ggplot}\NormalTok{(model_imp)}\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_pointrange}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{reorder}\NormalTok{(predictor, mean_AIC),}
-                      \DataTypeTok{y =}\NormalTok{ mean_AIC,}
-                      \DataTypeTok{ymin =}\NormalTok{ mean_AIC }\OperatorTok{-}\StringTok{ }\NormalTok{sd_AIC,}
-                      \DataTypeTok{ymax =}\NormalTok{ mean_AIC }\OperatorTok{+}\StringTok{ }\NormalTok{sd_AIC))}\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_text}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ predictor, }
-                \DataTypeTok{y =} \FloatTok{0.2}\NormalTok{,}
-                \DataTypeTok{label =}\NormalTok{ pred_name),}
-            \DataTypeTok{angle =} \DecValTok{0}\NormalTok{,}
-            \DataTypeTok{hjust =} \StringTok{"inward"}\NormalTok{,}
-            \DataTypeTok{vjust =} \DecValTok{2}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(model_imp) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_pointrange}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}
+    \DataTypeTok{x =} \KeywordTok{reorder}\NormalTok{(predictor, mean_AIC),}
+    \DataTypeTok{y =}\NormalTok{ mean_AIC,}
+    \DataTypeTok{ymin =}\NormalTok{ mean_AIC }\OperatorTok{-}\StringTok{ }\NormalTok{sd_AIC,}
+    \DataTypeTok{ymax =}\NormalTok{ mean_AIC }\OperatorTok{+}\StringTok{ }\NormalTok{sd_AIC}
+\NormalTok{  )) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_text}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}
+    \DataTypeTok{x =}\NormalTok{ predictor,}
+    \DataTypeTok{y =} \FloatTok{0.2}\NormalTok{,}
+    \DataTypeTok{label =}\NormalTok{ pred_name}
+\NormalTok{  ),}
+  \DataTypeTok{angle =} \DecValTok{0}\NormalTok{,}
+  \DataTypeTok{hjust =} \StringTok{"inward"}\NormalTok{,}
+  \DataTypeTok{vjust =} \DecValTok{2}
+\NormalTok{  ) }\OperatorTok{+}
 \StringTok{  }\CommentTok{# scale_y_continuous(breaks = seq(45, 75, 10))+}
-\StringTok{  }\KeywordTok{scale_x_discrete}\NormalTok{(}\DataTypeTok{labels =} \OtherTok{NULL}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_x_discrete}\NormalTok{(}\DataTypeTok{labels =} \OtherTok{NULL}\NormalTok{) }\OperatorTok{+}
 \StringTok{  }\CommentTok{# scale_color_brewer(palette = "RdBu", values = c(0.5, 1))+}
 \StringTok{  }\KeywordTok{coord_flip}\NormalTok{(}
     \CommentTok{# ylim = c(45, 75)}
-\NormalTok{  )}\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme_test}\NormalTok{()}\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"none"}\NormalTok{)}\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Predictor"}\NormalTok{,}
-       \DataTypeTok{y =} \StringTok{"Cumulative AIC weight"}\NormalTok{)}
+\NormalTok{  ) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_test}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"none"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}
+    \DataTypeTok{x =} \StringTok{"Predictor"}\NormalTok{,}
+    \DataTypeTok{y =} \StringTok{"Cumulative AIC weight"}
+\NormalTok{  )}
 
 \KeywordTok{ggsave}\NormalTok{(fig_aic,}
-       \DataTypeTok{filename =} \StringTok{"figs/fig_aic_weight.png"}\NormalTok{, }
-       \DataTypeTok{device =} \KeywordTok{png}\NormalTok{(),}
-       \DataTypeTok{dpi =} \DecValTok{300}\NormalTok{,}
-       \DataTypeTok{width =} \DecValTok{79}\NormalTok{, }\DataTypeTok{height =} \DecValTok{120}\NormalTok{, }\DataTypeTok{units =} \StringTok{"mm"}\NormalTok{)}
+  \DataTypeTok{filename =} \StringTok{"figs/fig_aic_weight.png"}\NormalTok{,}
+  \DataTypeTok{device =} \KeywordTok{png}\NormalTok{(),}
+  \DataTypeTok{dpi =} \DecValTok{300}\NormalTok{,}
+  \DataTypeTok{width =} \DecValTok{79}\NormalTok{, }\DataTypeTok{height =} \DecValTok{120}\NormalTok{, }\DataTypeTok{units =} \StringTok{"mm"}
+\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2442,21 +2460,25 @@ For each species, we examined those models which had ΔAICc \textless{} 2, as th
 \NormalTok{\})}
 
 \CommentTok{# prepare model data}
-\NormalTok{scales =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"2.5km"}\NormalTok{)}
-\NormalTok{model_data <-}\StringTok{ }\KeywordTok{tibble}\NormalTok{(}\DataTypeTok{scale =}\NormalTok{ scales, }
-                              \DataTypeTok{scientific_name =}\NormalTok{ list_of_species) }\OperatorTok{%>%}
+\NormalTok{scales <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"2.5km"}\NormalTok{)}
+\NormalTok{model_data <-}\StringTok{ }\KeywordTok{tibble}\NormalTok{(}
+  \DataTypeTok{scale =}\NormalTok{ scales,}
+  \DataTypeTok{scientific_name =}\NormalTok{ list_of_species}
+\NormalTok{) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(scale))}
 
 \CommentTok{# rename model data components and separate predictors}
-\NormalTok{names <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"predictor"}\NormalTok{, }\StringTok{"coefficient"}\NormalTok{, }\StringTok{"se"}\NormalTok{, }\StringTok{"ci_lower"}\NormalTok{, }
-           \StringTok{"ci_higher"}\NormalTok{, }\StringTok{"z_value"}\NormalTok{, }\StringTok{"p_value"}\NormalTok{)}
+\NormalTok{names <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}
+  \StringTok{"predictor"}\NormalTok{, }\StringTok{"coefficient"}\NormalTok{, }\StringTok{"se"}\NormalTok{, }\StringTok{"ci_lower"}\NormalTok{,}
+  \StringTok{"ci_higher"}\NormalTok{, }\StringTok{"z_value"}\NormalTok{, }\StringTok{"p_value"}
+\NormalTok{)}
 
 \CommentTok{# get data for plotting:}
 \NormalTok{model_est <-}\StringTok{ }\KeywordTok{map}\NormalTok{(model_est, }\ControlFlowTok{function}\NormalTok{(l) \{}
   \KeywordTok{map}\NormalTok{(l, }\ControlFlowTok{function}\NormalTok{(df) \{}
     \KeywordTok{colnames}\NormalTok{(df) <-}\StringTok{ }\NormalTok{names}
 \NormalTok{    df <-}\StringTok{ }\KeywordTok{separate_interaction_terms}\NormalTok{(df)}
-\NormalTok{    df <-}\StringTok{ }\KeywordTok{make_response_data}\NormalTok{(df) }
+\NormalTok{    df <-}\StringTok{ }\KeywordTok{make_response_data}\NormalTok{(df)}
     \KeywordTok{return}\NormalTok{(df)}
 \NormalTok{  \})}
 \NormalTok{\})}
@@ -2471,16 +2493,16 @@ For each species, we examined those models which had ΔAICc \textless{} 2, as th
 \CommentTok{# add names to model estimates}
 \KeywordTok{names}\NormalTok{(model_est) <-}\StringTok{ }\NormalTok{scales}
 \NormalTok{model_est <-}\StringTok{ }\KeywordTok{imap}\NormalTok{(model_est, }\ControlFlowTok{function}\NormalTok{(.x, .y) \{}
-  \KeywordTok{bind_rows}\NormalTok{(.x) }\OperatorTok{%>%}\StringTok{ }
+  \KeywordTok{bind_rows}\NormalTok{(.x) }\OperatorTok{%>%}
 \StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{scale =}\NormalTok{ .y)}
 \NormalTok{\})}
 
 \CommentTok{# remove modulators}
-\NormalTok{model_est <-}\StringTok{ }\KeywordTok{bind_rows}\NormalTok{(model_est) }\OperatorTok{%>%}\StringTok{ }
+\NormalTok{model_est <-}\StringTok{ }\KeywordTok{bind_rows}\NormalTok{(model_est) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\KeywordTok{matches}\NormalTok{(}\StringTok{"modulator"}\NormalTok{))}
 
 \CommentTok{# join data to species name}
-\NormalTok{model_data <-}\StringTok{ }\NormalTok{model_data }\OperatorTok{%>%}\StringTok{ }
+\NormalTok{model_data <-}\StringTok{ }\NormalTok{model_data }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{left_join}\NormalTok{(model_est)}
 
 \CommentTok{# Keep only those predictors whose p-values are significant:}
@@ -2494,14 +2516,17 @@ Export predictor effects.
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{# get predictor effect data}
-\NormalTok{data_predictor_effect <-}\StringTok{ }\KeywordTok{distinct}\NormalTok{(model_data, }
-\NormalTok{                                  scientific_name, }
-\NormalTok{                                  se,}
-\NormalTok{                                  predictor, coefficient)}
+\NormalTok{data_predictor_effect <-}\StringTok{ }\KeywordTok{distinct}\NormalTok{(}
+\NormalTok{  model_data,}
+\NormalTok{  scientific_name,}
+\NormalTok{  se,}
+\NormalTok{  predictor, coefficient}
+\NormalTok{)}
 
 \CommentTok{# write to file}
 \KeywordTok{write_csv}\NormalTok{(data_predictor_effect,}
-          \DataTypeTok{path =} \StringTok{"data/results/data_predictor_effect.csv"}\NormalTok{)}
+  \DataTypeTok{path =} \StringTok{"data/results/data_predictor_effect.csv"}
+\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2509,17 +2534,21 @@ Export model data.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-\NormalTok{model_data_to_file <-}\StringTok{ }\NormalTok{model_data }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{select}\NormalTok{(predictor, data,}
-\NormalTok{         scientific_name, scale) }\OperatorTok{%>%}\StringTok{ }
+\NormalTok{model_data_to_file <-}\StringTok{ }\NormalTok{model_data }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(}
+\NormalTok{    predictor, data,}
+\NormalTok{    scientific_name, scale}
+\NormalTok{  ) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{unnest}\NormalTok{(}\DataTypeTok{cols =} \StringTok{"data"}\NormalTok{)}
 
 \CommentTok{# remove .y}
-\NormalTok{model_data_to_file <-}\StringTok{ }\NormalTok{model_data_to_file }\OperatorTok{%>%}\StringTok{ }
+\NormalTok{model_data_to_file <-}\StringTok{ }\NormalTok{model_data_to_file }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{predictor =} \KeywordTok{str_remove}\NormalTok{(predictor, }\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.y"}\NormalTok{))}
 
-\KeywordTok{write_csv}\NormalTok{(model_data_to_file,}
-          \StringTok{"data/results/data_occupancy_predictors.csv"}\NormalTok{)}
+\KeywordTok{write_csv}\NormalTok{(}
+\NormalTok{  model_data_to_file,}
+  \StringTok{"data/results/data_occupancy_predictors.csv"}
+\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2538,7 +2567,7 @@ Fix predictor name.
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{# remove .y from predictors}
 \NormalTok{model_data <-}\StringTok{ }\NormalTok{model_data }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate_at}\NormalTok{(}\DataTypeTok{.vars =} \KeywordTok{c}\NormalTok{(}\StringTok{"predictor"}\NormalTok{), }\DataTypeTok{.funs =} \ControlFlowTok{function}\NormalTok{(x)\{}
+\StringTok{  }\KeywordTok{mutate_at}\NormalTok{(}\DataTypeTok{.vars =} \KeywordTok{c}\NormalTok{(}\StringTok{"predictor"}\NormalTok{), }\DataTypeTok{.funs =} \ControlFlowTok{function}\NormalTok{(x) \{}
 \NormalTok{    stringr}\OperatorTok{::}\KeywordTok{str_remove}\NormalTok{(x, }\StringTok{".y"}\NormalTok{)}
 \NormalTok{  \})}
 \end{Highlighting}
@@ -2550,29 +2579,37 @@ Fix predictor name.
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{# is the coeff positive? how many positive per scale per predictor per axis of split?}
-\NormalTok{data_predictor <-}\StringTok{ }\KeywordTok{mutate}\NormalTok{(model_data, }
-                                \DataTypeTok{direction =}\NormalTok{ coefficient }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{count}\NormalTok{(predictor, }
-\NormalTok{        direction) }\OperatorTok{%>%}\StringTok{ }
+\NormalTok{data_predictor <-}\StringTok{ }\KeywordTok{mutate}\NormalTok{(model_data,}
+  \DataTypeTok{direction =}\NormalTok{ coefficient }\OperatorTok{>}\StringTok{ }\DecValTok{0}
+\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{count}\NormalTok{(}
+\NormalTok{    predictor,}
+\NormalTok{    direction}
+\NormalTok{  ) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{mag =}\NormalTok{ n }\OperatorTok{*}\StringTok{ }\NormalTok{(}\KeywordTok{if_else}\NormalTok{(direction, }\DecValTok{1}\NormalTok{, }\DecValTok{-1}\NormalTok{)))}
 
 \CommentTok{# wrangle data to get nice bars}
-\NormalTok{data_predictor <-}\StringTok{ }\NormalTok{data_predictor}\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\NormalTok{n) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{drop_na}\NormalTok{(direction) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{direction =} \KeywordTok{ifelse}\NormalTok{(direction, }\StringTok{"positive"}\NormalTok{, }\StringTok{"negative"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{pivot_wider}\NormalTok{(}\DataTypeTok{values_from =} \StringTok{"mag"}\NormalTok{, }\DataTypeTok{names_from =} \StringTok{"direction"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{mutate_at}\NormalTok{(}\KeywordTok{vars}\NormalTok{(positive, negative),}
-            \OperatorTok{~}\KeywordTok{if_else}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(.), }\DecValTok{0}\NormalTok{, .))}
+\NormalTok{data_predictor <-}\StringTok{ }\NormalTok{data_predictor }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\NormalTok{n) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{drop_na}\NormalTok{(direction) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{direction =} \KeywordTok{ifelse}\NormalTok{(direction, }\StringTok{"positive"}\NormalTok{, }\StringTok{"negative"}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{pivot_wider}\NormalTok{(}\DataTypeTok{values_from =} \StringTok{"mag"}\NormalTok{, }\DataTypeTok{names_from =} \StringTok{"direction"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate_at}\NormalTok{(}
+    \KeywordTok{vars}\NormalTok{(positive, negative),}
+    \OperatorTok{~}\StringTok{ }\KeywordTok{if_else}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(.), }\DecValTok{0}\NormalTok{, .)}
+\NormalTok{  )}
 
-\NormalTok{data_predictor_long <-}\StringTok{ }\NormalTok{data_predictor }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{pivot_longer}\NormalTok{(}\DataTypeTok{cols =} \KeywordTok{c}\NormalTok{(}\StringTok{"negative"}\NormalTok{, }\StringTok{"positive"}\NormalTok{),}
-               \DataTypeTok{names_to =} \StringTok{"effect"}\NormalTok{,}
-               \DataTypeTok{values_to =} \StringTok{"magnitude"}\NormalTok{)}
+\NormalTok{data_predictor_long <-}\StringTok{ }\NormalTok{data_predictor }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{pivot_longer}\NormalTok{(}
+    \DataTypeTok{cols =} \KeywordTok{c}\NormalTok{(}\StringTok{"negative"}\NormalTok{, }\StringTok{"positive"}\NormalTok{),}
+    \DataTypeTok{names_to =} \StringTok{"effect"}\NormalTok{,}
+    \DataTypeTok{values_to =} \StringTok{"magnitude"}
+\NormalTok{  )}
 
 \CommentTok{# write}
 \KeywordTok{write_csv}\NormalTok{(data_predictor_long,}
-          \DataTypeTok{path =} \StringTok{"data/results/data_predictor_direction_nSpecies.csv"}\NormalTok{)}
+  \DataTypeTok{path =} \StringTok{"data/results/data_predictor_direction_nSpecies.csv"}
+\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
