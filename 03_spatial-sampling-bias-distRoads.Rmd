@@ -222,7 +222,7 @@ chkCovars %>%
 library(magrittr)
 readr::read_csv("data/results/distance_roads_sites.csv") %>%
   kableExtra::kbl(
-   booktabs = TRUE
+    booktabs = TRUE
   ) %>%
   kableExtra::kable_styling(latex_options = c("hold_position"))
 ```

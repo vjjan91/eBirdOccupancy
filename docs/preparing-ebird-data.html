@@ -253,7 +253,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb1-11" title="11">}</a>
 <a class="sourceLine" id="cb1-12" title="12"></a>
 <a class="sourceLine" id="cb1-13" title="13"><span class="co"># set file paths for auk functions</span></a>
-<a class="sourceLine" id="cb1-14" title="14"><span class="co"># To use these two datasets, please download the latest versions from https://ebird.org/data/download and set the file path accordingly. Since these two datasets are extremely large, we have not uploaded the same on github. </span></a>
+<a class="sourceLine" id="cb1-14" title="14"><span class="co"># To use these two datasets, please download the latest versions from https://ebird.org/data/download and set the file path accordingly. Since these two datasets are extremely large, we have not uploaded the same on github.</span></a>
 <a class="sourceLine" id="cb1-15" title="15"></a>
 <a class="sourceLine" id="cb1-16" title="16">f_in_ebd &lt;-<span class="st"> </span><span class="kw">file.path</span>(<span class="st">&quot;data/ebd_IN_relApr-2020.txt&quot;</span>)</a>
 <a class="sourceLine" id="cb1-17" title="17">f_in_sampling &lt;-<span class="st"> </span><span class="kw">file.path</span>(<span class="st">&quot;data/ebd_sampling_relApr-2020.txt&quot;</span>)</a></code></pre></div>
@@ -292,7 +292,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>eBird checklists only suggest whether a species was reported at a particular location. To arrive at absence data, we use a process known as zero-filling (Johnston et al., 2019), wherein a new dataframe is created with a 0 marked for each checklist when the bird was not observed.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="co"># fill zeroes</span></a>
 <a class="sourceLine" id="cb7-2" title="2">zf &lt;-<span class="st"> </span><span class="kw">auk_zerofill</span>(f_out_ebd, f_out_sampling)</a>
-<a class="sourceLine" id="cb7-3" title="3">new_zf &lt;-<span class="st"> </span><span class="kw">collapse_zerofill</span>(zf) </a></code></pre></div>
+<a class="sourceLine" id="cb7-3" title="3">new_zf &lt;-<span class="st"> </span><span class="kw">collapse_zerofill</span>(zf)</a></code></pre></div>
 <p>Let us now choose specific columns necessary for further analysis.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="co"># choose columns of interest</span></a>
 <a class="sourceLine" id="cb8-2" title="2">columnsOfInterest &lt;-<span class="st"> </span><span class="kw">c</span>(</a>
@@ -304,20 +304,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb8-8" title="8">  <span class="st">&quot;protocol_type&quot;</span>, <span class="st">&quot;duration_minutes&quot;</span>,</a>
 <a class="sourceLine" id="cb8-9" title="9">  <span class="st">&quot;effort_distance_km&quot;</span>, <span class="st">&quot;effort_area_ha&quot;</span>,</a>
 <a class="sourceLine" id="cb8-10" title="10">  <span class="st">&quot;number_observers&quot;</span>, <span class="st">&quot;species_observed&quot;</span>,</a>
-<a class="sourceLine" id="cb8-11" title="11">  <span class="st">&quot;reviewed&quot;</span>)</a>
-<a class="sourceLine" id="cb8-12" title="12"></a>
-<a class="sourceLine" id="cb8-13" title="13"><span class="co"># make list of presence and absence data and choose cols of interest</span></a>
-<a class="sourceLine" id="cb8-14" title="14">data &lt;-<span class="st"> </span><span class="kw">list</span>(ebd, new_zf) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-15" title="15"><span class="st">  </span><span class="kw">map</span>(<span class="cf">function</span>(x) {</a>
-<a class="sourceLine" id="cb8-16" title="16">    x <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">one_of</span>(columnsOfInterest))</a>
-<a class="sourceLine" id="cb8-17" title="17">  })</a>
-<a class="sourceLine" id="cb8-18" title="18"></a>
-<a class="sourceLine" id="cb8-19" title="19"><span class="co"># remove zerofills to save working memory</span></a>
-<a class="sourceLine" id="cb8-20" title="20"><span class="kw">rm</span>(zf, new_zf)</a>
-<a class="sourceLine" id="cb8-21" title="21"><span class="kw">gc</span>()</a>
-<a class="sourceLine" id="cb8-22" title="22"></a>
-<a class="sourceLine" id="cb8-23" title="23"><span class="co"># check for presences and absence in absences df, remove essentially the presences df which may lead to erroneous analysis</span></a>
-<a class="sourceLine" id="cb8-24" title="24">data[[<span class="dv">2</span>]] &lt;-<span class="st"> </span>data[[<span class="dv">2</span>]] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(species_observed <span class="op">==</span><span class="st"> </span>F)</a></code></pre></div>
+<a class="sourceLine" id="cb8-11" title="11">  <span class="st">&quot;reviewed&quot;</span></a>
+<a class="sourceLine" id="cb8-12" title="12">)</a>
+<a class="sourceLine" id="cb8-13" title="13"></a>
+<a class="sourceLine" id="cb8-14" title="14"><span class="co"># make list of presence and absence data and choose cols of interest</span></a>
+<a class="sourceLine" id="cb8-15" title="15">data &lt;-<span class="st"> </span><span class="kw">list</span>(ebd, new_zf) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-16" title="16"><span class="st">  </span><span class="kw">map</span>(<span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb8-17" title="17">    x <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">one_of</span>(columnsOfInterest))</a>
+<a class="sourceLine" id="cb8-18" title="18">  })</a>
+<a class="sourceLine" id="cb8-19" title="19"></a>
+<a class="sourceLine" id="cb8-20" title="20"><span class="co"># remove zerofills to save working memory</span></a>
+<a class="sourceLine" id="cb8-21" title="21"><span class="kw">rm</span>(zf, new_zf)</a>
+<a class="sourceLine" id="cb8-22" title="22"><span class="kw">gc</span>()</a>
+<a class="sourceLine" id="cb8-23" title="23"></a>
+<a class="sourceLine" id="cb8-24" title="24"><span class="co"># check for presences and absence in absences df, remove essentially the presences df which may lead to erroneous analysis</span></a>
+<a class="sourceLine" id="cb8-25" title="25">data[[<span class="dv">2</span>]] &lt;-<span class="st"> </span>data[[<span class="dv">2</span>]] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(species_observed <span class="op">==</span><span class="st"> </span>F)</a></code></pre></div>
 </div>
 <div id="spatial-filter" class="section level2">
 <h2><span class="header-section-number">2.4</span> Spatial filter</h2>
