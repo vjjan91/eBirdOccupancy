@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # style rmd
-Rscript --slave -e 'styler::style_dir(".")'
+Rscript --slave -e 'styler::style_dir(".",filetype = "Rmd")'
 
 # render books
 Rscript --slave -e 'bookdown::render_book("index.Rmd")'
