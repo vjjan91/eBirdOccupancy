@@ -7,7 +7,7 @@
 #' 
 #' In this section, we will visualize the cumulative AIC weights and the magnitude and direction of species-specific probability of occupancy. 
 #' 
-#' To get cumulative AIC weights, we first obtained a measure of relative importance of climatic and landscape predictors by calculating cumulative variable importance scores. These scores were calculated by obtaining the sum of model weights (AIC weights) across all models (including the top models) for each predictor across all species. We then calculated the mean cumulative variable importance score and a standard deviation for each predictor (K.P. Burnham & Anderson, 2002). 
+#' To get cumulative AIC weights, we first obtained a measure of relative importance of climatic and landscape predictors by calculating cumulative variable importance scores. These scores were calculated by obtaining the sum of model weights (AIC weights) across all models (including the top models) for each predictor across all species. We then calculated the mean cumulative variable importance score and a standard deviation for each predictor [@burnham2002a]. 
 #' 
 #' ## Prepare libraries
 #' 
@@ -186,7 +186,7 @@ ggsave(fig_aic,
 #' 
 #' ## Prepare model coefficient data
 #' 
-#' For each species, we examined those models which had ΔAICc < 2, as these top models were considered to explain a large proportion of the association between the species-specific probability of occupancy and environmental drivers (Kenneth P. Burnham et al., 2011; Elsen et al., 2017). Using these restricted model sets for each species; we created a model-averaged coefficient estimate for each predictor and assessed its direction and significance (Bartoń, 2009). We considered a predictor to be significantly associated with occupancy if the range of the 95% confidence interval around the model-averaged coefficient did not contain zero.  
+#' For each species, we examined those models which had ΔAICc < 2, as these top models were considered to explain a large proportion of the association between the species-specific probability of occupancy and environmental drivers [@burnham2011; @elsen2017]. Using these restricted model sets for each species; we created a model-averaged coefficient estimate for each predictor and assessed its direction and significance [@MuMIn]. We considered a predictor to be significantly associated with occupancy if the range of the 95% confidence interval around the model-averaged coefficient did not contain zero.  
 ## ----read_model_estimates-----------------------------------------------------
 file_read <- c("data/results/lc-clim-modelEst.xlsx")
 
