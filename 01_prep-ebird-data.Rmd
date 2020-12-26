@@ -7,7 +7,8 @@ editor_options:
 
 ## Prepare libraries and data sources
 
-Here, we will load the necessary libraries required for preparing the eBird data. Please download the latest versions of the eBird Basic Dataset (for India) and the eBird Sampling dataset from https://ebird.org/data/download  
+Here, we will load the necessary libraries required for preparing the eBird data. Please download the latest versions of the eBird Basic Dataset (for India) and the eBird Sampling dataset from https://ebird.org/data/download.
+
 ```{r load_libs,  message=FALSE, warning=FALSE}
 # load libraries
 library(tidyverse)
@@ -30,7 +31,8 @@ f_in_sampling <- file.path("data/ebd_sampling_relApr-2020.txt")
 
 ## Filter data
 
-Insert the list of species that we will be analyzing in this study. We initially chose those species that occurred in at least 5% of all checklists across 50% of the 25 x 25 km cells from where they have been reported, resulting in a total of 93 species. To arrive at this final list of species, we carried out further pre-processing which can be found in Section 2 of the Supplementary material. 
+Insert the list of species that we will be analyzing in this study. We initially chose those species that occurred in at least 5% of all checklists across 50% of the 25 x 25 km cells from where they have been reported, resulting in a total of 93 species. To arrive at this final list of species, we carried out further pre-processing which can be found in Section 2 of the Supplementary material.
+
 ```{r soi,  message=FALSE, warning=FALSE}
 # add species of interest
 specieslist <- read.csv("data/species_list.csv")
@@ -38,7 +40,8 @@ speciesOfInterest <- as.character(specieslist$scientific_name)
 ```
 
 
-Here, we set broad spatial filters for the states of Kerala, Tamil Nadu and Karnataka and keep only those checklists for our list of species that were reported between 1st Jan 2013 and 31st Dec 2019. 
+Here, we set broad spatial filters for the states of Kerala, Tamil Nadu and Karnataka and keep only those checklists for our list of species that were reported between 1st Jan 2013 and 31st Dec 2019.
+
 ```{r prep_ebd_filters}
 # run filters using auk packages
 ebd_filters <- auk_ebd(f_in_ebd, f_in_sampling) %>%
@@ -75,7 +78,7 @@ The data has been filtered above using the auk functions. We will now work with 
 ebd <- read_ebd(f_out_ebd)
 ```
 
-eBird checklists only suggest whether a species was reported at a particular location. To arrive at absence data, we use a process known as zero-filling (Johnston et al., 2019), wherein a new dataframe is created with a 0 marked for each checklist when the bird was not observed. 
+eBird checklists only suggest whether a species was reported at a particular location. To arrive at absence data, we use a process known as zero-filling [@johnston2019a], wherein a new dataframe is created with a 0 marked for each checklist when the bird was not observed. 
 ```{r fill_zeroes}
 # fill zeroes
 zf <- auk_zerofill(f_out_ebd, f_out_sampling)
@@ -157,7 +160,7 @@ save(data, file = "data/01_data_temp.rdata")
 
 ## Handle presence data
 
-Further pre-processing is required in the case of many checklists where species abundance is often unknown and an 'X' is denoted in such cases. Here, we convert all 'X' notations to a 1, suggesting a presence (as we are not concerned with abundance data in this analysis). We also removed those checklists where the duration in minutes is either not recorded or listed as zero. Lastly, we added an sampling effort based filter following Johnston et al., 2019, wherein we considered only those checklists with duration in minutes is less than 300 and distance in kilometres traveled is less than 5km. Lastly, we excluded those group checklists where the number of observers was greater than 10. 
+Further pre-processing is required in the case of many checklists where species abundance is often unknown and an 'X' is denoted in such cases. Here, we convert all 'X' notations to a 1, suggesting a presence (as we are not concerned with abundance data in this analysis). We also removed those checklists where the duration in minutes is either not recorded or listed as zero. Lastly, we added an sampling effort based filter following [@johnston2019a], wherein we considered only those checklists with duration in minutes is less than 300 and distance in kilometres traveled is less than 5km. Lastly, we excluded those group checklists where the number of observers was greater than 10. 
 ```{r proc_presence_data}
 # in the first set, replace X, for presences, with 1
 data[[1]] <- data[[1]] %>%
