@@ -11,7 +11,7 @@ To get cumulative AIC weights, we first obtained a measure of relative importanc
 
 ## Prepare libraries
 
-```{r load_libs_results01, eval=FALSE}
+```{r load_libs_results01}
 # to load data
 library(readxl)
 
@@ -40,7 +40,7 @@ source("code/fun_plot_interaction.r")
 
 ## Load species list
 
-```{r eval=FALSE}
+```{r }
 # list of species
 species <- read_csv("data/species_list.csv")
 list_of_species <- as.character(species$scientific_name)
@@ -170,7 +170,7 @@ ggsave(fig_aic,
 ## Prepare model coefficient data
 
 For each species, we examined those models which had ΔAICc < 2, as these top models were considered to explain a large proportion of the association between the species-specific probability of occupancy and environmental drivers (Kenneth P. Burnham et al., 2011; Elsen et al., 2017). Using these restricted model sets for each species; we created a model-averaged coefficient estimate for each predictor and assessed its direction and significance (Bartoń, 2009). We considered a predictor to be significantly associated with occupancy if the range of the 95% confidence interval around the model-averaged coefficient did not contain zero.  
-```{r read_model_estimates, eval=FALSE}
+```{r read_model_estimates}
 file_read <- c("data/results/lc-clim-modelEst.xlsx")
 
 # read data as list column
