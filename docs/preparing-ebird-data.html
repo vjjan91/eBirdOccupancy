@@ -218,6 +218,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.5" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#get-predictor-effects"><i class="fa fa-check"></i><b>8.5</b> Get predictor effects</a></li>
 <li class="chapter" data-level="8.6" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#main-text-figure-4"><i class="fa fa-check"></i><b>8.6</b> Main Text Figure 4</a></li>
 </ul></li>
+<li class="chapter" data-level="9" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>9</b> References</a></li>
 </ul>
 
       </nav>
@@ -239,7 +240,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Section 2</span> Preparing eBird Data</h1>
 <div id="prepare-libraries-and-data-sources" class="section level2">
 <h2><span class="header-section-number">2.1</span> Prepare libraries and data sources</h2>
-<p>Here, we will load the necessary libraries required for preparing the eBird data. Please download the latest versions of the eBird Basic Dataset (for India) and the eBird Sampling dataset from <a href="https://ebird.org/data/download" class="uri">https://ebird.org/data/download</a></p>
+<p>Here, we will load the necessary libraries required for preparing the eBird data. Please download the latest versions of the eBird Basic Dataset (for India) and the eBird Sampling dataset from <a href="https://ebird.org/data/download" class="uri">https://ebird.org/data/download</a>.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># load libraries</span></a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(tidyverse)</a>
 <a class="sourceLine" id="cb1-3" title="3"><span class="kw">library</span>(readr)</a>
@@ -289,7 +290,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The data has been filtered above using the auk functions. We will now work with the filtered checklist observations (Please note that we have not yet spatially filtered the checklists to the confines of our study area, which is the Nilgiris and the Anamalai hills. This step is carried out further on).</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="co"># read in the data</span></a>
 <a class="sourceLine" id="cb6-2" title="2">ebd &lt;-<span class="st"> </span><span class="kw">read_ebd</span>(f_out_ebd)</a></code></pre></div>
-<p>eBird checklists only suggest whether a species was reported at a particular location. To arrive at absence data, we use a process known as zero-filling (Johnston et al., 2019), wherein a new dataframe is created with a 0 marked for each checklist when the bird was not observed.</p>
+<p>eBird checklists only suggest whether a species was reported at a particular location. To arrive at absence data, we use a process known as zero-filling <span class="citation">(Johnston et al. <a href="#ref-johnston2019a">2019</a>)</span>, wherein a new dataframe is created with a 0 marked for each checklist when the bird was not observed.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="co"># fill zeroes</span></a>
 <a class="sourceLine" id="cb7-2" title="2">zf &lt;-<span class="st"> </span><span class="kw">auk_zerofill</span>(f_out_ebd, f_out_sampling)</a>
 <a class="sourceLine" id="cb7-3" title="3">new_zf &lt;-<span class="st"> </span><span class="kw">collapse_zerofill</span>(zf)</a></code></pre></div>
@@ -361,7 +362,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="handle-presence-data" class="section level2">
 <h2><span class="header-section-number">2.5</span> Handle presence data</h2>
-<p>Further pre-processing is required in the case of many checklists where species abundance is often unknown and an ‘X’ is denoted in such cases. Here, we convert all ‘X’ notations to a 1, suggesting a presence (as we are not concerned with abundance data in this analysis). We also removed those checklists where the duration in minutes is either not recorded or listed as zero. Lastly, we added an sampling effort based filter following Johnston et al., 2019, wherein we considered only those checklists with duration in minutes is less than 300 and distance in kilometres traveled is less than 5km. Lastly, we excluded those group checklists where the number of observers was greater than 10.</p>
+<p>Further pre-processing is required in the case of many checklists where species abundance is often unknown and an ‘X’ is denoted in such cases. Here, we convert all ‘X’ notations to a 1, suggesting a presence (as we are not concerned with abundance data in this analysis). We also removed those checklists where the duration in minutes is either not recorded or listed as zero. Lastly, we added an sampling effort based filter following <span class="citation">(Johnston et al. <a href="#ref-johnston2019a">2019</a>)</span>, wherein we considered only those checklists with duration in minutes is less than 300 and distance in kilometres traveled is less than 5km. Lastly, we excluded those group checklists where the number of observers was greater than 10.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="co"># in the first set, replace X, for presences, with 1</span></a>
 <a class="sourceLine" id="cb11-2" title="2">data[[<span class="dv">1</span>]] &lt;-<span class="st"> </span>data[[<span class="dv">1</span>]] <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb11-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">observation_count =</span> <span class="kw">ifelse</span>(observation_count <span class="op">==</span><span class="st"> &quot;X&quot;</span>,</a>
@@ -439,6 +440,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </div>
 </div>
+<h3> References</h3>
+<div id="refs" class="references">
+<div id="ref-johnston2019a">
+<p>Johnston, A, Wm Hochachka, Me Strimas-Mackey, V Ruiz Gutierrez, Oj Robinson, Et Miller, T Auer, St Kelling, and D Fink. 2019. “Analytical Guidelines to Increase the Value of Citizen Science Data: Using eBird Data to Estimate Species Occurrence.” Preprint. Ecology. <a href="https://doi.org/10.1101/574392">https://doi.org/10.1101/574392</a>.</p>
+</div>
+</div>
             </section>
 
           </div>
@@ -486,6 +493,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

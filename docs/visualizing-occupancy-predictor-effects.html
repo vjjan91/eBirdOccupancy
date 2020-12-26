@@ -36,7 +36,7 @@
   
   
 <link rel="prev" href="modelling-species-occupancy.html"/>
-
+<link rel="next" href="references.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -218,6 +218,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.5" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#get-predictor-effects"><i class="fa fa-check"></i><b>8.5</b> Get predictor effects</a></li>
 <li class="chapter" data-level="8.6" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#main-text-figure-4"><i class="fa fa-check"></i><b>8.6</b> Main Text Figure 4</a></li>
 </ul></li>
+<li class="chapter" data-level="9" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>9</b> References</a></li>
 </ul>
 
       </nav>
@@ -238,7 +239,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="visualizing-occupancy-predictor-effects" class="section level1">
 <h1><span class="header-section-number">Section 8</span> Visualizing Occupancy Predictor Effects</h1>
 <p>In this section, we will visualize the cumulative AIC weights and the magnitude and direction of species-specific probability of occupancy.</p>
-<p>To get cumulative AIC weights, we first obtained a measure of relative importance of climatic and landscape predictors by calculating cumulative variable importance scores. These scores were calculated by obtaining the sum of model weights (AIC weights) across all models (including the top models) for each predictor across all species. We then calculated the mean cumulative variable importance score and a standard deviation for each predictor (K.P. Burnham &amp; Anderson, 2002).</p>
+<p>To get cumulative AIC weights, we first obtained a measure of relative importance of climatic and landscape predictors by calculating cumulative variable importance scores. These scores were calculated by obtaining the sum of model weights (AIC weights) across all models (including the top models) for each predictor across all species. We then calculated the mean cumulative variable importance score and a standard deviation for each predictor <span class="citation">(Burnham and Anderson <a href="#ref-burnham2002a">2002</a>)</span>.</p>
 <div id="prepare-libraries-3" class="section level2">
 <h2><span class="header-section-number">8.1</span> Prepare libraries</h2>
 <div class="sourceCode" id="cb62"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1"><span class="co"># to load data</span></a>
@@ -400,7 +401,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="prepare-model-coefficient-data" class="section level2">
 <h2><span class="header-section-number">8.4</span> Prepare model coefficient data</h2>
-<p>For each species, we examined those models which had ΔAICc &lt; 2, as these top models were considered to explain a large proportion of the association between the species-specific probability of occupancy and environmental drivers (Kenneth P. Burnham et al., 2011; Elsen et al., 2017). Using these restricted model sets for each species; we created a model-averaged coefficient estimate for each predictor and assessed its direction and significance (Bartoń, 2009). We considered a predictor to be significantly associated with occupancy if the range of the 95% confidence interval around the model-averaged coefficient did not contain zero.</p>
+<p>For each species, we examined those models which had ΔAICc &lt; 2, as these top models were considered to explain a large proportion of the association between the species-specific probability of occupancy and environmental drivers <span class="citation">(Burnham, Anderson, and Huyvaert <a href="#ref-burnham2011">2011</a>; Elsen et al. <a href="#ref-elsen2017">2017</a>)</span>. Using these restricted model sets for each species; we created a model-averaged coefficient estimate for each predictor and assessed its direction and significance <span class="citation">(Bartoń <a href="#ref-MuMIn">2020</a>)</span>. We considered a predictor to be significantly associated with occupancy if the range of the 95% confidence interval around the model-averaged coefficient did not contain zero.</p>
 <div class="sourceCode" id="cb69"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" title="1">file_read &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;data/results/lc-clim-modelEst.xlsx&quot;</span>)</a>
 <a class="sourceLine" id="cb69-2" title="2"></a>
 <a class="sourceLine" id="cb69-3" title="3"><span class="co"># read data as list column</span></a>
@@ -547,6 +548,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p class="caption">(a) Cumulative AIC weights suggest that climatic predictors have higher relative importance when compared to landscape predictors. (b) The direction of association between species-specific probability of occupancy and climatic and landscape is shown here. While climatic predictors were both positively and negatively associated with the probability of occupancy for a number of species, human-associated land cover types were largely negatively associated with species-specific probability of occupancy.</p>
 </div>
 
+
+</div>
+</div>
+<h3> References</h3>
+<div id="refs" class="references">
+<div id="ref-MuMIn">
+<p>Bartoń, Kamil. 2020. <em>MuMIn: Multi-Model Inference</em>. Manual.</p>
+</div>
+<div id="ref-burnham2002a">
+<p>Burnham, Kenneth P., and David R. Anderson. 2002. <em>Model Selection and Multimodel Inference: A Practical Information-Theoretic Approach</em>. Second. New York: Springer-Verlag. <a href="https://doi.org/10.1007/b97636">https://doi.org/10.1007/b97636</a>.</p>
+</div>
+<div id="ref-burnham2011">
+<p>Burnham, Kenneth P., David R. Anderson, and Kathryn P. Huyvaert. 2011. “AIC Model Selection and Multimodel Inference in Behavioral Ecology: Some Background, Observations, and Comparisons.” <em>Behavioral Ecology and Sociobiology</em> 65 (1): 23–35. <a href="https://doi.org/10.1007/s00265-010-1029-6">https://doi.org/10.1007/s00265-010-1029-6</a>.</p>
+</div>
+<div id="ref-elsen2017">
+<p>Elsen, Paul R., Morgan W. Tingley, Ramnarayan Kalyanaraman, Krishnamurthy Ramesh, and David S. Wilcove. 2017. “The Role of Competition, Ecotones, and Temperature in the Elevational Distribution of Himalayan Birds.” <em>Ecology</em> 98 (2): 337–48. <a href="https://doi.org/10.1002/ecy.1669">https://doi.org/10.1002/ecy.1669</a>.</p>
 </div>
 </div>
             </section>
@@ -554,8 +571,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="modelling-species-occupancy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="modelling-species-occupancy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -596,6 +613,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>
