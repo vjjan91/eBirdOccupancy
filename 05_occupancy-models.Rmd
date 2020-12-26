@@ -34,7 +34,7 @@ source("code/fun_model_estimate_collection.r")
 
 Here, we load the required dataframe that contains 10 random visits to a site and environmental covariates that were prepared at a spatial scale of 2.5 sq.km. We also scaled all covariates (mean around 0 and standard deviation of 1). Next, we ensured that only Traveling and Stationary checklists were considered. Even though stationary counts have no distance traveled, we defaulted all stationary accounts to an effective distance of 100m, which we consider the average maximum detection radius for most bird species in our area. Following this, we excluded predictors with a Pearson coefficient >0.5 which resulted in the removal of grasslands as it was highly negatively correlated with forests (r =-0.77).  
 
-Please note that species-specific plots of probabilities of occupancy as a function of environmental data can be accessed in Section 8 of the Supplementary Material. 
+Please note that species-specific plots of probabilities of occupancy as a function of environmental data can be accessed in Section 10 of the Supplementary Material. 
 ```{r load_dataframe, eval=FALSE}
 # Load in the prepared dataframe that contains 10 random visits to each site
 dat <- fread("data/04_data-covars-2.5km.csv", header = T)
