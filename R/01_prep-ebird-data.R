@@ -22,7 +22,7 @@ sum.no.na <- function(x) {
 }
 
 # set file paths for auk functions
-# To use these two datasets, please download the latest versions from https://ebird.org/data/download and set the file path accordingly. Since these two datasets are extremely large, we have not uploaded the same on github. 
+# To use these two datasets, please download the latest versions from https://ebird.org/data/download and set the file path accordingly. Since these two datasets are extremely large, we have not uploaded the same on github.
 
 f_in_ebd <- file.path("data/ebd_IN_relApr-2020.txt")
 f_in_sampling <- file.path("data/ebd_sampling_relApr-2020.txt")
@@ -79,7 +79,7 @@ ebd <- read_ebd(f_out_ebd)
 ## ----fill_zeroes--------------------------------------------------------------
 # fill zeroes
 zf <- auk_zerofill(f_out_ebd, f_out_sampling)
-new_zf <- collapse_zerofill(zf) 
+new_zf <- collapse_zerofill(zf)
 
 #' 
 #' Let us now choose specific columns necessary for further analysis. 
@@ -94,7 +94,8 @@ columnsOfInterest <- c(
   "protocol_type", "duration_minutes",
   "effort_distance_km", "effort_area_ha",
   "number_observers", "species_observed",
-  "reviewed")
+  "reviewed"
+)
 
 # make list of presence and absence data and choose cols of interest
 data <- list(ebd, new_zf) %>%

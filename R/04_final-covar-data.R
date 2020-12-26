@@ -167,7 +167,7 @@ landscape_data <- stack(landscape_files)
 
 # get proper names
 elev_names <- c("elev", "slope", "aspect")
-chelsa_names <- c("bio1","bio12")
+chelsa_names <- c("bio1", "bio12")
 
 names(landscape_data) <- as.character(glue('{c(elev_names, chelsa_names, "landcover")}'))
 
