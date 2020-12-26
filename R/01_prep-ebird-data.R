@@ -1,207 +1,240 @@
-## ----load_libs, eval=FALSE, message=FALSE, warning=FALSE----------------------
-## # load libraries
-## library(tidyverse)
-## library(readr)
-## library(sf)
-## library(auk)
-## library(readxl)
-## 
-## # custom sum function
-## sum.no.na <- function(x) {
-##   sum(x, na.rm = T)
-## }
-## 
-## # set file paths for auk functions
-## # To use these two datasets, please download the latest versions from https://ebird.org/data/download and set the file path accordingly. Since these two datasets are extremely large, we have not uploaded the same on github.
-## 
-## f_in_ebd <- file.path("data/ebd_IN_relApr-2020.txt")
-## f_in_sampling <- file.path("data/ebd_sampling_relApr-2020.txt")
+#' ---
+#' editor_options: 
+#'   chunk_output_type: console
+#' ---
+#' 
+#' # Preparing eBird Data
+#' 
+#' ## Prepare libraries and data sources
+#' 
+#' Here, we will load the necessary libraries required for preparing the eBird data. Please download the latest versions of the eBird Basic Dataset (for India) and the eBird Sampling dataset from https://ebird.org/data/download  
+## ----load_libs,  message=FALSE, warning=FALSE---------------------------------
+# load libraries
+library(tidyverse)
+library(readr)
+library(sf)
+library(auk)
+library(readxl)
 
+# custom sum function
+sum.no.na <- function(x) {
+  sum(x, na.rm = T)
+}
 
-## ----soi, eval=FALSE, message=FALSE, warning=FALSE----------------------------
-## # add species of interest
-## specieslist <- read.csv("data/species_list.csv")
-## speciesOfInterest <- as.character(specieslist$scientific_name)
+# set file paths for auk functions
+# To use these two datasets, please download the latest versions from https://ebird.org/data/download and set the file path accordingly. Since these two datasets are extremely large, we have not uploaded the same on github. 
 
+f_in_ebd <- file.path("data/ebd_IN_relApr-2020.txt")
+f_in_sampling <- file.path("data/ebd_sampling_relApr-2020.txt")
 
-## ----prep_ebd_filters, eval=FALSE---------------------------------------------
-## # run filters using auk packages
-## ebd_filters <- auk_ebd(f_in_ebd, f_in_sampling) %>%
-##   auk_species(speciesOfInterest) %>%
-##   auk_country(country = "IN") %>%
-##   auk_state(c("IN-KL", "IN-TN", "IN-KA")) %>% # Restricting geography to TamilNadu, Kerala & Karnataka
-##   auk_date(c("2013-01-01", "2019-12-31")) %>%
-##   auk_complete()
-## 
-## # check filters
-## ebd_filters
+#' 
+#' ## Filter data
+#' 
+#' Insert the list of species that we will be analyzing in this study. We initially chose those species that occurred in at least 5% of all checklists across 50% of the 25 x 25 km cells from where they have been reported, resulting in a total of 93 species. To arrive at this final list of species, we carried out further pre-processing which can be found in Section 2 of the Supplementary material. 
+## ----soi,  message=FALSE, warning=FALSE---------------------------------------
+# add species of interest
+specieslist <- read.csv("data/species_list.csv")
+speciesOfInterest <- as.character(specieslist$scientific_name)
 
+#' 
+#' 
+#' Here, we set broad spatial filters for the states of Kerala, Tamil Nadu and Karnataka and keep only those checklists for our list of species that were reported between 1st Jan 2013 and 31st Dec 2019. 
+## ----prep_ebd_filters---------------------------------------------------------
+# run filters using auk packages
+ebd_filters <- auk_ebd(f_in_ebd, f_in_sampling) %>%
+  auk_species(speciesOfInterest) %>%
+  auk_country(country = "IN") %>%
+  auk_state(c("IN-KL", "IN-TN", "IN-KA")) %>% # Restricting geography to TamilNadu, Kerala & Karnataka
+  auk_date(c("2013-01-01", "2019-12-31")) %>%
+  auk_complete()
 
-## ----output_loc, eval=FALSE---------------------------------------------------
-## # specify output location and perform filter
-## f_out_ebd <- "data/01_ebird-filtered-EBD-westernGhats.txt"
-## f_out_sampling <- "data/01_ebird-filtered-sampling-westernGhats.txt"
+# check filters
+ebd_filters
 
+#' 
+#' Below code need not be run if it has been filtered once already and the above path leads to the right dataset. NB: This is a computation heavy process, run with caution.
+#' 
+## ----output_loc---------------------------------------------------------------
+# specify output location and perform filter
+f_out_ebd <- "data/01_ebird-filtered-EBD-westernGhats.txt"
+f_out_sampling <- "data/01_ebird-filtered-sampling-westernGhats.txt"
 
-## ----filter_data, eval=FALSE--------------------------------------------------
-## ebd_filtered <- auk_filter(ebd_filters,
-##   file = f_out_ebd,
-##   file_sampling = f_out_sampling, overwrite = TRUE
-## )
+#' 
+## ----filter_data--------------------------------------------------------------
+ebd_filtered <- auk_filter(ebd_filters,
+  file = f_out_ebd,
+  file_sampling = f_out_sampling, overwrite = TRUE
+)
 
+#' 
+#' ## Process filtered data
+#' 
+#' The data has been filtered above using the auk functions. We will now work with the filtered checklist observations (Please note that we have not yet spatially filtered the checklists to the confines of our study area, which is the Nilgiris and the Anamalai hills. This step is carried out further on).
+## ----read_data----------------------------------------------------------------
+# read in the data
+ebd <- read_ebd(f_out_ebd)
 
-## ----read_data, eval=FALSE----------------------------------------------------
-## # read in the data
-## ebd <- read_ebd(f_out_ebd)
+#' 
+#' eBird checklists only suggest whether a species was reported at a particular location. To arrive at absence data, we use a process known as zero-filling (Johnston et al., 2019), wherein a new dataframe is created with a 0 marked for each checklist when the bird was not observed. 
+## ----fill_zeroes--------------------------------------------------------------
+# fill zeroes
+zf <- auk_zerofill(f_out_ebd, f_out_sampling)
+new_zf <- collapse_zerofill(zf) 
 
+#' 
+#' Let us now choose specific columns necessary for further analysis. 
+## ----choose_cols--------------------------------------------------------------
+# choose columns of interest
+columnsOfInterest <- c(
+  "checklist_id", "scientific_name", "common_name",
+  "observation_count", "locality", "locality_id",
+  "locality_type", "latitude", "longitude",
+  "observation_date", "time_observations_started",
+  "observer_id", "sampling_event_identifier",
+  "protocol_type", "duration_minutes",
+  "effort_distance_km", "effort_area_ha",
+  "number_observers", "species_observed",
+  "reviewed")
 
-## ----fill_zeroes, eval=FALSE--------------------------------------------------
-## # fill zeroes
-## zf <- auk_zerofill(f_out_ebd, f_out_sampling)
-## new_zf <- collapse_zerofill(zf)
+# make list of presence and absence data and choose cols of interest
+data <- list(ebd, new_zf) %>%
+  map(function(x) {
+    x %>% select(one_of(columnsOfInterest))
+  })
 
+# remove zerofills to save working memory
+rm(zf, new_zf)
+gc()
 
-## ----choose_cols, eval=FALSE--------------------------------------------------
-## # choose columns of interest
-## columnsOfInterest <- c(
-##   "checklist_id", "scientific_name", "common_name",
-##   "observation_count", "locality", "locality_id",
-##   "locality_type", "latitude", "longitude",
-##   "observation_date", "time_observations_started",
-##   "observer_id", "sampling_event_identifier",
-##   "protocol_type", "duration_minutes",
-##   "effort_distance_km", "effort_area_ha",
-##   "number_observers", "species_observed",
-##   "reviewed")
-## 
-## # make list of presence and absence data and choose cols of interest
-## data <- list(ebd, new_zf) %>%
-##   map(function(x) {
-##     x %>% select(one_of(columnsOfInterest))
-##   })
-## 
-## # remove zerofills to save working memory
-## rm(zf, new_zf)
-## gc()
-## 
-## # check for presences and absence in absences df, remove essentially the presences df which may lead to erroneous analysis
-## data[[2]] <- data[[2]] %>% filter(species_observed == F)
+# check for presences and absence in absences df, remove essentially the presences df which may lead to erroneous analysis
+data[[2]] <- data[[2]] %>% filter(species_observed == F)
 
+#' 
+#' ## Spatial filter
+#' 
+#' A spatial filter is now supplied to further restrict our list of observations to the confines of the Nilgiris and the Anamalai hills of the Western Ghats biodiversity hotspot.
+## ----spatial_filters----------------------------------------------------------
+# load shapefile of the study area
+library(sf)
+hills <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp")
 
-## ----spatial_filters, eval=FALSE----------------------------------------------
-## # load shapefile of the study area
-## library(sf)
-## hills <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp")
-## 
-## # write a prelim filter by bounding box
-## box <- st_bbox(hills)
-## 
-## # get data spatial coordinates
-## dataLocs <- data %>%
-##   map(function(x) {
-##     select(x, longitude, latitude) %>%
-##       filter(between(longitude, box["xmin"], box["xmax"]) &
-##         between(latitude, box["ymin"], box["ymax"]))
-##   }) %>%
-##   bind_rows() %>%
-##   distinct() %>%
-##   st_as_sf(coords = c("longitude", "latitude")) %>%
-##   st_set_crs(4326) %>%
-##   st_intersection(hills)
-## 
-## # get simplified data and drop geometry
-## dataLocs <- mutate(dataLocs, spatialKeep = T) %>%
-##   bind_cols(., as_tibble(st_coordinates(dataLocs))) %>%
-##   st_drop_geometry()
-## 
-## # bind to data and then filter
-## data <- data %>%
-##   map(function(x) {
-##     left_join(x, dataLocs, by = c("longitude" = "X", "latitude" = "Y")) %>%
-##       filter(spatialKeep == T) %>%
-##       select(-Id, -spatialKeep)
-##   })
+# write a prelim filter by bounding box
+box <- st_bbox(hills)
 
+# get data spatial coordinates
+dataLocs <- data %>%
+  map(function(x) {
+    select(x, longitude, latitude) %>%
+      filter(between(longitude, box["xmin"], box["xmax"]) &
+        between(latitude, box["ymin"], box["ymax"]))
+  }) %>%
+  bind_rows() %>%
+  distinct() %>%
+  st_as_sf(coords = c("longitude", "latitude")) %>%
+  st_set_crs(4326) %>%
+  st_intersection(hills)
 
-## ----save_temp_data, eval=FALSE-----------------------------------------------
-## # save a temp data file
-## save(data, file = "data/01_data_temp.rdata")
+# get simplified data and drop geometry
+dataLocs <- mutate(dataLocs, spatialKeep = T) %>%
+  bind_cols(., as_tibble(st_coordinates(dataLocs))) %>%
+  st_drop_geometry()
 
+# bind to data and then filter
+data <- data %>%
+  map(function(x) {
+    left_join(x, dataLocs, by = c("longitude" = "X", "latitude" = "Y")) %>%
+      filter(spatialKeep == T) %>%
+      select(-Id, -spatialKeep)
+  })
 
-## ----proc_presence_data, eval=FALSE-------------------------------------------
-## # in the first set, replace X, for presences, with 1
-## data[[1]] <- data[[1]] %>%
-##   mutate(observation_count = ifelse(observation_count == "X",
-##     "1", observation_count
-##   ))
-## 
-## # remove records where duration is 0
-## data <- map(data, function(x) filter(x, duration_minutes > 0))
-## 
-## # group data by site and sampling event identifier
-## # then, summarise relevant variables as the sum
-## dataGrouped <- map(data, function(x) {
-##   x %>%
-##     group_by(sampling_event_identifier) %>%
-##     summarise_at(
-##       vars(
-##         duration_minutes, effort_distance_km,
-##         effort_area_ha
-##       ),
-##       list(sum.no.na)
-##     )
-## })
-## 
-## # bind rows combining data frames, and filter
-## dataGrouped <- bind_rows(dataGrouped) %>%
-##   filter(
-##     duration_minutes <= 300,
-##     effort_distance_km <= 5,
-##     effort_area_ha <= 500
-##   )
-## 
-## # get data identifiers, such as sampling identifier etc
-## dataConstants <- data %>%
-##   bind_rows() %>%
-##   select(
-##     sampling_event_identifier, time_observations_started,
-##     locality, locality_type, locality_id,
-##     observer_id, observation_date, scientific_name,
-##     observation_count, protocol_type, number_observers,
-##     longitude, latitude
-##   )
-## 
-## # join the summarised data with the identifiers,
-## # using sampling_event_identifier as the key
-## dataGrouped <- left_join(dataGrouped, dataConstants,
-##   by = "sampling_event_identifier"
-## )
-## 
-## # remove checklists or seis with more than 10 obervers
-## count(dataGrouped, number_observers > 10) # count how many have 10+ obs
-## dataGrouped <- filter(dataGrouped, number_observers <= 10)
+#' 
+#' Save temporary data created so far.
+## ----save_temp_data-----------------------------------------------------------
+# save a temp data file
+save(data, file = "data/01_data_temp.rdata")
 
+#' 
+#' ## Handle presence data
+#' 
+#' Further pre-processing is required in the case of many checklists where species abundance is often unknown and an 'X' is denoted in such cases. Here, we convert all 'X' notations to a 1, suggesting a presence (as we are not concerned with abundance data in this analysis). We also removed those checklists where the duration in minutes is either not recorded or listed as zero. Lastly, we added an sampling effort based filter following Johnston et al., 2019, wherein we considered only those checklists with duration in minutes is less than 300 and distance in kilometres traveled is less than 5km. Lastly, we excluded those group checklists where the number of observers was greater than 10. 
+## ----proc_presence_data-------------------------------------------------------
+# in the first set, replace X, for presences, with 1
+data[[1]] <- data[[1]] %>%
+  mutate(observation_count = ifelse(observation_count == "X",
+    "1", observation_count
+  ))
 
-## ----decimal_time, eval=FALSE-------------------------------------------------
-## # assign present or not, and get time in decimal hours since midnight
-## library(lubridate)
-## time_to_decimal <- function(x) {
-##   x <- hms(x, quiet = TRUE)
-##   hour(x) + minute(x) / 60 + second(x) / 3600
-## }
-## 
-## # will cause issues if using time obs started as a linear effect and not quadratic
-## dataGrouped <- mutate(dataGrouped,
-##   pres_abs = observation_count >= 1,
-##   decimalTime = time_to_decimal(time_observations_started)
-## )
-## 
-## # check class of dataGrouped, make sure not sf
-## assertthat::assert_that(!"sf" %in% class(dataGrouped))
+# remove records where duration is 0
+data <- map(data, function(x) filter(x, duration_minutes > 0))
 
+# group data by site and sampling event identifier
+# then, summarise relevant variables as the sum
+dataGrouped <- map(data, function(x) {
+  x %>%
+    group_by(sampling_event_identifier) %>%
+    summarise_at(
+      vars(
+        duration_minutes, effort_distance_km,
+        effort_area_ha
+      ),
+      list(sum.no.na)
+    )
+})
 
-## ----write_clean_data, eval=FALSE---------------------------------------------
-## 
-## # save a temp data file
-## save(dataGrouped, file = "data/01_data_prelim_processing.rdata")
+# bind rows combining data frames, and filter
+dataGrouped <- bind_rows(dataGrouped) %>%
+  filter(
+    duration_minutes <= 300,
+    effort_distance_km <= 5,
+    effort_area_ha <= 500
+  )
+
+# get data identifiers, such as sampling identifier etc
+dataConstants <- data %>%
+  bind_rows() %>%
+  select(
+    sampling_event_identifier, time_observations_started,
+    locality, locality_type, locality_id,
+    observer_id, observation_date, scientific_name,
+    observation_count, protocol_type, number_observers,
+    longitude, latitude
+  )
+
+# join the summarised data with the identifiers,
+# using sampling_event_identifier as the key
+dataGrouped <- left_join(dataGrouped, dataConstants,
+  by = "sampling_event_identifier"
+)
+
+# remove checklists or seis with more than 10 obervers
+count(dataGrouped, number_observers > 10) # count how many have 10+ obs
+dataGrouped <- filter(dataGrouped, number_observers <= 10)
+
+#' 
+#' ## Add decimal time
+#' 
+#' We added a column where time is denoted in decimal hours since midnight. 
+## ----decimal_time-------------------------------------------------------------
+# assign present or not, and get time in decimal hours since midnight
+library(lubridate)
+time_to_decimal <- function(x) {
+  x <- hms(x, quiet = TRUE)
+  hour(x) + minute(x) / 60 + second(x) / 3600
+}
+
+# will cause issues if using time obs started as a linear effect and not quadratic
+dataGrouped <- mutate(dataGrouped,
+  pres_abs = observation_count >= 1,
+  decimalTime = time_to_decimal(time_observations_started)
+)
+
+# check class of dataGrouped, make sure not sf
+assertthat::assert_that(!"sf" %in% class(dataGrouped))
+
+#' 
+#' The above data is saved to a file.
+## ----write_clean_data---------------------------------------------------------
+
+# save a temp data file
+save(dataGrouped, file = "data/01_data_prelim_processing.rdata")
 
