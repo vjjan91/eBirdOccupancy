@@ -17,9 +17,9 @@ output:
     toc-depth: 1
     secnumdepth: 2
     geometry: "left=4cm, right=3cm, top=2.5cm, bottom=2.5cm"
-# bibliography: [refs.bib]
-# biblio-style: apalike
-# link-citations: yes
+bibliography: [references_ebird.bib]
+biblio-style: apalike
+link-citations: yes
 github-repo: pratikunterwegs/eBirdOccupancy
 ---
 

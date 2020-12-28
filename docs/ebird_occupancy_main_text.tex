@@ -187,7 +187,7 @@ Figure prepared in QGIS 3.10.
 \hypertarget{prepare-libraries-and-data-sources}{%
 \subsection{Prepare libraries and data sources}\label{prepare-libraries-and-data-sources}}
 
-Here, we will load the necessary libraries required for preparing the eBird data. Please download the latest versions of the eBird Basic Dataset (for India) and the eBird Sampling dataset from \url{https://ebird.org/data/download}
+Here, we will load the necessary libraries required for preparing the eBird data. Please download the latest versions of the eBird Basic Dataset (for India) and the eBird Sampling dataset from \url{https://ebird.org/data/download}.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -272,7 +272,7 @@ The data has been filtered above using the auk functions. We will now work with 
 \end{Highlighting}
 \end{Shaded}
 
-eBird checklists only suggest whether a species was reported at a particular location. To arrive at absence data, we use a process known as zero-filling (Johnston et al., 2019), wherein a new dataframe is created with a 0 marked for each checklist when the bird was not observed.
+eBird checklists only suggest whether a species was reported at a particular location. To arrive at absence data, we use a process known as zero-filling (Johnston et al. \protect\hyperlink{ref-johnston2019a}{2019}), wherein a new dataframe is created with a 0 marked for each checklist when the bird was not observed.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -368,7 +368,7 @@ Save temporary data created so far.
 \hypertarget{handle-presence-data}{%
 \subsection{Handle presence data}\label{handle-presence-data}}
 
-Further pre-processing is required in the case of many checklists where species abundance is often unknown and an `X' is denoted in such cases. Here, we convert all `X' notations to a 1, suggesting a presence (as we are not concerned with abundance data in this analysis). We also removed those checklists where the duration in minutes is either not recorded or listed as zero. Lastly, we added an sampling effort based filter following Johnston et al., 2019, wherein we considered only those checklists with duration in minutes is less than 300 and distance in kilometres traveled is less than 5km. Lastly, we excluded those group checklists where the number of observers was greater than 10.
+Further pre-processing is required in the case of many checklists where species abundance is often unknown and an `X' is denoted in such cases. Here, we convert all `X' notations to a 1, suggesting a presence (as we are not concerned with abundance data in this analysis). We also removed those checklists where the duration in minutes is either not recorded or listed as zero. Lastly, we added an sampling effort based filter following (Johnston et al. \protect\hyperlink{ref-johnston2019a}{2019}), wherein we considered only those checklists with duration in minutes is less than 300 and distance in kilometres traveled is less than 5km. Lastly, we excluded those group checklists where the number of observers was greater than 10.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -761,7 +761,7 @@ Figure code is hidden in versions rendered as HTML and PDF.
 \hypertarget{preparing-observer-expertise-scores}{%
 \section{Preparing Observer Expertise Scores}\label{preparing-observer-expertise-scores}}
 
-Differences in local avifaunal expertise among citizen scientists can lead to biased species detection when compared with data collected by a consistent set of trained observers (van Strien et al., 2013). Including observer expertise as a detection covariate in occupancy models using eBird data can help account for this variation (Johnston et al., 2018). Observer-specific expertise in local avifauna was calculated following (Kelling et al., 2015) as the normalized predicted number of species reported by an observer after 60 minutes of sampling across the most common land cover type within the study area. This score was calculated by examining checklists from anonymized observers across the study area. We modified (Kelling et al., 2015) formulation by including only observations of the 93 species of interest in our calculations. An observer with a higher number of species of interest reported within 60 minutes would have a higher observer-specific expertise score, with respect to the study area.
+Differences in local avifaunal expertise among citizen scientists can lead to biased species detection when compared with data collected by a consistent set of trained observers (van Strien, van Swaay, and Termaat \protect\hyperlink{ref-vanstrien2013}{2013}). Including observer expertise as a detection covariate in occupancy models using eBird data can help account for this variation (Johnston et al. \protect\hyperlink{ref-johnston2018}{2018}). Observer-specific expertise in local avifauna was calculated following (Kelling et al. \protect\hyperlink{ref-kelling2015a}{2015}) as the normalized predicted number of species reported by an observer after 60 minutes of sampling across the most common land cover type within the study area. This score was calculated by examining checklists from anonymized observers across the study area. We modified Kelling et al.~(2015) formulation by including only observations of the 93 species of interest in our calculations. An observer with a higher number of species of interest reported within 60 minutes would have a higher observer-specific expertise score, with respect to the study area.
 
 Plots with respect to how observer expertise varied over time (2013-2019) for the list of species considered in this study (across the study area alone) can be accessed in Section 7 of the Supplementary Material.
 
@@ -1389,7 +1389,7 @@ In this section, we prepare a final list of covariates, after taking into accoun
 \hypertarget{spatial-subsampling}{%
 \subsection{Spatial subsampling}\label{spatial-subsampling}}
 
-Sampling bias can be introduced into citizen science due to the often ad-hoc nature of data collection (Sullivan et al., 2014). For eBird, this translates into checklists reported when convenient, rather than at regular or random points in time and space, leading to non-independence in the data if observations are spatio-temporally clustered (Johnston et al., 2019). Spatio-temporal autocorrelation in the data can be reduced by sub-sampling at an appropriate spatial resolution, and by avoiding temporal clustering. We estimated two simple measures of spatial clustering: the distance from each site to the nearest road (road data from OpenStreetMap; (OpenStreetMap contributors, 2017), and the nearest-neighbor distance for each site. Sites were strongly tied to roads (mean distance to road ± SD = 390.77 ± 859.15 m; range = 0.28 m -- 7.64 km) and were on average only 297 m away from another site (SD = 553 m; range = 0.14 m -- 12.85 km) (Figure 3). This analysis was done in the previous section.
+Sampling bias can be introduced into citizen science due to the often ad-hoc nature of data collection (Sullivan et al. \protect\hyperlink{ref-sullivan2014}{2014}). For eBird, this translates into checklists reported when convenient, rather than at regular or random points in time and space, leading to non-independence in the data if observations are spatio-temporally clustered (Johnston et al. \protect\hyperlink{ref-johnston2019a}{2019}). Spatio-temporal autocorrelation in the data can be reduced by sub-sampling at an appropriate spatial resolution, and by avoiding temporal clustering. We estimated two simple measures of spatial clustering: the distance from each site to the nearest road (road data from OpenStreetMap; (OpenStreetMap contributors \protect\hyperlink{ref-OpenStreetMap}{2019})), and the nearest-neighbor distance for each site. Sites were strongly tied to roads (mean distance to road ± SD = 390.77 ± 859.15 m; range = 0.28 m -- 7.64 km) and were on average only 297 m away from another site (SD = 553 m; range = 0.14 m -- 12.85 km) (Figure 3). This analysis was done in the previous section.
 
 Here, to further reduce spatial autocorrelation, we divided the study area into a grid of 1km wide square cells and picked checklists from one site at random within each grid cell.
 
@@ -1550,7 +1550,7 @@ Reload climate and land cover predictors prepared previously.
 \hypertarget{spatial-buffers-around-selected-checklists}{%
 \subsection{Spatial buffers around selected checklists}\label{spatial-buffers-around-selected-checklists}}
 
-Every checklist on eBird is associated with a latitude and longitude. However, the coordinates entered by an observer may not accurately depict the location at which a species was detected. This can occur for two reasons: first, traveling checklists are often associated with a single location along the route travelled by observers; and second, checklist locations could be assigned to a `hotspot' -- a location that is marked by eBird as being frequented by multiple observers. In many cases, an observation might be assigned to a hotspot even though the observation was not made at the precise location of the hotspot (Praveen J, 2017). (Johnston et al., 2019) showed that a large proportion of observations occurred within a 3km grid, even for those checklists up to 5km in length. Hence to adjust for spatial precision, we considered a minimum radius of 2.5km around each unique locality when sampling environmental covariate values.
+Every checklist on eBird is associated with a latitude and longitude. However, the coordinates entered by an observer may not accurately depict the location at which a species was detected. This can occur for two reasons: first, traveling checklists are often associated with a single location along the route travelled by observers; and second, checklist locations could be assigned to a `hotspot' -- a location that is marked by eBird as being frequented by multiple observers. In many cases, an observation might be assigned to a hotspot even though the observation was not made at the precise location of the hotspot (J. \protect\hyperlink{ref-praveenj.2017}{2017}). Johnston et al., (2019) showed that a large proportion of observations occurred within a 3km grid, even for those checklists up to 5km in length. Hence to adjust for spatial precision, we considered a minimum radius of 2.5km around each unique locality when sampling environmental covariate values.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -1721,7 +1721,7 @@ Save data to file.
 \hypertarget{load-dataframe-and-scale-covariates}{%
 \subsection{Load dataframe and scale covariates}\label{load-dataframe-and-scale-covariates}}
 
-Here, we load the required dataframe that contains 10 random visits to a site and environmental covariates that were prepared at a spatial scale of 2.5 sq.km. We also scaled all covariates (mean around 0 and standard deviation of 1). Next, we ensured that only Traveling and Stationary checklists were considered. Even though stationary counts have no distance traveled, we defaulted all stationary accounts to an effective distance of 100m, which we consider the average maximum detection radius for most bird species in our area. Following this, we excluded predictors with a Pearson coefficient \textgreater{}0.5 which resulted in the removal of grasslands as it was highly negatively correlated with forests (r =-0.77).
+Here, we load the required dataframe that contains 10 random visits to a site and environmental covariates that were prepared at a spatial scale of 2.5 sq.km. We also scaled all covariates (mean around 0 and standard deviation of 1). Next, we ensured that only Traveling and Stationary checklists were considered. Even though stationary counts have no distance traveled, we defaulted all stationary accounts to an effective distance of 100m, which we consider the average maximum detection radius for most bird species in our area. Following this, we excluded predictors with a Pearson coefficient \textgreater{} 0.5 which resulted in the removal of grasslands as it was highly negatively correlated with forests (r = -0.77).
 
 Please note that species-specific plots of probabilities of occupancy as a function of environmental data can be accessed in Section 10 of the Supplementary Material.
 
@@ -1874,7 +1874,7 @@ Please note that species-specific plots of probabilities of occupancy as a funct
 \hypertarget{identifying-covariates-necessary-to-model-the-detection-process}{%
 \subsection{Identifying covariates necessary to model the detection process}\label{identifying-covariates-necessary-to-model-the-detection-process}}
 
-Here, we use the \texttt{unmarked} package in R (Fiske and Chandler 2019) to identify detection level covariates that are important for each species.
+Here, we use the \texttt{unmarked} package in R (Fiske and Chandler \protect\hyperlink{ref-fiske2011}{2011}) to identify detection level covariates that are important for each species. We use AIC criteria to select top models (Burnham, Anderson, and Huyvaert \protect\hyperlink{ref-burnham2011}{2011}).
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -2017,11 +2017,11 @@ Here, we use the \texttt{unmarked} package in R (Fiske and Chandler 2019) to ide
 \hypertarget{land-cover-and-climate}{%
 \subsection{Land Cover and Climate}\label{land-cover-and-climate}}
 
-Occupancy models estimate the probability of occurrence of a given species while controlling for the probability of detection and allow us to model the factors affecting occurrence and detection independently (Johnston et al., 2018; Mackenzie et al., 2018). The flexible eBird observation process contributes to the largest source of variation in the likelihood of detecting a particular species (Johnston et al., 2019); hence, we included seven covariates that influence the probability of detection for each checklist: ordinal day of year, duration of observation, distance travelled, protocol type, time observations started, number of observers and the checklist calibration index (CCI).
+Occupancy models estimate the probability of occurrence of a given species while controlling for the probability of detection and allow us to model the factors affecting occurrence and detection independently (Johnston et al. \protect\hyperlink{ref-johnston2018}{2018}; MacKenzie et al. \protect\hyperlink{ref-mackenzie2002}{2002}). The flexible eBird observation process contributes to the largest source of variation in the likelihood of detecting a particular species (Johnston et al. \protect\hyperlink{ref-johnston2019a}{2019}); hence, we included seven covariates that influence the probability of detection for each checklist: ordinal day of year, duration of observation, distance travelled, protocol type, time observations started, number of observers and the checklist calibration index (CCI).
 
-Using a multi-model information-theoretic approach, we tested how strongly our occurrence data fit our candidate set of environmental covariates (K.P. Burnham \& Anderson, 2002). We fitted single-species occupancy models for each species, to simultaneously estimate a probability of detection (p) and a probability of occupancy (Ѱ) (Fiske \& Chandler, 2011; Mackenzie et al., 2002). For each species, we fit 256 models, each with a unique combination of the eight (climate and land cover) occupancy covariates and all seven detection covariates (Appendix S5).
+Using a multi-model information-theoretic approach, we tested how strongly our occurrence data fit our candidate set of environmental covariates (Burnham and Anderson \protect\hyperlink{ref-burnham2002a}{2002}). We fitted single-species occupancy models for each species, to simultaneously estimate a probability of detection (p) and a probability of occupancy (\(\psi\)) (Fiske and Chandler \protect\hyperlink{ref-fiske2011}{2011}; MacKenzie et al. \protect\hyperlink{ref-mackenzie2002}{2002}). For each species, we fit 256 models, each with a unique combination of the eight (climate and land cover) occupancy covariates and all seven detection covariates (Appendix S5).
 
-Across the 256 models tested for each species, the model with highest support was determined using AICc scores. However, across the majority of the species, no single model had overwhelming support. Hence, for each species, we examined those models which had ΔAICc \textless{} 2, as these top models were considered to explain a large proportion of the association between the species-specific probability of occupancy and environmental drivers (Kenneth P. Burnham et al., 2011; Elsen et al., 2017). Using these restricted model sets for each species; we created a model-averaged coefficient estimate for each predictor and assessed its direction and significance (Bartoń, 2009). We considered a predictor to be significantly associated with occupancy if the range of the 95\% confidence interval around the model-averaged coefficient did not contain zero. Next, we obtained a measure of relative importance of climatic and landscape predictors by calculating cumulative variable importance scores. These scores were calculated by obtaining the sum of model weights (AIC weights) across all models (including the top models) for each predictor across all species.
+Across the 256 models tested for each species, the model with highest support was determined using AICc scores. However, across the majority of the species, no single model had overwhelming support. Hence, for each species, we examined those models which had \(\Delta\)AICc \textless{} 2, as these top models were considered to explain a large proportion of the association between the species-specific probability of occupancy and environmental drivers (Burnham, Anderson, and Huyvaert \protect\hyperlink{ref-burnham2011}{2011}; Elsen et al. \protect\hyperlink{ref-elsen2017}{2017}). Using these restricted model sets for each species; we created a model-averaged coefficient estimate for each predictor and assessed its direction and significance (Bartoń \protect\hyperlink{ref-MuMIn}{2020}). We considered a predictor to be significantly associated with occupancy if the range of the 95\% confidence interval around the model-averaged coefficient did not contain zero. Next, we obtained a measure of relative importance of climatic and landscape predictors by calculating cumulative variable importance scores. These scores were calculated by obtaining the sum of model weights (AIC weights) across all models (including the top models) for each predictor across all species.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -2243,7 +2243,7 @@ Adequate model fit was assessed using a chi-square goodness-of-fit test using 50
 
 In this section, we will visualize the cumulative AIC weights and the magnitude and direction of species-specific probability of occupancy.
 
-To get cumulative AIC weights, we first obtained a measure of relative importance of climatic and landscape predictors by calculating cumulative variable importance scores. These scores were calculated by obtaining the sum of model weights (AIC weights) across all models (including the top models) for each predictor across all species. We then calculated the mean cumulative variable importance score and a standard deviation for each predictor (K.P. Burnham \& Anderson, 2002).
+To get cumulative AIC weights, we first obtained a measure of relative importance of climatic and landscape predictors by calculating cumulative variable importance scores. These scores were calculated by obtaining the sum of model weights (AIC weights) across all models (including the top models) for each predictor across all species. We then calculated the mean cumulative variable importance score and a standard deviation for each predictor (Burnham and Anderson \protect\hyperlink{ref-burnham2002a}{2002}).
 
 \hypertarget{prepare-libraries-3}{%
 \subsection{Prepare libraries}\label{prepare-libraries-3}}
@@ -2444,7 +2444,7 @@ Prepare figure for cumulative AIC weight. Figure code is hidden in versions rend
 \hypertarget{prepare-model-coefficient-data}{%
 \subsection{Prepare model coefficient data}\label{prepare-model-coefficient-data}}
 
-For each species, we examined those models which had ΔAICc \textless{} 2, as these top models were considered to explain a large proportion of the association between the species-specific probability of occupancy and environmental drivers (Kenneth P. Burnham et al., 2011; Elsen et al., 2017). Using these restricted model sets for each species; we created a model-averaged coefficient estimate for each predictor and assessed its direction and significance (Bartoń, 2009). We considered a predictor to be significantly associated with occupancy if the range of the 95\% confidence interval around the model-averaged coefficient did not contain zero.
+For each species, we examined those models which had ΔAICc \textless{} 2, as these top models were considered to explain a large proportion of the association between the species-specific probability of occupancy and environmental drivers (Burnham, Anderson, and Huyvaert \protect\hyperlink{ref-burnham2011}{2011}; Elsen et al. \protect\hyperlink{ref-elsen2017}{2017}). Using these restricted model sets for each species; we created a model-averaged coefficient estimate for each predictor and assessed its direction and significance (Bartoń \protect\hyperlink{ref-MuMIn}{2020}). We considered a predictor to be significantly associated with occupancy if the range of the 95\% confidence interval around the model-averaged coefficient did not contain zero.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -2634,5 +2634,50 @@ Figure code is hidden in versions rendered as HTML and PDF.
 \includegraphics{figs/fig_04_aic_weight_effect.png}
 \caption{(a) Cumulative AIC weights suggest that climatic predictors have higher relative importance when compared to landscape predictors. (b) The direction of association between species-specific probability of occupancy and climatic and landscape is shown here. While climatic predictors were both positively and negatively associated with the probability of occupancy for a number of species, human-associated land cover types were largely negatively associated with species-specific probability of occupancy.}
 \end{figure}
+
+\clearpage
+
+\hypertarget{references}{%
+\section{References}\label{references}}
+
+\hypertarget{refs}{}
+\leavevmode\hypertarget{ref-MuMIn}{}%
+Bartoń, Kamil. 2020. \emph{MuMIn: Multi-Model Inference}. Manual.
+
+\leavevmode\hypertarget{ref-burnham2002a}{}%
+Burnham, Kenneth P., and David R. Anderson. 2002. \emph{Model Selection and Multimodel Inference: A Practical Information-Theoretic Approach}. Second. New York: Springer-Verlag. \url{https://doi.org/10.1007/b97636}.
+
+\leavevmode\hypertarget{ref-burnham2011}{}%
+Burnham, Kenneth P., David R. Anderson, and Kathryn P. Huyvaert. 2011. ``AIC Model Selection and Multimodel Inference in Behavioral Ecology: Some Background, Observations, and Comparisons.'' \emph{Behavioral Ecology and Sociobiology} 65 (1): 23--35. \url{https://doi.org/10.1007/s00265-010-1029-6}.
+
+\leavevmode\hypertarget{ref-elsen2017}{}%
+Elsen, Paul R., Morgan W. Tingley, Ramnarayan Kalyanaraman, Krishnamurthy Ramesh, and David S. Wilcove. 2017. ``The Role of Competition, Ecotones, and Temperature in the Elevational Distribution of Himalayan Birds.'' \emph{Ecology} 98 (2): 337--48. \url{https://doi.org/10.1002/ecy.1669}.
+
+\leavevmode\hypertarget{ref-fiske2011}{}%
+Fiske, Ian, and Richard Chandler. 2011. ``\textbf{Unmarked} : An \emph{R} Package for Fitting Hierarchical Models of Wildlife Occurrence and Abundance.'' \emph{Journal of Statistical Software} 43 (10). \url{https://doi.org/10.18637/jss.v043.i10}.
+
+\leavevmode\hypertarget{ref-praveenj.2017}{}%
+J., Praveen. 2017. ``On the Geo-Precision of Data for Modelling Home Range of a Species Commentary on Ramesh et Al. (2017).'' \emph{Biological Conservation} 213 (September): 245--46. \url{https://doi.org/10.1016/j.biocon.2017.07.017}.
+
+\leavevmode\hypertarget{ref-johnston2019a}{}%
+Johnston, A, Wm Hochachka, Me Strimas-Mackey, V Ruiz Gutierrez, Oj Robinson, Et Miller, T Auer, St Kelling, and D Fink. 2019. ``Analytical Guidelines to Increase the Value of Citizen Science Data: Using eBird Data to Estimate Species Occurrence.'' Preprint. Ecology. \url{https://doi.org/10.1101/574392}.
+
+\leavevmode\hypertarget{ref-johnston2018}{}%
+Johnston, Alison, Daniel Fink, Wesley M. Hochachka, and Steve Kelling. 2018. ``Estimates of Observer Expertise Improve Species Distributions from Citizen Science Data.'' Edited by Nick Isaac. \emph{Methods in Ecology and Evolution} 9 (1): 88--97. \url{https://doi.org/10.1111/2041-210X.12838}.
+
+\leavevmode\hypertarget{ref-kelling2015a}{}%
+Kelling, Steve, Alison Johnston, Wesley M. Hochachka, Marshall Iliff, Daniel Fink, Jeff Gerbracht, Carl Lagoze, et al. 2015. ``Can Observation Skills of Citizen Scientists Be Estimated Using Species Accumulation Curves?'' Edited by Stefano Goffredo. \emph{PLOS ONE} 10 (10): e0139600. \url{https://doi.org/10.1371/journal.pone.0139600}.
+
+\leavevmode\hypertarget{ref-mackenzie2002}{}%
+MacKenzie, Darryl I., James D. Nichols, Gideon B. Lachman, Sam Droege, J. Andrew Royle, and Catherine A. Langtimm. 2002. ``Estimating Site Occupancy Rates When Detection Probabilities Are Less Than One.'' \emph{Ecology} 83 (8): 2248--55. \href{https://doi.org/10.1890/0012-9658(2002)083\%5B2248:ESORWD\%5D2.0.CO;2}{https://doi.org/10.1890/0012-9658(2002)083{[}2248:ESORWD{]}2.0.CO;2}.
+
+\leavevmode\hypertarget{ref-OpenStreetMap}{}%
+OpenStreetMap contributors. 2019. ``Planet Dump Retrieved from https://planet.osm.org.''
+
+\leavevmode\hypertarget{ref-sullivan2014}{}%
+Sullivan, Brian L., Jocelyn L. Aycrigg, Jessie H. Barry, Rick E. Bonney, Nicholas Bruns, Caren B. Cooper, Theo Damoulas, et al. 2014. ``The eBird Enterprise: An Integrated Approach to Development and Application of Citizen Science.'' \emph{Biological Conservation} 169 (January): 31--40. \url{https://doi.org/10.1016/j.biocon.2013.11.003}.
+
+\leavevmode\hypertarget{ref-vanstrien2013}{}%
+van Strien, Arco J., Chris A.M. van Swaay, and Tim Termaat. 2013. ``Opportunistic Citizen Science Data of Animal Species Produce Reliable Estimates of Distribution Trends If Analysed with Occupancy Models.'' Edited by Vincent Devictor. \emph{Journal of Applied Ecology} 50 (6): 1450--8. \url{https://doi.org/10.1111/1365-2664.12158}.
 
 \end{document}
