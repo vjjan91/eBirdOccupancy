@@ -119,7 +119,7 @@
 
 \title{Source code for \emph{Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot}}
 \author{Vijay Ramesh \and Pratik R. Gupte \and Morgan W. Tingley \and VV Robin \and Ruth DeFries}
-\date{2020-12-23}
+\date{2020-12-26}
 
 \begin{document}
 \maketitle
@@ -187,7 +187,7 @@ Figure prepared in QGIS 3.10.
 \hypertarget{prepare-libraries-and-data-sources}{%
 \subsection{Prepare libraries and data sources}\label{prepare-libraries-and-data-sources}}
 
-Here, we will load the necessary libraries required for preparing the eBird data. Please download the latest versions of the eBird Basic Dataset (for India) and the eBird Sampling dataset from \url{https://ebird.org/data/download}
+Here, we will load the necessary libraries required for preparing the eBird data. Please download the latest versions of the eBird Basic Dataset (for India) and the eBird Sampling dataset from \url{https://ebird.org/data/download}.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -204,7 +204,7 @@ Here, we will load the necessary libraries required for preparing the eBird data
 \NormalTok{\}}
 
 \CommentTok{# set file paths for auk functions}
-\CommentTok{# To use these two datasets, please download the latest versions from https://ebird.org/data/download and set the file path accordingly. Since these two datasets are extremely large, we have not uploaded the same on github. }
+\CommentTok{# To use these two datasets, please download the latest versions from https://ebird.org/data/download and set the file path accordingly. Since these two datasets are extremely large, we have not uploaded the same on github.}
 
 \NormalTok{f_in_ebd <-}\StringTok{ }\KeywordTok{file.path}\NormalTok{(}\StringTok{"data/ebd_IN_relApr-2020.txt"}\NormalTok{)}
 \NormalTok{f_in_sampling <-}\StringTok{ }\KeywordTok{file.path}\NormalTok{(}\StringTok{"data/ebd_sampling_relApr-2020.txt"}\NormalTok{)}
@@ -214,7 +214,7 @@ Here, we will load the necessary libraries required for preparing the eBird data
 \hypertarget{filter-data}{%
 \subsection{Filter data}\label{filter-data}}
 
-Insert the list of species that we will be analyzing in this study.
+Insert the list of species that we will be analyzing in this study. We initially chose those species that occurred in at least 5\% of all checklists across 50\% of the 25 x 25 km cells from where they have been reported, resulting in a total of 93 species. To arrive at this final list of species, we carried out further pre-processing which can be found in Section 2 of the Supplementary material.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -272,13 +272,13 @@ The data has been filtered above using the auk functions. We will now work with 
 \end{Highlighting}
 \end{Shaded}
 
-eBird checklists only suggest whether a species was reported at a particular location. To arrive at absence data, we use a process known as zero-filling (Johnston et al., 2019), wherein a new dataframe is created with a 0 marked for each checklist when the bird was not observed.
+eBird checklists only suggest whether a species was reported at a particular location. To arrive at absence data, we use a process known as zero-filling (Johnston et al. \protect\hyperlink{ref-johnston2019a}{2019}), wherein a new dataframe is created with a 0 marked for each checklist when the bird was not observed.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{# fill zeroes}
 \NormalTok{zf <-}\StringTok{ }\KeywordTok{auk_zerofill}\NormalTok{(f_out_ebd, f_out_sampling)}
-\NormalTok{new_zf <-}\StringTok{ }\KeywordTok{collapse_zerofill}\NormalTok{(zf) }
+\NormalTok{new_zf <-}\StringTok{ }\KeywordTok{collapse_zerofill}\NormalTok{(zf)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -321,7 +321,7 @@ A spatial filter is now supplied to further restrict our list of observations to
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-\CommentTok{# load shapefile of the study area }
+\CommentTok{# load shapefile of the study area}
 \KeywordTok{library}\NormalTok{(sf)}
 \NormalTok{hills <-}\StringTok{ }\KeywordTok{st_read}\NormalTok{(}\StringTok{"data/spatial/hillsShapefile/Nil_Ana_Pal.shp"}\NormalTok{)}
 
@@ -368,7 +368,7 @@ Save temporary data created so far.
 \hypertarget{handle-presence-data}{%
 \subsection{Handle presence data}\label{handle-presence-data}}
 
-Further pre-processing is required in the case of many checklists where species abundance is often unknown and an `X' is denoted in such cases. Here, we convert all `X' notations to a 1, suggesting a presence (as we are not concerned with abundance data in this analysis). We also removed those checklists where the duration in minutes is either not recorded or listed as zero. Lastly, we added an sampling effort based filter following Johnston et al., 2019, wherein we considered only those checklists with duration in minutes is less than 300 and distance in kilometres traveled is less than 5km. Lastly, we excluded those group checklists where the number of observers was greater than 10.
+Further pre-processing is required in the case of many checklists where species abundance is often unknown and an `X' is denoted in such cases. Here, we convert all `X' notations to a 1, suggesting a presence (as we are not concerned with abundance data in this analysis). We also removed those checklists where the duration in minutes is either not recorded or listed as zero. Lastly, we added an sampling effort based filter following (Johnston et al. \protect\hyperlink{ref-johnston2019a}{2019}), wherein we considered only those checklists with duration in minutes is less than 300 and distance in kilometres traveled is less than 5km. Lastly, we excluded those group checklists where the number of observers was greater than 10.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -461,12 +461,15 @@ The above data is saved to a file.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{preparing-landscape-data}{%
-\section{Preparing Landscape Data}\label{preparing-landscape-data}}
+\hypertarget{preparing-environmental-predictors}{%
+\section{Preparing Environmental Predictors}\label{preparing-environmental-predictors}}
 
-Here, we prepare environmental layers which we have accessed as raster images from remote sensing platforms using Google Earth Engine.
-The GEE code can be found in a separate file.
-The goal here is to resample all rasters so that they have the same resolution of 1km cells.
+In this script, we processed climatic and landscape predictors for occupancy modeling.
+
+All climatic data was obtained from \url{https://chelsa-climate.org/bioclim/}
+All landscape data was derived from a high resolution Sentinel-2 composite image that was classified using Google Earth Engine. This code can be accessed in Section 3 of the Supplementary Material and here: \url{https://code.earthengine.google.com/ec69fc4ffad32a532b25202009243d42}.
+
+The goal here is to resample all rasters so that they have the same resolution of 1km cells. We also tested for spatial autocorrelation among climatic predictors, which can be found in Section 4 of the Supplementary Material.
 
 \hypertarget{prepare-libraries}{%
 \subsection{Prepare libraries}\label{prepare-libraries}}
@@ -576,6 +579,8 @@ We stack the terrain and climatic rasters.
 \subsection{Resample landcover from 10m to 1km}\label{resample-landcover-from-10m-to-1km}}
 
 We read in a land cover classified image and resample that using the mode function to a 1km resolution. Please note that the resampling process need not be carried out as it has been done already and the resampled raster can be loaded with the subsequent code chunk.
+
+The classified image can be obtained from: \url{https://code.earthengine.google.com/ec69fc4ffad32a532b25202009243d42}.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -756,7 +761,9 @@ Figure code is hidden in versions rendered as HTML and PDF.
 \hypertarget{preparing-observer-expertise-scores}{%
 \section{Preparing Observer Expertise Scores}\label{preparing-observer-expertise-scores}}
 
-Differences in local avifaunal expertise among citizen scientists can lead to biased species detection when compared with data collected by a consistent set of trained observers (van Strien et al., 2013). Including observer expertise as a detection covariate in occupancy models using eBird data can help account for this variation (Johnston et al., 2018). Observer-specific expertise in local avifauna was calculated following (Kelling et al., 2015) as the normalized predicted number of species reported by an observer after 60 minutes of sampling across the most common land cover type within the study area. This score was calculated by examining checklists from anonymized observers across the study area. We modified (Kelling et al., 2015) formulation by including only observations of the 93 species of interest in our calculations. An observer with a higher number of species of interest reported within 60 minutes would have a higher observer-specific expertise score, with respect to the study area
+Differences in local avifaunal expertise among citizen scientists can lead to biased species detection when compared with data collected by a consistent set of trained observers (van Strien, van Swaay, and Termaat \protect\hyperlink{ref-vanstrien2013}{2013}). Including observer expertise as a detection covariate in occupancy models using eBird data can help account for this variation (Johnston et al. \protect\hyperlink{ref-johnston2018}{2018}). Observer-specific expertise in local avifauna was calculated following (Kelling et al. \protect\hyperlink{ref-kelling2015a}{2015}) as the normalized predicted number of species reported by an observer after 60 minutes of sampling across the most common land cover type within the study area. This score was calculated by examining checklists from anonymized observers across the study area. We modified Kelling et al.~(2015) formulation by including only observations of the 93 species of interest in our calculations. An observer with a higher number of species of interest reported within 60 minutes would have a higher observer-specific expertise score, with respect to the study area.
+
+Plots with respect to how observer expertise varied over time (2013-2019) for the list of species considered in this study (across the study area alone) can be accessed in Section 7 of the Supplementary Material.
 
 \hypertarget{prepare-libraries-1}{%
 \subsection{Prepare libraries}\label{prepare-libraries-1}}
@@ -1233,7 +1240,6 @@ We use these functions to find the distance between each checklist location and 
 \NormalTok{    dist, idx }\OperatorTok{=}\NormalTok{ ckd_tree.query(A, k}\OperatorTok{=}\NormalTok{[}\DecValTok{2}\NormalTok{])}
     \ControlFlowTok{return}\NormalTok{ dist}
 
-
 \CommentTok{# get distance to nearest road}
 \NormalTok{unique_locs[}\StringTok{'dist_road'}\NormalTok{] }\OperatorTok{=}\NormalTok{ ckdnearest(unique_locs, roads)}
 
@@ -1357,7 +1363,9 @@ Figure code is hidden in versions rendered as HTML and PDF.
 \section{Adding Covariates to Checklist Data}\label{adding-covariates-to-checklist-data}}
 
 In this section, we prepare a final list of covariates, after taking into account spatial sampling bias (examined in the previous section), temporal bias and observer expertise scores.
-\#\# Prepare libraries and data
+
+\hypertarget{prepare-libraries-and-data}{%
+\subsection{Prepare libraries and data}\label{prepare-libraries-and-data}}
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -1381,9 +1389,11 @@ In this section, we prepare a final list of covariates, after taking into accoun
 \hypertarget{spatial-subsampling}{%
 \subsection{Spatial subsampling}\label{spatial-subsampling}}
 
-Sampling bias can be introduced into citizen science due to the often ad-hoc nature of data collection (Sullivan et al., 2014). For eBird, this translates into checklists reported when convenient, rather than at regular or random points in time and space, leading to non-independence in the data if observations are spatio-temporally clustered (Johnston et al., 2019). Spatio-temporal autocorrelation in the data can be reduced by sub-sampling at an appropriate spatial resolution, and by avoiding temporal clustering. We estimated two simple measures of spatial clustering: the distance from each site to the nearest road (road data from OpenStreetMap; (OpenStreetMap contributors, 2017), and the nearest-neighbor distance for each site. Sites were strongly tied to roads (mean distance to road ± SD = 390.77 ± 859.15 m; range = 0.28 m -- 7.64 km) and were on average only 297 m away from another site (SD = 553 m; range = 0.14 m -- 12.85 km) (Figure 3). This analysis was done in the previous section.
+Sampling bias can be introduced into citizen science due to the often ad-hoc nature of data collection (Sullivan et al. \protect\hyperlink{ref-sullivan2014}{2014}). For eBird, this translates into checklists reported when convenient, rather than at regular or random points in time and space, leading to non-independence in the data if observations are spatio-temporally clustered (Johnston et al. \protect\hyperlink{ref-johnston2019a}{2019}). Spatio-temporal autocorrelation in the data can be reduced by sub-sampling at an appropriate spatial resolution, and by avoiding temporal clustering. We estimated two simple measures of spatial clustering: the distance from each site to the nearest road (road data from OpenStreetMap; (OpenStreetMap contributors \protect\hyperlink{ref-OpenStreetMap}{2019})), and the nearest-neighbor distance for each site. Sites were strongly tied to roads (mean distance to road ± SD = 390.77 ± 859.15 m; range = 0.28 m -- 7.64 km) and were on average only 297 m away from another site (SD = 553 m; range = 0.14 m -- 12.85 km) (Figure 3). This analysis was done in the previous section.
 
 Here, to further reduce spatial autocorrelation, we divided the study area into a grid of 1km wide square cells and picked checklists from one site at random within each grid cell.
+
+Prior to running this analysis, we checked how many checklists/data would be retained given a particular value of distance to account for spatial independence. This analysis can be accessed in Section 8 of the Supplementary Material. We show that over 80\% of checklists are retained with a distance cutoff of 1km. In addition, a number of thinning approaches were tested to determine which method retained the highest proportion of points, while accounting for sampling effort (time and distance). This analysis can be accessed in Section 9 of the Supplementary Material.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -1531,7 +1541,7 @@ Reload climate and land cover predictors prepared previously.
 
 \CommentTok{# get proper names}
 \NormalTok{elev_names <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"elev"}\NormalTok{, }\StringTok{"slope"}\NormalTok{, }\StringTok{"aspect"}\NormalTok{)}
-\NormalTok{chelsa_names <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"bio1"}\NormalTok{,}\StringTok{"bio12"}\NormalTok{)}
+\NormalTok{chelsa_names <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"bio1"}\NormalTok{, }\StringTok{"bio12"}\NormalTok{)}
 
 \KeywordTok{names}\NormalTok{(landscape_data) <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(}\KeywordTok{glue}\NormalTok{(}\StringTok{'\{c(elev_names, chelsa_names, "landcover")\}'}\NormalTok{))}
 \end{Highlighting}
@@ -1540,7 +1550,7 @@ Reload climate and land cover predictors prepared previously.
 \hypertarget{spatial-buffers-around-selected-checklists}{%
 \subsection{Spatial buffers around selected checklists}\label{spatial-buffers-around-selected-checklists}}
 
-Every checklist on eBird is associated with a latitude and longitude. However, the coordinates entered by an observer may not accurately depict the location at which a species was detected. This can occur for two reasons: first, traveling checklists are often associated with a single location along the route travelled by observers; and second, checklist locations could be assigned to a `hotspot' -- a location that is marked by eBird as being frequented by multiple observers. In many cases, an observation might be assigned to a hotspot even though the observation was not made at the precise location of the hotspot (Praveen J, 2017). (Johnston et al., 2019) showed that a large proportion of observations occurred within a 3km grid, even for those checklists up to 5km in length. Hence to adjust for spatial precision, we considered a minimum radius of 2.5km around each unique locality when sampling environmental covariate values.
+Every checklist on eBird is associated with a latitude and longitude. However, the coordinates entered by an observer may not accurately depict the location at which a species was detected. This can occur for two reasons: first, traveling checklists are often associated with a single location along the route travelled by observers; and second, checklist locations could be assigned to a `hotspot' -- a location that is marked by eBird as being frequented by multiple observers. In many cases, an observation might be assigned to a hotspot even though the observation was not made at the precise location of the hotspot (J. \protect\hyperlink{ref-praveenj.2017}{2017}). Johnston et al., (2019) showed that a large proportion of observations occurred within a 3km grid, even for those checklists up to 5km in length. Hence to adjust for spatial precision, we considered a minimum radius of 2.5km around each unique locality when sampling environmental covariate values.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -1711,7 +1721,9 @@ Save data to file.
 \hypertarget{load-dataframe-and-scale-covariates}{%
 \subsection{Load dataframe and scale covariates}\label{load-dataframe-and-scale-covariates}}
 
-Here, we load the required dataframe that contains 10 random visits to a site and environmental covariates that were prepared at a spatial scale of 2.5 sq.km. We also scaled all covariates (mean around 0 and standard deviation of 1). Next, we ensured that only Traveling and Stationary checklists were considered. Even though stationary counts have no distance traveled, we defaulted all stationary accounts to an effective distance of 100m, which we consider the average maximum detection radius for most bird species in our area. Following this, we excluded predictors with a Pearson coefficient \textgreater{}0.5 which resulted in the removal of grasslands as it was highly negatively correlated with forests (r =-0.77).
+Here, we load the required dataframe that contains 10 random visits to a site and environmental covariates that were prepared at a spatial scale of 2.5 sq.km. We also scaled all covariates (mean around 0 and standard deviation of 1). Next, we ensured that only Traveling and Stationary checklists were considered. Even though stationary counts have no distance traveled, we defaulted all stationary accounts to an effective distance of 100m, which we consider the average maximum detection radius for most bird species in our area. Following this, we excluded predictors with a Pearson coefficient \textgreater{} 0.5 which resulted in the removal of grasslands as it was highly negatively correlated with forests (r = -0.77).
+
+Please note that species-specific plots of probabilities of occupancy as a function of environmental data can be accessed in Section 10 of the Supplementary Material.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -1862,7 +1874,7 @@ Here, we load the required dataframe that contains 10 random visits to a site an
 \hypertarget{identifying-covariates-necessary-to-model-the-detection-process}{%
 \subsection{Identifying covariates necessary to model the detection process}\label{identifying-covariates-necessary-to-model-the-detection-process}}
 
-Here, we use the \texttt{unmarked} package in R (Fiske and Chandler 2019) to identify detection level covariates that are important for each species.
+Here, we use the \texttt{unmarked} package in R (Fiske and Chandler \protect\hyperlink{ref-fiske2011}{2011}) to identify detection level covariates that are important for each species. We use AIC criteria to select top models (Burnham, Anderson, and Huyvaert \protect\hyperlink{ref-burnham2011}{2011}).
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -2005,11 +2017,11 @@ Here, we use the \texttt{unmarked} package in R (Fiske and Chandler 2019) to ide
 \hypertarget{land-cover-and-climate}{%
 \subsection{Land Cover and Climate}\label{land-cover-and-climate}}
 
-Occupancy models estimate the probability of occurrence of a given species while controlling for the probability of detection and allow us to model the factors affecting occurrence and detection independently (Johnston et al., 2018; Mackenzie et al., 2018). The flexible eBird observation process contributes to the largest source of variation in the likelihood of detecting a particular species (Johnston et al., 2019); hence, we included seven covariates that influence the probability of detection for each checklist: ordinal day of year, duration of observation, distance travelled, protocol type, time observations started, number of observers and the checklist calibration index (CCI).
+Occupancy models estimate the probability of occurrence of a given species while controlling for the probability of detection and allow us to model the factors affecting occurrence and detection independently (Johnston et al. \protect\hyperlink{ref-johnston2018}{2018}; MacKenzie et al. \protect\hyperlink{ref-mackenzie2002}{2002}). The flexible eBird observation process contributes to the largest source of variation in the likelihood of detecting a particular species (Johnston et al. \protect\hyperlink{ref-johnston2019a}{2019}); hence, we included seven covariates that influence the probability of detection for each checklist: ordinal day of year, duration of observation, distance travelled, protocol type, time observations started, number of observers and the checklist calibration index (CCI).
 
-Using a multi-model information-theoretic approach, we tested how strongly our occurrence data fit our candidate set of environmental covariates (K.P. Burnham \& Anderson, 2002). We fitted single-species occupancy models for each species, to simultaneously estimate a probability of detection (p) and a probability of occupancy (Ѱ) (Fiske \& Chandler, 2011; Mackenzie et al., 2002). For each species, we fit 256 models, each with a unique combination of the eight (climate and land cover) occupancy covariates and all seven detection covariates (Appendix S5).
+Using a multi-model information-theoretic approach, we tested how strongly our occurrence data fit our candidate set of environmental covariates (Burnham and Anderson \protect\hyperlink{ref-burnham2002a}{2002}). We fitted single-species occupancy models for each species, to simultaneously estimate a probability of detection (p) and a probability of occupancy (\(\psi\)) (Fiske and Chandler \protect\hyperlink{ref-fiske2011}{2011}; MacKenzie et al. \protect\hyperlink{ref-mackenzie2002}{2002}). For each species, we fit 256 models, each with a unique combination of the eight (climate and land cover) occupancy covariates and all seven detection covariates (Appendix S5).
 
-Across the 256 models tested for each species, the model with highest support was determined using AICc scores. However, across the majority of the species, no single model had overwhelming support. Hence, for each species, we examined those models which had ΔAICc \textless{} 2, as these top models were considered to explain a large proportion of the association between the species-specific probability of occupancy and environmental drivers (Kenneth P. Burnham et al., 2011; Elsen et al., 2017). Using these restricted model sets for each species; we created a model-averaged coefficient estimate for each predictor and assessed its direction and significance (Bartoń, 2009). We considered a predictor to be significantly associated with occupancy if the range of the 95\% confidence interval around the model-averaged coefficient did not contain zero. Next, we obtained a measure of relative importance of climatic and landscape predictors by calculating cumulative variable importance scores. These scores were calculated by obtaining the sum of model weights (AIC weights) across all models (including the top models) for each predictor across all species.
+Across the 256 models tested for each species, the model with highest support was determined using AICc scores. However, across the majority of the species, no single model had overwhelming support. Hence, for each species, we examined those models which had \(\Delta\)AICc \textless{} 2, as these top models were considered to explain a large proportion of the association between the species-specific probability of occupancy and environmental drivers (Burnham, Anderson, and Huyvaert \protect\hyperlink{ref-burnham2011}{2011}; Elsen et al. \protect\hyperlink{ref-elsen2017}{2017}). Using these restricted model sets for each species; we created a model-averaged coefficient estimate for each predictor and assessed its direction and significance (Bartoń \protect\hyperlink{ref-MuMIn}{2020}). We considered a predictor to be significantly associated with occupancy if the range of the 95\% confidence interval around the model-averaged coefficient did not contain zero. Next, we obtained a measure of relative importance of climatic and landscape predictors by calculating cumulative variable importance scores. These scores were calculated by obtaining the sum of model weights (AIC weights) across all models (including the top models) for each predictor across all species.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -2231,7 +2243,7 @@ Adequate model fit was assessed using a chi-square goodness-of-fit test using 50
 
 In this section, we will visualize the cumulative AIC weights and the magnitude and direction of species-specific probability of occupancy.
 
-To get cumulative AIC weights, we first obtained a measure of relative importance of climatic and landscape predictors by calculating cumulative variable importance scores. These scores were calculated by obtaining the sum of model weights (AIC weights) across all models (including the top models) for each predictor across all species. We then calculated the mean cumulative variable importance score and a standard deviation for each predictor (K.P. Burnham \& Anderson, 2002).
+To get cumulative AIC weights, we first obtained a measure of relative importance of climatic and landscape predictors by calculating cumulative variable importance scores. These scores were calculated by obtaining the sum of model weights (AIC weights) across all models (including the top models) for each predictor across all species. We then calculated the mean cumulative variable importance score and a standard deviation for each predictor (Burnham and Anderson \protect\hyperlink{ref-burnham2002a}{2002}).
 
 \hypertarget{prepare-libraries-3}{%
 \subsection{Prepare libraries}\label{prepare-libraries-3}}
@@ -2290,19 +2302,21 @@ To get cumulative AIC weights, we first obtained a measure of relative importanc
 \CommentTok{# read in sheets by species}
 \NormalTok{model_imp <-}\StringTok{ }\KeywordTok{map}\NormalTok{(file_names, }\ControlFlowTok{function}\NormalTok{(f) \{}
 \NormalTok{  md_list <-}\StringTok{ }\KeywordTok{map}\NormalTok{(list_of_species, }\ControlFlowTok{function}\NormalTok{(sn) \{}
-    
+
     \CommentTok{# some sheets are not found}
-    
-    \KeywordTok{tryCatch}\NormalTok{(\{}
-      
-\NormalTok{      readxl}\OperatorTok{::}\KeywordTok{read_excel}\NormalTok{(f, }\DataTypeTok{sheet =}\NormalTok{ sn) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{        `}\DataTypeTok{colnames<-}\StringTok{`}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"predictor"}\NormalTok{, }\StringTok{"AIC_weight"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{        }\KeywordTok{filter}\NormalTok{(}\KeywordTok{str_detect}\NormalTok{(predictor, }\StringTok{"psi"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{        }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{predictor =}\NormalTok{ stringr}\OperatorTok{::}\KeywordTok{str_extract}\NormalTok{(predictor, }
-                                \DataTypeTok{pattern =}\NormalTok{ stringr}\OperatorTok{::}\KeywordTok{regex}\NormalTok{(}\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{((.*?)}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{)"}\NormalTok{)),}
-               \DataTypeTok{predictor =}\NormalTok{ stringr}\OperatorTok{::}\KeywordTok{str_replace_all}\NormalTok{(predictor, }\StringTok{"[//(//)]"}\NormalTok{, }\StringTok{""}\NormalTok{),}
-               \DataTypeTok{predictor =}\NormalTok{ stringr}\OperatorTok{::}\KeywordTok{str_remove}\NormalTok{(predictor, }\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.y"}\NormalTok{))}
-      
+
+    \KeywordTok{tryCatch}\NormalTok{(}
+\NormalTok{      \{}
+\NormalTok{        readxl}\OperatorTok{::}\KeywordTok{read_excel}\NormalTok{(f, }\DataTypeTok{sheet =}\NormalTok{ sn) }\OperatorTok{%>%}
+\StringTok{          `}\DataTypeTok{colnames<-}\StringTok{`}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"predictor"}\NormalTok{, }\StringTok{"AIC_weight"}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{          }\KeywordTok{filter}\NormalTok{(}\KeywordTok{str_detect}\NormalTok{(predictor, }\StringTok{"psi"}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{          }\KeywordTok{mutate}\NormalTok{(}
+            \DataTypeTok{predictor =}\NormalTok{ stringr}\OperatorTok{::}\KeywordTok{str_extract}\NormalTok{(predictor,}
+              \DataTypeTok{pattern =}\NormalTok{ stringr}\OperatorTok{::}\KeywordTok{regex}\NormalTok{(}\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{((.*?)}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{)"}\NormalTok{)}
+\NormalTok{            ),}
+            \DataTypeTok{predictor =}\NormalTok{ stringr}\OperatorTok{::}\KeywordTok{str_replace_all}\NormalTok{(predictor, }\StringTok{"[//(//)]"}\NormalTok{, }\StringTok{""}\NormalTok{),}
+            \DataTypeTok{predictor =}\NormalTok{ stringr}\OperatorTok{::}\KeywordTok{str_remove}\NormalTok{(predictor, }\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.y"}\NormalTok{)}
+\NormalTok{          )}
 \NormalTok{      \},}
       \DataTypeTok{error =} \ControlFlowTok{function}\NormalTok{(e) \{}
         \KeywordTok{message}\NormalTok{(}\KeywordTok{as.character}\NormalTok{(e))}
@@ -2310,7 +2324,7 @@ To get cumulative AIC weights, we first obtained a measure of relative importanc
 \NormalTok{    )}
 \NormalTok{  \})}
   \KeywordTok{names}\NormalTok{(md_list) <-}\StringTok{ }\NormalTok{list_of_species}
-  
+
   \KeywordTok{return}\NormalTok{(md_list)}
 \NormalTok{\})}
 \end{Highlighting}
@@ -2330,7 +2344,7 @@ To get cumulative AIC weights, we first obtained a measure of relative importanc
 \NormalTok{\})}
 
 \CommentTok{# bind rows}
-\NormalTok{model_imp <-}\StringTok{ }\KeywordTok{map}\NormalTok{(model_imp, bind_rows) }\OperatorTok{%>%}\StringTok{ }
+\NormalTok{model_imp <-}\StringTok{ }\KeywordTok{map}\NormalTok{(model_imp, bind_rows) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{bind_rows}\NormalTok{()}
 
 \CommentTok{# convert to numeric}
@@ -2339,16 +2353,19 @@ To get cumulative AIC weights, we first obtained a measure of relative importanc
 \KeywordTok{levels}\NormalTok{(model_imp}\OperatorTok{$}\NormalTok{scale) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"2.5km"}\NormalTok{)}
 
 \CommentTok{# Let's get a summary of cumulative variable importance}
-\NormalTok{model_imp <-}\KeywordTok{group_by}\NormalTok{(model_imp, predictor) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{mean_AIC =} \KeywordTok{mean}\NormalTok{(AIC_weight),}
-            \DataTypeTok{sd_AIC=}\KeywordTok{sd}\NormalTok{(AIC_weight),}
-            \DataTypeTok{min_AIC =} \KeywordTok{min}\NormalTok{(AIC_weight),}
-            \DataTypeTok{max_AIC =} \KeywordTok{max}\NormalTok{(AIC_weight),}
-            \DataTypeTok{med_AIC =} \KeywordTok{median}\NormalTok{(AIC_weight))}
+\NormalTok{model_imp <-}\StringTok{ }\KeywordTok{group_by}\NormalTok{(model_imp, predictor) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarise}\NormalTok{(}
+    \DataTypeTok{mean_AIC =} \KeywordTok{mean}\NormalTok{(AIC_weight),}
+    \DataTypeTok{sd_AIC =} \KeywordTok{sd}\NormalTok{(AIC_weight),}
+    \DataTypeTok{min_AIC =} \KeywordTok{min}\NormalTok{(AIC_weight),}
+    \DataTypeTok{max_AIC =} \KeywordTok{max}\NormalTok{(AIC_weight),}
+    \DataTypeTok{med_AIC =} \KeywordTok{median}\NormalTok{(AIC_weight)}
+\NormalTok{  )}
 
 \CommentTok{# write to file}
 \KeywordTok{write_csv}\NormalTok{(model_imp,}
-          \DataTypeTok{file =} \StringTok{"data/results/cumulative_AIC_weights.csv"}\NormalTok{)}
+  \DataTypeTok{file =} \StringTok{"data/results/cumulative_AIC_weights.csv"}
+\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2365,12 +2382,16 @@ Read data back in.
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{# make nice names}
-\NormalTok{predictor_name <-}\StringTok{ }\KeywordTok{tibble}\NormalTok{(}\DataTypeTok{predictor =} \KeywordTok{levels}\NormalTok{(model_imp}\OperatorTok{$}\NormalTok{predictor),}
-                         \DataTypeTok{pred_name =} \KeywordTok{c}\NormalTok{(}\StringTok{"Annual Mean Temperature (°C)"}\NormalTok{, }
-                                       \StringTok{"Annual Precipitation (mm)"}\NormalTok{,}
-                                       \StringTok{"% Agriculture"}\NormalTok{, }\StringTok{"% Forests"}\NormalTok{,}
-                                       \StringTok{"% Plantations"}\NormalTok{, }\StringTok{"% Settlements"}\NormalTok{, }
-                                       \StringTok{"% Tea"}\NormalTok{, }\StringTok{"% Water Bodies"}\NormalTok{))}
+\NormalTok{predictor_name <-}\StringTok{ }\KeywordTok{tibble}\NormalTok{(}
+  \DataTypeTok{predictor =} \KeywordTok{levels}\NormalTok{(model_imp}\OperatorTok{$}\NormalTok{predictor),}
+  \DataTypeTok{pred_name =} \KeywordTok{c}\NormalTok{(}
+    \StringTok{"Annual Mean Temperature (°C)"}\NormalTok{,}
+    \StringTok{"Annual Precipitation (mm)"}\NormalTok{,}
+    \StringTok{"% Agriculture"}\NormalTok{, }\StringTok{"% Forests"}\NormalTok{,}
+    \StringTok{"% Plantations"}\NormalTok{, }\StringTok{"% Settlements"}\NormalTok{,}
+    \StringTok{"% Tea"}\NormalTok{, }\StringTok{"% Water Bodies"}
+\NormalTok{  )}
+\NormalTok{)}
 
 \CommentTok{# rename predictor}
 \NormalTok{model_imp <-}\StringTok{ }\KeywordTok{left_join}\NormalTok{(model_imp, predictor_name)}
@@ -2382,40 +2403,48 @@ Prepare figure for cumulative AIC weight. Figure code is hidden in versions rend
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \NormalTok{fig_aic <-}
-\StringTok{  }\KeywordTok{ggplot}\NormalTok{(model_imp)}\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_pointrange}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{reorder}\NormalTok{(predictor, mean_AIC),}
-                      \DataTypeTok{y =}\NormalTok{ mean_AIC,}
-                      \DataTypeTok{ymin =}\NormalTok{ mean_AIC }\OperatorTok{-}\StringTok{ }\NormalTok{sd_AIC,}
-                      \DataTypeTok{ymax =}\NormalTok{ mean_AIC }\OperatorTok{+}\StringTok{ }\NormalTok{sd_AIC))}\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_text}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ predictor, }
-                \DataTypeTok{y =} \FloatTok{0.2}\NormalTok{,}
-                \DataTypeTok{label =}\NormalTok{ pred_name),}
-            \DataTypeTok{angle =} \DecValTok{0}\NormalTok{,}
-            \DataTypeTok{hjust =} \StringTok{"inward"}\NormalTok{,}
-            \DataTypeTok{vjust =} \DecValTok{2}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(model_imp) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_pointrange}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}
+    \DataTypeTok{x =} \KeywordTok{reorder}\NormalTok{(predictor, mean_AIC),}
+    \DataTypeTok{y =}\NormalTok{ mean_AIC,}
+    \DataTypeTok{ymin =}\NormalTok{ mean_AIC }\OperatorTok{-}\StringTok{ }\NormalTok{sd_AIC,}
+    \DataTypeTok{ymax =}\NormalTok{ mean_AIC }\OperatorTok{+}\StringTok{ }\NormalTok{sd_AIC}
+\NormalTok{  )) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_text}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}
+    \DataTypeTok{x =}\NormalTok{ predictor,}
+    \DataTypeTok{y =} \FloatTok{0.2}\NormalTok{,}
+    \DataTypeTok{label =}\NormalTok{ pred_name}
+\NormalTok{  ),}
+  \DataTypeTok{angle =} \DecValTok{0}\NormalTok{,}
+  \DataTypeTok{hjust =} \StringTok{"inward"}\NormalTok{,}
+  \DataTypeTok{vjust =} \DecValTok{2}
+\NormalTok{  ) }\OperatorTok{+}
 \StringTok{  }\CommentTok{# scale_y_continuous(breaks = seq(45, 75, 10))+}
-\StringTok{  }\KeywordTok{scale_x_discrete}\NormalTok{(}\DataTypeTok{labels =} \OtherTok{NULL}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_x_discrete}\NormalTok{(}\DataTypeTok{labels =} \OtherTok{NULL}\NormalTok{) }\OperatorTok{+}
 \StringTok{  }\CommentTok{# scale_color_brewer(palette = "RdBu", values = c(0.5, 1))+}
 \StringTok{  }\KeywordTok{coord_flip}\NormalTok{(}
     \CommentTok{# ylim = c(45, 75)}
-\NormalTok{  )}\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme_test}\NormalTok{()}\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"none"}\NormalTok{)}\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Predictor"}\NormalTok{,}
-       \DataTypeTok{y =} \StringTok{"Cumulative AIC weight"}\NormalTok{)}
+\NormalTok{  ) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_test}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"none"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}
+    \DataTypeTok{x =} \StringTok{"Predictor"}\NormalTok{,}
+    \DataTypeTok{y =} \StringTok{"Cumulative AIC weight"}
+\NormalTok{  )}
 
 \KeywordTok{ggsave}\NormalTok{(fig_aic,}
-       \DataTypeTok{filename =} \StringTok{"figs/fig_aic_weight.png"}\NormalTok{, }
-       \DataTypeTok{device =} \KeywordTok{png}\NormalTok{(),}
-       \DataTypeTok{dpi =} \DecValTok{300}\NormalTok{,}
-       \DataTypeTok{width =} \DecValTok{79}\NormalTok{, }\DataTypeTok{height =} \DecValTok{120}\NormalTok{, }\DataTypeTok{units =} \StringTok{"mm"}\NormalTok{)}
+  \DataTypeTok{filename =} \StringTok{"figs/fig_aic_weight.png"}\NormalTok{,}
+  \DataTypeTok{device =} \KeywordTok{png}\NormalTok{(),}
+  \DataTypeTok{dpi =} \DecValTok{300}\NormalTok{,}
+  \DataTypeTok{width =} \DecValTok{79}\NormalTok{, }\DataTypeTok{height =} \DecValTok{120}\NormalTok{, }\DataTypeTok{units =} \StringTok{"mm"}
+\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \hypertarget{prepare-model-coefficient-data}{%
 \subsection{Prepare model coefficient data}\label{prepare-model-coefficient-data}}
 
-For each species, we examined those models which had ΔAICc \textless{} 2, as these top models were considered to explain a large proportion of the association between the species-specific probability of occupancy and environmental drivers (Kenneth P. Burnham et al., 2011; Elsen et al., 2017). Using these restricted model sets for each species; we created a model-averaged coefficient estimate for each predictor and assessed its direction and significance (Bartoń, 2009). We considered a predictor to be significantly associated with occupancy if the range of the 95\% confidence interval around the model-averaged coefficient did not contain zero.
+For each species, we examined those models which had ΔAICc \textless{} 2, as these top models were considered to explain a large proportion of the association between the species-specific probability of occupancy and environmental drivers (Burnham, Anderson, and Huyvaert \protect\hyperlink{ref-burnham2011}{2011}; Elsen et al. \protect\hyperlink{ref-elsen2017}{2017}). Using these restricted model sets for each species; we created a model-averaged coefficient estimate for each predictor and assessed its direction and significance (Bartoń \protect\hyperlink{ref-MuMIn}{2020}). We considered a predictor to be significantly associated with occupancy if the range of the 95\% confidence interval around the model-averaged coefficient did not contain zero.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -2431,21 +2460,25 @@ For each species, we examined those models which had ΔAICc \textless{} 2, as th
 \NormalTok{\})}
 
 \CommentTok{# prepare model data}
-\NormalTok{scales =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"2.5km"}\NormalTok{)}
-\NormalTok{model_data <-}\StringTok{ }\KeywordTok{tibble}\NormalTok{(}\DataTypeTok{scale =}\NormalTok{ scales, }
-                              \DataTypeTok{scientific_name =}\NormalTok{ list_of_species) }\OperatorTok{%>%}
+\NormalTok{scales <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"2.5km"}\NormalTok{)}
+\NormalTok{model_data <-}\StringTok{ }\KeywordTok{tibble}\NormalTok{(}
+  \DataTypeTok{scale =}\NormalTok{ scales,}
+  \DataTypeTok{scientific_name =}\NormalTok{ list_of_species}
+\NormalTok{) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(scale))}
 
 \CommentTok{# rename model data components and separate predictors}
-\NormalTok{names <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"predictor"}\NormalTok{, }\StringTok{"coefficient"}\NormalTok{, }\StringTok{"se"}\NormalTok{, }\StringTok{"ci_lower"}\NormalTok{, }
-           \StringTok{"ci_higher"}\NormalTok{, }\StringTok{"z_value"}\NormalTok{, }\StringTok{"p_value"}\NormalTok{)}
+\NormalTok{names <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}
+  \StringTok{"predictor"}\NormalTok{, }\StringTok{"coefficient"}\NormalTok{, }\StringTok{"se"}\NormalTok{, }\StringTok{"ci_lower"}\NormalTok{,}
+  \StringTok{"ci_higher"}\NormalTok{, }\StringTok{"z_value"}\NormalTok{, }\StringTok{"p_value"}
+\NormalTok{)}
 
 \CommentTok{# get data for plotting:}
 \NormalTok{model_est <-}\StringTok{ }\KeywordTok{map}\NormalTok{(model_est, }\ControlFlowTok{function}\NormalTok{(l) \{}
   \KeywordTok{map}\NormalTok{(l, }\ControlFlowTok{function}\NormalTok{(df) \{}
     \KeywordTok{colnames}\NormalTok{(df) <-}\StringTok{ }\NormalTok{names}
 \NormalTok{    df <-}\StringTok{ }\KeywordTok{separate_interaction_terms}\NormalTok{(df)}
-\NormalTok{    df <-}\StringTok{ }\KeywordTok{make_response_data}\NormalTok{(df) }
+\NormalTok{    df <-}\StringTok{ }\KeywordTok{make_response_data}\NormalTok{(df)}
     \KeywordTok{return}\NormalTok{(df)}
 \NormalTok{  \})}
 \NormalTok{\})}
@@ -2460,16 +2493,16 @@ For each species, we examined those models which had ΔAICc \textless{} 2, as th
 \CommentTok{# add names to model estimates}
 \KeywordTok{names}\NormalTok{(model_est) <-}\StringTok{ }\NormalTok{scales}
 \NormalTok{model_est <-}\StringTok{ }\KeywordTok{imap}\NormalTok{(model_est, }\ControlFlowTok{function}\NormalTok{(.x, .y) \{}
-  \KeywordTok{bind_rows}\NormalTok{(.x) }\OperatorTok{%>%}\StringTok{ }
+  \KeywordTok{bind_rows}\NormalTok{(.x) }\OperatorTok{%>%}
 \StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{scale =}\NormalTok{ .y)}
 \NormalTok{\})}
 
 \CommentTok{# remove modulators}
-\NormalTok{model_est <-}\StringTok{ }\KeywordTok{bind_rows}\NormalTok{(model_est) }\OperatorTok{%>%}\StringTok{ }
+\NormalTok{model_est <-}\StringTok{ }\KeywordTok{bind_rows}\NormalTok{(model_est) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\KeywordTok{matches}\NormalTok{(}\StringTok{"modulator"}\NormalTok{))}
 
 \CommentTok{# join data to species name}
-\NormalTok{model_data <-}\StringTok{ }\NormalTok{model_data }\OperatorTok{%>%}\StringTok{ }
+\NormalTok{model_data <-}\StringTok{ }\NormalTok{model_data }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{left_join}\NormalTok{(model_est)}
 
 \CommentTok{# Keep only those predictors whose p-values are significant:}
@@ -2483,14 +2516,17 @@ Export predictor effects.
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{# get predictor effect data}
-\NormalTok{data_predictor_effect <-}\StringTok{ }\KeywordTok{distinct}\NormalTok{(model_data, }
-\NormalTok{                                  scientific_name, }
-\NormalTok{                                  se,}
-\NormalTok{                                  predictor, coefficient)}
+\NormalTok{data_predictor_effect <-}\StringTok{ }\KeywordTok{distinct}\NormalTok{(}
+\NormalTok{  model_data,}
+\NormalTok{  scientific_name,}
+\NormalTok{  se,}
+\NormalTok{  predictor, coefficient}
+\NormalTok{)}
 
 \CommentTok{# write to file}
 \KeywordTok{write_csv}\NormalTok{(data_predictor_effect,}
-          \DataTypeTok{path =} \StringTok{"data/results/data_predictor_effect.csv"}\NormalTok{)}
+  \DataTypeTok{path =} \StringTok{"data/results/data_predictor_effect.csv"}
+\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2498,17 +2534,21 @@ Export model data.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-\NormalTok{model_data_to_file <-}\StringTok{ }\NormalTok{model_data }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{select}\NormalTok{(predictor, data,}
-\NormalTok{         scientific_name, scale) }\OperatorTok{%>%}\StringTok{ }
+\NormalTok{model_data_to_file <-}\StringTok{ }\NormalTok{model_data }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(}
+\NormalTok{    predictor, data,}
+\NormalTok{    scientific_name, scale}
+\NormalTok{  ) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{unnest}\NormalTok{(}\DataTypeTok{cols =} \StringTok{"data"}\NormalTok{)}
 
 \CommentTok{# remove .y}
-\NormalTok{model_data_to_file <-}\StringTok{ }\NormalTok{model_data_to_file }\OperatorTok{%>%}\StringTok{ }
+\NormalTok{model_data_to_file <-}\StringTok{ }\NormalTok{model_data_to_file }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{predictor =} \KeywordTok{str_remove}\NormalTok{(predictor, }\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.y"}\NormalTok{))}
 
-\KeywordTok{write_csv}\NormalTok{(model_data_to_file,}
-          \StringTok{"data/results/data_occupancy_predictors.csv"}\NormalTok{)}
+\KeywordTok{write_csv}\NormalTok{(}
+\NormalTok{  model_data_to_file,}
+  \StringTok{"data/results/data_occupancy_predictors.csv"}
+\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2527,7 +2567,7 @@ Fix predictor name.
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{# remove .y from predictors}
 \NormalTok{model_data <-}\StringTok{ }\NormalTok{model_data }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate_at}\NormalTok{(}\DataTypeTok{.vars =} \KeywordTok{c}\NormalTok{(}\StringTok{"predictor"}\NormalTok{), }\DataTypeTok{.funs =} \ControlFlowTok{function}\NormalTok{(x)\{}
+\StringTok{  }\KeywordTok{mutate_at}\NormalTok{(}\DataTypeTok{.vars =} \KeywordTok{c}\NormalTok{(}\StringTok{"predictor"}\NormalTok{), }\DataTypeTok{.funs =} \ControlFlowTok{function}\NormalTok{(x) \{}
 \NormalTok{    stringr}\OperatorTok{::}\KeywordTok{str_remove}\NormalTok{(x, }\StringTok{".y"}\NormalTok{)}
 \NormalTok{  \})}
 \end{Highlighting}
@@ -2539,29 +2579,37 @@ Fix predictor name.
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{# is the coeff positive? how many positive per scale per predictor per axis of split?}
-\NormalTok{data_predictor <-}\StringTok{ }\KeywordTok{mutate}\NormalTok{(model_data, }
-                                \DataTypeTok{direction =}\NormalTok{ coefficient }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{count}\NormalTok{(predictor, }
-\NormalTok{        direction) }\OperatorTok{%>%}\StringTok{ }
+\NormalTok{data_predictor <-}\StringTok{ }\KeywordTok{mutate}\NormalTok{(model_data,}
+  \DataTypeTok{direction =}\NormalTok{ coefficient }\OperatorTok{>}\StringTok{ }\DecValTok{0}
+\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{count}\NormalTok{(}
+\NormalTok{    predictor,}
+\NormalTok{    direction}
+\NormalTok{  ) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{mag =}\NormalTok{ n }\OperatorTok{*}\StringTok{ }\NormalTok{(}\KeywordTok{if_else}\NormalTok{(direction, }\DecValTok{1}\NormalTok{, }\DecValTok{-1}\NormalTok{)))}
 
 \CommentTok{# wrangle data to get nice bars}
-\NormalTok{data_predictor <-}\StringTok{ }\NormalTok{data_predictor}\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\NormalTok{n) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{drop_na}\NormalTok{(direction) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{direction =} \KeywordTok{ifelse}\NormalTok{(direction, }\StringTok{"positive"}\NormalTok{, }\StringTok{"negative"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{pivot_wider}\NormalTok{(}\DataTypeTok{values_from =} \StringTok{"mag"}\NormalTok{, }\DataTypeTok{names_from =} \StringTok{"direction"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{mutate_at}\NormalTok{(}\KeywordTok{vars}\NormalTok{(positive, negative),}
-            \OperatorTok{~}\KeywordTok{if_else}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(.), }\DecValTok{0}\NormalTok{, .))}
+\NormalTok{data_predictor <-}\StringTok{ }\NormalTok{data_predictor }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\NormalTok{n) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{drop_na}\NormalTok{(direction) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{direction =} \KeywordTok{ifelse}\NormalTok{(direction, }\StringTok{"positive"}\NormalTok{, }\StringTok{"negative"}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{pivot_wider}\NormalTok{(}\DataTypeTok{values_from =} \StringTok{"mag"}\NormalTok{, }\DataTypeTok{names_from =} \StringTok{"direction"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate_at}\NormalTok{(}
+    \KeywordTok{vars}\NormalTok{(positive, negative),}
+    \OperatorTok{~}\StringTok{ }\KeywordTok{if_else}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(.), }\DecValTok{0}\NormalTok{, .)}
+\NormalTok{  )}
 
-\NormalTok{data_predictor_long <-}\StringTok{ }\NormalTok{data_predictor }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{pivot_longer}\NormalTok{(}\DataTypeTok{cols =} \KeywordTok{c}\NormalTok{(}\StringTok{"negative"}\NormalTok{, }\StringTok{"positive"}\NormalTok{),}
-               \DataTypeTok{names_to =} \StringTok{"effect"}\NormalTok{,}
-               \DataTypeTok{values_to =} \StringTok{"magnitude"}\NormalTok{)}
+\NormalTok{data_predictor_long <-}\StringTok{ }\NormalTok{data_predictor }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{pivot_longer}\NormalTok{(}
+    \DataTypeTok{cols =} \KeywordTok{c}\NormalTok{(}\StringTok{"negative"}\NormalTok{, }\StringTok{"positive"}\NormalTok{),}
+    \DataTypeTok{names_to =} \StringTok{"effect"}\NormalTok{,}
+    \DataTypeTok{values_to =} \StringTok{"magnitude"}
+\NormalTok{  )}
 
 \CommentTok{# write}
 \KeywordTok{write_csv}\NormalTok{(data_predictor_long,}
-          \DataTypeTok{path =} \StringTok{"data/results/data_predictor_direction_nSpecies.csv"}\NormalTok{)}
+  \DataTypeTok{path =} \StringTok{"data/results/data_predictor_direction_nSpecies.csv"}
+\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2586,5 +2634,50 @@ Figure code is hidden in versions rendered as HTML and PDF.
 \includegraphics{figs/fig_04_aic_weight_effect.png}
 \caption{(a) Cumulative AIC weights suggest that climatic predictors have higher relative importance when compared to landscape predictors. (b) The direction of association between species-specific probability of occupancy and climatic and landscape is shown here. While climatic predictors were both positively and negatively associated with the probability of occupancy for a number of species, human-associated land cover types were largely negatively associated with species-specific probability of occupancy.}
 \end{figure}
+
+\clearpage
+
+\hypertarget{references}{%
+\section{References}\label{references}}
+
+\hypertarget{refs}{}
+\leavevmode\hypertarget{ref-MuMIn}{}%
+Bartoń, Kamil. 2020. \emph{MuMIn: Multi-Model Inference}. Manual.
+
+\leavevmode\hypertarget{ref-burnham2002a}{}%
+Burnham, Kenneth P., and David R. Anderson. 2002. \emph{Model Selection and Multimodel Inference: A Practical Information-Theoretic Approach}. Second. New York: Springer-Verlag. \url{https://doi.org/10.1007/b97636}.
+
+\leavevmode\hypertarget{ref-burnham2011}{}%
+Burnham, Kenneth P., David R. Anderson, and Kathryn P. Huyvaert. 2011. ``AIC Model Selection and Multimodel Inference in Behavioral Ecology: Some Background, Observations, and Comparisons.'' \emph{Behavioral Ecology and Sociobiology} 65 (1): 23--35. \url{https://doi.org/10.1007/s00265-010-1029-6}.
+
+\leavevmode\hypertarget{ref-elsen2017}{}%
+Elsen, Paul R., Morgan W. Tingley, Ramnarayan Kalyanaraman, Krishnamurthy Ramesh, and David S. Wilcove. 2017. ``The Role of Competition, Ecotones, and Temperature in the Elevational Distribution of Himalayan Birds.'' \emph{Ecology} 98 (2): 337--48. \url{https://doi.org/10.1002/ecy.1669}.
+
+\leavevmode\hypertarget{ref-fiske2011}{}%
+Fiske, Ian, and Richard Chandler. 2011. ``\textbf{Unmarked} : An \emph{R} Package for Fitting Hierarchical Models of Wildlife Occurrence and Abundance.'' \emph{Journal of Statistical Software} 43 (10). \url{https://doi.org/10.18637/jss.v043.i10}.
+
+\leavevmode\hypertarget{ref-praveenj.2017}{}%
+J., Praveen. 2017. ``On the Geo-Precision of Data for Modelling Home Range of a Species Commentary on Ramesh et Al. (2017).'' \emph{Biological Conservation} 213 (September): 245--46. \url{https://doi.org/10.1016/j.biocon.2017.07.017}.
+
+\leavevmode\hypertarget{ref-johnston2019a}{}%
+Johnston, A, Wm Hochachka, Me Strimas-Mackey, V Ruiz Gutierrez, Oj Robinson, Et Miller, T Auer, St Kelling, and D Fink. 2019. ``Analytical Guidelines to Increase the Value of Citizen Science Data: Using eBird Data to Estimate Species Occurrence.'' Preprint. Ecology. \url{https://doi.org/10.1101/574392}.
+
+\leavevmode\hypertarget{ref-johnston2018}{}%
+Johnston, Alison, Daniel Fink, Wesley M. Hochachka, and Steve Kelling. 2018. ``Estimates of Observer Expertise Improve Species Distributions from Citizen Science Data.'' Edited by Nick Isaac. \emph{Methods in Ecology and Evolution} 9 (1): 88--97. \url{https://doi.org/10.1111/2041-210X.12838}.
+
+\leavevmode\hypertarget{ref-kelling2015a}{}%
+Kelling, Steve, Alison Johnston, Wesley M. Hochachka, Marshall Iliff, Daniel Fink, Jeff Gerbracht, Carl Lagoze, et al. 2015. ``Can Observation Skills of Citizen Scientists Be Estimated Using Species Accumulation Curves?'' Edited by Stefano Goffredo. \emph{PLOS ONE} 10 (10): e0139600. \url{https://doi.org/10.1371/journal.pone.0139600}.
+
+\leavevmode\hypertarget{ref-mackenzie2002}{}%
+MacKenzie, Darryl I., James D. Nichols, Gideon B. Lachman, Sam Droege, J. Andrew Royle, and Catherine A. Langtimm. 2002. ``Estimating Site Occupancy Rates When Detection Probabilities Are Less Than One.'' \emph{Ecology} 83 (8): 2248--55. \href{https://doi.org/10.1890/0012-9658(2002)083\%5B2248:ESORWD\%5D2.0.CO;2}{https://doi.org/10.1890/0012-9658(2002)083{[}2248:ESORWD{]}2.0.CO;2}.
+
+\leavevmode\hypertarget{ref-OpenStreetMap}{}%
+OpenStreetMap contributors. 2019. ``Planet Dump Retrieved from https://planet.osm.org.''
+
+\leavevmode\hypertarget{ref-sullivan2014}{}%
+Sullivan, Brian L., Jocelyn L. Aycrigg, Jessie H. Barry, Rick E. Bonney, Nicholas Bruns, Caren B. Cooper, Theo Damoulas, et al. 2014. ``The eBird Enterprise: An Integrated Approach to Development and Application of Citizen Science.'' \emph{Biological Conservation} 169 (January): 31--40. \url{https://doi.org/10.1016/j.biocon.2013.11.003}.
+
+\leavevmode\hypertarget{ref-vanstrien2013}{}%
+van Strien, Arco J., Chris A.M. van Swaay, and Tim Termaat. 2013. ``Opportunistic Citizen Science Data of Animal Species Produce Reliable Estimates of Distribution Trends If Analysed with Occupancy Models.'' Edited by Vincent Devictor. \emph{Journal of Applied Ecology} 50 (6): 1450--8. \url{https://doi.org/10.1111/1365-2664.12158}.
 
 \end{document}

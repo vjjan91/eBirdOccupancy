@@ -5,13 +5,13 @@ editor_options:
 
 # Preparing Observer Expertise Scores
 
-Differences in local avifaunal expertise among citizen scientists can lead to biased species detection when compared with data collected by a consistent set of trained observers (van Strien et al., 2013). Including observer expertise as a detection covariate in occupancy models using eBird data can help account for this variation (Johnston et al., 2018). Observer-specific expertise in local avifauna was calculated following (Kelling et al., 2015) as the normalized predicted number of species reported by an observer after 60 minutes of sampling across the most common land cover type within the study area. This score was calculated by examining checklists from anonymized observers across the study area. We modified (Kelling et al., 2015) formulation by including only observations of the 93 species of interest in our calculations. An observer with a higher number of species of interest reported within 60 minutes would have a higher observer-specific expertise score, with respect to the study area. 
+Differences in local avifaunal expertise among citizen scientists can lead to biased species detection when compared with data collected by a consistent set of trained observers [@vanstrien2013]. Including observer expertise as a detection covariate in occupancy models using eBird data can help account for this variation [@johnston2018]. Observer-specific expertise in local avifauna was calculated following [@kelling2015a] as the normalized predicted number of species reported by an observer after 60 minutes of sampling across the most common land cover type within the study area. This score was calculated by examining checklists from anonymized observers across the study area. We modified Kelling et al. (2015) formulation by including only observations of the 93 species of interest in our calculations. An observer with a higher number of species of interest reported within 60 minutes would have a higher observer-specific expertise score, with respect to the study area. 
 
 Plots with respect to how observer expertise varied over time (2013-2019) for the list of species considered in this study (across the study area alone) can be accessed in Section 7 of the Supplementary Material. 
 
 ## Prepare libraries
 
-```{r load_libs3, eval=FALSE, message=FALSE, warning=FALSE}
+```{r load_libs3, , message=FALSE, warning=FALSE}
 
 # load libs
 library(data.table)
@@ -33,7 +33,7 @@ time_to_decimal <- function(x) {
 ## Prepare data
 
 Here, we go through the data preparation process again because we might want to assess observer expertise over a larger area than the study site.
-```{r load_raw_data, eval=FALSE}
+```{r load_raw_data}
 # Read in shapefile of study area to subset by bounding box
 library(sf)
 wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>%
@@ -65,7 +65,7 @@ ebd_filtered <- auk_filter(ebd_filters,
 ```
 
 Load in the filtered data and columns of interest. 
-```{r read_all_ebd, eval=FALSE}
+```{r read_all_ebd}
 ## Process filtered data
 # read in the data
 ebd <- fread(f_out_ebd)
@@ -94,7 +94,7 @@ setDT(ebd)
 
 ## Spatially explicit filter on checklists
 
-```{r hills_subset_exp, eval=FALSE}
+```{r hills_subset_exp}
 # get checklist locations
 ebd_locs <- ebd[, .(longitude, latitude)]
 ebd_locs <- setDF(ebd_locs) %>% distinct()
@@ -115,13 +115,13 @@ ebd_locs <- filter(ebd_locs, id %in% to_keep) %>%
   st_drop_geometry()
 ```
 
-```{r hills_subset_exp2, eval=FALSE}
+```{r hills_subset_exp2}
 ebd <- ebd[longitude %in% ebd_locs$X & latitude %in% ebd_locs$Y, ]
 ```
 
 ## Prepare species of interest
 
-```{r soi_score, eval=FALSE}
+```{r soi_score}
 # read in species list
 specieslist <- read.csv("data/species_list.csv")
 
@@ -141,7 +141,7 @@ fwrite(ebdSpSum, file = "data/03_data-nspp-per-chk.csv")
 
 ## Prepare checklists for observer score
 
-```{r prepare_chk_covars, eval=FALSE}
+```{r prepare_chk_covars}
 # 1. add new columns of decimal time and julian date
 ebd[, `:=`(
   decimalTime = time_to_decimal(time_observations_started),
@@ -178,7 +178,7 @@ gc()
 ## Get landcover
 
 Read in land cover type data resampled at 1km resolution.
-```{r chk_covar_landuse, eval=FALSE}
+```{r chk_covar_landuse}
 # read in 1km landcover and set 0 to NA
 library(raster)
 landcover <- raster::raster("data/landUseClassification/lc_01000m.tif")
@@ -206,7 +206,7 @@ setDT(ebdChkSummary)[, landcover := landcoverVec]
 
 ## Filter checklist data
 
-```{r filter_data2, eval=FALSE}
+```{r filter_data2}
 # change names for easy handling
 setnames(ebdChkSummary, c(
   "sei", "observer", "year", "duration", "distance",
@@ -248,7 +248,7 @@ fwrite(ebdChkSummary, file = "data/03_data-covars-perChklist.csv")
 ## Model observer expertise
 
 Our observer expertise model aims to include the random intercept effect of observer identity, with a random slope effect of duration. This models the different rate of species accumulation by different observers, as well as their different starting points.
-```{r run_model, eval=FALSE}
+```{r run_model}
 # uses either a subset or all data
 library(lmerTest)
 
@@ -265,7 +265,7 @@ data = ebdChkSummary, family = "poisson"
 )
 ``` 
 
-```{r write_obsexp_model, eval=FALSE}
+```{r write_obsexp_model}
 # make dir if absent
 if (!dir.exists("data/modOutput")) {
   dir.create("data/modOutput")
@@ -279,7 +279,7 @@ if (!dir.exists("data/modOutput")) {
 }
 ```
 
-```{r obsexp_ranef, eval=FALSE}
+```{r obsexp_ranef}
 # make df with means
 observer <- unique(ebdChkSummary$observer)
 
@@ -300,7 +300,7 @@ dfPredict <- mutate(dfPredict,
   mutate(score = scales::rescale(score))
 ```
 
-```{r write_obsexp, eval=FALSE}
+```{r write_obsexp}
 fwrite(dfPredict %>% dplyr::select(observer, score),
   file = "data/03_data-obsExpertise-score.csv"
 )

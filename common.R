@@ -6,17 +6,17 @@ knitr::opts_chunk$set(
   comment = "#>",
   collapse = TRUE,
   cache = FALSE,
-  eval=FALSE,
+  eval = FALSE,
   warning = FALSE,
   error = FALSE,
   message = FALSE,
-  out.width = "\\textwidth", 
+  out.width = "\\textwidth",
   attr.source = ".numberLines",
   fig.align = "center",
   fig.width = 7,
-  fig.asp = 0.618,  # 1 / phi
+  fig.asp = 0.618, # 1 / phi
   fig.show = "hold",
-  python.reticulate=FALSE
+  python.reticulate = FALSE
 )
 options(knitr.kable.NA = "")
 options(dplyr.print_min = 6, dplyr.print_max = 6)
