@@ -1,0 +1,42 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Checking Temporal Sampling Frequency
+
+How often are checklists recorded in each grid cell?
+
+## Load libraries
+
+```{r}
+# load libraries
+library(tidyverse)
+library(sf)
+
+# for plotting
+library(ggplot2)
+library(scico)
+```
+
+## Load checklist data
+
+```{r}
+# load checklist data
+data = read_csv("data/03_data-covars-perChklist.csv")
+
+# transform to UTM 43N
+data = st_as_sf(data, coords = c("longitude", "latitude"), crs = 4326)
+data = st_transform(data, crs = 32643)
+
+# get coordinates and bind to data
+data = cbind(st_drop_geometry(data),
+             st_coordinates(data))
+
+# bin to 1000m
+data = mutate(data,
+              X = plyr::round_any(X, 1000),
+              Y = plyr::round_any(Y, 1000))
+```
+
