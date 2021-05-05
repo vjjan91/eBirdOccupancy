@@ -39,6 +39,7 @@ use_python("/usr/bin/python3")
 ```
 
 Importing python libraries. These libraries need to be installed before use.
+
 ```{python prepare_py_libs}
 # import classic python libs
 import itertools
@@ -153,6 +154,7 @@ chkCovars = chkCovars.merge(unique_locs, on=['latitude',
 ### Spatially explicit filter on checklists
 
 We filter the checklists by the boundary of the study area. This is *not* the extent.
+
 ```{r spatial_filter_supp01}
 # extract data from python
 chkCovars <- py$chkCovars
@@ -170,11 +172,12 @@ chkCovars <- chkCovars %>%
   filter(id %in% unlist(st_contains(wg, chkCovars)))
 ```
 
-## Main Text Figure 3
+## Prepare Main Text Figure 3
 
 ### Prepare histogram of distance to roads
 
 Figure code is hidden in versions rendered as HTML or PDF.
+
 ```{r plot_histogram, , echo=FALSE}
 # make histogram
 hist_roads <- ggplot(chkCovars) +
@@ -227,7 +230,7 @@ readr::read_csv("data/results/distance_roads_sites.csv") %>%
   kableExtra::kable_styling(latex_options = c("hold_position"))
 ```
 
-## Distance to nearest neighbouring site
+### Distance to nearest neighbouring site
 
 ```{r get_nn_site}
 # get unique locations
@@ -235,6 +238,7 @@ locs <- py$unique_locs
 ```
 
 Figure code is hidden in versions rendered as HTML and PDF.
+
 ```{r echo=FALSE}
 # make histogram of nearest neighbours
 hist_sites <-
@@ -258,7 +262,7 @@ hist_sites <-
   )
 ```
 
-```{r plot_map_nnb, , echo=FALSE}
+```{r plot_map_nnb, echo=FALSE}
 # transform points to utm
 locs <- locs %>%
   st_as_sf(coords = c("longitude", "latitude")) %>%
@@ -328,6 +332,7 @@ bbox <- st_bbox(wg)
 ```
 
 Figure code is hidden in versions rendered as HTML and PDF.
+
 ```{r plot_map_dist_roads, , echo=FALSE}
 # plot on maps
 ggplot() +
@@ -372,4 +377,4 @@ ggsave(filename = "figs/fig_distRoads.png", device = png())
 dev.off()
 ```
 
-![Spatial sampling bias of eBird observations across the Nilgiri and the Anamalai hills. A large proportion of localities/sites were next to roads and were on average only ~300m from another locality/site. Each cell here is 2.5km x 2.5km](figs/fig_03_distance_to_roads.png)
+![Spatial sampling bias of eBird observations across the Nilgiri and the Anamalai hills. A large proportion of localities/sites were next to roads and were on average only ~300m from another locality/site. Each cell here is 2.5km x 2.5km](figs/fig_03.png)
