@@ -16,6 +16,7 @@ library(readr)
 library(sf)
 library(auk)
 library(readxl)
+library(lubridate)
 
 # custom sum function
 sum.no.na <- function(x) {
@@ -40,7 +41,7 @@ speciesOfInterest <- as.character(specieslist$scientific_name)
 ```
 
 
-Here, we set broad spatial filters for the states of Kerala, Tamil Nadu and Karnataka and keep only those checklists for our list of species that were reported between 1st Jan 2013 and 31st Dec 2019.
+Here, we set broad spatial filters for the states of Kerala, Tamil Nadu and Karnataka and keep only those checklists for our list of species that were reported between 1st Jan 2013 and 31st Dec 2020.
 
 ```{r prep_ebd_filters}
 # run filters using auk packages
@@ -48,7 +49,7 @@ ebd_filters <- auk_ebd(f_in_ebd, f_in_sampling) %>%
   auk_species(speciesOfInterest) %>%
   auk_country(country = "IN") %>%
   auk_state(c("IN-KL", "IN-TN", "IN-KA")) %>% # Restricting geography to TamilNadu, Kerala & Karnataka
-  auk_date(c("2013-01-01", "2019-12-31")) %>%
+  auk_date(c("2013-01-01", "2020-12-31")) %>%
   auk_complete()
 
 # check filters
@@ -160,7 +161,7 @@ save(data, file = "data/01_data_temp.rdata")
 
 ## Handle presence data
 
-Further pre-processing is required in the case of many checklists where species abundance is often unknown and an 'X' is denoted in such cases. Here, we convert all 'X' notations to a 1, suggesting a presence (as we are not concerned with abundance data in this analysis). We also removed those checklists where the duration in minutes is either not recorded or listed as zero. Lastly, we added an sampling effort based filter following [@johnston2019a], wherein we considered only those checklists with duration in minutes is less than 300 and distance in kilometres traveled is less than 5km. Lastly, we excluded those group checklists where the number of observers was greater than 10. 
+Further pre-processing is required in the case of many checklists where species abundance is often unknown and an 'X' is denoted in such cases. Here, we convert all 'X' notations to a 1, suggesting a presence (as we are not concerned with abundance data in this analysis). We also removed those checklists where the duration in minutes is either not recorded or listed as zero. Lastly, we added an sampling effort based filter following [@johnston2019a], wherein we considered only those checklists with duration in minutes is less than 300 and distance in kilometres traveled is less than 5km. Lastly, we excluded those group checklists where the number of observers was greater than 10. Upon receiving comments from reviewers, we restrict all our checklists between December 1st and May 31st (non-rainy months)and checklists recorded between 5am and 7pm.
 ```{r proc_presence_data}
 # in the first set, replace X, for presences, with 1
 data[[1]] <- data[[1]] %>%
@@ -213,6 +214,12 @@ dataGrouped <- left_join(dataGrouped, dataConstants,
 # remove checklists or seis with more than 10 obervers
 count(dataGrouped, number_observers > 10) # count how many have 10+ obs
 dataGrouped <- filter(dataGrouped, number_observers <= 10)
+
+# keep only checklists between 5AM and 7PM
+dataGrouped <- filter(dataGrouped, time_observations_started >= "05:00:00" & time_observations_started <= "19:00:00")
+
+# keep only checklists between December 1st and May 31st
+dataGrouped <- filter(dataGrouped, month(observation_date) %in% c(1,2,3,4,5,12))
 ```
 
 ## Add decimal time
