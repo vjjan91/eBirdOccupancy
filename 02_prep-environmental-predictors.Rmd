@@ -65,16 +65,34 @@ rm(alt.hills)
 gc()
 ```
 
+## Prepare Bioclim 4a and Bioclim 15
+
+```{r prepare_bio4a_bio15}
+# list chelsa files
+chelsaFiles = list.files("data/chelsa/", recursive = TRUE, pattern = "tif")
+
+# load Bio 1 and 12
+bio_1 = raster("data/chelsa/envicloud/chelsa/chelsa_V1/climatologies/bio/CHELSA_bio10_01.tif")
+bio_12 = raster("data/chelsa/envicloud/chelsa/chelsa_V1/climatologies/bio/CHELSA_bio10_12.tif")
+
+
+```
+
 ## Prepare CHELSA rasters
 
-We prepare the CHELSA rasters for annual temperature and annual precipitation in the same way, reading them in, cropping them to the study site buffer extent, and handling the temperature layer values which we divide by 10. The CHELSA rasters can be downloaded from https://chelsa-climate.org/bioclim/
+CHELSA rasters can be downloaded using the `get_chelsa.sh` shell script, which is a `wget` command pointing to the `envidatS3.txt` file.
+
+### Prepare BIOCLIM 1 and 12
+
+We prepare the CHELSA rasters for annual temperature (Bio 1) and annual precipitation (Bio 12) in the same way, reading them in, cropping them to the study site buffer extent, and handling the temperature layer values which we divide by 10. The CHELSA rasters can be downloaded from https://chelsa-climate.org/bioclim/
 
 ```{r chelsa_rasters, , message=FALSE, warning=FALSE}
 # list chelsa files
 # the chelsa data for Annual mean temperature and annual precipitation can be downloaded from the aforementioned link. They haven't been uploaded to github as a result of its large size.
 chelsaFiles <- list.files("data/chelsa/",
   full.names = TRUE,
-  pattern = "*.tif"
+  recursive = TRUE,
+  pattern = "bio10"
 )
 
 # gather chelsa rasters
@@ -92,11 +110,134 @@ chelsaData[[1]] <- chelsaData[[1]] / 10
 chelsaData <- raster::stack(chelsaData)
 ```
 
+### Prepare BIOCLIM 4a
+
+```{r check_for_4a}
+if(file.exists("data/chelsa/CHELSA_bio10_4a.tif")) {
+  message("Bio 4a already exists, will be overwritten")
+}
+```
+
+
+Bioclim 4a, the coefficient of variation temperature seasonality is calculated as
+
+$$Bio\ 4a = \frac{SD\{ Tkavg_1, \ldots Tkavg_{12} \}}{(Bio\ 1 + 273.15)} \times 100$$
+
+where $Tkavg_i = (Tkmin_i + Tkmax_i) / 2$
+
+Here, we use only the months of December and Jan -- May for winter temperature variation.
+
+```{r bioclim_4a}
+# list rasters by pattern
+patterns = c("tmin", "tmax")
+
+# list the filepaths
+tkAvg = map(patterns, function(pattern) {
+  # list the paths
+  files = list.files(
+    path = "data/chelsa",
+    full.names = TRUE,
+    recursive = TRUE,
+    pattern = pattern
+  )
+})
+
+# print crs elev data for sanity check --- basic WGS84
+crs(elevData)
+
+# now run over the paths and read as rasters and crop by buffer
+tkAvg = map(tkAvg, function(paths) {
+  # going over the file paths, read them in as rasters, convert CRS and crop
+  tempData = map(paths, function(path) {
+    # read in
+    a = raster(path)
+    # assign crs
+    crs(a) = crs(elevData)
+    # crop by buffer, will throw error if CRS doesn't match
+    a = crop(a, as(buffer, "Spatial"))
+    # return a
+    a
+  })
+  # convert each to kelvin, first dividing by 10 to get celsius
+  tempData = map(tempData, function(tmpRaster) {
+    tmpRaster = (tmpRaster / 10) + 273.15
+  })
+})
+
+# assign names
+names(tkAvg) = patterns
+
+# go over the tmin and tmax and get the average monthly temp
+tkAvg = map2(tkAvg[["tmin"]], tkAvg[["tmax"]], function(tmin, tmax) {
+  # return the mean of the corresponding tmin and tmax
+  # still in kelvin
+  calc(stack(tmin, tmax), fun = mean)
+} )
+
+# calculate Bio 4a
+bio_4a = (calc(stack(tkAvg), fun = sd) / (chelsaData[[1]] + 273.15)) * 100
+names(bio_4a) = "CHELSA_bio10_4a"
+# save bio_4a
+writeRaster(bio_4a, filename = "data/chelsa/CHELSA_bio10_4a.tif", overwrite = T)
+```
+
+### Prepare Bioclim 15
+
+```{r check_for_15}
+if(file.exists("data/chelsa/CHELSA_bio10_15.tif")) {
+  message("Bio 15 already exists, will be overwritten")
+}
+```
+
+
+Bioclim 15, the coefficient of variation precipitation (in our area, rainfall) seasonality is calculated as
+
+$$Bio\ 15 = \frac{SD\{ PPT_1, \ldots PPT_{12} \}}{1 + (Bio\ 12 / 12)} \times 100$$
+
+where $PPT_i$ is the monthly precipitation.
+
+Here, we use only the months of December and Jan -- May for winter rainfall variation.
+
+```{r bioclim_15}
+# list rasters by pattern
+pattern = "prec"
+
+# list the filepaths
+pptTotal = list.files(
+    path = "data/chelsa",
+    full.names = TRUE,
+    recursive = TRUE,
+    pattern = pattern
+)
+
+# print crs elev data for sanity check --- basic WGS84
+crs(elevData)
+
+# now run over the paths and read as rasters and crop by buffer
+pptTotal = map(pptTotal, function(path) {
+    a = raster(path)
+    # assign crs
+    crs(a) = crs(elevData)
+    # crop by buffer, will throw error if CRS doesn't match
+    a = crop(a, as(buffer, "Spatial"))
+    # return a
+    a
+})
+
+# calculate Bio 4a
+bio_15 = (calc(stack(pptTotal), fun = sd) / (1 + (chelsaData[[2]] / 12))) * 100
+names(bio_15) = "CHELSA_bio10_15"
+# save bio_4a
+writeRaster(bio_15, filename = "data/chelsa/CHELSA_bio10_15.tif", overwrite = T)
+```
+
+### Stack terrain and climate
+
 We stack the terrain and climatic rasters.
 
 ```{r stack_rasters, , message=FALSE, warning=FALSE}
 # stack rasters for efficient reprojection later
-env_data <- stack(elevData, chelsaData)
+env_data <- stack(elevData, chelsaData, CHELSA_bio10_4a = bio_4a, bio_15)
 ```
 
 ## Resample landcover from 10m to 1km
