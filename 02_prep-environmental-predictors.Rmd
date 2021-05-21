@@ -306,8 +306,6 @@ gdalUtils::gdalwarp(
 We compare the frequency of landcover classes between the original 10m and the resampled 1km raster to be certain that the resampling has not resulted in drastic misrepresentation of the frequency of any landcover type. This comparison is made using the figure below.
 
 ```{r get_resampled_lc, , echo=FALSE}
-# mask by study area
-landcover <- raster(landcover)
 # landcover <- mask(landcover, mask = as(hills, "Spatial"))
 lc_data <- raster("data/landUseClassification/lc_01000m.tif")
 # lc_data <- mask(lc_data, mask = as(hills, "Spatial"))
@@ -315,50 +313,46 @@ lc_data[lc_data == 0] <- NA
 
 # make raster barplot data
 data1km <- raster::getValues(lc_data)
-data1km <- data1km[data1km > 0]
 data1km <- table(data1km)
 data1km <- data1km / sum(data1km)
 
-data10m <- raster::getValues(landcover)
-data10m <- data10m[data10m > 0]
+data10m <- raster::getValues(landcover_reclassified)
 data10m <- tibble(value = data10m)
-data10m <- dplyr::count(data10m, value) %>% dplyr::mutate(n = n / sum(n))
+data10m <- dplyr::count(data10m, value) %>% 
+  dplyr::mutate(n = n / sum(n))
 data10m <- xtabs(n ~ value, data10m)
 
-# map rasters
-{
-  png(
-    filename = "figs/figLandcoverResample.png", width = 1200, height = 1200,
-    res = 150
-  )
-  par(mfrow = c(2, 2))
-  # rasterplots
-  raster::plot(landcover,
-    col = c("white", scico::scico(palette = "batlow", 7)),
-    main = "10m sentinel data", xlab = "longitude", y = "latitude"
-  )
-  plot(hills, add = T, border = "red", col = "transparent")
-  raster::plot(rasterAgg1km,
-    col = c("white", scico::scico(palette = "batlow", 7)),
-    main = "1km resampled data", xlab = "longitude", y = "latitude"
-  )
-  plot(hills, add = T, border = "red", col = "transparent")
+library(tmap)
 
-  # barplots
-  barplot(data10m,
-    xlab = c("landcover class"), ylab = "prop.",
-    col = scico::scico(palette = "batlow", 7)
-  )
-  barplot(data1km,
-    xlab = c("landcover class"), ylab = "prop.",
-    col = scico::scico(palette = "batlow", 7), alpha = 0.8, add = F
-  )
-  barplot(data10m,
-    xlab = c("landcover class"), ylab = "prop.",
-    col = "grey20", border = NA, density = 30, add = T
-  )
-  dev.off()
-}
+# make figures
+fig_lc_roy_reclass =
+  tm_shape(landcover_reclassified)+
+  tm_raster(palette = c(viridis::turbo(11), "grey"), style = "cat",
+            title = "Landcover")+
+  tm_shape(hills)+
+  tm_borders(col = "white")+
+  tm_layout(legend.position = c("left","bottom"),
+            panel.labels = "Reclassified Roy et al. 2015 Landcover",
+            panel.show = T)
+
+fig_lc_1km =
+  tm_shape(lc_data)+
+  tm_raster(palette = c(viridis::turbo(11), "grey"), style = "cat",
+            title = "Landcover")+
+  tm_shape(hills)+
+  tm_borders(col = "white")+
+  tm_layout(legend.position = c("left","bottom"),
+            panel.labels = "Reclassified Landcover, resampled 1km",
+            panel.show = T)
+
+# save figures
+fig_landcover_resample = tmap_arrange(fig_lc_roy_reclass, fig_lc_1km, ncol = 2)
+tmap_save(
+  tm = fig_landcover_resample,
+  filename = "figs/fig_landcover_resample.png",
+  width = 9,
+  height = 5
+)
 ```
 
 ## Resample other rasters to 1km
