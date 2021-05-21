@@ -22,6 +22,12 @@ library(stringi)
 library(glue)
 library(gdalUtils)
 library(purrr)
+library(dplyr)
+library(tibble)
+
+# for plotting
+library(viridis)
+library(tmap)
 
 # prep mode function to aggregate
 funcMode <- function(x, na.rm = T) {
