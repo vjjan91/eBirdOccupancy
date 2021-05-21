@@ -1,5 +1,3 @@
 #!/bin/bash
 # code to get chelsa files
-cd  data/chelsa
-wget --no-host-directories --force-directories --input-file=envidatS3paths.txt
-cd ../..
+wget -P data/chelsa/ --no-host-directories --force-directories --input-file=data/chelsa/envidatS3paths.txt
