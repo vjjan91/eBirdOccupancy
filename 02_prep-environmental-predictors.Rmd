@@ -254,7 +254,36 @@ The classified image can be obtained from: https://code.earthengine.google.com/e
 
 ```{r landcover_raster, , message=FALSE, warning=FALSE, message=FALSE}
 # read in landcover raster location
-landcover <- "data/landUseClassification/classifiedImage-UTM.tif"
+landcover <- "data/landUseClassification/landcover_roy_2015/"
+
+# read in and crop
+landcover = raster(landcover)
+buffer_utm = st_transform(buffer, 32643)
+landcover = crop(
+  landcover,
+  as(
+    buffer_utm,
+    "Spatial"
+  )
+)
+
+# read reclassification matrix
+reclassification_matrix = read.csv("data/landUseClassification/LandCover_ReclassifyMatrix_2015.csv")
+reclassification_matrix = as.matrix(reclassification_matrix[,c("V1", "To")])
+
+# reclassify
+landcover_reclassified = reclassify(
+  x = landcover,
+  rcl = reclassification_matrix
+)
+
+# write to file
+writeRaster(landcover_reclassified, 
+            filename = "data/landUseClassification/landcover_roy_2015_reclassified.tif",
+            overwrite = TRUE)
+
+# check reclassification
+plot(landcover_reclassified)
 
 # get extent
 e <- bbox(raster(landcover))
