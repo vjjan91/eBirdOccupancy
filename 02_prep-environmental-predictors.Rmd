@@ -292,12 +292,12 @@ e <- bbox(raster(landcover))
 res_init <- res(raster(landcover))
 
 # res to transform to 1000m
-res_final <- res_init * 100
+res_final <- res_init * (1000 / res_init)
 
 # use gdalutils gdalwarp for resampling transform
 # to 1km from 10m
 gdalUtils::gdalwarp(
-  srcfile = landcover,
+  srcfile = "data/landUseClassification/landcover_roy_2015_reclassified.tif",
   dstfile = "data/landUseClassification/lc_01000m.tif",
   tr = c(res_final), r = "mode", te = c(e)
 )
