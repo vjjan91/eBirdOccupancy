@@ -8,7 +8,7 @@ editor_options:
 In this script, we processed climatic and landscape predictors for occupancy modeling.
 
 All climatic data was obtained from https://chelsa-climate.org/bioclim/ 
-All landscape data was derived from a high resolution Sentinel-2 composite image that was classified using Google Earth Engine. This code can be accessed in Section 3 of the Supplementary Material and here: https://code.earthengine.google.com/ec69fc4ffad32a532b25202009243d42. 
+All landscape data was derived from a high resolution land cover map (Roy et al 2015). This map provides sufficient classes to achieve a high land cover resolution. 
 
 The goal here is to resample all rasters so that they have the same resolution of 1km cells. We also tested for spatial autocorrelation among climatic predictors, which can be found in Section 4 of the Supplementary Material. 
 
@@ -22,6 +22,12 @@ library(stringi)
 library(glue)
 library(gdalUtils)
 library(purrr)
+library(dplyr)
+library(tibble)
+
+# for plotting
+library(viridis)
+library(tmap)
 
 # prep mode function to aggregate
 funcMode <- function(x, na.rm = T) {
@@ -74,17 +80,15 @@ chelsaFiles = list.files("data/chelsa/", recursive = TRUE, pattern = "tif")
 # load Bio 1 and 12
 bio_1 = raster("data/chelsa/envicloud/chelsa/chelsa_V1/climatologies/bio/CHELSA_bio10_01.tif")
 bio_12 = raster("data/chelsa/envicloud/chelsa/chelsa_V1/climatologies/bio/CHELSA_bio10_12.tif")
-
-
 ```
 
 ## Prepare CHELSA rasters
 
 CHELSA rasters can be downloaded using the `get_chelsa.sh` shell script, which is a `wget` command pointing to the `envidatS3.txt` file.
 
-### Prepare BIOCLIM 1 and 12
+### Prepare BIOCLIM 4a and 15
 
-We prepare the CHELSA rasters for annual temperature (Bio 1) and annual precipitation (Bio 12) in the same way, reading them in, cropping them to the study site buffer extent, and handling the temperature layer values which we divide by 10. The CHELSA rasters can be downloaded from https://chelsa-climate.org/bioclim/
+We prepare the CHELSA rasters for seasonality in temperature (Bio 4a) and seasonality in precipitation (Bio 15) in the same way, reading them in, cropping them to the study site buffer extent, and handling the temperature layer values which we divide by 10. The CHELSA rasters can be downloaded from https://chelsa-climate.org/bioclim/
 
 ```{r chelsa_rasters, , message=FALSE, warning=FALSE}
 # list chelsa files
@@ -244,11 +248,38 @@ env_data <- stack(elevData, chelsaData, CHELSA_bio10_4a = bio_4a, bio_15)
 
 We read in a land cover classified image and resample that using the mode function to a 1km resolution. Please note that the resampling process need not be carried out as it has been done already and the resampled raster can be loaded with the subsequent code chunk. 
 
-The classified image can be obtained from: https://code.earthengine.google.com/ec69fc4ffad32a532b25202009243d42.
-
 ```{r landcover_raster, , message=FALSE, warning=FALSE, message=FALSE}
 # read in landcover raster location
-landcover <- "data/landUseClassification/classifiedImage-UTM.tif"
+landcover <- "data/landUseClassification/landcover_roy_2015/"
+
+# read in and crop
+landcover = raster(landcover)
+buffer_utm = st_transform(buffer, 32643)
+landcover = crop(
+  landcover,
+  as(
+    buffer_utm,
+    "Spatial"
+  )
+)
+
+# read reclassification matrix
+reclassification_matrix = read.csv("data/landUseClassification/LandCover_ReclassifyMatrix_2015.csv")
+reclassification_matrix = as.matrix(reclassification_matrix[,c("V1", "To")])
+
+# reclassify
+landcover_reclassified = reclassify(
+  x = landcover,
+  rcl = reclassification_matrix
+)
+
+# write to file
+writeRaster(landcover_reclassified, 
+            filename = "data/landUseClassification/landcover_roy_2015_reclassified.tif",
+            overwrite = TRUE)
+
+# check reclassification
+plot(landcover_reclassified)
 
 # get extent
 e <- bbox(raster(landcover))
@@ -257,22 +288,20 @@ e <- bbox(raster(landcover))
 res_init <- res(raster(landcover))
 
 # res to transform to 1000m
-res_final <- res_init * 100
+res_final <- res_init * (1000 / res_init)
 
 # use gdalutils gdalwarp for resampling transform
 # to 1km from 10m
 gdalUtils::gdalwarp(
-  srcfile = landcover,
+  srcfile = "data/landUseClassification/landcover_roy_2015_reclassified.tif",
   dstfile = "data/landUseClassification/lc_01000m.tif",
   tr = c(res_final), r = "mode", te = c(e)
 )
 ```
 
-We compare the frequency of landcover classes between the original 10m and the resampled 1km raster to be certain that the resampling has not resulted in drastic misrepresentation of the frequency of any landcover type. This comparison is made using the figure below.
+We compare the frequency of landcover classes between the original raster and the resampled 1km raster to be certain that the resampling has not resulted in drastic misrepresentation of the frequency of any landcover type. This comparison is made using the figure below.
 
 ```{r get_resampled_lc, , echo=FALSE}
-# mask by study area
-landcover <- raster(landcover)
 # landcover <- mask(landcover, mask = as(hills, "Spatial"))
 lc_data <- raster("data/landUseClassification/lc_01000m.tif")
 # lc_data <- mask(lc_data, mask = as(hills, "Spatial"))
@@ -280,50 +309,46 @@ lc_data[lc_data == 0] <- NA
 
 # make raster barplot data
 data1km <- raster::getValues(lc_data)
-data1km <- data1km[data1km > 0]
 data1km <- table(data1km)
 data1km <- data1km / sum(data1km)
 
-data10m <- raster::getValues(landcover)
-data10m <- data10m[data10m > 0]
+data10m <- raster::getValues(landcover_reclassified)
 data10m <- tibble(value = data10m)
-data10m <- dplyr::count(data10m, value) %>% dplyr::mutate(n = n / sum(n))
+data10m <- dplyr::count(data10m, value) %>% 
+  dplyr::mutate(n = n / sum(n))
 data10m <- xtabs(n ~ value, data10m)
 
-# map rasters
-{
-  png(
-    filename = "figs/figLandcoverResample.png", width = 1200, height = 1200,
-    res = 150
-  )
-  par(mfrow = c(2, 2))
-  # rasterplots
-  raster::plot(landcover,
-    col = c("white", scico::scico(palette = "batlow", 7)),
-    main = "10m sentinel data", xlab = "longitude", y = "latitude"
-  )
-  plot(hills, add = T, border = "red", col = "transparent")
-  raster::plot(rasterAgg1km,
-    col = c("white", scico::scico(palette = "batlow", 7)),
-    main = "1km resampled data", xlab = "longitude", y = "latitude"
-  )
-  plot(hills, add = T, border = "red", col = "transparent")
+library(tmap)
 
-  # barplots
-  barplot(data10m,
-    xlab = c("landcover class"), ylab = "prop.",
-    col = scico::scico(palette = "batlow", 7)
-  )
-  barplot(data1km,
-    xlab = c("landcover class"), ylab = "prop.",
-    col = scico::scico(palette = "batlow", 7), alpha = 0.8, add = F
-  )
-  barplot(data10m,
-    xlab = c("landcover class"), ylab = "prop.",
-    col = "grey20", border = NA, density = 30, add = T
-  )
-  dev.off()
-}
+# make figures
+fig_lc_roy_reclass =
+  tm_shape(landcover_reclassified)+
+  tm_raster(palette = c(viridis::turbo(11), "grey"), style = "cat",
+            title = "Landcover")+
+  tm_shape(hills)+
+  tm_borders(col = "white")+
+  tm_layout(legend.position = c("left","bottom"),
+            panel.labels = "Reclassified Roy et al. 2015 Landcover",
+            panel.show = T)
+
+fig_lc_1km =
+  tm_shape(lc_data)+
+  tm_raster(palette = c(viridis::turbo(11), "grey"), style = "cat",
+            title = "Landcover")+
+  tm_shape(hills)+
+  tm_borders(col = "white")+
+  tm_layout(legend.position = c("left","bottom"),
+            panel.labels = "Reclassified Landcover, resampled 1km",
+            panel.show = T)
+
+# save figures
+fig_landcover_resample = tmap_arrange(fig_lc_roy_reclass, fig_lc_1km, ncol = 2)
+tmap_save(
+  tm = fig_landcover_resample,
+  filename = "figs/fig_landcover_resample.png",
+  width = 9,
+  height = 5
+)
 ```
 
 ## Resample other rasters to 1km
@@ -385,7 +410,7 @@ landscape <- stack("data/spatial/landscape_resamp01_km.tif")
 
 # get proper names
 elev_names <- c("elev", "slope", "aspect")
-chelsa_names <- c("bio_01", "bio_12")
+chelsa_names <- c("bio_15a", "bio_4a")
 
 names(landscape) <- as.character(glue('{c(elev_names, chelsa_names, "landcover")}'))
 ```
@@ -419,8 +444,8 @@ Figure code is hidden in versions rendered as HTML or PDF.
 ```{r plot_clim_elev, , echo=FALSE}
 # make labeller
 chelsa <- c(
-  bio_01 = "Annual Mean Temperature (°C)",
-  bio_12 = "Annual Precipitation (mm)"
+  bio_15a = "Seasonality in Precipiation (CV)",
+  bio_4a = "Seasonality in Temperature (CV)"
 )
 
 fig_climate_elev <-
@@ -505,10 +530,11 @@ fig_lc_elev <-
   ) +
   scale_y_discrete(
     labels = c(
-      "Agriculture", "Forest",
-      "Grassland", "Plantations",
-      "Settlements", "Tea",
-      "Water Bodies"
+      "Evergreen", "Deciduous",
+      "Degraded Forest", "Scrubland",
+      "Dry Grassland", "Plantation",
+      "Settlement","Barren land","Cropland","Wetland",
+      "Mixed Forest","Sholas"
     )
   ) +
   scale_x_continuous(
@@ -555,8 +581,8 @@ fig_clim_lc_elev <-
 ggsave(fig_clim_lc_elev,
   filename = "figs/fig_02_clim_lc_elev.png",
   dpi = 300,
-  height = 120, width = 168, units = "mm"
+  height = 130, width = 168, units = "mm"
 )
 ```
 
-![Annual Mean Temperature varied from ~28C in the plains to <14C at higher elevations. Annual precipitation increased at lower elevations (in the plains) to ~3000mm and ranged between 1500mm and 2200mm at mid- and high elevations across the Nilgiri and the Anamalai hills. (b) The proportion of land cover types varied across the study area as shown in this panel (1 = agriculture; 2 = forests; 3 = grasslands; 4 = plantations; 5 = settlements; 6 = tea; 7 = water bodies).](figs/fig_02.png)
+![(a) Seasonality in precipitation and seasonality in temperature as a function of elevation is shown here. The coefficient of variation was calculated. (b) The proportion of land cover types varied across the study area as shown in this panel.](figs/fig_02_clim_lc_elev.png)
