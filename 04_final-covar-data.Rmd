@@ -78,7 +78,7 @@ data_spatial_thin <- map(data_spatial_thin, function(df) {
     group_by(cell) %>%
     filter(tot_effort == max(tot_effort))
 
-  return(points_max)
+  points_max
 })
 
 # remove old data
@@ -88,6 +88,7 @@ rm(dataGrouped)
 ## Temporal subsampling
 
 Additionally, from each selected site, we randomly selected a maximum of 10 checklists, which reduced temporal autocorrelation.
+
 ```{r subsample_data}
 # subsample data for random 10 observations
 dataSubsample <- map(data_spatial_thin, function(df) {
@@ -101,7 +102,7 @@ dataSubsample <- map(data_spatial_thin, function(df) {
     .f = function(x) sample_n(x, 10, replace = FALSE)
   )
 
-  return(bind_rows(df_samples))
+  bind_rows(df_samples)
 })
 
 # bind all rows for data frame
@@ -113,7 +114,8 @@ rm(data_spatial_thin)
 
 ## Add checklist calibration index
 
-Load the CCI computed in the previous section. The CCI was the lone observer’s expertise score for single-observer checklists, and the highest expertise score among observers for group checklists. 
+Load the CCI computed in the previous section. The CCI was the lone observer’s expertise score for single-observer checklists, and the highest expertise score among observers for group checklists.
+
 ```{r add_expertise}
 # read in obs score and extract numbers
 expertiseScore <- read_csv("data/03_data-obsExpertise-score.csv") %>%

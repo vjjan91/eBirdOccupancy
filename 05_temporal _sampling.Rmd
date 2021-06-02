@@ -1,0 +1,285 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Checking Temporal Sampling Frequency
+
+How often are checklists recorded in each grid cell?
+
+## Load libraries
+
+```{r}
+# load libraries
+library(tidyverse)
+library(sf)
+
+# for plotting
+library(ggplot2)
+library(scico)
+library(ggthemes)
+library(ggspatial)
+```
+
+## Load checklist data
+
+Here we load filtered checklist data and convert to UTM 43N coordinates.
+
+```{r}
+# load checklist data
+load("data/01_ebird_data_prelim_processing.rdata")
+
+# get checklists
+data = distinct(dataGrouped, sampling_event_identifier, observation_date,
+  longitude, latitude)
+
+# remove old data
+rm(dataGrouped)
+
+# transform to UTM 43N
+data = st_as_sf(data, coords = c("longitude", "latitude"), crs = 4326)
+data = st_transform(data, crs = 32643)
+
+# get coordinates and bind to data
+data = cbind(st_drop_geometry(data),
+             st_coordinates(data))
+
+# bin to 1000m
+data = mutate(data,
+              X = plyr::round_any(X, 2500),
+              Y = plyr::round_any(Y, 2500))
+```
+
+## Get time differences per grid cell
+
+```{r}
+# get time differences in days
+data = mutate(data, observation_date = as.POSIXct(observation_date))
+data = nest(data, data = c("sampling_event_identifier", "observation_date"))
+
+# map over data
+data = mutate(data,
+  lag_metrics = lapply(data, function(df) {
+
+    df = arrange(df, observation_date)
+
+    lag = as.numeric(diff(df$observation_date, na.rm=TRUE) / (24 * 3600))
+
+    data = tibble(
+      mean_lag = mean(lag, na.rm=TRUE),
+      median_lag = median(lag, na.rm=TRUE),
+      sd_lag = sd(lag, na.rm=TRUE),
+      n_chk = nrow(df)
+    )
+
+    data
+  }))
+```
+
+```{r}
+# unnest lag metrics
+data_lag = select(data, -data)
+data_lag = unnest(data_lag, cols = "lag_metrics")
+
+# set the mean and median to infinity if nchk is 1
+data_lag = mutate(data_lag,
+  mean_lag = ifelse(n_chk == 1, Inf, mean_lag),
+  median_lag = ifelse(n_chk == 1, Inf, median_lag),
+  sd_lag = ifelse(n_chk == 1, Inf, sd_lag)
+)
+
+# set all 0 to 1
+data_lag = mutate(data_lag, mean_lag = mean_lag + 1,
+  median_lag = median_lag + 1)
+# melt data by tile
+# data_lag = pivot_longer(data_lag, cols = c("mean_lag", "median_lag", "sd_lag"))
+```
+
+## Time Since Previous Checklist
+
+### Get aux data
+
+```{r}
+# hills data
+wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>%
+  st_transform(32643)
+
+roads <- st_read("data/spatial/roads_studysite_2019/roads_studysite_2019.shp") %>%
+  st_transform(32643)
+
+# add land
+library(rnaturalearth)
+land <- ne_countries(
+  scale = 50, type = "countries", continent = "asia",
+  country = "india",
+  returnclass = c("sf")
+) %>%
+  st_transform(32643)
+
+bbox <- st_bbox(wg)
+```
+
+### Histogram of lags
+
+```{r}
+# get lags
+data = mutate(data,
+  lag_hist = lapply(data, function(df) {
+
+    df = arrange(df, observation_date)
+
+    lag = as.numeric(diff(df$observation_date, na.rm=TRUE) / (24 * 3600))
+
+    data = tibble(
+      lag = lag + 1,
+      index = seq(lag)
+    )
+
+    data
+  }))
+
+# unnest lags
+data_hist = select(data, X, Y, lag_hist) %>%
+  unnest(cols = "lag_hist")
+```
+
+```{r}
+fig_hist_lag = 
+ggplot(data_hist)+
+  geom_histogram(
+    aes(x = lag),
+    bins = 10, size = 0.2, fill = "steelblue"
+  )+
+  scale_x_log10()+
+  scale_y_continuous(
+    labels = scales::label_number(
+      scale = 0.001, accuracy = 1,
+      suffix = "K"
+    ),
+    limits = c(0, 10.5e3)
+  )+
+  theme_few() +
+  theme(
+    plot.background = element_rect(fill = "white", colour = 1),
+    panel.background = element_blank(),
+    panel.border = element_blank(), axis.line = element_blank(),
+    axis.text.y = element_text(
+      angle = 90,
+      hjust = 0.5
+    )
+  )+
+  labs(
+    x = "Days since prev. checklist",
+    y = "# checklists"
+  )
+```
+
+```{r}
+# make plot
+fig_lag_spatial = 
+ggplot(data_lag)+
+  geom_sf(data = land, fill = "grey90", col = NA) +
+  geom_sf(
+    data = wg,
+    fill = NA
+  )+
+  annotation_custom(
+    grob = fig_hist_lag %>% ggplotGrob(),
+    xmin = bbox["xmax"] - (bbox["xmax"] - bbox["xmin"]) / 2.5,
+    xmax = bbox["xmax"],
+    ymin = bbox["ymax"] - (bbox["ymax"] - bbox["ymin"]) / 3,
+    ymax = bbox["ymax"]
+  ) +
+  geom_tile(
+    aes(X, Y,
+        fill = mean_lag),
+    col = "grey90"
+  )+
+  geom_sf(
+    data = roads, size = 0.2, col = "indianred"
+  ) +
+  scale_fill_scico(
+    palette = "oslo",
+    direction = 1,
+    trans = "log10",
+    na.value = alpha("gold")
+  )+
+  annotation_north_arrow(
+    location = "br", which_north = "true",
+    pad_x = unit(0.1, "in"), pad_y = unit(0.5, "in"),
+    style = north_arrow_fancy_orienteering
+  ) +
+  annotation_scale(location = "br", width_hint = 0.4, text_cex = 1) +
+  coord_sf(
+    expand = FALSE,
+    xlim = bbox[c("xmin", "xmax")],
+    ylim = bbox[c("ymin", "ymax")]
+  ) +
+  ggthemes::theme_few() +
+  theme(
+    legend.position = c(0.9, 0.53),
+    legend.background = element_blank(),
+    legend.key = element_rect(fill = "grey90"),
+    axis.text.y = element_text(
+      angle = 90,
+      hjust = 0.5
+    ),
+    axis.title = element_blank(),
+    panel.background = element_rect(fill = "lightblue")
+  )+
+  labs(
+    fill = "Mean days\nb/w checklists"
+  )
+```
+
+```{r}
+# save figure
+ggsave(filename = "figs/fig_lag_spatial.png", width = 6.5, height = 6.5, 
+       device = png())
+```
+
+## Checklists per Month
+
+```{r}
+# get two week period by date
+data = select(data, X, Y, data)
+
+# unnest
+data = unnest(data, cols = "data")
+
+# get fortnight
+library(lubridate)
+data = mutate(data, week = week(observation_date),
+  week = plyr::round_any(week, 2),
+  year = year(observation_date),
+  month = month(observation_date)) 
+
+# count checklists per fortnight
+data_count = count(data, month, year)
+```
+
+```{r}
+ggplot(data_count)+
+  geom_boxplot(
+    aes(x = factor(month), 
+        y = n),
+    fill = "steelblue"
+  )+
+  scale_y_log10(
+    limits = c(10, NA)
+  )+
+  theme_classic()+
+  theme(
+    axis.text.y = element_text(
+      angle = 90,
+      hjust = 0.5
+    )
+  )+
+  labs(
+    x = "Month",
+    y = "# checklists"
+  )
+
+ggsave(filename = "figs/fig_chk_per_month.png")
+```

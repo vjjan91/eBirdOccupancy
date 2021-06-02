@@ -16,13 +16,18 @@ The goal here is to resample all rasters so that they have the same resolution o
 
 We load some common libraries for raster processing and define a custom mode function.
 ```{r load_libs2, , message=FALSE, warning=FALSE}
-
 # load libs
 library(raster)
 library(stringi)
 library(glue)
 library(gdalUtils)
 library(purrr)
+library(dplyr)
+library(tibble)
+
+# for plotting
+library(viridis)
+library(tmap)
 
 # prep mode function to aggregate
 funcMode <- function(x, na.rm = T) {
@@ -50,7 +55,8 @@ buffer <- st_buffer(hills, 3e4) %>%
 
 ## Prepare terrain rasters
 
-We prepare the elevation data which is an SRTM raster layer, and derive the slope and aspect from it after cropping it to the extent of the study site buffer. Please download the latest version of the SRTM raster layer from https://www.worldclim.org/data/worldclim21.html 
+We prepare the elevation data which is an SRTM raster layer, and derive the slope and aspect from it after cropping it to the extent of the study site buffer. Please download the latest version of the SRTM raster layer from https://www.worldclim.org/data/worldclim21.html
+
 ```{r terrain_raster, , message=FALSE, warning=FALSE}
 # load elevation and crop to hills size, then mask by hills
 alt <- raster("data/spatial/Elevation/alt") # this layer is not added to github as a result of its large size and can be downloaded from the above link
@@ -65,15 +71,34 @@ rm(alt.hills)
 gc()
 ```
 
+## Prepare Bioclim 4a and Bioclim 15
+
+```{r prepare_bio4a_bio15}
+# list chelsa files
+chelsaFiles = list.files("data/chelsa/", recursive = TRUE, pattern = "tif")
+
+# load Bio 1 and 12
+bio_1 = raster("data/chelsa/envicloud/chelsa/chelsa_V1/climatologies/bio/CHELSA_bio10_01.tif")
+bio_12 = raster("data/chelsa/envicloud/chelsa/chelsa_V1/climatologies/bio/CHELSA_bio10_12.tif")
+
+
+```
+
 ## Prepare CHELSA rasters
 
-We prepare the CHELSA rasters for annual temperature and annual precipitation in the same way, reading them in, cropping them to the study site buffer extent, and handling the temperature layer values which we divide by 10. The CHELSA rasters can be downloaded from https://chelsa-climate.org/bioclim/
+CHELSA rasters can be downloaded using the `get_chelsa.sh` shell script, which is a `wget` command pointing to the `envidatS3.txt` file.
+
+### Prepare BIOCLIM 1 and 12
+
+We prepare the CHELSA rasters for annual temperature (Bio 1) and annual precipitation (Bio 12) in the same way, reading them in, cropping them to the study site buffer extent, and handling the temperature layer values which we divide by 10. The CHELSA rasters can be downloaded from https://chelsa-climate.org/bioclim/
+
 ```{r chelsa_rasters, , message=FALSE, warning=FALSE}
 # list chelsa files
 # the chelsa data for Annual mean temperature and annual precipitation can be downloaded from the aforementioned link. They haven't been uploaded to github as a result of its large size.
 chelsaFiles <- list.files("data/chelsa/",
   full.names = TRUE,
-  pattern = "*.tif"
+  recursive = TRUE,
+  pattern = "bio10"
 )
 
 # gather chelsa rasters
@@ -91,20 +116,174 @@ chelsaData[[1]] <- chelsaData[[1]] / 10
 chelsaData <- raster::stack(chelsaData)
 ```
 
+### Prepare BIOCLIM 4a
+
+```{r check_for_4a}
+if(file.exists("data/chelsa/CHELSA_bio10_4a.tif")) {
+  message("Bio 4a already exists, will be overwritten")
+}
+```
+
+
+Bioclim 4a, the coefficient of variation temperature seasonality is calculated as
+
+$$Bio\ 4a = \frac{SD\{ Tkavg_1, \ldots Tkavg_{12} \}}{(Bio\ 1 + 273.15)} \times 100$$
+
+where $Tkavg_i = (Tkmin_i + Tkmax_i) / 2$
+
+Here, we use only the months of December and Jan -- May for winter temperature variation.
+
+```{r bioclim_4a}
+# list rasters by pattern
+patterns = c("tmin", "tmax")
+
+# list the filepaths
+tkAvg = map(patterns, function(pattern) {
+  # list the paths
+  files = list.files(
+    path = "data/chelsa",
+    full.names = TRUE,
+    recursive = TRUE,
+    pattern = pattern
+  )
+})
+
+# print crs elev data for sanity check --- basic WGS84
+crs(elevData)
+
+# now run over the paths and read as rasters and crop by buffer
+tkAvg = map(tkAvg, function(paths) {
+  # going over the file paths, read them in as rasters, convert CRS and crop
+  tempData = map(paths, function(path) {
+    # read in
+    a = raster(path)
+    # assign crs
+    crs(a) = crs(elevData)
+    # crop by buffer, will throw error if CRS doesn't match
+    a = crop(a, as(buffer, "Spatial"))
+    # return a
+    a
+  })
+  # convert each to kelvin, first dividing by 10 to get celsius
+  tempData = map(tempData, function(tmpRaster) {
+    tmpRaster = (tmpRaster / 10) + 273.15
+  })
+})
+
+# assign names
+names(tkAvg) = patterns
+
+# go over the tmin and tmax and get the average monthly temp
+tkAvg = map2(tkAvg[["tmin"]], tkAvg[["tmax"]], function(tmin, tmax) {
+  # return the mean of the corresponding tmin and tmax
+  # still in kelvin
+  calc(stack(tmin, tmax), fun = mean)
+} )
+
+# calculate Bio 4a
+bio_4a = (calc(stack(tkAvg), fun = sd) / (chelsaData[[1]] + 273.15)) * 100
+names(bio_4a) = "CHELSA_bio10_4a"
+# save bio_4a
+writeRaster(bio_4a, filename = "data/chelsa/CHELSA_bio10_4a.tif", overwrite = T)
+```
+
+### Prepare Bioclim 15
+
+```{r check_for_15}
+if(file.exists("data/chelsa/CHELSA_bio10_15.tif")) {
+  message("Bio 15 already exists, will be overwritten")
+}
+```
+
+
+Bioclim 15, the coefficient of variation precipitation (in our area, rainfall) seasonality is calculated as
+
+$$Bio\ 15 = \frac{SD\{ PPT_1, \ldots PPT_{12} \}}{1 + (Bio\ 12 / 12)} \times 100$$
+
+where $PPT_i$ is the monthly precipitation.
+
+Here, we use only the months of December and Jan -- May for winter rainfall variation.
+
+```{r bioclim_15}
+# list rasters by pattern
+pattern = "prec"
+
+# list the filepaths
+pptTotal = list.files(
+    path = "data/chelsa",
+    full.names = TRUE,
+    recursive = TRUE,
+    pattern = pattern
+)
+
+# print crs elev data for sanity check --- basic WGS84
+crs(elevData)
+
+# now run over the paths and read as rasters and crop by buffer
+pptTotal = map(pptTotal, function(path) {
+    a = raster(path)
+    # assign crs
+    crs(a) = crs(elevData)
+    # crop by buffer, will throw error if CRS doesn't match
+    a = crop(a, as(buffer, "Spatial"))
+    # return a
+    a
+})
+
+# calculate Bio 4a
+bio_15 = (calc(stack(pptTotal), fun = sd) / (1 + (chelsaData[[2]] / 12))) * 100
+names(bio_15) = "CHELSA_bio10_15"
+# save bio_4a
+writeRaster(bio_15, filename = "data/chelsa/CHELSA_bio10_15.tif", overwrite = T)
+```
+
+### Stack terrain and climate
+
 We stack the terrain and climatic rasters.
+
 ```{r stack_rasters, , message=FALSE, warning=FALSE}
 # stack rasters for efficient reprojection later
-env_data <- stack(elevData, chelsaData)
+env_data <- stack(elevData, chelsaData, CHELSA_bio10_4a = bio_4a, bio_15)
 ```
 
 ## Resample landcover from 10m to 1km
 
 We read in a land cover classified image and resample that using the mode function to a 1km resolution. Please note that the resampling process need not be carried out as it has been done already and the resampled raster can be loaded with the subsequent code chunk. 
 
-The classified image can be obtained from: https://code.earthengine.google.com/ec69fc4ffad32a532b25202009243d42. 
+The classified image can be obtained from: https://code.earthengine.google.com/ec69fc4ffad32a532b25202009243d42.
+
 ```{r landcover_raster, , message=FALSE, warning=FALSE, message=FALSE}
 # read in landcover raster location
-landcover <- "data/landUseClassification/classifiedImage-UTM.tif"
+landcover <- "data/landUseClassification/landcover_roy_2015/"
+
+# read in and crop
+landcover = raster(landcover)
+buffer_utm = st_transform(buffer, 32643)
+landcover = crop(
+  landcover,
+  as(
+    buffer_utm,
+    "Spatial"
+  )
+)
+
+# read reclassification matrix
+reclassification_matrix = read.csv("data/landUseClassification/LandCover_ReclassifyMatrix_2015.csv")
+reclassification_matrix = as.matrix(reclassification_matrix[,c("V1", "To")])
+
+# reclassify
+landcover_reclassified = reclassify(
+  x = landcover,
+  rcl = reclassification_matrix
+)
+
+# write to file
+writeRaster(landcover_reclassified, 
+            filename = "data/landUseClassification/landcover_roy_2015_reclassified.tif",
+            overwrite = TRUE)
+
+# check reclassification
+plot(landcover_reclassified)
 
 # get extent
 e <- bbox(raster(landcover))
@@ -113,21 +292,20 @@ e <- bbox(raster(landcover))
 res_init <- res(raster(landcover))
 
 # res to transform to 1000m
-res_final <- res_init * 100
+res_final <- res_init * (1000 / res_init)
 
 # use gdalutils gdalwarp for resampling transform
 # to 1km from 10m
 gdalUtils::gdalwarp(
-  srcfile = landcover,
+  srcfile = "data/landUseClassification/landcover_roy_2015_reclassified.tif",
   dstfile = "data/landUseClassification/lc_01000m.tif",
   tr = c(res_final), r = "mode", te = c(e)
 )
 ```
 
 We compare the frequency of landcover classes between the original 10m and the resampled 1km raster to be certain that the resampling has not resulted in drastic misrepresentation of the frequency of any landcover type. This comparison is made using the figure below.
+
 ```{r get_resampled_lc, , echo=FALSE}
-# mask by study area
-landcover <- raster(landcover)
 # landcover <- mask(landcover, mask = as(hills, "Spatial"))
 lc_data <- raster("data/landUseClassification/lc_01000m.tif")
 # lc_data <- mask(lc_data, mask = as(hills, "Spatial"))
@@ -135,50 +313,46 @@ lc_data[lc_data == 0] <- NA
 
 # make raster barplot data
 data1km <- raster::getValues(lc_data)
-data1km <- data1km[data1km > 0]
 data1km <- table(data1km)
 data1km <- data1km / sum(data1km)
 
-data10m <- raster::getValues(landcover)
-data10m <- data10m[data10m > 0]
+data10m <- raster::getValues(landcover_reclassified)
 data10m <- tibble(value = data10m)
-data10m <- dplyr::count(data10m, value) %>% dplyr::mutate(n = n / sum(n))
+data10m <- dplyr::count(data10m, value) %>% 
+  dplyr::mutate(n = n / sum(n))
 data10m <- xtabs(n ~ value, data10m)
 
-# map rasters
-{
-  png(
-    filename = "figs/figLandcoverResample.png", width = 1200, height = 1200,
-    res = 150
-  )
-  par(mfrow = c(2, 2))
-  # rasterplots
-  raster::plot(landcover,
-    col = c("white", scico::scico(palette = "batlow", 7)),
-    main = "10m sentinel data", xlab = "longitude", y = "latitude"
-  )
-  plot(hills, add = T, border = "red", col = "transparent")
-  raster::plot(rasterAgg1km,
-    col = c("white", scico::scico(palette = "batlow", 7)),
-    main = "1km resampled data", xlab = "longitude", y = "latitude"
-  )
-  plot(hills, add = T, border = "red", col = "transparent")
+library(tmap)
 
-  # barplots
-  barplot(data10m,
-    xlab = c("landcover class"), ylab = "prop.",
-    col = scico::scico(palette = "batlow", 7)
-  )
-  barplot(data1km,
-    xlab = c("landcover class"), ylab = "prop.",
-    col = scico::scico(palette = "batlow", 7), alpha = 0.8, add = F
-  )
-  barplot(data10m,
-    xlab = c("landcover class"), ylab = "prop.",
-    col = "grey20", border = NA, density = 30, add = T
-  )
-  dev.off()
-}
+# make figures
+fig_lc_roy_reclass =
+  tm_shape(landcover_reclassified)+
+  tm_raster(palette = c(viridis::turbo(11), "grey"), style = "cat",
+            title = "Landcover")+
+  tm_shape(hills)+
+  tm_borders(col = "white")+
+  tm_layout(legend.position = c("left","bottom"),
+            panel.labels = "Reclassified Roy et al. 2015 Landcover",
+            panel.show = T)
+
+fig_lc_1km =
+  tm_shape(lc_data)+
+  tm_raster(palette = c(viridis::turbo(11), "grey"), style = "cat",
+            title = "Landcover")+
+  tm_shape(hills)+
+  tm_borders(col = "white")+
+  tm_layout(legend.position = c("left","bottom"),
+            panel.labels = "Reclassified Landcover, resampled 1km",
+            panel.show = T)
+
+# save figures
+fig_landcover_resample = tmap_arrange(fig_lc_roy_reclass, fig_lc_1km, ncol = 2)
+tmap_save(
+  tm = fig_landcover_resample,
+  filename = "figs/fig_landcover_resample.png",
+  width = 9,
+  height = 5
+)
 ```
 
 ## Resample other rasters to 1km
@@ -188,6 +362,7 @@ We now resample all other rasters to a resolution of 1km.
 ### Read in resampled landcover
 
 Here, we read in the 1km landcover raster and set 0 to NA.
+
 ```{r read_resamp_lc, , message=FALSE, warning=FALSE}
 lc_data <- raster("data/landUseClassification/lc_01000m.tif")
 lc_data[lc_data == 0] <- NA
@@ -413,4 +588,4 @@ ggsave(fig_clim_lc_elev,
 )
 ```
 
-![Annual Mean Temperature varied from ~28C in the plains to <14C at higher elevations. Annual precipitation increased at lower elevations (in the plains) to ~3000mm and ranged between 1500mm and 2200mm at mid- and high elevations across the Nilgiri and the Anamalai hills. (b) The proportion of land cover types varied across the study area as shown in this panel (1 = agriculture; 2 = forests; 3 = grasslands; 4 = plantations; 5 = settlements; 6 = tea; 7 = water bodies).](figs/fig_02_clim_lc_elev.png)
+![Annual Mean Temperature varied from ~28C in the plains to <14C at higher elevations. Annual precipitation increased at lower elevations (in the plains) to ~3000mm and ranged between 1500mm and 2200mm at mid- and high elevations across the Nilgiri and the Anamalai hills. (b) The proportion of land cover types varied across the study area as shown in this panel (1 = agriculture; 2 = forests; 3 = grasslands; 4 = plantations; 5 = settlements; 6 = tea; 7 = water bodies).](figs/fig_02.png)

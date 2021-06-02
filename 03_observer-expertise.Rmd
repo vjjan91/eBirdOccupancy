@@ -33,6 +33,7 @@ time_to_decimal <- function(x) {
 ## Prepare data
 
 Here, we go through the data preparation process again because we might want to assess observer expertise over a larger area than the study site.
+
 ```{r load_raw_data}
 # Read in shapefile of study area to subset by bounding box
 library(sf)
@@ -64,7 +65,8 @@ ebd_filtered <- auk_filter(ebd_filters,
 )
 ```
 
-Load in the filtered data and columns of interest. 
+Load in the filtered data and columns of interest.
+
 ```{r read_all_ebd}
 ## Process filtered data
 # read in the data

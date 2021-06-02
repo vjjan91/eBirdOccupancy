@@ -74,19 +74,22 @@ ebd_filtered <- auk_filter(ebd_filters,
 ## Process filtered data
 
 The data has been filtered above using the auk functions. We will now work with the filtered checklist observations (Please note that we have not yet spatially filtered the checklists to the confines of our study area, which is the Nilgiris and the Anamalai hills. This step is carried out further on).
+
 ```{r read_data}
 # read in the data
 ebd <- read_ebd(f_out_ebd)
 ```
 
-eBird checklists only suggest whether a species was reported at a particular location. To arrive at absence data, we use a process known as zero-filling [@johnston2019a], wherein a new dataframe is created with a 0 marked for each checklist when the bird was not observed. 
+eBird checklists only suggest whether a species was reported at a particular location. To arrive at absence data, we use a process known as zero-filling [@johnston2019a], wherein a new dataframe is created with a 0 marked for each checklist when the bird was not observed.
+
 ```{r fill_zeroes}
 # fill zeroes
 zf <- auk_zerofill(f_out_ebd, f_out_sampling)
 new_zf <- collapse_zerofill(zf)
 ```
 
-Let us now choose specific columns necessary for further analysis. 
+Let us now choose specific columns necessary for further analysis.
+
 ```{r choose_cols}
 # choose columns of interest
 columnsOfInterest <- c(
@@ -118,6 +121,7 @@ data[[2]] <- data[[2]] %>% filter(species_observed == F)
 ## Spatial filter
 
 A spatial filter is now supplied to further restrict our list of observations to the confines of the Nilgiris and the Anamalai hills of the Western Ghats biodiversity hotspot.
+
 ```{r spatial_filters}
 # load shapefile of the study area
 library(sf)
@@ -224,7 +228,8 @@ dataGrouped <- filter(dataGrouped, month(observation_date) %in% c(1,2,3,4,5,12))
 
 ## Add decimal time
 
-We added a column where time is denoted in decimal hours since midnight. 
+We added a column where time is denoted in decimal hours since midnight.
+
 ```{r decimal_time}
 # assign present or not, and get time in decimal hours since midnight
 library(lubridate)
@@ -244,8 +249,8 @@ assertthat::assert_that(!"sf" %in% class(dataGrouped))
 ```
 
 The above data is saved to a file.
-```{r write_clean_data}
 
+```{r write_clean_data}
 # save a temp data file
-save(dataGrouped, file = "data/01_data_prelim_processing.rdata")
+save(dataGrouped, file = "data/01_data_prelim_processing.Rdata")
 ```
