@@ -254,6 +254,12 @@ ebdChkSummary <- ebdChkSummary %>%
 # editing julian date to model it in a linear fashion
 unique(ebdChkSummary$julianDate)
 
+ebdChkSummary <- ebdChkSummary %>%
+  mutate(newjulianDate = 
+  case_when(julianDate >=334 & julianDate <=365 ~ (julianDate - 333),
+            julianDate >=1 & julianDate <=152 ~ (julianDate + 31)
+            )) %>%
+  drop_na(newjulianDate)
 
 # save to file for later reuse
 fwrite(ebdChkSummary, file = "data/03_data-covars-perChklist.csv")
@@ -272,8 +278,8 @@ modObsExp <- glmer(nSoi ~ sqrt(duration) +
   landcover +
   sqrt(decimalTime) +
   I((sqrt(decimalTime))^2) +
-  log(julianDate) +
-  I((log(julianDate)^2)) +
+  log(newjulianDate) +
+  I((log(newjulianDate)^2)) +
   (1 | observer) + (0 + duration | observer),
 data = ebdChkSummary, family = "poisson"
 )
@@ -299,7 +305,7 @@ observer <- unique(ebdChkSummary$observer)
 
 # predict at 60 mins on the most common landcover
 dfPredict <- ebdChkSummary %>%
-  summarise_at(vars(duration, decimalTime, julianDate), list(~ mean(.))) %>%
+  summarise_at(vars(duration, decimalTime, newjulianDate), list(~ mean(.))) %>%
   mutate(duration = 60, landcover = as.factor(6)) %>%
   tidyr::crossing(observer)
 
