@@ -10,22 +10,25 @@ In this section, we prepare a final list of covariates, after taking into accoun
 ## Prepare libraries and data
 
 ```{r load_libs_data, , message=FALSE, warning=FALSE}
-
-# load libs
+# load libs for data
 library(dplyr)
 library(readr)
 library(stringr)
 library(purrr)
-library(raster)
 library(glue)
-library(devtools)
-library(remotes)
-library(rgeos)
-install_github("hunzikp/velox")
-library(velox)
 library(tidyr)
+
+# check for velox and install
+library(devtools)
+if(!"velox" %in% installed.packages()) {
+  install_github("hunzikp/velox") 
+}
+
+# load spatial
+library(raster)
+library(rgeos)
+library(velox)
 library(sf)
-library(tidyverse)
 
 # load saved data object
 load("data/01_data_prelim_processing.rdata")
@@ -65,24 +68,59 @@ data_spatial_thin <- map(data_spatial_thin, function(df) {
   df <- df %>%
     filter(effort_distance_km <= effort_distance_max) %>%
     st_as_sf(coords = c("longitude", "latitude")) %>%
-    `st_crs<-`(4326) %>%
+    `st_crs<-`(4326)
+  
+  # transform to regional UTM 43N and add id
+  df <- df %>% 
     st_transform(32643) %>%
     mutate(coordId = 1:nrow(.)) %>%
     bind_cols(as_tibble(st_coordinates(.)))
 
   # whcih cell has which coords
-  grid_contents <- st_contains(grid, df) %>%
-    as_tibble() %>%
-    rename(cell = row.id, coordId = col.id)
-
-  # what's the max point in each grid
-  points_max <- left_join(df %>% st_drop_geometry(),
-    grid_contents,
+  grid_overlap = st_contains(grid, df) %>% 
+    unclass() %>% 
+    discard(.p = is_empty)
+  
+  # count length of grid overlap list
+  # this is the number of cells with points in them
+  sampled_cells = length(grid_overlap)
+  
+  # make tibble
+  grid_overlap = tibble(
+    uid_cell = seq(length(grid_overlap)), # the uid_cell is specific to this sp.
+    coordId = grid_overlap
+  )
+  
+  # unnest
+  grid_overlap = unnest(grid_overlap, cols = "coordId")
+  
+  # join grid cell overlap with coordinate data
+  df <- left_join(df,
+    grid_overlap,
     by = "coordId"
-  ) %>%
-    group_by(cell) %>%
-    filter(tot_effort == max(tot_effort))
-
+  ) %>% 
+    st_drop_geometry()
+  
+  # for each uid_cell, select coord where effort is max
+  points_max = df %>%
+    group_by(uid_cell) %>%
+    filter(tot_effort == max(tot_effort)) %>% 
+    
+    # there may be multiple rows with max effort, select first
+    filter(row_number() == 1)
+  
+  # check for number of samples
+  assertthat::assert_that(
+    assertthat::are_equal(sampled_cells, nrow(points_max),
+                          msg = "spatial thinning error: more samples than\\
+                          sampled cells")
+  )
+  # check that there is one sample per cell
+  assertthat::assert_that(
+    assertthat::are_equal(
+      max(count(points_max, uid_cell)$n), 1)
+  )
+  
   points_max
 })
 
