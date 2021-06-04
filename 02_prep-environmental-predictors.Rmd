@@ -444,7 +444,7 @@ Figure code is hidden in versions rendered as HTML or PDF.
 ```{r plot_clim_elev, , echo=FALSE}
 # make labeller
 chelsa <- c(
-  bio_15a = "Seasonality in Precipiation (CV)",
+  bio_15a = "Seasonality in Precipitation (CV)",
   bio_4a = "Seasonality in Temperature (CV)"
 )
 
@@ -531,10 +531,10 @@ fig_lc_elev <-
   scale_y_discrete(
     labels = c(
       "Evergreen", "Deciduous",
-      "Degraded Forest", "Scrubland",
-      "Dry Grassland", "Plantation",
-      "Settlement","Barren land","Cropland","Wetland",
-      "Mixed Forest","Sholas"
+      "Mixed/Degraded Forest", "Crop/Fallow Land",
+      "Grassland", "Plantation",
+      "Settlement","Waterbody",
+      "Sholas"
     )
   ) +
   scale_x_continuous(
