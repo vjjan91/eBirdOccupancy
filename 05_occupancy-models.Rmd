@@ -93,14 +93,11 @@ names(dat) <- c(
 dat.1 <- dat %>%
   mutate(
     year = year(observation_date),
-    pres_abs = as.integer(pres_abs),
-    min_obs_startedSq = (min_obs_started)^2,
-    julian_dateSq = (julian_date)^2
-  ) # occupancy modeling requires an integer response
+    pres_abs = as.integer(pres_abs)) # occupancy modeling requires an integer response
 
 # Scaling detection and occupancy covariates
 dat.scaled <- dat.1
-dat.scaled[, c(1, 2, 11, 16:28, 30,31)] <- scale(dat.scaled[, c(1, 2, 11, 16:28,30,31)]) # Scaling and standardizing detection and site-level covariates
+dat.scaled[, c(1, 2, 11, 16:28)] <- scale(dat.scaled[, c(1, 2, 11, 16:28)]) # Scaling and standardizing detection and site-level covariates
 fwrite(dat.scaled, file = "data/05_scaled-covars-2.5km.csv")
 
 # Reload the scaled covariate data
@@ -121,7 +118,7 @@ dat.scaled$observation_date <- format(
 # Majority are uncorrelated since we decided to keep climatic and land cover predictors and removed elevation.
 source("R/fun_screen_cor.R")
 names(dat.scaled)
-screen.cor(dat.scaled[, c(1, 2, 11, 16:28,30,31)], threshold = 0.3)
+screen.cor(dat.scaled[, c(1, 2, 11, 16:28)], threshold = 0.3)
 
 ```
 
@@ -153,13 +150,11 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
 
   obs_covs <- c(
     "min_obs_started",
-    "min_obs_startedSq",
     "duration_minutes",
     "effort_distance_km",
     "number_observers",
     "expertise",
-    "julian_date",
-    "julian_dateSq"
+    "julian_date"
   )
 
   # format for unmarked
@@ -190,7 +185,6 @@ capture.output(all_null, file = "C:\\Users\\vr235\\Downloads\\null_models.csv")
 
 Here, we use the `unmarked` package in R [@fiske2011] to identify detection level covariates that are important for each species. We use AIC criteria to select top models [@burnham2011].
 ```{r prob_detection}
-
 # All models are stored in lists below
 det_dred <- list()
 
@@ -223,13 +217,11 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
 
   obs_covs <- c(
     "min_obs_started",
-    "min_obs_startedSq",
     "duration_minutes",
     "effort_distance_km",
     "number_observers",
     "expertise",
-    "julian_date",
-    "julian_dateSq"
+    "julian_date"
   )
 
   # format for unmarked
@@ -245,8 +237,8 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
   occ_um <- formatWide(occ_wide, type = "unmarkedFrameOccu")
 
   # Fit a global model with all detection level covariates
-  global_mod <- occu(~ min_obs_started + min_obs_startedSq +
-    julian_date + julian_dateSq +
+  global_mod <- occu(~ min_obs_started + I((min_obs_started)^2) +
+    julian_date + I((julian_date)^2) +
     duration_minutes +
     effort_distance_km +
     number_observers +
