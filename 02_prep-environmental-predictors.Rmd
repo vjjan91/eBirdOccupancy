@@ -533,8 +533,7 @@ fig_lc_elev <-
       "Evergreen", "Deciduous",
       "Mixed/Degraded Forest", "Crop/Fallow Land",
       "Grassland", "Plantation",
-      "Settlement","Waterbody",
-      "Sholas"
+      "Settlement","Waterbody"
     )
   ) +
   scale_x_continuous(
