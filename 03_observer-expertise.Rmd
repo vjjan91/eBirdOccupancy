@@ -303,10 +303,10 @@ if (!dir.exists("data/modOutput")) {
 # make df with means
 observer <- unique(ebdChkSummary$observer)
 
-# predict at 60 mins on the most common landcover
+# predict at 60 mins on the most common landcover (deciduous forests)
 dfPredict <- ebdChkSummary %>%
   summarise_at(vars(duration, decimalTime, newjulianDate), list(~ mean(.))) %>%
-  mutate(duration = 60, landcover = as.factor(6)) %>%
+  mutate(duration = 60, landcover = as.factor(2)) %>%
   tidyr::crossing(observer)
 
 # run predict from model on it
