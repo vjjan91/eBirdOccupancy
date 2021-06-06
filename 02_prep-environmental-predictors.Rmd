@@ -92,7 +92,7 @@ We prepare the CHELSA rasters for seasonality in temperature (Bio 4a) and season
 
 ```{r chelsa_rasters, , message=FALSE, warning=FALSE}
 # list chelsa files
-# the chelsa data for Annual mean temperature and annual precipitation can be downloaded from the aforementioned link. They haven't been uploaded to github as a result of its large size.
+# the chelsa data can be downloaded from the aforementioned link. They haven't been uploaded to github as a result of its large size.
 chelsaFiles <- list.files("data/chelsa/",
   full.names = TRUE,
   recursive = TRUE,
@@ -444,7 +444,7 @@ Figure code is hidden in versions rendered as HTML or PDF.
 ```{r plot_clim_elev, , echo=FALSE}
 # make labeller
 chelsa <- c(
-  bio_15a = "Seasonality in Precipiation (CV)",
+  bio_15a = "Seasonality in Precipitation (CV)",
   bio_4a = "Seasonality in Temperature (CV)"
 )
 
@@ -531,10 +531,9 @@ fig_lc_elev <-
   scale_y_discrete(
     labels = c(
       "Evergreen", "Deciduous",
-      "Degraded Forest", "Scrubland",
-      "Dry Grassland", "Plantation",
-      "Settlement","Barren land","Cropland","Wetland",
-      "Mixed Forest","Sholas"
+      "Mixed/Degraded Forest", "Agriculture/Settlements",
+      "Grassland", "Plantation",
+      "Waterbody"
     )
   ) +
   scale_x_continuous(
