@@ -578,10 +578,10 @@ fig_clim_lc_elev <-
 
 # save
 ggsave(fig_clim_lc_elev,
-  filename = "figs/fig_02_clim_lc_elev.png",
+  filename = "figs/fig_02.png",
   dpi = 300,
   height = 130, width = 168, units = "mm"
 )
 ```
 
-![(a) Seasonality in precipitation and seasonality in temperature as a function of elevation is shown here. The coefficient of variation was calculated. (b) The proportion of land cover types varied across the study area as shown in this panel.](figs/fig_02_clim_lc_elev.png)
+![(a) Seasonality in precipitation and seasonality in temperature as a function of elevation is shown here. The coefficient of variation was calculated. (b) The proportion of land cover types varied across the study area as shown in this panel.](figs/fig_02.png)
