@@ -1,5 +1,5 @@
 #!/bin/bash
-
+cd ..
 # style rmd
 Rscript --slave -e 'styler::style_dir(".",filetype = "Rmd")'
 
