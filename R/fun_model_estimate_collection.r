@@ -7,7 +7,7 @@
 #' @export
 #' @import magrittr
 
-source("R/fun_separate_interactions.r")
+source("scripts/fun_separate_interactions.r")
 
 get_model_estimates <- function(list_of_top_models) {
 
