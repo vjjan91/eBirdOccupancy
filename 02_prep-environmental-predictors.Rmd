@@ -23,11 +23,15 @@ library(glue)
 library(gdalUtils)
 library(purrr)
 library(dplyr)
+library(tidyr)
 library(tibble)
 
 # for plotting
 library(viridis)
 library(tmap)
+library(scales)
+library(ggplot2)
+library(patchwork)
 
 # prep mode function to aggregate
 funcMode <- function(x, na.rm = T) {
@@ -39,6 +43,11 @@ funcMode <- function(x, na.rm = T) {
 assertthat::assert_that(funcMode(c(2, 2, 2, 2, 3, 3, 3, 4)) == as.character(2),
   msg = "problem in the mode function"
 ) # works
+
+# get ci func
+ci <- function(x) {
+  qnorm(0.975) * sd(x, na.rm = T) / sqrt(length(x))
+}
 ```
 
 ## Prepare spatial extent
@@ -241,7 +250,7 @@ We stack the terrain and climatic rasters.
 
 ```{r stack_rasters, , message=FALSE, warning=FALSE}
 # stack rasters for efficient reprojection later
-env_data <- stack(elevData, chelsaData, CHELSA_bio10_4a = bio_4a, bio_15)
+env_data <- stack(elevData, bio_4a, bio_15)
 ```
 
 ## Resample landcover from 10m to 1km
@@ -367,7 +376,6 @@ lc_data[lc_data == 0] <- NA
 ### Reproject environmental data using landcover as a template
 
 ```{r resample_env_data, , message=FALSE, warning=FALSE}
-
 # resample to the corresponding landcover data
 env_data_resamp <- projectRaster(
   from = env_data, to = lc_data,
@@ -386,22 +394,6 @@ writeRaster(land_stack, filename = as.character(land_names), overwrite = TRUE)
 
 ## Temperature and rainfall in relation to elevation
 
-### Prepare libraries and CI function
-
-```{r prep_libs_supp03}
-# load libs
-library(dplyr)
-library(tidyr)
-
-library(scales)
-library(ggplot2)
-
-# get ci func
-ci <- function(x) {
-  qnorm(0.975) * sd(x, na.rm = T) / sqrt(length(x))
-}
-```
-
 ### Load resampled environmental rasters
 
 ```{r load_rasters_supp3}
@@ -410,9 +402,9 @@ landscape <- stack("data/spatial/landscape_resamp01_km.tif")
 
 # get proper names
 elev_names <- c("elev", "slope", "aspect")
-chelsa_names <- c("bio_15a", "bio_4a")
+chelsa_names <- c("bio_4a", "bio_15")
 
-names(landscape) <- as.character(glue('{c(elev_names, chelsa_names, "landcover")}'))
+names(landscape) <- glue('{c(elev_names, chelsa_names, "landcover")}')
 ```
 
 ```{r get_data_at_elev}
@@ -443,33 +435,37 @@ Figure code is hidden in versions rendered as HTML or PDF.
 
 ```{r plot_clim_elev, , echo=FALSE}
 # make labeller
-chelsa <- c(
-  bio_15a = "Seasonality in Precipitation (CV)",
-  bio_4a = "Seasonality in Temperature (CV)"
+climvar_names <- c(
+  bio_15 = "Seasonality in\nPrecipitation (CV)",
+  bio_4a = "Seasonality in\nTemperature (CV)"
 )
 
-fig_climate_elev <-
-  ggplot(land_data) +
-  geom_line(aes(x = elev_round, y = mean),
-    size = 0.2, col = "grey"
-  ) +
-  geom_pointrange(aes(x = elev_round, y = mean, ymin = mean - ci, ymax = mean + ci),
-    size = 0.3
-  ) +
-  scale_x_continuous(labels = scales::comma) +
-  scale_y_continuous(labels = scales::comma) +
-  facet_wrap(~clim_var,
-    scales = "free_y",
-    labeller = labeller(clim_var = chelsa),
-    strip.position = "left"
-  ) +
-  theme_test() +
-  theme(
-    strip.placement = "outside",
-    strip.background = element_blank(),
-    strip.text = element_text(size = 11)
-  ) +
-  labs(x = "Elevation (m)", y = NULL)
+# split data to list
+land_data = split(land_data, f = land_data$clim_var)
+
+subplots_climate_elev = Map(function(df, climvar) {
+  ggplot(df) +
+    geom_line(
+      aes(
+        x = elev_round, y = mean
+      ),
+      size = 0.2, col = "grey"
+    ) +
+    geom_pointrange(
+      aes(
+        x = elev_round, y = mean, 
+        ymin = mean - ci, ymax = mean + ci
+      ),
+      size = 0.3
+    ) +
+    scale_x_continuous(labels = scales::comma) +
+    scale_y_continuous(labels = scales::comma) +
+    theme_test() +
+    labs(x = "Elevation (m)", y = climvar)
+}, land_data, climvar_names)
+
+fig_climate_elev <- wrap_plots(subplots_climate_elev, ncol = 2) &
+  plot_annotation(tag_levels = "A")
 
 # save as png
 ggsave(fig_climate_elev,
@@ -514,27 +510,34 @@ Figure code is hidden in versions rendered as HTML and PDF.
 # plot figure as tilemap
 fig_lc_elev <-
   ggplot(lc_elev) +
-  geom_tile(aes(
-    x = elev, y = factor(landcover),
-    fill = prop
-  ),
-  col = "grey"
+  geom_tile(
+    aes(
+      x = elev, y = factor(landcover),
+      fill = prop
+    ),
+    col = "white"
   ) +
-  scale_fill_distiller(
-    palette = "OrRd",
-    direction = 1,
-    na.value = "grey",
-    values = c(0, 1),
-    labels = scales::percent,
-    name = "% area"
-  ) +
-  scale_y_discrete(
-    labels = c(
+  annotate(
+    geom = "text",
+    x = 10,
+    y = seq(7),
+    size = 4,
+    colour = "grey20",
+    label = c(
       "Evergreen", "Deciduous",
       "Mixed/Degraded Forest", "Agriculture/Settlements",
       "Grassland", "Plantation",
       "Waterbody"
-    )
+    ),
+    hjust = "inward"
+  )+
+  scale_fill_viridis_c(
+    option = "F",
+    direction = -1,
+    na.value = "grey90",
+    values = c(0, 1),
+    labels = scales::percent,
+    name = "% Area"
   ) +
   scale_x_continuous(
     breaks = seq(0, 2500, 500),
@@ -544,16 +547,21 @@ fig_lc_elev <-
   coord_cartesian(expand = F) +
   labs(
     x = "Elevation (m)",
-    y = "Land Cover Type"
+    y = "Land Cover Type",
+    title = "NEEDS TO BE CHANGED WITH NEW RECLASS MATRIX"
   ) +
   theme_test() +
-  theme(legend.key.width = unit(2, units = "mm")) +
+  theme(
+    legend.key.width = unit(2, units = "mm"),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()
+  ) +
   labs(fill = NULL)
 
 # export figure
 ggsave(fig_lc_elev,
   filename = "figs/fig_lc_elev.png",
-  height = 2, width = 6, device = png(), dpi = 300
+  height = 4, width = 6, device = png(), dpi = 300
 )
 dev.off()
 ```
@@ -561,14 +569,9 @@ dev.off()
 ## Main Text Figure 2
 
 ```{r echo=FALSE}
-library(patchwork)
-```
-
-```{r echo=FALSE}
 fig_clim_lc_elev <-
   wrap_plots(fig_climate_elev, fig_lc_elev,
-    ncol = 1,
-    design = "AA\nAA\nBB"
+    ncol = 1
   ) +
   plot_annotation(
     tag_levels = "a",
@@ -580,7 +583,7 @@ fig_clim_lc_elev <-
 ggsave(fig_clim_lc_elev,
   filename = "figs/fig_02.png",
   dpi = 300,
-  height = 130, width = 168, units = "mm"
+  height = 130, width = 150, units = "mm"
 )
 ```
 
