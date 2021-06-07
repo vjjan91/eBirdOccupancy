@@ -459,12 +459,21 @@ subplots_climate_elev = Map(function(df, climvar) {
       size = 0.3
     ) +
     scale_x_continuous(labels = scales::comma) +
-    scale_y_continuous(labels = scales::comma) +
+    scale_y_continuous(labels = function(x){
+        vapply(x, FUN = function(y) {
+          # if(is.na(y)) NA_character_
+          if(y > 1 & !is.na(y)) sprintf("%.0f", y)
+          else sprintf("%.1f", y)
+        },
+        FUN.VALUE = "label")
+      }
+    ) +
     theme_test() +
     labs(x = "Elevation (m)", y = climvar)
 }, land_data, climvar_names)
 
-fig_climate_elev <- wrap_plots(subplots_climate_elev, ncol = 2) &
+fig_climate_elev <- 
+  wrap_plots(subplots_climate_elev, ncol = 2) &
   plot_annotation(tag_levels = "A")
 
 # save as png
