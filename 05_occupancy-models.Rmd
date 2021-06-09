@@ -75,9 +75,15 @@ dat <- dat %>%
             )) %>%
   drop_na(newjulianDate)
 
+# recode time observations started to model it as a linear predictor
+dat <- dat %>%
+  mutate(newmin_obs_started = case_when(min_obs_started >=300 & min_obs_started <=720 ~ abs(min_obs_started - 720),
+min_obs_started >=720 & min_obs_started <=1140 ~ abs(720- min_obs_started))) %>%
+  drop_na(newmin_obs_started)
+
 # Removing other unnecessary columns from the dataframe and creating a clean one without the rest
 names(dat)
-dat <- dat[, -c(1, 4, 5, 16, 18, 21, 23, 25, 26, 37)]
+dat <- dat[, -c(1, 4, 5, 16, 18, 21, 23, 25, 26, 36, 37)]
 
 # Rename column names:
 names(dat) <- c(
@@ -87,7 +93,7 @@ names(dat) <- c(
   "protocol_type", "number_observers", "pres_abs", "tot_effort",
   "longitude", "latitude", "expertise", "elev","bio15a.y", "bio4a.y",
   "lc_01.y", "lc_02.y", "lc_05.y", "lc_04.y", "lc_09.y",
-  "lc_07.y","lc_03.y","min_obs_started", "julian_date"
+  "lc_07.y","lc_03.y","julian_date", "min_obs_started"
 )
 
 dat.1 <- dat %>%
@@ -237,8 +243,8 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
   occ_um <- formatWide(occ_wide, type = "unmarkedFrameOccu")
 
   # Fit a global model with all detection level covariates
-  global_mod <- occu(~ min_obs_started + I((min_obs_started)^2) +
-    julian_date + I((julian_date)^2) +
+  global_mod <- occu(~ min_obs_started + 
+    julian_date + 
     duration_minutes +
     effort_distance_km +
     number_observers +
@@ -316,6 +322,10 @@ write.xlsx(det_avg, file = "C:\\Users\\vr235\\Downloads\\det-avg.xlsx", rowNames
 write.xlsx(det_imp, file = "C:\\Users\\vr235\\Downloads\\det-imp.xlsx", rowNames = T, colNames = T)
 
 write.xlsx(det_modelEst, file = "C:\\Users\\vr235\\Downloads\\det-modelEst.xlsx", rowNames = T, colNames = T)
+
+# Note if you are unable to write to a file, use (for example)
+purrr::map(det_imp, ~ purrr::compact(.)) %>% purrr::keep(~length(.) != 0)
+
 ```
 
 ## Land Cover and Climate
@@ -342,7 +352,7 @@ lc_clim_modelEst <- list()
 # Add a progress bar for the loop
 pb <- txtProgressBar(min = 0, max = length(unique(dat.scaled$scientific_name)), style = 3) # text based bar
 
-for (i in 7:length(unique(dat.scaled$scientific_name))) {
+for (i in 1:length(unique(dat.scaled$scientific_name))) {
   data <- dat.scaled %>% filter(dat.scaled$scientific_name == unique(dat.scaled$scientific_name)[i])
 
   # Preparing data for the unmarked model
@@ -356,13 +366,11 @@ for (i in 7:length(unique(dat.scaled$scientific_name))) {
 
   obs_covs <- c(
     "min_obs_started",
-    "min_obs_startedSq",
     "duration_minutes",
     "effort_distance_km",
     "number_observers",
     "expertise",
-    "julian_date",
-    "julian_dateSq"
+    "julian_date"
   )
 
   # format for unmarked
@@ -377,8 +385,8 @@ for (i in 7:length(unique(dat.scaled$scientific_name))) {
   # Convert this dataframe of observations into an unmarked object to start fitting occupancy models
   occ_um <- formatWide(occ_wide, type = "unmarkedFrameOccu")
 
-  model_lc_clim <- occu(~ min_obs_started + min_obs_startedSq + 
-    julian_date + julian_dateSq + 
+  model_lc_clim <- occu(~ min_obs_started + 
+    julian_date +
     duration_minutes +
     effort_distance_km +
     number_observers +
@@ -456,14 +464,14 @@ for (i in 7:length(unique(dat.scaled$scientific_name))) {
 close(pb)
 
 # 1. Store all the model outputs for each species (for both landcover and climate)
-write.xlsx(lc_clim, file = "data\results\lc-clim.xlsx")
+write.xlsx(lc_clim, file = "C:\\Users\\vr235\\Downloads\\lc-clim.xlsx")
 
 # 2. Store all the model averaged outputs for each species and relative importance scores
-write.xlsx(lc_clim_avg, file = "data\results\lc-clim-avg.xlsx", rowNames = T, colNames = T)
-write.xlsx(lc_clim_imp, file = "data\results\lc-clim-imp.xlsx", rowNames = T, colNames = T)
+write.xlsx(lc_clim_avg, file = "C:\\Users\\vr235\\Downloads\\lc-clim-avg.xlsx", rowNames = T, colNames = T)
+write.xlsx(lc_clim_imp, file = "C:\\Users\\vr235\\Downloads\\lc-clim-imp.xlsx", rowNames = T, colNames = T)
 
 # 3. Store all model estimates
-write.xlsx(lc_clim_modelEst, file = "data\results\lc-clim-modelEst.xlsx", rowNames = T, colNames = T)
+write.xlsx(lc_clim_modelEst, file = "C:\\Users\\vr235\\Downloads\\lc-clim-modelEst.xlsx", rowNames = T, colNames = T)
 ```
 
 ## Goodness-of-fit tests
@@ -482,7 +490,7 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
   occ <- filter_repeat_visits(data,
     min_obs = 1, max_obs = 10,
     annual_closure = FALSE,
-    n_days = 2600, # 6 years is considered a period of closure
+    n_days = 3000, # 6 years is considered a period of closure
     date_var = "observation_date",
     site_vars = c("locality_id")
   )
@@ -501,7 +509,8 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
   occ_wide <- format_unmarked_occu(occ,
     site_id = "site",
     response = "pres_abs",
-    site_covs = c("locality_id", "lc_01.y", "lc_02.y", "lc_04.y", "lc_05.y", "lc_06.y", "lc_07.y", "bio_1.y", "bio_12.y"),
+    site_covs = c("locality_id", "lc_01.y", "lc_02.y", "lc_05.y", 
+    "lc_04.y", "lc_09.y", "lc_07.y","lc_03.y","bio15a.y", "bio4a.y"),
     obs_covs = obs_covs
   )
 
@@ -514,8 +523,8 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
     effort_distance_km +
     number_observers +
     protocol_type +
-    expertise ~ lc_01.y + lc_02.y + lc_04.y +
-    lc_05.y + lc_06.y + lc_07.y + bio_1.y + bio_12.y, data = occ_um)
+    expertise ~ lc_01.y + lc_02.y + lc_05.y +
+    lc_04.y + lc_09.y + lc_07.y + lc_03.y + bio15a.y + bio4a.y, data = occ_um)
 
   occ_gof <- mb.gof.test(model_lc_clim, nsim = 5000, plot.hist = FALSE)
 

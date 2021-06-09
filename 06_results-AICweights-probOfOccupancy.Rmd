@@ -25,8 +25,8 @@ library(stringr)
 library(data.table)
 
 # to wrangle models
-source("code/fun_model_estimate_collection.r")
-source("code/fun_make_resp_data.r")
+source("R/fun_model_estimate_collection.r")
+source("R/fun_make_resp_data.r")
 
 # nice tables
 library(knitr)
@@ -35,14 +35,14 @@ library(kableExtra)
 # plotting
 library(ggplot2)
 library(patchwork)
-source("code/fun_plot_interaction.r")
+source("R/fun_plot_interaction.r")
 ```
 
 ## Load species list
 
 ```{r }
 # list of species
-species <- read_csv("data/species_list.csv")
+species <- read_csv("data/post_analysis_species_list.csv")
 list_of_species <- as.character(species$scientific_name)
 ```
 
@@ -131,12 +131,11 @@ model_imp$predictor <- as_factor(model_imp$predictor)
 # make nice names
 predictor_name <- tibble(
   predictor = levels(model_imp$predictor),
-  pred_name = c(
-    "Annual Mean Temperature (°C)",
-    "Annual Precipitation (mm)",
-    "% Agriculture", "% Forests",
-    "% Plantations", "% Settlements",
-    "% Tea", "% Water Bodies"
+  pred_name = c("Precipitation Seasonality (CV)",
+    "Temperature Seasonality (CV)",
+    "% Evergreen", "% Deciduous",
+    "% Mixed/Degraded Forest", "% Agriculture/Settlements",
+    "% Grassland", "% Plantations","% Water Bodies"
   )
 )
 
