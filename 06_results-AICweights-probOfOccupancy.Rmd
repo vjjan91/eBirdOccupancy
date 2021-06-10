@@ -22,7 +22,7 @@ library(forcats)
 library(tidyr)
 library(purrr)
 library(stringr)
-library(data.table)
+# library(data.table)
 
 # to wrangle models
 source("R/fun_model_estimate_collection.r")
@@ -131,9 +131,10 @@ model_imp$predictor <- as_factor(model_imp$predictor)
 # make nice names
 predictor_name <- tibble(
   predictor = levels(model_imp$predictor),
-  pred_name = c("Precipitation Seasonality (CV)",
+  pred_name = c(
+    "Precipitation Seasonality (CV)",
     "Temperature Seasonality (CV)",
-    "% Evergreen", "% Deciduous",
+    "% Evergreen Forest", "% Deciduous Forest",
     "% Mixed/Degraded Forest", "% Agriculture/Settlements",
     "% Grassland", "% Plantations","% Water Bodies"
   )
@@ -166,6 +167,7 @@ fig_aic <-
   scale_x_discrete(labels = NULL) +
   # scale_color_brewer(palette = "RdBu", values = c(0.5, 1))+
   coord_flip(
+    ylim = c(0, 1.25)
     # ylim = c(45, 75)
   ) +
   theme_test() +
@@ -261,7 +263,7 @@ data_predictor_effect <- distinct(
 
 # write to file
 write_csv(data_predictor_effect,
-  path = "data/results/data_predictor_effect.csv"
+  file = "data/results/data_predictor_effect.csv"
 )
 ```
 
@@ -287,7 +289,7 @@ write_csv(
 Read in data after clearing R session.
 ```{r}
 # read from file
-model_data <- read_csv("data/results/data_predictor_effect.csv")
+model_data <- read_csv("data/results/results-predictors-species-traits.csv")
 ```
 
 Fix predictor name.
@@ -303,11 +305,14 @@ model_data <- model_data %>%
 
 ```{r}
 # is the coeff positive? how many positive per scale per predictor per axis of split?
+# now splitting by habitat --- forest or open country
 data_predictor <- mutate(model_data,
   direction = coefficient > 0
 ) %>%
+  rename(habitat = "Open-country/Forest") %>%
   count(
     predictor,
+    habitat,
     direction
   ) %>%
   mutate(mag = n * (if_else(direction, 1, -1)))
@@ -344,6 +349,12 @@ data_predictor_long <- left_join(data_predictor_long, model_imp)
 
 Prepare figure of the number of species affected in each direction. Figure code is hidden in versions rendered as HTML and PDF.
 ```{r echo=FALSE}
+# habitat labels
+labels = c(
+  "OC" = "Open Country Birds",
+  "RF" = "Rainforest Birds"
+)
+
 fig_predictor <-
   ggplot(model_imp) +
   geom_hline(
@@ -366,12 +377,17 @@ fig_predictor <-
     y = 0,
     label = pred_name
   ),
-  angle = 0,
-  vjust = 2,
-  size = 4
+    angle = 0,
+    vjust = 2,
+    size = 4
   ) +
   scale_fill_brewer(palette = "Set1") +
   scale_x_discrete(labels = NULL) +
+  scale_y_continuous(labels = abs, limits = c(-25, 25))+
+
+  # uncomment below to split by habitat
+  # facet_grid(~habitat, labeller = labeller(habitat = labels))+
+
   coord_flip() +
   theme_test() +
   theme(legend.position = "none") +
@@ -388,9 +404,7 @@ ggsave(fig_predictor,
 
 Figure code is hidden in versions rendered as HTML and PDF.
 ```{r echo=FALSE}
-library(patchwork)
-
-# wrap
+# wrap figures to form figure 4
 fig_predictor_effect <-
   wrap_plots(fig_aic, fig_predictor) +
   plot_annotation(
