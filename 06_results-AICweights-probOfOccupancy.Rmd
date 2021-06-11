@@ -386,7 +386,7 @@ fig_predictor <-
   scale_y_continuous(labels = abs, limits = c(-25, 25))+
 
   # uncomment below to split by habitat
-  # facet_grid(~habitat, labeller = labeller(habitat = labels))+
+  facet_grid(~habitat, labeller = labeller(habitat = labels))+
 
   coord_flip() +
   theme_test() +
