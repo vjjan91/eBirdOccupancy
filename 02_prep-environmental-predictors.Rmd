@@ -15,7 +15,7 @@ The goal here is to resample all rasters so that they have the same resolution o
 ## Prepare libraries
 
 We load some common libraries for raster processing and define a custom mode function.
-```{r load_libs2, , message=FALSE, warning=FALSE}
+```{r load_libs2, message=FALSE, warning=FALSE}
 # load libs
 library(raster)
 library(stringi)
@@ -332,7 +332,7 @@ library(tmap)
 # make figures
 fig_lc_roy_reclass =
   tm_shape(landcover_reclassified)+
-  tm_raster(palette = c(viridis::turbo(11), "grey"), style = "cat",
+  tm_raster(palette = c(viridis::turbo(6), "grey"), style = "cat",
             title = "Landcover")+
   tm_shape(hills)+
   tm_borders(col = "white")+
@@ -342,7 +342,7 @@ fig_lc_roy_reclass =
 
 fig_lc_1km =
   tm_shape(lc_data)+
-  tm_raster(palette = c(viridis::turbo(11), "grey"), style = "cat",
+  tm_raster(palette = c(viridis::turbo(6), "grey"), style = "cat",
             title = "Landcover")+
   tm_shape(hills)+
   tm_borders(col = "white")+
@@ -528,10 +528,11 @@ fig_lc_elev <-
   ) +
   annotate(
     geom = "text",
+    fontface = "bold",
     x = 10,
     y = seq(7),
     size = 4,
-    colour = "grey20",
+    colour = c(rep("grey20", 3), "grey90", rep("grey20", 3)),
     label = c(
       "Evergreen", "Deciduous",
       "Mixed/Degraded Forest", "Agriculture/Settlements",
@@ -556,8 +557,7 @@ fig_lc_elev <-
   coord_cartesian(expand = F) +
   labs(
     x = "Elevation (m)",
-    y = "Land Cover Type",
-    title = "NEEDS TO BE CHANGED WITH NEW RECLASS MATRIX"
+    y = "Land Cover Type"
   ) +
   theme_test() +
   theme(
