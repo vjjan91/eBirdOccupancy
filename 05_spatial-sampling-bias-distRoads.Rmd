@@ -5,19 +5,15 @@ editor_options:
 
 # Examining Spatial Sampling Bias
 
-The goal of this section is to determine how far each checklist location is from the nearest road, and how far each site is from its nearest neighbour. This involves finding the pairwise distance between a large number of unique checklist locations to a vast number of roads, as well as to each other.
-
-Parts of this section are thus implemented in Python 3, using the R-Python interface package, `reticulate`.
+The goal of this section is to show how far each checklist location is from the nearest road, and how far each site is from its nearest neighbour. This follows finding the pairwise distance between a large number of unique checklist locations to a vast number of roads, as well as to each other.
 
 ## Prepare libraries
 
-```{r setup_python}
+```{r setup_libs}
 # load libraries
-# to use python
-library(reticulate)
-
 # for data
 library(sf)
+library(rnaturalearth)
 library(dplyr)
 library(readr)
 library(purrr)
@@ -51,9 +47,7 @@ chkCovars = read_csv("data/03_data-covars-perChklist.csv")
 
 We filter the checklists by the boundary of the study area. This is *not* the extent.
 
-```{r spatial_filter_supp01}
-# extract data from python
-chkCovars <- py$chkCovars
+```{r spatial_filter_nnb_dist}
 
 chkCovars <- st_as_sf(chkCovars, coords = c("longitude", "latitude")) %>%
   `st_crs<-`(4326) %>%
@@ -62,11 +56,29 @@ chkCovars <- st_as_sf(chkCovars, coords = c("longitude", "latitude")) %>%
 # read wg
 wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>%
   st_transform(32643)
+# get bounding box
+bbox <- st_bbox(wg)
 
 # spatial subset
 chkCovars <- chkCovars %>%
   mutate(id = 1:nrow(.)) %>%
   filter(id %in% unlist(st_contains(wg, chkCovars)))
+```
+
+### Get background land for plotting
+
+```{r}
+# add land
+land <- ne_countries(
+  scale = 50, type = "countries", continent = "asia",
+  country = "india",
+  returnclass = c("sf")
+) %>%
+  st_transform(32643)
+
+# add roads data
+roads <- st_read("data/spatial/roads_studysite_2019/roads_studysite_2019.shp") %>%
+  st_transform(32643)
 ```
 
 ## Prepare Main Text Figure 3
@@ -75,26 +87,33 @@ chkCovars <- chkCovars %>%
 
 Figure code is hidden in versions rendered as HTML or PDF.
 
-```{r plot_histogram, , echo=FALSE}
+```{r plot_histogram, echo=FALSE}
 # make histogram
-hist_roads <- ggplot(chkCovars) +
+hist_roads <- 
+ggplot(chkCovars) +
   geom_histogram(aes(dist_road / 1e3),
-    bins = 20, size = 0.2, fill = "steelblue"
+    bins = 20, size = 0.2, 
+    fill = "steelblue"
   ) +
-  labs(x = "distance to roads (km)", y = "# checklists") +
   scale_x_log10(
     label = label_number(accuracy = 0.1),
     breaks = c(0.1, 1, 10)
   ) +
-  scale_y_continuous(label = label_number(
+  scale_y_continuous(,
+    breaks = c(0, 2500, 5000),
+    label = label_number(
     scale = 0.001,
     accuracy = 1, suffix = "K"
   )) +
-  theme_few() +
+  theme_test() +
   theme(
-    plot.background = element_rect(fill = NA, colour = 1),
+    plot.background = element_rect(fill = "white", colour = 1),
     panel.background = element_blank(),
     panel.border = element_blank(), axis.line = element_blank()
+  )+
+  labs(
+    x = "Distance to roads (km)",
+    y = "# Locations"
   )
 ```
 
@@ -130,8 +149,14 @@ readr::read_csv("data/results/distance_roads_sites.csv") %>%
 ### Distance to nearest neighbouring site
 
 ```{r get_nn_site}
-# get unique locations
-locs <- py$unique_locs
+# get unique locations from checklists
+locs_unique = cbind(
+  st_drop_geometry(chkCovars),
+  st_coordinates(chkCovars)
+) %>%
+as_tibble()
+
+locs_unique = distinct(locs_unique, X, Y, .keep_all = T)
 ```
 
 Figure code is hidden in versions rendered as HTML and PDF.
@@ -139,7 +164,7 @@ Figure code is hidden in versions rendered as HTML and PDF.
 ```{r echo=FALSE}
 # make histogram of nearest neighbours
 hist_sites <-
-  ggplot(locs) +
+  ggplot(locs_unique) +
   geom_histogram(aes(nnb / 1e3),
     bins = 100, size = 0.2, fill = "steelblue"
   ) +
@@ -151,7 +176,7 @@ hist_sites <-
     scale = 0.001, accuracy = 1,
     suffix = "K"
   )) +
-  theme_few() +
+  theme_test() +
   theme(
     plot.background = element_rect(fill = NA, colour = 1),
     panel.background = element_blank(),
@@ -159,12 +184,12 @@ hist_sites <-
   )
 ```
 
+### Spatial distribution of distances to neighbours
+
 ```{r plot_map_nnb, echo=FALSE}
 # transform points to utm
-locs <- locs %>%
-  st_as_sf(coords = c("longitude", "latitude")) %>%
-  `st_crs<-`(4326) %>%
-  st_transform(32643)
+locs_unique <- locs_unique %>%
+  st_as_sf(coords = c("X", "Y"), crs = 32643)
 
 # add nnb to locations
 ggplot() +
@@ -178,9 +203,12 @@ ggplot() +
     ymax = bbox["ymax"]
   ) +
   geom_sf(data = roads, size = 0.2, col = "steelblue") +
-  geom_sf(data = locs, aes(col = nnb / 1000)) +
+  geom_sf(data = locs_unique, aes(col = nnb / 1000),
+    alpha = 0.6
+  )+
   scale_colour_scico(
-    palette = "oslo", values = c(0, 1), direction = -1, limits = c(0, 5),
+    palette = "lajolla", 
+    values = c(0, 1), direction = 1, limits = c(0, 5),
     na.value = "indianred"
   ) +
   annotation_north_arrow(
@@ -189,7 +217,7 @@ ggplot() +
     style = north_arrow_fancy_orienteering
   ) +
   annotation_scale(location = "br", width_hint = 0.4, text_cex = 1) +
-  theme_few() +
+  theme_test() +
   theme(
     legend.position = c(0.9, 0.55),
     legend.background = element_blank(),
@@ -207,25 +235,14 @@ ggplot() +
 ## Main Text Figure 3
 
 ```{r load_data_in_r}
-roads <- st_read("data/spatial/roads_studysite_2019/roads_studysite_2019.shp") %>%
-  st_transform(32643)
+# get locations
 points <- chkCovars %>%
   bind_cols(as_tibble(st_coordinates(.))) %>%
   st_drop_geometry() %>%
   mutate(X = round_any(X, 2500), Y = round_any(Y, 2500))
 
+# count points
 points <- count(points, X, Y)
-
-# add land
-library(rnaturalearth)
-land <- ne_countries(
-  scale = 50, type = "countries", continent = "asia",
-  country = "india",
-  returnclass = c("sf")
-) %>%
-  st_transform(32643)
-
-bbox <- st_bbox(wg)
 ```
 
 Figure code is hidden in versions rendered as HTML and PDF.
@@ -254,12 +271,18 @@ ggplot() +
     style = north_arrow_fancy_orienteering
   ) +
   annotation_scale(location = "br", width_hint = 0.4, text_cex = 1) +
-  theme_few() +
+  theme_test() +
   theme(
-    legend.position = c(0.9, 0.55),
+    legend.position = c(0.9, 0.53),
     legend.background = element_blank(),
     legend.key = element_rect(fill = "grey90"),
+    legend.key.width = unit(2, units = "mm"),
+    legend.title = element_text(face = "bold"),
     axis.title = element_blank(),
+    axis.text.y = element_text(
+      angle = 90,
+      hjust = 0.5
+    ),
     panel.background = element_rect(fill = "lightblue")
   ) +
   coord_sf(
@@ -267,10 +290,12 @@ ggplot() +
     xlim = bbox[c("xmin", "xmax")],
     ylim = bbox[c("ymin", "ymax")]
   ) +
-  labs(fill = "checklists", colour = NULL)
+  labs(fill = "# Checklists", colour = NULL)
 
 # save figure
-ggsave(filename = "figs/fig_distRoads.png", device = png())
+ggsave(filename = "figs/fig_03.png", 
+  height = 150,
+  width = 150, units = "mm")
 dev.off()
 ```
 
