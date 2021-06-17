@@ -40,7 +40,7 @@ Read in checklist data with distance to nearest neighbouring site, and the dista
 
 ```{r read_chk_dists}
 # read from local file
-chkCovars = read_csv("data/03_data-covars-perChklist.csv")
+chkCovars <- read_csv("data/03_data-covars-perChklist.csv")
 ```
 
 ### Spatially explicit filter on checklists
@@ -89,10 +89,10 @@ Figure code is hidden in versions rendered as HTML or PDF.
 
 ```{r plot_histogram, echo=FALSE}
 # make histogram
-hist_roads <- 
-ggplot(chkCovars) +
+hist_roads <-
+  ggplot(chkCovars) +
   geom_histogram(aes(dist_road / 1e3),
-    bins = 20, size = 0.2, 
+    bins = 20, size = 0.2,
     fill = "steelblue"
   ) +
   scale_x_log10(
@@ -102,15 +102,16 @@ ggplot(chkCovars) +
   scale_y_continuous(,
     breaks = c(0, 2500, 5000),
     label = label_number(
-    scale = 0.001,
-    accuracy = 1, suffix = "K"
-  )) +
+      scale = 0.001,
+      accuracy = 1, suffix = "K"
+    )
+  ) +
   theme_test() +
   theme(
     plot.background = element_rect(fill = "white", colour = 1),
     panel.background = element_blank(),
     panel.border = element_blank(), axis.line = element_blank()
-  )+
+  ) +
   labs(
     x = "Distance to roads (km)",
     y = "# Locations"
@@ -150,13 +151,13 @@ readr::read_csv("data/results/distance_roads_sites.csv") %>%
 
 ```{r get_nn_site}
 # get unique locations from checklists
-locs_unique = cbind(
+locs_unique <- cbind(
   st_drop_geometry(chkCovars),
   st_coordinates(chkCovars)
 ) %>%
-as_tibble()
+  as_tibble()
 
-locs_unique = distinct(locs_unique, X, Y, .keep_all = T)
+locs_unique <- distinct(locs_unique, X, Y, .keep_all = T)
 ```
 
 Figure code is hidden in versions rendered as HTML and PDF.
@@ -203,11 +204,12 @@ ggplot() +
     ymax = bbox["ymax"]
   ) +
   geom_sf(data = roads, size = 0.2, col = "steelblue") +
-  geom_sf(data = locs_unique, aes(col = nnb / 1000),
+  geom_sf(
+    data = locs_unique, aes(col = nnb / 1000),
     alpha = 0.6
-  )+
+  ) +
   scale_colour_scico(
-    palette = "lajolla", 
+    palette = "lajolla",
     values = c(0, 1), direction = 1, limits = c(0, 5),
     na.value = "indianred"
   ) +
@@ -293,9 +295,11 @@ ggplot() +
   labs(fill = "# Checklists", colour = NULL)
 
 # save figure
-ggsave(filename = "figs/fig_03.png", 
+ggsave(
+  filename = "figs/fig_03.png",
   height = 150,
-  width = 150, units = "mm")
+  width = 150, units = "mm"
+)
 dev.off()
 ```
 

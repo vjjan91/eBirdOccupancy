@@ -20,8 +20,8 @@ library(tidyr)
 
 # check for velox and install
 library(devtools)
-if(!"velox" %in% installed.packages()) {
-  install_github("hunzikp/velox") 
+if (!"velox" %in% installed.packages()) {
+  install_github("hunzikp/velox")
 }
 
 # load spatial
@@ -69,58 +69,59 @@ data_spatial_thin <- map(data_spatial_thin, function(df) {
     filter(effort_distance_km <= effort_distance_max) %>%
     st_as_sf(coords = c("longitude", "latitude")) %>%
     `st_crs<-`(4326)
-  
+
   # transform to regional UTM 43N and add id
-  df <- df %>% 
+  df <- df %>%
     st_transform(32643) %>%
     mutate(coordId = 1:nrow(.)) %>%
     bind_cols(as_tibble(st_coordinates(.)))
 
   # whcih cell has which coords
-  grid_overlap = st_contains(grid, df) %>% 
-    unclass() %>% 
+  grid_overlap <- st_contains(grid, df) %>%
+    unclass() %>%
     discard(.p = is_empty)
-  
+
   # count length of grid overlap list
   # this is the number of cells with points in them
-  sampled_cells = length(grid_overlap)
-  
+  sampled_cells <- length(grid_overlap)
+
   # make tibble
-  grid_overlap = tibble(
+  grid_overlap <- tibble(
     uid_cell = seq(length(grid_overlap)), # the uid_cell is specific to this sp.
     coordId = grid_overlap
   )
-  
+
   # unnest
-  grid_overlap = unnest(grid_overlap, cols = "coordId")
-  
+  grid_overlap <- unnest(grid_overlap, cols = "coordId")
+
   # join grid cell overlap with coordinate data
   df <- left_join(df,
     grid_overlap,
     by = "coordId"
-  ) %>% 
+  ) %>%
     st_drop_geometry()
-  
+
   # for each uid_cell, select coord where effort is max
-  points_max = df %>%
+  points_max <- df %>%
     group_by(uid_cell) %>%
-    filter(tot_effort == max(tot_effort)) %>% 
-    
+    filter(tot_effort == max(tot_effort)) %>%
     # there may be multiple rows with max effort, select first
     filter(row_number() == 1)
-  
+
   # check for number of samples
   assertthat::assert_that(
     assertthat::are_equal(sampled_cells, nrow(points_max),
-                          msg = "spatial thinning error: more samples than\\
-                          sampled cells")
+      msg = "spatial thinning error: more samples than\\
+                          sampled cells"
+    )
   )
   # check that there is one sample per cell
   assertthat::assert_that(
     assertthat::are_equal(
-      max(count(points_max, uid_cell)$n), 1)
+      max(count(points_max, uid_cell)$n), 1
+    )
   )
-  
+
   points_max
 })
 

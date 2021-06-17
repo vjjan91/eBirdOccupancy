@@ -100,7 +100,7 @@ ebd <- filter(ebd, number_observers <= 10)
 ebd <- filter(ebd, time_observations_started >= "05:00:00" & time_observations_started <= "19:00:00")
 
 # keep only checklists between December 1st and May 31st
-ebd <- filter(ebd, month(observation_date) %in% c(1,2,3,4,5,12))
+ebd <- filter(ebd, month(observation_date) %in% c(1, 2, 3, 4, 5, 12))
 ```
 
 ## Spatially explicit filter on checklists
@@ -124,7 +124,7 @@ to_keep <- unlist(st_contains(wg, ebd_locs))
 ebd_locs <- filter(ebd_locs, id %in% to_keep) %>%
   bind_cols(as_tibble(st_coordinates(st_as_sf(.)))) %>%
   st_drop_geometry()
-names(ebd_locs) <- c("longitudeWGS","latitudeWGS","id","longitudeUTM","latitudeUTM")
+names(ebd_locs) <- c("longitudeWGS", "latitudeWGS", "id", "longitudeUTM", "latitudeUTM")
 ```
 
 ```{r hills_subset_exp2}
@@ -175,7 +175,6 @@ ebdEffChk <- setDF(ebd) %>%
     sampling_event_identifier, observer_id,
     duration_minutes, decimalTime, julianDate
   ) %>%
-
   # drop years below 2013
   filter(year >= 2013)
 
@@ -220,10 +219,11 @@ setDT(ebdChkSummary)[, landcover := landcoverVec]
 
 ```{r filter_data2}
 # change names for easy handling
-setnames(ebdChkSummary, c("locality",
-  "locality_id","latitude","longitude", "observer","sei",
-  "duration","distance","area","nObs","decimalTime","julianDate",
-  "year","nSp", "nSoi", "landcover"
+setnames(ebdChkSummary, c(
+  "locality",
+  "locality_id", "latitude", "longitude", "observer", "sei",
+  "duration", "distance", "area", "nObs", "decimalTime", "julianDate",
+  "year", "nSp", "nSoi", "landcover"
 ))
 
 # count data points per observer
@@ -255,10 +255,13 @@ ebdChkSummary <- ebdChkSummary %>%
 unique(ebdChkSummary$julianDate)
 
 ebdChkSummary <- ebdChkSummary %>%
-  mutate(newjulianDate = 
-  case_when(julianDate >=334 & julianDate <=365 ~ (julianDate - 333),
-            julianDate >=1 & julianDate <=152 ~ (julianDate + 31)
-            )) %>%
+  mutate(
+    newjulianDate =
+      case_when(
+        julianDate >= 334 & julianDate <= 365 ~ (julianDate - 333),
+        julianDate >= 1 & julianDate <= 152 ~ (julianDate + 31)
+      )
+  ) %>%
   drop_na(newjulianDate)
 
 # save to file for later reuse

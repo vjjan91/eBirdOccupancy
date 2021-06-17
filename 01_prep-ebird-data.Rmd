@@ -1,6 +1,9 @@
 ---
-editor_options: 
+editor_options:
   chunk_output_type: console
+output:
+  html_document:
+    df_print: paged
 ---
 
 # Preparing eBird Data
@@ -48,7 +51,8 @@ Here, we set broad spatial filters for the states of Kerala, Tamil Nadu and Karn
 ebd_filters <- auk_ebd(f_in_ebd, f_in_sampling) %>%
   auk_species(speciesOfInterest) %>%
   auk_country(country = "IN") %>%
-  auk_state(c("IN-KL", "IN-TN", "IN-KA")) %>% # Restricting geography to TamilNadu, Kerala & Karnataka
+  auk_state(c("IN-KL", "IN-TN", "IN-KA")) %>%
+  # Restricting geography to TamilNadu, Kerala & Karnataka
   auk_date(c("2013-01-01", "2020-12-31")) %>%
   auk_complete()
 
@@ -223,7 +227,7 @@ dataGrouped <- filter(dataGrouped, number_observers <= 10)
 dataGrouped <- filter(dataGrouped, time_observations_started >= "05:00:00" & time_observations_started <= "19:00:00")
 
 # keep only checklists between December 1st and May 31st
-dataGrouped <- filter(dataGrouped, month(observation_date) %in% c(1,2,3,4,5,12))
+dataGrouped <- filter(dataGrouped, month(observation_date) %in% c(1, 2, 3, 4, 5, 12))
 ```
 
 ## Add decimal time

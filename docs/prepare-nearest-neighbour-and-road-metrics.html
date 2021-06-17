@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</title>
-  <meta name="description" content="Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <title>Section 5 Prepare Nearest Neighbour and Road Metrics | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</title>
+  <meta name="description" content="Section 5 Prepare Nearest Neighbour and Road Metrics | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <meta property="og:title" content="Section 5 Prepare Nearest Neighbour and Road Metrics | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="pratikunterwegs/eBirdOccupancy" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <meta name="twitter:title" content="Section 5 Prepare Nearest Neighbour and Road Metrics | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
   
   
   
@@ -35,8 +35,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="preparing-ebird-data.html"/>
+<link rel="prev" href="preparing-observer-expertise-scores.html"/>
+<link rel="next" href="examining-spatial-sampling-bias.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -282,48 +282,125 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Source code for <em>Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</em></h1>
-<p class="author"><em>Vijay Ramesh</em></p>
-<p class="author"><em>Pratik R. Gupte</em></p>
-<p class="author"><em>Morgan W. Tingley</em></p>
-<p class="author"><em>VV Robin</em></p>
-<p class="author"><em>Ruth DeFries</em></p>
-<p class="date" style="margin-top: 1.5em;"><em>2021-06-17</em></p>
+<div id="prepare-nearest-neighbour-and-road-metrics" class="section level1">
+<h1><span class="header-section-number">Section 5</span> Prepare Nearest Neighbour and Road Metrics</h1>
+<p>The goal of this section is to determine how far each checklist location is from the nearest road, and how far each site is from its nearest neighbour. This involves finding the pairwise distance between a large number of unique checklist locations to a vast number of roads, as well as to each other.</p>
+<p>This section is implemented in Python 3, because we want to use <code>scipy</code>’s efficient spatial indexing functions based on “kDtrees”.</p>
+<div id="prepare-libraries-2" class="section level2">
+<h2><span class="header-section-number">5.1</span> Prepare libraries</h2>
+<p>Here, we import required libraries — you may need to install these for your system.</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb43-1"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-1"></a><span class="co"># import basic python libs</span></span>
+<span id="cb43-2"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-2"></a><span class="im">import</span> itertools</span>
+<span id="cb43-3"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-3"></a><span class="im">from</span> operator <span class="im">import</span> itemgetter</span>
+<span id="cb43-4"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-4"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb43-5"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-5"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb43-6"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-6"></a><span class="im">import</span> math</span>
+<span id="cb43-7"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-7"></a></span>
+<span id="cb43-8"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-8"></a><span class="co"># libs for dataframes</span></span>
+<span id="cb43-9"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-9"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb43-10"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-10"></a></span>
+<span id="cb43-11"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-11"></a><span class="co"># import libs for geodata</span></span>
+<span id="cb43-12"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-12"></a><span class="im">from</span> shapely.ops <span class="im">import</span> nearest_points</span>
+<span id="cb43-13"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-13"></a><span class="im">import</span> geopandas <span class="im">as</span> gpd</span>
+<span id="cb43-14"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-14"></a></span>
+<span id="cb43-15"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-15"></a><span class="co"># import ckdtree</span></span>
+<span id="cb43-16"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-16"></a><span class="im">from</span> scipy.spatial <span class="im">import</span> cKDTree</span>
+<span id="cb43-17"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-17"></a><span class="im">from</span> shapely.geometry <span class="im">import</span> Point, MultiPoint, LineString, MultiLineString</span></code></pre></div>
 </div>
-<div id="introduction" class="section level1">
-<h1><span class="header-section-number">Section 1</span> Introduction</h1>
-<p>This is the readable version containing analysis that models associations between environmental predictors (climate and landcover) and citizen science observations of birds across the Nilgiri and Anamalai Hills of the Western Ghats Biodiversity Hotspot.</p>
-<p>Methods and format are derived from <a href="https://cornelllabofornithology.github.io/ebird-best-practices/">Strimas-Mackey et al.</a>.</p>
-<div id="attribution" class="section level2">
-<h2><span class="header-section-number">1.1</span> Attribution</h2>
-<p>Please contact the following in case of interest in the project.</p>
-<ul>
-<li>Vijay Ramesh (lead author)
-<ul>
-<li>PhD student, Columbia University</li>
-</ul></li>
-<li>Pratik Gupte (repo maintainer)
-<ul>
-<li>PhD student, University of Groningen</li>
-</ul></li>
-</ul>
+<div id="prepare-data-for-processing" class="section level2">
+<h2><span class="header-section-number">5.2</span> Prepare data for processing</h2>
+<p>First we read in the roads shapefile, which is obtained from the Open Street Map database.
+Then we read in the checklist covariates, and extract the unique coordinate pairs.
+All data are reprojected to be in the UTM 43N coordinate system.</p>
+<p>We define a custom Python function to separate multi-feature geometries (here, roads which are in parts) into single feature geometries.
+Then we define a function to use the K-dimensional trees method from <code>scipy</code> to find the distance between two geometries, here, the distance between the locations and the nearest road.
+We define another function to find the distance between checklist locations and all other checklist locations.</p>
+<p>We use these functions to find the distance between each checklist location and the nearest road and the next nearest site.</p>
 </div>
-<div id="data-access" class="section level2">
-<h2><span class="header-section-number">1.2</span> Data access</h2>
-<p>The data used in this work are available from <a href="http://ebird.org/data/download">eBird</a>.</p>
+<div id="read-in-data" class="section level2">
+<h2><span class="header-section-number">5.3</span> Read in data</h2>
+<p>Here we read in the data and convert it to a spatial format.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb44-1"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb44-1"></a><span class="co"># read in roads shapefile</span></span>
+<span id="cb44-2"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb44-2"></a>roads <span class="op">=</span> gpd.read_file(<span class="st">&quot;data/spatial/roads_studysite_2019/roads_studysite_2019.shp&quot;</span>)</span>
+<span id="cb44-3"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb44-3"></a>roads.head()</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb45-1"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-1"></a><span class="co"># read in checklist covariates for conversion to gpd</span></span>
+<span id="cb45-2"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-2"></a><span class="co"># get unique coordinates, assign them to the df</span></span>
+<span id="cb45-3"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-3"></a><span class="co"># convert df to geo-df</span></span>
+<span id="cb45-4"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-4"></a>chkCovars <span class="op">=</span> pd.read_csv(<span class="st">&quot;data/03_data-covars-perChklist.csv&quot;</span>)</span>
+<span id="cb45-5"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-5"></a>unique_locs <span class="op">=</span> chkCovars.drop_duplicates(subset<span class="op">=</span>[<span class="st">&#39;longitude&#39;</span>,</span>
+<span id="cb45-6"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-6"></a>                                         <span class="st">&#39;latitude&#39;</span>])[[<span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;latitude&#39;</span>]]</span>
+<span id="cb45-7"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-7"></a>unique_locs[<span class="st">&#39;coordId&#39;</span>] <span class="op">=</span> np.arange(<span class="dv">1</span>, unique_locs.shape[<span class="dv">0</span>]<span class="op">+</span><span class="dv">1</span>)</span>
+<span id="cb45-8"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-8"></a>chkCovars <span class="op">=</span> chkCovars.merge(unique_locs, on<span class="op">=</span>[<span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;latitude&#39;</span>])</span>
+<span id="cb45-9"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-9"></a></span>
+<span id="cb45-10"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-10"></a>unique_locs <span class="op">=</span> gpd.GeoDataFrame(</span>
+<span id="cb45-11"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-11"></a>unique_locs, </span>
+<span id="cb45-12"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-12"></a>geometry <span class="op">=</span> gpd.points_from_xy(unique_locs.longitude, unique_locs.latitude))</span>
+<span id="cb45-13"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-13"></a>unique_locs.crs <span class="op">=</span> {<span class="st">&#39;init&#39;</span> :<span class="st">&#39;epsg:4326&#39;</span>}</span>
+<span id="cb45-14"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-14"></a></span>
+<span id="cb45-15"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-15"></a><span class="co"># reproject spatials to 43n epsg 32643</span></span>
+<span id="cb45-16"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-16"></a></span>
+<span id="cb45-17"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-17"></a>roads <span class="op">=</span> roads.to_crs({<span class="st">&#39;init&#39;</span>: <span class="st">&#39;epsg:32643&#39;</span>})</span>
+<span id="cb45-18"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-18"></a>unique_locs <span class="op">=</span> unique_locs.to_crs({<span class="st">&#39;init&#39;</span>: <span class="st">&#39;epsg:32643&#39;</span>})</span></code></pre></div>
 </div>
-<div id="data-processing" class="section level2">
-<h2><span class="header-section-number">1.3</span> Data processing</h2>
-<p>The data processing for this project is described in the following sections. Navigate through them using the links in the sidebar.</p>
+<div id="define-functions-for-geometry-simplication-and-distances" class="section level2">
+<h2><span class="header-section-number">5.4</span> Define functions for geometry simplication and distances</h2>
+<div class="sourceCode" id="cb46"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb46-1"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-1"></a><span class="co"># function to simplify multilinestrings</span></span>
+<span id="cb46-2"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-2"></a><span class="kw">def</span> simplify_roads(complex_roads):</span>
+<span id="cb46-3"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-3"></a>    simpleRoads <span class="op">=</span> []</span>
+<span id="cb46-4"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-4"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(complex_roads.geometry)):</span>
+<span id="cb46-5"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-5"></a>        feature <span class="op">=</span> complex_roads.geometry.iloc[i]</span>
+<span id="cb46-6"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-6"></a>        <span class="cf">if</span> feature.geom_type <span class="op">==</span> <span class="st">&quot;LineString&quot;</span>:</span>
+<span id="cb46-7"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-7"></a>            simpleRoads.append(feature)</span>
+<span id="cb46-8"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-8"></a>        <span class="cf">elif</span> feature.geom_type <span class="op">==</span> <span class="st">&quot;MultiLineString&quot;</span>:</span>
+<span id="cb46-9"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-9"></a>            <span class="cf">for</span> road_level2 <span class="kw">in</span> feature:</span>
+<span id="cb46-10"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-10"></a>                simpleRoads.append(road_level2)</span>
+<span id="cb46-11"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-11"></a>    <span class="cf">return</span> simpleRoads</span>
+<span id="cb46-12"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-12"></a></span>
+<span id="cb46-13"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-13"></a><span class="co"># function to use ckdtrees to find the nearest road</span></span>
+<span id="cb46-14"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-14"></a><span class="kw">def</span> ckdnearest(gdfA, gdfB):</span>
+<span id="cb46-15"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-15"></a>    A <span class="op">=</span> np.concatenate(</span>
+<span id="cb46-16"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-16"></a>    [np.array(geom.coords) <span class="cf">for</span> geom <span class="kw">in</span> gdfA.geometry.to_list()])</span>
+<span id="cb46-17"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-17"></a>    simplified_features <span class="op">=</span> simplify_roads(gdfB)</span>
+<span id="cb46-18"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-18"></a>    B <span class="op">=</span> [np.array(geom.coords) <span class="cf">for</span> geom <span class="kw">in</span> simplified_features]</span>
+<span id="cb46-19"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-19"></a>    B <span class="op">=</span> np.concatenate(B)</span>
+<span id="cb46-20"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-20"></a>    ckd_tree <span class="op">=</span> cKDTree(B)</span>
+<span id="cb46-21"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-21"></a>    dist, idx <span class="op">=</span> ckd_tree.query(A, k<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb46-22"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-22"></a>    <span class="cf">return</span> dist</span>
+<span id="cb46-23"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-23"></a></span>
+<span id="cb46-24"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-24"></a><span class="co"># function to use ckdtrees for nearest other checklist point</span></span>
+<span id="cb46-25"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-25"></a><span class="kw">def</span> ckdnearest_point(gdfA, gdfB):</span>
+<span id="cb46-26"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-26"></a>    A <span class="op">=</span> np.concatenate(</span>
+<span id="cb46-27"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-27"></a>    [np.array(geom.coords) <span class="cf">for</span> geom <span class="kw">in</span> gdfA.geometry.to_list()])</span>
+<span id="cb46-28"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-28"></a>    <span class="co">#simplified_features = simplify_roads(gdfB)</span></span>
+<span id="cb46-29"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-29"></a>    B <span class="op">=</span> np.concatenate(</span>
+<span id="cb46-30"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-30"></a>    [np.array(geom.coords) <span class="cf">for</span> geom <span class="kw">in</span> gdfB.geometry.to_list()])</span>
+<span id="cb46-31"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-31"></a>    <span class="co">#B = np.concatenate(B)</span></span>
+<span id="cb46-32"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-32"></a>    ckd_tree <span class="op">=</span> cKDTree(B)</span>
+<span id="cb46-33"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-33"></a>    dist, idx <span class="op">=</span> ckd_tree.query(A, k<span class="op">=</span>[<span class="dv">2</span>])</span>
+<span id="cb46-34"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-34"></a>    <span class="cf">return</span> dist</span></code></pre></div>
 </div>
-<div id="main-text-figure-1" class="section level2">
-<h2><span class="header-section-number">1.4</span> Main Text Figure 1</h2>
-<p>Figure prepared in QGIS 3.10.</p>
-<div class="figure">
-<img src="figs/fig_01.png" alt="" />
-<p class="caption">A shaded relief of the study area - the Nilgiri and the Anamalai hills are shown in this figure. This map was made using the SRTM digital elevation model at a spatial resolution of 1km and data from Natural Earth were used to outline boundaries of water bodies.</p>
-</div>
+<div id="get-distance-from-sites-to-road-and-each-other" class="section level2">
+<h2><span class="header-section-number">5.5</span> Get distance from sites to road and each other</h2>
+<div class="sourceCode" id="cb47"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb47-1"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb47-1"></a><span class="co"># get distance to nearest road</span></span>
+<span id="cb47-2"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb47-2"></a>unique_locs[<span class="st">&#39;dist_road&#39;</span>] <span class="op">=</span> ckdnearest(unique_locs, roads)</span>
+<span id="cb47-3"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb47-3"></a></span>
+<span id="cb47-4"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb47-4"></a><span class="co"># get distance to nearest other site</span></span>
+<span id="cb47-5"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb47-5"></a>unique_locs[<span class="st">&#39;nnb&#39;</span>] <span class="op">=</span> ckdnearest_point(unique_locs, unique_locs)</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb48-1"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb48-1"></a><span class="co"># check for added columns</span></span>
+<span id="cb48-2"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb48-2"></a>unique_locs.head()</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb49-1"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb49-1"></a><span class="co"># write to file</span></span>
+<span id="cb49-2"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb49-2"></a>unique_locs <span class="op">=</span> pd.DataFrame(unique_locs.drop(columns<span class="op">=</span><span class="st">&#39;geometry&#39;</span>))</span>
+<span id="cb49-3"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb49-3"></a>unique_locs[<span class="st">&#39;dist_road&#39;</span>] <span class="op">=</span> unique_locs[<span class="st">&#39;dist_road&#39;</span>]</span>
+<span id="cb49-4"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb49-4"></a>unique_locs[<span class="st">&#39;nnb&#39;</span>] <span class="op">=</span> unique_locs[<span class="st">&#39;nnb&#39;</span>]</span>
+<span id="cb49-5"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb49-5"></a>unique_locs.to_csv(path_or_buf <span class="op">=</span> <span class="st">&quot;data/locs_dist_to_road.csv&quot;</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb49-6"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb49-6"></a></span>
+<span id="cb49-7"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb49-7"></a><span class="co"># merge unique locs with chkCovars</span></span>
+<span id="cb49-8"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb49-8"></a>chkCovars <span class="op">=</span> chkCovars.merge(unique_locs, on<span class="op">=</span>[<span class="st">&#39;latitude&#39;</span>, <span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;coordId&#39;</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb50-1"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb50-1"></a><span class="co"># check that metrics have been added to the data</span></span>
+<span id="cb50-2"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb50-2"></a>chkCovars.head()</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb51-1"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb51-1"></a><span class="co"># save data to local file</span></span>
+<span id="cb51-2"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb51-2"></a><span class="co"># overwrite pre-existing data</span></span>
+<span id="cb51-3"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb51-3"></a>chkCovars.to_csv(<span class="st">&quot;data/03_data-covars-perChklist.csv&quot;</span>)</span></code></pre></div>
 
 </div>
 </div>
@@ -332,8 +409,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-
-<a href="preparing-ebird-data.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="preparing-observer-expertise-scores.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="examining-spatial-sampling-bias.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -355,7 +432,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/pratikunterwegs/eBirdOccupancy/edit/master/index.Rmd",
+"link": "https://github.com/pratikunterwegs/eBirdOccupancy/edit/master/04_distance-roads-neighbours.Rmd",
 "text": "Edit"
 },
 "history": {
