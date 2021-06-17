@@ -136,7 +136,7 @@ predictor_name <- tibble(
     "Temperature Seasonality (CV)",
     "% Evergreen Forest", "% Deciduous Forest",
     "% Mixed/Degraded Forest", "% Agriculture/Settlements",
-    "% Grassland", "% Plantations","% Water Bodies"
+    "% Grassland", "% Plantations", "% Water Bodies"
   )
 )
 
@@ -351,7 +351,7 @@ data_predictor_long <- left_join(data_predictor_long, model_imp)
 Prepare figure of the number of species affected in each direction. Figure code is hidden in versions rendered as HTML and PDF.
 ```{r echo=FALSE}
 # habitat labels
-labels = c(
+labels <- c(
   "OC" = "Open Country Birds",
   "RF" = "Rainforest Birds"
 )
@@ -378,17 +378,16 @@ fig_predictor <-
     y = 0,
     label = pred_name
   ),
-    angle = 0,
-    vjust = 2,
-    size = 3
+  angle = 0,
+  vjust = 2,
+  size = 3
   ) +
   scale_fill_brewer(palette = "Set1") +
   scale_x_discrete(labels = NULL) +
-  scale_y_continuous(labels = abs, limits = c(-25, 25))+
+  scale_y_continuous(labels = abs, limits = c(-25, 25)) +
 
   # uncomment below to split by habitat
-  facet_grid(~habitat, labeller = labeller(habitat = labels))+
-
+  facet_grid(~habitat, labeller = labeller(habitat = labels)) +
   coord_flip() +
   theme_test() +
   theme(legend.position = "none") +
