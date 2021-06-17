@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Section 6 Adding Covariates to Checklist Data | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</title>
-  <meta name="description" content="Section 6 Adding Covariates to Checklist Data | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <title>Section 7 Adding Covariates to Checklist Data | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</title>
+  <meta name="description" content="Section 7 Adding Covariates to Checklist Data | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Section 6 Adding Covariates to Checklist Data | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <meta property="og:title" content="Section 7 Adding Covariates to Checklist Data | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="pratikunterwegs/eBirdOccupancy" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Section 6 Adding Covariates to Checklist Data | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <meta name="twitter:title" content="Section 7 Adding Covariates to Checklist Data | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
   
   
   
@@ -28,14 +28,14 @@
 <meta name="author" content="Ruth DeFries" />
 
 
-<meta name="date" content="2020-12-26" />
+<meta name="date" content="2021-06-17" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="examining-spatial-sampling-bias.html"/>
+<link rel="prev" href="checking-temporal-sampling-frequency.html"/>
 <link rel="next" href="modelling-species-occupancy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -54,28 +54,32 @@
 
 
 
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -84,9 +88,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -119,6 +123,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -132,13 +137,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
 <li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#attribution"><i class="fa fa-check"></i><b>1.1</b> Attribution</a></li>
 <li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#data-access"><i class="fa fa-check"></i><b>1.2</b> Data access</a></li>
 <li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#data-processing"><i class="fa fa-check"></i><b>1.3</b> Data processing</a></li>
 <li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#main-text-figure-1"><i class="fa fa-check"></i><b>1.4</b> Main Text Figure 1</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html"><i class="fa fa-check"></i><b>2</b> Preparing eBird Data</a><ul>
+<li class="chapter" data-level="2" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html"><i class="fa fa-check"></i><b>2</b> Preparing eBird Data</a>
+<ul>
 <li class="chapter" data-level="2.1" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#prepare-libraries-and-data-sources"><i class="fa fa-check"></i><b>2.1</b> Prepare libraries and data sources</a></li>
 <li class="chapter" data-level="2.2" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#filter-data"><i class="fa fa-check"></i><b>2.2</b> Filter data</a></li>
 <li class="chapter" data-level="2.3" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#process-filtered-data"><i class="fa fa-check"></i><b>2.3</b> Process filtered data</a></li>
@@ -146,24 +153,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.5" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#handle-presence-data"><i class="fa fa-check"></i><b>2.5</b> Handle presence data</a></li>
 <li class="chapter" data-level="2.6" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#add-decimal-time"><i class="fa fa-check"></i><b>2.6</b> Add decimal time</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html"><i class="fa fa-check"></i><b>3</b> Preparing Environmental Predictors</a><ul>
+<li class="chapter" data-level="3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html"><i class="fa fa-check"></i><b>3</b> Preparing Environmental Predictors</a>
+<ul>
 <li class="chapter" data-level="3.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-libraries"><i class="fa fa-check"></i><b>3.1</b> Prepare libraries</a></li>
 <li class="chapter" data-level="3.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-spatial-extent"><i class="fa fa-check"></i><b>3.2</b> Prepare spatial extent</a></li>
 <li class="chapter" data-level="3.3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-terrain-rasters"><i class="fa fa-check"></i><b>3.3</b> Prepare terrain rasters</a></li>
-<li class="chapter" data-level="3.4" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-chelsa-rasters"><i class="fa fa-check"></i><b>3.4</b> Prepare CHELSA rasters</a></li>
-<li class="chapter" data-level="3.5" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-landcover-from-10m-to-1km"><i class="fa fa-check"></i><b>3.5</b> Resample landcover from 10m to 1km</a></li>
-<li class="chapter" data-level="3.6" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-other-rasters-to-1km"><i class="fa fa-check"></i><b>3.6</b> Resample other rasters to 1km</a><ul>
-<li class="chapter" data-level="3.6.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#read-in-resampled-landcover"><i class="fa fa-check"></i><b>3.6.1</b> Read in resampled landcover</a></li>
-<li class="chapter" data-level="3.6.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#reproject-environmental-data-using-landcover-as-a-template"><i class="fa fa-check"></i><b>3.6.2</b> Reproject environmental data using landcover as a template</a></li>
+<li class="chapter" data-level="3.4" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-4a-and-bioclim-15"><i class="fa fa-check"></i><b>3.4</b> Prepare Bioclim 4a and Bioclim 15</a></li>
+<li class="chapter" data-level="3.5" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-chelsa-rasters"><i class="fa fa-check"></i><b>3.5</b> Prepare CHELSA rasters</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-4a-and-15"><i class="fa fa-check"></i><b>3.5.1</b> Prepare BIOCLIM 4a and 15</a></li>
+<li class="chapter" data-level="3.5.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-4a"><i class="fa fa-check"></i><b>3.5.2</b> Prepare BIOCLIM 4a</a></li>
+<li class="chapter" data-level="3.5.3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-15"><i class="fa fa-check"></i><b>3.5.3</b> Prepare Bioclim 15</a></li>
+<li class="chapter" data-level="3.5.4" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#stack-terrain-and-climate"><i class="fa fa-check"></i><b>3.5.4</b> Stack terrain and climate</a></li>
 </ul></li>
-<li class="chapter" data-level="3.7" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#temperature-and-rainfall-in-relation-to-elevation"><i class="fa fa-check"></i><b>3.7</b> Temperature and rainfall in relation to elevation</a><ul>
-<li class="chapter" data-level="3.7.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-libraries-and-ci-function"><i class="fa fa-check"></i><b>3.7.1</b> Prepare libraries and CI function</a></li>
-<li class="chapter" data-level="3.7.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#load-resampled-environmental-rasters"><i class="fa fa-check"></i><b>3.7.2</b> Load resampled environmental rasters</a></li>
+<li class="chapter" data-level="3.6" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-landcover-from-10m-to-1km"><i class="fa fa-check"></i><b>3.6</b> Resample landcover from 10m to 1km</a></li>
+<li class="chapter" data-level="3.7" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-other-rasters-to-1km"><i class="fa fa-check"></i><b>3.7</b> Resample other rasters to 1km</a>
+<ul>
+<li class="chapter" data-level="3.7.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#read-in-resampled-landcover"><i class="fa fa-check"></i><b>3.7.1</b> Read in resampled landcover</a></li>
+<li class="chapter" data-level="3.7.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#reproject-environmental-data-using-landcover-as-a-template"><i class="fa fa-check"></i><b>3.7.2</b> Reproject environmental data using landcover as a template</a></li>
 </ul></li>
-<li class="chapter" data-level="3.8" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#land-cover-type-in-relation-to-elevation"><i class="fa fa-check"></i><b>3.8</b> Land cover type in relation to elevation</a></li>
-<li class="chapter" data-level="3.9" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#main-text-figure-2"><i class="fa fa-check"></i><b>3.9</b> Main Text Figure 2</a></li>
+<li class="chapter" data-level="3.8" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#temperature-and-rainfall-in-relation-to-elevation"><i class="fa fa-check"></i><b>3.8</b> Temperature and rainfall in relation to elevation</a>
+<ul>
+<li class="chapter" data-level="3.8.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#load-resampled-environmental-rasters"><i class="fa fa-check"></i><b>3.8.1</b> Load resampled environmental rasters</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html"><i class="fa fa-check"></i><b>4</b> Preparing Observer Expertise Scores</a><ul>
+<li class="chapter" data-level="3.9" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#land-cover-type-in-relation-to-elevation"><i class="fa fa-check"></i><b>3.9</b> Land cover type in relation to elevation</a></li>
+<li class="chapter" data-level="3.10" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#main-text-figure-2"><i class="fa fa-check"></i><b>3.10</b> Main Text Figure 2</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html"><i class="fa fa-check"></i><b>4</b> Preparing Observer Expertise Scores</a>
+<ul>
 <li class="chapter" data-level="4.1" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#prepare-libraries-1"><i class="fa fa-check"></i><b>4.1</b> Prepare libraries</a></li>
 <li class="chapter" data-level="4.2" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#prepare-data"><i class="fa fa-check"></i><b>4.2</b> Prepare data</a></li>
 <li class="chapter" data-level="4.3" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#spatially-explicit-filter-on-checklists"><i class="fa fa-check"></i><b>4.3</b> Spatially explicit filter on checklists</a></li>
@@ -173,52 +190,73 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.7" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#filter-checklist-data"><i class="fa fa-check"></i><b>4.7</b> Filter checklist data</a></li>
 <li class="chapter" data-level="4.8" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#model-observer-expertise"><i class="fa fa-check"></i><b>4.8</b> Model observer expertise</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html"><i class="fa fa-check"></i><b>5</b> Examining Spatial Sampling Bias</a><ul>
+<li class="chapter" data-level="5" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html"><i class="fa fa-check"></i><b>5</b> Examining Spatial Sampling Bias</a>
+<ul>
 <li class="chapter" data-level="5.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-libraries-2"><i class="fa fa-check"></i><b>5.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="5.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-data-for-processing"><i class="fa fa-check"></i><b>5.2</b> Prepare data for processing</a><ul>
-<li class="chapter" data-level="5.2.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#python-functions-and-distance-calculations"><i class="fa fa-check"></i><b>5.2.1</b> Python functions and distance calculations</a></li>
-<li class="chapter" data-level="5.2.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#spatially-explicit-filter-on-checklists-1"><i class="fa fa-check"></i><b>5.2.2</b> Spatially explicit filter on checklists</a></li>
+<li class="chapter" data-level="5.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#read-checklist-data"><i class="fa fa-check"></i><b>5.2</b> Read checklist data</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#spatially-explicit-filter-on-checklists-1"><i class="fa fa-check"></i><b>5.2.1</b> Spatially explicit filter on checklists</a></li>
+<li class="chapter" data-level="5.2.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#get-background-land-for-plotting"><i class="fa fa-check"></i><b>5.2.2</b> Get background land for plotting</a></li>
 </ul></li>
-<li class="chapter" data-level="5.3" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#main-text-figure-3"><i class="fa fa-check"></i><b>5.3</b> Main Text Figure 3</a><ul>
+<li class="chapter" data-level="5.3" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-main-text-figure-3"><i class="fa fa-check"></i><b>5.3</b> Prepare Main Text Figure 3</a>
+<ul>
 <li class="chapter" data-level="5.3.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-histogram-of-distance-to-roads"><i class="fa fa-check"></i><b>5.3.1</b> Prepare histogram of distance to roads</a></li>
 <li class="chapter" data-level="5.3.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#table-distance-to-roads"><i class="fa fa-check"></i><b>5.3.2</b> Table: Distance to roads</a></li>
+<li class="chapter" data-level="5.3.3" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#distance-to-nearest-neighbouring-site"><i class="fa fa-check"></i><b>5.3.3</b> Distance to nearest neighbouring site</a></li>
+<li class="chapter" data-level="5.3.4" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#spatial-distribution-of-distances-to-neighbours"><i class="fa fa-check"></i><b>5.3.4</b> Spatial distribution of distances to neighbours</a></li>
 </ul></li>
-<li class="chapter" data-level="5.4" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#distance-to-nearest-neighbouring-site"><i class="fa fa-check"></i><b>5.4</b> Distance to nearest neighbouring site</a></li>
-<li class="chapter" data-level="5.5" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#main-text-figure-3-1"><i class="fa fa-check"></i><b>5.5</b> Main Text Figure 3</a></li>
+<li class="chapter" data-level="5.4" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#main-text-figure-3"><i class="fa fa-check"></i><b>5.4</b> Main Text Figure 3</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html"><i class="fa fa-check"></i><b>6</b> Adding Covariates to Checklist Data</a><ul>
-<li class="chapter" data-level="6.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#prepare-libraries-and-data"><i class="fa fa-check"></i><b>6.1</b> Prepare libraries and data</a></li>
-<li class="chapter" data-level="6.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-subsampling"><i class="fa fa-check"></i><b>6.2</b> Spatial subsampling</a></li>
-<li class="chapter" data-level="6.3" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#temporal-subsampling"><i class="fa fa-check"></i><b>6.3</b> Temporal subsampling</a></li>
-<li class="chapter" data-level="6.4" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#add-checklist-calibration-index"><i class="fa fa-check"></i><b>6.4</b> Add checklist calibration index</a></li>
-<li class="chapter" data-level="6.5" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#add-climatic-and-landscape-covariates"><i class="fa fa-check"></i><b>6.5</b> Add climatic and landscape covariates</a></li>
-<li class="chapter" data-level="6.6" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-buffers-around-selected-checklists"><i class="fa fa-check"></i><b>6.6</b> Spatial buffers around selected checklists</a></li>
-<li class="chapter" data-level="6.7" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-buffer-wide-covariates"><i class="fa fa-check"></i><b>6.7</b> Spatial buffer-wide covariates</a><ul>
-<li class="chapter" data-level="6.7.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#mean-climatic-covariates"><i class="fa fa-check"></i><b>6.7.1</b> Mean climatic covariates</a></li>
-<li class="chapter" data-level="6.7.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#proportions-of-land-cover-type"><i class="fa fa-check"></i><b>6.7.2</b> Proportions of land cover type</a></li>
-<li class="chapter" data-level="6.7.3" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#link-environmental-covariates-to-checklists"><i class="fa fa-check"></i><b>6.7.3</b> Link environmental covariates to checklists</a></li>
+<li class="chapter" data-level="6" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html"><i class="fa fa-check"></i><b>6</b> Checking Temporal Sampling Frequency</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#load-libraries"><i class="fa fa-check"></i><b>6.1</b> Load libraries</a></li>
+<li class="chapter" data-level="6.2" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#load-checklist-data"><i class="fa fa-check"></i><b>6.2</b> Load checklist data</a></li>
+<li class="chapter" data-level="6.3" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#get-time-differences-per-grid-cell"><i class="fa fa-check"></i><b>6.3</b> Get time differences per grid cell</a></li>
+<li class="chapter" data-level="6.4" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#time-since-previous-checklist"><i class="fa fa-check"></i><b>6.4</b> Time Since Previous Checklist</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#get-aux-data"><i class="fa fa-check"></i><b>6.4.1</b> Get aux data</a></li>
+<li class="chapter" data-level="6.4.2" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#histogram-of-lags"><i class="fa fa-check"></i><b>6.4.2</b> Histogram of lags</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#checklists-per-month"><i class="fa fa-check"></i><b>6.5</b> Checklists per Month</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html"><i class="fa fa-check"></i><b>7</b> Adding Covariates to Checklist Data</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#prepare-libraries-and-data"><i class="fa fa-check"></i><b>7.1</b> Prepare libraries and data</a></li>
+<li class="chapter" data-level="7.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-subsampling"><i class="fa fa-check"></i><b>7.2</b> Spatial subsampling</a></li>
+<li class="chapter" data-level="7.3" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#temporal-subsampling"><i class="fa fa-check"></i><b>7.3</b> Temporal subsampling</a></li>
+<li class="chapter" data-level="7.4" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#add-checklist-calibration-index"><i class="fa fa-check"></i><b>7.4</b> Add checklist calibration index</a></li>
+<li class="chapter" data-level="7.5" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#add-climatic-and-landscape-covariates"><i class="fa fa-check"></i><b>7.5</b> Add climatic and landscape covariates</a></li>
+<li class="chapter" data-level="7.6" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-buffers-around-selected-checklists"><i class="fa fa-check"></i><b>7.6</b> Spatial buffers around selected checklists</a></li>
+<li class="chapter" data-level="7.7" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-buffer-wide-covariates"><i class="fa fa-check"></i><b>7.7</b> Spatial buffer-wide covariates</a>
+<ul>
+<li class="chapter" data-level="7.7.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#mean-climatic-covariates"><i class="fa fa-check"></i><b>7.7.1</b> Mean climatic covariates</a></li>
+<li class="chapter" data-level="7.7.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#proportions-of-land-cover-type"><i class="fa fa-check"></i><b>7.7.2</b> Proportions of land cover type</a></li>
+<li class="chapter" data-level="7.7.3" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#link-environmental-covariates-to-checklists"><i class="fa fa-check"></i><b>7.7.3</b> Link environmental covariates to checklists</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html"><i class="fa fa-check"></i><b>7</b> Modelling Species Occupancy</a><ul>
-<li class="chapter" data-level="7.0.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#load-necessary-libraries"><i class="fa fa-check"></i><b>7.0.1</b> Load necessary libraries</a></li>
-<li class="chapter" data-level="7.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#load-dataframe-and-scale-covariates"><i class="fa fa-check"></i><b>7.1</b> Load dataframe and scale covariates</a></li>
-<li class="chapter" data-level="7.2" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#running-a-null-model"><i class="fa fa-check"></i><b>7.2</b> Running a null model</a></li>
-<li class="chapter" data-level="7.3" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#identifying-covariates-necessary-to-model-the-detection-process"><i class="fa fa-check"></i><b>7.3</b> Identifying covariates necessary to model the detection process</a></li>
-<li class="chapter" data-level="7.4" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#land-cover-and-climate"><i class="fa fa-check"></i><b>7.4</b> Land Cover and Climate</a></li>
-<li class="chapter" data-level="7.5" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#goodness-of-fit-tests"><i class="fa fa-check"></i><b>7.5</b> Goodness-of-fit tests</a></li>
+<li class="chapter" data-level="8" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html"><i class="fa fa-check"></i><b>8</b> Modelling Species Occupancy</a>
+<ul>
+<li class="chapter" data-level="8.0.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#load-necessary-libraries"><i class="fa fa-check"></i><b>8.0.1</b> Load necessary libraries</a></li>
+<li class="chapter" data-level="8.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#load-dataframe-and-scale-covariates"><i class="fa fa-check"></i><b>8.1</b> Load dataframe and scale covariates</a></li>
+<li class="chapter" data-level="8.2" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#running-a-null-model"><i class="fa fa-check"></i><b>8.2</b> Running a null model</a></li>
+<li class="chapter" data-level="8.3" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#identifying-covariates-necessary-to-model-the-detection-process"><i class="fa fa-check"></i><b>8.3</b> Identifying covariates necessary to model the detection process</a></li>
+<li class="chapter" data-level="8.4" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#land-cover-and-climate"><i class="fa fa-check"></i><b>8.4</b> Land Cover and Climate</a></li>
+<li class="chapter" data-level="8.5" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#goodness-of-fit-tests"><i class="fa fa-check"></i><b>8.5</b> Goodness-of-fit tests</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html"><i class="fa fa-check"></i><b>8</b> Visualizing Occupancy Predictor Effects</a><ul>
-<li class="chapter" data-level="8.1" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-libraries-3"><i class="fa fa-check"></i><b>8.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="8.2" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#load-species-list"><i class="fa fa-check"></i><b>8.2</b> Load species list</a></li>
-<li class="chapter" data-level="8.3" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#show-aic-weight-importance"><i class="fa fa-check"></i><b>8.3</b> Show AIC weight importance</a><ul>
-<li class="chapter" data-level="8.3.1" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#read-in-aic-weight-data"><i class="fa fa-check"></i><b>8.3.1</b> Read in AIC weight data</a></li>
-<li class="chapter" data-level="8.3.2" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-cumulative-aic-weight-data"><i class="fa fa-check"></i><b>8.3.2</b> Prepare cumulative AIC weight data</a></li>
+<li class="chapter" data-level="9" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html"><i class="fa fa-check"></i><b>9</b> Visualizing Occupancy Predictor Effects</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-libraries-3"><i class="fa fa-check"></i><b>9.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="9.2" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#load-species-list"><i class="fa fa-check"></i><b>9.2</b> Load species list</a></li>
+<li class="chapter" data-level="9.3" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#show-aic-weight-importance"><i class="fa fa-check"></i><b>9.3</b> Show AIC weight importance</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#read-in-aic-weight-data"><i class="fa fa-check"></i><b>9.3.1</b> Read in AIC weight data</a></li>
+<li class="chapter" data-level="9.3.2" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-cumulative-aic-weight-data"><i class="fa fa-check"></i><b>9.3.2</b> Prepare cumulative AIC weight data</a></li>
 </ul></li>
-<li class="chapter" data-level="8.4" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-model-coefficient-data"><i class="fa fa-check"></i><b>8.4</b> Prepare model coefficient data</a></li>
-<li class="chapter" data-level="8.5" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#get-predictor-effects"><i class="fa fa-check"></i><b>8.5</b> Get predictor effects</a></li>
-<li class="chapter" data-level="8.6" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#main-text-figure-4"><i class="fa fa-check"></i><b>8.6</b> Main Text Figure 4</a></li>
+<li class="chapter" data-level="9.4" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-model-coefficient-data"><i class="fa fa-check"></i><b>9.4</b> Prepare model coefficient data</a></li>
+<li class="chapter" data-level="9.5" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#get-predictor-effects"><i class="fa fa-check"></i><b>9.5</b> Get predictor effects</a></li>
+<li class="chapter" data-level="9.6" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#main-text-figure-4"><i class="fa fa-check"></i><b>9.6</b> Main Text Figure 4</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>9</b> References</a></li>
+<li class="chapter" data-level="10" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>10</b> References</a></li>
 </ul>
 
       </nav>
@@ -237,276 +275,320 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="adding-covariates-to-checklist-data" class="section level1">
-<h1><span class="header-section-number">Section 6</span> Adding Covariates to Checklist Data</h1>
+<h1><span class="header-section-number">Section 7</span> Adding Covariates to Checklist Data</h1>
 <p>In this section, we prepare a final list of covariates, after taking into account spatial sampling bias (examined in the previous section), temporal bias and observer expertise scores.</p>
 <div id="prepare-libraries-and-data" class="section level2">
-<h2><span class="header-section-number">6.1</span> Prepare libraries and data</h2>
-<div class="sourceCode" id="cb46"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1"></a>
-<a class="sourceLine" id="cb46-2" title="2"><span class="co"># load libs</span></a>
-<a class="sourceLine" id="cb46-3" title="3"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb46-4" title="4"><span class="kw">library</span>(readr)</a>
-<a class="sourceLine" id="cb46-5" title="5"><span class="kw">library</span>(stringr)</a>
-<a class="sourceLine" id="cb46-6" title="6"><span class="kw">library</span>(purrr)</a>
-<a class="sourceLine" id="cb46-7" title="7"><span class="kw">library</span>(raster)</a>
-<a class="sourceLine" id="cb46-8" title="8"><span class="kw">library</span>(glue)</a>
-<a class="sourceLine" id="cb46-9" title="9"><span class="kw">library</span>(velox)</a>
-<a class="sourceLine" id="cb46-10" title="10"><span class="kw">library</span>(tidyr)</a>
-<a class="sourceLine" id="cb46-11" title="11"><span class="kw">library</span>(sf)</a>
-<a class="sourceLine" id="cb46-12" title="12"></a>
-<a class="sourceLine" id="cb46-13" title="13"><span class="co"># load saved data object</span></a>
-<a class="sourceLine" id="cb46-14" title="14"><span class="kw">load</span>(<span class="st">&quot;data/01_ebird_data_prelim_processing.rdata&quot;</span>)</a></code></pre></div>
+<h2><span class="header-section-number">7.1</span> Prepare libraries and data</h2>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="adding-covariates-to-checklist-data.html#cb61-1"></a><span class="co"># load libs for data</span></span>
+<span id="cb61-2"><a href="adding-covariates-to-checklist-data.html#cb61-2"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb61-3"><a href="adding-covariates-to-checklist-data.html#cb61-3"></a><span class="kw">library</span>(readr)</span>
+<span id="cb61-4"><a href="adding-covariates-to-checklist-data.html#cb61-4"></a><span class="kw">library</span>(stringr)</span>
+<span id="cb61-5"><a href="adding-covariates-to-checklist-data.html#cb61-5"></a><span class="kw">library</span>(purrr)</span>
+<span id="cb61-6"><a href="adding-covariates-to-checklist-data.html#cb61-6"></a><span class="kw">library</span>(glue)</span>
+<span id="cb61-7"><a href="adding-covariates-to-checklist-data.html#cb61-7"></a><span class="kw">library</span>(tidyr)</span>
+<span id="cb61-8"><a href="adding-covariates-to-checklist-data.html#cb61-8"></a></span>
+<span id="cb61-9"><a href="adding-covariates-to-checklist-data.html#cb61-9"></a><span class="co"># check for velox and install</span></span>
+<span id="cb61-10"><a href="adding-covariates-to-checklist-data.html#cb61-10"></a><span class="kw">library</span>(devtools)</span>
+<span id="cb61-11"><a href="adding-covariates-to-checklist-data.html#cb61-11"></a><span class="cf">if</span> (<span class="op">!</span><span class="st">&quot;velox&quot;</span> <span class="op">%in%</span><span class="st"> </span><span class="kw">installed.packages</span>()) {</span>
+<span id="cb61-12"><a href="adding-covariates-to-checklist-data.html#cb61-12"></a>  <span class="kw">install_github</span>(<span class="st">&quot;hunzikp/velox&quot;</span>)</span>
+<span id="cb61-13"><a href="adding-covariates-to-checklist-data.html#cb61-13"></a>}</span>
+<span id="cb61-14"><a href="adding-covariates-to-checklist-data.html#cb61-14"></a></span>
+<span id="cb61-15"><a href="adding-covariates-to-checklist-data.html#cb61-15"></a><span class="co"># load spatial</span></span>
+<span id="cb61-16"><a href="adding-covariates-to-checklist-data.html#cb61-16"></a><span class="kw">library</span>(raster)</span>
+<span id="cb61-17"><a href="adding-covariates-to-checklist-data.html#cb61-17"></a><span class="kw">library</span>(rgeos)</span>
+<span id="cb61-18"><a href="adding-covariates-to-checklist-data.html#cb61-18"></a><span class="kw">library</span>(velox)</span>
+<span id="cb61-19"><a href="adding-covariates-to-checklist-data.html#cb61-19"></a><span class="kw">library</span>(sf)</span>
+<span id="cb61-20"><a href="adding-covariates-to-checklist-data.html#cb61-20"></a></span>
+<span id="cb61-21"><a href="adding-covariates-to-checklist-data.html#cb61-21"></a><span class="co"># load saved data object</span></span>
+<span id="cb61-22"><a href="adding-covariates-to-checklist-data.html#cb61-22"></a><span class="kw">load</span>(<span class="st">&quot;data/01_data_prelim_processing.rdata&quot;</span>)</span></code></pre></div>
 </div>
 <div id="spatial-subsampling" class="section level2">
-<h2><span class="header-section-number">6.2</span> Spatial subsampling</h2>
-<p>Sampling bias can be introduced into citizen science due to the often ad-hoc nature of data collection <span class="citation">(Sullivan et al. <a href="#ref-sullivan2014">2014</a>)</span>. For eBird, this translates into checklists reported when convenient, rather than at regular or random points in time and space, leading to non-independence in the data if observations are spatio-temporally clustered <span class="citation">(Johnston et al. <a href="#ref-johnston2019a">2019</a>)</span>. Spatio-temporal autocorrelation in the data can be reduced by sub-sampling at an appropriate spatial resolution, and by avoiding temporal clustering. We estimated two simple measures of spatial clustering: the distance from each site to the nearest road (road data from OpenStreetMap; <span class="citation">(OpenStreetMap contributors <a href="#ref-OpenStreetMap">2019</a>)</span>), and the nearest-neighbor distance for each site. Sites were strongly tied to roads (mean distance to road ± SD = 390.77 ± 859.15 m; range = 0.28 m – 7.64 km) and were on average only 297 m away from another site (SD = 553 m; range = 0.14 m – 12.85 km) (Figure 3). This analysis was done in the previous section.</p>
+<h2><span class="header-section-number">7.2</span> Spatial subsampling</h2>
+<p>Sampling bias can be introduced into citizen science due to the often ad-hoc nature of data collection <span class="citation">(Sullivan et al. <a href="#ref-sullivan2014" role="doc-biblioref">2014</a>)</span>. For eBird, this translates into checklists reported when convenient, rather than at regular or random points in time and space, leading to non-independence in the data if observations are spatio-temporally clustered <span class="citation">(Johnston et al. <a href="#ref-johnston2019a" role="doc-biblioref">2019</a>)</span>. Spatio-temporal autocorrelation in the data can be reduced by sub-sampling at an appropriate spatial resolution, and by avoiding temporal clustering. We estimated two simple measures of spatial clustering: the distance from each site to the nearest road (road data from OpenStreetMap; <span class="citation">(OpenStreetMap contributors <a href="#ref-OpenStreetMap" role="doc-biblioref">2019</a>)</span>), and the nearest-neighbor distance for each site. Sites were strongly tied to roads (mean distance to road ± SD = 390.77 ± 859.15 m; range = 0.28 m – 7.64 km) and were on average only 297 m away from another site (SD = 553 m; range = 0.14 m – 12.85 km) (Figure 3). This analysis was done in the previous section.</p>
 <p>Here, to further reduce spatial autocorrelation, we divided the study area into a grid of 1km wide square cells and picked checklists from one site at random within each grid cell.</p>
 <p>Prior to running this analysis, we checked how many checklists/data would be retained given a particular value of distance to account for spatial independence. This analysis can be accessed in Section 8 of the Supplementary Material. We show that over 80% of checklists are retained with a distance cutoff of 1km. In addition, a number of thinning approaches were tested to determine which method retained the highest proportion of points, while accounting for sampling effort (time and distance). This analysis can be accessed in Section 9 of the Supplementary Material.</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1"><span class="co"># grid based spatial thinning</span></a>
-<a class="sourceLine" id="cb47-2" title="2">gridsize &lt;-<span class="st"> </span><span class="dv">1000</span> <span class="co"># grid size in metres</span></a>
-<a class="sourceLine" id="cb47-3" title="3">effort_distance_max &lt;-<span class="st"> </span><span class="dv">1000</span> <span class="co"># removing checklists with this distance</span></a>
-<a class="sourceLine" id="cb47-4" title="4"></a>
-<a class="sourceLine" id="cb47-5" title="5"><span class="co"># make grids across the study site</span></a>
-<a class="sourceLine" id="cb47-6" title="6">hills &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb47-7" title="7"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
-<a class="sourceLine" id="cb47-8" title="8">grid &lt;-<span class="st"> </span><span class="kw">st_make_grid</span>(hills, <span class="dt">cellsize =</span> gridsize)</a>
-<a class="sourceLine" id="cb47-9" title="9"></a>
-<a class="sourceLine" id="cb47-10" title="10"><span class="co"># split data by species</span></a>
-<a class="sourceLine" id="cb47-11" title="11">data_spatial_thin &lt;-<span class="st"> </span><span class="kw">split</span>(<span class="dt">x =</span> dataGrouped, <span class="dt">f =</span> dataGrouped<span class="op">$</span>scientific_name)</a>
-<a class="sourceLine" id="cb47-12" title="12"></a>
-<a class="sourceLine" id="cb47-13" title="13"><span class="co"># spatial thinning on each species retains</span></a>
-<a class="sourceLine" id="cb47-14" title="14"><span class="co"># site with maximum visits per grid cell</span></a>
-<a class="sourceLine" id="cb47-15" title="15">data_spatial_thin &lt;-<span class="st"> </span><span class="kw">map</span>(data_spatial_thin, <span class="cf">function</span>(df) {</a>
-<a class="sourceLine" id="cb47-16" title="16"></a>
-<a class="sourceLine" id="cb47-17" title="17">  <span class="co"># count visits per locality</span></a>
-<a class="sourceLine" id="cb47-18" title="18">  df &lt;-<span class="st"> </span><span class="kw">group_by</span>(df, locality) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb47-19" title="19"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">tot_effort =</span> <span class="kw">length</span>(sampling_event_identifier)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb47-20" title="20"><span class="st">    </span><span class="kw">ungroup</span>()</a>
-<a class="sourceLine" id="cb47-21" title="21"></a>
-<a class="sourceLine" id="cb47-22" title="22">  <span class="co"># remove sites with distances above spatial independence</span></a>
-<a class="sourceLine" id="cb47-23" title="23">  df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb47-24" title="24"><span class="st">    </span><span class="kw">filter</span>(effort_distance_km <span class="op">&lt;=</span><span class="st"> </span>effort_distance_max) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb47-25" title="25"><span class="st">    </span><span class="kw">st_as_sf</span>(<span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb47-26" title="26"><span class="st">    `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb47-27" title="27"><span class="st">    </span><span class="kw">st_transform</span>(<span class="dv">32643</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb47-28" title="28"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">coordId =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(.)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb47-29" title="29"><span class="st">    </span><span class="kw">bind_cols</span>(<span class="kw">as_tibble</span>(<span class="kw">st_coordinates</span>(.)))</a>
-<a class="sourceLine" id="cb47-30" title="30"></a>
-<a class="sourceLine" id="cb47-31" title="31">  <span class="co"># whcih cell has which coords</span></a>
-<a class="sourceLine" id="cb47-32" title="32">  grid_contents &lt;-<span class="st"> </span><span class="kw">st_contains</span>(grid, df) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb47-33" title="33"><span class="st">    </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb47-34" title="34"><span class="st">    </span><span class="kw">rename</span>(<span class="dt">cell =</span> row.id, <span class="dt">coordId =</span> col.id)</a>
-<a class="sourceLine" id="cb47-35" title="35"></a>
-<a class="sourceLine" id="cb47-36" title="36">  <span class="co"># what&#39;s the max point in each grid</span></a>
-<a class="sourceLine" id="cb47-37" title="37">  points_max &lt;-<span class="st"> </span><span class="kw">left_join</span>(df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">st_drop_geometry</span>(),</a>
-<a class="sourceLine" id="cb47-38" title="38">    grid_contents,</a>
-<a class="sourceLine" id="cb47-39" title="39">    <span class="dt">by =</span> <span class="st">&quot;coordId&quot;</span></a>
-<a class="sourceLine" id="cb47-40" title="40">  ) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb47-41" title="41"><span class="st">    </span><span class="kw">group_by</span>(cell) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb47-42" title="42"><span class="st">    </span><span class="kw">filter</span>(tot_effort <span class="op">==</span><span class="st"> </span><span class="kw">max</span>(tot_effort))</a>
-<a class="sourceLine" id="cb47-43" title="43"></a>
-<a class="sourceLine" id="cb47-44" title="44">  <span class="kw">return</span>(points_max)</a>
-<a class="sourceLine" id="cb47-45" title="45">})</a>
-<a class="sourceLine" id="cb47-46" title="46"></a>
-<a class="sourceLine" id="cb47-47" title="47"><span class="co"># remove old data</span></a>
-<a class="sourceLine" id="cb47-48" title="48"><span class="kw">rm</span>(dataGrouped)</a></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="adding-covariates-to-checklist-data.html#cb62-1"></a><span class="co"># grid based spatial thinning</span></span>
+<span id="cb62-2"><a href="adding-covariates-to-checklist-data.html#cb62-2"></a>gridsize &lt;-<span class="st"> </span><span class="dv">1000</span> <span class="co"># grid size in metres</span></span>
+<span id="cb62-3"><a href="adding-covariates-to-checklist-data.html#cb62-3"></a>effort_distance_max &lt;-<span class="st"> </span><span class="dv">1000</span> <span class="co"># removing checklists with this distance</span></span>
+<span id="cb62-4"><a href="adding-covariates-to-checklist-data.html#cb62-4"></a></span>
+<span id="cb62-5"><a href="adding-covariates-to-checklist-data.html#cb62-5"></a><span class="co"># make grids across the study site</span></span>
+<span id="cb62-6"><a href="adding-covariates-to-checklist-data.html#cb62-6"></a>hills &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb62-7"><a href="adding-covariates-to-checklist-data.html#cb62-7"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</span>
+<span id="cb62-8"><a href="adding-covariates-to-checklist-data.html#cb62-8"></a>grid &lt;-<span class="st"> </span><span class="kw">st_make_grid</span>(hills, <span class="dt">cellsize =</span> gridsize)</span>
+<span id="cb62-9"><a href="adding-covariates-to-checklist-data.html#cb62-9"></a></span>
+<span id="cb62-10"><a href="adding-covariates-to-checklist-data.html#cb62-10"></a><span class="co"># split data by species</span></span>
+<span id="cb62-11"><a href="adding-covariates-to-checklist-data.html#cb62-11"></a>data_spatial_thin &lt;-<span class="st"> </span><span class="kw">split</span>(<span class="dt">x =</span> dataGrouped, <span class="dt">f =</span> dataGrouped<span class="op">$</span>scientific_name)</span>
+<span id="cb62-12"><a href="adding-covariates-to-checklist-data.html#cb62-12"></a></span>
+<span id="cb62-13"><a href="adding-covariates-to-checklist-data.html#cb62-13"></a><span class="co"># spatial thinning on each species retains</span></span>
+<span id="cb62-14"><a href="adding-covariates-to-checklist-data.html#cb62-14"></a><span class="co"># site with maximum visits per grid cell</span></span>
+<span id="cb62-15"><a href="adding-covariates-to-checklist-data.html#cb62-15"></a>data_spatial_thin &lt;-<span class="st"> </span><span class="kw">map</span>(data_spatial_thin, <span class="cf">function</span>(df) {</span>
+<span id="cb62-16"><a href="adding-covariates-to-checklist-data.html#cb62-16"></a></span>
+<span id="cb62-17"><a href="adding-covariates-to-checklist-data.html#cb62-17"></a>  <span class="co"># count visits per locality</span></span>
+<span id="cb62-18"><a href="adding-covariates-to-checklist-data.html#cb62-18"></a>  df &lt;-<span class="st"> </span><span class="kw">group_by</span>(df, locality) <span class="op">%&gt;%</span></span>
+<span id="cb62-19"><a href="adding-covariates-to-checklist-data.html#cb62-19"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">tot_effort =</span> <span class="kw">length</span>(sampling_event_identifier)) <span class="op">%&gt;%</span></span>
+<span id="cb62-20"><a href="adding-covariates-to-checklist-data.html#cb62-20"></a><span class="st">    </span><span class="kw">ungroup</span>()</span>
+<span id="cb62-21"><a href="adding-covariates-to-checklist-data.html#cb62-21"></a></span>
+<span id="cb62-22"><a href="adding-covariates-to-checklist-data.html#cb62-22"></a>  <span class="co"># remove sites with distances above spatial independence</span></span>
+<span id="cb62-23"><a href="adding-covariates-to-checklist-data.html#cb62-23"></a>  df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span></span>
+<span id="cb62-24"><a href="adding-covariates-to-checklist-data.html#cb62-24"></a><span class="st">    </span><span class="kw">filter</span>(effort_distance_km <span class="op">&lt;=</span><span class="st"> </span>effort_distance_max) <span class="op">%&gt;%</span></span>
+<span id="cb62-25"><a href="adding-covariates-to-checklist-data.html#cb62-25"></a><span class="st">    </span><span class="kw">st_as_sf</span>(<span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb62-26"><a href="adding-covariates-to-checklist-data.html#cb62-26"></a><span class="st">    `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>)</span>
+<span id="cb62-27"><a href="adding-covariates-to-checklist-data.html#cb62-27"></a></span>
+<span id="cb62-28"><a href="adding-covariates-to-checklist-data.html#cb62-28"></a>  <span class="co"># transform to regional UTM 43N and add id</span></span>
+<span id="cb62-29"><a href="adding-covariates-to-checklist-data.html#cb62-29"></a>  df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span></span>
+<span id="cb62-30"><a href="adding-covariates-to-checklist-data.html#cb62-30"></a><span class="st">    </span><span class="kw">st_transform</span>(<span class="dv">32643</span>) <span class="op">%&gt;%</span></span>
+<span id="cb62-31"><a href="adding-covariates-to-checklist-data.html#cb62-31"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">coordId =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(.)) <span class="op">%&gt;%</span></span>
+<span id="cb62-32"><a href="adding-covariates-to-checklist-data.html#cb62-32"></a><span class="st">    </span><span class="kw">bind_cols</span>(<span class="kw">as_tibble</span>(<span class="kw">st_coordinates</span>(.)))</span>
+<span id="cb62-33"><a href="adding-covariates-to-checklist-data.html#cb62-33"></a></span>
+<span id="cb62-34"><a href="adding-covariates-to-checklist-data.html#cb62-34"></a>  <span class="co"># whcih cell has which coords</span></span>
+<span id="cb62-35"><a href="adding-covariates-to-checklist-data.html#cb62-35"></a>  grid_overlap &lt;-<span class="st"> </span><span class="kw">st_contains</span>(grid, df) <span class="op">%&gt;%</span></span>
+<span id="cb62-36"><a href="adding-covariates-to-checklist-data.html#cb62-36"></a><span class="st">    </span><span class="kw">unclass</span>() <span class="op">%&gt;%</span></span>
+<span id="cb62-37"><a href="adding-covariates-to-checklist-data.html#cb62-37"></a><span class="st">    </span><span class="kw">discard</span>(<span class="dt">.p =</span> is_empty)</span>
+<span id="cb62-38"><a href="adding-covariates-to-checklist-data.html#cb62-38"></a></span>
+<span id="cb62-39"><a href="adding-covariates-to-checklist-data.html#cb62-39"></a>  <span class="co"># count length of grid overlap list</span></span>
+<span id="cb62-40"><a href="adding-covariates-to-checklist-data.html#cb62-40"></a>  <span class="co"># this is the number of cells with points in them</span></span>
+<span id="cb62-41"><a href="adding-covariates-to-checklist-data.html#cb62-41"></a>  sampled_cells &lt;-<span class="st"> </span><span class="kw">length</span>(grid_overlap)</span>
+<span id="cb62-42"><a href="adding-covariates-to-checklist-data.html#cb62-42"></a></span>
+<span id="cb62-43"><a href="adding-covariates-to-checklist-data.html#cb62-43"></a>  <span class="co"># make tibble</span></span>
+<span id="cb62-44"><a href="adding-covariates-to-checklist-data.html#cb62-44"></a>  grid_overlap &lt;-<span class="st"> </span><span class="kw">tibble</span>(</span>
+<span id="cb62-45"><a href="adding-covariates-to-checklist-data.html#cb62-45"></a>    <span class="dt">uid_cell =</span> <span class="kw">seq</span>(<span class="kw">length</span>(grid_overlap)), <span class="co"># the uid_cell is specific to this sp.</span></span>
+<span id="cb62-46"><a href="adding-covariates-to-checklist-data.html#cb62-46"></a>    <span class="dt">coordId =</span> grid_overlap</span>
+<span id="cb62-47"><a href="adding-covariates-to-checklist-data.html#cb62-47"></a>  )</span>
+<span id="cb62-48"><a href="adding-covariates-to-checklist-data.html#cb62-48"></a></span>
+<span id="cb62-49"><a href="adding-covariates-to-checklist-data.html#cb62-49"></a>  <span class="co"># unnest</span></span>
+<span id="cb62-50"><a href="adding-covariates-to-checklist-data.html#cb62-50"></a>  grid_overlap &lt;-<span class="st"> </span><span class="kw">unnest</span>(grid_overlap, <span class="dt">cols =</span> <span class="st">&quot;coordId&quot;</span>)</span>
+<span id="cb62-51"><a href="adding-covariates-to-checklist-data.html#cb62-51"></a></span>
+<span id="cb62-52"><a href="adding-covariates-to-checklist-data.html#cb62-52"></a>  <span class="co"># join grid cell overlap with coordinate data</span></span>
+<span id="cb62-53"><a href="adding-covariates-to-checklist-data.html#cb62-53"></a>  df &lt;-<span class="st"> </span><span class="kw">left_join</span>(df,</span>
+<span id="cb62-54"><a href="adding-covariates-to-checklist-data.html#cb62-54"></a>    grid_overlap,</span>
+<span id="cb62-55"><a href="adding-covariates-to-checklist-data.html#cb62-55"></a>    <span class="dt">by =</span> <span class="st">&quot;coordId&quot;</span></span>
+<span id="cb62-56"><a href="adding-covariates-to-checklist-data.html#cb62-56"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb62-57"><a href="adding-covariates-to-checklist-data.html#cb62-57"></a><span class="st">    </span><span class="kw">st_drop_geometry</span>()</span>
+<span id="cb62-58"><a href="adding-covariates-to-checklist-data.html#cb62-58"></a></span>
+<span id="cb62-59"><a href="adding-covariates-to-checklist-data.html#cb62-59"></a>  <span class="co"># for each uid_cell, select coord where effort is max</span></span>
+<span id="cb62-60"><a href="adding-covariates-to-checklist-data.html#cb62-60"></a>  points_max &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span></span>
+<span id="cb62-61"><a href="adding-covariates-to-checklist-data.html#cb62-61"></a><span class="st">    </span><span class="kw">group_by</span>(uid_cell) <span class="op">%&gt;%</span></span>
+<span id="cb62-62"><a href="adding-covariates-to-checklist-data.html#cb62-62"></a><span class="st">    </span><span class="kw">filter</span>(tot_effort <span class="op">==</span><span class="st"> </span><span class="kw">max</span>(tot_effort)) <span class="op">%&gt;%</span></span>
+<span id="cb62-63"><a href="adding-covariates-to-checklist-data.html#cb62-63"></a><span class="st">    </span><span class="co"># there may be multiple rows with max effort, select first</span></span>
+<span id="cb62-64"><a href="adding-covariates-to-checklist-data.html#cb62-64"></a><span class="st">    </span><span class="kw">filter</span>(<span class="kw">row_number</span>() <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)</span>
+<span id="cb62-65"><a href="adding-covariates-to-checklist-data.html#cb62-65"></a></span>
+<span id="cb62-66"><a href="adding-covariates-to-checklist-data.html#cb62-66"></a>  <span class="co"># check for number of samples</span></span>
+<span id="cb62-67"><a href="adding-covariates-to-checklist-data.html#cb62-67"></a>  assertthat<span class="op">::</span><span class="kw">assert_that</span>(</span>
+<span id="cb62-68"><a href="adding-covariates-to-checklist-data.html#cb62-68"></a>    assertthat<span class="op">::</span><span class="kw">are_equal</span>(sampled_cells, <span class="kw">nrow</span>(points_max),</span>
+<span id="cb62-69"><a href="adding-covariates-to-checklist-data.html#cb62-69"></a>      <span class="dt">msg =</span> <span class="st">&quot;spatial thinning error: more samples than</span><span class="ch">\\</span></span>
+<span id="cb62-70"><a href="adding-covariates-to-checklist-data.html#cb62-70"></a><span class="st">                          sampled cells&quot;</span></span>
+<span id="cb62-71"><a href="adding-covariates-to-checklist-data.html#cb62-71"></a>    )</span>
+<span id="cb62-72"><a href="adding-covariates-to-checklist-data.html#cb62-72"></a>  )</span>
+<span id="cb62-73"><a href="adding-covariates-to-checklist-data.html#cb62-73"></a>  <span class="co"># check that there is one sample per cell</span></span>
+<span id="cb62-74"><a href="adding-covariates-to-checklist-data.html#cb62-74"></a>  assertthat<span class="op">::</span><span class="kw">assert_that</span>(</span>
+<span id="cb62-75"><a href="adding-covariates-to-checklist-data.html#cb62-75"></a>    assertthat<span class="op">::</span><span class="kw">are_equal</span>(</span>
+<span id="cb62-76"><a href="adding-covariates-to-checklist-data.html#cb62-76"></a>      <span class="kw">max</span>(<span class="kw">count</span>(points_max, uid_cell)<span class="op">$</span>n), <span class="dv">1</span></span>
+<span id="cb62-77"><a href="adding-covariates-to-checklist-data.html#cb62-77"></a>    )</span>
+<span id="cb62-78"><a href="adding-covariates-to-checklist-data.html#cb62-78"></a>  )</span>
+<span id="cb62-79"><a href="adding-covariates-to-checklist-data.html#cb62-79"></a></span>
+<span id="cb62-80"><a href="adding-covariates-to-checklist-data.html#cb62-80"></a>  points_max</span>
+<span id="cb62-81"><a href="adding-covariates-to-checklist-data.html#cb62-81"></a>})</span>
+<span id="cb62-82"><a href="adding-covariates-to-checklist-data.html#cb62-82"></a></span>
+<span id="cb62-83"><a href="adding-covariates-to-checklist-data.html#cb62-83"></a><span class="co"># remove old data</span></span>
+<span id="cb62-84"><a href="adding-covariates-to-checklist-data.html#cb62-84"></a><span class="kw">rm</span>(dataGrouped)</span></code></pre></div>
 </div>
 <div id="temporal-subsampling" class="section level2">
-<h2><span class="header-section-number">6.3</span> Temporal subsampling</h2>
+<h2><span class="header-section-number">7.3</span> Temporal subsampling</h2>
 <p>Additionally, from each selected site, we randomly selected a maximum of 10 checklists, which reduced temporal autocorrelation.</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1"><span class="co"># subsample data for random 10 observations</span></a>
-<a class="sourceLine" id="cb48-2" title="2">dataSubsample &lt;-<span class="st"> </span><span class="kw">map</span>(data_spatial_thin, <span class="cf">function</span>(df) {</a>
-<a class="sourceLine" id="cb48-3" title="3">  df &lt;-<span class="st"> </span><span class="kw">ungroup</span>(df)</a>
-<a class="sourceLine" id="cb48-4" title="4">  df_to_locality &lt;-<span class="st"> </span><span class="kw">split</span>(<span class="dt">x =</span> df, <span class="dt">f =</span> df<span class="op">$</span>locality)</a>
-<a class="sourceLine" id="cb48-5" title="5">  df_samples &lt;-<span class="st"> </span><span class="kw">map_if</span>(</a>
-<a class="sourceLine" id="cb48-6" title="6">    <span class="dt">.x =</span> df_to_locality,</a>
-<a class="sourceLine" id="cb48-7" title="7">    <span class="dt">.p =</span> <span class="cf">function</span>(x) {</a>
-<a class="sourceLine" id="cb48-8" title="8">      <span class="kw">nrow</span>(x) <span class="op">&gt;</span><span class="st"> </span><span class="dv">10</span></a>
-<a class="sourceLine" id="cb48-9" title="9">    },</a>
-<a class="sourceLine" id="cb48-10" title="10">    <span class="dt">.f =</span> <span class="cf">function</span>(x) <span class="kw">sample_n</span>(x, <span class="dv">10</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb48-11" title="11">  )</a>
-<a class="sourceLine" id="cb48-12" title="12"></a>
-<a class="sourceLine" id="cb48-13" title="13">  <span class="kw">return</span>(<span class="kw">bind_rows</span>(df_samples))</a>
-<a class="sourceLine" id="cb48-14" title="14">})</a>
-<a class="sourceLine" id="cb48-15" title="15"></a>
-<a class="sourceLine" id="cb48-16" title="16"><span class="co"># bind all rows for data frame</span></a>
-<a class="sourceLine" id="cb48-17" title="17">dataSubsample &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(dataSubsample)</a>
-<a class="sourceLine" id="cb48-18" title="18"></a>
-<a class="sourceLine" id="cb48-19" title="19"><span class="co"># remove previous data</span></a>
-<a class="sourceLine" id="cb48-20" title="20"><span class="kw">rm</span>(data_spatial_thin)</a></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="adding-covariates-to-checklist-data.html#cb63-1"></a><span class="co"># subsample data for random 10 observations</span></span>
+<span id="cb63-2"><a href="adding-covariates-to-checklist-data.html#cb63-2"></a>dataSubsample &lt;-<span class="st"> </span><span class="kw">map</span>(data_spatial_thin, <span class="cf">function</span>(df) {</span>
+<span id="cb63-3"><a href="adding-covariates-to-checklist-data.html#cb63-3"></a>  df &lt;-<span class="st"> </span><span class="kw">ungroup</span>(df)</span>
+<span id="cb63-4"><a href="adding-covariates-to-checklist-data.html#cb63-4"></a>  df_to_locality &lt;-<span class="st"> </span><span class="kw">split</span>(<span class="dt">x =</span> df, <span class="dt">f =</span> df<span class="op">$</span>locality)</span>
+<span id="cb63-5"><a href="adding-covariates-to-checklist-data.html#cb63-5"></a>  df_samples &lt;-<span class="st"> </span><span class="kw">map_if</span>(</span>
+<span id="cb63-6"><a href="adding-covariates-to-checklist-data.html#cb63-6"></a>    <span class="dt">.x =</span> df_to_locality,</span>
+<span id="cb63-7"><a href="adding-covariates-to-checklist-data.html#cb63-7"></a>    <span class="dt">.p =</span> <span class="cf">function</span>(x) {</span>
+<span id="cb63-8"><a href="adding-covariates-to-checklist-data.html#cb63-8"></a>      <span class="kw">nrow</span>(x) <span class="op">&gt;</span><span class="st"> </span><span class="dv">10</span></span>
+<span id="cb63-9"><a href="adding-covariates-to-checklist-data.html#cb63-9"></a>    },</span>
+<span id="cb63-10"><a href="adding-covariates-to-checklist-data.html#cb63-10"></a>    <span class="dt">.f =</span> <span class="cf">function</span>(x) <span class="kw">sample_n</span>(x, <span class="dv">10</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb63-11"><a href="adding-covariates-to-checklist-data.html#cb63-11"></a>  )</span>
+<span id="cb63-12"><a href="adding-covariates-to-checklist-data.html#cb63-12"></a></span>
+<span id="cb63-13"><a href="adding-covariates-to-checklist-data.html#cb63-13"></a>  <span class="kw">bind_rows</span>(df_samples)</span>
+<span id="cb63-14"><a href="adding-covariates-to-checklist-data.html#cb63-14"></a>})</span>
+<span id="cb63-15"><a href="adding-covariates-to-checklist-data.html#cb63-15"></a></span>
+<span id="cb63-16"><a href="adding-covariates-to-checklist-data.html#cb63-16"></a><span class="co"># bind all rows for data frame</span></span>
+<span id="cb63-17"><a href="adding-covariates-to-checklist-data.html#cb63-17"></a>dataSubsample &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(dataSubsample)</span>
+<span id="cb63-18"><a href="adding-covariates-to-checklist-data.html#cb63-18"></a></span>
+<span id="cb63-19"><a href="adding-covariates-to-checklist-data.html#cb63-19"></a><span class="co"># remove previous data</span></span>
+<span id="cb63-20"><a href="adding-covariates-to-checklist-data.html#cb63-20"></a><span class="kw">rm</span>(data_spatial_thin)</span></code></pre></div>
 </div>
 <div id="add-checklist-calibration-index" class="section level2">
-<h2><span class="header-section-number">6.4</span> Add checklist calibration index</h2>
+<h2><span class="header-section-number">7.4</span> Add checklist calibration index</h2>
 <p>Load the CCI computed in the previous section. The CCI was the lone observer’s expertise score for single-observer checklists, and the highest expertise score among observers for group checklists.</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1"><span class="co"># read in obs score and extract numbers</span></a>
-<a class="sourceLine" id="cb49-2" title="2">expertiseScore &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/03_data-obsExpertise-score.csv&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb49-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">numObserver =</span> <span class="kw">str_extract</span>(observer, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">d+&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb49-4" title="4"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>observer)</a>
-<a class="sourceLine" id="cb49-5" title="5"></a>
-<a class="sourceLine" id="cb49-6" title="6"><span class="co"># group seis consist of multiple observers</span></a>
-<a class="sourceLine" id="cb49-7" title="7"><span class="co"># in this case, seis need to have the highest expertise observer score</span></a>
-<a class="sourceLine" id="cb49-8" title="8"><span class="co"># as the associated covariate</span></a>
-<a class="sourceLine" id="cb49-9" title="9"></a>
-<a class="sourceLine" id="cb49-10" title="10"><span class="co"># get unique observers per sei</span></a>
-<a class="sourceLine" id="cb49-11" title="11">dataSeiScore &lt;-<span class="st"> </span><span class="kw">distinct</span>(</a>
-<a class="sourceLine" id="cb49-12" title="12">  dataSubsample, sampling_event_identifier,</a>
-<a class="sourceLine" id="cb49-13" title="13">  observer_id</a>
-<a class="sourceLine" id="cb49-14" title="14">) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb49-15" title="15"><span class="st">  </span><span class="co"># make list column of observers</span></a>
-<a class="sourceLine" id="cb49-16" title="16"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">observers =</span> <span class="kw">str_split</span>(observer_id, <span class="st">&quot;,&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb49-17" title="17"><span class="st">  </span><span class="kw">unnest</span>(<span class="dt">cols =</span> <span class="kw">c</span>(observers)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb49-18" title="18"><span class="st">  </span><span class="co"># add numeric observer id</span></a>
-<a class="sourceLine" id="cb49-19" title="19"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">numObserver =</span> <span class="kw">str_extract</span>(observers, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">d+&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb49-20" title="20"><span class="st">  </span><span class="co"># now get distinct sei and observer id numeric</span></a>
-<a class="sourceLine" id="cb49-21" title="21"><span class="st">  </span><span class="kw">distinct</span>(sampling_event_identifier, numObserver)</a>
-<a class="sourceLine" id="cb49-22" title="22"></a>
-<a class="sourceLine" id="cb49-23" title="23"><span class="co"># now add expertise score to sei</span></a>
-<a class="sourceLine" id="cb49-24" title="24">dataSeiScore &lt;-<span class="st"> </span><span class="kw">left_join</span>(dataSeiScore, expertiseScore,</a>
-<a class="sourceLine" id="cb49-25" title="25">  <span class="dt">by =</span> <span class="st">&quot;numObserver&quot;</span></a>
-<a class="sourceLine" id="cb49-26" title="26">) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb49-27" title="27"><span class="st">  </span><span class="co"># get max expertise score per sei</span></a>
-<a class="sourceLine" id="cb49-28" title="28"><span class="st">  </span><span class="kw">group_by</span>(sampling_event_identifier) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb49-29" title="29"><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">expertise =</span> <span class="kw">max</span>(score))</a>
-<a class="sourceLine" id="cb49-30" title="30"></a>
-<a class="sourceLine" id="cb49-31" title="31"><span class="co"># add to dataCovar</span></a>
-<a class="sourceLine" id="cb49-32" title="32">dataSubsample &lt;-<span class="st"> </span><span class="kw">left_join</span>(dataSubsample, dataSeiScore,</a>
-<a class="sourceLine" id="cb49-33" title="33">  <span class="dt">by =</span> <span class="st">&quot;sampling_event_identifier&quot;</span></a>
-<a class="sourceLine" id="cb49-34" title="34">)</a>
-<a class="sourceLine" id="cb49-35" title="35"></a>
-<a class="sourceLine" id="cb49-36" title="36"><span class="co"># remove data without expertise score</span></a>
-<a class="sourceLine" id="cb49-37" title="37">dataSubsample &lt;-<span class="st"> </span><span class="kw">filter</span>(dataSubsample, <span class="op">!</span><span class="kw">is.na</span>(expertise))</a></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="adding-covariates-to-checklist-data.html#cb64-1"></a><span class="co"># read in obs score and extract numbers</span></span>
+<span id="cb64-2"><a href="adding-covariates-to-checklist-data.html#cb64-2"></a>expertiseScore &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/03_data-obsExpertise-score.csv&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb64-3"><a href="adding-covariates-to-checklist-data.html#cb64-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">numObserver =</span> <span class="kw">str_extract</span>(observer, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">d+&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb64-4"><a href="adding-covariates-to-checklist-data.html#cb64-4"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>observer)</span>
+<span id="cb64-5"><a href="adding-covariates-to-checklist-data.html#cb64-5"></a></span>
+<span id="cb64-6"><a href="adding-covariates-to-checklist-data.html#cb64-6"></a><span class="co"># group seis consist of multiple observers</span></span>
+<span id="cb64-7"><a href="adding-covariates-to-checklist-data.html#cb64-7"></a><span class="co"># in this case, seis need to have the highest expertise observer score</span></span>
+<span id="cb64-8"><a href="adding-covariates-to-checklist-data.html#cb64-8"></a><span class="co"># as the associated covariate</span></span>
+<span id="cb64-9"><a href="adding-covariates-to-checklist-data.html#cb64-9"></a></span>
+<span id="cb64-10"><a href="adding-covariates-to-checklist-data.html#cb64-10"></a><span class="co"># get unique observers per sei</span></span>
+<span id="cb64-11"><a href="adding-covariates-to-checklist-data.html#cb64-11"></a>dataSeiScore &lt;-<span class="st"> </span><span class="kw">distinct</span>(</span>
+<span id="cb64-12"><a href="adding-covariates-to-checklist-data.html#cb64-12"></a>  dataSubsample, sampling_event_identifier,</span>
+<span id="cb64-13"><a href="adding-covariates-to-checklist-data.html#cb64-13"></a>  observer_id</span>
+<span id="cb64-14"><a href="adding-covariates-to-checklist-data.html#cb64-14"></a>) <span class="op">%&gt;%</span></span>
+<span id="cb64-15"><a href="adding-covariates-to-checklist-data.html#cb64-15"></a><span class="st">  </span><span class="co"># make list column of observers</span></span>
+<span id="cb64-16"><a href="adding-covariates-to-checklist-data.html#cb64-16"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">observers =</span> <span class="kw">str_split</span>(observer_id, <span class="st">&quot;,&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb64-17"><a href="adding-covariates-to-checklist-data.html#cb64-17"></a><span class="st">  </span><span class="kw">unnest</span>(<span class="dt">cols =</span> <span class="kw">c</span>(observers)) <span class="op">%&gt;%</span></span>
+<span id="cb64-18"><a href="adding-covariates-to-checklist-data.html#cb64-18"></a><span class="st">  </span><span class="co"># add numeric observer id</span></span>
+<span id="cb64-19"><a href="adding-covariates-to-checklist-data.html#cb64-19"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">numObserver =</span> <span class="kw">str_extract</span>(observers, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">d+&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb64-20"><a href="adding-covariates-to-checklist-data.html#cb64-20"></a><span class="st">  </span><span class="co"># now get distinct sei and observer id numeric</span></span>
+<span id="cb64-21"><a href="adding-covariates-to-checklist-data.html#cb64-21"></a><span class="st">  </span><span class="kw">distinct</span>(sampling_event_identifier, numObserver)</span>
+<span id="cb64-22"><a href="adding-covariates-to-checklist-data.html#cb64-22"></a></span>
+<span id="cb64-23"><a href="adding-covariates-to-checklist-data.html#cb64-23"></a><span class="co"># now add expertise score to sei</span></span>
+<span id="cb64-24"><a href="adding-covariates-to-checklist-data.html#cb64-24"></a>dataSeiScore &lt;-<span class="st"> </span><span class="kw">left_join</span>(dataSeiScore, expertiseScore,</span>
+<span id="cb64-25"><a href="adding-covariates-to-checklist-data.html#cb64-25"></a>  <span class="dt">by =</span> <span class="st">&quot;numObserver&quot;</span></span>
+<span id="cb64-26"><a href="adding-covariates-to-checklist-data.html#cb64-26"></a>) <span class="op">%&gt;%</span></span>
+<span id="cb64-27"><a href="adding-covariates-to-checklist-data.html#cb64-27"></a><span class="st">  </span><span class="co"># get max expertise score per sei</span></span>
+<span id="cb64-28"><a href="adding-covariates-to-checklist-data.html#cb64-28"></a><span class="st">  </span><span class="kw">group_by</span>(sampling_event_identifier) <span class="op">%&gt;%</span></span>
+<span id="cb64-29"><a href="adding-covariates-to-checklist-data.html#cb64-29"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">expertise =</span> <span class="kw">max</span>(score))</span>
+<span id="cb64-30"><a href="adding-covariates-to-checklist-data.html#cb64-30"></a></span>
+<span id="cb64-31"><a href="adding-covariates-to-checklist-data.html#cb64-31"></a><span class="co"># add to dataCovar</span></span>
+<span id="cb64-32"><a href="adding-covariates-to-checklist-data.html#cb64-32"></a>dataSubsample &lt;-<span class="st"> </span><span class="kw">left_join</span>(dataSubsample, dataSeiScore,</span>
+<span id="cb64-33"><a href="adding-covariates-to-checklist-data.html#cb64-33"></a>  <span class="dt">by =</span> <span class="st">&quot;sampling_event_identifier&quot;</span></span>
+<span id="cb64-34"><a href="adding-covariates-to-checklist-data.html#cb64-34"></a>)</span>
+<span id="cb64-35"><a href="adding-covariates-to-checklist-data.html#cb64-35"></a></span>
+<span id="cb64-36"><a href="adding-covariates-to-checklist-data.html#cb64-36"></a><span class="co"># remove data without expertise score</span></span>
+<span id="cb64-37"><a href="adding-covariates-to-checklist-data.html#cb64-37"></a>dataSubsample &lt;-<span class="st"> </span><span class="kw">filter</span>(dataSubsample, <span class="op">!</span><span class="kw">is.na</span>(expertise))</span></code></pre></div>
 </div>
 <div id="add-climatic-and-landscape-covariates" class="section level2">
-<h2><span class="header-section-number">6.5</span> Add climatic and landscape covariates</h2>
+<h2><span class="header-section-number">7.5</span> Add climatic and landscape covariates</h2>
 <p>Reload climate and land cover predictors prepared previously.</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1"></a>
-<a class="sourceLine" id="cb50-2" title="2"><span class="co"># list landscape covariate stacks</span></a>
-<a class="sourceLine" id="cb50-3" title="3">landscape_files &lt;-<span class="st"> &quot;data/spatial/landscape_resamp01_km.tif&quot;</span></a>
-<a class="sourceLine" id="cb50-4" title="4"></a>
-<a class="sourceLine" id="cb50-5" title="5"><span class="co"># read in as stacks</span></a>
-<a class="sourceLine" id="cb50-6" title="6">landscape_data &lt;-<span class="st"> </span><span class="kw">stack</span>(landscape_files)</a>
-<a class="sourceLine" id="cb50-7" title="7"></a>
-<a class="sourceLine" id="cb50-8" title="8"><span class="co"># get proper names</span></a>
-<a class="sourceLine" id="cb50-9" title="9">elev_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;elev&quot;</span>, <span class="st">&quot;slope&quot;</span>, <span class="st">&quot;aspect&quot;</span>)</a>
-<a class="sourceLine" id="cb50-10" title="10">chelsa_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;bio1&quot;</span>, <span class="st">&quot;bio12&quot;</span>)</a>
-<a class="sourceLine" id="cb50-11" title="11"></a>
-<a class="sourceLine" id="cb50-12" title="12"><span class="kw">names</span>(landscape_data) &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">glue</span>(<span class="st">&#39;{c(elev_names, chelsa_names, &quot;landcover&quot;)}&#39;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="adding-covariates-to-checklist-data.html#cb65-1"></a></span>
+<span id="cb65-2"><a href="adding-covariates-to-checklist-data.html#cb65-2"></a><span class="co"># list landscape covariate stacks</span></span>
+<span id="cb65-3"><a href="adding-covariates-to-checklist-data.html#cb65-3"></a>landscape_files &lt;-<span class="st"> &quot;data/spatial/landscape_resamp01_km.tif&quot;</span></span>
+<span id="cb65-4"><a href="adding-covariates-to-checklist-data.html#cb65-4"></a></span>
+<span id="cb65-5"><a href="adding-covariates-to-checklist-data.html#cb65-5"></a><span class="co"># read in as stacks</span></span>
+<span id="cb65-6"><a href="adding-covariates-to-checklist-data.html#cb65-6"></a>landscape_data &lt;-<span class="st"> </span><span class="kw">stack</span>(landscape_files)</span>
+<span id="cb65-7"><a href="adding-covariates-to-checklist-data.html#cb65-7"></a></span>
+<span id="cb65-8"><a href="adding-covariates-to-checklist-data.html#cb65-8"></a><span class="co"># get proper names</span></span>
+<span id="cb65-9"><a href="adding-covariates-to-checklist-data.html#cb65-9"></a>elev_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;elev&quot;</span>, <span class="st">&quot;slope&quot;</span>, <span class="st">&quot;aspect&quot;</span>)</span>
+<span id="cb65-10"><a href="adding-covariates-to-checklist-data.html#cb65-10"></a>chelsa_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;bio15a&quot;</span>, <span class="st">&quot;bio4a&quot;</span>)</span>
+<span id="cb65-11"><a href="adding-covariates-to-checklist-data.html#cb65-11"></a></span>
+<span id="cb65-12"><a href="adding-covariates-to-checklist-data.html#cb65-12"></a><span class="kw">names</span>(landscape_data) &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">glue</span>(<span class="st">&#39;{c(elev_names, chelsa_names, &quot;landcover&quot;)}&#39;</span>))</span></code></pre></div>
 </div>
 <div id="spatial-buffers-around-selected-checklists" class="section level2">
-<h2><span class="header-section-number">6.6</span> Spatial buffers around selected checklists</h2>
-<p>Every checklist on eBird is associated with a latitude and longitude. However, the coordinates entered by an observer may not accurately depict the location at which a species was detected. This can occur for two reasons: first, traveling checklists are often associated with a single location along the route travelled by observers; and second, checklist locations could be assigned to a ‘hotspot’ – a location that is marked by eBird as being frequented by multiple observers. In many cases, an observation might be assigned to a hotspot even though the observation was not made at the precise location of the hotspot <span class="citation">(J. <a href="#ref-praveenj.2017">2017</a>)</span>. Johnston et al., (2019) showed that a large proportion of observations occurred within a 3km grid, even for those checklists up to 5km in length. Hence to adjust for spatial precision, we considered a minimum radius of 2.5km around each unique locality when sampling environmental covariate values.</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1"><span class="co"># assign neighbourhood radius in m</span></a>
-<a class="sourceLine" id="cb51-2" title="2">sample_radius &lt;-<span class="st"> </span><span class="fl">2.5</span> <span class="op">*</span><span class="st"> </span><span class="fl">1e3</span></a>
-<a class="sourceLine" id="cb51-3" title="3"></a>
-<a class="sourceLine" id="cb51-4" title="4"><span class="co"># get distinct points and make buffer</span></a>
-<a class="sourceLine" id="cb51-5" title="5">ebird_buff &lt;-<span class="st"> </span>dataSubsample <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb51-6" title="6"><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb51-7" title="7"><span class="st">  </span><span class="kw">distinct</span>(X, Y) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb51-8" title="8"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(.)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb51-9" title="9"><span class="st">  </span><span class="kw">crossing</span>(sample_radius) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb51-10" title="10"><span class="st">  </span><span class="kw">arrange</span>(id) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb51-11" title="11"><span class="st">  </span><span class="kw">group_by</span>(sample_radius) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb51-12" title="12"><span class="st">  </span><span class="kw">nest</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb51-13" title="13"><span class="st">  </span><span class="kw">ungroup</span>()</a>
-<a class="sourceLine" id="cb51-14" title="14"></a>
-<a class="sourceLine" id="cb51-15" title="15"></a>
-<a class="sourceLine" id="cb51-16" title="16"><span class="co"># convert to spatial features</span></a>
-<a class="sourceLine" id="cb51-17" title="17">ebird_buff &lt;-<span class="st"> </span><span class="kw">mutate</span>(ebird_buff,</a>
-<a class="sourceLine" id="cb51-18" title="18">  <span class="dt">data =</span> <span class="kw">map2</span>(</a>
-<a class="sourceLine" id="cb51-19" title="19">    data, sample_radius,</a>
-<a class="sourceLine" id="cb51-20" title="20">    <span class="cf">function</span>(df, rd) {</a>
-<a class="sourceLine" id="cb51-21" title="21">      df_sf &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(df, <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;X&quot;</span>, <span class="st">&quot;Y&quot;</span>), <span class="dt">crs =</span> <span class="dv">32643</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb51-22" title="22"><span class="st">        </span><span class="co"># add long lat</span></a>
-<a class="sourceLine" id="cb51-23" title="23"><span class="st">        </span><span class="kw">bind_cols</span>(<span class="kw">as_tibble</span>(<span class="kw">st_coordinates</span>(.))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb51-24" title="24"><span class="st">        </span><span class="co"># rename(longitude = X, latitude = Y) %&gt;%</span></a>
-<a class="sourceLine" id="cb51-25" title="25"><span class="st">        </span><span class="co"># # transform to modis projection</span></a>
-<a class="sourceLine" id="cb51-26" title="26"><span class="st">        </span><span class="co"># st_transform(crs = 32643) %&gt;%</span></a>
-<a class="sourceLine" id="cb51-27" title="27"><span class="st">        </span><span class="co"># buffer to create neighborhood around each point</span></a>
-<a class="sourceLine" id="cb51-28" title="28"><span class="st">        </span><span class="kw">st_buffer</span>(<span class="dt">dist =</span> rd)</a>
-<a class="sourceLine" id="cb51-29" title="29">    }</a>
-<a class="sourceLine" id="cb51-30" title="30">  )</a>
-<a class="sourceLine" id="cb51-31" title="31">)</a></code></pre></div>
+<h2><span class="header-section-number">7.6</span> Spatial buffers around selected checklists</h2>
+<p>Every checklist on eBird is associated with a latitude and longitude. However, the coordinates entered by an observer may not accurately depict the location at which a species was detected. This can occur for two reasons: first, traveling checklists are often associated with a single location along the route travelled by observers; and second, checklist locations could be assigned to a ‘hotspot’ – a location that is marked by eBird as being frequented by multiple observers. In many cases, an observation might be assigned to a hotspot even though the observation was not made at the precise location of the hotspot <span class="citation">(J. <a href="#ref-praveenj.2017" role="doc-biblioref">2017</a>)</span>. Johnston et al., (2019) showed that a large proportion of observations occurred within a 3km grid, even for those checklists up to 5km in length. Hence to adjust for spatial precision, we considered a minimum radius of 2.5km around each unique locality when sampling environmental covariate values.</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="adding-covariates-to-checklist-data.html#cb66-1"></a><span class="co"># assign neighbourhood radius in m</span></span>
+<span id="cb66-2"><a href="adding-covariates-to-checklist-data.html#cb66-2"></a>sample_radius &lt;-<span class="st"> </span><span class="fl">2.5</span> <span class="op">*</span><span class="st"> </span><span class="fl">1e3</span></span>
+<span id="cb66-3"><a href="adding-covariates-to-checklist-data.html#cb66-3"></a></span>
+<span id="cb66-4"><a href="adding-covariates-to-checklist-data.html#cb66-4"></a><span class="co"># get distinct points and make buffer</span></span>
+<span id="cb66-5"><a href="adding-covariates-to-checklist-data.html#cb66-5"></a>ebird_buff &lt;-<span class="st"> </span>dataSubsample <span class="op">%&gt;%</span></span>
+<span id="cb66-6"><a href="adding-covariates-to-checklist-data.html#cb66-6"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span></span>
+<span id="cb66-7"><a href="adding-covariates-to-checklist-data.html#cb66-7"></a><span class="st">  </span><span class="kw">distinct</span>(X, Y) <span class="op">%&gt;%</span></span>
+<span id="cb66-8"><a href="adding-covariates-to-checklist-data.html#cb66-8"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(.)) <span class="op">%&gt;%</span></span>
+<span id="cb66-9"><a href="adding-covariates-to-checklist-data.html#cb66-9"></a><span class="st">  </span><span class="kw">crossing</span>(sample_radius) <span class="op">%&gt;%</span></span>
+<span id="cb66-10"><a href="adding-covariates-to-checklist-data.html#cb66-10"></a><span class="st">  </span><span class="kw">arrange</span>(id) <span class="op">%&gt;%</span></span>
+<span id="cb66-11"><a href="adding-covariates-to-checklist-data.html#cb66-11"></a><span class="st">  </span><span class="kw">group_by</span>(sample_radius) <span class="op">%&gt;%</span></span>
+<span id="cb66-12"><a href="adding-covariates-to-checklist-data.html#cb66-12"></a><span class="st">  </span><span class="kw">nest</span>() <span class="op">%&gt;%</span></span>
+<span id="cb66-13"><a href="adding-covariates-to-checklist-data.html#cb66-13"></a><span class="st">  </span><span class="kw">ungroup</span>()</span>
+<span id="cb66-14"><a href="adding-covariates-to-checklist-data.html#cb66-14"></a></span>
+<span id="cb66-15"><a href="adding-covariates-to-checklist-data.html#cb66-15"></a></span>
+<span id="cb66-16"><a href="adding-covariates-to-checklist-data.html#cb66-16"></a><span class="co"># convert to spatial features</span></span>
+<span id="cb66-17"><a href="adding-covariates-to-checklist-data.html#cb66-17"></a>ebird_buff &lt;-<span class="st"> </span><span class="kw">mutate</span>(ebird_buff,</span>
+<span id="cb66-18"><a href="adding-covariates-to-checklist-data.html#cb66-18"></a>  <span class="dt">data =</span> <span class="kw">map2</span>(</span>
+<span id="cb66-19"><a href="adding-covariates-to-checklist-data.html#cb66-19"></a>    data, sample_radius,</span>
+<span id="cb66-20"><a href="adding-covariates-to-checklist-data.html#cb66-20"></a>    <span class="cf">function</span>(df, rd) {</span>
+<span id="cb66-21"><a href="adding-covariates-to-checklist-data.html#cb66-21"></a>      df_sf &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(df, <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;X&quot;</span>, <span class="st">&quot;Y&quot;</span>), <span class="dt">crs =</span> <span class="dv">32643</span>) <span class="op">%&gt;%</span></span>
+<span id="cb66-22"><a href="adding-covariates-to-checklist-data.html#cb66-22"></a><span class="st">        </span><span class="co"># add long lat</span></span>
+<span id="cb66-23"><a href="adding-covariates-to-checklist-data.html#cb66-23"></a><span class="st">        </span><span class="kw">bind_cols</span>(<span class="kw">as_tibble</span>(<span class="kw">st_coordinates</span>(.))) <span class="op">%&gt;%</span></span>
+<span id="cb66-24"><a href="adding-covariates-to-checklist-data.html#cb66-24"></a><span class="st">        </span><span class="co"># rename(longitude = X, latitude = Y) %&gt;%</span></span>
+<span id="cb66-25"><a href="adding-covariates-to-checklist-data.html#cb66-25"></a><span class="st">        </span><span class="co"># # transform to modis projection</span></span>
+<span id="cb66-26"><a href="adding-covariates-to-checklist-data.html#cb66-26"></a><span class="st">        </span><span class="co"># st_transform(crs = 32643) %&gt;%</span></span>
+<span id="cb66-27"><a href="adding-covariates-to-checklist-data.html#cb66-27"></a><span class="st">        </span><span class="co"># buffer to create neighborhood around each point</span></span>
+<span id="cb66-28"><a href="adding-covariates-to-checklist-data.html#cb66-28"></a><span class="st">        </span><span class="kw">st_buffer</span>(<span class="dt">dist =</span> rd)</span>
+<span id="cb66-29"><a href="adding-covariates-to-checklist-data.html#cb66-29"></a>    }</span>
+<span id="cb66-30"><a href="adding-covariates-to-checklist-data.html#cb66-30"></a>  )</span>
+<span id="cb66-31"><a href="adding-covariates-to-checklist-data.html#cb66-31"></a>)</span></code></pre></div>
 </div>
 <div id="spatial-buffer-wide-covariates" class="section level2">
-<h2><span class="header-section-number">6.7</span> Spatial buffer-wide covariates</h2>
+<h2><span class="header-section-number">7.7</span> Spatial buffer-wide covariates</h2>
 <div id="mean-climatic-covariates" class="section level3">
-<h3><span class="header-section-number">6.7.1</span> Mean climatic covariates</h3>
+<h3><span class="header-section-number">7.7.1</span> Mean climatic covariates</h3>
 <p>All climatic covariates are sampled by considering the mean values within a 2.5km radius as discussed above and prefixed “am_”.</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1"><span class="co"># get area mean for all preds except landcover, which is the last one</span></a>
-<a class="sourceLine" id="cb52-2" title="2">env_area_mean &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(ebird_buff<span class="op">$</span>data, <span class="cf">function</span>(df) {</a>
-<a class="sourceLine" id="cb52-3" title="3">  stk &lt;-<span class="st"> </span>landscape_data[[<span class="op">-</span><span class="kw">dim</span>(landscape_data)[<span class="dv">3</span>]]] <span class="co"># removing landcover here</span></a>
-<a class="sourceLine" id="cb52-4" title="4">  velstk &lt;-<span class="st"> </span><span class="kw">velox</span>(stk)</a>
-<a class="sourceLine" id="cb52-5" title="5">  dextr &lt;-<span class="st"> </span>velstk<span class="op">$</span><span class="kw">extract</span>(</a>
-<a class="sourceLine" id="cb52-6" title="6">    <span class="dt">sp =</span> df, <span class="dt">df =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb52-7" title="7">    <span class="dt">fun =</span> <span class="cf">function</span>(x) <span class="kw">mean</span>(x, <span class="dt">na.rm =</span> T)</a>
-<a class="sourceLine" id="cb52-8" title="8">  )</a>
-<a class="sourceLine" id="cb52-9" title="9"></a>
-<a class="sourceLine" id="cb52-10" title="10">  <span class="co"># assign names for joining</span></a>
-<a class="sourceLine" id="cb52-11" title="11">  <span class="kw">names</span>(dextr) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="kw">names</span>(stk))</a>
-<a class="sourceLine" id="cb52-12" title="12">  <span class="kw">return</span>(<span class="kw">as_tibble</span>(dextr))</a>
-<a class="sourceLine" id="cb52-13" title="13">})</a>
-<a class="sourceLine" id="cb52-14" title="14"></a>
-<a class="sourceLine" id="cb52-15" title="15"><span class="co"># join to buffer data</span></a>
-<a class="sourceLine" id="cb52-16" title="16">ebird_buff &lt;-<span class="st"> </span>ebird_buff <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb52-17" title="17"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">data =</span> <span class="kw">map2</span>(data, env_area_mean, inner_join, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="adding-covariates-to-checklist-data.html#cb67-1"></a><span class="co"># get area mean for all preds except landcover, which is the last one</span></span>
+<span id="cb67-2"><a href="adding-covariates-to-checklist-data.html#cb67-2"></a>env_area_mean &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(ebird_buff<span class="op">$</span>data, <span class="cf">function</span>(df) {</span>
+<span id="cb67-3"><a href="adding-covariates-to-checklist-data.html#cb67-3"></a>  stk &lt;-<span class="st"> </span>landscape_data[[<span class="op">-</span><span class="kw">dim</span>(landscape_data)[<span class="dv">3</span>]]] <span class="co"># removing landcover here</span></span>
+<span id="cb67-4"><a href="adding-covariates-to-checklist-data.html#cb67-4"></a>  velstk &lt;-<span class="st"> </span><span class="kw">velox</span>(stk)</span>
+<span id="cb67-5"><a href="adding-covariates-to-checklist-data.html#cb67-5"></a>  dextr &lt;-<span class="st"> </span>velstk<span class="op">$</span><span class="kw">extract</span>(</span>
+<span id="cb67-6"><a href="adding-covariates-to-checklist-data.html#cb67-6"></a>    <span class="dt">sp =</span> df, <span class="dt">df =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb67-7"><a href="adding-covariates-to-checklist-data.html#cb67-7"></a>    <span class="dt">fun =</span> <span class="cf">function</span>(x) <span class="kw">mean</span>(x, <span class="dt">na.rm =</span> T)</span>
+<span id="cb67-8"><a href="adding-covariates-to-checklist-data.html#cb67-8"></a>  )</span>
+<span id="cb67-9"><a href="adding-covariates-to-checklist-data.html#cb67-9"></a></span>
+<span id="cb67-10"><a href="adding-covariates-to-checklist-data.html#cb67-10"></a>  <span class="co"># assign names for joining</span></span>
+<span id="cb67-11"><a href="adding-covariates-to-checklist-data.html#cb67-11"></a>  <span class="kw">names</span>(dextr) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="kw">names</span>(stk))</span>
+<span id="cb67-12"><a href="adding-covariates-to-checklist-data.html#cb67-12"></a>  <span class="kw">return</span>(<span class="kw">as_tibble</span>(dextr))</span>
+<span id="cb67-13"><a href="adding-covariates-to-checklist-data.html#cb67-13"></a>})</span>
+<span id="cb67-14"><a href="adding-covariates-to-checklist-data.html#cb67-14"></a></span>
+<span id="cb67-15"><a href="adding-covariates-to-checklist-data.html#cb67-15"></a><span class="co"># join to buffer data</span></span>
+<span id="cb67-16"><a href="adding-covariates-to-checklist-data.html#cb67-16"></a>ebird_buff &lt;-<span class="st"> </span>ebird_buff <span class="op">%&gt;%</span></span>
+<span id="cb67-17"><a href="adding-covariates-to-checklist-data.html#cb67-17"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">data =</span> <span class="kw">map2</span>(data, env_area_mean, inner_join, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>))</span></code></pre></div>
 </div>
 <div id="proportions-of-land-cover-type" class="section level3">
-<h3><span class="header-section-number">6.7.2</span> Proportions of land cover type</h3>
+<h3><span class="header-section-number">7.7.2</span> Proportions of land cover type</h3>
 <p>All land cover covariates were sampled by considering the proportion of each land cover type within a 2.5km radius.</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1"><span class="co"># get the last element of each stack from the list</span></a>
-<a class="sourceLine" id="cb53-2" title="2"><span class="co"># this is the landcover at that resolution</span></a>
-<a class="sourceLine" id="cb53-3" title="3">lc_area_prop &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(ebird_buff<span class="op">$</span>data, <span class="cf">function</span>(df) {</a>
-<a class="sourceLine" id="cb53-4" title="4">  lc &lt;-<span class="st"> </span>landscape_data[[<span class="kw">dim</span>(landscape_data)[<span class="dv">3</span>]]] <span class="co"># accessing landcover here</span></a>
-<a class="sourceLine" id="cb53-5" title="5">  lc_velox &lt;-<span class="st"> </span><span class="kw">velox</span>(lc)</a>
-<a class="sourceLine" id="cb53-6" title="6">  lc_vals &lt;-<span class="st"> </span>lc_velox<span class="op">$</span><span class="kw">extract</span>(<span class="dt">sp =</span> df, <span class="dt">df =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb53-7" title="7">  <span class="kw">names</span>(lc_vals) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;lc&quot;</span>)</a>
-<a class="sourceLine" id="cb53-8" title="8"></a>
-<a class="sourceLine" id="cb53-9" title="9">  <span class="co"># get landcover proportions</span></a>
-<a class="sourceLine" id="cb53-10" title="10">  lc_prop &lt;-<span class="st"> </span><span class="kw">count</span>(lc_vals, id, lc) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb53-11" title="11"><span class="st">    </span><span class="kw">group_by</span>(id) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb53-12" title="12"><span class="st">    </span><span class="kw">mutate</span>(</a>
-<a class="sourceLine" id="cb53-13" title="13">      <span class="dt">lc =</span> <span class="kw">glue</span>(<span class="st">&#39;lc_{str_pad(lc, 2, pad = &quot;0&quot;)}&#39;</span>),</a>
-<a class="sourceLine" id="cb53-14" title="14">      <span class="dt">prop =</span> n <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(n)</a>
-<a class="sourceLine" id="cb53-15" title="15">    ) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb53-16" title="16"><span class="st">    </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>n) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb53-17" title="17"><span class="st">    </span>tidyr<span class="op">::</span><span class="kw">pivot_wider</span>(</a>
-<a class="sourceLine" id="cb53-18" title="18">      <span class="dt">names_from =</span> lc,</a>
-<a class="sourceLine" id="cb53-19" title="19">      <span class="dt">values_from =</span> prop,</a>
-<a class="sourceLine" id="cb53-20" title="20">      <span class="dt">values_fill =</span> <span class="kw">list</span>(<span class="dt">prop =</span> <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb53-21" title="21">    ) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb53-22" title="22"><span class="st">    </span><span class="kw">ungroup</span>()</a>
-<a class="sourceLine" id="cb53-23" title="23"></a>
-<a class="sourceLine" id="cb53-24" title="24">  <span class="kw">return</span>(lc_prop)</a>
-<a class="sourceLine" id="cb53-25" title="25">})</a>
-<a class="sourceLine" id="cb53-26" title="26"></a>
-<a class="sourceLine" id="cb53-27" title="27"><span class="co"># join to data</span></a>
-<a class="sourceLine" id="cb53-28" title="28">ebird_buff &lt;-<span class="st"> </span>ebird_buff <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb53-29" title="29"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">data =</span> <span class="kw">map2</span>(data, lc_area_prop, inner_join, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="adding-covariates-to-checklist-data.html#cb68-1"></a><span class="co"># get the last element of each stack from the list</span></span>
+<span id="cb68-2"><a href="adding-covariates-to-checklist-data.html#cb68-2"></a><span class="co"># this is the landcover at that resolution</span></span>
+<span id="cb68-3"><a href="adding-covariates-to-checklist-data.html#cb68-3"></a>lc_area_prop &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(ebird_buff<span class="op">$</span>data, <span class="cf">function</span>(df) {</span>
+<span id="cb68-4"><a href="adding-covariates-to-checklist-data.html#cb68-4"></a>  lc &lt;-<span class="st"> </span>landscape_data[[<span class="kw">dim</span>(landscape_data)[<span class="dv">3</span>]]] <span class="co"># accessing landcover here</span></span>
+<span id="cb68-5"><a href="adding-covariates-to-checklist-data.html#cb68-5"></a>  lc_velox &lt;-<span class="st"> </span><span class="kw">velox</span>(lc)</span>
+<span id="cb68-6"><a href="adding-covariates-to-checklist-data.html#cb68-6"></a>  lc_vals &lt;-<span class="st"> </span>lc_velox<span class="op">$</span><span class="kw">extract</span>(<span class="dt">sp =</span> df, <span class="dt">df =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb68-7"><a href="adding-covariates-to-checklist-data.html#cb68-7"></a>  <span class="kw">names</span>(lc_vals) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;lc&quot;</span>)</span>
+<span id="cb68-8"><a href="adding-covariates-to-checklist-data.html#cb68-8"></a></span>
+<span id="cb68-9"><a href="adding-covariates-to-checklist-data.html#cb68-9"></a>  <span class="co"># get landcover proportions</span></span>
+<span id="cb68-10"><a href="adding-covariates-to-checklist-data.html#cb68-10"></a>  lc_prop &lt;-<span class="st"> </span><span class="kw">count</span>(lc_vals, id, lc) <span class="op">%&gt;%</span></span>
+<span id="cb68-11"><a href="adding-covariates-to-checklist-data.html#cb68-11"></a><span class="st">    </span><span class="kw">group_by</span>(id) <span class="op">%&gt;%</span></span>
+<span id="cb68-12"><a href="adding-covariates-to-checklist-data.html#cb68-12"></a><span class="st">    </span><span class="kw">mutate</span>(</span>
+<span id="cb68-13"><a href="adding-covariates-to-checklist-data.html#cb68-13"></a>      <span class="dt">lc =</span> <span class="kw">glue</span>(<span class="st">&#39;lc_{str_pad(lc, 2, pad = &quot;0&quot;)}&#39;</span>),</span>
+<span id="cb68-14"><a href="adding-covariates-to-checklist-data.html#cb68-14"></a>      <span class="dt">prop =</span> n <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(n)</span>
+<span id="cb68-15"><a href="adding-covariates-to-checklist-data.html#cb68-15"></a>    ) <span class="op">%&gt;%</span></span>
+<span id="cb68-16"><a href="adding-covariates-to-checklist-data.html#cb68-16"></a><span class="st">    </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>n) <span class="op">%&gt;%</span></span>
+<span id="cb68-17"><a href="adding-covariates-to-checklist-data.html#cb68-17"></a><span class="st">    </span>tidyr<span class="op">::</span><span class="kw">pivot_wider</span>(</span>
+<span id="cb68-18"><a href="adding-covariates-to-checklist-data.html#cb68-18"></a>      <span class="dt">names_from =</span> lc,</span>
+<span id="cb68-19"><a href="adding-covariates-to-checklist-data.html#cb68-19"></a>      <span class="dt">values_from =</span> prop,</span>
+<span id="cb68-20"><a href="adding-covariates-to-checklist-data.html#cb68-20"></a>      <span class="dt">values_fill =</span> <span class="kw">list</span>(<span class="dt">prop =</span> <span class="dv">0</span>)</span>
+<span id="cb68-21"><a href="adding-covariates-to-checklist-data.html#cb68-21"></a>    ) <span class="op">%&gt;%</span></span>
+<span id="cb68-22"><a href="adding-covariates-to-checklist-data.html#cb68-22"></a><span class="st">    </span><span class="kw">ungroup</span>()</span>
+<span id="cb68-23"><a href="adding-covariates-to-checklist-data.html#cb68-23"></a></span>
+<span id="cb68-24"><a href="adding-covariates-to-checklist-data.html#cb68-24"></a>  <span class="kw">return</span>(lc_prop)</span>
+<span id="cb68-25"><a href="adding-covariates-to-checklist-data.html#cb68-25"></a>})</span>
+<span id="cb68-26"><a href="adding-covariates-to-checklist-data.html#cb68-26"></a></span>
+<span id="cb68-27"><a href="adding-covariates-to-checklist-data.html#cb68-27"></a><span class="co"># join to data</span></span>
+<span id="cb68-28"><a href="adding-covariates-to-checklist-data.html#cb68-28"></a>ebird_buff &lt;-<span class="st"> </span>ebird_buff <span class="op">%&gt;%</span></span>
+<span id="cb68-29"><a href="adding-covariates-to-checklist-data.html#cb68-29"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">data =</span> <span class="kw">map2</span>(data, lc_area_prop, inner_join, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>))</span></code></pre></div>
 </div>
 <div id="link-environmental-covariates-to-checklists" class="section level3">
-<h3><span class="header-section-number">6.7.3</span> Link environmental covariates to checklists</h3>
-<div class="sourceCode" id="cb54"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1"><span class="co"># duplicate scale data</span></a>
-<a class="sourceLine" id="cb54-2" title="2">data_at_scale &lt;-<span class="st"> </span>ebird_buff</a>
-<a class="sourceLine" id="cb54-3" title="3"></a>
-<a class="sourceLine" id="cb54-4" title="4"><span class="co"># join the full data to landscape samples at each scale</span></a>
-<a class="sourceLine" id="cb54-5" title="5">data_at_scale<span class="op">$</span>data &lt;-<span class="st"> </span><span class="kw">map</span>(data_at_scale<span class="op">$</span>data, <span class="cf">function</span>(df) {</a>
-<a class="sourceLine" id="cb54-6" title="6">  df &lt;-<span class="st"> </span><span class="kw">st_drop_geometry</span>(df)</a>
-<a class="sourceLine" id="cb54-7" title="7">  df &lt;-<span class="st"> </span><span class="kw">inner_join</span>(dataSubsample, df, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;X&quot;</span>, <span class="st">&quot;Y&quot;</span>))</a>
-<a class="sourceLine" id="cb54-8" title="8">  <span class="kw">return</span>(df)</a>
-<a class="sourceLine" id="cb54-9" title="9">})</a></code></pre></div>
+<h3><span class="header-section-number">7.7.3</span> Link environmental covariates to checklists</h3>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="adding-covariates-to-checklist-data.html#cb69-1"></a><span class="co"># duplicate scale data</span></span>
+<span id="cb69-2"><a href="adding-covariates-to-checklist-data.html#cb69-2"></a>data_at_scale &lt;-<span class="st"> </span>ebird_buff</span>
+<span id="cb69-3"><a href="adding-covariates-to-checklist-data.html#cb69-3"></a></span>
+<span id="cb69-4"><a href="adding-covariates-to-checklist-data.html#cb69-4"></a><span class="co"># join the full data to landscape samples at each scale</span></span>
+<span id="cb69-5"><a href="adding-covariates-to-checklist-data.html#cb69-5"></a>data_at_scale<span class="op">$</span>data &lt;-<span class="st"> </span><span class="kw">map</span>(data_at_scale<span class="op">$</span>data, <span class="cf">function</span>(df) {</span>
+<span id="cb69-6"><a href="adding-covariates-to-checklist-data.html#cb69-6"></a>  df &lt;-<span class="st"> </span><span class="kw">st_drop_geometry</span>(df)</span>
+<span id="cb69-7"><a href="adding-covariates-to-checklist-data.html#cb69-7"></a>  df &lt;-<span class="st"> </span><span class="kw">inner_join</span>(dataSubsample, df, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;X&quot;</span>, <span class="st">&quot;Y&quot;</span>))</span>
+<span id="cb69-8"><a href="adding-covariates-to-checklist-data.html#cb69-8"></a>  <span class="kw">return</span>(df)</span>
+<span id="cb69-9"><a href="adding-covariates-to-checklist-data.html#cb69-9"></a>})</span></code></pre></div>
 <p>Save data to file.</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" title="1"><span class="co"># write to file</span></a>
-<a class="sourceLine" id="cb55-2" title="2"><span class="kw">pmap</span>(data_at_scale, <span class="cf">function</span>(sample_radius, data) {</a>
-<a class="sourceLine" id="cb55-3" title="3">  <span class="kw">write_csv</span>(data, <span class="dt">path =</span> <span class="kw">glue</span>(<span class="st">&#39;data/04_data-covars-{str_pad(sample_radius/1e3, 2, pad = &quot;0&quot;)}km.csv&#39;</span>))</a>
-<a class="sourceLine" id="cb55-4" title="4">  <span class="kw">message</span>(<span class="kw">glue</span>(<span class="st">&#39;export done: data/04_data-covars-{str_pad(sample_radius/1e3, 2, pad = &quot;0&quot;)}km.csv&#39;</span>))</a>
-<a class="sourceLine" id="cb55-5" title="5">})</a></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="adding-covariates-to-checklist-data.html#cb70-1"></a><span class="co"># write to file</span></span>
+<span id="cb70-2"><a href="adding-covariates-to-checklist-data.html#cb70-2"></a><span class="kw">pmap</span>(data_at_scale, <span class="cf">function</span>(sample_radius, data) {</span>
+<span id="cb70-3"><a href="adding-covariates-to-checklist-data.html#cb70-3"></a>  <span class="kw">write_csv</span>(data, <span class="dt">path =</span> <span class="kw">glue</span>(<span class="st">&#39;data/04_data-covars-{str_pad(sample_radius/1e3, 2, pad = &quot;0&quot;)}km.csv&#39;</span>))</span>
+<span id="cb70-4"><a href="adding-covariates-to-checklist-data.html#cb70-4"></a>  <span class="kw">message</span>(<span class="kw">glue</span>(<span class="st">&#39;export done: data/04_data-covars-{str_pad(sample_radius/1e3, 2, pad = &quot;0&quot;)}km.csv&#39;</span>))</span>
+<span id="cb70-5"><a href="adding-covariates-to-checklist-data.html#cb70-5"></a>})</span></code></pre></div>
 
 </div>
 </div>
 </div>
 <h3> References</h3>
-<div id="refs" class="references">
+<div id="refs" class="references hanging-indent">
 <div id="ref-praveenj.2017">
-<p>J., Praveen. 2017. “On the Geo-Precision of Data for Modelling Home Range of a Species Commentary on Ramesh et Al. (2017).” <em>Biological Conservation</em> 213 (September): 245–46. <a href="https://doi.org/10.1016/j.biocon.2017.07.017">https://doi.org/10.1016/j.biocon.2017.07.017</a>.</p>
+<p>J., Praveen. 2017. “On the Geo-Precision of Data for Modelling Home Range of a Species A Commentary on Ramesh et Al. (2017).” <em>Biological Conservation</em> 213 (September): 245–46. <a href="https://doi.org/10.1016/j.biocon.2017.07.017">https://doi.org/10.1016/j.biocon.2017.07.017</a>.</p>
 </div>
 <div id="ref-johnston2019a">
 <p>Johnston, A, Wm Hochachka, Me Strimas-Mackey, V Ruiz Gutierrez, Oj Robinson, Et Miller, T Auer, St Kelling, and D Fink. 2019. “Analytical Guidelines to Increase the Value of Citizen Science Data: Using eBird Data to Estimate Species Occurrence.” Preprint. Ecology. <a href="https://doi.org/10.1101/574392">https://doi.org/10.1101/574392</a>.</p>
@@ -523,7 +605,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="examining-spatial-sampling-bias.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="checking-temporal-sampling-frequency.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="modelling-species-occupancy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
@@ -546,7 +628,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/pratikunterwegs/eBirdOccupancy/edit/master/04_final-covar-data.Rmd",
+"link": "https://github.com/pratikunterwegs/eBirdOccupancy/edit/master/07_final-covar-data.Rmd",
 "text": "Edit"
 },
 "history": {
