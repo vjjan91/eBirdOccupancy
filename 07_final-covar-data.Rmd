@@ -40,11 +40,11 @@ Sampling bias can be introduced into citizen science due to the often ad-hoc nat
 
 Here, to further reduce spatial autocorrelation, we divided the study area into a grid of 1km wide square cells and picked checklists from one site at random within each grid cell. 
 
-Prior to running this analysis, we checked how many checklists/data would be retained given a particular value of distance to account for spatial independence. This analysis can be accessed in Section 8 of the Supplementary Material. We show that over 80% of checklists are retained with a distance cutoff of 1km. In addition, a number of thinning approaches were tested to determine which method retained the highest proportion of points, while accounting for sampling effort (time and distance). This analysis can be accessed in Section 9 of the Supplementary Material. 
+Prior to running this analysis, we checked how many checklists/data would be retained given a particular value of distance to account for spatial independence. This analysis can be accessed in Section 8 of the Supplementary Material. We show that over 80% of checklists are retained with a distance cutoff of 500m. In addition, a number of thinning approaches were tested to determine which method retained the highest proportion of points, while accounting for sampling effort (time and distance). This analysis can be accessed in Section 9 of the Supplementary Material. 
 
 ```{r spatial_thinning}
 # grid based spatial thinning
-gridsize <- 1000 # grid size in metres
+gridsize <- 500 # grid size in metres
 effort_distance_max <- 1000 # removing checklists with this distance
 
 # make grids across the study site
@@ -52,12 +52,18 @@ hills <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>%
   st_transform(32643)
 grid <- st_make_grid(hills, cellsize = gridsize)
 
+# filtering on !pres_abs keeps absences
+# this absence data will be thinned
+data_thin_absences = filter(dataGrouped, !pres_abs)
+data_presences = filter(dataGrouped, pres_abs)
+
 # split data by species
-data_spatial_thin <- split(x = dataGrouped, f = dataGrouped$scientific_name)
+data_thin_absences <- split(x = data_thin_absences,
+                           f = data_thin_absences$scientific_name)
 
 # spatial thinning on each species retains
 # site with maximum visits per grid cell
-data_spatial_thin <- map(data_spatial_thin, function(df) {
+data_thin_absences <- map(data_thin_absences, function(df) {
 
   # count visits per locality
   df <- group_by(df, locality) %>%
@@ -131,11 +137,11 @@ rm(dataGrouped)
 
 ## Temporal subsampling
 
-Additionally, from each selected site, we randomly selected a maximum of 10 checklists, which reduced temporal autocorrelation.
+Additionally, from each selected site, we randomly selected a maximum of 10 **absence** checklists, which reduced temporal clustering. We kept **all** presence checklists.
 
 ```{r subsample_data}
 # subsample data for random 10 observations
-dataSubsample <- map(data_spatial_thin, function(df) {
+dataSubsample <- map(data_thin_absences, function(df) {
   df <- ungroup(df)
   df_to_locality <- split(x = df, f = df$locality)
   df_samples <- map_if(
@@ -149,11 +155,14 @@ dataSubsample <- map(data_spatial_thin, function(df) {
   bind_rows(df_samples)
 })
 
-# bind all rows for data frame
+# bind all spatially and temporally thinned absences rows for data frame
 dataSubsample <- bind_rows(dataSubsample)
 
+#join ALL PRESENCES and THINNED ABSENCES
+dataSubsample = bind_rows(dataSubsample, data_presences)
+
 # remove previous data
-rm(data_spatial_thin)
+rm(data_thin_absences)
 ```
 
 ## Add checklist calibration index
