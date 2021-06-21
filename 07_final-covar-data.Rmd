@@ -44,7 +44,7 @@ Prior to running this analysis, we checked how many checklists/data would be ret
 
 ```{r spatial_thinning}
 # grid based spatial thinning
-gridsize <- 500 # grid size in metres
+gridsize <- 5000 # grid size in metres
 effort_distance_max <- 1000 # removing checklists with this distance
 
 # make grids across the study site
@@ -213,7 +213,6 @@ dataSubsample <- filter(dataSubsample, !is.na(expertise))
 
 Reload climate and land cover predictors prepared previously. 
 ```{r add_landcovars}
-
 # list landscape covariate stacks
 landscape_files <- "data/spatial/landscape_resamp01_km.tif"
 
@@ -259,7 +258,6 @@ All climatic covariates are sampled by considering the mean values within a 2.5k
 
 ```{r mean_landscape}
 # get area mean for all preds except landcover, which is the last one
-env_area_mean <- purrr::map(ebird_buff$data, function(df) {
 stk <- raster::dropLayer(landscape_data, "landcover") # removing landcover here
 velstk <- velox(stk)
 
@@ -307,9 +305,6 @@ lc_prop <- count(lc_vals, id, lc) %>%
   ) %>%
   ungroup()
 
-  return(lc_prop)
-})
-
 # join to data
 ebird_buff <- mutate( ebird_buff, lc_prop)
 ```
@@ -317,22 +312,16 @@ ebird_buff <- mutate( ebird_buff, lc_prop)
 ### Link environmental covariates to checklists
 
 ```{r land_to_obs}
-# duplicate scale data
-data_at_scale <- ebird_buff
+# drop geometry
+ebird_buff = st_drop_geometry(ebird_buff)
 
-# join the full data to landscape samples at each scale
-data_at_scale$data <- map(data_at_scale$data, function(df) {
-  df <- st_drop_geometry(df)
-  df <- inner_join(dataSubsample, df, by = c("X", "Y"))
-  return(df)
-})
+# link to dataSubsample
+dataSubsample = inner_join(dataSubsample, ebird_buff, 
+                           by = c("X", "Y"))
 ```
 
 Save data to file.
 ```{r spit_scale}
 # write to file
-pmap(data_at_scale, function(sample_radius, data) {
-  write_csv(data, path = glue('data/04_data-covars-{str_pad(sample_radius/1e3, 2, pad = "0")}km.csv'))
-  message(glue('export done: data/04_data-covars-{str_pad(sample_radius/1e3, 2, pad = "0")}km.csv'))
-})
+write_csv(dataSubsample, path = glue('data/04_data-covars-2.5km.csv'))
 ```
