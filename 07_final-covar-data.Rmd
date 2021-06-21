@@ -287,33 +287,31 @@ All land cover covariates were sampled by considering the proportion of each lan
 ```{r pland}
 # get the last element of each stack from the list
 # this is the landcover at that resolution
-lc_area_prop <- purrr::map(ebird_buff$data, function(df) {
-  lc <- landscape_data[[dim(landscape_data)[3]]] # accessing landcover here
-  lc_velox <- velox(lc)
-  lc_vals <- lc_velox$extract(sp = df, df = TRUE)
-  names(lc_vals) <- c("id", "lc")
+lc <- landscape_data[["landcover"]] # accessing landcover here
+lc_velox <- velox(lc)
+lc_vals <- lc_velox$extract(sp = ebird_buff, df = TRUE)
+names(lc_vals) <- c("id", "lc")
 
-  # get landcover proportions
-  lc_prop <- count(lc_vals, id, lc) %>%
-    group_by(id) %>%
-    mutate(
-      lc = glue('lc_{str_pad(lc, 2, pad = "0")}'),
-      prop = n / sum(n)
-    ) %>%
-    dplyr::select(-n) %>%
-    tidyr::pivot_wider(
-      names_from = lc,
-      values_from = prop,
-      values_fill = list(prop = 0)
-    ) %>%
-    ungroup()
+# get landcover proportions
+lc_prop <- count(lc_vals, id, lc) %>%
+  group_by(id) %>%
+  mutate(
+    lc = glue('lc_{str_pad(lc, 2, pad = "0")}'),
+    prop = n / sum(n)
+  ) %>%
+  dplyr::select(-n) %>%
+  tidyr::pivot_wider(
+    names_from = lc,
+    values_from = prop,
+    values_fill = list(prop = 0)
+  ) %>%
+  ungroup()
 
   return(lc_prop)
 })
 
 # join to data
-ebird_buff <- ebird_buff %>%
-  mutate(data = map2(data, lc_area_prop, inner_join, by = "id"))
+ebird_buff <- mutate( ebird_buff, lc_prop)
 ```
 
 ### Link environmental covariates to checklists
