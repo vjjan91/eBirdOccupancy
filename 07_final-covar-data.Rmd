@@ -244,21 +244,11 @@ ebird_buff <- dataSubsample %>%
 
 
 # convert to spatial features
-ebird_buff <- mutate(ebird_buff,
-  data = map2(
-    data, sample_radius,
-    function(df, rd) {
-      df_sf <- st_as_sf(df, coords = c("X", "Y"), crs = 32643) %>%
-        # add long lat
-        bind_cols(as_tibble(st_coordinates(.))) %>%
-        # rename(longitude = X, latitude = Y) %>%
-        # # transform to modis projection
-        # st_transform(crs = 32643) %>%
-        # buffer to create neighborhood around each point
-        st_buffer(dist = rd)
-    }
-  )
-)
+ebird_buff <- st_as_sf(ebird_buff, coords = c("X", "Y"), crs = 32643) %>%
+  # add long lat
+  bind_cols(as_tibble(st_coordinates(.))) %>% 
+  # make buffer around points
+  st_buffer(dist = sample_radius)
 ```
 
 ## Spatial buffer-wide covariates
