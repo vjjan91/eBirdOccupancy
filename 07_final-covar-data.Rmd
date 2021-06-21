@@ -259,7 +259,7 @@ All climatic covariates are sampled by considering the mean values within a 2.5k
 ```{r mean_landscape}
 # get area mean for all preds except landcover, which is the last one
 env_area_mean <- purrr::map(ebird_buff$data, function(df) {
-  stk <- landscape_data[[-dim(landscape_data)[3]]] # removing landcover here
+  stk <- raster::dropLayer(landscape_data, "landcover") # removing landcover here
   velstk <- velox(stk)
   dextr <- velstk$extract(
     sp = df, df = TRUE,
