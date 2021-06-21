@@ -1,7 +1,7 @@
 --- 
 knit: "bookdown::render_book"
 title: "Source code for _Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot_"
-author:
+author: 
     - Vijay Ramesh
     - Pratik R. Gupte
     - Morgan W. Tingley

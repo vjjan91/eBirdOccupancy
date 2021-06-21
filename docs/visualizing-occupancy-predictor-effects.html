@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Section 8 Visualizing Occupancy Predictor Effects | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</title>
-  <meta name="description" content="Section 8 Visualizing Occupancy Predictor Effects | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <title>Section 10 Visualizing Occupancy Predictor Effects | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</title>
+  <meta name="description" content="Section 10 Visualizing Occupancy Predictor Effects | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Section 8 Visualizing Occupancy Predictor Effects | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <meta property="og:title" content="Section 10 Visualizing Occupancy Predictor Effects | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="pratikunterwegs/eBirdOccupancy" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Section 8 Visualizing Occupancy Predictor Effects | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <meta name="twitter:title" content="Section 10 Visualizing Occupancy Predictor Effects | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
   
   
   
@@ -28,7 +28,7 @@
 <meta name="author" content="Ruth DeFries" />
 
 
-<meta name="date" content="2020-12-26" />
+<meta name="date" content="2021-06-17" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -54,28 +54,32 @@
 
 
 
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -84,9 +88,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -119,6 +123,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -132,13 +137,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
 <li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#attribution"><i class="fa fa-check"></i><b>1.1</b> Attribution</a></li>
 <li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#data-access"><i class="fa fa-check"></i><b>1.2</b> Data access</a></li>
 <li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#data-processing"><i class="fa fa-check"></i><b>1.3</b> Data processing</a></li>
 <li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#main-text-figure-1"><i class="fa fa-check"></i><b>1.4</b> Main Text Figure 1</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html"><i class="fa fa-check"></i><b>2</b> Preparing eBird Data</a><ul>
+<li class="chapter" data-level="2" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html"><i class="fa fa-check"></i><b>2</b> Preparing eBird Data</a>
+<ul>
 <li class="chapter" data-level="2.1" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#prepare-libraries-and-data-sources"><i class="fa fa-check"></i><b>2.1</b> Prepare libraries and data sources</a></li>
 <li class="chapter" data-level="2.2" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#filter-data"><i class="fa fa-check"></i><b>2.2</b> Filter data</a></li>
 <li class="chapter" data-level="2.3" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#process-filtered-data"><i class="fa fa-check"></i><b>2.3</b> Process filtered data</a></li>
@@ -146,24 +153,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.5" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#handle-presence-data"><i class="fa fa-check"></i><b>2.5</b> Handle presence data</a></li>
 <li class="chapter" data-level="2.6" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#add-decimal-time"><i class="fa fa-check"></i><b>2.6</b> Add decimal time</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html"><i class="fa fa-check"></i><b>3</b> Preparing Environmental Predictors</a><ul>
+<li class="chapter" data-level="3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html"><i class="fa fa-check"></i><b>3</b> Preparing Environmental Predictors</a>
+<ul>
 <li class="chapter" data-level="3.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-libraries"><i class="fa fa-check"></i><b>3.1</b> Prepare libraries</a></li>
 <li class="chapter" data-level="3.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-spatial-extent"><i class="fa fa-check"></i><b>3.2</b> Prepare spatial extent</a></li>
 <li class="chapter" data-level="3.3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-terrain-rasters"><i class="fa fa-check"></i><b>3.3</b> Prepare terrain rasters</a></li>
-<li class="chapter" data-level="3.4" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-chelsa-rasters"><i class="fa fa-check"></i><b>3.4</b> Prepare CHELSA rasters</a></li>
-<li class="chapter" data-level="3.5" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-landcover-from-10m-to-1km"><i class="fa fa-check"></i><b>3.5</b> Resample landcover from 10m to 1km</a></li>
-<li class="chapter" data-level="3.6" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-other-rasters-to-1km"><i class="fa fa-check"></i><b>3.6</b> Resample other rasters to 1km</a><ul>
-<li class="chapter" data-level="3.6.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#read-in-resampled-landcover"><i class="fa fa-check"></i><b>3.6.1</b> Read in resampled landcover</a></li>
-<li class="chapter" data-level="3.6.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#reproject-environmental-data-using-landcover-as-a-template"><i class="fa fa-check"></i><b>3.6.2</b> Reproject environmental data using landcover as a template</a></li>
+<li class="chapter" data-level="3.4" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-4a-and-bioclim-15"><i class="fa fa-check"></i><b>3.4</b> Prepare Bioclim 4a and Bioclim 15</a></li>
+<li class="chapter" data-level="3.5" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-chelsa-rasters"><i class="fa fa-check"></i><b>3.5</b> Prepare CHELSA rasters</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-4a-and-15"><i class="fa fa-check"></i><b>3.5.1</b> Prepare BIOCLIM 4a and 15</a></li>
+<li class="chapter" data-level="3.5.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-4a"><i class="fa fa-check"></i><b>3.5.2</b> Prepare BIOCLIM 4a</a></li>
+<li class="chapter" data-level="3.5.3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-15"><i class="fa fa-check"></i><b>3.5.3</b> Prepare Bioclim 15</a></li>
+<li class="chapter" data-level="3.5.4" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#stack-terrain-and-climate"><i class="fa fa-check"></i><b>3.5.4</b> Stack terrain and climate</a></li>
 </ul></li>
-<li class="chapter" data-level="3.7" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#temperature-and-rainfall-in-relation-to-elevation"><i class="fa fa-check"></i><b>3.7</b> Temperature and rainfall in relation to elevation</a><ul>
-<li class="chapter" data-level="3.7.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-libraries-and-ci-function"><i class="fa fa-check"></i><b>3.7.1</b> Prepare libraries and CI function</a></li>
-<li class="chapter" data-level="3.7.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#load-resampled-environmental-rasters"><i class="fa fa-check"></i><b>3.7.2</b> Load resampled environmental rasters</a></li>
+<li class="chapter" data-level="3.6" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-landcover-from-10m-to-1km"><i class="fa fa-check"></i><b>3.6</b> Resample landcover from 10m to 1km</a></li>
+<li class="chapter" data-level="3.7" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-other-rasters-to-1km"><i class="fa fa-check"></i><b>3.7</b> Resample other rasters to 1km</a>
+<ul>
+<li class="chapter" data-level="3.7.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#read-in-resampled-landcover"><i class="fa fa-check"></i><b>3.7.1</b> Read in resampled landcover</a></li>
+<li class="chapter" data-level="3.7.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#reproject-environmental-data-using-landcover-as-a-template"><i class="fa fa-check"></i><b>3.7.2</b> Reproject environmental data using landcover as a template</a></li>
 </ul></li>
-<li class="chapter" data-level="3.8" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#land-cover-type-in-relation-to-elevation"><i class="fa fa-check"></i><b>3.8</b> Land cover type in relation to elevation</a></li>
-<li class="chapter" data-level="3.9" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#main-text-figure-2"><i class="fa fa-check"></i><b>3.9</b> Main Text Figure 2</a></li>
+<li class="chapter" data-level="3.8" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#temperature-and-rainfall-in-relation-to-elevation"><i class="fa fa-check"></i><b>3.8</b> Temperature and rainfall in relation to elevation</a>
+<ul>
+<li class="chapter" data-level="3.8.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#load-resampled-environmental-rasters"><i class="fa fa-check"></i><b>3.8.1</b> Load resampled environmental rasters</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html"><i class="fa fa-check"></i><b>4</b> Preparing Observer Expertise Scores</a><ul>
+<li class="chapter" data-level="3.9" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#land-cover-type-in-relation-to-elevation"><i class="fa fa-check"></i><b>3.9</b> Land cover type in relation to elevation</a></li>
+<li class="chapter" data-level="3.10" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#main-text-figure-2"><i class="fa fa-check"></i><b>3.10</b> Main Text Figure 2</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html"><i class="fa fa-check"></i><b>4</b> Preparing Observer Expertise Scores</a>
+<ul>
 <li class="chapter" data-level="4.1" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#prepare-libraries-1"><i class="fa fa-check"></i><b>4.1</b> Prepare libraries</a></li>
 <li class="chapter" data-level="4.2" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#prepare-data"><i class="fa fa-check"></i><b>4.2</b> Prepare data</a></li>
 <li class="chapter" data-level="4.3" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#spatially-explicit-filter-on-checklists"><i class="fa fa-check"></i><b>4.3</b> Spatially explicit filter on checklists</a></li>
@@ -173,52 +190,81 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.7" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#filter-checklist-data"><i class="fa fa-check"></i><b>4.7</b> Filter checklist data</a></li>
 <li class="chapter" data-level="4.8" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#model-observer-expertise"><i class="fa fa-check"></i><b>4.8</b> Model observer expertise</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html"><i class="fa fa-check"></i><b>5</b> Examining Spatial Sampling Bias</a><ul>
-<li class="chapter" data-level="5.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-libraries-2"><i class="fa fa-check"></i><b>5.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="5.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-data-for-processing"><i class="fa fa-check"></i><b>5.2</b> Prepare data for processing</a><ul>
-<li class="chapter" data-level="5.2.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#python-functions-and-distance-calculations"><i class="fa fa-check"></i><b>5.2.1</b> Python functions and distance calculations</a></li>
-<li class="chapter" data-level="5.2.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#spatially-explicit-filter-on-checklists-1"><i class="fa fa-check"></i><b>5.2.2</b> Spatially explicit filter on checklists</a></li>
+<li class="chapter" data-level="5" data-path="prepare-nearest-neighbour-and-road-metrics.html"><a href="prepare-nearest-neighbour-and-road-metrics.html"><i class="fa fa-check"></i><b>5</b> Prepare Nearest Neighbour and Road Metrics</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="prepare-nearest-neighbour-and-road-metrics.html"><a href="prepare-nearest-neighbour-and-road-metrics.html#prepare-libraries-2"><i class="fa fa-check"></i><b>5.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="5.2" data-path="prepare-nearest-neighbour-and-road-metrics.html"><a href="prepare-nearest-neighbour-and-road-metrics.html#prepare-data-for-processing"><i class="fa fa-check"></i><b>5.2</b> Prepare data for processing</a></li>
+<li class="chapter" data-level="5.3" data-path="prepare-nearest-neighbour-and-road-metrics.html"><a href="prepare-nearest-neighbour-and-road-metrics.html#read-in-data"><i class="fa fa-check"></i><b>5.3</b> Read in data</a></li>
+<li class="chapter" data-level="5.4" data-path="prepare-nearest-neighbour-and-road-metrics.html"><a href="prepare-nearest-neighbour-and-road-metrics.html#define-functions-for-geometry-simplication-and-distances"><i class="fa fa-check"></i><b>5.4</b> Define functions for geometry simplication and distances</a></li>
+<li class="chapter" data-level="5.5" data-path="prepare-nearest-neighbour-and-road-metrics.html"><a href="prepare-nearest-neighbour-and-road-metrics.html#get-distance-from-sites-to-road-and-each-other"><i class="fa fa-check"></i><b>5.5</b> Get distance from sites to road and each other</a></li>
 </ul></li>
-<li class="chapter" data-level="5.3" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#main-text-figure-3"><i class="fa fa-check"></i><b>5.3</b> Main Text Figure 3</a><ul>
-<li class="chapter" data-level="5.3.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-histogram-of-distance-to-roads"><i class="fa fa-check"></i><b>5.3.1</b> Prepare histogram of distance to roads</a></li>
-<li class="chapter" data-level="5.3.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#table-distance-to-roads"><i class="fa fa-check"></i><b>5.3.2</b> Table: Distance to roads</a></li>
+<li class="chapter" data-level="6" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html"><i class="fa fa-check"></i><b>6</b> Examining Spatial Sampling Bias</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-libraries-3"><i class="fa fa-check"></i><b>6.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="6.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#read-checklist-data"><i class="fa fa-check"></i><b>6.2</b> Read checklist data</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#spatially-explicit-filter-on-checklists-1"><i class="fa fa-check"></i><b>6.2.1</b> Spatially explicit filter on checklists</a></li>
+<li class="chapter" data-level="6.2.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#get-background-land-for-plotting"><i class="fa fa-check"></i><b>6.2.2</b> Get background land for plotting</a></li>
 </ul></li>
-<li class="chapter" data-level="5.4" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#distance-to-nearest-neighbouring-site"><i class="fa fa-check"></i><b>5.4</b> Distance to nearest neighbouring site</a></li>
-<li class="chapter" data-level="5.5" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#main-text-figure-3-1"><i class="fa fa-check"></i><b>5.5</b> Main Text Figure 3</a></li>
+<li class="chapter" data-level="6.3" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-main-text-figure-3"><i class="fa fa-check"></i><b>6.3</b> Prepare Main Text Figure 3</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-histogram-of-distance-to-roads"><i class="fa fa-check"></i><b>6.3.1</b> Prepare histogram of distance to roads</a></li>
+<li class="chapter" data-level="6.3.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#table-distance-to-roads"><i class="fa fa-check"></i><b>6.3.2</b> Table: Distance to roads</a></li>
+<li class="chapter" data-level="6.3.3" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#distance-to-nearest-neighbouring-site"><i class="fa fa-check"></i><b>6.3.3</b> Distance to nearest neighbouring site</a></li>
+<li class="chapter" data-level="6.3.4" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#spatial-distribution-of-distances-to-neighbours"><i class="fa fa-check"></i><b>6.3.4</b> Spatial distribution of distances to neighbours</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html"><i class="fa fa-check"></i><b>6</b> Adding Covariates to Checklist Data</a><ul>
-<li class="chapter" data-level="6.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#prepare-libraries-and-data"><i class="fa fa-check"></i><b>6.1</b> Prepare libraries and data</a></li>
-<li class="chapter" data-level="6.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-subsampling"><i class="fa fa-check"></i><b>6.2</b> Spatial subsampling</a></li>
-<li class="chapter" data-level="6.3" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#temporal-subsampling"><i class="fa fa-check"></i><b>6.3</b> Temporal subsampling</a></li>
-<li class="chapter" data-level="6.4" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#add-checklist-calibration-index"><i class="fa fa-check"></i><b>6.4</b> Add checklist calibration index</a></li>
-<li class="chapter" data-level="6.5" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#add-climatic-and-landscape-covariates"><i class="fa fa-check"></i><b>6.5</b> Add climatic and landscape covariates</a></li>
-<li class="chapter" data-level="6.6" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-buffers-around-selected-checklists"><i class="fa fa-check"></i><b>6.6</b> Spatial buffers around selected checklists</a></li>
-<li class="chapter" data-level="6.7" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-buffer-wide-covariates"><i class="fa fa-check"></i><b>6.7</b> Spatial buffer-wide covariates</a><ul>
-<li class="chapter" data-level="6.7.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#mean-climatic-covariates"><i class="fa fa-check"></i><b>6.7.1</b> Mean climatic covariates</a></li>
-<li class="chapter" data-level="6.7.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#proportions-of-land-cover-type"><i class="fa fa-check"></i><b>6.7.2</b> Proportions of land cover type</a></li>
-<li class="chapter" data-level="6.7.3" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#link-environmental-covariates-to-checklists"><i class="fa fa-check"></i><b>6.7.3</b> Link environmental covariates to checklists</a></li>
+<li class="chapter" data-level="6.4" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#main-text-figure-3"><i class="fa fa-check"></i><b>6.4</b> Main Text Figure 3</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html"><i class="fa fa-check"></i><b>7</b> Checking Temporal Sampling Frequency</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#load-libraries"><i class="fa fa-check"></i><b>7.1</b> Load libraries</a></li>
+<li class="chapter" data-level="7.2" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#load-checklist-data"><i class="fa fa-check"></i><b>7.2</b> Load checklist data</a></li>
+<li class="chapter" data-level="7.3" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#get-time-differences-per-grid-cell"><i class="fa fa-check"></i><b>7.3</b> Get time differences per grid cell</a></li>
+<li class="chapter" data-level="7.4" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#time-since-previous-checklist"><i class="fa fa-check"></i><b>7.4</b> Time Since Previous Checklist</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#get-aux-data"><i class="fa fa-check"></i><b>7.4.1</b> Get aux data</a></li>
+<li class="chapter" data-level="7.4.2" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#histogram-of-lags"><i class="fa fa-check"></i><b>7.4.2</b> Histogram of lags</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#checklists-per-month"><i class="fa fa-check"></i><b>7.5</b> Checklists per Month</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html"><i class="fa fa-check"></i><b>8</b> Adding Covariates to Checklist Data</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#prepare-libraries-and-data"><i class="fa fa-check"></i><b>8.1</b> Prepare libraries and data</a></li>
+<li class="chapter" data-level="8.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-subsampling"><i class="fa fa-check"></i><b>8.2</b> Spatial subsampling</a></li>
+<li class="chapter" data-level="8.3" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#temporal-subsampling"><i class="fa fa-check"></i><b>8.3</b> Temporal subsampling</a></li>
+<li class="chapter" data-level="8.4" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#add-checklist-calibration-index"><i class="fa fa-check"></i><b>8.4</b> Add checklist calibration index</a></li>
+<li class="chapter" data-level="8.5" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#add-climatic-and-landscape-covariates"><i class="fa fa-check"></i><b>8.5</b> Add climatic and landscape covariates</a></li>
+<li class="chapter" data-level="8.6" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-buffers-around-selected-checklists"><i class="fa fa-check"></i><b>8.6</b> Spatial buffers around selected checklists</a></li>
+<li class="chapter" data-level="8.7" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-buffer-wide-covariates"><i class="fa fa-check"></i><b>8.7</b> Spatial buffer-wide covariates</a>
+<ul>
+<li class="chapter" data-level="8.7.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#mean-climatic-covariates"><i class="fa fa-check"></i><b>8.7.1</b> Mean climatic covariates</a></li>
+<li class="chapter" data-level="8.7.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#proportions-of-land-cover-type"><i class="fa fa-check"></i><b>8.7.2</b> Proportions of land cover type</a></li>
+<li class="chapter" data-level="8.7.3" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#link-environmental-covariates-to-checklists"><i class="fa fa-check"></i><b>8.7.3</b> Link environmental covariates to checklists</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html"><i class="fa fa-check"></i><b>7</b> Modelling Species Occupancy</a><ul>
-<li class="chapter" data-level="7.0.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#load-necessary-libraries"><i class="fa fa-check"></i><b>7.0.1</b> Load necessary libraries</a></li>
-<li class="chapter" data-level="7.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#load-dataframe-and-scale-covariates"><i class="fa fa-check"></i><b>7.1</b> Load dataframe and scale covariates</a></li>
-<li class="chapter" data-level="7.2" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#running-a-null-model"><i class="fa fa-check"></i><b>7.2</b> Running a null model</a></li>
-<li class="chapter" data-level="7.3" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#identifying-covariates-necessary-to-model-the-detection-process"><i class="fa fa-check"></i><b>7.3</b> Identifying covariates necessary to model the detection process</a></li>
-<li class="chapter" data-level="7.4" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#land-cover-and-climate"><i class="fa fa-check"></i><b>7.4</b> Land Cover and Climate</a></li>
-<li class="chapter" data-level="7.5" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#goodness-of-fit-tests"><i class="fa fa-check"></i><b>7.5</b> Goodness-of-fit tests</a></li>
+<li class="chapter" data-level="9" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html"><i class="fa fa-check"></i><b>9</b> Modelling Species Occupancy</a>
+<ul>
+<li class="chapter" data-level="9.0.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#load-necessary-libraries"><i class="fa fa-check"></i><b>9.0.1</b> Load necessary libraries</a></li>
+<li class="chapter" data-level="9.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#load-dataframe-and-scale-covariates"><i class="fa fa-check"></i><b>9.1</b> Load dataframe and scale covariates</a></li>
+<li class="chapter" data-level="9.2" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#running-a-null-model"><i class="fa fa-check"></i><b>9.2</b> Running a null model</a></li>
+<li class="chapter" data-level="9.3" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#identifying-covariates-necessary-to-model-the-detection-process"><i class="fa fa-check"></i><b>9.3</b> Identifying covariates necessary to model the detection process</a></li>
+<li class="chapter" data-level="9.4" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#land-cover-and-climate"><i class="fa fa-check"></i><b>9.4</b> Land Cover and Climate</a></li>
+<li class="chapter" data-level="9.5" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#goodness-of-fit-tests"><i class="fa fa-check"></i><b>9.5</b> Goodness-of-fit tests</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html"><i class="fa fa-check"></i><b>8</b> Visualizing Occupancy Predictor Effects</a><ul>
-<li class="chapter" data-level="8.1" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-libraries-3"><i class="fa fa-check"></i><b>8.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="8.2" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#load-species-list"><i class="fa fa-check"></i><b>8.2</b> Load species list</a></li>
-<li class="chapter" data-level="8.3" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#show-aic-weight-importance"><i class="fa fa-check"></i><b>8.3</b> Show AIC weight importance</a><ul>
-<li class="chapter" data-level="8.3.1" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#read-in-aic-weight-data"><i class="fa fa-check"></i><b>8.3.1</b> Read in AIC weight data</a></li>
-<li class="chapter" data-level="8.3.2" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-cumulative-aic-weight-data"><i class="fa fa-check"></i><b>8.3.2</b> Prepare cumulative AIC weight data</a></li>
+<li class="chapter" data-level="10" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html"><i class="fa fa-check"></i><b>10</b> Visualizing Occupancy Predictor Effects</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-libraries-4"><i class="fa fa-check"></i><b>10.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="10.2" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#load-species-list"><i class="fa fa-check"></i><b>10.2</b> Load species list</a></li>
+<li class="chapter" data-level="10.3" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#show-aic-weight-importance"><i class="fa fa-check"></i><b>10.3</b> Show AIC weight importance</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#read-in-aic-weight-data"><i class="fa fa-check"></i><b>10.3.1</b> Read in AIC weight data</a></li>
+<li class="chapter" data-level="10.3.2" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-cumulative-aic-weight-data"><i class="fa fa-check"></i><b>10.3.2</b> Prepare cumulative AIC weight data</a></li>
 </ul></li>
-<li class="chapter" data-level="8.4" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-model-coefficient-data"><i class="fa fa-check"></i><b>8.4</b> Prepare model coefficient data</a></li>
-<li class="chapter" data-level="8.5" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#get-predictor-effects"><i class="fa fa-check"></i><b>8.5</b> Get predictor effects</a></li>
-<li class="chapter" data-level="8.6" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#main-text-figure-4"><i class="fa fa-check"></i><b>8.6</b> Main Text Figure 4</a></li>
+<li class="chapter" data-level="10.4" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-model-coefficient-data"><i class="fa fa-check"></i><b>10.4</b> Prepare model coefficient data</a></li>
+<li class="chapter" data-level="10.5" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#get-predictor-effects"><i class="fa fa-check"></i><b>10.5</b> Get predictor effects</a></li>
+<li class="chapter" data-level="10.6" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#main-text-figure-4"><i class="fa fa-check"></i><b>10.6</b> Main Text Figure 4</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>9</b> References</a></li>
+<li class="chapter" data-level="11" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>11</b> References</a></li>
 </ul>
 
       </nav>
@@ -237,322 +283,326 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="visualizing-occupancy-predictor-effects" class="section level1">
-<h1><span class="header-section-number">Section 8</span> Visualizing Occupancy Predictor Effects</h1>
+<h1><span class="header-section-number">Section 10</span> Visualizing Occupancy Predictor Effects</h1>
 <p>In this section, we will visualize the cumulative AIC weights and the magnitude and direction of species-specific probability of occupancy.</p>
-<p>To get cumulative AIC weights, we first obtained a measure of relative importance of climatic and landscape predictors by calculating cumulative variable importance scores. These scores were calculated by obtaining the sum of model weights (AIC weights) across all models (including the top models) for each predictor across all species. We then calculated the mean cumulative variable importance score and a standard deviation for each predictor <span class="citation">(Burnham and Anderson <a href="#ref-burnham2002a">2002</a>)</span>.</p>
-<div id="prepare-libraries-3" class="section level2">
-<h2><span class="header-section-number">8.1</span> Prepare libraries</h2>
-<div class="sourceCode" id="cb62"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1"><span class="co"># to load data</span></a>
-<a class="sourceLine" id="cb62-2" title="2"><span class="kw">library</span>(readxl)</a>
-<a class="sourceLine" id="cb62-3" title="3"></a>
-<a class="sourceLine" id="cb62-4" title="4"><span class="co"># to handle data</span></a>
-<a class="sourceLine" id="cb62-5" title="5"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb62-6" title="6"><span class="kw">library</span>(readr)</a>
-<a class="sourceLine" id="cb62-7" title="7"><span class="kw">library</span>(forcats)</a>
-<a class="sourceLine" id="cb62-8" title="8"><span class="kw">library</span>(tidyr)</a>
-<a class="sourceLine" id="cb62-9" title="9"><span class="kw">library</span>(purrr)</a>
-<a class="sourceLine" id="cb62-10" title="10"><span class="kw">library</span>(stringr)</a>
-<a class="sourceLine" id="cb62-11" title="11"><span class="kw">library</span>(data.table)</a>
-<a class="sourceLine" id="cb62-12" title="12"></a>
-<a class="sourceLine" id="cb62-13" title="13"><span class="co"># to wrangle models</span></a>
-<a class="sourceLine" id="cb62-14" title="14"><span class="kw">source</span>(<span class="st">&quot;code/fun_model_estimate_collection.r&quot;</span>)</a>
-<a class="sourceLine" id="cb62-15" title="15"><span class="kw">source</span>(<span class="st">&quot;code/fun_make_resp_data.r&quot;</span>)</a>
-<a class="sourceLine" id="cb62-16" title="16"></a>
-<a class="sourceLine" id="cb62-17" title="17"><span class="co"># nice tables</span></a>
-<a class="sourceLine" id="cb62-18" title="18"><span class="kw">library</span>(knitr)</a>
-<a class="sourceLine" id="cb62-19" title="19"><span class="kw">library</span>(kableExtra)</a>
-<a class="sourceLine" id="cb62-20" title="20"></a>
-<a class="sourceLine" id="cb62-21" title="21"><span class="co"># plotting</span></a>
-<a class="sourceLine" id="cb62-22" title="22"><span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb62-23" title="23"><span class="kw">library</span>(patchwork)</a>
-<a class="sourceLine" id="cb62-24" title="24"><span class="kw">source</span>(<span class="st">&quot;code/fun_plot_interaction.r&quot;</span>)</a></code></pre></div>
+<p>To get cumulative AIC weights, we first obtained a measure of relative importance of climatic and landscape predictors by calculating cumulative variable importance scores. These scores were calculated by obtaining the sum of model weights (AIC weights) across all models (including the top models) for each predictor across all species. We then calculated the mean cumulative variable importance score and a standard deviation for each predictor <span class="citation">(Burnham and Anderson <a href="#ref-burnham2002a" role="doc-biblioref">2002</a>)</span>.</p>
+<div id="prepare-libraries-4" class="section level2">
+<h2><span class="header-section-number">10.1</span> Prepare libraries</h2>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="visualizing-occupancy-predictor-effects.html#cb86-1"></a><span class="co"># to load data</span></span>
+<span id="cb86-2"><a href="visualizing-occupancy-predictor-effects.html#cb86-2"></a><span class="kw">library</span>(readxl)</span>
+<span id="cb86-3"><a href="visualizing-occupancy-predictor-effects.html#cb86-3"></a></span>
+<span id="cb86-4"><a href="visualizing-occupancy-predictor-effects.html#cb86-4"></a><span class="co"># to handle data</span></span>
+<span id="cb86-5"><a href="visualizing-occupancy-predictor-effects.html#cb86-5"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb86-6"><a href="visualizing-occupancy-predictor-effects.html#cb86-6"></a><span class="kw">library</span>(readr)</span>
+<span id="cb86-7"><a href="visualizing-occupancy-predictor-effects.html#cb86-7"></a><span class="kw">library</span>(forcats)</span>
+<span id="cb86-8"><a href="visualizing-occupancy-predictor-effects.html#cb86-8"></a><span class="kw">library</span>(tidyr)</span>
+<span id="cb86-9"><a href="visualizing-occupancy-predictor-effects.html#cb86-9"></a><span class="kw">library</span>(purrr)</span>
+<span id="cb86-10"><a href="visualizing-occupancy-predictor-effects.html#cb86-10"></a><span class="kw">library</span>(stringr)</span>
+<span id="cb86-11"><a href="visualizing-occupancy-predictor-effects.html#cb86-11"></a><span class="co"># library(data.table)</span></span>
+<span id="cb86-12"><a href="visualizing-occupancy-predictor-effects.html#cb86-12"></a></span>
+<span id="cb86-13"><a href="visualizing-occupancy-predictor-effects.html#cb86-13"></a><span class="co"># to wrangle models</span></span>
+<span id="cb86-14"><a href="visualizing-occupancy-predictor-effects.html#cb86-14"></a><span class="kw">source</span>(<span class="st">&quot;R/fun_model_estimate_collection.r&quot;</span>)</span>
+<span id="cb86-15"><a href="visualizing-occupancy-predictor-effects.html#cb86-15"></a><span class="kw">source</span>(<span class="st">&quot;R/fun_make_resp_data.r&quot;</span>)</span>
+<span id="cb86-16"><a href="visualizing-occupancy-predictor-effects.html#cb86-16"></a></span>
+<span id="cb86-17"><a href="visualizing-occupancy-predictor-effects.html#cb86-17"></a><span class="co"># nice tables</span></span>
+<span id="cb86-18"><a href="visualizing-occupancy-predictor-effects.html#cb86-18"></a><span class="kw">library</span>(knitr)</span>
+<span id="cb86-19"><a href="visualizing-occupancy-predictor-effects.html#cb86-19"></a><span class="kw">library</span>(kableExtra)</span>
+<span id="cb86-20"><a href="visualizing-occupancy-predictor-effects.html#cb86-20"></a></span>
+<span id="cb86-21"><a href="visualizing-occupancy-predictor-effects.html#cb86-21"></a><span class="co"># plotting</span></span>
+<span id="cb86-22"><a href="visualizing-occupancy-predictor-effects.html#cb86-22"></a><span class="kw">library</span>(ggplot2)</span>
+<span id="cb86-23"><a href="visualizing-occupancy-predictor-effects.html#cb86-23"></a><span class="kw">library</span>(patchwork)</span>
+<span id="cb86-24"><a href="visualizing-occupancy-predictor-effects.html#cb86-24"></a><span class="kw">source</span>(<span class="st">&quot;R/fun_plot_interaction.r&quot;</span>)</span></code></pre></div>
 </div>
 <div id="load-species-list" class="section level2">
-<h2><span class="header-section-number">8.2</span> Load species list</h2>
-<div class="sourceCode" id="cb63"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" title="1"><span class="co"># list of species</span></a>
-<a class="sourceLine" id="cb63-2" title="2">species &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/species_list.csv&quot;</span>)</a>
-<a class="sourceLine" id="cb63-3" title="3">list_of_species &lt;-<span class="st"> </span><span class="kw">as.character</span>(species<span class="op">$</span>scientific_name)</a></code></pre></div>
+<h2><span class="header-section-number">10.2</span> Load species list</h2>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="visualizing-occupancy-predictor-effects.html#cb87-1"></a><span class="co"># list of species</span></span>
+<span id="cb87-2"><a href="visualizing-occupancy-predictor-effects.html#cb87-2"></a>species &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/post_analysis_species_list.csv&quot;</span>)</span>
+<span id="cb87-3"><a href="visualizing-occupancy-predictor-effects.html#cb87-3"></a>list_of_species &lt;-<span class="st"> </span><span class="kw">as.character</span>(species<span class="op">$</span>scientific_name)</span></code></pre></div>
 </div>
 <div id="show-aic-weight-importance" class="section level2">
-<h2><span class="header-section-number">8.3</span> Show AIC weight importance</h2>
+<h2><span class="header-section-number">10.3</span> Show AIC weight importance</h2>
 <div id="read-in-aic-weight-data" class="section level3">
-<h3><span class="header-section-number">8.3.1</span> Read in AIC weight data</h3>
-<div class="sourceCode" id="cb64"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" title="1"><span class="co"># which files to read</span></a>
-<a class="sourceLine" id="cb64-2" title="2">file_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;data/results/lc-clim-imp.xlsx&quot;</span>)</a>
-<a class="sourceLine" id="cb64-3" title="3"></a>
-<a class="sourceLine" id="cb64-4" title="4"><span class="co"># read in sheets by species</span></a>
-<a class="sourceLine" id="cb64-5" title="5">model_imp &lt;-<span class="st"> </span><span class="kw">map</span>(file_names, <span class="cf">function</span>(f) {</a>
-<a class="sourceLine" id="cb64-6" title="6">  md_list &lt;-<span class="st"> </span><span class="kw">map</span>(list_of_species, <span class="cf">function</span>(sn) {</a>
-<a class="sourceLine" id="cb64-7" title="7"></a>
-<a class="sourceLine" id="cb64-8" title="8">    <span class="co"># some sheets are not found</span></a>
-<a class="sourceLine" id="cb64-9" title="9"></a>
-<a class="sourceLine" id="cb64-10" title="10">    <span class="kw">tryCatch</span>(</a>
-<a class="sourceLine" id="cb64-11" title="11">      {</a>
-<a class="sourceLine" id="cb64-12" title="12">        readxl<span class="op">::</span><span class="kw">read_excel</span>(f, <span class="dt">sheet =</span> sn) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb64-13" title="13"><span class="st">          `</span><span class="dt">colnames&lt;-</span><span class="st">`</span>(<span class="kw">c</span>(<span class="st">&quot;predictor&quot;</span>, <span class="st">&quot;AIC_weight&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb64-14" title="14"><span class="st">          </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(predictor, <span class="st">&quot;psi&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb64-15" title="15"><span class="st">          </span><span class="kw">mutate</span>(</a>
-<a class="sourceLine" id="cb64-16" title="16">            <span class="dt">predictor =</span> stringr<span class="op">::</span><span class="kw">str_extract</span>(predictor,</a>
-<a class="sourceLine" id="cb64-17" title="17">              <span class="dt">pattern =</span> stringr<span class="op">::</span><span class="kw">regex</span>(<span class="st">&quot;</span><span class="ch">\\</span><span class="st">((.*?)</span><span class="ch">\\</span><span class="st">)&quot;</span>)</a>
-<a class="sourceLine" id="cb64-18" title="18">            ),</a>
-<a class="sourceLine" id="cb64-19" title="19">            <span class="dt">predictor =</span> stringr<span class="op">::</span><span class="kw">str_replace_all</span>(predictor, <span class="st">&quot;[//(//)]&quot;</span>, <span class="st">&quot;&quot;</span>),</a>
-<a class="sourceLine" id="cb64-20" title="20">            <span class="dt">predictor =</span> stringr<span class="op">::</span><span class="kw">str_remove</span>(predictor, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">.y&quot;</span>)</a>
-<a class="sourceLine" id="cb64-21" title="21">          )</a>
-<a class="sourceLine" id="cb64-22" title="22">      },</a>
-<a class="sourceLine" id="cb64-23" title="23">      <span class="dt">error =</span> <span class="cf">function</span>(e) {</a>
-<a class="sourceLine" id="cb64-24" title="24">        <span class="kw">message</span>(<span class="kw">as.character</span>(e))</a>
-<a class="sourceLine" id="cb64-25" title="25">      }</a>
-<a class="sourceLine" id="cb64-26" title="26">    )</a>
-<a class="sourceLine" id="cb64-27" title="27">  })</a>
-<a class="sourceLine" id="cb64-28" title="28">  <span class="kw">names</span>(md_list) &lt;-<span class="st"> </span>list_of_species</a>
-<a class="sourceLine" id="cb64-29" title="29"></a>
-<a class="sourceLine" id="cb64-30" title="30">  <span class="kw">return</span>(md_list)</a>
-<a class="sourceLine" id="cb64-31" title="31">})</a></code></pre></div>
+<h3><span class="header-section-number">10.3.1</span> Read in AIC weight data</h3>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="visualizing-occupancy-predictor-effects.html#cb88-1"></a><span class="co"># which files to read</span></span>
+<span id="cb88-2"><a href="visualizing-occupancy-predictor-effects.html#cb88-2"></a>file_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;data/results/lc-clim-imp.xlsx&quot;</span>)</span>
+<span id="cb88-3"><a href="visualizing-occupancy-predictor-effects.html#cb88-3"></a></span>
+<span id="cb88-4"><a href="visualizing-occupancy-predictor-effects.html#cb88-4"></a><span class="co"># read in sheets by species</span></span>
+<span id="cb88-5"><a href="visualizing-occupancy-predictor-effects.html#cb88-5"></a>model_imp &lt;-<span class="st"> </span><span class="kw">map</span>(file_names, <span class="cf">function</span>(f) {</span>
+<span id="cb88-6"><a href="visualizing-occupancy-predictor-effects.html#cb88-6"></a>  md_list &lt;-<span class="st"> </span><span class="kw">map</span>(list_of_species, <span class="cf">function</span>(sn) {</span>
+<span id="cb88-7"><a href="visualizing-occupancy-predictor-effects.html#cb88-7"></a></span>
+<span id="cb88-8"><a href="visualizing-occupancy-predictor-effects.html#cb88-8"></a>    <span class="co"># some sheets are not found</span></span>
+<span id="cb88-9"><a href="visualizing-occupancy-predictor-effects.html#cb88-9"></a></span>
+<span id="cb88-10"><a href="visualizing-occupancy-predictor-effects.html#cb88-10"></a>    <span class="kw">tryCatch</span>(</span>
+<span id="cb88-11"><a href="visualizing-occupancy-predictor-effects.html#cb88-11"></a>      {</span>
+<span id="cb88-12"><a href="visualizing-occupancy-predictor-effects.html#cb88-12"></a>        readxl<span class="op">::</span><span class="kw">read_excel</span>(f, <span class="dt">sheet =</span> sn) <span class="op">%&gt;%</span></span>
+<span id="cb88-13"><a href="visualizing-occupancy-predictor-effects.html#cb88-13"></a><span class="st">          `</span><span class="dt">colnames&lt;-</span><span class="st">`</span>(<span class="kw">c</span>(<span class="st">&quot;predictor&quot;</span>, <span class="st">&quot;AIC_weight&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb88-14"><a href="visualizing-occupancy-predictor-effects.html#cb88-14"></a><span class="st">          </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(predictor, <span class="st">&quot;psi&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb88-15"><a href="visualizing-occupancy-predictor-effects.html#cb88-15"></a><span class="st">          </span><span class="kw">mutate</span>(</span>
+<span id="cb88-16"><a href="visualizing-occupancy-predictor-effects.html#cb88-16"></a>            <span class="dt">predictor =</span> stringr<span class="op">::</span><span class="kw">str_extract</span>(predictor,</span>
+<span id="cb88-17"><a href="visualizing-occupancy-predictor-effects.html#cb88-17"></a>              <span class="dt">pattern =</span> stringr<span class="op">::</span><span class="kw">regex</span>(<span class="st">&quot;</span><span class="ch">\\</span><span class="st">((.*?)</span><span class="ch">\\</span><span class="st">)&quot;</span>)</span>
+<span id="cb88-18"><a href="visualizing-occupancy-predictor-effects.html#cb88-18"></a>            ),</span>
+<span id="cb88-19"><a href="visualizing-occupancy-predictor-effects.html#cb88-19"></a>            <span class="dt">predictor =</span> stringr<span class="op">::</span><span class="kw">str_replace_all</span>(predictor, <span class="st">&quot;[//(//)]&quot;</span>, <span class="st">&quot;&quot;</span>),</span>
+<span id="cb88-20"><a href="visualizing-occupancy-predictor-effects.html#cb88-20"></a>            <span class="dt">predictor =</span> stringr<span class="op">::</span><span class="kw">str_remove</span>(predictor, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">.y&quot;</span>)</span>
+<span id="cb88-21"><a href="visualizing-occupancy-predictor-effects.html#cb88-21"></a>          )</span>
+<span id="cb88-22"><a href="visualizing-occupancy-predictor-effects.html#cb88-22"></a>      },</span>
+<span id="cb88-23"><a href="visualizing-occupancy-predictor-effects.html#cb88-23"></a>      <span class="dt">error =</span> <span class="cf">function</span>(e) {</span>
+<span id="cb88-24"><a href="visualizing-occupancy-predictor-effects.html#cb88-24"></a>        <span class="kw">message</span>(<span class="kw">as.character</span>(e))</span>
+<span id="cb88-25"><a href="visualizing-occupancy-predictor-effects.html#cb88-25"></a>      }</span>
+<span id="cb88-26"><a href="visualizing-occupancy-predictor-effects.html#cb88-26"></a>    )</span>
+<span id="cb88-27"><a href="visualizing-occupancy-predictor-effects.html#cb88-27"></a>  })</span>
+<span id="cb88-28"><a href="visualizing-occupancy-predictor-effects.html#cb88-28"></a>  <span class="kw">names</span>(md_list) &lt;-<span class="st"> </span>list_of_species</span>
+<span id="cb88-29"><a href="visualizing-occupancy-predictor-effects.html#cb88-29"></a></span>
+<span id="cb88-30"><a href="visualizing-occupancy-predictor-effects.html#cb88-30"></a>  <span class="kw">return</span>(md_list)</span>
+<span id="cb88-31"><a href="visualizing-occupancy-predictor-effects.html#cb88-31"></a>})</span></code></pre></div>
 </div>
 <div id="prepare-cumulative-aic-weight-data" class="section level3">
-<h3><span class="header-section-number">8.3.2</span> Prepare cumulative AIC weight data</h3>
-<div class="sourceCode" id="cb65"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" title="1"><span class="co"># assign scale - minimum spatial scale at which the analysis was carried out to account for observer effort</span></a>
-<a class="sourceLine" id="cb65-2" title="2"><span class="kw">names</span>(model_imp) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2.5km&quot;</span>)</a>
-<a class="sourceLine" id="cb65-3" title="3">model_imp &lt;-<span class="st"> </span><span class="kw">imap</span>(model_imp, <span class="cf">function</span>(.x, .y) {</a>
-<a class="sourceLine" id="cb65-4" title="4">  .x &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(.x)</a>
-<a class="sourceLine" id="cb65-5" title="5">  .x<span class="op">$</span>scale &lt;-<span class="st"> </span>.y</a>
-<a class="sourceLine" id="cb65-6" title="6">  <span class="kw">return</span>(.x)</a>
-<a class="sourceLine" id="cb65-7" title="7">})</a>
-<a class="sourceLine" id="cb65-8" title="8"></a>
-<a class="sourceLine" id="cb65-9" title="9"><span class="co"># bind rows</span></a>
-<a class="sourceLine" id="cb65-10" title="10">model_imp &lt;-<span class="st"> </span><span class="kw">map</span>(model_imp, bind_rows) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb65-11" title="11"><span class="st">  </span><span class="kw">bind_rows</span>()</a>
-<a class="sourceLine" id="cb65-12" title="12"></a>
-<a class="sourceLine" id="cb65-13" title="13"><span class="co"># convert to numeric</span></a>
-<a class="sourceLine" id="cb65-14" title="14">model_imp<span class="op">$</span>AIC_weight &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(model_imp<span class="op">$</span>AIC_weight)</a>
-<a class="sourceLine" id="cb65-15" title="15">model_imp<span class="op">$</span>scale &lt;-<span class="st"> </span><span class="kw">as.factor</span>(model_imp<span class="op">$</span>scale)</a>
-<a class="sourceLine" id="cb65-16" title="16"><span class="kw">levels</span>(model_imp<span class="op">$</span>scale) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2.5km&quot;</span>)</a>
-<a class="sourceLine" id="cb65-17" title="17"></a>
-<a class="sourceLine" id="cb65-18" title="18"><span class="co"># Let&#39;s get a summary of cumulative variable importance</span></a>
-<a class="sourceLine" id="cb65-19" title="19">model_imp &lt;-<span class="st"> </span><span class="kw">group_by</span>(model_imp, predictor) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb65-20" title="20"><span class="st">  </span><span class="kw">summarise</span>(</a>
-<a class="sourceLine" id="cb65-21" title="21">    <span class="dt">mean_AIC =</span> <span class="kw">mean</span>(AIC_weight),</a>
-<a class="sourceLine" id="cb65-22" title="22">    <span class="dt">sd_AIC =</span> <span class="kw">sd</span>(AIC_weight),</a>
-<a class="sourceLine" id="cb65-23" title="23">    <span class="dt">min_AIC =</span> <span class="kw">min</span>(AIC_weight),</a>
-<a class="sourceLine" id="cb65-24" title="24">    <span class="dt">max_AIC =</span> <span class="kw">max</span>(AIC_weight),</a>
-<a class="sourceLine" id="cb65-25" title="25">    <span class="dt">med_AIC =</span> <span class="kw">median</span>(AIC_weight)</a>
-<a class="sourceLine" id="cb65-26" title="26">  )</a>
-<a class="sourceLine" id="cb65-27" title="27"></a>
-<a class="sourceLine" id="cb65-28" title="28"><span class="co"># write to file</span></a>
-<a class="sourceLine" id="cb65-29" title="29"><span class="kw">write_csv</span>(model_imp,</a>
-<a class="sourceLine" id="cb65-30" title="30">  <span class="dt">file =</span> <span class="st">&quot;data/results/cumulative_AIC_weights.csv&quot;</span></a>
-<a class="sourceLine" id="cb65-31" title="31">)</a></code></pre></div>
+<h3><span class="header-section-number">10.3.2</span> Prepare cumulative AIC weight data</h3>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="visualizing-occupancy-predictor-effects.html#cb89-1"></a><span class="co"># assign scale - minimum spatial scale at which the analysis was carried out to account for observer effort</span></span>
+<span id="cb89-2"><a href="visualizing-occupancy-predictor-effects.html#cb89-2"></a><span class="kw">names</span>(model_imp) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2.5km&quot;</span>)</span>
+<span id="cb89-3"><a href="visualizing-occupancy-predictor-effects.html#cb89-3"></a>model_imp &lt;-<span class="st"> </span><span class="kw">imap</span>(model_imp, <span class="cf">function</span>(.x, .y) {</span>
+<span id="cb89-4"><a href="visualizing-occupancy-predictor-effects.html#cb89-4"></a>  .x &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(.x)</span>
+<span id="cb89-5"><a href="visualizing-occupancy-predictor-effects.html#cb89-5"></a>  .x<span class="op">$</span>scale &lt;-<span class="st"> </span>.y</span>
+<span id="cb89-6"><a href="visualizing-occupancy-predictor-effects.html#cb89-6"></a>  <span class="kw">return</span>(.x)</span>
+<span id="cb89-7"><a href="visualizing-occupancy-predictor-effects.html#cb89-7"></a>})</span>
+<span id="cb89-8"><a href="visualizing-occupancy-predictor-effects.html#cb89-8"></a></span>
+<span id="cb89-9"><a href="visualizing-occupancy-predictor-effects.html#cb89-9"></a><span class="co"># bind rows</span></span>
+<span id="cb89-10"><a href="visualizing-occupancy-predictor-effects.html#cb89-10"></a>model_imp &lt;-<span class="st"> </span><span class="kw">map</span>(model_imp, bind_rows) <span class="op">%&gt;%</span></span>
+<span id="cb89-11"><a href="visualizing-occupancy-predictor-effects.html#cb89-11"></a><span class="st">  </span><span class="kw">bind_rows</span>()</span>
+<span id="cb89-12"><a href="visualizing-occupancy-predictor-effects.html#cb89-12"></a></span>
+<span id="cb89-13"><a href="visualizing-occupancy-predictor-effects.html#cb89-13"></a><span class="co"># convert to numeric</span></span>
+<span id="cb89-14"><a href="visualizing-occupancy-predictor-effects.html#cb89-14"></a>model_imp<span class="op">$</span>AIC_weight &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(model_imp<span class="op">$</span>AIC_weight)</span>
+<span id="cb89-15"><a href="visualizing-occupancy-predictor-effects.html#cb89-15"></a>model_imp<span class="op">$</span>scale &lt;-<span class="st"> </span><span class="kw">as.factor</span>(model_imp<span class="op">$</span>scale)</span>
+<span id="cb89-16"><a href="visualizing-occupancy-predictor-effects.html#cb89-16"></a><span class="kw">levels</span>(model_imp<span class="op">$</span>scale) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2.5km&quot;</span>)</span>
+<span id="cb89-17"><a href="visualizing-occupancy-predictor-effects.html#cb89-17"></a></span>
+<span id="cb89-18"><a href="visualizing-occupancy-predictor-effects.html#cb89-18"></a><span class="co"># Let&#39;s get a summary of cumulative variable importance</span></span>
+<span id="cb89-19"><a href="visualizing-occupancy-predictor-effects.html#cb89-19"></a>model_imp &lt;-<span class="st"> </span><span class="kw">group_by</span>(model_imp, predictor) <span class="op">%&gt;%</span></span>
+<span id="cb89-20"><a href="visualizing-occupancy-predictor-effects.html#cb89-20"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
+<span id="cb89-21"><a href="visualizing-occupancy-predictor-effects.html#cb89-21"></a>    <span class="dt">mean_AIC =</span> <span class="kw">mean</span>(AIC_weight),</span>
+<span id="cb89-22"><a href="visualizing-occupancy-predictor-effects.html#cb89-22"></a>    <span class="dt">sd_AIC =</span> <span class="kw">sd</span>(AIC_weight),</span>
+<span id="cb89-23"><a href="visualizing-occupancy-predictor-effects.html#cb89-23"></a>    <span class="dt">min_AIC =</span> <span class="kw">min</span>(AIC_weight),</span>
+<span id="cb89-24"><a href="visualizing-occupancy-predictor-effects.html#cb89-24"></a>    <span class="dt">max_AIC =</span> <span class="kw">max</span>(AIC_weight),</span>
+<span id="cb89-25"><a href="visualizing-occupancy-predictor-effects.html#cb89-25"></a>    <span class="dt">med_AIC =</span> <span class="kw">median</span>(AIC_weight)</span>
+<span id="cb89-26"><a href="visualizing-occupancy-predictor-effects.html#cb89-26"></a>  )</span>
+<span id="cb89-27"><a href="visualizing-occupancy-predictor-effects.html#cb89-27"></a></span>
+<span id="cb89-28"><a href="visualizing-occupancy-predictor-effects.html#cb89-28"></a><span class="co"># write to file</span></span>
+<span id="cb89-29"><a href="visualizing-occupancy-predictor-effects.html#cb89-29"></a><span class="kw">write_csv</span>(model_imp,</span>
+<span id="cb89-30"><a href="visualizing-occupancy-predictor-effects.html#cb89-30"></a>  <span class="dt">file =</span> <span class="st">&quot;data/results/cumulative_AIC_weights.csv&quot;</span></span>
+<span id="cb89-31"><a href="visualizing-occupancy-predictor-effects.html#cb89-31"></a>)</span></code></pre></div>
 <p>Read data back in.</p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" title="1"><span class="co"># read data and make factor</span></a>
-<a class="sourceLine" id="cb66-2" title="2">model_imp &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/results/cumulative_AIC_weights.csv&quot;</span>)</a>
-<a class="sourceLine" id="cb66-3" title="3">model_imp<span class="op">$</span>predictor &lt;-<span class="st"> </span><span class="kw">as_factor</span>(model_imp<span class="op">$</span>predictor)</a></code></pre></div>
-<div class="sourceCode" id="cb67"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" title="1"><span class="co"># make nice names</span></a>
-<a class="sourceLine" id="cb67-2" title="2">predictor_name &lt;-<span class="st"> </span><span class="kw">tibble</span>(</a>
-<a class="sourceLine" id="cb67-3" title="3">  <span class="dt">predictor =</span> <span class="kw">levels</span>(model_imp<span class="op">$</span>predictor),</a>
-<a class="sourceLine" id="cb67-4" title="4">  <span class="dt">pred_name =</span> <span class="kw">c</span>(</a>
-<a class="sourceLine" id="cb67-5" title="5">    <span class="st">&quot;Annual Mean Temperature (°C)&quot;</span>,</a>
-<a class="sourceLine" id="cb67-6" title="6">    <span class="st">&quot;Annual Precipitation (mm)&quot;</span>,</a>
-<a class="sourceLine" id="cb67-7" title="7">    <span class="st">&quot;% Agriculture&quot;</span>, <span class="st">&quot;% Forests&quot;</span>,</a>
-<a class="sourceLine" id="cb67-8" title="8">    <span class="st">&quot;% Plantations&quot;</span>, <span class="st">&quot;% Settlements&quot;</span>,</a>
-<a class="sourceLine" id="cb67-9" title="9">    <span class="st">&quot;% Tea&quot;</span>, <span class="st">&quot;% Water Bodies&quot;</span></a>
-<a class="sourceLine" id="cb67-10" title="10">  )</a>
-<a class="sourceLine" id="cb67-11" title="11">)</a>
-<a class="sourceLine" id="cb67-12" title="12"></a>
-<a class="sourceLine" id="cb67-13" title="13"><span class="co"># rename predictor</span></a>
-<a class="sourceLine" id="cb67-14" title="14">model_imp &lt;-<span class="st"> </span><span class="kw">left_join</span>(model_imp, predictor_name)</a></code></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="visualizing-occupancy-predictor-effects.html#cb90-1"></a><span class="co"># read data and make factor</span></span>
+<span id="cb90-2"><a href="visualizing-occupancy-predictor-effects.html#cb90-2"></a>model_imp &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/results/cumulative_AIC_weights.csv&quot;</span>)</span>
+<span id="cb90-3"><a href="visualizing-occupancy-predictor-effects.html#cb90-3"></a>model_imp<span class="op">$</span>predictor &lt;-<span class="st"> </span><span class="kw">as_factor</span>(model_imp<span class="op">$</span>predictor)</span></code></pre></div>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="visualizing-occupancy-predictor-effects.html#cb91-1"></a><span class="co"># make nice names</span></span>
+<span id="cb91-2"><a href="visualizing-occupancy-predictor-effects.html#cb91-2"></a>predictor_name &lt;-<span class="st"> </span><span class="kw">tibble</span>(</span>
+<span id="cb91-3"><a href="visualizing-occupancy-predictor-effects.html#cb91-3"></a>  <span class="dt">predictor =</span> <span class="kw">levels</span>(model_imp<span class="op">$</span>predictor),</span>
+<span id="cb91-4"><a href="visualizing-occupancy-predictor-effects.html#cb91-4"></a>  <span class="dt">pred_name =</span> <span class="kw">c</span>(</span>
+<span id="cb91-5"><a href="visualizing-occupancy-predictor-effects.html#cb91-5"></a>    <span class="st">&quot;Precipitation Seasonality (CV)&quot;</span>,</span>
+<span id="cb91-6"><a href="visualizing-occupancy-predictor-effects.html#cb91-6"></a>    <span class="st">&quot;Temperature Seasonality (CV)&quot;</span>,</span>
+<span id="cb91-7"><a href="visualizing-occupancy-predictor-effects.html#cb91-7"></a>    <span class="st">&quot;% Evergreen Forest&quot;</span>, <span class="st">&quot;% Deciduous Forest&quot;</span>,</span>
+<span id="cb91-8"><a href="visualizing-occupancy-predictor-effects.html#cb91-8"></a>    <span class="st">&quot;% Mixed/Degraded Forest&quot;</span>, <span class="st">&quot;% Agriculture/Settlements&quot;</span>,</span>
+<span id="cb91-9"><a href="visualizing-occupancy-predictor-effects.html#cb91-9"></a>    <span class="st">&quot;% Grassland&quot;</span>, <span class="st">&quot;% Plantations&quot;</span>, <span class="st">&quot;% Water Bodies&quot;</span></span>
+<span id="cb91-10"><a href="visualizing-occupancy-predictor-effects.html#cb91-10"></a>  )</span>
+<span id="cb91-11"><a href="visualizing-occupancy-predictor-effects.html#cb91-11"></a>)</span>
+<span id="cb91-12"><a href="visualizing-occupancy-predictor-effects.html#cb91-12"></a></span>
+<span id="cb91-13"><a href="visualizing-occupancy-predictor-effects.html#cb91-13"></a><span class="co"># rename predictor</span></span>
+<span id="cb91-14"><a href="visualizing-occupancy-predictor-effects.html#cb91-14"></a>model_imp &lt;-<span class="st"> </span><span class="kw">left_join</span>(model_imp, predictor_name)</span></code></pre></div>
 <p>Prepare figure for cumulative AIC weight. Figure code is hidden in versions rendered as HTML and PDF.</p>
-<div class="sourceCode" id="cb68"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" title="1">fig_aic &lt;-</a>
-<a class="sourceLine" id="cb68-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(model_imp) <span class="op">+</span></a>
-<a class="sourceLine" id="cb68-3" title="3"><span class="st">  </span><span class="kw">geom_pointrange</span>(<span class="kw">aes</span>(</a>
-<a class="sourceLine" id="cb68-4" title="4">    <span class="dt">x =</span> <span class="kw">reorder</span>(predictor, mean_AIC),</a>
-<a class="sourceLine" id="cb68-5" title="5">    <span class="dt">y =</span> mean_AIC,</a>
-<a class="sourceLine" id="cb68-6" title="6">    <span class="dt">ymin =</span> mean_AIC <span class="op">-</span><span class="st"> </span>sd_AIC,</a>
-<a class="sourceLine" id="cb68-7" title="7">    <span class="dt">ymax =</span> mean_AIC <span class="op">+</span><span class="st"> </span>sd_AIC</a>
-<a class="sourceLine" id="cb68-8" title="8">  )) <span class="op">+</span></a>
-<a class="sourceLine" id="cb68-9" title="9"><span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(</a>
-<a class="sourceLine" id="cb68-10" title="10">    <span class="dt">x =</span> predictor,</a>
-<a class="sourceLine" id="cb68-11" title="11">    <span class="dt">y =</span> <span class="fl">0.2</span>,</a>
-<a class="sourceLine" id="cb68-12" title="12">    <span class="dt">label =</span> pred_name</a>
-<a class="sourceLine" id="cb68-13" title="13">  ),</a>
-<a class="sourceLine" id="cb68-14" title="14">  <span class="dt">angle =</span> <span class="dv">0</span>,</a>
-<a class="sourceLine" id="cb68-15" title="15">  <span class="dt">hjust =</span> <span class="st">&quot;inward&quot;</span>,</a>
-<a class="sourceLine" id="cb68-16" title="16">  <span class="dt">vjust =</span> <span class="dv">2</span></a>
-<a class="sourceLine" id="cb68-17" title="17">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb68-18" title="18"><span class="st">  </span><span class="co"># scale_y_continuous(breaks = seq(45, 75, 10))+</span></a>
-<a class="sourceLine" id="cb68-19" title="19"><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">labels =</span> <span class="ot">NULL</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb68-20" title="20"><span class="st">  </span><span class="co"># scale_color_brewer(palette = &quot;RdBu&quot;, values = c(0.5, 1))+</span></a>
-<a class="sourceLine" id="cb68-21" title="21"><span class="st">  </span><span class="kw">coord_flip</span>(</a>
-<a class="sourceLine" id="cb68-22" title="22">    <span class="co"># ylim = c(45, 75)</span></a>
-<a class="sourceLine" id="cb68-23" title="23">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb68-24" title="24"><span class="st">  </span><span class="kw">theme_test</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb68-25" title="25"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb68-26" title="26"><span class="st">  </span><span class="kw">labs</span>(</a>
-<a class="sourceLine" id="cb68-27" title="27">    <span class="dt">x =</span> <span class="st">&quot;Predictor&quot;</span>,</a>
-<a class="sourceLine" id="cb68-28" title="28">    <span class="dt">y =</span> <span class="st">&quot;Cumulative AIC weight&quot;</span></a>
-<a class="sourceLine" id="cb68-29" title="29">  )</a>
-<a class="sourceLine" id="cb68-30" title="30"></a>
-<a class="sourceLine" id="cb68-31" title="31"><span class="kw">ggsave</span>(fig_aic,</a>
-<a class="sourceLine" id="cb68-32" title="32">  <span class="dt">filename =</span> <span class="st">&quot;figs/fig_aic_weight.png&quot;</span>,</a>
-<a class="sourceLine" id="cb68-33" title="33">  <span class="dt">device =</span> <span class="kw">png</span>(),</a>
-<a class="sourceLine" id="cb68-34" title="34">  <span class="dt">dpi =</span> <span class="dv">300</span>,</a>
-<a class="sourceLine" id="cb68-35" title="35">  <span class="dt">width =</span> <span class="dv">79</span>, <span class="dt">height =</span> <span class="dv">120</span>, <span class="dt">units =</span> <span class="st">&quot;mm&quot;</span></a>
-<a class="sourceLine" id="cb68-36" title="36">)</a></code></pre></div>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="visualizing-occupancy-predictor-effects.html#cb92-1"></a>fig_aic &lt;-</span>
+<span id="cb92-2"><a href="visualizing-occupancy-predictor-effects.html#cb92-2"></a><span class="st">  </span><span class="kw">ggplot</span>(model_imp) <span class="op">+</span></span>
+<span id="cb92-3"><a href="visualizing-occupancy-predictor-effects.html#cb92-3"></a><span class="st">  </span><span class="kw">geom_pointrange</span>(<span class="kw">aes</span>(</span>
+<span id="cb92-4"><a href="visualizing-occupancy-predictor-effects.html#cb92-4"></a>    <span class="dt">x =</span> <span class="kw">reorder</span>(predictor, mean_AIC),</span>
+<span id="cb92-5"><a href="visualizing-occupancy-predictor-effects.html#cb92-5"></a>    <span class="dt">y =</span> mean_AIC,</span>
+<span id="cb92-6"><a href="visualizing-occupancy-predictor-effects.html#cb92-6"></a>    <span class="dt">ymin =</span> mean_AIC <span class="op">-</span><span class="st"> </span>sd_AIC,</span>
+<span id="cb92-7"><a href="visualizing-occupancy-predictor-effects.html#cb92-7"></a>    <span class="dt">ymax =</span> mean_AIC <span class="op">+</span><span class="st"> </span>sd_AIC</span>
+<span id="cb92-8"><a href="visualizing-occupancy-predictor-effects.html#cb92-8"></a>  )) <span class="op">+</span></span>
+<span id="cb92-9"><a href="visualizing-occupancy-predictor-effects.html#cb92-9"></a><span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(</span>
+<span id="cb92-10"><a href="visualizing-occupancy-predictor-effects.html#cb92-10"></a>    <span class="dt">x =</span> predictor,</span>
+<span id="cb92-11"><a href="visualizing-occupancy-predictor-effects.html#cb92-11"></a>    <span class="dt">y =</span> <span class="fl">1.2</span>,</span>
+<span id="cb92-12"><a href="visualizing-occupancy-predictor-effects.html#cb92-12"></a>    <span class="dt">label =</span> pred_name</span>
+<span id="cb92-13"><a href="visualizing-occupancy-predictor-effects.html#cb92-13"></a>  ),</span>
+<span id="cb92-14"><a href="visualizing-occupancy-predictor-effects.html#cb92-14"></a>  <span class="dt">size =</span> <span class="dv">3</span>,</span>
+<span id="cb92-15"><a href="visualizing-occupancy-predictor-effects.html#cb92-15"></a>  <span class="dt">angle =</span> <span class="dv">0</span>,</span>
+<span id="cb92-16"><a href="visualizing-occupancy-predictor-effects.html#cb92-16"></a>  <span class="dt">hjust =</span> <span class="dv">1</span>,</span>
+<span id="cb92-17"><a href="visualizing-occupancy-predictor-effects.html#cb92-17"></a>  <span class="dt">vjust =</span> <span class="dv">2</span></span>
+<span id="cb92-18"><a href="visualizing-occupancy-predictor-effects.html#cb92-18"></a>  ) <span class="op">+</span></span>
+<span id="cb92-19"><a href="visualizing-occupancy-predictor-effects.html#cb92-19"></a><span class="st">  </span><span class="co"># scale_y_continuous(breaks = seq(45, 75, 10))+</span></span>
+<span id="cb92-20"><a href="visualizing-occupancy-predictor-effects.html#cb92-20"></a><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">labels =</span> <span class="ot">NULL</span>) <span class="op">+</span></span>
+<span id="cb92-21"><a href="visualizing-occupancy-predictor-effects.html#cb92-21"></a><span class="st">  </span><span class="co"># scale_color_brewer(palette = &quot;RdBu&quot;, values = c(0.5, 1))+</span></span>
+<span id="cb92-22"><a href="visualizing-occupancy-predictor-effects.html#cb92-22"></a><span class="st">  </span><span class="kw">coord_flip</span>(</span>
+<span id="cb92-23"><a href="visualizing-occupancy-predictor-effects.html#cb92-23"></a>    <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">1.25</span>)</span>
+<span id="cb92-24"><a href="visualizing-occupancy-predictor-effects.html#cb92-24"></a>    <span class="co"># ylim = c(45, 75)</span></span>
+<span id="cb92-25"><a href="visualizing-occupancy-predictor-effects.html#cb92-25"></a>  ) <span class="op">+</span></span>
+<span id="cb92-26"><a href="visualizing-occupancy-predictor-effects.html#cb92-26"></a><span class="st">  </span><span class="kw">theme_test</span>() <span class="op">+</span></span>
+<span id="cb92-27"><a href="visualizing-occupancy-predictor-effects.html#cb92-27"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></span>
+<span id="cb92-28"><a href="visualizing-occupancy-predictor-effects.html#cb92-28"></a><span class="st">  </span><span class="kw">labs</span>(</span>
+<span id="cb92-29"><a href="visualizing-occupancy-predictor-effects.html#cb92-29"></a>    <span class="dt">x =</span> <span class="st">&quot;Predictor&quot;</span>,</span>
+<span id="cb92-30"><a href="visualizing-occupancy-predictor-effects.html#cb92-30"></a>    <span class="dt">y =</span> <span class="st">&quot;Cumulative AIC weight&quot;</span></span>
+<span id="cb92-31"><a href="visualizing-occupancy-predictor-effects.html#cb92-31"></a>  )</span>
+<span id="cb92-32"><a href="visualizing-occupancy-predictor-effects.html#cb92-32"></a></span>
+<span id="cb92-33"><a href="visualizing-occupancy-predictor-effects.html#cb92-33"></a><span class="kw">ggsave</span>(fig_aic,</span>
+<span id="cb92-34"><a href="visualizing-occupancy-predictor-effects.html#cb92-34"></a>  <span class="dt">filename =</span> <span class="st">&quot;figs/fig_aic_weight.png&quot;</span>,</span>
+<span id="cb92-35"><a href="visualizing-occupancy-predictor-effects.html#cb92-35"></a>  <span class="dt">device =</span> <span class="kw">png</span>(),</span>
+<span id="cb92-36"><a href="visualizing-occupancy-predictor-effects.html#cb92-36"></a>  <span class="dt">dpi =</span> <span class="dv">300</span>,</span>
+<span id="cb92-37"><a href="visualizing-occupancy-predictor-effects.html#cb92-37"></a>  <span class="dt">width =</span> <span class="dv">79</span>, <span class="dt">height =</span> <span class="dv">120</span>, <span class="dt">units =</span> <span class="st">&quot;mm&quot;</span></span>
+<span id="cb92-38"><a href="visualizing-occupancy-predictor-effects.html#cb92-38"></a>)</span></code></pre></div>
 </div>
 </div>
 <div id="prepare-model-coefficient-data" class="section level2">
-<h2><span class="header-section-number">8.4</span> Prepare model coefficient data</h2>
-<p>For each species, we examined those models which had ΔAICc &lt; 2, as these top models were considered to explain a large proportion of the association between the species-specific probability of occupancy and environmental drivers <span class="citation">(Burnham, Anderson, and Huyvaert <a href="#ref-burnham2011">2011</a>; Elsen et al. <a href="#ref-elsen2017">2017</a>)</span>. Using these restricted model sets for each species; we created a model-averaged coefficient estimate for each predictor and assessed its direction and significance <span class="citation">(Bartoń <a href="#ref-MuMIn">2020</a>)</span>. We considered a predictor to be significantly associated with occupancy if the range of the 95% confidence interval around the model-averaged coefficient did not contain zero.</p>
-<div class="sourceCode" id="cb69"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" title="1">file_read &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;data/results/lc-clim-modelEst.xlsx&quot;</span>)</a>
-<a class="sourceLine" id="cb69-2" title="2"></a>
-<a class="sourceLine" id="cb69-3" title="3"><span class="co"># read data as list column</span></a>
-<a class="sourceLine" id="cb69-4" title="4">model_est &lt;-<span class="st"> </span><span class="kw">map</span>(file_read, <span class="cf">function</span>(fr) {</a>
-<a class="sourceLine" id="cb69-5" title="5">  md_list &lt;-<span class="st"> </span><span class="kw">map</span>(list_of_species, <span class="cf">function</span>(sn) {</a>
-<a class="sourceLine" id="cb69-6" title="6">    readxl<span class="op">::</span><span class="kw">read_excel</span>(fr, <span class="dt">sheet =</span> sn)</a>
-<a class="sourceLine" id="cb69-7" title="7">  })</a>
-<a class="sourceLine" id="cb69-8" title="8">  <span class="kw">names</span>(md_list) &lt;-<span class="st"> </span>list_of_species</a>
-<a class="sourceLine" id="cb69-9" title="9">  <span class="kw">return</span>(md_list)</a>
-<a class="sourceLine" id="cb69-10" title="10">})</a>
-<a class="sourceLine" id="cb69-11" title="11"></a>
-<a class="sourceLine" id="cb69-12" title="12"><span class="co"># prepare model data</span></a>
-<a class="sourceLine" id="cb69-13" title="13">scales &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2.5km&quot;</span>)</a>
-<a class="sourceLine" id="cb69-14" title="14">model_data &lt;-<span class="st"> </span><span class="kw">tibble</span>(</a>
-<a class="sourceLine" id="cb69-15" title="15">  <span class="dt">scale =</span> scales,</a>
-<a class="sourceLine" id="cb69-16" title="16">  <span class="dt">scientific_name =</span> list_of_species</a>
-<a class="sourceLine" id="cb69-17" title="17">) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb69-18" title="18"><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(scale))</a>
-<a class="sourceLine" id="cb69-19" title="19"></a>
-<a class="sourceLine" id="cb69-20" title="20"><span class="co"># rename model data components and separate predictors</span></a>
-<a class="sourceLine" id="cb69-21" title="21">names &lt;-<span class="st"> </span><span class="kw">c</span>(</a>
-<a class="sourceLine" id="cb69-22" title="22">  <span class="st">&quot;predictor&quot;</span>, <span class="st">&quot;coefficient&quot;</span>, <span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci_lower&quot;</span>,</a>
-<a class="sourceLine" id="cb69-23" title="23">  <span class="st">&quot;ci_higher&quot;</span>, <span class="st">&quot;z_value&quot;</span>, <span class="st">&quot;p_value&quot;</span></a>
-<a class="sourceLine" id="cb69-24" title="24">)</a>
-<a class="sourceLine" id="cb69-25" title="25"></a>
-<a class="sourceLine" id="cb69-26" title="26"><span class="co"># get data for plotting:</span></a>
-<a class="sourceLine" id="cb69-27" title="27">model_est &lt;-<span class="st"> </span><span class="kw">map</span>(model_est, <span class="cf">function</span>(l) {</a>
-<a class="sourceLine" id="cb69-28" title="28">  <span class="kw">map</span>(l, <span class="cf">function</span>(df) {</a>
-<a class="sourceLine" id="cb69-29" title="29">    <span class="kw">colnames</span>(df) &lt;-<span class="st"> </span>names</a>
-<a class="sourceLine" id="cb69-30" title="30">    df &lt;-<span class="st"> </span><span class="kw">separate_interaction_terms</span>(df)</a>
-<a class="sourceLine" id="cb69-31" title="31">    df &lt;-<span class="st"> </span><span class="kw">make_response_data</span>(df)</a>
-<a class="sourceLine" id="cb69-32" title="32">    <span class="kw">return</span>(df)</a>
-<a class="sourceLine" id="cb69-33" title="33">  })</a>
-<a class="sourceLine" id="cb69-34" title="34">})</a>
-<a class="sourceLine" id="cb69-35" title="35"></a>
-<a class="sourceLine" id="cb69-36" title="36"><span class="co"># add names and scales</span></a>
-<a class="sourceLine" id="cb69-37" title="37">model_est &lt;-<span class="st"> </span><span class="kw">map</span>(model_est, <span class="cf">function</span>(l) {</a>
-<a class="sourceLine" id="cb69-38" title="38">  <span class="kw">imap</span>(l, <span class="cf">function</span>(.x, .y) {</a>
-<a class="sourceLine" id="cb69-39" title="39">    <span class="kw">mutate</span>(.x, <span class="dt">scientific_name =</span> .y)</a>
-<a class="sourceLine" id="cb69-40" title="40">  })</a>
-<a class="sourceLine" id="cb69-41" title="41">})</a>
-<a class="sourceLine" id="cb69-42" title="42"></a>
-<a class="sourceLine" id="cb69-43" title="43"><span class="co"># add names to model estimates</span></a>
-<a class="sourceLine" id="cb69-44" title="44"><span class="kw">names</span>(model_est) &lt;-<span class="st"> </span>scales</a>
-<a class="sourceLine" id="cb69-45" title="45">model_est &lt;-<span class="st"> </span><span class="kw">imap</span>(model_est, <span class="cf">function</span>(.x, .y) {</a>
-<a class="sourceLine" id="cb69-46" title="46">  <span class="kw">bind_rows</span>(.x) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb69-47" title="47"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">scale =</span> .y)</a>
-<a class="sourceLine" id="cb69-48" title="48">})</a>
-<a class="sourceLine" id="cb69-49" title="49"></a>
-<a class="sourceLine" id="cb69-50" title="50"><span class="co"># remove modulators</span></a>
-<a class="sourceLine" id="cb69-51" title="51">model_est &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(model_est) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb69-52" title="52"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">matches</span>(<span class="st">&quot;modulator&quot;</span>))</a>
-<a class="sourceLine" id="cb69-53" title="53"></a>
-<a class="sourceLine" id="cb69-54" title="54"><span class="co"># join data to species name</span></a>
-<a class="sourceLine" id="cb69-55" title="55">model_data &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb69-56" title="56"><span class="st">  </span><span class="kw">left_join</span>(model_est)</a>
-<a class="sourceLine" id="cb69-57" title="57"></a>
-<a class="sourceLine" id="cb69-58" title="58"><span class="co"># Keep only those predictors whose p-values are significant:</span></a>
-<a class="sourceLine" id="cb69-59" title="59">model_data &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb69-60" title="60"><span class="st">  </span><span class="kw">filter</span>(p_value <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>)</a></code></pre></div>
+<h2><span class="header-section-number">10.4</span> Prepare model coefficient data</h2>
+<p>For each species, we examined those models which had ΔAICc &lt; 2, as these top models were considered to explain a large proportion of the association between the species-specific probability of occupancy and environmental drivers <span class="citation">(Burnham, Anderson, and Huyvaert <a href="#ref-burnham2011" role="doc-biblioref">2011</a>; Elsen et al. <a href="#ref-elsen2017" role="doc-biblioref">2017</a>)</span>. Using these restricted model sets for each species; we created a model-averaged coefficient estimate for each predictor and assessed its direction and significance <span class="citation">(Bartoń <a href="#ref-MuMIn" role="doc-biblioref">2020</a>)</span>. We considered a predictor to be significantly associated with occupancy if the range of the 95% confidence interval around the model-averaged coefficient did not contain zero.</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="visualizing-occupancy-predictor-effects.html#cb93-1"></a>file_read &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;data/results/lc-clim-modelEst.xlsx&quot;</span>)</span>
+<span id="cb93-2"><a href="visualizing-occupancy-predictor-effects.html#cb93-2"></a></span>
+<span id="cb93-3"><a href="visualizing-occupancy-predictor-effects.html#cb93-3"></a><span class="co"># read data as list column</span></span>
+<span id="cb93-4"><a href="visualizing-occupancy-predictor-effects.html#cb93-4"></a>model_est &lt;-<span class="st"> </span><span class="kw">map</span>(file_read, <span class="cf">function</span>(fr) {</span>
+<span id="cb93-5"><a href="visualizing-occupancy-predictor-effects.html#cb93-5"></a>  md_list &lt;-<span class="st"> </span><span class="kw">map</span>(list_of_species, <span class="cf">function</span>(sn) {</span>
+<span id="cb93-6"><a href="visualizing-occupancy-predictor-effects.html#cb93-6"></a>    readxl<span class="op">::</span><span class="kw">read_excel</span>(fr, <span class="dt">sheet =</span> sn)</span>
+<span id="cb93-7"><a href="visualizing-occupancy-predictor-effects.html#cb93-7"></a>  })</span>
+<span id="cb93-8"><a href="visualizing-occupancy-predictor-effects.html#cb93-8"></a>  <span class="kw">names</span>(md_list) &lt;-<span class="st"> </span>list_of_species</span>
+<span id="cb93-9"><a href="visualizing-occupancy-predictor-effects.html#cb93-9"></a>  <span class="kw">return</span>(md_list)</span>
+<span id="cb93-10"><a href="visualizing-occupancy-predictor-effects.html#cb93-10"></a>})</span>
+<span id="cb93-11"><a href="visualizing-occupancy-predictor-effects.html#cb93-11"></a></span>
+<span id="cb93-12"><a href="visualizing-occupancy-predictor-effects.html#cb93-12"></a><span class="co"># prepare model data</span></span>
+<span id="cb93-13"><a href="visualizing-occupancy-predictor-effects.html#cb93-13"></a>scales &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2.5km&quot;</span>)</span>
+<span id="cb93-14"><a href="visualizing-occupancy-predictor-effects.html#cb93-14"></a>model_data &lt;-<span class="st"> </span><span class="kw">tibble</span>(</span>
+<span id="cb93-15"><a href="visualizing-occupancy-predictor-effects.html#cb93-15"></a>  <span class="dt">scale =</span> scales,</span>
+<span id="cb93-16"><a href="visualizing-occupancy-predictor-effects.html#cb93-16"></a>  <span class="dt">scientific_name =</span> list_of_species</span>
+<span id="cb93-17"><a href="visualizing-occupancy-predictor-effects.html#cb93-17"></a>) <span class="op">%&gt;%</span></span>
+<span id="cb93-18"><a href="visualizing-occupancy-predictor-effects.html#cb93-18"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(scale))</span>
+<span id="cb93-19"><a href="visualizing-occupancy-predictor-effects.html#cb93-19"></a></span>
+<span id="cb93-20"><a href="visualizing-occupancy-predictor-effects.html#cb93-20"></a><span class="co"># rename model data components and separate predictors</span></span>
+<span id="cb93-21"><a href="visualizing-occupancy-predictor-effects.html#cb93-21"></a>names &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
+<span id="cb93-22"><a href="visualizing-occupancy-predictor-effects.html#cb93-22"></a>  <span class="st">&quot;predictor&quot;</span>, <span class="st">&quot;coefficient&quot;</span>, <span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci_lower&quot;</span>,</span>
+<span id="cb93-23"><a href="visualizing-occupancy-predictor-effects.html#cb93-23"></a>  <span class="st">&quot;ci_higher&quot;</span>, <span class="st">&quot;z_value&quot;</span>, <span class="st">&quot;p_value&quot;</span></span>
+<span id="cb93-24"><a href="visualizing-occupancy-predictor-effects.html#cb93-24"></a>)</span>
+<span id="cb93-25"><a href="visualizing-occupancy-predictor-effects.html#cb93-25"></a></span>
+<span id="cb93-26"><a href="visualizing-occupancy-predictor-effects.html#cb93-26"></a><span class="co"># get data for plotting:</span></span>
+<span id="cb93-27"><a href="visualizing-occupancy-predictor-effects.html#cb93-27"></a>model_est &lt;-<span class="st"> </span><span class="kw">map</span>(model_est, <span class="cf">function</span>(l) {</span>
+<span id="cb93-28"><a href="visualizing-occupancy-predictor-effects.html#cb93-28"></a>  <span class="kw">map</span>(l, <span class="cf">function</span>(df) {</span>
+<span id="cb93-29"><a href="visualizing-occupancy-predictor-effects.html#cb93-29"></a>    <span class="kw">colnames</span>(df) &lt;-<span class="st"> </span>names</span>
+<span id="cb93-30"><a href="visualizing-occupancy-predictor-effects.html#cb93-30"></a>    df &lt;-<span class="st"> </span><span class="kw">separate_interaction_terms</span>(df)</span>
+<span id="cb93-31"><a href="visualizing-occupancy-predictor-effects.html#cb93-31"></a>    df &lt;-<span class="st"> </span><span class="kw">make_response_data</span>(df)</span>
+<span id="cb93-32"><a href="visualizing-occupancy-predictor-effects.html#cb93-32"></a>    <span class="kw">return</span>(df)</span>
+<span id="cb93-33"><a href="visualizing-occupancy-predictor-effects.html#cb93-33"></a>  })</span>
+<span id="cb93-34"><a href="visualizing-occupancy-predictor-effects.html#cb93-34"></a>})</span>
+<span id="cb93-35"><a href="visualizing-occupancy-predictor-effects.html#cb93-35"></a></span>
+<span id="cb93-36"><a href="visualizing-occupancy-predictor-effects.html#cb93-36"></a><span class="co"># add names and scales</span></span>
+<span id="cb93-37"><a href="visualizing-occupancy-predictor-effects.html#cb93-37"></a>model_est &lt;-<span class="st"> </span><span class="kw">map</span>(model_est, <span class="cf">function</span>(l) {</span>
+<span id="cb93-38"><a href="visualizing-occupancy-predictor-effects.html#cb93-38"></a>  <span class="kw">imap</span>(l, <span class="cf">function</span>(.x, .y) {</span>
+<span id="cb93-39"><a href="visualizing-occupancy-predictor-effects.html#cb93-39"></a>    <span class="kw">mutate</span>(.x, <span class="dt">scientific_name =</span> .y)</span>
+<span id="cb93-40"><a href="visualizing-occupancy-predictor-effects.html#cb93-40"></a>  })</span>
+<span id="cb93-41"><a href="visualizing-occupancy-predictor-effects.html#cb93-41"></a>})</span>
+<span id="cb93-42"><a href="visualizing-occupancy-predictor-effects.html#cb93-42"></a></span>
+<span id="cb93-43"><a href="visualizing-occupancy-predictor-effects.html#cb93-43"></a><span class="co"># add names to model estimates</span></span>
+<span id="cb93-44"><a href="visualizing-occupancy-predictor-effects.html#cb93-44"></a><span class="kw">names</span>(model_est) &lt;-<span class="st"> </span>scales</span>
+<span id="cb93-45"><a href="visualizing-occupancy-predictor-effects.html#cb93-45"></a>model_est &lt;-<span class="st"> </span><span class="kw">imap</span>(model_est, <span class="cf">function</span>(.x, .y) {</span>
+<span id="cb93-46"><a href="visualizing-occupancy-predictor-effects.html#cb93-46"></a>  <span class="kw">bind_rows</span>(.x) <span class="op">%&gt;%</span></span>
+<span id="cb93-47"><a href="visualizing-occupancy-predictor-effects.html#cb93-47"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">scale =</span> .y)</span>
+<span id="cb93-48"><a href="visualizing-occupancy-predictor-effects.html#cb93-48"></a>})</span>
+<span id="cb93-49"><a href="visualizing-occupancy-predictor-effects.html#cb93-49"></a></span>
+<span id="cb93-50"><a href="visualizing-occupancy-predictor-effects.html#cb93-50"></a><span class="co"># remove modulators</span></span>
+<span id="cb93-51"><a href="visualizing-occupancy-predictor-effects.html#cb93-51"></a>model_est &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(model_est) <span class="op">%&gt;%</span></span>
+<span id="cb93-52"><a href="visualizing-occupancy-predictor-effects.html#cb93-52"></a><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">matches</span>(<span class="st">&quot;modulator&quot;</span>))</span>
+<span id="cb93-53"><a href="visualizing-occupancy-predictor-effects.html#cb93-53"></a></span>
+<span id="cb93-54"><a href="visualizing-occupancy-predictor-effects.html#cb93-54"></a><span class="co"># join data to species name</span></span>
+<span id="cb93-55"><a href="visualizing-occupancy-predictor-effects.html#cb93-55"></a>model_data &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span></span>
+<span id="cb93-56"><a href="visualizing-occupancy-predictor-effects.html#cb93-56"></a><span class="st">  </span><span class="kw">left_join</span>(model_est)</span>
+<span id="cb93-57"><a href="visualizing-occupancy-predictor-effects.html#cb93-57"></a></span>
+<span id="cb93-58"><a href="visualizing-occupancy-predictor-effects.html#cb93-58"></a><span class="co"># Keep only those predictors whose p-values are significant:</span></span>
+<span id="cb93-59"><a href="visualizing-occupancy-predictor-effects.html#cb93-59"></a>model_data &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span></span>
+<span id="cb93-60"><a href="visualizing-occupancy-predictor-effects.html#cb93-60"></a><span class="st">  </span><span class="kw">filter</span>(p_value <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>)</span></code></pre></div>
 <p>Export predictor effects.</p>
-<div class="sourceCode" id="cb70"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1"><span class="co"># get predictor effect data</span></a>
-<a class="sourceLine" id="cb70-2" title="2">data_predictor_effect &lt;-<span class="st"> </span><span class="kw">distinct</span>(</a>
-<a class="sourceLine" id="cb70-3" title="3">  model_data,</a>
-<a class="sourceLine" id="cb70-4" title="4">  scientific_name,</a>
-<a class="sourceLine" id="cb70-5" title="5">  se,</a>
-<a class="sourceLine" id="cb70-6" title="6">  predictor, coefficient</a>
-<a class="sourceLine" id="cb70-7" title="7">)</a>
-<a class="sourceLine" id="cb70-8" title="8"></a>
-<a class="sourceLine" id="cb70-9" title="9"><span class="co"># write to file</span></a>
-<a class="sourceLine" id="cb70-10" title="10"><span class="kw">write_csv</span>(data_predictor_effect,</a>
-<a class="sourceLine" id="cb70-11" title="11">  <span class="dt">path =</span> <span class="st">&quot;data/results/data_predictor_effect.csv&quot;</span></a>
-<a class="sourceLine" id="cb70-12" title="12">)</a></code></pre></div>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="visualizing-occupancy-predictor-effects.html#cb94-1"></a><span class="co"># get predictor effect data</span></span>
+<span id="cb94-2"><a href="visualizing-occupancy-predictor-effects.html#cb94-2"></a>data_predictor_effect &lt;-<span class="st"> </span><span class="kw">distinct</span>(</span>
+<span id="cb94-3"><a href="visualizing-occupancy-predictor-effects.html#cb94-3"></a>  model_data,</span>
+<span id="cb94-4"><a href="visualizing-occupancy-predictor-effects.html#cb94-4"></a>  scientific_name,</span>
+<span id="cb94-5"><a href="visualizing-occupancy-predictor-effects.html#cb94-5"></a>  se,</span>
+<span id="cb94-6"><a href="visualizing-occupancy-predictor-effects.html#cb94-6"></a>  predictor, coefficient</span>
+<span id="cb94-7"><a href="visualizing-occupancy-predictor-effects.html#cb94-7"></a>)</span>
+<span id="cb94-8"><a href="visualizing-occupancy-predictor-effects.html#cb94-8"></a></span>
+<span id="cb94-9"><a href="visualizing-occupancy-predictor-effects.html#cb94-9"></a><span class="co"># write to file</span></span>
+<span id="cb94-10"><a href="visualizing-occupancy-predictor-effects.html#cb94-10"></a><span class="kw">write_csv</span>(data_predictor_effect,</span>
+<span id="cb94-11"><a href="visualizing-occupancy-predictor-effects.html#cb94-11"></a>  <span class="dt">file =</span> <span class="st">&quot;data/results/data_predictor_effect.csv&quot;</span></span>
+<span id="cb94-12"><a href="visualizing-occupancy-predictor-effects.html#cb94-12"></a>)</span></code></pre></div>
 <p>Export model data.</p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" title="1">model_data_to_file &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb71-2" title="2"><span class="st">  </span><span class="kw">select</span>(</a>
-<a class="sourceLine" id="cb71-3" title="3">    predictor, data,</a>
-<a class="sourceLine" id="cb71-4" title="4">    scientific_name, scale</a>
-<a class="sourceLine" id="cb71-5" title="5">  ) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb71-6" title="6"><span class="st">  </span><span class="kw">unnest</span>(<span class="dt">cols =</span> <span class="st">&quot;data&quot;</span>)</a>
-<a class="sourceLine" id="cb71-7" title="7"></a>
-<a class="sourceLine" id="cb71-8" title="8"><span class="co"># remove .y</span></a>
-<a class="sourceLine" id="cb71-9" title="9">model_data_to_file &lt;-<span class="st"> </span>model_data_to_file <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb71-10" title="10"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">predictor =</span> <span class="kw">str_remove</span>(predictor, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">.y&quot;</span>))</a>
-<a class="sourceLine" id="cb71-11" title="11"></a>
-<a class="sourceLine" id="cb71-12" title="12"><span class="kw">write_csv</span>(</a>
-<a class="sourceLine" id="cb71-13" title="13">  model_data_to_file,</a>
-<a class="sourceLine" id="cb71-14" title="14">  <span class="st">&quot;data/results/data_occupancy_predictors.csv&quot;</span></a>
-<a class="sourceLine" id="cb71-15" title="15">)</a></code></pre></div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="visualizing-occupancy-predictor-effects.html#cb95-1"></a>model_data_to_file &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span></span>
+<span id="cb95-2"><a href="visualizing-occupancy-predictor-effects.html#cb95-2"></a><span class="st">  </span><span class="kw">select</span>(</span>
+<span id="cb95-3"><a href="visualizing-occupancy-predictor-effects.html#cb95-3"></a>    predictor, data,</span>
+<span id="cb95-4"><a href="visualizing-occupancy-predictor-effects.html#cb95-4"></a>    scientific_name, scale</span>
+<span id="cb95-5"><a href="visualizing-occupancy-predictor-effects.html#cb95-5"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb95-6"><a href="visualizing-occupancy-predictor-effects.html#cb95-6"></a><span class="st">  </span><span class="kw">unnest</span>(<span class="dt">cols =</span> <span class="st">&quot;data&quot;</span>)</span>
+<span id="cb95-7"><a href="visualizing-occupancy-predictor-effects.html#cb95-7"></a></span>
+<span id="cb95-8"><a href="visualizing-occupancy-predictor-effects.html#cb95-8"></a><span class="co"># remove .y</span></span>
+<span id="cb95-9"><a href="visualizing-occupancy-predictor-effects.html#cb95-9"></a>model_data_to_file &lt;-<span class="st"> </span>model_data_to_file <span class="op">%&gt;%</span></span>
+<span id="cb95-10"><a href="visualizing-occupancy-predictor-effects.html#cb95-10"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">predictor =</span> <span class="kw">str_remove</span>(predictor, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">.y&quot;</span>))</span>
+<span id="cb95-11"><a href="visualizing-occupancy-predictor-effects.html#cb95-11"></a></span>
+<span id="cb95-12"><a href="visualizing-occupancy-predictor-effects.html#cb95-12"></a><span class="kw">write_csv</span>(</span>
+<span id="cb95-13"><a href="visualizing-occupancy-predictor-effects.html#cb95-13"></a>  model_data_to_file,</span>
+<span id="cb95-14"><a href="visualizing-occupancy-predictor-effects.html#cb95-14"></a>  <span class="st">&quot;data/results/data_occupancy_predictors.csv&quot;</span></span>
+<span id="cb95-15"><a href="visualizing-occupancy-predictor-effects.html#cb95-15"></a>)</span></code></pre></div>
 <p>Read in data after clearing R session.</p>
-<div class="sourceCode" id="cb72"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1"><span class="co"># read from file</span></a>
-<a class="sourceLine" id="cb72-2" title="2">model_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/results/data_predictor_effect.csv&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="visualizing-occupancy-predictor-effects.html#cb96-1"></a><span class="co"># read from file</span></span>
+<span id="cb96-2"><a href="visualizing-occupancy-predictor-effects.html#cb96-2"></a>model_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/results/results-predictors-species-traits.csv&quot;</span>)</span></code></pre></div>
 <p>Fix predictor name.</p>
-<div class="sourceCode" id="cb73"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" title="1"><span class="co"># remove .y from predictors</span></a>
-<a class="sourceLine" id="cb73-2" title="2">model_data &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb73-3" title="3"><span class="st">  </span><span class="kw">mutate_at</span>(<span class="dt">.vars =</span> <span class="kw">c</span>(<span class="st">&quot;predictor&quot;</span>), <span class="dt">.funs =</span> <span class="cf">function</span>(x) {</a>
-<a class="sourceLine" id="cb73-4" title="4">    stringr<span class="op">::</span><span class="kw">str_remove</span>(x, <span class="st">&quot;.y&quot;</span>)</a>
-<a class="sourceLine" id="cb73-5" title="5">  })</a></code></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="visualizing-occupancy-predictor-effects.html#cb97-1"></a><span class="co"># remove .y from predictors</span></span>
+<span id="cb97-2"><a href="visualizing-occupancy-predictor-effects.html#cb97-2"></a>model_data &lt;-<span class="st"> </span>model_data <span class="op">%&gt;%</span></span>
+<span id="cb97-3"><a href="visualizing-occupancy-predictor-effects.html#cb97-3"></a><span class="st">  </span><span class="kw">mutate_at</span>(<span class="dt">.vars =</span> <span class="kw">c</span>(<span class="st">&quot;predictor&quot;</span>), <span class="dt">.funs =</span> <span class="cf">function</span>(x) {</span>
+<span id="cb97-4"><a href="visualizing-occupancy-predictor-effects.html#cb97-4"></a>    stringr<span class="op">::</span><span class="kw">str_remove</span>(x, <span class="st">&quot;.y&quot;</span>)</span>
+<span id="cb97-5"><a href="visualizing-occupancy-predictor-effects.html#cb97-5"></a>  })</span></code></pre></div>
 </div>
 <div id="get-predictor-effects" class="section level2">
-<h2><span class="header-section-number">8.5</span> Get predictor effects</h2>
-<div class="sourceCode" id="cb74"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1"><span class="co"># is the coeff positive? how many positive per scale per predictor per axis of split?</span></a>
-<a class="sourceLine" id="cb74-2" title="2">data_predictor &lt;-<span class="st"> </span><span class="kw">mutate</span>(model_data,</a>
-<a class="sourceLine" id="cb74-3" title="3">  <span class="dt">direction =</span> coefficient <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb74-4" title="4">) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb74-5" title="5"><span class="st">  </span><span class="kw">count</span>(</a>
-<a class="sourceLine" id="cb74-6" title="6">    predictor,</a>
-<a class="sourceLine" id="cb74-7" title="7">    direction</a>
-<a class="sourceLine" id="cb74-8" title="8">  ) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb74-9" title="9"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">mag =</span> n <span class="op">*</span><span class="st"> </span>(<span class="kw">if_else</span>(direction, <span class="dv">1</span>, <span class="dv">-1</span>)))</a>
-<a class="sourceLine" id="cb74-10" title="10"></a>
-<a class="sourceLine" id="cb74-11" title="11"><span class="co"># wrangle data to get nice bars</span></a>
-<a class="sourceLine" id="cb74-12" title="12">data_predictor &lt;-<span class="st"> </span>data_predictor <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb74-13" title="13"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>n) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb74-14" title="14"><span class="st">  </span><span class="kw">drop_na</span>(direction) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb74-15" title="15"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">direction =</span> <span class="kw">ifelse</span>(direction, <span class="st">&quot;positive&quot;</span>, <span class="st">&quot;negative&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb74-16" title="16"><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">values_from =</span> <span class="st">&quot;mag&quot;</span>, <span class="dt">names_from =</span> <span class="st">&quot;direction&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb74-17" title="17"><span class="st">  </span><span class="kw">mutate_at</span>(</a>
-<a class="sourceLine" id="cb74-18" title="18">    <span class="kw">vars</span>(positive, negative),</a>
-<a class="sourceLine" id="cb74-19" title="19">    <span class="op">~</span><span class="st"> </span><span class="kw">if_else</span>(<span class="kw">is.na</span>(.), <span class="dv">0</span>, .)</a>
-<a class="sourceLine" id="cb74-20" title="20">  )</a>
-<a class="sourceLine" id="cb74-21" title="21"></a>
-<a class="sourceLine" id="cb74-22" title="22">data_predictor_long &lt;-<span class="st"> </span>data_predictor <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb74-23" title="23"><span class="st">  </span><span class="kw">pivot_longer</span>(</a>
-<a class="sourceLine" id="cb74-24" title="24">    <span class="dt">cols =</span> <span class="kw">c</span>(<span class="st">&quot;negative&quot;</span>, <span class="st">&quot;positive&quot;</span>),</a>
-<a class="sourceLine" id="cb74-25" title="25">    <span class="dt">names_to =</span> <span class="st">&quot;effect&quot;</span>,</a>
-<a class="sourceLine" id="cb74-26" title="26">    <span class="dt">values_to =</span> <span class="st">&quot;magnitude&quot;</span></a>
-<a class="sourceLine" id="cb74-27" title="27">  )</a>
-<a class="sourceLine" id="cb74-28" title="28"></a>
-<a class="sourceLine" id="cb74-29" title="29"><span class="co"># write</span></a>
-<a class="sourceLine" id="cb74-30" title="30"><span class="kw">write_csv</span>(data_predictor_long,</a>
-<a class="sourceLine" id="cb74-31" title="31">  <span class="dt">path =</span> <span class="st">&quot;data/results/data_predictor_direction_nSpecies.csv&quot;</span></a>
-<a class="sourceLine" id="cb74-32" title="32">)</a></code></pre></div>
+<h2><span class="header-section-number">10.5</span> Get predictor effects</h2>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="visualizing-occupancy-predictor-effects.html#cb98-1"></a><span class="co"># is the coeff positive? how many positive per scale per predictor per axis of split?</span></span>
+<span id="cb98-2"><a href="visualizing-occupancy-predictor-effects.html#cb98-2"></a><span class="co"># now splitting by habitat --- forest or open country</span></span>
+<span id="cb98-3"><a href="visualizing-occupancy-predictor-effects.html#cb98-3"></a>data_predictor &lt;-<span class="st"> </span><span class="kw">mutate</span>(model_data,</span>
+<span id="cb98-4"><a href="visualizing-occupancy-predictor-effects.html#cb98-4"></a>  <span class="dt">direction =</span> coefficient <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span></span>
+<span id="cb98-5"><a href="visualizing-occupancy-predictor-effects.html#cb98-5"></a>) <span class="op">%&gt;%</span></span>
+<span id="cb98-6"><a href="visualizing-occupancy-predictor-effects.html#cb98-6"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">habitat =</span> <span class="st">&quot;Open-country/Forest&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb98-7"><a href="visualizing-occupancy-predictor-effects.html#cb98-7"></a><span class="st">  </span><span class="kw">count</span>(</span>
+<span id="cb98-8"><a href="visualizing-occupancy-predictor-effects.html#cb98-8"></a>    predictor,</span>
+<span id="cb98-9"><a href="visualizing-occupancy-predictor-effects.html#cb98-9"></a>    habitat,</span>
+<span id="cb98-10"><a href="visualizing-occupancy-predictor-effects.html#cb98-10"></a>    direction</span>
+<span id="cb98-11"><a href="visualizing-occupancy-predictor-effects.html#cb98-11"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb98-12"><a href="visualizing-occupancy-predictor-effects.html#cb98-12"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">mag =</span> n <span class="op">*</span><span class="st"> </span>(<span class="kw">if_else</span>(direction, <span class="dv">1</span>, <span class="dv">-1</span>)))</span>
+<span id="cb98-13"><a href="visualizing-occupancy-predictor-effects.html#cb98-13"></a></span>
+<span id="cb98-14"><a href="visualizing-occupancy-predictor-effects.html#cb98-14"></a><span class="co"># wrangle data to get nice bars</span></span>
+<span id="cb98-15"><a href="visualizing-occupancy-predictor-effects.html#cb98-15"></a>data_predictor &lt;-<span class="st"> </span>data_predictor <span class="op">%&gt;%</span></span>
+<span id="cb98-16"><a href="visualizing-occupancy-predictor-effects.html#cb98-16"></a><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>n) <span class="op">%&gt;%</span></span>
+<span id="cb98-17"><a href="visualizing-occupancy-predictor-effects.html#cb98-17"></a><span class="st">  </span><span class="kw">drop_na</span>(direction) <span class="op">%&gt;%</span></span>
+<span id="cb98-18"><a href="visualizing-occupancy-predictor-effects.html#cb98-18"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">direction =</span> <span class="kw">ifelse</span>(direction, <span class="st">&quot;positive&quot;</span>, <span class="st">&quot;negative&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb98-19"><a href="visualizing-occupancy-predictor-effects.html#cb98-19"></a><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">values_from =</span> <span class="st">&quot;mag&quot;</span>, <span class="dt">names_from =</span> <span class="st">&quot;direction&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb98-20"><a href="visualizing-occupancy-predictor-effects.html#cb98-20"></a><span class="st">  </span><span class="kw">mutate_at</span>(</span>
+<span id="cb98-21"><a href="visualizing-occupancy-predictor-effects.html#cb98-21"></a>    <span class="kw">vars</span>(positive, negative),</span>
+<span id="cb98-22"><a href="visualizing-occupancy-predictor-effects.html#cb98-22"></a>    <span class="op">~</span><span class="st"> </span><span class="kw">if_else</span>(<span class="kw">is.na</span>(.), <span class="dv">0</span>, .)</span>
+<span id="cb98-23"><a href="visualizing-occupancy-predictor-effects.html#cb98-23"></a>  )</span>
+<span id="cb98-24"><a href="visualizing-occupancy-predictor-effects.html#cb98-24"></a></span>
+<span id="cb98-25"><a href="visualizing-occupancy-predictor-effects.html#cb98-25"></a>data_predictor_long &lt;-<span class="st"> </span>data_predictor <span class="op">%&gt;%</span></span>
+<span id="cb98-26"><a href="visualizing-occupancy-predictor-effects.html#cb98-26"></a><span class="st">  </span><span class="kw">pivot_longer</span>(</span>
+<span id="cb98-27"><a href="visualizing-occupancy-predictor-effects.html#cb98-27"></a>    <span class="dt">cols =</span> <span class="kw">c</span>(<span class="st">&quot;negative&quot;</span>, <span class="st">&quot;positive&quot;</span>),</span>
+<span id="cb98-28"><a href="visualizing-occupancy-predictor-effects.html#cb98-28"></a>    <span class="dt">names_to =</span> <span class="st">&quot;effect&quot;</span>,</span>
+<span id="cb98-29"><a href="visualizing-occupancy-predictor-effects.html#cb98-29"></a>    <span class="dt">values_to =</span> <span class="st">&quot;magnitude&quot;</span></span>
+<span id="cb98-30"><a href="visualizing-occupancy-predictor-effects.html#cb98-30"></a>  )</span>
+<span id="cb98-31"><a href="visualizing-occupancy-predictor-effects.html#cb98-31"></a></span>
+<span id="cb98-32"><a href="visualizing-occupancy-predictor-effects.html#cb98-32"></a><span class="co"># write</span></span>
+<span id="cb98-33"><a href="visualizing-occupancy-predictor-effects.html#cb98-33"></a><span class="kw">write_csv</span>(data_predictor_long,</span>
+<span id="cb98-34"><a href="visualizing-occupancy-predictor-effects.html#cb98-34"></a>  <span class="dt">path =</span> <span class="st">&quot;data/results/data_predictor_direction_nSpecies.csv&quot;</span></span>
+<span id="cb98-35"><a href="visualizing-occupancy-predictor-effects.html#cb98-35"></a>)</span></code></pre></div>
 <p>Prepare data to determine the direction (positive or negative) of the effect of each predictor. How many species are affected in either direction?</p>
-<div class="sourceCode" id="cb75"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" title="1"><span class="co"># join with predictor names and relative AIC</span></a>
-<a class="sourceLine" id="cb75-2" title="2">data_predictor_long &lt;-<span class="st"> </span><span class="kw">left_join</span>(data_predictor_long, model_imp)</a></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="visualizing-occupancy-predictor-effects.html#cb99-1"></a><span class="co"># join with predictor names and relative AIC</span></span>
+<span id="cb99-2"><a href="visualizing-occupancy-predictor-effects.html#cb99-2"></a>data_predictor_long &lt;-<span class="st"> </span><span class="kw">left_join</span>(data_predictor_long, model_imp)</span></code></pre></div>
 <p>Prepare figure of the number of species affected in each direction. Figure code is hidden in versions rendered as HTML and PDF.</p>
 </div>
 <div id="main-text-figure-4" class="section level2">
-<h2><span class="header-section-number">8.6</span> Main Text Figure 4</h2>
+<h2><span class="header-section-number">10.6</span> Main Text Figure 4</h2>
 <p>Figure code is hidden in versions rendered as HTML and PDF.</p>
 <div class="figure">
-<img src="figs/fig_04_aic_weight_effect.png" alt="(a) Cumulative AIC weights suggest that climatic predictors have higher relative importance when compared to landscape predictors. (b) The direction of association between species-specific probability of occupancy and climatic and landscape is shown here. While climatic predictors were both positively and negatively associated with the probability of occupancy for a number of species, human-associated land cover types were largely negatively associated with species-specific probability of occupancy." />
+<img src="figs/fig_04.png" alt="" />
 <p class="caption">(a) Cumulative AIC weights suggest that climatic predictors have higher relative importance when compared to landscape predictors. (b) The direction of association between species-specific probability of occupancy and climatic and landscape is shown here. While climatic predictors were both positively and negatively associated with the probability of occupancy for a number of species, human-associated land cover types were largely negatively associated with species-specific probability of occupancy.</p>
 </div>
-
 
 </div>
 </div>
 <h3> References</h3>
-<div id="refs" class="references">
+<div id="refs" class="references hanging-indent">
 <div id="ref-MuMIn">
 <p>Bartoń, Kamil. 2020. <em>MuMIn: Multi-Model Inference</em>. Manual.</p>
 </div>
@@ -594,7 +644,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/pratikunterwegs/eBirdOccupancy/edit/master/06_results-AICweights-probOfOccupancy.Rmd",
+"link": "https://github.com/pratikunterwegs/eBirdOccupancy/edit/master/09_results-AICweights-probOfOccupancy.Rmd",
 "text": "Edit"
 },
 "history": {

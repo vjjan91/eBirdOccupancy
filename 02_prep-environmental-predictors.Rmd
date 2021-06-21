@@ -15,7 +15,7 @@ The goal here is to resample all rasters so that they have the same resolution o
 ## Prepare libraries
 
 We load some common libraries for raster processing and define a custom mode function.
-```{r load_libs2, , message=FALSE, warning=FALSE}
+```{r load_libs2, message=FALSE, warning=FALSE}
 # load libs
 library(raster)
 library(stringi)
@@ -84,11 +84,11 @@ gc()
 
 ```{r prepare_bio4a_bio15}
 # list chelsa files
-chelsaFiles = list.files("data/chelsa/", recursive = TRUE, pattern = "tif")
+chelsaFiles <- list.files("data/chelsa/", recursive = TRUE, pattern = "tif")
 
 # load Bio 1 and 12
-bio_1 = raster("data/chelsa/envicloud/chelsa/chelsa_V1/climatologies/bio/CHELSA_bio10_01.tif")
-bio_12 = raster("data/chelsa/envicloud/chelsa/chelsa_V1/climatologies/bio/CHELSA_bio10_12.tif")
+bio_1 <- raster("data/chelsa/envicloud/chelsa/chelsa_V1/climatologies/bio/CHELSA_bio10_01.tif")
+bio_12 <- raster("data/chelsa/envicloud/chelsa/chelsa_V1/climatologies/bio/CHELSA_bio10_12.tif")
 ```
 
 ## Prepare CHELSA rasters
@@ -126,7 +126,7 @@ chelsaData <- raster::stack(chelsaData)
 ### Prepare BIOCLIM 4a
 
 ```{r check_for_4a}
-if(file.exists("data/chelsa/CHELSA_bio10_4a.tif")) {
+if (file.exists("data/chelsa/CHELSA_bio10_4a.tif")) {
   message("Bio 4a already exists, will be overwritten")
 }
 ```
@@ -142,12 +142,12 @@ Here, we use only the months of December and Jan -- May for winter temperature v
 
 ```{r bioclim_4a}
 # list rasters by pattern
-patterns = c("tmin", "tmax")
+patterns <- c("tmin", "tmax")
 
 # list the filepaths
-tkAvg = map(patterns, function(pattern) {
+tkAvg <- map(patterns, function(pattern) {
   # list the paths
-  files = list.files(
+  files <- list.files(
     path = "data/chelsa",
     full.names = TRUE,
     recursive = TRUE,
@@ -159,37 +159,37 @@ tkAvg = map(patterns, function(pattern) {
 crs(elevData)
 
 # now run over the paths and read as rasters and crop by buffer
-tkAvg = map(tkAvg, function(paths) {
+tkAvg <- map(tkAvg, function(paths) {
   # going over the file paths, read them in as rasters, convert CRS and crop
-  tempData = map(paths, function(path) {
+  tempData <- map(paths, function(path) {
     # read in
-    a = raster(path)
+    a <- raster(path)
     # assign crs
-    crs(a) = crs(elevData)
+    crs(a) <- crs(elevData)
     # crop by buffer, will throw error if CRS doesn't match
-    a = crop(a, as(buffer, "Spatial"))
+    a <- crop(a, as(buffer, "Spatial"))
     # return a
     a
   })
   # convert each to kelvin, first dividing by 10 to get celsius
-  tempData = map(tempData, function(tmpRaster) {
-    tmpRaster = (tmpRaster / 10) + 273.15
+  tempData <- map(tempData, function(tmpRaster) {
+    tmpRaster <- (tmpRaster / 10) + 273.15
   })
 })
 
 # assign names
-names(tkAvg) = patterns
+names(tkAvg) <- patterns
 
 # go over the tmin and tmax and get the average monthly temp
-tkAvg = map2(tkAvg[["tmin"]], tkAvg[["tmax"]], function(tmin, tmax) {
+tkAvg <- map2(tkAvg[["tmin"]], tkAvg[["tmax"]], function(tmin, tmax) {
   # return the mean of the corresponding tmin and tmax
   # still in kelvin
   calc(stack(tmin, tmax), fun = mean)
-} )
+})
 
 # calculate Bio 4a
-bio_4a = (calc(stack(tkAvg), fun = sd) / (chelsaData[[1]] + 273.15)) * 100
-names(bio_4a) = "CHELSA_bio10_4a"
+bio_4a <- (calc(stack(tkAvg), fun = sd) / (chelsaData[[1]] + 273.15)) * 100
+names(bio_4a) <- "CHELSA_bio10_4a"
 # save bio_4a
 writeRaster(bio_4a, filename = "data/chelsa/CHELSA_bio10_4a.tif", overwrite = T)
 ```
@@ -197,7 +197,7 @@ writeRaster(bio_4a, filename = "data/chelsa/CHELSA_bio10_4a.tif", overwrite = T)
 ### Prepare Bioclim 15
 
 ```{r check_for_15}
-if(file.exists("data/chelsa/CHELSA_bio10_15.tif")) {
+if (file.exists("data/chelsa/CHELSA_bio10_15.tif")) {
   message("Bio 15 already exists, will be overwritten")
 }
 ```
@@ -213,33 +213,33 @@ Here, we use only the months of December and Jan -- May for winter rainfall vari
 
 ```{r bioclim_15}
 # list rasters by pattern
-pattern = "prec"
+pattern <- "prec"
 
 # list the filepaths
-pptTotal = list.files(
-    path = "data/chelsa",
-    full.names = TRUE,
-    recursive = TRUE,
-    pattern = pattern
+pptTotal <- list.files(
+  path = "data/chelsa",
+  full.names = TRUE,
+  recursive = TRUE,
+  pattern = pattern
 )
 
 # print crs elev data for sanity check --- basic WGS84
 crs(elevData)
 
 # now run over the paths and read as rasters and crop by buffer
-pptTotal = map(pptTotal, function(path) {
-    a = raster(path)
-    # assign crs
-    crs(a) = crs(elevData)
-    # crop by buffer, will throw error if CRS doesn't match
-    a = crop(a, as(buffer, "Spatial"))
-    # return a
-    a
+pptTotal <- map(pptTotal, function(path) {
+  a <- raster(path)
+  # assign crs
+  crs(a) <- crs(elevData)
+  # crop by buffer, will throw error if CRS doesn't match
+  a <- crop(a, as(buffer, "Spatial"))
+  # return a
+  a
 })
 
 # calculate Bio 4a
-bio_15 = (calc(stack(pptTotal), fun = sd) / (1 + (chelsaData[[2]] / 12))) * 100
-names(bio_15) = "CHELSA_bio10_15"
+bio_15 <- (calc(stack(pptTotal), fun = sd) / (1 + (chelsaData[[2]] / 12))) * 100
+names(bio_15) <- "CHELSA_bio10_15"
 # save bio_4a
 writeRaster(bio_15, filename = "data/chelsa/CHELSA_bio10_15.tif", overwrite = T)
 ```
@@ -262,9 +262,9 @@ We read in a land cover classified image and resample that using the mode functi
 landcover <- "data/landUseClassification/landcover_roy_2015/"
 
 # read in and crop
-landcover = raster(landcover)
-buffer_utm = st_transform(buffer, 32643)
-landcover = crop(
+landcover <- raster(landcover)
+buffer_utm <- st_transform(buffer, 32643)
+landcover <- crop(
   landcover,
   as(
     buffer_utm,
@@ -273,19 +273,20 @@ landcover = crop(
 )
 
 # read reclassification matrix
-reclassification_matrix = read.csv("data/landUseClassification/LandCover_ReclassifyMatrix_2015.csv")
-reclassification_matrix = as.matrix(reclassification_matrix[,c("V1", "To")])
+reclassification_matrix <- read.csv("data/landUseClassification/LandCover_ReclassifyMatrix_2015.csv")
+reclassification_matrix <- as.matrix(reclassification_matrix[, c("V1", "To")])
 
 # reclassify
-landcover_reclassified = reclassify(
+landcover_reclassified <- reclassify(
   x = landcover,
   rcl = reclassification_matrix
 )
 
 # write to file
-writeRaster(landcover_reclassified, 
-            filename = "data/landUseClassification/landcover_roy_2015_reclassified.tif",
-            overwrite = TRUE)
+writeRaster(landcover_reclassified,
+  filename = "data/landUseClassification/landcover_roy_2015_reclassified.tif",
+  overwrite = TRUE
+)
 
 # check reclassification
 plot(landcover_reclassified)
@@ -323,35 +324,43 @@ data1km <- data1km / sum(data1km)
 
 data10m <- raster::getValues(landcover_reclassified)
 data10m <- tibble(value = data10m)
-data10m <- dplyr::count(data10m, value) %>% 
+data10m <- dplyr::count(data10m, value) %>%
   dplyr::mutate(n = n / sum(n))
 data10m <- xtabs(n ~ value, data10m)
 
 library(tmap)
 
 # make figures
-fig_lc_roy_reclass =
-  tm_shape(landcover_reclassified)+
-  tm_raster(palette = c(viridis::turbo(11), "grey"), style = "cat",
-            title = "Landcover")+
-  tm_shape(hills)+
-  tm_borders(col = "white")+
-  tm_layout(legend.position = c("left","bottom"),
-            panel.labels = "Reclassified Roy et al. 2015 Landcover",
-            panel.show = T)
+fig_lc_roy_reclass <-
+  tm_shape(landcover_reclassified) +
+  tm_raster(
+    palette = c(viridis::turbo(6), "grey"), style = "cat",
+    title = "Landcover"
+  ) +
+  tm_shape(hills) +
+  tm_borders(col = "white") +
+  tm_layout(
+    legend.position = c("left", "bottom"),
+    panel.labels = "Reclassified Roy et al. 2015 Landcover",
+    panel.show = T
+  )
 
-fig_lc_1km =
-  tm_shape(lc_data)+
-  tm_raster(palette = c(viridis::turbo(11), "grey"), style = "cat",
-            title = "Landcover")+
-  tm_shape(hills)+
-  tm_borders(col = "white")+
-  tm_layout(legend.position = c("left","bottom"),
-            panel.labels = "Reclassified Landcover, resampled 1km",
-            panel.show = T)
+fig_lc_1km <-
+  tm_shape(lc_data) +
+  tm_raster(
+    palette = c(viridis::turbo(6), "grey"), style = "cat",
+    title = "Landcover"
+  ) +
+  tm_shape(hills) +
+  tm_borders(col = "white") +
+  tm_layout(
+    legend.position = c("left", "bottom"),
+    panel.labels = "Reclassified Landcover, resampled 1km",
+    panel.show = T
+  )
 
 # save figures
-fig_landcover_resample = tmap_arrange(fig_lc_roy_reclass, fig_lc_1km, ncol = 2)
+fig_landcover_resample <- tmap_arrange(fig_lc_roy_reclass, fig_lc_1km, ncol = 2)
 tmap_save(
   tm = fig_landcover_resample,
   filename = "figs/fig_landcover_resample.png",
@@ -441,9 +450,9 @@ climvar_names <- c(
 )
 
 # split data to list
-land_data = split(land_data, f = land_data$clim_var)
+land_data <- split(land_data, f = land_data$clim_var)
 
-subplots_climate_elev = Map(function(df, climvar) {
+subplots_climate_elev <- Map(function(df, climvar) {
   ggplot(df) +
     geom_line(
       aes(
@@ -453,28 +462,32 @@ subplots_climate_elev = Map(function(df, climvar) {
     ) +
     geom_pointrange(
       aes(
-        x = elev_round, y = mean, 
+        x = elev_round, y = mean,
         ymin = mean - ci, ymax = mean + ci
       ),
       size = 0.3
     ) +
     scale_x_continuous(labels = scales::comma) +
-    scale_y_continuous(labels = function(x){
-        vapply(x, FUN = function(y) {
+    scale_y_continuous(labels = function(x) {
+      vapply(x,
+        FUN = function(y) {
           # if(is.na(y)) NA_character_
-          if(y > 1 & !is.na(y)) sprintf("%.0f", y)
-          else sprintf("%.1f", y)
+          if (y > 1 & !is.na(y)) {
+            sprintf("%.0f", y)
+          } else {
+            sprintf("%.1f", y)
+          }
         },
-        FUN.VALUE = "label")
-      }
-    ) +
+        FUN.VALUE = "label"
+      )
+    }) +
     theme_test() +
     labs(x = "Elevation (m)", y = climvar)
 }, land_data, climvar_names)
 
-fig_climate_elev <- 
+fig_climate_elev <-
   wrap_plots(subplots_climate_elev, ncol = 2) &
-  plot_annotation(tag_levels = "A")
+    plot_annotation(tag_levels = "A")
 
 # save as png
 ggsave(fig_climate_elev,
@@ -528,10 +541,11 @@ fig_lc_elev <-
   ) +
   annotate(
     geom = "text",
+    fontface = "bold",
     x = 10,
     y = seq(7),
     size = 4,
-    colour = "grey20",
+    colour = c(rep("grey20", 3), "grey90", rep("grey20", 3)),
     label = c(
       "Evergreen", "Deciduous",
       "Mixed/Degraded Forest", "Agriculture/Settlements",
@@ -539,7 +553,7 @@ fig_lc_elev <-
       "Waterbody"
     ),
     hjust = "inward"
-  )+
+  ) +
   scale_fill_viridis_c(
     option = "F",
     direction = -1,
@@ -556,8 +570,7 @@ fig_lc_elev <-
   coord_cartesian(expand = F) +
   labs(
     x = "Elevation (m)",
-    y = "Land Cover Type",
-    title = "NEEDS TO BE CHANGED WITH NEW RECLASS MATRIX"
+    y = "Land Cover Type"
   ) +
   theme_test() +
   theme(
