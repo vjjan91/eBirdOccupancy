@@ -72,7 +72,7 @@ data_thin_absences <- map(data_thin_absences, function(df) {
 
   # remove sites with distances above spatial independence
   df <- df %>%
-    filter(effort_distance_km <= effort_distance_max) %>%
+    dplyr::filter(effort_distance_km <= effort_distance_max) %>%
     st_as_sf(coords = c("longitude", "latitude")) %>%
     `st_crs<-`(4326)
 
@@ -110,9 +110,9 @@ data_thin_absences <- map(data_thin_absences, function(df) {
   # for each uid_cell, select coord where effort is max
   points_max <- df %>%
     group_by(uid_cell) %>%
-    filter(tot_effort == max(tot_effort)) %>%
+    dplyr::filter(tot_effort == max(tot_effort)) %>%
     # there may be multiple rows with max effort, select first
-    filter(row_number() == 1)
+    dplyr::filter(row_number() == 1)
 
   # check for number of samples
   assertthat::assert_that(
@@ -213,7 +213,6 @@ dataSubsample <- filter(dataSubsample, !is.na(expertise))
 
 Reload climate and land cover predictors prepared previously. 
 ```{r add_landcovars}
-
 # list landscape covariate stacks
 landscape_files <- "data/spatial/landscape_resamp01_km.tif"
 
@@ -237,31 +236,18 @@ sample_radius <- 2.5 * 1e3
 # get distinct points and make buffer
 ebird_buff <- dataSubsample %>%
   ungroup() %>%
-  distinct(X, Y) %>%
-  mutate(id = 1:nrow(.)) %>%
-  crossing(sample_radius) %>%
-  arrange(id) %>%
-  group_by(sample_radius) %>%
-  nest() %>%
-  ungroup()
+  distinct(X, Y) %>% 
+  
+  # remove NAs
+  drop_na()
 
 
 # convert to spatial features
-ebird_buff <- mutate(ebird_buff,
-  data = map2(
-    data, sample_radius,
-    function(df, rd) {
-      df_sf <- st_as_sf(df, coords = c("X", "Y"), crs = 32643) %>%
-        # add long lat
-        bind_cols(as_tibble(st_coordinates(.))) %>%
-        # rename(longitude = X, latitude = Y) %>%
-        # # transform to modis projection
-        # st_transform(crs = 32643) %>%
-        # buffer to create neighborhood around each point
-        st_buffer(dist = rd)
-    }
-  )
-)
+ebird_buff <- st_as_sf(ebird_buff, coords = c("X", "Y"), crs = 32643) %>%
+  # add long lat
+  bind_cols(as_tibble(st_coordinates(.))) %>% 
+  # make buffer around points
+  st_buffer(dist = sample_radius)
 ```
 
 ## Spatial buffer-wide covariates
@@ -269,24 +255,28 @@ ebird_buff <- mutate(ebird_buff,
 ### Mean climatic covariates
 
 All climatic covariates are sampled by considering the mean values within a 2.5km radius as discussed above and prefixed "am_".
+
 ```{r mean_landscape}
 # get area mean for all preds except landcover, which is the last one
-env_area_mean <- purrr::map(ebird_buff$data, function(df) {
-  stk <- landscape_data[[-dim(landscape_data)[3]]] # removing landcover here
-  velstk <- velox(stk)
-  dextr <- velstk$extract(
-    sp = df, df = TRUE,
-    fun = function(x) mean(x, na.rm = T)
-  )
+stk <- raster::dropLayer(landscape_data, "landcover") # removing landcover here
+velstk <- velox(stk)
 
-  # assign names for joining
-  names(dextr) <- c("id", names(stk))
-  return(as_tibble(dextr))
-})
+# velox raster value extraction
+dextr <- velstk$extract(
+  sp = ebird_buff, df = TRUE,
+  fun = function(x) mean(x, na.rm = T)
+)
+
+# assign names for joining
+names(dextr) <- c("id", names(stk))
+env_area_mean <- as_tibble(dextr)
+
+# add id to buffer data
+ebird_buff = mutate(ebird_buff,
+                    id = seq(nrow(ebird_buff)))
 
 # join to buffer data
-ebird_buff <- ebird_buff %>%
-  mutate(data = map2(data, env_area_mean, inner_join, by = "id"))
+ebird_buff <- inner_join(ebird_buff, env_area_mean)
 ```
 
 ### Proportions of land cover type
@@ -295,54 +285,43 @@ All land cover covariates were sampled by considering the proportion of each lan
 ```{r pland}
 # get the last element of each stack from the list
 # this is the landcover at that resolution
-lc_area_prop <- purrr::map(ebird_buff$data, function(df) {
-  lc <- landscape_data[[dim(landscape_data)[3]]] # accessing landcover here
-  lc_velox <- velox(lc)
-  lc_vals <- lc_velox$extract(sp = df, df = TRUE)
-  names(lc_vals) <- c("id", "lc")
+lc <- landscape_data[["landcover"]] # accessing landcover here
+lc_velox <- velox(lc)
+lc_vals <- lc_velox$extract(sp = ebird_buff, df = TRUE)
+names(lc_vals) <- c("id", "lc")
 
-  # get landcover proportions
-  lc_prop <- count(lc_vals, id, lc) %>%
-    group_by(id) %>%
-    mutate(
-      lc = glue('lc_{str_pad(lc, 2, pad = "0")}'),
-      prop = n / sum(n)
-    ) %>%
-    dplyr::select(-n) %>%
-    tidyr::pivot_wider(
-      names_from = lc,
-      values_from = prop,
-      values_fill = list(prop = 0)
-    ) %>%
-    ungroup()
-
-  return(lc_prop)
-})
+# get landcover proportions
+lc_prop <- count(lc_vals, id, lc) %>%
+  group_by(id) %>%
+  mutate(
+    lc = glue('lc_{str_pad(lc, 2, pad = "0")}'),
+    prop = n / sum(n)
+  ) %>%
+  dplyr::select(-n) %>%
+  tidyr::pivot_wider(
+    names_from = lc,
+    values_from = prop,
+    values_fill = list(prop = 0)
+  ) %>%
+  ungroup()
 
 # join to data
-ebird_buff <- ebird_buff %>%
-  mutate(data = map2(data, lc_area_prop, inner_join, by = "id"))
+ebird_buff <- mutate( ebird_buff, lc_prop)
 ```
 
 ### Link environmental covariates to checklists
 
 ```{r land_to_obs}
-# duplicate scale data
-data_at_scale <- ebird_buff
+# drop geometry
+ebird_buff = st_drop_geometry(ebird_buff)
 
-# join the full data to landscape samples at each scale
-data_at_scale$data <- map(data_at_scale$data, function(df) {
-  df <- st_drop_geometry(df)
-  df <- inner_join(dataSubsample, df, by = c("X", "Y"))
-  return(df)
-})
+# link to dataSubsample
+dataSubsample = inner_join(dataSubsample, ebird_buff, 
+                           by = c("X", "Y"))
 ```
 
 Save data to file.
 ```{r spit_scale}
 # write to file
-pmap(data_at_scale, function(sample_radius, data) {
-  write_csv(data, path = glue('data/04_data-covars-{str_pad(sample_radius/1e3, 2, pad = "0")}km.csv'))
-  message(glue('export done: data/04_data-covars-{str_pad(sample_radius/1e3, 2, pad = "0")}km.csv'))
-})
+write_csv(dataSubsample, path = glue('data/04_data-covars-2.5km.csv'))
 ```
