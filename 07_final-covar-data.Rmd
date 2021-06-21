@@ -42,9 +42,9 @@ Here, to further reduce spatial autocorrelation, we divided the study area into 
 
 Prior to running this analysis, we checked how many checklists/data would be retained given a particular value of distance to account for spatial independence. This analysis can be accessed in Section 8 of the Supplementary Material. We show that over 80% of checklists are retained with a distance cutoff of 500m. In addition, a number of thinning approaches were tested to determine which method retained the highest proportion of points, while accounting for sampling effort (time and distance). This analysis can be accessed in Section 9 of the Supplementary Material. 
 
-```{r spatial_thinning}
+```{r separate_pres_abs}
 # grid based spatial thinning
-gridsize <- 500 # grid size in metres
+gridsize <- 5000 # grid size in metres
 effort_distance_max <- 1000 # removing checklists with this distance
 
 # make grids across the study site
@@ -60,7 +60,10 @@ data_presences = filter(dataGrouped, pres_abs)
 # split data by species
 data_thin_absences <- split(x = data_thin_absences,
                            f = data_thin_absences$scientific_name)
+```
 
+
+```{r sp_thin_absences}
 # spatial thinning on each species retains
 # site with maximum visits per grid cell
 data_thin_absences <- map(data_thin_absences, function(df) {
@@ -127,8 +130,9 @@ data_thin_absences <- map(data_thin_absences, function(df) {
       max(count(points_max, uid_cell)$n), 1
     )
   )
-
-  points_max
+  
+  # return data without UID cell and coordinate Id
+  dplyr::select(ungroup(points_max), -uid_cell, -coordId)
 })
 
 # remove old data
@@ -154,12 +158,38 @@ dataSubsample <- map(data_thin_absences, function(df) {
 
   bind_rows(df_samples)
 })
+```
 
+
+```{r join_pres_abs}
 # bind all spatially and temporally thinned absences rows for data frame
 dataSubsample <- bind_rows(dataSubsample)
 
+# convert presence data to UTM 43 N and long-lat to X-Y
+data_presences = bind_cols(
+  data_presences,
+  as_tibble(
+    st_as_sf(
+      data_presences,
+      coords = c("longitude", "latitude"),
+      crs = 4326
+    ) %>% 
+      st_transform(32643) %>% 
+      st_coordinates()
+  )
+)
+
+# drop long lat
+data_presences = dplyr::select(data_presences, -longitude, -latitude)
+
 #join ALL PRESENCES and THINNED ABSENCES
 dataSubsample = bind_rows(dataSubsample, data_presences)
+
+# check joined data
+assertthat::assert_that(
+  max(apply(dataSubsample, 2, function(x)sum(is.na(x)))) == 0,
+  msg = "some columns missing from one of the datasets"
+)
 
 # remove previous data
 rm(data_thin_absences)
