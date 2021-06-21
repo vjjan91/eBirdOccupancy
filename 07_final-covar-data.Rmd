@@ -72,7 +72,7 @@ data_thin_absences <- map(data_thin_absences, function(df) {
 
   # remove sites with distances above spatial independence
   df <- df %>%
-    filter(effort_distance_km <= effort_distance_max) %>%
+    dplyr::filter(effort_distance_km <= effort_distance_max) %>%
     st_as_sf(coords = c("longitude", "latitude")) %>%
     `st_crs<-`(4326)
 
@@ -110,9 +110,9 @@ data_thin_absences <- map(data_thin_absences, function(df) {
   # for each uid_cell, select coord where effort is max
   points_max <- df %>%
     group_by(uid_cell) %>%
-    filter(tot_effort == max(tot_effort)) %>%
+    dplyr::filter(tot_effort == max(tot_effort)) %>%
     # there may be multiple rows with max effort, select first
-    filter(row_number() == 1)
+    dplyr::filter(row_number() == 1)
 
   # check for number of samples
   assertthat::assert_that(
