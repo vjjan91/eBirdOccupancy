@@ -237,13 +237,10 @@ sample_radius <- 2.5 * 1e3
 # get distinct points and make buffer
 ebird_buff <- dataSubsample %>%
   ungroup() %>%
-  distinct(X, Y) %>%
-  mutate(id = 1:nrow(.)) %>%
-  crossing(sample_radius) %>%
-  arrange(id) %>%
-  group_by(sample_radius) %>%
-  nest() %>%
-  ungroup()
+  distinct(X, Y) %>% 
+  
+  # remove NAs
+  drop_na()
 
 
 # convert to spatial features
