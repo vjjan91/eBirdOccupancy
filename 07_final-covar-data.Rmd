@@ -44,7 +44,7 @@ Prior to running this analysis, we checked how many checklists/data would be ret
 
 ```{r spatial_thinning}
 # grid based spatial thinning
-gridsize <- 5000 # grid size in metres
+gridsize <- 500 # grid size in metres
 effort_distance_max <- 1000 # removing checklists with this distance
 
 # make grids across the study site
