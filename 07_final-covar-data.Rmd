@@ -256,24 +256,29 @@ ebird_buff <- st_as_sf(ebird_buff, coords = c("X", "Y"), crs = 32643) %>%
 ### Mean climatic covariates
 
 All climatic covariates are sampled by considering the mean values within a 2.5km radius as discussed above and prefixed "am_".
+
 ```{r mean_landscape}
 # get area mean for all preds except landcover, which is the last one
 env_area_mean <- purrr::map(ebird_buff$data, function(df) {
-  stk <- raster::dropLayer(landscape_data, "landcover") # removing landcover here
-  velstk <- velox(stk)
-  dextr <- velstk$extract(
-    sp = df, df = TRUE,
-    fun = function(x) mean(x, na.rm = T)
-  )
+stk <- raster::dropLayer(landscape_data, "landcover") # removing landcover here
+velstk <- velox(stk)
 
-  # assign names for joining
-  names(dextr) <- c("id", names(stk))
-  return(as_tibble(dextr))
-})
+# velox raster value extraction
+dextr <- velstk$extract(
+  sp = ebird_buff, df = TRUE,
+  fun = function(x) mean(x, na.rm = T)
+)
+
+# assign names for joining
+names(dextr) <- c("id", names(stk))
+env_area_mean <- as_tibble(dextr)
+
+# add id to buffer data
+ebird_buff = mutate(ebird_buff,
+                    id = seq(nrow(ebird_buff)))
 
 # join to buffer data
-ebird_buff <- ebird_buff %>%
-  mutate(data = map2(data, env_area_mean, inner_join, by = "id"))
+ebird_buff <- inner_join(ebird_buff, env_area_mean)
 ```
 
 ### Proportions of land cover type
