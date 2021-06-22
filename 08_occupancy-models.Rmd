@@ -285,10 +285,12 @@ close(pb)
 capture.output(all_null, file = "data/results/null_models.csv")
 ```
 
+**CHECKED UNTIL HERE** --- REMOVE THESE AND OTHER NOTES LATER
 
 ## Identifying covariates necessary to model the detection process
 
 Here, we use the `unmarked` package in R [@fiske2011] to identify detection level covariates that are important for each species. We use AIC criteria to select top models [@burnham2011].
+
 ```{r prob_detection}
 # All models are stored in lists below
 det_dred <- list()
