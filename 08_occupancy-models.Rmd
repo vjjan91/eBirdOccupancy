@@ -153,6 +153,9 @@ presSpecies <- dat.scaled %>%
   group_by(scientific_name) %>%
   filter(pres_abs == "1") %>%
   summarise(n=n())
+
+# convert locality_id to factors
+dat.scaled$locality_id <- as.factor(dat.scaled$locality_id)
 ```
 
 ## Running a null model
@@ -176,7 +179,7 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
   occ <- filter_repeat_visits(data,
     min_obs = 1, max_obs = 10,
     annual_closure = FALSE,
-    n_days = 2555, # 7 years is considered a period of closure
+    n_days = 1302, # 7 years is considered a period of closure
     date_var = "observation_date",
     site_vars = c("locality_id")
   )
