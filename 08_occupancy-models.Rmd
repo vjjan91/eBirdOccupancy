@@ -9,21 +9,26 @@ editor_options:
 
 ```{r load_libraries, message=FALSE, warning=FALSE}
 # Load libraries
+# for ebird data
 library(auk)
-library(lubridate)
-library(sf)
-library(unmarked)
-library(raster)
 library(ebirdst)
+
+# general data
+library(tidyverse)
+library(data.table)
+library(lubridate)
+library(openxlsx)
+library(raster) # prolly unnecessary
+
+# for models
+library(unmarked)
 library(MuMIn)
 library(AICcmodavg)
 library(fields)
-library(tidyverse)
+
+# for computation
 library(doParallel)
 library(snow)
-library(openxlsx)
-library(data.table)
-library(dplyr)
 library(ecodist)
 
 # Source necessary functions
@@ -31,7 +36,7 @@ source("R/fun_screen_cor.R")
 source("R/fun_model_estimate_collection.r")
 ```
 
-## Load dataframe and scale covariates
+## Load dataframe and prepare covariates
 
 Here, we load the required dataframe that contains 10 random visits to a site and environmental covariates that were prepared at a spatial scale of 2.5 sq.km. We also scaled all covariates (mean around 0 and standard deviation of 1). Next, we ensured that only Traveling and Stationary checklists were considered. Even though stationary counts have no distance traveled, we defaulted all stationary accounts to an effective distance of 100m, which we consider the average maximum detection radius for most bird species in our area.  
 
@@ -40,9 +45,15 @@ Please note that species-specific plots of probabilities of occupancy as a funct
 ```{r load_dataframe}
 # Load in the prepared dataframe that contains 10 random visits to each site
 dat <- fread("data/04_data-covars-2.5km.csv", header = T)
-setDF(dat)
+dat = as_tibble(dat)
 head(dat)
+```
 
+### Handle the sampling protocol
+
+Select protocol and add 0.1 km to stationary checklists.
+
+```{r handle_protocol}
 # Some more pre-processing to get the right data structures
 
 # Ensuring that only Traveling and Stationary checklists were considered
@@ -53,18 +64,25 @@ dat <- dat %>% filter(protocol_type %in% c("Traveling", "Stationary"))
 # as that's approximately the max normal hearing distance for people doing point
 # counts.
 dat <- dat %>%
-  mutate(effort_distance_km = replace(
-    effort_distance_km,
-    which(effort_distance_km == 0 &
-      protocol_type == "Stationary"),
-    0.1
-  ))
+  mutate(effort_distance_km = if_else(
+    effort_distance_km == 0 &
+      protocol_type == "Stationary",
+    0.1, effort_distance_km
+    )
+  )
+```
 
+### Handle time and date
+
+Convert time and date to julian date and minutes since day.
+
+```{r handle_time_obs_started}
 # Converting time observations started to numeric and adding it as a new column
 # This new column will be minute_observations_started
-dat <- dat %>%
+dat <-
+  dat %>%
   mutate(
-    min_obs_started = strtoi(
+    min_obs_started = as.integer(
       as.difftime(
         time_observations_started,
         format = "%H:%M:%S", units = "mins"
@@ -74,7 +92,7 @@ dat <- dat %>%
 
 # Adding the julian date to the dataframe
 dat <- dat %>%
-  mutate(julian_date = lubridate::yday(dat$observation_date))
+  mutate(julian_date = lubridate::yday(observation_date))
 
 # recode julian date to model it as a linear predictor
 dat <- dat %>%
@@ -100,22 +118,37 @@ dat <- dat %>%
     )
   ) %>%
   drop_na(newmin_obs_started)
+```
 
+### Scaling covariates
+
+```{r select_columns_to_scale}
 # Removing other unnecessary columns from the dataframe and creating a clean one without the rest
 names(dat)
-dat <- dat[, -c(1, 4, 5, 16,21,23,24,34, 35)]
-
-# Rename column names:
-names(dat) <- c(
-  "duration_minutes", "effort_distance_km", "locality",
-  "locality_type", "locality_id", "observer_id",
-  "observation_date", "scientific_name", "observation_count",
-  "protocol_type", "number_observers", "pres_abs", "tot_effort",
-  "longitude", "latitude", "expertise", "elev", "bio_15a.y", "bio_4a.y",
-  "lc_02.y", "lc_09.y", "lc_01.y", "lc_05.y", "lc_04.y",
-  "lc_07.y", "lc_03.y", "julian_date", "min_obs_started"
+# select relevant columns BY NAME
+dat = select(
+  dat,
+  c("duration_minutes", "effort_distance_km", "locality",
+    "locality_type", "locality_id", "observer_id",
+    "observation_date", "scientific_name", "observation_count",
+    "protocol_type", "number_observers", "pres_abs"),
+  
+  # rename X-Y but NOTE THEY ARE IN UTM COORDINATES
+  longitude = "X", latitude = "Y",
+  expertise,
+  
+  # elevation and climate layers
+  elev, bio15a, bio4a, 
+  
+  # all LANDCOVER COLUMNS
+  matches("lc"),
+  
+  # set new columns to old column names
+  julian_date = "newjulianDate",
+  min_obs_started = "newmin_obs_started"
 )
 
+# add year and convert presence-absence to integer
 dat.1 <- dat %>%
   mutate(
     year = year(observation_date),
@@ -124,12 +157,30 @@ dat.1 <- dat %>%
 
 # Scaling detection and occupancy covariates
 dat.scaled <- dat.1
-dat.scaled[, c(1, 2, 11, 16:28)] <- scale(dat.scaled[, c(1, 2, 11, 16:28)]) # Scaling and standardizing detection and site-level covariates
-fwrite(dat.scaled, file = "data/05_scaled-covars-2.5km.csv")
 
+# NEVER EVER refer to columns by numbers, numbers change, names remain
+# INSERT RELEVANT COLUMN NAMES
+cols_to_scale = c("duration_minutes") # ADD MORE
+
+# this scales the relevant columns between 0 and 1
+dat.scaled = mutate(
+  dat.scaled,
+  across(
+    .cols = all_of(cols_to_scale), # referring to the columns
+    .fns = scales::rescale # the rescale function
+  )
+)
+
+# save data to file
+fwrite(dat.scaled, file = "data/05_scaled-covars-2.5km.csv")
+```
+
+### Correct date format
+
+```{r read_scaled_data}
 # Reload the scaled covariate data
 dat.scaled <- fread("data/05_scaled-covars-2.5km.csv", header = T)
-setDF(dat.scaled)
+dat.scaled = as_tibble(dat.scaled)
 head(dat.scaled)
 
 # Ensure observation_date column is in the right format
@@ -140,19 +191,27 @@ dat.scaled$observation_date <- format(
   ),
   "%Y-%m-%d"
 )
+```
 
+### Check for correlated covariates
+
+```{r test_correlation}
 # Testing for correlations before running further analyses
 # Majority are uncorrelated since we decided to keep climatic and land cover predictors and removed elevation.
 source("R/fun_screen_cor.R")
-names(dat.scaled)
-screen.cor(dat.scaled[, c(1, 2, 11, 16:28)], threshold = 0.3)
+
+# SELECT COLUMNS to check BY NAME
+cols_to_check = c("duration_minutes") # add more here
+
+# screen covariates for correlation
+screen.cor(dat.scaled[, cols_to_check], threshold = 0.3)
 
 # total number of presences by species
 # min no. presences = 173 to max = 6423
 presSpecies <- dat.scaled %>%
   group_by(scientific_name) %>%
   filter(pres_abs == "1") %>%
-  summarise(n=n())
+  summarise(n = n())
 
 # convert locality_id to factors
 dat.scaled$locality_id <- as.factor(dat.scaled$locality_id)
@@ -164,16 +223,23 @@ dat.scaled$locality_id <- as.factor(dat.scaled$locality_id)
 # All null models are stored in lists below
 all_null <- list()
 
+# define species and a counter
+species = unique(dat.scaled$scientific_name)
+counter = 0
+
 # Add a progress bar for the loop
 pb <- txtProgressBar(
   min = 0,
-  max = length(unique(dat.scaled$scientific_name)),
+  max = length(species),
   style = 3
 ) # text based bar
 
-for (i in 1:length(unique(dat.scaled$scientific_name))) {
+# loop over species
+for (i in species) {
+  
+  # filter data by species
   data <- dat.scaled %>%
-    filter(dat.scaled$scientific_name == unique(dat.scaled$scientific_name)[i])
+    filter(scientific_name == i)
 
   # Preparing data for the unmarked model
   occ <- filter_repeat_visits(data,
@@ -198,8 +264,8 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
     site_id = "site",
     response = "pres_abs",
     site_covs = c(
-      "locality_id", "lc_02.y", "lc_09.y", "lc_01.y",
-      "lc_05.y", "lc_04.y", "lc_07.y", "lc_03.y", "bio_15a.y", "bio_4a.y"
+      "locality_id", "lc_01", "lc_02", "lc_05",
+      "lc_04", "lc_09", "lc_07", "lc_03", "bio15a", "bio4a"
     ),
     obs_covs = obs_covs
   )
@@ -208,9 +274,13 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
   occ_um <- formatWide(occ_wide, type = "unmarkedFrameOccu")
 
   # Set up the model
+  # the list is now automatically named
   all_null[[i]] <- occu(~1 ~ 1, data = occ_um)
-  names(all_null)[i] <- unique(dat.scaled$scientific_name)[i]
-  setTxtProgressBar(pb, i)
+  
+  # increase counter
+  counter = counter + 1
+  
+  setTxtProgressBar(pb, counter)
 }
 close(pb)
 
@@ -218,10 +288,12 @@ close(pb)
 capture.output(all_null, file = "data/results/null_models.csv")
 ```
 
+**CHECKED UNTIL HERE** --- REMOVE THESE AND OTHER NOTES LATER
 
 ## Identifying covariates necessary to model the detection process
 
 Here, we use the `unmarked` package in R [@fiske2011] to identify detection level covariates that are important for each species. We use AIC criteria to select top models [@burnham2011].
+
 ```{r prob_detection}
 # All models are stored in lists below
 det_dred <- list()
