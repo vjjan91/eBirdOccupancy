@@ -164,7 +164,21 @@ dat.1 <- dat %>%
 
 # Scaling detection and occupancy covariates
 dat.scaled <- dat.1
-dat.scaled[, c(1, 2, 11, 16:28)] <- scale(dat.scaled[, c(1, 2, 11, 16:28)]) # Scaling and standardizing detection and site-level covariates
+
+# NEVER EVER refer to columns by numbers, numbers change, names remain
+# INSERT RELEVANT COLUMN NAMES
+cols_to_scale = c("duration_minutes") # ADD MORE
+
+# this scales the relevant columns between 0 and 1
+dat.scaled = mutate(
+  dat.scaled,
+  across(
+    .cols = all_of(cols_to_scale), # referring to the columns
+    .fns = scales::rescale # the rescale function
+  )
+)
+
+# save data to file
 fwrite(dat.scaled, file = "data/05_scaled-covars-2.5km.csv")
 
 # Reload the scaled covariate data
