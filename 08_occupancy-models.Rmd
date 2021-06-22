@@ -155,6 +155,7 @@ dat = select(
   min_obs_started = "newmin_obs_started"
 )
 
+# add year and convert presence-absence to integer
 dat.1 <- dat %>%
   mutate(
     year = year(observation_date),
