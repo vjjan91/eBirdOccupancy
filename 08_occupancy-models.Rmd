@@ -125,19 +125,34 @@ dat <- dat %>%
   drop_na(newmin_obs_started)
 ```
 
+### Scaling covariates
+
+```{r select_columns_to_scale}
 # Removing other unnecessary columns from the dataframe and creating a clean one without the rest
 names(dat)
 dat <- dat[, -c(1, 4, 5, 16, 18, 21, 23, 25, 26, 36, 37)]
 
-# Rename column names:
-names(dat) <- c(
-  "duration_minutes", "effort_distance_km", "locality",
-  "locality_type", "locality_id", "observer_id",
-  "observation_date", "scientific_name", "observation_count",
-  "protocol_type", "number_observers", "pres_abs", "tot_effort",
-  "longitude", "latitude", "expertise", "elev", "bio15a.y", "bio4a.y",
-  "lc_01.y", "lc_02.y", "lc_05.y", "lc_04.y", "lc_09.y",
-  "lc_07.y", "lc_03.y", "julian_date", "min_obs_started"
+# select relevant columns BY NAME
+dat = select(
+  dat,
+  c("duration_minutes", "effort_distance_km", "locality",
+    "locality_type", "locality_id", "observer_id",
+    "observation_date", "scientific_name", "observation_count",
+    "protocol_type", "number_observers", "pres_abs"),
+  
+  # rename X-Y but NOTE THEY ARE IN UTM COORDINATES
+  longitude = "X", latitude = "Y",
+  expertise,
+  
+  # elevation and climate layers
+  elev, bio15a, bio4a, 
+  
+  # all LANDCOVER COLUMNS
+  matches("lc"),
+  
+  # set new columns to old column names
+  julian_date = "newjulianDate",
+  min_obs_started = "newmin_obs_started"
 )
 
 dat.1 <- dat %>%
