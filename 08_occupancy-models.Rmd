@@ -52,7 +52,13 @@ Please note that species-specific plots of probabilities of occupancy as a funct
 dat <- fread("data/04_data-covars-2.5km.csv", header = T)
 dat = as_tibble(dat)
 head(dat)
+```
 
+### Handle the sampling protocol
+
+Select protocol and add 0.1 km to stationary checklists.
+
+```{r handle_protocol}
 # Some more pre-processing to get the right data structures
 
 # Ensuring that only Traveling and Stationary checklists were considered
@@ -63,12 +69,13 @@ dat <- dat %>% filter(protocol_type %in% c("Traveling", "Stationary"))
 # as that's approximately the max normal hearing distance for people doing point
 # counts.
 dat <- dat %>%
-  mutate(effort_distance_km = replace(
-    effort_distance_km,
-    which(effort_distance_km == 0 &
-      protocol_type == "Stationary"),
-    0.1
-  ))
+  mutate(effort_distance_km = if_else(
+    effort_distance_km == 0 &
+      protocol_type == "Stationary",
+    0.1, effort_distance_km
+    )
+  )
+```
 
 # Converting time observations started to numeric and adding it as a new column
 # This new column will be minute_observations_started
