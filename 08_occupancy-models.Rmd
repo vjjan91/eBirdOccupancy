@@ -77,11 +77,17 @@ dat <- dat %>%
   )
 ```
 
+### Handle time and date
+
+Convert time and date to julian date and minutes since day.
+
+```{r handle_time_obs_started}
 # Converting time observations started to numeric and adding it as a new column
 # This new column will be minute_observations_started
-dat <- dat %>%
+dat <-
+  dat %>%
   mutate(
-    min_obs_started = strtoi(
+    min_obs_started = as.integer(
       as.difftime(
         time_observations_started,
         format = "%H:%M:%S", units = "mins"
@@ -91,7 +97,7 @@ dat <- dat %>%
 
 # Adding the julian date to the dataframe
 dat <- dat %>%
-  mutate(julian_date = lubridate::yday(dat$observation_date))
+  mutate(julian_date = lubridate::yday(observation_date))
 
 # recode julian date to model it as a linear predictor
 dat <- dat %>%
@@ -117,6 +123,7 @@ dat <- dat %>%
     )
   ) %>%
   drop_na(newmin_obs_started)
+```
 
 # Removing other unnecessary columns from the dataframe and creating a clean one without the rest
 names(dat)
