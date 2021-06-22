@@ -220,16 +220,23 @@ screen.cor(dat.scaled[, cols_to_check], threshold = 0.3)
 # All null models are stored in lists below
 all_null <- list()
 
+# define species and a counter
+species = unique(dat.scaled$scientific_name)
+counter = 0
+
 # Add a progress bar for the loop
 pb <- txtProgressBar(
   min = 0,
-  max = length(unique(dat.scaled$scientific_name)),
+  max = length(species),
   style = 3
 ) # text based bar
 
-for (i in 1:length(unique(dat.scaled$scientific_name))) {
+# loop over species
+for (i in species) {
+  
+  # filter data by species
   data <- dat.scaled %>%
-    filter(dat.scaled$scientific_name == unique(dat.scaled$scientific_name)[i])
+    filter(scientific_name == i)
 
   # Preparing data for the unmarked model
   occ <- filter_repeat_visits(data,
