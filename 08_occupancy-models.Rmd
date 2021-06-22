@@ -9,16 +9,26 @@ editor_options:
 
 ```{r load_libraries, message=FALSE, warning=FALSE}
 # Load libraries
+# for ebird data
 library(auk)
+library(ebirdst)
+
+# general data
+library(tidyverse)
+library(data.table)
 library(lubridate)
-library(sf)
+library(openxlsx)
+library(raster) # prolly unnecessary
+
+# for models
 library(unmarked)
 library(raster)
 library(ebirdst)
 library(MuMIn)
 library(AICcmodavg)
 library(fields)
-library(tidyverse)
+
+# for computation
 library(doParallel)
 library(snow)
 library(openxlsx)
