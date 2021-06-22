@@ -200,11 +200,18 @@ dat.scaled$observation_date <- format(
 )
 ```
 
+### Check for correlated covariates
+
+```{r test_correlation}
 # Testing for correlations before running further analyses
 # Majority are uncorrelated since we decided to keep climatic and land cover predictors and removed elevation.
 source("R/fun_screen_cor.R")
-names(dat.scaled)
-screen.cor(dat.scaled[, c(1, 2, 11, 16:28)], threshold = 0.3)
+
+# SELECT COLUMNS to check BY NAME
+cols_to_check = c("duration_minutes") # add more here
+
+# screen covariates for correlation
+screen.cor(dat.scaled[, cols_to_check], threshold = 0.3)
 ```
 
 ## Running a null model
