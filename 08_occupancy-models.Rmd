@@ -126,7 +126,7 @@ dat <- dat %>%
 # Removing other unnecessary columns from the dataframe and creating a clean one without the rest
 names(dat)
 # select relevant columns BY NAME
-dat = select(
+dat = dplyr::select(
   dat,
   c("duration_minutes", "effort_distance_km", "locality",
     "locality_type", "locality_id", "observer_id",
@@ -158,9 +158,11 @@ dat.1 <- dat %>%
 # Scaling detection and occupancy covariates
 dat.scaled <- dat.1
 
-# NEVER EVER refer to columns by numbers, numbers change, names remain
-# INSERT RELEVANT COLUMN NAMES
-cols_to_scale = c("duration_minutes") # ADD MORE
+# Note: Never refer to columns by numbers, numbers change, names remain
+cols_to_scale = c("duration_minutes", "effort_distance_km",
+                  "number_observers","expertise", "elev","bio15a",                           "bio4a", "lc_02", "lc_09", "lc_01", 
+                   "lc_05", "lc_04", "lc_07", "lc_03", 
+                    "julian_date", "min_obs_started") 
 
 # this scales the relevant columns between 0 and 1
 dat.scaled = mutate(
@@ -201,7 +203,9 @@ dat.scaled$observation_date <- format(
 source("R/fun_screen_cor.R")
 
 # SELECT COLUMNS to check BY NAME
-cols_to_check = c("duration_minutes") # add more here
+cols_to_check = c("expertise", "bio15a", "bio4a", "lc_02",
+                  "lc_09", "lc_01", 
+                   "lc_05", "lc_04", "lc_07", "lc_03") 
 
 # screen covariates for correlation
 screen.cor(dat.scaled[, cols_to_check], threshold = 0.3)
