@@ -132,7 +132,7 @@ data_thin_absences <- map(data_thin_absences, function(df) {
   )
   
   # return data without UID cell and coordinate Id
-  dplyr::select(ungroup(points_max), -uid_cell, -coordId)
+  dplyr::select(ungroup(points_max), -uid_cell, -coordId, -tot_effort)
 })
 
 # remove old data
