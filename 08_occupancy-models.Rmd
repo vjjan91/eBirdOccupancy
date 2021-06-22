@@ -271,9 +271,13 @@ for (i in species) {
   occ_um <- formatWide(occ_wide, type = "unmarkedFrameOccu")
 
   # Set up the model
+  # the list is now automatically named
   all_null[[i]] <- occu(~1 ~ 1, data = occ_um)
-  names(all_null)[i] <- unique(dat.scaled$scientific_name)[i]
-  setTxtProgressBar(pb, i)
+  
+  # increase counter
+  counter = counter + 1
+  
+  setTxtProgressBar(pb, counter)
 }
 close(pb)
 
