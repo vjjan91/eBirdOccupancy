@@ -180,10 +180,14 @@ dat.scaled = mutate(
 
 # save data to file
 fwrite(dat.scaled, file = "data/05_scaled-covars-2.5km.csv")
+```
 
+### Correct date format
+
+```{r read_scaled_data}
 # Reload the scaled covariate data
 dat.scaled <- fread("data/05_scaled-covars-2.5km.csv", header = T)
-setDF(dat.scaled)
+dat.scaled = as_tibble(dat.scaled)
 head(dat.scaled)
 
 # Ensure observation_date column is in the right format
@@ -194,6 +198,7 @@ dat.scaled$observation_date <- format(
   ),
   "%Y-%m-%d"
 )
+```
 
 # Testing for correlations before running further analyses
 # Majority are uncorrelated since we decided to keep climatic and land cover predictors and removed elevation.
