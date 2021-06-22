@@ -261,8 +261,8 @@ for (i in species) {
     site_id = "site",
     response = "pres_abs",
     site_covs = c(
-      "locality_id", "lc_01.y", "lc_02.y", "lc_05.y",
-      "lc_04.y", "lc_09.y", "lc_07.y", "lc_03.y", "bio15a.y", "bio4a.y"
+      "locality_id", "lc_01", "lc_02", "lc_05",
+      "lc_04", "lc_09", "lc_07", "lc_03", "bio15a", "bio4a"
     ),
     obs_covs = obs_covs
   )
