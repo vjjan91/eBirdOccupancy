@@ -132,7 +132,7 @@ data_thin_absences <- map(data_thin_absences, function(df) {
   )
   
   # return data without UID cell and coordinate Id
-  dplyr::select(ungroup(points_max), -uid_cell, -coordId)
+  dplyr::select(ungroup(points_max), -uid_cell, -coordId, -tot_effort)
 })
 
 # remove old data
@@ -241,7 +241,8 @@ dataSubsample <- filter(dataSubsample, !is.na(expertise))
 
 ## Add climatic and landscape covariates
 
-Reload climate and land cover predictors prepared previously. 
+Reload climate and land cover predictors prepared previously.
+
 ```{r add_landcovars}
 # list landscape covariate stacks
 landscape_files <- "data/spatial/landscape_resamp01_km.tif"
@@ -258,7 +259,8 @@ names(landscape_data) <- as.character(glue('{c(elev_names, chelsa_names, "landco
 
 ## Spatial buffers around selected checklists
 
-Every checklist on eBird is associated with a latitude and longitude. However, the coordinates entered by an observer may not accurately depict the location at which a species was detected. This can occur for two reasons: first, traveling checklists are often associated with a single location along the route travelled by observers; and second, checklist locations could be assigned to a ‘hotspot’ – a location that is marked by eBird as being frequented by multiple observers. In many cases, an observation might be assigned to a hotspot even though the observation was not made at the precise location of the hotspot [@praveenj.2017]. Johnston et al., (2019) showed that a large proportion of observations occurred within a 3km grid, even for those checklists up to 5km in length. Hence to adjust for spatial precision, we considered a minimum radius of 2.5km around each unique locality when sampling environmental covariate values. 
+Every checklist on eBird is associated with a latitude and longitude. However, the coordinates entered by an observer may not accurately depict the location at which a species was detected. This can occur for two reasons: first, traveling checklists are often associated with a single location along the route travelled by observers; and second, checklist locations could be assigned to a ‘hotspot’ – a location that is marked by eBird as being frequented by multiple observers. In many cases, an observation might be assigned to a hotspot even though the observation was not made at the precise location of the hotspot [@praveenj.2017]. Johnston et al., (2019) showed that a large proportion of observations occurred within a 3km grid, even for those checklists up to 5km in length. Hence to adjust for spatial precision, we considered a minimum radius of 2.5km around each unique locality when sampling environmental covariate values.
+
 ```{r point_buffer}
 # assign neighbourhood radius in m
 sample_radius <- 2.5 * 1e3
@@ -311,7 +313,8 @@ ebird_buff <- inner_join(ebird_buff, env_area_mean)
 
 ### Proportions of land cover type
 
-All land cover covariates were sampled by considering the proportion of each land cover type within a 2.5km radius. 
+All land cover covariates were sampled by considering the proportion of each land cover type within a 2.5km radius.
+
 ```{r pland}
 # get the last element of each stack from the list
 # this is the landcover at that resolution
