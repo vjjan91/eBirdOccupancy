@@ -41,7 +41,7 @@ source("R/fun_screen_cor.R")
 source("R/fun_model_estimate_collection.r")
 ```
 
-## Load dataframe and scale covariates
+## Load dataframe and prepare covariates
 
 Here, we load the required dataframe that contains 10 random visits to a site and environmental covariates that were prepared at a spatial scale of 2.5 sq.km. We also scaled all covariates (mean around 0 and standard deviation of 1). Next, we ensured that only Traveling and Stationary checklists were considered. Even though stationary counts have no distance traveled, we defaulted all stationary accounts to an effective distance of 100m, which we consider the average maximum detection radius for most bird species in our area. Following this, we excluded predictors with a Pearson coefficient $>$ 0.5.  
 
