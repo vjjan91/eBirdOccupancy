@@ -22,8 +22,6 @@ library(raster) # prolly unnecessary
 
 # for models
 library(unmarked)
-library(raster)
-library(ebirdst)
 library(MuMIn)
 library(AICcmodavg)
 library(fields)
@@ -31,9 +29,6 @@ library(fields)
 # for computation
 library(doParallel)
 library(snow)
-library(openxlsx)
-library(data.table)
-library(dplyr)
 library(ecodist)
 
 # Source necessary functions
@@ -130,7 +125,6 @@ dat <- dat %>%
 ```{r select_columns_to_scale}
 # Removing other unnecessary columns from the dataframe and creating a clean one without the rest
 names(dat)
-dat <- dat[, -c(1, 4, 5, 16, 18, 21, 23, 25, 26, 36, 37)]
 
 # select relevant columns BY NAME
 dat = select(
