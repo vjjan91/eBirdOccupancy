@@ -38,7 +38,7 @@ source("R/fun_model_estimate_collection.r")
 
 ## Load dataframe and prepare covariates
 
-Here, we load the required dataframe that contains 10 random visits to a site and environmental covariates that were prepared at a spatial scale of 2.5 sq.km. We also scaled all covariates (mean around 0 and standard deviation of 1). Next, we ensured that only Traveling and Stationary checklists were considered. Even though stationary counts have no distance traveled, we defaulted all stationary accounts to an effective distance of 100m, which we consider the average maximum detection radius for most bird species in our area. Following this, we excluded predictors with a Pearson coefficient $>$ 0.5.  
+Here, we load the required dataframe that contains 10 random visits to a site and environmental covariates that were prepared at a spatial scale of 2.5 sq.km. We also scaled all covariates (mean around 0 and standard deviation of 1). Next, we ensured that only Traveling and Stationary checklists were considered. Even though stationary counts have no distance traveled, we defaulted all stationary accounts to an effective distance of 100m, which we consider the average maximum detection radius for most bird species in our area.  
 
 Please note that species-specific plots of probabilities of occupancy as a function of environmental data can be accessed in Section 10 of the Supplementary Material.
 
@@ -125,7 +125,6 @@ dat <- dat %>%
 ```{r select_columns_to_scale}
 # Removing other unnecessary columns from the dataframe and creating a clean one without the rest
 names(dat)
-
 # select relevant columns BY NAME
 dat = select(
   dat,
@@ -206,6 +205,16 @@ cols_to_check = c("duration_minutes") # add more here
 
 # screen covariates for correlation
 screen.cor(dat.scaled[, cols_to_check], threshold = 0.3)
+
+# total number of presences by species
+# min no. presences = 173 to max = 6423
+presSpecies <- dat.scaled %>%
+  group_by(scientific_name) %>%
+  filter(pres_abs == "1") %>%
+  summarise(n = n())
+
+# convert locality_id to factors
+dat.scaled$locality_id <- as.factor(dat.scaled$locality_id)
 ```
 
 ## Running a null model
@@ -236,7 +245,7 @@ for (i in species) {
   occ <- filter_repeat_visits(data,
     min_obs = 1, max_obs = 10,
     annual_closure = FALSE,
-    n_days = 3000, # 7 years is considered a period of closure
+    n_days = 1302, # 7 years is considered a period of closure
     date_var = "observation_date",
     site_vars = c("locality_id")
   )
@@ -307,7 +316,7 @@ pb <- txtProgressBar(
 
 for (i in 1:length(unique(dat.scaled$scientific_name))) {
   data <- dat.scaled %>%
-    filter(dat.scaled$scientific_name == unique(dat.scaled$scientific_name)[i])
+    filter(dat.scaled$scientific_name == unique(dat.scaled$scientific_name)[3])
 
   # Preparing data for the unmarked model
   occ <- filter_repeat_visits(data,
@@ -332,8 +341,8 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
     site_id = "site",
     response = "pres_abs",
     site_covs = c(
-      "locality_id", "lc_01.y", "lc_02.y", "lc_05.y",
-      "lc_04.y", "lc_09.y", "lc_07.y", "lc_03.y", "bio15a.y", "bio4a.y"
+     "locality_id", "bio4a.y","lc_01.y", "lc_02.y", "lc_05.y",
+       "lc_04.y", "lc_07.y","lc_09.y","lc_03.y", "bio15a.y"
     ),
     obs_covs = obs_covs
   )
@@ -342,7 +351,7 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
   occ_um <- formatWide(occ_wide, type = "unmarkedFrameOccu")
 
   # Fit a global model with all detection level covariates
-  global_mod <- occu(~ min_obs_started +
+  global_mod <- occu(~ min_obs_started + I(min_obs_started^2) +
     julian_date +
     duration_minutes +
     effort_distance_km +
