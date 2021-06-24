@@ -316,7 +316,7 @@ pb <- txtProgressBar(
   max = length(unique(dat.scaled$scientific_name)), style = 3
 ) # text based bar
 
-for (i in 71:length(unique(dat.scaled$scientific_name))) {
+for (i in 1:length(unique(dat.scaled$scientific_name))) {
   data <- dat.scaled %>%
     filter(dat.scaled$scientific_name == unique(dat.scaled$scientific_name)[i])
 
@@ -573,14 +573,17 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
 close(pb)
 
 # 1. Store all the model outputs for each species (for both landcover and climate)
-write.xlsx(lc_clim, file = "data/results/lc-clim.xlsx")
+write.xlsx(lc_clim, file = "data/results/lc-clim-1.xlsx")
 
 # 2. Store all the model averaged outputs for each species and relative importance scores
-write.xlsx(lc_clim_avg, file = "data/results/lc-clim-avg.xlsx", rowNames = T, colNames = T)
-write.xlsx(lc_clim_imp, file = "data/results/lc-clim-imp.xlsx", rowNames = T, colNames = T)
+write.xlsx(lc_clim_avg, file = "data/results/lc-clim-avg-1.xlsx", rowNames = T, colNames = T)
+write.xlsx(lc_clim_imp, file = "data/results/lc-clim-imp-1.xlsx", rowNames = T, colNames = T)
 
 # 3. Store all model estimates
-write.xlsx(lc_clim_modelEst, file = "data/results/lc-clim-modelEst.xlsx", rowNames = T, colNames = T)
+write.xlsx(lc_clim_modelEst, file = "data/results/lc-clim-modelEst-1.xlsx", rowNames = T, colNames = T)
+
+# Note if you are unable to write to a file, use (for example)
+a <- purrr::map(lc_clim_modelEst, ~ purrr::compact(.)) %>% purrr::keep(~ length(.) != 0)
 ```
 
 ## Goodness-of-fit tests
@@ -599,7 +602,7 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
   occ <- filter_repeat_visits(data,
     min_obs = 1, max_obs = 10,
     annual_closure = FALSE,
-    n_days = 3000, # 6 years is considered a period of closure
+    n_days = 1302, # 6 years is considered a period of closure
     date_var = "observation_date",
     site_vars = c("locality_id")
   )
@@ -618,9 +621,8 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
   occ_wide <- format_unmarked_occu(occ,
     site_id = "site",
     response = "pres_abs",
-    site_covs = c(
-      "locality_id", "lc_01.y", "lc_02.y", "lc_05.y",
-      "lc_04.y", "lc_09.y", "lc_07.y", "lc_03.y", "bio15a.y", "bio4a.y"
+    site_covs = c("locality_id", "lc_01", "lc_02", "lc_05",
+      "lc_04", "lc_09", "lc_07", "lc_03", "bio15a", "bio4a"
     ),
     obs_covs = obs_covs
   )
@@ -634,8 +636,8 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
     effort_distance_km +
     number_observers +
     protocol_type +
-    expertise ~ lc_01.y + lc_02.y + lc_05.y +
-    lc_04.y + lc_09.y + lc_07.y + lc_03.y + bio15a.y + bio4a.y, data = occ_um)
+    expertise ~ lc_01 + lc_02 + lc_05 +
+      lc_04 + lc_09 + lc_07 + lc_03 + bio15a + bio4a, data = occ_um)
 
   occ_gof <- mb.gof.test(model_lc_clim, nsim = 5000, plot.hist = FALSE)
 
