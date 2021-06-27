@@ -126,7 +126,7 @@ dat <- dat %>%
 # Removing other unnecessary columns from the dataframe and creating a clean one without the rest
 names(dat)
 # select relevant columns BY NAME
-dat = select(
+dat = dplyr::select(
   dat,
   c("duration_minutes", "effort_distance_km", "locality",
     "locality_type", "locality_id", "observer_id",
@@ -158,9 +158,11 @@ dat.1 <- dat %>%
 # Scaling detection and occupancy covariates
 dat.scaled <- dat.1
 
-# NEVER EVER refer to columns by numbers, numbers change, names remain
-# INSERT RELEVANT COLUMN NAMES
-cols_to_scale = c("duration_minutes") # ADD MORE
+# Note: Never refer to columns by numbers, numbers change, names remain
+cols_to_scale = c("duration_minutes", "effort_distance_km",
+                  "number_observers","expertise", "elev","bio15a",                           "bio4a", "lc_02", "lc_09", "lc_01", 
+                   "lc_05", "lc_04", "lc_07", "lc_03", 
+                    "julian_date", "min_obs_started") 
 
 # this scales the relevant columns between 0 and 1
 dat.scaled = mutate(
@@ -201,7 +203,9 @@ dat.scaled$observation_date <- format(
 source("R/fun_screen_cor.R")
 
 # SELECT COLUMNS to check BY NAME
-cols_to_check = c("duration_minutes") # add more here
+cols_to_check = c("expertise", "bio15a", "bio4a", "lc_02",
+                  "lc_09", "lc_01", 
+                   "lc_05", "lc_04", "lc_07", "lc_03") 
 
 # screen covariates for correlation
 screen.cor(dat.scaled[, cols_to_check], threshold = 0.3)
@@ -288,8 +292,6 @@ close(pb)
 capture.output(all_null, file = "data/results/null_models.csv")
 ```
 
-**CHECKED UNTIL HERE** --- REMOVE THESE AND OTHER NOTES LATER
-
 ## Identifying covariates necessary to model the detection process
 
 Here, we use the `unmarked` package in R [@fiske2011] to identify detection level covariates that are important for each species. We use AIC criteria to select top models [@burnham2011].
@@ -316,13 +318,13 @@ pb <- txtProgressBar(
 
 for (i in 1:length(unique(dat.scaled$scientific_name))) {
   data <- dat.scaled %>%
-    filter(dat.scaled$scientific_name == unique(dat.scaled$scientific_name)[3])
+    filter(dat.scaled$scientific_name == unique(dat.scaled$scientific_name)[i])
 
   # Preparing data for the unmarked model
   occ <- filter_repeat_visits(data,
     min_obs = 1, max_obs = 10,
     annual_closure = FALSE,
-    n_days = 3000, # 7 years is considered a period of closure
+    n_days = 1302, # 7 years is considered a period of closure
     date_var = "observation_date",
     site_vars = c("locality_id")
   )
@@ -340,9 +342,8 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
   occ_wide <- format_unmarked_occu(occ,
     site_id = "site",
     response = "pres_abs",
-    site_covs = c(
-     "locality_id", "bio4a.y","lc_01.y", "lc_02.y", "lc_05.y",
-       "lc_04.y", "lc_07.y","lc_09.y","lc_03.y", "bio15a.y"
+    site_covs = c("locality_id", "lc_01", "lc_02", "lc_05",
+      "lc_04", "lc_09", "lc_07", "lc_03", "bio15a", "bio4a"
     ),
     obs_covs = obs_covs
   )
@@ -351,7 +352,7 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
   occ_um <- formatWide(occ_wide, type = "unmarkedFrameOccu")
 
   # Fit a global model with all detection level covariates
-  global_mod <- occu(~ min_obs_started + I(min_obs_started^2) +
+  global_mod <- occu(~ min_obs_started + 
     julian_date +
     duration_minutes +
     effort_distance_km +
@@ -432,7 +433,7 @@ write.xlsx(det_imp, file = "data/results/det-imp.xlsx", rowNames = T, colNames =
 write.xlsx(det_modelEst, file = "data/results/det-modelEst.xlsx", rowNames = T, colNames = T)
 
 # Note if you are unable to write to a file, use (for example)
-purrr::map(det_imp, ~ purrr::compact(.)) %>% purrr::keep(~ length(.) != 0)
+a <- purrr::map(det_imp, ~ purrr::compact(.)) %>% purrr::keep(~ length(.) != 0)
 ```
 
 ## Land Cover and Climate
@@ -466,7 +467,7 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
   occ <- filter_repeat_visits(data,
     min_obs = 1, max_obs = 10,
     annual_closure = FALSE,
-    n_days = 3000, # 6 years is considered a period of closure
+    n_days = 1302, # 6 years is considered a period of closure
     date_var = "observation_date",
     site_vars = c("locality_id")
   )
@@ -484,9 +485,8 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
   occ_wide <- format_unmarked_occu(occ,
     site_id = "site",
     response = "pres_abs",
-    site_covs = c(
-      "locality_id", "lc_01.y", "lc_02.y", "lc_05.y",
-      "lc_04.y", "lc_09.y", "lc_07.y", "lc_03.y", "bio15a.y", "bio4a.y"
+    site_covs = c("locality_id", "lc_01", "lc_02", "lc_05",
+      "lc_04", "lc_09", "lc_07", "lc_03", "bio15a", "bio4a"
     ),
     obs_covs = obs_covs
   )
@@ -499,8 +499,8 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
     duration_minutes +
     effort_distance_km +
     number_observers +
-    expertise ~ lc_01.y + lc_02.y + lc_05.y +
-    lc_04.y + lc_09.y + lc_07.y + lc_03.y + bio15a.y + bio4a.y, data = occ_um)
+    expertise ~ lc_01 + lc_02 + lc_05 +
+      lc_04 + lc_09 + lc_07 + lc_03 + bio15a + bio4a, data = occ_um)
 
   # Set up the cluster
   clusterType <- if (length(find.package("snow", quiet = TRUE))) "SOCK" else "PSOCK"
@@ -573,14 +573,17 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
 close(pb)
 
 # 1. Store all the model outputs for each species (for both landcover and climate)
-write.xlsx(lc_clim, file = "data/results/lc-clim.xlsx")
+write.xlsx(lc_clim, file = "data/results/lc-clim-1.xlsx")
 
 # 2. Store all the model averaged outputs for each species and relative importance scores
-write.xlsx(lc_clim_avg, file = "data/results/lc-clim-avg.xlsx", rowNames = T, colNames = T)
-write.xlsx(lc_clim_imp, file = "data/results/lc-clim-imp.xlsx", rowNames = T, colNames = T)
+write.xlsx(lc_clim_avg, file = "data/results/lc-clim-avg-1.xlsx", rowNames = T, colNames = T)
+write.xlsx(lc_clim_imp, file = "data/results/lc-clim-imp-1.xlsx", rowNames = T, colNames = T)
 
 # 3. Store all model estimates
-write.xlsx(lc_clim_modelEst, file = "data/results/lc-clim-modelEst.xlsx", rowNames = T, colNames = T)
+write.xlsx(lc_clim_modelEst, file = "data/results/lc-clim-modelEst-1.xlsx", rowNames = T, colNames = T)
+
+# Note if you are unable to write to a file, use (for example)
+a <- purrr::map(lc_clim_modelEst, ~ purrr::compact(.)) %>% purrr::keep(~ length(.) != 0)
 ```
 
 ## Goodness-of-fit tests
@@ -599,7 +602,7 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
   occ <- filter_repeat_visits(data,
     min_obs = 1, max_obs = 10,
     annual_closure = FALSE,
-    n_days = 3000, # 6 years is considered a period of closure
+    n_days = 1302, # 6 years is considered a period of closure
     date_var = "observation_date",
     site_vars = c("locality_id")
   )
@@ -618,9 +621,8 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
   occ_wide <- format_unmarked_occu(occ,
     site_id = "site",
     response = "pres_abs",
-    site_covs = c(
-      "locality_id", "lc_01.y", "lc_02.y", "lc_05.y",
-      "lc_04.y", "lc_09.y", "lc_07.y", "lc_03.y", "bio15a.y", "bio4a.y"
+    site_covs = c("locality_id", "lc_01", "lc_02", "lc_05",
+      "lc_04", "lc_09", "lc_07", "lc_03", "bio15a", "bio4a"
     ),
     obs_covs = obs_covs
   )
@@ -634,8 +636,8 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
     effort_distance_km +
     number_observers +
     protocol_type +
-    expertise ~ lc_01.y + lc_02.y + lc_05.y +
-    lc_04.y + lc_09.y + lc_07.y + lc_03.y + bio15a.y + bio4a.y, data = occ_um)
+    expertise ~ lc_01 + lc_02 + lc_05 +
+      lc_04 + lc_09 + lc_07 + lc_03 + bio15a + bio4a, data = occ_um)
 
   occ_gof <- mb.gof.test(model_lc_clim, nsim = 5000, plot.hist = FALSE)
 
