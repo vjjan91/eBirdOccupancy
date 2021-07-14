@@ -1,0 +1,137 @@
+scientific_name,predictor,coefficient,se,order,common_name,Open-country/Forest,ForagingHabit,eBird_spp_codes,,HWI,Body.mass,Log.transformed.Body.Mass,TrophicLevel,TrophicNiche,Migration.1,Migration.2,Migration.3,Diet
+Acridotheres fuscus,bio4a.y,0.778824501,0.194889625,Passeriformes,Jungle Myna,OC,GRD,junmyn1,OC,24.7162719,82.8,1.918030337,Omnivore,Omnivore,Not a Migrant,2,resident,omnivore
+Acridotheres fuscus,lc_07.y,3.906146275,0.830524958,Passeriformes,Jungle Myna,OC,GRD,junmyn1,OC,24.7162719,82.8,1.918030337,Omnivore,Omnivore,Not a Migrant,2,resident,omnivore
+Acridotheres tristis,lc_01.y,-0.889273003,0.441499338,Passeriformes,Common Myna,OC,MID,commyn,OC,21.84696376,116,2.066064897,Carnivore,Omnivore,Not a Migrant,2,resident,omnivore
+Acrocephalus dumetorum,bio4a.y,0.325624608,0.110771793,Passeriformes,Blyth's Reed Warbler,OC,UND,blrwar1,OC,21.82218576,11.2,1.049218023,Carnivore,Invertivore,Full Migrant,3,directional migratory,invertebrates
+Acrocephalus dumetorum,lc_01.y,0.394872057,0.087523418,Passeriformes,Blyth's Reed Warbler,OC,UND,blrwar1,OC,21.82218576,11.2,1.049218023,Carnivore,Invertivore,Full Migrant,3,directional migratory,invertebrates
+Acrocephalus dumetorum,lc_07.y,0.415798946,0.102217023,Passeriformes,Blyth's Reed Warbler,OC,UND,blrwar1,OC,21.82218576,11.2,1.049218023,Carnivore,Invertivore,Full Migrant,3,directional migratory,invertebrates
+Aegithina tiphia,bio15a.y,-0.322633594,0.139228326,Passeriformes,Common Iora,OC,MID,comior1,OC,9.442634919,12,1.079181246,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Aegithina tiphia,bio4a.y,-0.420906851,0.174796448,Passeriformes,Common Iora,OC,MID,comior1,OC,9.442634919,12,1.079181246,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Chrysocolaptes guttacristatus,bio4a.y,-0.867137398,0.194834922,Piciformes,Greater Flameback,RF,CAN,grefla1,FOR,19.87077838,142,2.152288344,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Chrysocolaptes guttacristatus,lc_04.y,-0.730756758,0.224840784,Piciformes,Greater Flameback,RF,CAN,grefla1,FOR,19.87077838,142,2.152288344,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Cinnyris asiaticus,bio4a.y,0.346534174,0.135066516,Passeriformes,Purple Sunbird,OC,MID,pursun4,OC,17.7876848,8.1,0.908485019,Omnivore,Omnivore,Not a Migrant,1,resident,omnivore
+Cinnyris asiaticus,lc_02.y,0.343417577,0.1404444,Passeriformes,Purple Sunbird,OC,MID,pursun4,OC,17.7876848,8.1,0.908485019,Omnivore,Omnivore,Not a Migrant,1,resident,omnivore
+Cinnyris asiaticus,lc_03.y,0.7712147,0.313107296,Passeriformes,Purple Sunbird,OC,MID,pursun4,OC,17.7876848,8.1,0.908485019,Omnivore,Omnivore,Not a Migrant,1,resident,omnivore
+Cinnyris asiaticus,lc_04.y,0.35992922,0.146598171,Passeriformes,Purple Sunbird,OC,MID,pursun4,OC,17.7876848,8.1,0.908485019,Omnivore,Omnivore,Not a Migrant,1,resident,omnivore
+Cinnyris lotenius,bio4a.y,-0.718816549,0.205971018,Passeriformes,Loten's Sunbird,RF,CAN,lobsun2,FOR,14.2241907,8,0.942999593,Omnivore,Nectarivore,Not a Migrant,1,resident,omnivore
+Columba livia,lc_01.y,-0.850814544,0.343447433,Columbiformes,Rock Pigeon,OC,GRD,rocpig,OC,44.18079137,354.5,2.549248557,Herbivore,Granivore,Not a Migrant,1,resident,seeds
+Copsychus saularis,bio4a.y,1.182720955,0.437688518,Passeriformes,Oriental Magpie-Robin,OC,GRD,magrob,OC,18.59340096,36,1.556302501,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Copsychus saularis,lc_02.y,0.723909146,0.329728236,Passeriformes,Oriental Magpie-Robin,OC,GRD,magrob,OC,18.59340096,36,1.556302501,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Copsychus saularis,lc_07.y,2.433578056,1.078226419,Passeriformes,Oriental Magpie-Robin,OC,GRD,magrob,OC,18.59340096,36,1.556302501,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Corvus macrorhynchos,bio15a.y,1.231630632,0.263514441,Passeriformes,Large-billed Crow,OC,GRD,labcro1,OC,38.03851875,521,2.71023587,Omnivore,Omnivore,Not a Migrant,1,resident,omnivore
+Corvus macrorhynchos,bio4a.y,2.329208025,0.613676691,Passeriformes,Large-billed Crow,OC,GRD,labcro1,OC,38.03851875,521,2.71023587,Omnivore,Omnivore,Not a Migrant,1,resident,omnivore
+Corvus splendens,bio4a.y,0.342604788,0.11797698,Passeriformes,House Crow,OC,GRD,houcro1,OC,36.62683518,293.5,2.466200102,Omnivore,Omnivore,Not a Migrant,1,resident,scav
+Corvus splendens,lc_01.y,-1.162381814,0.319212285,Passeriformes,House Crow,OC,GRD,houcro1,OC,36.62683518,293.5,2.466200102,Omnivore,Omnivore,Not a Migrant,1,resident,scav
+Culicicapa ceylonensis,bio15a.y,-0.269590205,0.133772841,Passeriformes,Gray-headed Canary-Flycatcher,RF,MID,gyhcaf1,FOR,19.98883172,7.7,0.886490725,Carnivore,Invertivore,Not a Migrant,1,directional migratory,invertebrates
+Culicicapa ceylonensis,bio4a.y,0.42647087,0.162263209,Passeriformes,Gray-headed Canary-Flycatcher,RF,MID,gyhcaf1,FOR,19.98883172,7.7,0.886490725,Carnivore,Invertivore,Not a Migrant,1,directional migratory,invertebrates
+Culicicapa ceylonensis,lc_01.y,0.887111916,0.133935151,Passeriformes,Gray-headed Canary-Flycatcher,RF,MID,gyhcaf1,FOR,19.98883172,7.7,0.886490725,Carnivore,Invertivore,Not a Migrant,1,directional migratory,invertebrates
+Culicicapa ceylonensis,lc_05.y,0.822627829,0.10929773,Passeriformes,Gray-headed Canary-Flycatcher,RF,MID,gyhcaf1,FOR,19.98883172,7.7,0.886490725,Carnivore,Invertivore,Not a Migrant,1,directional migratory,invertebrates
+Dendrocitta leucogastra,bio4a.y,-1.433435795,0.384436334,Passeriformes,White-bellied Treepie,RF,CAN,whbtre1,FOR,11.46243132,99.2,1.996511672,Carnivore,Omnivore,Not a Migrant,1,resident,omnivore
+Dendrocitta leucogastra,lc_01.y,0.933559408,0.43182268,Passeriformes,White-bellied Treepie,RF,CAN,whbtre1,FOR,11.46243132,99.2,1.996511672,Carnivore,Omnivore,Not a Migrant,1,resident,omnivore
+Dendrocitta leucogastra,lc_02.y,1.060063725,0.527017294,Passeriformes,White-bellied Treepie,RF,CAN,whbtre1,FOR,11.46243132,99.2,1.996511672,Carnivore,Omnivore,Not a Migrant,1,resident,omnivore
+Dendrocitta leucogastra,lc_07.y,-2.530103719,1.072251069,Passeriformes,White-bellied Treepie,RF,CAN,whbtre1,FOR,11.46243132,99.2,1.996511672,Carnivore,Omnivore,Not a Migrant,1,resident,omnivore
+Dendrocitta vagabunda,bio4a.y,-0.898069698,0.155957337,Passeriformes,Rufous Treepie,OC,MID,ruftre2,FOR,14.95803233,100,2,Carnivore,Omnivore,Not a Migrant,1,resident,omnivore
+Dendrocitta vagabunda,lc_01.y,-1.272720428,0.515153294,Passeriformes,Rufous Treepie,OC,MID,ruftre2,FOR,14.95803233,100,2,Carnivore,Omnivore,Not a Migrant,1,resident,omnivore
+Dicrurus aeneus,bio4a.y,-0.968260781,0.226334937,Passeriformes,Bronzed Drongo,RF,MID,brodro1,FOR,27.86537116,26,1.414973348,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Dicrurus aeneus,lc_04.y,-0.507128167,0.22040655,Passeriformes,Bronzed Drongo,RF,MID,brodro1,FOR,27.86537116,26,1.414973348,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Dicrurus leucophaeus,lc_01.y,0.275947695,0.132465519,Passeriformes,Ashy Drongo,OC,CAN,ashdro1,FOR,30.10929264,37.6,1.575187845,Carnivore,Invertivore,Full Migrant,1,directional migratory,invertebrates
+Dicrurus macrocercus,lc_01.y,-0.68054596,0.253323868,Passeriformes,Black Drongo,OC,CAN,bladro1,OC,27.11140206,48.3,1.683947131,Carnivore,Invertivore,Full Migrant,1,directional migratory,invertebrates
+Dicrurus macrocercus,lc_04.y,0.563930939,0.198590616,Passeriformes,Black Drongo,OC,CAN,bladro1,OC,27.11140206,48.3,1.683947131,Carnivore,Invertivore,Full Migrant,1,directional migratory,invertebrates
+Dicrurus paradiseus,bio15a.y,0.465797609,0.142613445,Passeriformes,Greater Racket-tailed Drongo,RF,CAN,grtdro1,FOR,22.20132932,79.5,1.93358851,Carnivore,Invertivore,Not a Migrant,1,directional migratory,invertebrates
+Dicrurus paradiseus,bio4a.y,-1.671006424,0.294638774,Passeriformes,Greater Racket-tailed Drongo,RF,CAN,grtdro1,FOR,22.20132932,79.5,1.93358851,Carnivore,Invertivore,Not a Migrant,1,directional migratory,invertebrates
+Dicrurus paradiseus,lc_01.y,0.669006518,0.289061801,Passeriformes,Greater Racket-tailed Drongo,RF,CAN,grtdro1,FOR,22.20132932,79.5,1.93358851,Carnivore,Invertivore,Not a Migrant,1,directional migratory,invertebrates
+Dicrurus paradiseus,lc_02.y,1.176168536,0.382841765,Passeriformes,Greater Racket-tailed Drongo,RF,CAN,grtdro1,FOR,22.20132932,79.5,1.93358851,Carnivore,Invertivore,Not a Migrant,1,directional migratory,invertebrates
+Dinopium benghalense,bio4a.y,-1.192337905,0.254714788,Piciformes,Black-rumped Flameback,OC,MID,bkrfla1,OC,20.69691878,100,2,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Dinopium benghalense,lc_01.y,-0.499291863,0.247400846,Piciformes,Black-rumped Flameback,OC,MID,bkrfla1,OC,20.69691878,100,2,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Geokichla citrina,bio4a.y,-1.050447632,0.235223757,Passeriformes,Orange-headed Thrush,OC,GRD,orhthr1,FOR,29.62560681,53.5,1.726727209,Omnivore,Invertivore,Full Migrant,3,directional migratory,omnivore
+Geokichla citrina,lc_07.y,0.547821281,0.159944198,Passeriformes,Orange-headed Thrush,OC,GRD,orhthr1,FOR,29.62560681,53.5,1.726727209,Omnivore,Invertivore,Full Migrant,3,directional migratory,omnivore
+Gracula indica,bio15a.y,0.633724118,0.163396186,Passeriformes,Southern Hill Myna,RF,CAN,sohmyn1,FOR,22.18829439,126,2.100370545,Herbivore,Frugivore,NA,1,resident,NA
+Gracula indica,bio4a.y,-0.657483598,0.200582758,Passeriformes,Southern Hill Myna,RF,CAN,sohmyn1,FOR,22.18829439,126,2.100370545,Herbivore,Frugivore,NA,1,resident,NA
+Gracula indica,lc_01.y,1.31263053,0.330560506,Passeriformes,Southern Hill Myna,RF,CAN,sohmyn1,FOR,22.18829439,126,2.100370545,Herbivore,Frugivore,NA,1,resident,NA
+Gracula indica,lc_02.y,1.102842121,0.214882167,Passeriformes,Southern Hill Myna,RF,CAN,sohmyn1,FOR,22.18829439,126,2.100370545,Herbivore,Frugivore,NA,1,resident,NA
+Gracula indica,lc_09.y,0.235505268,0.11676101,Passeriformes,Southern Hill Myna,RF,CAN,sohmyn1,FOR,22.18829439,126,2.100370545,Herbivore,Frugivore,NA,1,resident,NA
+Halcyon smyrnensis,lc_01.y,-1.002374525,0.276596713,Coraciiformes,White-throated Kingfisher,OC,AQU,whtkin2,OC,20.24597458,91.4,1.960946196,Carnivore,Omnivore,Not a Migrant,2,resident,vertebrates
+Iole indica,bio4a.y,-0.513167552,0.135086894,Passeriformes,Yellow-browed Bulbul,RF,MID,yebbul3,FOR,15.38598123,30.6,1.485721426,Herbivore,Omnivore,Not a Migrant,1,resident,omnivore
+Iole indica,lc_01.y,1.295643103,0.184852429,Passeriformes,Yellow-browed Bulbul,RF,MID,yebbul3,FOR,15.38598123,30.6,1.485721426,Herbivore,Omnivore,Not a Migrant,1,resident,omnivore
+Iole indica,lc_02.y,0.981613241,0.171959531,Passeriformes,Yellow-browed Bulbul,RF,MID,yebbul3,FOR,15.38598123,30.6,1.485721426,Herbivore,Omnivore,Not a Migrant,1,resident,omnivore
+Iole indica,lc_05.y,0.495411315,0.146245149,Passeriformes,Yellow-browed Bulbul,RF,MID,yebbul3,FOR,15.38598123,30.6,1.485721426,Herbivore,Omnivore,Not a Migrant,1,resident,omnivore
+Irena puella,bio4a.y,-0.812383727,0.185045618,Passeriformes,Asian Fairy-bluebird,RF,CAN,asfblu1,FOR,23.21144279,64.9,1.812244697,Herbivore,Frugivore,Not a Migrant,1,resident,fruit
+Irena puella,lc_01.y,0.736793018,0.150142061,Passeriformes,Asian Fairy-bluebird,RF,CAN,asfblu1,FOR,23.21144279,64.9,1.812244697,Herbivore,Frugivore,Not a Migrant,1,resident,fruit
+Irena puella,lc_02.y,0.746897487,0.188991931,Passeriformes,Asian Fairy-bluebird,RF,CAN,asfblu1,FOR,23.21144279,64.9,1.812244697,Herbivore,Frugivore,Not a Migrant,1,resident,fruit
+Leptocoma minima,bio4a.y,-0.380694879,0.184423326,Passeriformes,Crimson-backed Sunbird,RF,CAN,crbsun2,FOR,13.63501565,5,0.689308859,Omnivore,Nectarivore,Not a Migrant,1,resident,omnivore
+Leptocoma minima,lc_01.y,1.09451798,0.382331541,Passeriformes,Crimson-backed Sunbird,RF,CAN,crbsun2,FOR,13.63501565,5,0.689308859,Omnivore,Nectarivore,Not a Migrant,1,resident,omnivore
+Leptocoma zeylonica,bio4a.y,-0.340251172,0.145500938,Passeriformes,Purple-rumped Sunbird,OC,MID,pursun3,OC,13.88500334,9,0.942999593,Omnivore,Omnivore,Not a Migrant,1,resident,omnivore
+Leptocoma zeylonica,lc_04.y,0.641821248,0.327047457,Passeriformes,Purple-rumped Sunbird,OC,MID,pursun3,OC,13.88500334,9,0.942999593,Omnivore,Omnivore,Not a Migrant,1,resident,omnivore
+Loriculus vernalis,bio4a.y,-0.722824824,0.142811405,Psittaciformes,Vernal Hanging-Parrot,OC,CAN,vehpar1,FOR,45.63002759,35.7,1.552668216,Herbivore,Frugivore,Full Migrant,1,resident,fruit
+Loriculus vernalis,lc_01.y,0.614592813,0.161637952,Psittaciformes,Vernal Hanging-Parrot,OC,CAN,vehpar1,FOR,45.63002759,35.7,1.552668216,Herbivore,Frugivore,Full Migrant,1,resident,fruit
+Loriculus vernalis,lc_02.y,0.549594199,0.171848928,Psittaciformes,Vernal Hanging-Parrot,OC,CAN,vehpar1,FOR,45.63002759,35.7,1.552668216,Herbivore,Frugivore,Full Migrant,1,resident,fruit
+Merops leschenaulti,bio4a.y,-0.443957986,0.21172255,Coraciiformes,Chestnut-headed Bee-eater,OC,AER,chbeat1,OC,41.36177249,27.2,1.434568904,Carnivore,Invertivore,Full Migrant,1,directional migratory,invertebrates
+Merops leschenaulti,lc_01.y,1.04619006,0.494764708,Coraciiformes,Chestnut-headed Bee-eater,OC,AER,chbeat1,OC,41.36177249,27.2,1.434568904,Carnivore,Invertivore,Full Migrant,1,directional migratory,invertebrates
+Merops orientalis,bio15a.y,-0.355612923,0.181246645,Coraciiformes,Green Bee-eater,OC,AER,grbeat1,OC,35.33244734,14.8,1.170261715,Carnivore,Invertivore,Full Migrant,1,dispersive migratory,invertebrates
+Merops orientalis,lc_01.y,-2.277395084,0.858432454,Coraciiformes,Green Bee-eater,OC,AER,grbeat1,OC,35.33244734,14.8,1.170261715,Carnivore,Invertivore,Full Migrant,1,dispersive migratory,invertebrates
+Motacilla cinerea,bio4a.y,0.25154582,0.11247674,NA,NA,OC,GRD,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Motacilla cinerea,lc_04.y,-0.553465151,0.19747247,NA,NA,OC,GRD,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Motacilla maderaspatensis,bio4a.y,0.625346478,0.300988115,NA,NA,OC,GRD,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Motacilla maderaspatensis,lc_05.y,-0.780184672,0.351117388,NA,NA,OC,GRD,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Myophonus horsfieldii,bio4a.y,-0.56894515,0.242772658,Passeriformes,Malabar Whistling-Thrush,OC,GRD,mawthr1,FOR,15.79117285,117,2.068185862,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Myophonus horsfieldii,lc_01.y,2.861494108,0.82966554,Passeriformes,Malabar Whistling-Thrush,OC,GRD,mawthr1,FOR,15.79117285,117,2.068185862,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Myophonus horsfieldii,lc_04.y,-0.933207868,0.471390428,Passeriformes,Malabar Whistling-Thrush,OC,GRD,mawthr1,FOR,15.79117285,117,2.068185862,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Ocyceros griseus,bio4a.y,-0.854781899,0.159113881,Bucerotiformes,Malabar Gray Hornbill,RF,CAN,maghor2,FOR,16.59582064,292,2.465382851,Herbivore,Frugivore,Not a Migrant,1,resident,fruit
+Ocyceros griseus,lc_01.y,0.522554256,0.251657765,Bucerotiformes,Malabar Gray Hornbill,RF,CAN,maghor2,FOR,16.59582064,292,2.465382851,Herbivore,Frugivore,Not a Migrant,1,resident,fruit
+Ocyceros griseus,lc_02.y,0.644015772,0.307841438,Bucerotiformes,Malabar Gray Hornbill,RF,CAN,maghor2,FOR,16.59582064,292,2.465382851,Herbivore,Frugivore,Not a Migrant,1,resident,fruit
+Oriolus kundoo,bio4a.y,-0.723465021,0.164711278,Passeriformes,Indian Golden Oriole,OC,CAN,ingori1,OC,32.63653545,79,1.897627091,Omnivore,Omnivore,NA,1,directional migratory,NA
+Oriolus kundoo,lc_02.y,0.780470153,0.173207468,Passeriformes,Indian Golden Oriole,OC,CAN,ingori1,OC,32.63653545,79,1.897627091,Omnivore,Omnivore,NA,1,directional migratory,NA
+Oriolus xanthornus,bio4a.y,-1.054880854,0.199711224,Passeriformes,Black-hooded Oriole,OC,CAN,blhori1,FOR,26.9861565,56.3,1.750508395,Herbivore,Frugivore,Not a Migrant,1,dispersive migratory,fruit
+Oriolus xanthornus,lc_01.y,-1.305094815,0.341534882,Passeriformes,Black-hooded Oriole,OC,CAN,blhori1,FOR,26.9861565,56.3,1.750508395,Herbivore,Frugivore,Not a Migrant,1,dispersive migratory,fruit
+Orthotomus sutorius,bio15a.y,2.029662683,0.765071547,Passeriformes,Common Tailorbird,OC,UND,comtai1,OC,10.61962388,7.5,0.875061263,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Orthotomus sutorius,bio4a.y,2.981945502,1.313369606,Passeriformes,Common Tailorbird,OC,UND,comtai1,OC,10.61962388,7.5,0.875061263,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Orthotomus sutorius,lc_01.y,-1.186189818,0.536576485,Passeriformes,Common Tailorbird,OC,UND,comtai1,OC,10.61962388,7.5,0.875061263,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Parus cinereus,lc_07.y,0.289042458,0.114227886,Passeriformes,Cinereous Tit,OC,MID,gretit2,OC,17.00271931,18.2,1.260071388,Omnivore,Invertivore,NA,1,resident,NA
+Passer domesticus,bio4a.y,4.528768603,1.013921402,Passeriformes,House Sparrow,OC,GRD,houspa,OC,25.709883,27.7,1.423409728,Herbivore,Granivore,Not a Migrant,1,dispersive migratory,seeds
+Passer domesticus,lc_01.y,-1.369383973,0.376908067,Passeriformes,House Sparrow,OC,GRD,houspa,OC,25.709883,27.7,1.423409728,Herbivore,Granivore,Not a Migrant,1,dispersive migratory,seeds
+Passer domesticus,lc_02.y,-1.9300961,0.456947734,Passeriformes,House Sparrow,OC,GRD,houspa,OC,25.709883,27.7,1.423409728,Herbivore,Granivore,Not a Migrant,1,dispersive migratory,seeds
+Pavo cristatus,bio15a.y,-0.41422132,0.177586498,Galliformes,Indian Peafowl,OC,GRD,compea,OC,28.71360931,4194,3.618551168,Omnivore,Omnivore,Not a Migrant,1,resident,omnivore
+Pavo cristatus,bio4a.y,0.664068994,0.202223231,Galliformes,Indian Peafowl,OC,GRD,compea,OC,28.71360931,4194,3.618551168,Omnivore,Omnivore,Not a Migrant,1,resident,omnivore
+Pellorneum ruficeps,bio15a.y,-0.480483609,0.185431493,Passeriformes,Puff-throated Babbler,RF,GRD,putbab1,FOR,8.626835437,26,1.414973348,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Pellorneum ruficeps,bio4a.y,0.721692587,0.225577777,Passeriformes,Puff-throated Babbler,RF,GRD,putbab1,FOR,8.626835437,26,1.414973348,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Pellorneum ruficeps,lc_01.y,0.454986159,0.168176541,Passeriformes,Puff-throated Babbler,RF,GRD,putbab1,FOR,8.626835437,26,1.414973348,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Pericrocotus flammeus,bio4a.y,-0.3938415,0.121336188,Passeriformes,Orange Minivet,RF,CAN,scamin3,FOR,27.33760301,23.3,1.367355921,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Pericrocotus flammeus,lc_01.y,0.514953853,0.115579634,Passeriformes,Orange Minivet,RF,CAN,scamin3,FOR,27.33760301,23.3,1.367355921,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Pericrocotus flammeus,lc_02.y,0.603028253,0.132585812,Passeriformes,Orange Minivet,RF,CAN,scamin3,FOR,27.33760301,23.3,1.367355921,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Pomatorhinus horsfieldii,lc_01.y,1.022618672,0.272566224,Passeriformes,Indian Scimitar-Babbler,OC,UND,insbab1,FOR,7.890830663,43,1.633468456,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Pomatorhinus horsfieldii,lc_04.y,-0.928029275,0.331476763,Passeriformes,Indian Scimitar-Babbler,OC,UND,insbab1,FOR,7.890830663,43,1.633468456,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Pomatorhinus horsfieldii,lc_07.y,0.504368413,0.143549799,Passeriformes,Indian Scimitar-Babbler,OC,UND,insbab1,FOR,7.890830663,43,1.633468456,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Psilopogon haemacephalus,bio15a.y,-0.306948948,0.111088412,Piciformes,Coppersmith Barbet,OC,CAN,copbar1,OC,25.0825522,46.7,1.648262406,Omnivore,Frugivore,Not a Migrant,1,resident,fruit
+Psilopogon haemacephalus,lc_01.y,-0.572210664,0.180291989,Piciformes,Coppersmith Barbet,OC,CAN,copbar1,OC,25.0825522,46.7,1.648262406,Omnivore,Frugivore,Not a Migrant,1,resident,fruit
+Psilopogon haemacephalus,lc_07.y,-0.770777748,0.241118175,Piciformes,Coppersmith Barbet,OC,CAN,copbar1,OC,25.0825522,46.7,1.648262406,Omnivore,Frugivore,Not a Migrant,1,resident,fruit
+Psilopogon malabaricus,lc_04.y,-1.605773664,0.704401445,Piciformes,Malabar Barbet,RF,CAN,crfbar1,FOR,29.02505264,37.6,1.575187845,Omnivore,Frugivore,Not a Migrant,1,resident,NA
+Psilopogon viridis,bio4a.y,-1.16507052,0.171771328,Piciformes,White-cheeked Barbet,OC,CAN,whcbar1,FOR,20.66856819,80.5,1.90579588,Herbivore,Frugivore,Not a Migrant,1,resident,fruit
+Psilopogon viridis,lc_09.y,-0.282504788,0.14250624,Piciformes,White-cheeked Barbet,OC,CAN,whcbar1,FOR,20.66856819,80.5,1.90579588,Herbivore,Frugivore,Not a Migrant,1,resident,fruit
+Psittacula columboides,bio4a.y,-0.35092704,0.152756029,Psittaciformes,Malabar Parakeet,RF,CAN,malpar1,FOR,46.59881239,85.5,1.939469331,Herbivore,Omnivore,Nomadic,1,resident,omnivore
+Psittacula columboides,lc_04.y,-1.119869896,0.333702251,Psittaciformes,Malabar Parakeet,RF,CAN,malpar1,FOR,46.59881239,85.5,1.939469331,Herbivore,Omnivore,Nomadic,1,resident,omnivore
+Psittacula columboides,lc_07.y,-0.505955033,0.210357433,Psittaciformes,Malabar Parakeet,RF,CAN,malpar1,FOR,46.59881239,85.5,1.939469331,Herbivore,Omnivore,Nomadic,1,resident,omnivore
+Psittacula cyanocephala,bio15a.y,-0.304243694,0.122057154,Psittaciformes,Plum-headed Parakeet,OC,CAN,plhpar1,OC,50.43591699,66,1.819478128,Herbivore,Frugivore,Not a Migrant,1,resident,fruit
+Psittacula cyanocephala,bio4a.y,-0.905157811,0.157901877,Psittaciformes,Plum-headed Parakeet,OC,CAN,plhpar1,OC,50.43591699,66,1.819478128,Herbivore,Frugivore,Not a Migrant,1,resident,fruit
+Psittacula cyanocephala,lc_04.y,-0.388193544,0.158193131,Psittaciformes,Plum-headed Parakeet,OC,CAN,plhpar1,OC,50.43591699,66,1.819478128,Herbivore,Frugivore,Not a Migrant,1,resident,fruit
+Psittacula krameri,lc_02.y,0.681273779,0.234587818,Psittaciformes,Rose-ringed Parakeet,OC,CAN,rorpar,OC,47.72960483,116.5,2.064869625,Herbivore,Omnivore,Not a Migrant,1,resident,fruit
+Psittacula krameri,lc_03.y,0.428720351,0.125710093,Psittaciformes,Rose-ringed Parakeet,OC,CAN,rorpar,OC,47.72960483,116.5,2.064869625,Herbivore,Omnivore,Not a Migrant,1,resident,fruit
+Psittacula krameri,lc_04.y,0.971911722,0.201577105,Psittaciformes,Rose-ringed Parakeet,OC,CAN,rorpar,OC,47.72960483,116.5,2.064869625,Herbivore,Omnivore,Not a Migrant,1,resident,fruit
+Pycnonotus cafer,bio15a.y,-0.308301135,0.093653889,Passeriformes,Red-vented Bulbul,OC,MID,revbul,OC,16.99361609,42.9,1.631950826,Herbivore,Omnivore,Not a Migrant,1,resident,omnivore
+Pycnonotus cafer,bio4a.y,0.301943802,0.093695001,Passeriformes,Red-vented Bulbul,OC,MID,revbul,OC,16.99361609,42.9,1.631950826,Herbivore,Omnivore,Not a Migrant,1,resident,omnivore
+Pycnonotus cafer,lc_01.y,-1.098308734,0.161358777,Passeriformes,Red-vented Bulbul,OC,MID,revbul,OC,16.99361609,42.9,1.631950826,Herbivore,Omnivore,Not a Migrant,1,resident,omnivore
+Pycnonotus jocosus,lc_01.y,0.614816712,0.289857558,Passeriformes,Red-whiskered Bulbul,OC,MID,rewbul,OC,14.25432338,27.4,1.469380136,Herbivore,Omnivore,Not a Migrant,1,resident,omnivore
+Pycnonotus jocosus,lc_07.y,1.962152153,0.523623791,Passeriformes,Red-whiskered Bulbul,OC,MID,rewbul,OC,14.25432338,27.4,1.469380136,Herbivore,Omnivore,Not a Migrant,1,resident,omnivore
+Pycnonotus luteolus,bio4a.y,0.96622463,0.262008798,Passeriformes,White-browed Bulbul,RF,MID,whbbul2,FOR,11.20238876,34.7,1.540329475,Herbivore,Frugivore,Not a Migrant,1,resident,fruit
+Pycnonotus luteolus,lc_01.y,-1.66722719,0.505951025,Passeriformes,White-browed Bulbul,RF,MID,whbbul2,FOR,11.20238876,34.7,1.540329475,Herbivore,Frugivore,Not a Migrant,1,resident,fruit
+Pycnonotus luteolus,lc_07.y,-0.699756008,0.312773371,Passeriformes,White-browed Bulbul,RF,MID,whbbul2,FOR,11.20238876,34.7,1.540329475,Herbivore,Frugivore,Not a Migrant,1,resident,fruit
+Saxicola caprata,bio4a.y,4.445223979,1.133348084,Passeriformes,Pied Bushchat,OC,UND,piebus1,OC,11.2556987,15.2,1.181843588,Carnivore,Invertivore,Full Migrant,3,directional migratory,invertebrates
+Saxicola caprata,lc_02.y,-1.521850813,0.536054422,Passeriformes,Pied Bushchat,OC,UND,piebus1,OC,11.2556987,15.2,1.181843588,Carnivore,Invertivore,Full Migrant,3,directional migratory,invertebrates
+Saxicola caprata,lc_05.y,0.707979537,0.330054521,Passeriformes,Pied Bushchat,OC,UND,piebus1,OC,11.2556987,15.2,1.181843588,Carnivore,Invertivore,Full Migrant,3,directional migratory,invertebrates
+Saxicola caprata,lc_07.y,2.034897298,0.834587944,Passeriformes,Pied Bushchat,OC,UND,piebus1,OC,11.2556987,15.2,1.181843588,Carnivore,Invertivore,Full Migrant,3,directional migratory,invertebrates
+Sitta frontalis,lc_01.y,0.533167607,0.247517744,Passeriformes,Velvet-fronted Nuthatch,RF,MID,vefnut1,FOR,23.06378825,16.5,1.217483944,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Streptopelia chinensis,bio4a.y,0.621251446,0.274186581,Columbiformes,Spotted Dove,OC,GRD,spodov,OC,30.6093332,159,2.201397124,Herbivore,Granivore,Full Migrant,1,dispersive migratory,seeds
+Streptopelia chinensis,lc_05.y,-0.402664611,0.169930898,Columbiformes,Spotted Dove,OC,GRD,spodov,OC,30.6093332,159,2.201397124,Herbivore,Granivore,Full Migrant,1,dispersive migratory,seeds
+Streptopelia chinensis,lc_07.y,1.573794407,0.611283525,Columbiformes,Spotted Dove,OC,GRD,spodov,OC,30.6093332,159,2.201397124,Herbivore,Granivore,Full Migrant,1,dispersive migratory,seeds
+Zosterops palpebrosus,bio4a.y,5.459997415,1.071716228,Passeriformes,Indian White-eye,OC,MID,indwhe1,FOR,21.11433824,8.6,0.934498451,Omnivore,Omnivore,Full Migrant,1,resident,omnivore
+Zosterops palpebrosus,lc_02.y,-2.919897527,1.29687223,Passeriformes,Indian White-eye,OC,MID,indwhe1,FOR,21.11433824,8.6,0.934498451,Omnivore,Omnivore,Full Migrant,1,resident,omnivore
+Zosterops palpebrosus,lc_09.y,-1.913905226,0.690805905,Passeriformes,Indian White-eye,OC,MID,indwhe1,FOR,21.11433824,8.6,0.934498451,Omnivore,Omnivore,Full Migrant,1,resident,omnivore
