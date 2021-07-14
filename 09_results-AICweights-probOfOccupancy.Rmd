@@ -320,7 +320,7 @@ model_data <- model_data %>%
 data_predictor <- mutate(model_data,
   direction = coefficient > 0
 ) %>%
-  rename(habitat = "Open-country/Forest") %>%
+  rename(habitat = "Habitat.use") %>%
   count(
     predictor,
     habitat,
@@ -362,7 +362,7 @@ Prepare figure of the number of species affected in each direction. Figure code 
 ```{r echo=FALSE}
 # habitat labels
 labels <- c(
-  "OC" = "Open Country Birds",
+  "OC" = "Generalist Birds",
   "FOR" = "Forest Birds"
 )
 
@@ -394,7 +394,7 @@ fig_predictor <-
   ) +
   scale_fill_brewer(palette = "Set1") +
   scale_x_discrete(labels = NULL) +
-  scale_y_continuous(labels = abs, limits = c(-25, 25)) +
+  scale_y_continuous(labels = abs, limits = c(-30, 30)) +
 
   # uncomment below to split by habitat
   facet_grid(~habitat, labeller = labeller(habitat = labels)) +
