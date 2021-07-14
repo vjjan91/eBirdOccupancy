@@ -5,6 +5,17 @@ data/eBird*
 data/ebird_*
 data/for-map
 data/spatial/elevation
+data/spatial/Elevation
+
+# no roads data
+data/spatial/geofabrik*
+
+# no transformed data
+data/spatial/hills_utm/
+data/spatial/hillsBuffer/
+data/spatial/hillsBuffer.zip
+
+# natural earth data
 
 # no land polygons
 data/spatial/*land*
