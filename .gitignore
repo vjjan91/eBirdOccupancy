@@ -58,6 +58,9 @@ data/data*.csv
 # no trait data
 data/species-trait-dat.csv
 
+# allow species lists
+!data/post_analysis_species_list.csv
+
 docs/*.aux
 docs/*.fdb_latexmk
 docs/*.fls
