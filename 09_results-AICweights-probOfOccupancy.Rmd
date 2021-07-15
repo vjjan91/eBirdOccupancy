@@ -87,22 +87,12 @@ model_imp <- map(file_names, function(f) {
 ### Prepare cumulative AIC weight data
 
 ```{r}
-# assign scale - minimum spatial scale at which the analysis was carried out to account for observer effort
-names(model_imp) <- c("2.5km")
-model_imp <- imap(model_imp, function(.x, .y) {
-  .x <- bind_rows(.x)
-  .x$scale <- .y
-  return(.x)
-})
-
 # bind rows
 model_imp <- map(model_imp, bind_rows) %>%
   bind_rows()
 
 # convert to numeric
 model_imp$AIC_weight <- as.numeric(model_imp$AIC_weight)
-model_imp$scale <- as.factor(model_imp$scale)
-levels(model_imp$scale) <- c("2.5km")
 
 # Let's get a summary of cumulative variable importance
 model_imp <- group_by(model_imp, predictor) %>%
@@ -121,6 +111,7 @@ write_csv(model_imp,
 ```
 
 Read data back in.
+
 ```{r}
 # read data and make factor
 model_imp <- read_csv("data/results/cumulative_AIC_weights.csv")
@@ -145,6 +136,7 @@ model_imp <- left_join(model_imp, predictor_name)
 ```
 
 Prepare figure for cumulative AIC weight. Figure code is hidden in versions rendered as HTML and PDF.
+
 ```{r}
 fig_aic <-
   ggplot(model_imp) +
@@ -189,25 +181,35 @@ ggsave(fig_aic,
 ## Prepare model coefficient data
 
 For each species, we examined those models which had ΔAICc < 2, as these top models were considered to explain a large proportion of the association between the species-specific probability of occupancy and environmental drivers [@burnham2011; @elsen2017]. Using these restricted model sets for each species; we created a model-averaged coefficient estimate for each predictor and assessed its direction and significance [@MuMIn]. We considered a predictor to be significantly associated with occupancy if the range of the 95% confidence interval around the model-averaged coefficient did not contain zero.  
+
 ```{r read_model_estimates}
 file_read <- c("data/results/lc-clim-modelEst.xlsx")
 
 # read data as list column
-model_est <- map(file_read, function(fr) {
-  md_list <- map(list_of_species, function(sn) {
-    readxl::read_excel(fr, sheet = sn)
+model_est <- map(list_of_species, function(sn) {
+    tryCatch(
+      {
+        readxl::read_excel(file_read, sheet = sn) %>%
+          rename(predictor = "...1") %>%
+          filter(str_detect(predictor, "psi")) %>%
+          mutate(
+            predictor = stringr::str_extract(predictor,
+                                             pattern = stringr::regex("\\((.*?)\\)")
+            ),
+            predictor = stringr::str_replace_all(predictor, "[//(//)]", ""),
+            predictor = stringr::str_remove(predictor, "\\.y")
+          )
+      },
+      error = function(e) {
+        message(as.character(e))
+      }
+    )
   })
-  names(md_list) <- list_of_species
-  return(md_list)
-})
+# assign names
+names(model_est) <- list_of_species
 
-# prepare model data
-scales <- c("2.5km")
-model_data <- tibble(
-  scale = scales,
-  scientific_name = list_of_species
-) %>%
-  arrange(desc(scale))
+# remove null data
+model_est = keep(model_est, .p = function(x) !is.null(x))
 
 # rename model data components and separate predictors
 names <- c(
@@ -216,27 +218,16 @@ names <- c(
 )
 
 # get data for plotting:
-model_est <- map(model_est, function(l) {
-  map(l, function(df) {
+model_est <- map(model_est, function(df) {
     colnames(df) <- names
-    df <- separate_interaction_terms(df)
-    df <- make_response_data(df)
+    # df <- separate_interaction_terms(df)
+    # df <- make_response_data(df)
     return(df)
-  })
 })
 
 # add names and scales
-model_est <- map(model_est, function(l) {
-  imap(l, function(.x, .y) {
-    mutate(.x, scientific_name = .y)
-  })
-})
-
-# add names to model estimates
-names(model_est) <- scales
 model_est <- imap(model_est, function(.x, .y) {
-  bind_rows(.x) %>%
-    mutate(scale = .y)
+    mutate(.x, scientific_name = .y)
 })
 
 # remove modulators
@@ -269,13 +260,13 @@ write_csv(data_predictor_effect,
 ```
 
 Export model data.
+
 ```{r}
 model_data_to_file <- model_data %>%
   select(
-    predictor, data,
+    predictor, 
     scientific_name, scale
-  ) %>%
-  unnest(cols = "data")
+  )
 
 # remove .y
 model_data_to_file <- model_data_to_file %>%
@@ -292,7 +283,8 @@ Read in data after clearing R session.
 # first merge species trait data with significant predictor
 species_trait <- read.csv("data/species-trait-dat.csv")
 sig_predictor <- read.csv("data/results/data_predictor_effect.csv")
-merged_species_traits <- inner_join(sig_predictor, species_trait, by=c("scientific_name"="scientific_name"))
+merged_species_traits <- inner_join(sig_predictor, species_trait,
+                                    by=c("scientific_name"="scientific_name"))
 write_csv(
   merged_species_traits,
   "data/results/results-predictors-species-traits.csv"
@@ -320,6 +312,7 @@ model_data <- model_data %>%
 data_predictor <- mutate(model_data,
   direction = coefficient > 0
 ) %>%
+  filter(predictor != "Int") %>%
   rename(habitat = "Habitat.use") %>%
   count(
     predictor,
@@ -348,17 +341,19 @@ data_predictor_long <- data_predictor %>%
 
 # write
 write_csv(data_predictor_long,
-  path = "data/results/data_predictor_direction_nSpecies.csv"
+  file = "data/results/data_predictor_direction_nSpecies.csv"
 )
 ```
 
 Prepare data to determine the direction (positive or negative) of the effect of each predictor. How many species are affected in either direction?
+
 ```{r}
 # join with predictor names and relative AIC
 data_predictor_long <- left_join(data_predictor_long, model_imp)
 ```
 
 Prepare figure of the number of species affected in each direction. Figure code is hidden in versions rendered as HTML and PDF.
+
 ```{r echo=FALSE}
 # habitat labels
 labels <- c(
@@ -392,16 +387,33 @@ fig_predictor <-
   vjust = 2,
   size = 3
   ) +
-  scale_fill_brewer(palette = "Set1") +
+  geom_text(
+    data = tibble(
+      x = c(5),
+      y = c(-20, 20),
+      label = c("Negative effect", "Positive effect")
+    ),
+    aes(
+      x, y,
+      label = label
+    ),
+    angle = 90
+  )+
+  scale_fill_discrete_diverging(
+    palette = "Berlin",
+    l1 = 50
+  )+
   scale_x_discrete(labels = NULL) +
-  scale_y_continuous(labels = abs, limits = c(-30, 30)) +
-
+  scale_y_continuous(
+    labels = abs, 
+    limits = c(-30, 30)
+  ) +
   # uncomment below to split by habitat
   facet_grid(~habitat, labeller = labeller(habitat = labels)) +
   coord_flip() +
   theme_test() +
   theme(legend.position = "none") +
-  labs(x = "Predictor", y = "# Species")
+  labs(x = "Environmental Covariate", y = "# Species")
 
 ggsave(fig_predictor,
   filename = "figs/fig_predictor_effect.png",
