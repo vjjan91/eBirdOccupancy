@@ -189,7 +189,7 @@ dataSubsample <- map(data_thin_absences, function(df) {
 ```{r}
 data_presence_prop = data_presence_prop %>%
   mutate(
-    absences_tmp_thin = map_int(data_thin_absences, nrow),
+    absences_tmp_thin = map_int(dataSubsample, nrow),
     presence_prop_post_thin = presences / (presences + absences_tmp_thin)
   )
 
