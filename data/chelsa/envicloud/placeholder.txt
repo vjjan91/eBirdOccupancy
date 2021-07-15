@@ -1,0 +1,1 @@
+Folder contains downloaded bioclim data --- not uploaded to GH.

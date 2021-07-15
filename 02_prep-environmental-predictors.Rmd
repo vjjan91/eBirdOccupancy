@@ -28,6 +28,7 @@ library(tibble)
 
 # for plotting
 library(viridis)
+library(colorspace)
 library(tmap)
 library(scales)
 library(ggplot2)
@@ -427,7 +428,7 @@ land_data <- as.list(land_data)
 land_data <- purrr::map(land_data, getValues)
 names(land_data) <- c("elev", chelsa_names)
 
-# conver to dataframe and round to 100m
+# conver to dataframe and round to 200m
 land_data <- bind_cols(land_data)
 land_data <- drop_na(land_data) %>%
   mutate(elev_round = plyr::round_any(elev, 200)) %>%
@@ -481,7 +482,7 @@ subplots_climate_elev <- Map(function(df, climvar) {
         FUN.VALUE = "label"
       )
     }) +
-    theme_test() +
+    theme_test(base_family = "Arial") +
     labs(x = "Elevation (m)", y = climvar)
 }, land_data, climvar_names)
 
@@ -492,7 +493,7 @@ fig_climate_elev <-
 # save as png
 ggsave(fig_climate_elev,
   filename = "figs/fig_climate_elev.png",
-  height = 3, width = 6, device = png(), dpi = 300
+  height = 2, width = 6, device = png(), dpi = 300
 )
 ```
 
@@ -508,6 +509,7 @@ lc_elev <- tibble(
 # process data for proportions
 lc_elev <- lc_elev %>%
   filter(!is.na(landcover), !is.na(elev)) %>%
+  # round elev to 100m
   mutate(elev = plyr::round_any(elev, 100)) %>%
   count(elev, landcover) %>%
   group_by(elev) %>%
@@ -530,35 +532,48 @@ Figure code is hidden in versions rendered as HTML and PDF.
 
 ```{r fig_lc_elev, , message=FALSE, echo=FALSE}
 # plot figure as tilemap
+
+# factor order
+lc_elev$landcover = factor(lc_elev$landcover) |> 
+  forcats::fct_rev()
+
+# factor labels
+lc_labels = rev(
+  c(
+      "Evergreen Forest", "Deciduous Forest",
+      "Mixed/Degraded Forest", "Agriculture/Settlements",
+      "Grassland", "Plantation",
+      "Waterbody"
+    )
+)
+
 fig_lc_elev <-
   ggplot(lc_elev) +
   geom_tile(
     aes(
-      x = elev, y = factor(landcover),
-      fill = prop
+      x = elev, y = ordered(landcover),
+      fill = prop,
     ),
     col = "white"
   ) +
   annotate(
     geom = "text",
     fontface = "bold",
+    family = "Arial",
     x = 10,
     y = seq(7),
-    size = 4,
-    colour = c(rep("grey20", 3), "grey90", rep("grey20", 3)),
-    label = c(
-      "Evergreen", "Deciduous",
-      "Mixed/Degraded Forest", "Agriculture/Settlements",
-      "Grassland", "Plantation",
-      "Waterbody"
-    ),
+    size = 3,
+    label = lc_labels,
     hjust = "inward"
   ) +
-  scale_fill_viridis_c(
-    option = "F",
-    direction = -1,
+  scale_fill_continuous_sequential(
+    palette = "Batlow",
+    # direction = -1,
+    rev = T,
+    limits = c(0.01, 1),
+    breaks = c(0.01, seq(0.25, 1, 0.25)),
     na.value = "grey90",
-    values = c(0, 1),
+    # values = c(0, 1),
     labels = scales::percent,
     name = "% Area"
   ) +
@@ -566,13 +581,12 @@ fig_lc_elev <-
     breaks = seq(0, 2500, 500),
     labels = comma
   ) +
-  scale_alpha_continuous(range = c(0.3, 1)) +
   coord_cartesian(expand = F) +
   labs(
     x = "Elevation (m)",
     y = "Land Cover Type"
   ) +
-  theme_test() +
+  theme_test(base_family = "Arial") +
   theme(
     legend.key.width = unit(2, units = "mm"),
     axis.text.y = element_blank(),
@@ -583,7 +597,7 @@ fig_lc_elev <-
 # export figure
 ggsave(fig_lc_elev,
   filename = "figs/fig_lc_elev.png",
-  height = 4, width = 6, device = png(), dpi = 300
+  height = 3, width = 6, device = png(), dpi = 300
 )
 dev.off()
 ```
@@ -605,7 +619,7 @@ fig_clim_lc_elev <-
 ggsave(fig_clim_lc_elev,
   filename = "figs/fig_02.png",
   dpi = 300,
-  height = 130, width = 150, units = "mm"
+  height = 120, width = 150, units = "mm"
 )
 ```
 
