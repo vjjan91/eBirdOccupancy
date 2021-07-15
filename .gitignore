@@ -49,12 +49,26 @@ data/data*.csv
 # no google drive downloads
 *drive-download*
 
+# no soib data
+*2020_state*
+
+# no excel
+*.xlsx
+
+# no trait data
+data/species-trait-dat.csv
+
 docs/*.aux
 docs/*.fdb_latexmk
 docs/*.fls
 docs/*.log
 docs/*.tex
 
+# no wg extent
+*wg_extent*
+
+# no rdata
+*.Rds
 
 # Session Data files
 /.Rproj.user
