@@ -31,7 +31,7 @@ library(velox)
 library(sf)
 
 # load saved data object
-load("data/01_data_prelim_processing.rdata")
+load("data/01_ebird_data_prelim_processing.rdata")
 ```
 
 ## Spatial subsampling
@@ -60,6 +60,21 @@ data_presences = filter(dataGrouped, pres_abs)
 # split data by species
 data_thin_absences <- split(x = data_thin_absences,
                            f = data_thin_absences$scientific_name)
+```
+
+### Counting presence observation proportion
+
+```{r}
+data_presence_prop = count(data_presences, scientific_name, name = "presences") %>%
+  mutate(
+    absences = map_int(data_thin_absences, nrow),
+
+    presence_prop = presences / (presences + absences)
+  )
+
+# mean and sd of presence prop
+data_presence_prop %>%
+  summarise(mean(presence_prop), sd(presence_prop))
 ```
 
 
@@ -139,6 +154,15 @@ data_thin_absences <- map(data_thin_absences, function(df) {
 rm(dataGrouped)
 ```
 
+### Count absences after spatial thinning
+
+```{r}
+data_presence_prop = data_presence_prop %>%
+  mutate(
+    absences_sp_thin = map_int(data_thin_absences, nrow)
+  )
+```
+
 ## Temporal subsampling
 
 Additionally, from each selected site, we randomly selected a maximum of 10 **absence** checklists, which reduced temporal clustering. We kept **all** presence checklists.
@@ -160,6 +184,18 @@ dataSubsample <- map(data_thin_absences, function(df) {
 })
 ```
 
+### Count absences after temporal thinning
+
+```{r}
+data_presence_prop = data_presence_prop %>%
+  mutate(
+    absences_tmp_thin = map_int(dataSubsample, nrow),
+    presence_prop_post_thin = presences / (presences + absences_tmp_thin)
+  )
+
+# save data
+write_csv(data_presence_prop, file = "data/results/data_class_balance.csv")
+```
 
 ```{r join_pres_abs}
 # bind all spatially and temporally thinned absences rows for data frame

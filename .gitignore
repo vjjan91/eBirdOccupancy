@@ -5,10 +5,58 @@ data/eBird*
 data/ebird_*
 data/for-map
 data/spatial/elevation
-data/*
+data/spatial/Elevation
+
+# no roads data
+data/spatial/geofabrik*
+
+# no transformed data
+data/spatial/hills_utm/
+data/spatial/hillsBuffer/
+data/spatial/hillsBuffer.zip
+
+# natural earth data
+
+# no land polygons
+data/spatial/*land*
+
+*.tif*
 
 !data/spatial/00_data_exists.txt
 !data/results/00_data_exists.txt
+!data/chelsa/00_data_exists.txt
+
+# downloaded chelsa data
+data/chelsa/envicloud/*.tif
+
+# but allow processed layers 4a and 15
+!data/chelsa/CHELSA_bio10_4a.tif
+!data/chelsa/CHELSA_bio10_15.tif
+
+# downloaded landuse data from roy et al.
+data/landUseClassification/landcover_roy_2015
+
+# but allow cropped and resampled landcover
+!data/landUseClassification/landcover_roy_2015_reclassified.tif
+!data/landUseClassification/lc_01000m.tif
+
+# no WG shapefile
+data/spatial/hillsShapefile/WG.*
+
+# no random data files
+data/data*.csv
+
+# no google drive downloads
+*drive-download*
+
+# no soib data
+*2020_state*
+
+# no excel
+*.xlsx
+
+# no trait data
+data/species-trait-dat.csv
 
 docs/*.aux
 docs/*.fdb_latexmk
@@ -16,7 +64,11 @@ docs/*.fls
 docs/*.log
 docs/*.tex
 
-*.tif*
+# no wg extent
+*wg_extent*
+
+# no rdata
+*.Rds
 
 # Session Data files
 /.Rproj.user
@@ -27,6 +79,10 @@ docs/*.tex
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
 .Rproj.user
+
+# any Rdata
+*.Rdata
+*.rdata
 
 data/04_data-covars-2.5km.csv
 data/05_scaled-covars-2.5km.csv
