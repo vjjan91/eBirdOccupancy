@@ -401,7 +401,8 @@ fig_predictor <-
   )+
   scale_fill_discrete_diverging(
     palette = "Berlin",
-    l1 = 50
+    l1 = 50,
+    rev = T
   )+
   scale_x_discrete(labels = NULL) +
   scale_y_continuous(
@@ -425,6 +426,7 @@ ggsave(fig_predictor,
 ## Main Text Figure 4
 
 Figure code is hidden in versions rendered as HTML and PDF.
+
 ```{r echo=FALSE}
 # wrap figures to form figure 4
 fig_predictor_effect <-
