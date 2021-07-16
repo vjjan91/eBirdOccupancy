@@ -52,8 +52,6 @@ data/data*.csv
 # no soib data
 *2020_state*
 
-
-
 docs/*.aux
 docs/*.fdb_latexmk
 docs/*.fls
