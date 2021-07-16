@@ -1,0 +1,765 @@
+$`Acridotheres fuscus`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE     z  P(>|z|)
+    -0.32 0.0512 -6.26 3.91e-10
+
+Detection:
+ Estimate     SE    z  P(>|z|)
+     1.63 0.0948 17.2 3.01e-66
+
+AIC: 4471.244 
+
+$`Acridotheres tristis`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE     z  P(>|z|)
+    -0.76 0.0705 -10.8 3.82e-27
+
+Detection:
+ Estimate     SE    z  P(>|z|)
+    0.799 0.0937 8.53 1.48e-17
+
+AIC: 3222.104 
+
+$`Acrocephalus dumetorum`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE    z  P(>|z|)
+    0.544 0.0744 7.31 2.62e-13
+
+Detection:
+ Estimate     SE    z P(>|z|)
+    0.996 0.0723 13.8 3.9e-43
+
+AIC: 5531.901 
+
+$`Aegithina tiphia`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE     z  P(>|z|)
+    -1.03 0.0956 -10.8 2.93e-27
+
+Detection:
+ Estimate    SE    z P(>|z|)
+    0.294 0.119 2.47  0.0137
+
+AIC: 2402.155 
+
+$`Alcippe poioicephala`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate    SE     z  P(>|z|)
+     -1.4 0.152 -9.24 2.43e-20
+
+Detection:
+ Estimate    SE      z P(>|z|)
+   -0.131 0.194 -0.676   0.499
+
+AIC: 1580.345 
+
+$`Artamus fuscus`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate   SE     z  P(>|z|)
+    -2.46 0.15 -16.4 2.79e-60
+
+Detection:
+ Estimate    SE    z P(>|z|)
+    0.336 0.239 1.41   0.159
+
+AIC: 938.0288 
+
+$`Centropus sinensis`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE     z  P(>|z|)
+   -0.399 0.0707 -5.64 1.69e-08
+
+Detection:
+ Estimate     SE    z  P(>|z|)
+     0.75 0.0857 8.75 2.13e-18
+
+AIC: 3811.493 
+
+$`Chalcophaps indica`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate    SE     z  P(>|z|)
+    -1.44 0.112 -12.9 7.17e-38
+
+Detection:
+ Estimate    SE    z P(>|z|)
+    0.172 0.147 1.17   0.241
+
+AIC: 1808.901 
+
+$`Chrysocolaptes guttacristatus`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate    SE     z  P(>|z|)
+   -0.785 0.125 -6.31 2.87e-10
+
+Detection:
+ Estimate   SE     z P(>|z|)
+   -0.136 0.13 -1.04   0.298
+
+AIC: 2306.205 
+
+$`Cinnyris asiaticus`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE     z P(>|z|)
+   -0.747 0.0699 -10.7 1.2e-26
+
+Detection:
+ Estimate     SE    z  P(>|z|)
+    0.801 0.0931 8.59 8.36e-18
+
+AIC: 3290.784 
+
+$`Cinnyris lotenius`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate    SE     z  P(>|z|)
+    -1.83 0.134 -13.6 3.35e-42
+
+Detection:
+  Estimate    SE        z P(>|z|)
+ -6.05e-07 0.173 -3.5e-06       1
+
+AIC: 1324.511 
+
+$`Columba livia`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE     z  P(>|z|)
+    -1.48 0.0724 -20.4 1.91e-92
+
+Detection:
+ Estimate   SE    z  P(>|z|)
+     1.17 0.13 8.97 3.09e-19
+
+AIC: 2317.56 
+
+$`Copsychus fulicatus`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate    SE     z  P(>|z|)
+    -2.64 0.122 -21.6 3.5e-103
+
+Detection:
+ Estimate    SE    z  P(>|z|)
+    0.827 0.203 4.08 4.52e-05
+
+AIC: 979.4857 
+
+$`Copsychus saularis`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE     z P(>|z|)
+   -0.044 0.0587 -0.75   0.453
+
+Detection:
+ Estimate     SE    z  P(>|z|)
+     1.22 0.0801 15.3 1.15e-52
+
+AIC: 4796.163 
+
+$`Corvus macrorhynchos`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE    z  P(>|z|)
+    0.492 0.0607 8.11 4.97e-16
+
+Detection:
+ Estimate     SE    z  P(>|z|)
+     1.31 0.0668 19.6 6.15e-86
+
+AIC: 5782.701 
+
+$`Corvus splendens`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE     z  P(>|z|)
+   -0.598 0.0574 -10.4 2.03e-25
+
+Detection:
+ Estimate     SE    z  P(>|z|)
+     1.33 0.0922 14.4 6.41e-47
+
+AIC: 3781.431 
+
+$`Culicicapa ceylonensis`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE   z  P(>|z|)
+     -1.7 0.0894 -19 2.43e-80
+
+Detection:
+ Estimate    SE    z  P(>|z|)
+    0.865 0.159 5.43 5.63e-08
+
+AIC: 1851.619 
+
+$`Cyornis tickelliae`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate    SE     z  P(>|z|)
+    -2.09 0.109 -19.2 5.65e-82
+
+Detection:
+ Estimate    SE    z  P(>|z|)
+    0.596 0.169 3.52 0.000437
+
+AIC: 1369.881 
+
+$`Cypsiurus balasiensis`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate    SE     z  P(>|z|)
+    -2.12 0.121 -17.6 4.59e-69
+
+Detection:
+ Estimate    SE   z P(>|z|)
+    0.419 0.182 2.3  0.0215
+
+AIC: 1255.699 
+
+$`Dendrocitta leucogastra`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate    SE     z  P(>|z|)
+    -1.13 0.129 -8.75 2.08e-18
+
+Detection:
+ Estimate    SE     z P(>|z|)
+   -0.156 0.144 -1.08   0.281
+
+AIC: 1888.571 
+
+$`Dendrocitta vagabunda`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE     z P(>|z|)
+   -0.744 0.0936 -7.95 1.9e-15
+
+Detection:
+ Estimate    SE    z P(>|z|)
+    0.251 0.105 2.39  0.0168
+
+AIC: 2748.859 
+
+$`Dicrurus aeneus`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate    SE     z P(>|z|)
+   -0.929 0.112 -8.32 8.8e-17
+
+Detection:
+ Estimate    SE     z P(>|z|)
+    0.032 0.127 0.253     0.8
+
+AIC: 2286.229 
+
+$`Dicrurus leucophaeus`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE     z  P(>|z|)
+   -0.808 0.0739 -10.9 8.02e-28
+
+Detection:
+ Estimate    SE   z  P(>|z|)
+    0.731 0.101 7.2 5.89e-13
+
+AIC: 3113.732 
+
+$`Dicrurus macrocercus`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE     z  P(>|z|)
+    -1.27 0.0955 -13.3 3.16e-40
+
+Detection:
+ Estimate    SE    z P(>|z|)
+    0.399 0.129 3.08 0.00204
+
+AIC: 2139.449 
+
+$`Dicrurus paradiseus`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE      z P(>|z|)
+ -0.00815 0.0735 -0.111   0.912
+
+Detection:
+ Estimate    SE    z  P(>|z|)
+    0.764 0.079 9.67 4.14e-22
+
+AIC: 4342.696 
+
+$`Dinopium benghalense`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE     z  P(>|z|)
+   -0.758 0.0803 -9.45 3.45e-21
+
+Detection:
+ Estimate     SE    z  P(>|z|)
+    0.506 0.0971 5.21 1.87e-07
+
+AIC: 3029.85 
+
+$`Eudynamys scolopaceus`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE   z   P(>|z|)
+    -1.83 0.0833 -22 6.92e-107
+
+Detection:
+ Estimate    SE    z  P(>|z|)
+    0.982 0.129 7.59 3.26e-14
+
+AIC: 1848.987 
+
+$`Ficedula nigrorufa`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate    SE     z  P(>|z|)
+    -1.93 0.125 -15.4 1.94e-53
+
+Detection:
+ Estimate    SE    z P(>|z|)
+    0.325 0.192 1.69  0.0907
+
+AIC: 1357.012 
+
+$`Geokichla citrina`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate    SE     z  P(>|z|)
+     -1.3 0.117 -11.1 1.22e-28
+
+Detection:
+ Estimate    SE   z P(>|z|)
+    0.173 0.158 1.1   0.272
+
+AIC: 1931.348 
+
+$`Gracula indica`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE      z P(>|z|)
+  -0.0478 0.0727 -0.658    0.51
+
+Detection:
+ Estimate     SE    z  P(>|z|)
+    0.782 0.0812 9.63 6.03e-22
+
+AIC: 4334.212 
+
+$`Halcyon smyrnensis`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE     z  P(>|z|)
+   -0.423 0.0777 -5.45 5.02e-08
+
+Detection:
+ Estimate     SE    z  P(>|z|)
+    0.577 0.0895 6.44 1.18e-10
+
+AIC: 3576.108 
+
+$`Hierococcyx varius`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate   SE     z  P(>|z|)
+    -1.41 0.09 -15.6 6.07e-55
+
+Detection:
+ Estimate    SE    z  P(>|z|)
+    0.501 0.123 4.07 4.63e-05
+
+AIC: 2111.901 
+
+$`Hypothymis azurea`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate    SE     z  P(>|z|)
+    -1.83 0.173 -10.6 4.69e-26
+
+Detection:
+ Estimate    SE     z P(>|z|)
+   -0.344 0.209 -1.64   0.101
+
+AIC: 1119.505 
+
+$`Hypsipetes ganeesa`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE     z  P(>|z|)
+    -1.03 0.0774 -13.3 1.95e-40
+
+Detection:
+ Estimate    SE    z  P(>|z|)
+    0.844 0.127 6.66 2.76e-11
+
+AIC: 2717.095 
+
+$`Iole indica`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE      z P(>|z|)
+  -0.0343 0.0877 -0.391   0.696
+
+Detection:
+ Estimate     SE   z  P(>|z|)
+    0.518 0.0909 5.7 1.18e-08
+
+AIC: 3990.895 
+
+$`Irena puella`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate    SE     z  P(>|z|)
+   -0.829 0.111 -7.46 8.55e-14
+
+Detection:
+ Estimate    SE     z P(>|z|)
+   0.0913 0.129 0.708   0.479
+
+AIC: 2448.506 
+
+$`Lanius cristatus`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE     z  P(>|z|)
+    -1.35 0.0884 -15.3 1.09e-52
+
+Detection:
+ Estimate    SE    z  P(>|z|)
+     0.62 0.135 4.61 4.05e-06
+
+AIC: 2195.107 
+
+$`Lanius schach`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate    SE     z P(>|z|)
+    -1.48 0.078 -18.9 6.1e-80
+
+Detection:
+ Estimate    SE    z  P(>|z|)
+     1.03 0.142 7.25 4.13e-13
+
+AIC: 2204.761 
+
+$`Leptocoma minima`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE     z  P(>|z|)
+   -0.498 0.0871 -5.72 1.05e-08
+
+Detection:
+ Estimate    SE    z  P(>|z|)
+    0.508 0.109 4.68 2.87e-06
+
+AIC: 3261.997 
+
+$`Leptocoma zeylonica`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE     z  P(>|z|)
+   -0.682 0.0873 -7.81 5.72e-15
+
+Detection:
+ Estimate    SE   z  P(>|z|)
+    0.373 0.101 3.7 0.000219
+
+AIC: 2957.477 
+
+$`Loriculus vernalis`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE    z P(>|z|)
+   -0.157 0.0681 -2.3  0.0215
+
+Detection:
+ Estimate     SE    z  P(>|z|)
+    0.851 0.0796 10.7 1.17e-26
+
+AIC: 4295.064 
+
+$`Merops leschenaulti`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE     z  P(>|z|)
+   -0.531 0.0711 -7.46 8.58e-14
+
+Detection:
+ Estimate     SE    z  P(>|z|)
+    0.814 0.0974 8.35 6.69e-17
+
+AIC: 3583.882 
+
+$`Merops orientalis`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate    SE     z  P(>|z|)
+    -1.99 0.102 -19.6 2.68e-85
+
+Detection:
+ Estimate    SE    z  P(>|z|)
+     0.66 0.158 4.18 2.86e-05
+
+AIC: 1491.623 
+
+$`Montecincla fairbanki`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE   z  P(>|z|)
+    -1.41 0.0831 -17 5.92e-65
+
+Detection:
+ Estimate    SE    z  P(>|z|)
+    0.843 0.142 5.94 2.83e-09
+
+AIC: 2195.442 
+
+$`Motacilla cinerea`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE     z  P(>|z|)
+   -0.608 0.0649 -9.37 7.33e-21
+
+Detection:
+ Estimate     SE    z  P(>|z|)
+    0.978 0.0933 10.5 1.12e-25
+
+AIC: 3653.756 
+
+$`Motacilla maderaspatensis`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE     z  P(>|z|)
+    -1.37 0.0962 -14.2 4.98e-46
+
+Detection:
+ Estimate    SE   z  P(>|z|)
+    0.481 0.141 3.4 0.000671
+
+AIC: 2063.276 
+
+$`Muscicapa dauurica`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate    SE     z  P(>|z|)
+     -1.5 0.124 -12.1 6.96e-34
+
+Detection:
+ Estimate    SE     z P(>|z|)
+   0.0373 0.158 0.236   0.813
+
+AIC: 1639.294 
+
+$`Myophonus horsfieldii`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE     z P(>|z|)
+   0.0298 0.0664 0.449   0.654
+
+Detection:
+ Estimate     SE    z  P(>|z|)
+    0.989 0.0812 12.2 4.33e-34
+
+AIC: 4737.813 
+
+$`Ocyceros griseus`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE     z P(>|z|)
+   -0.752 0.0909 -8.27 1.3e-16
+
+Detection:
+ Estimate    SE    z P(>|z|)
+    0.359 0.111 3.25 0.00117
+
+AIC: 2839.178 
+
+$`Oriolus kundoo`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE     z  P(>|z|)
+   -0.833 0.0854 -9.75 1.89e-22
+
+Detection:
+ Estimate     SE    z  P(>|z|)
+    0.363 0.0976 3.72 0.000196
+
+AIC: 2813.433 
+
+$`Oriolus xanthornus`
+
+Call:
+occu(formula = ~1 ~ 1, data = occ_um)
+
+Occupancy:
+ Estimate     SE     z  P(>|z|)
+    -1.27 0.0945 -13.4 5.91e-41
+
+Detection:
+ Estimate    SE    z P(>|z|)
+    0.383 0.125 3.06 0.00222
+
+AIC: 2164.075 
+
