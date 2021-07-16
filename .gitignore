@@ -55,9 +55,6 @@ data/data*.csv
 # no excel
 *.xlsx
 
-# no trait data
-data/species-trait-dat.csv
-
 docs/*.aux
 docs/*.fdb_latexmk
 docs/*.fls
