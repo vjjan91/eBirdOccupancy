@@ -1,92 +1,92 @@
-order,scientific_name,common_name,eBird_spp_codes,Habitat use,HWI,Body mass,Log-transformed Body Mass,TrophicLevel,TrophicNiche,Migration-1,Migration-2,Migration-3,Diet,,
-Passeriformes,Acridotheres fuscus,Jungle Myna,junmyn1,OC,24.7162719,82.8,1.918030337,Omnivore,Omnivore,Not a Migrant,2,resident,omnivore,,
-Passeriformes,Acridotheres tristis,Common Myna,commyn,OC,21.84696376,116,2.066064897,Carnivore,Omnivore,Not a Migrant,2,resident,omnivore,,
-Passeriformes,Acrocephalus dumetorum,Blyth's Reed Warbler,blrwar1,OC,21.82218576,11.2,1.049218023,Carnivore,Invertivore,Full Migrant,3,directional migratory,invertebrates,,
-Passeriformes,Aegithina tiphia,Common Iora,comior1,OC,9.442634919,12,1.079181246,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates,,
-Passeriformes,Alcippe poioicephala,Brown-cheeked Fulvetta,brcful1,FOR,10.84852981,20.7,1.315970345,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates,,
-Passeriformes,Artamus fuscus,Ashy Woodswallow,ashwoo2,OC,47.65872903,39.8,1.599883072,Carnivore,Invertivore,Full Migrant,1,resident,invertebrates,,
-Passeriformes,Cecropis daurica,Red-rumped Swallow,rerswa1,OC,52.54321181,22,1.346352974,Carnivore,Invertivore,Full Migrant,3,directional migratory,invertebrates,,
-Cuculiformes,Centropus sinensis,Greater Coucal,grecou1,OC,13.23180548,283,2.448242413,Carnivore,Vertivore,Not a Migrant,1,resident,vertebrates,,
-Columbiformes,Chalcophaps indica,Asian Emerald Dove,emedov2,FOR,28.69523682,136,2.135259899,Herbivore,Omnivore,Not a Migrant,1,resident,omnivore,,
-Passeriformes,Chloropsis aurifrons,Golden-fronted Leafbird,goflea1,FOR,19.98309306,32.5,1.509336958,Omnivore,Omnivore,Not a Migrant,1,resident,omnivore,,
-Passeriformes,Chloropsis jerdoni,Jerdon's Leafbird,jerlea1,FOR,13.33196316,24.5,1.389166084,Omnivore,Omnivore,Not a Migrant,1,resident,fruit,,
-Piciformes,Chrysocolaptes guttacristatus,Greater Flameback,grefla1,FOR,19.87077838,142,2.152288344,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates,,
-Passeriformes,Cinnyris asiaticus,Purple Sunbird,pursun4,OC,17.7876848,8.1,0.908485019,Omnivore,Omnivore,Not a Migrant,1,resident,omnivore,,
-Passeriformes,Cinnyris lotenius,Loten's Sunbird,lobsun2,FOR,14.2241907,8,0.942999593,Omnivore,Nectarivore,Not a Migrant,1,resident,omnivore,,
-Columbiformes,Columba livia,Rock Pigeon,rocpig,OC,44.18079137,354.5,2.549248557,Herbivore,Granivore,Not a Migrant,1,resident,seeds,,
-Passeriformes,Copsychus fulicatus,Indian Robin,indrob1,OC,7.722208932,16.6,1.220108088,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates,,
-Passeriformes,Copsychus saularis,Oriental Magpie-Robin,magrob,OC,18.59340096,36,1.556302501,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates,,
-Passeriformes,Corvus macrorhynchos,Large-billed Crow,labcro1,OC,38.03851875,521,2.71023587,Omnivore,Omnivore,Not a Migrant,1,resident,omnivore,,
-Passeriformes,Corvus splendens,House Crow,houcro1,OC,36.62683518,293.5,2.466200102,Omnivore,Omnivore,Not a Migrant,1,resident,scav,,
-Passeriformes,Culicicapa ceylonensis,Gray-headed Canary-Flycatcher,gyhcaf1,FOR,19.98883172,7.7,0.886490725,Carnivore,Invertivore,Not a Migrant,1,directional migratory,invertebrates,,
-Passeriformes,Cyornis tickelliae,Tickell's Blue Flycatcher,tibfly3,FOR,18.95807643,14.6,1.209783015,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates,,
-Apodiformes,Cypsiurus balasiensis,Asian Palm-Swift,aspswi1,OC,68.27155551,9.1,0.959518377,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates,,
-Passeriformes,Dendrocitta leucogastra,White-bellied Treepie,whbtre1,FOR,11.46243132,99.2,1.996511672,Carnivore,Omnivore,Not a Migrant,1,resident,omnivore,,
-Passeriformes,Dendrocitta vagabunda,Rufous Treepie,ruftre2,FOR,14.95803233,100,2,Carnivore,Omnivore,Not a Migrant,1,resident,omnivore,,
-Passeriformes,Dicaeum concolor,Nilgiri Flowerpecker,plaflo1,FOR,20.29235021,6.2,0.792391689,Herbivore,Omnivore,Not a Migrant,1,resident,invertebrates,,
-Passeriformes,Dicaeum erythrorhynchos,Pale-billed Flowerpecker,pabflo1,OC,20.98007246,6.3,0.799340549,Herbivore,Frugivore,Not a Migrant,1,resident,fruit,,
-Passeriformes,Dicrurus aeneus,Bronzed Drongo,brodro1,FOR,27.86537116,26,1.414973348,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates,,
-Passeriformes,Dicrurus leucophaeus,Ashy Drongo,ashdro1,FOR,30.10929264,37.6,1.575187845,Carnivore,Invertivore,Full Migrant,1,directional migratory,invertebrates,,
-Passeriformes,Dicrurus macrocercus,Black Drongo,bladro1,OC,27.11140206,48.3,1.683947131,Carnivore,Invertivore,Full Migrant,1,directional migratory,invertebrates,,
-Passeriformes,Dicrurus paradiseus,Greater Racket-tailed Drongo,grtdro1,FOR,22.20132932,79.5,1.93358851,Carnivore,Invertivore,Not a Migrant,1,directional migratory,invertebrates,,
-Piciformes,Dinopium benghalense,Black-rumped Flameback,bkrfla1,OC,20.69691878,100,2,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates,,
-Passeriformes,Ficedula nigrorufa,Black-and-orange Flycatcher,barfly1,FOR,15.37661662,10.5,0.971275849,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates,,
-Passeriformes,Geokichla citrina,Orange-headed Thrush,orhthr1,FOR,29.62560681,53.5,1.726727209,Omnivore,Invertivore,Full Migrant,3,directional migratory,omnivore,,
-Passeriformes,Gracula indica,Southern Hill Myna,sohmyn1,FOR,22.18829439,126,2.100370545,Herbivore,Frugivore,NA,1,resident,NA,,
-Coraciiformes,Halcyon smyrnensis,White-throated Kingfisher,whtkin2,OC,20.24597458,91.4,1.960946196,Carnivore,Omnivore,Not a Migrant,2,resident,vertebrates,,
-Cuculiformes,Hierococcyx varius,Common Hawk-Cuckoo,cohcuc1,OC,34.94873606,103,2.012837225,Carnivore,Invertivore,Full Migrant,1,directional migratory,invertebrates,,
-Passeriformes,Hypothymis azurea,Black-naped Monarch,blnmon1,FOR,15.98878522,11.1,1.045322979,Carnivore,Invertivore,Full Migrant,1,resident,invertebrates,,
-Passeriformes,Hypsipetes ganeesa,Square-tailed Bulbul,sqtbul1,FOR,23.27074798,42.9,1.632457292,Herbivore,Frugivore,NA,1,resident,NA,,
-Passeriformes,Iole indica,Yellow-browed Bulbul,yebbul3,FOR,15.38598123,30.6,1.485721426,Herbivore,Omnivore,Not a Migrant,1,resident,omnivore,,
-Passeriformes,Irena puella,Asian Fairy-bluebird,asfblu1,FOR,23.21144279,64.9,1.812244697,Herbivore,Frugivore,Not a Migrant,1,resident,fruit,,
-Passeriformes,Lanius cristatus,Brown Shrike,brnshr,OC,26.95579136,33.5,1.50758604,Carnivore,Invertivore,Full Migrant,3,directional migratory,invertebrates,,
-Passeriformes,Lanius schach,Long-tailed Shrike,lotshr1,OC,19.99957577,51.6,1.71189155,Carnivore,Invertivore,Full Migrant,2,directional migratory,invertebrates,,
-Passeriformes,Leptocoma minima,Crimson-backed Sunbird,crbsun2,FOR,13.63501565,5,0.689308859,Omnivore,Nectarivore,Not a Migrant,1,resident,omnivore,,
-Passeriformes,Leptocoma zeylonica,Purple-rumped Sunbird,pursun3,OC,13.88500334,9,0.942999593,Omnivore,Omnivore,Not a Migrant,1,resident,omnivore,,
-Psittaciformes,Loriculus vernalis,Vernal Hanging-Parrot,vehpar1,FOR,45.63002759,35.7,1.552668216,Herbivore,Frugivore,Full Migrant,1,resident,fruit,,
-Coraciiformes,Merops leschenaulti,Chestnut-headed Bee-eater,chbeat1,OC,41.36177249,27.2,1.434568904,Carnivore,Invertivore,Full Migrant,1,directional migratory,invertebrates,,
-Coraciiformes,Merops orientalis,Green Bee-eater,grbeat1,OC,35.33244734,14.8,1.170261715,Carnivore,Invertivore,Full Migrant,1,dispersive migratory,invertebrates,,
-Passeriformes,Montecincla fairbanki,Palani Laughingthrush,kerlau2,FOR,7.10243127,45.5,1.658011397,Omnivore,Invertivore,Not a Migrant,1,NA,invertebrates,,
-Passeriformes,Muscicapa dauurica,Asian Brown Flycatcher,asbfly,OC,29.35421995,9.8,0.991226076,Carnivore,Invertivore,Full Migrant,3,directional migratory,invertebrates,,
-Passeriformes,Myophonus horsfieldii,Malabar Whistling-Thrush,mawthr1,FOR,15.79117285,117,2.068185862,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates,,
-Bucerotiformes,Ocyceros griseus,Malabar Gray Hornbill,maghor2,FOR,16.59582064,292,2.465382851,Herbivore,Frugivore,Not a Migrant,1,resident,fruit,,
-Passeriformes,Oriolus kundoo,Indian Golden Oriole,ingori1,OC,32.63653545,79,1.897627091,Omnivore,Omnivore,NA,1,directional migratory,NA,,
-Passeriformes,Oriolus xanthornus,Black-hooded Oriole,blhori1,FOR,26.9861565,56.3,1.750508395,Herbivore,Frugivore,Not a Migrant,1,dispersive migratory,fruit,,
-Passeriformes,Orthotomus sutorius,Common Tailorbird,comtai1,OC,10.61962388,7.5,0.875061263,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates,,
-Passeriformes,Parus cinereus,Cinereous Tit,gretit2,OC,17.00271931,18.2,1.260071388,Omnivore,Invertivore,NA,1,resident,NA,,
-Passeriformes,Passer domesticus,House Sparrow,houspa,OC,25.709883,27.7,1.423409728,Herbivore,Granivore,Not a Migrant,1,dispersive migratory,seeds,,
-Galliformes,Pavo cristatus,Indian Peafowl,compea,OC,28.71360931,4194,3.618551168,Omnivore,Omnivore,Not a Migrant,1,resident,omnivore,,
-Passeriformes,Pellorneum ruficeps,Puff-throated Babbler,putbab1,FOR,8.626835437,26,1.414973348,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates,,
-Passeriformes,Pericrocotus cinnamomeus,Small Minivet,smamin1,OC,22.4781892,8.6,0.934498451,Carnivore,Invertivore,Not a Migrant,2,resident,invertebrates,,
-Passeriformes,Pericrocotus flammeus,Orange Minivet,scamin3,FOR,27.33760301,23.3,1.367355921,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates,,
-Passeriformes,Phylloscopus nitidus,Green Warbler,grnwar1,FOR,23.33706107,8.3,0.892094603,Carnivore,Invertivore,NA,3,directional migratory,invertebrates,,
-Passeriformes,Phylloscopus trochiloides,Greenish Warbler,grewar3,FOR,19.14556042,7.1,0.90579588,Carnivore,Invertivore,Full Migrant,3,directional migratory,invertebrates,,
-Piciformes,Picus xanthopygaeus,Streak-throated Woodpecker,sttwoo1,OC,22.34897824,99.7,1.998651596,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates,,
-Passeriformes,Pomatorhinus horsfieldii,Indian Scimitar-Babbler,insbab1,FOR,7.890830663,43,1.633468456,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates,,
-Passeriformes,Prinia hodgsonii,Gray-breasted Prinia,gybpri1,OC,10.71805726,6.4,0.806179974,Carnivore,Invertivore,Altitudinal Migrant,1,resident,invertebrates,,
-Piciformes,Psilopogon haemacephalus,Coppersmith Barbet,copbar1,OC,25.0825522,46.7,1.648262406,Omnivore,Frugivore,Not a Migrant,1,resident,fruit,,
-Piciformes,Psilopogon malabaricus,Malabar Barbet,crfbar1,FOR,29.02505264,37.6,1.575187845,Omnivore,Frugivore,Not a Migrant,1,resident,NA,,
-Piciformes,Psilopogon viridis,White-cheeked Barbet,whcbar1,FOR,20.66856819,80.5,1.90579588,Herbivore,Frugivore,Not a Migrant,1,resident,fruit,,
-Piciformes,Psilopogon zeylanicus,Brown-headed Barbet,brhbar1,FOR,17.9836947,119,2.075546961,Herbivore,Frugivore,Not a Migrant,1,resident,fruit,,
-Psittaciformes,Psittacula columboides,Malabar Parakeet,malpar1,FOR,46.59881239,85.5,1.939469331,Herbivore,Omnivore,Nomadic,1,resident,omnivore,,
-Psittaciformes,Psittacula cyanocephala,Plum-headed Parakeet,plhpar1,OC,50.43591699,66,1.819478128,Herbivore,Frugivore,Not a Migrant,1,resident,fruit,,
-Psittaciformes,Psittacula krameri,Rose-ringed Parakeet,rorpar,OC,47.72960483,116.5,2.064869625,Herbivore,Omnivore,Not a Migrant,1,resident,fruit,,
-Passeriformes,Pycnonotus cafer,Red-vented Bulbul,revbul,OC,16.99361609,42.9,1.631950826,Herbivore,Omnivore,Not a Migrant,1,resident,omnivore,,
-Passeriformes,Pycnonotus jocosus,Red-whiskered Bulbul,rewbul,OC,14.25432338,27.4,1.469380136,Herbivore,Omnivore,Not a Migrant,1,resident,omnivore,,
-Passeriformes,Pycnonotus luteolus,White-browed Bulbul,whbbul2,FOR,11.20238876,34.7,1.540329475,Herbivore,Frugivore,Not a Migrant,1,resident,fruit,,
-Passeriformes,Rubigula gularis,Flame-throated Bulbul,bkcbul1,FOR,11.93469737,29.5,1.469822016,Herbivore,Frugivore,NA,1,resident,NA,,
-Passeriformes,Saxicola caprata,Pied Bushchat,piebus1,OC,11.2556987,15.2,1.181843588,Carnivore,Invertivore,Full Migrant,3,directional migratory,invertebrates,,
-Passeriformes,Sitta frontalis,Velvet-fronted Nuthatch,vefnut1,FOR,23.06378825,16.5,1.217483944,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates,,
-Columbiformes,Streptopelia chinensis,Spotted Dove,spodov,OC,30.6093332,159,2.201397124,Herbivore,Granivore,Full Migrant,1,dispersive migratory,seeds,,
-Passeriformes,Terpsiphone paradisi,Indian Paradise-Flycatcher,aspfly1,FOR,20.57106189,18.5,1.283979284,Carnivore,Invertivore,Full Migrant,2,directional migratory,invertebrates,,
-Columbiformes,Treron affinis,Gray-fronted Green-Pigeon,pomgrp2,FOR,35.56857414,234,2.369215857,Herbivore,Frugivore,Not a Migrant,1,resident,NA,,
-Passeriformes,Turdoides affinis,Yellow-billed Babbler,yebbab1,FOR,11.75510103,66,1.80126647,Omnivore,Invertivore,Not a Migrant,1,resident,invertebrates,,
-Passeriformes,Turdoides striata,Jungle Babbler,junbab2,OC,9.46000401,66,1.819478128,Omnivore,Omnivore,Not a Migrant,1,resident,omnivore,,
-Passeriformes,Turdoides subrufa,Rufous Babbler,rufbab3,FOR,7.066970696,67.5,1.823930455,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates,,
-Passeriformes,Turdus simillimus,Indian Blackbird,eurbla2,FOR,20.28216919,74.9,1.874481818,Omnivore,Omnivore,NA,1,directional migratory,NA,,
-Bucerotiformes,Upupa epops,Eurasian Hoopoe,hoopoe,OC,21.7746589,61.4,1.825620825,Carnivore,Invertivore,Full Migrant,3,directional migratory,invertebrates,,
-Piciformes,Yungipicus nanus,Brown-capped Woodpecker,bncwoo3,OC,27.36251687,14,1.208172527,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates,,
-Passeriformes,Zosterops palpebrosus,Indian White-eye,indwhe1,FOR,21.11433824,8.6,0.934498451,Omnivore,Omnivore,Full Migrant,1,resident,omnivore,,
-Passeriformes,Motacilla cinerea,Grey wagtail,,OC,NA,NA,NA,NA,NA,NA,NA,NA,NA,,
-Passeriformes,Motacilla maderaspatensis,White-browed wagtail,,OC,NA,NA,NA,NA,NA,NA,NA,NA,NA,,
-Passeriformes,Prinia socialis,Ashy prinia,,OC,NA,NA,NA,NA,NA,NA,NA,NA,NA,,
+order,scientific_name,common_name,eBird_spp_codes,Habitat use,HWI,Body mass,Log-transformed Body Mass,TrophicLevel,TrophicNiche,Migration-1,Migration-2,Migration-3,Diet
+Passeriformes,Acridotheres fuscus,Jungle Myna,junmyn1,OC,24.7162719,82.8,1.918030337,Omnivore,Omnivore,Not a Migrant,2,resident,omnivore
+Passeriformes,Acridotheres tristis,Common Myna,commyn,OC,21.84696376,116,2.066064897,Carnivore,Omnivore,Not a Migrant,2,resident,omnivore
+Passeriformes,Acrocephalus dumetorum,Blyth's Reed Warbler,blrwar1,OC,21.82218576,11.2,1.049218023,Carnivore,Invertivore,Full Migrant,3,directional migratory,invertebrates
+Passeriformes,Aegithina tiphia,Common Iora,comior1,OC,9.442634919,12,1.079181246,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Passeriformes,Alcippe poioicephala,Brown-cheeked Fulvetta,brcful1,FOR,10.84852981,20.7,1.315970345,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Passeriformes,Artamus fuscus,Ashy Woodswallow,ashwoo2,OC,47.65872903,39.8,1.599883072,Carnivore,Invertivore,Full Migrant,1,resident,invertebrates
+Passeriformes,Cecropis daurica,Red-rumped Swallow,rerswa1,OC,52.54321181,22,1.346352974,Carnivore,Invertivore,Full Migrant,3,directional migratory,invertebrates
+Cuculiformes,Centropus sinensis,Greater Coucal,grecou1,OC,13.23180548,283,2.448242413,Carnivore,Vertivore,Not a Migrant,1,resident,vertebrates
+Columbiformes,Chalcophaps indica,Asian Emerald Dove,emedov2,FOR,28.69523682,136,2.135259899,Herbivore,Omnivore,Not a Migrant,1,resident,omnivore
+Passeriformes,Chloropsis aurifrons,Golden-fronted Leafbird,goflea1,FOR,19.98309306,32.5,1.509336958,Omnivore,Omnivore,Not a Migrant,1,resident,omnivore
+Passeriformes,Chloropsis jerdoni,Jerdon's Leafbird,jerlea1,FOR,13.33196316,24.5,1.389166084,Omnivore,Omnivore,Not a Migrant,1,resident,fruit
+Piciformes,Chrysocolaptes guttacristatus,Greater Flameback,grefla1,FOR,19.87077838,142,2.152288344,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Passeriformes,Cinnyris asiaticus,Purple Sunbird,pursun4,OC,17.7876848,8.1,0.908485019,Omnivore,Omnivore,Not a Migrant,1,resident,omnivore
+Passeriformes,Cinnyris lotenius,Loten's Sunbird,lobsun2,FOR,14.2241907,8,0.942999593,Omnivore,Nectarivore,Not a Migrant,1,resident,omnivore
+Columbiformes,Columba livia,Rock Pigeon,rocpig,OC,44.18079137,354.5,2.549248557,Herbivore,Granivore,Not a Migrant,1,resident,seeds
+Passeriformes,Copsychus fulicatus,Indian Robin,indrob1,OC,7.722208932,16.6,1.220108088,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Passeriformes,Copsychus saularis,Oriental Magpie-Robin,magrob,OC,18.59340096,36,1.556302501,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Passeriformes,Corvus macrorhynchos,Large-billed Crow,labcro1,OC,38.03851875,521,2.71023587,Omnivore,Omnivore,Not a Migrant,1,resident,omnivore
+Passeriformes,Corvus splendens,House Crow,houcro1,OC,36.62683518,293.5,2.466200102,Omnivore,Omnivore,Not a Migrant,1,resident,scav
+Passeriformes,Culicicapa ceylonensis,Gray-headed Canary-Flycatcher,gyhcaf1,FOR,19.98883172,7.7,0.886490725,Carnivore,Invertivore,Not a Migrant,1,directional migratory,invertebrates
+Passeriformes,Cyornis tickelliae,Tickell's Blue Flycatcher,tibfly3,OC,18.95807643,14.6,1.209783015,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Apodiformes,Cypsiurus balasiensis,Asian Palm-Swift,aspswi1,OC,68.27155551,9.1,0.959518377,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Passeriformes,Dendrocitta leucogastra,White-bellied Treepie,whbtre1,FOR,11.46243132,99.2,1.996511672,Carnivore,Omnivore,Not a Migrant,1,resident,omnivore
+Passeriformes,Dendrocitta vagabunda,Rufous Treepie,ruftre2,OC,14.95803233,100,2,Carnivore,Omnivore,Not a Migrant,1,resident,omnivore
+Passeriformes,Dicaeum concolor,Nilgiri Flowerpecker,plaflo1,OC,20.29235021,6.2,0.792391689,Herbivore,Omnivore,Not a Migrant,1,resident,invertebrates
+Passeriformes,Dicaeum erythrorhynchos,Pale-billed Flowerpecker,pabflo1,OC,20.98007246,6.3,0.799340549,Herbivore,Frugivore,Not a Migrant,1,resident,fruit
+Passeriformes,Dicrurus aeneus,Bronzed Drongo,brodro1,FOR,27.86537116,26,1.414973348,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Passeriformes,Dicrurus leucophaeus,Ashy Drongo,ashdro1,OC,30.10929264,37.6,1.575187845,Carnivore,Invertivore,Full Migrant,1,directional migratory,invertebrates
+Passeriformes,Dicrurus macrocercus,Black Drongo,bladro1,OC,27.11140206,48.3,1.683947131,Carnivore,Invertivore,Full Migrant,1,directional migratory,invertebrates
+Passeriformes,Dicrurus paradiseus,Greater Racket-tailed Drongo,grtdro1,FOR,22.20132932,79.5,1.93358851,Carnivore,Invertivore,Not a Migrant,1,directional migratory,invertebrates
+Piciformes,Dinopium benghalense,Black-rumped Flameback,bkrfla1,OC,20.69691878,100,2,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Passeriformes,Ficedula nigrorufa,Black-and-orange Flycatcher,barfly1,FOR,15.37661662,10.5,0.971275849,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Passeriformes,Geokichla citrina,Orange-headed Thrush,orhthr1,OC,29.62560681,53.5,1.726727209,Omnivore,Invertivore,Full Migrant,3,directional migratory,omnivore
+Passeriformes,Gracula indica,Southern Hill Myna,sohmyn1,FOR,22.18829439,126,2.100370545,Herbivore,Frugivore,NA,1,resident,NA
+Coraciiformes,Halcyon smyrnensis,White-throated Kingfisher,whtkin2,OC,20.24597458,91.4,1.960946196,Carnivore,Omnivore,Not a Migrant,2,resident,vertebrates
+Cuculiformes,Hierococcyx varius,Common Hawk-Cuckoo,cohcuc1,OC,34.94873606,103,2.012837225,Carnivore,Invertivore,Full Migrant,1,directional migratory,invertebrates
+Passeriformes,Hypothymis azurea,Black-naped Monarch,blnmon1,FOR,15.98878522,11.1,1.045322979,Carnivore,Invertivore,Full Migrant,1,resident,invertebrates
+Passeriformes,Hypsipetes ganeesa,Square-tailed Bulbul,sqtbul1,FOR,23.27074798,42.9,1.632457292,Herbivore,Frugivore,NA,1,resident,NA
+Passeriformes,Iole indica,Yellow-browed Bulbul,yebbul3,FOR,15.38598123,30.6,1.485721426,Herbivore,Omnivore,Not a Migrant,1,resident,omnivore
+Passeriformes,Irena puella,Asian Fairy-bluebird,asfblu1,FOR,23.21144279,64.9,1.812244697,Herbivore,Frugivore,Not a Migrant,1,resident,fruit
+Passeriformes,Lanius cristatus,Brown Shrike,brnshr,OC,26.95579136,33.5,1.50758604,Carnivore,Invertivore,Full Migrant,3,directional migratory,invertebrates
+Passeriformes,Lanius schach,Long-tailed Shrike,lotshr1,OC,19.99957577,51.6,1.71189155,Carnivore,Invertivore,Full Migrant,2,directional migratory,invertebrates
+Passeriformes,Leptocoma minima,Crimson-backed Sunbird,crbsun2,FOR,13.63501565,5,0.689308859,Omnivore,Nectarivore,Not a Migrant,1,resident,omnivore
+Passeriformes,Leptocoma zeylonica,Purple-rumped Sunbird,pursun3,OC,13.88500334,9,0.942999593,Omnivore,Omnivore,Not a Migrant,1,resident,omnivore
+Psittaciformes,Loriculus vernalis,Vernal Hanging-Parrot,vehpar1,OC,45.63002759,35.7,1.552668216,Herbivore,Frugivore,Full Migrant,1,resident,fruit
+Coraciiformes,Merops leschenaulti,Chestnut-headed Bee-eater,chbeat1,OC,41.36177249,27.2,1.434568904,Carnivore,Invertivore,Full Migrant,1,directional migratory,invertebrates
+Coraciiformes,Merops orientalis,Green Bee-eater,grbeat1,OC,35.33244734,14.8,1.170261715,Carnivore,Invertivore,Full Migrant,1,dispersive migratory,invertebrates
+Passeriformes,Montecincla fairbanki,Palani Laughingthrush,kerlau2,FOR,7.10243127,45.5,1.658011397,Omnivore,Invertivore,Not a Migrant,1,NA,invertebrates
+Passeriformes,Muscicapa dauurica,Asian Brown Flycatcher,asbfly,OC,29.35421995,9.8,0.991226076,Carnivore,Invertivore,Full Migrant,3,directional migratory,invertebrates
+Passeriformes,Myophonus horsfieldii,Malabar Whistling-Thrush,mawthr1,OC,15.79117285,117,2.068185862,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Bucerotiformes,Ocyceros griseus,Malabar Gray Hornbill,maghor2,FOR,16.59582064,292,2.465382851,Herbivore,Frugivore,Not a Migrant,1,resident,fruit
+Passeriformes,Oriolus kundoo,Indian Golden Oriole,ingori1,OC,32.63653545,79,1.897627091,Omnivore,Omnivore,NA,1,directional migratory,NA
+Passeriformes,Oriolus xanthornus,Black-hooded Oriole,blhori1,OC,26.9861565,56.3,1.750508395,Herbivore,Frugivore,Not a Migrant,1,dispersive migratory,fruit
+Passeriformes,Orthotomus sutorius,Common Tailorbird,comtai1,OC,10.61962388,7.5,0.875061263,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Passeriformes,Parus cinereus,Cinereous Tit,gretit2,OC,17.00271931,18.2,1.260071388,Omnivore,Invertivore,NA,1,resident,NA
+Passeriformes,Passer domesticus,House Sparrow,houspa,OC,25.709883,27.7,1.423409728,Herbivore,Granivore,Not a Migrant,1,dispersive migratory,seeds
+Galliformes,Pavo cristatus,Indian Peafowl,compea,OC,28.71360931,4194,3.618551168,Omnivore,Omnivore,Not a Migrant,1,resident,omnivore
+Passeriformes,Pellorneum ruficeps,Puff-throated Babbler,putbab1,FOR,8.626835437,26,1.414973348,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Passeriformes,Pericrocotus cinnamomeus,Small Minivet,smamin1,OC,22.4781892,8.6,0.934498451,Carnivore,Invertivore,Not a Migrant,2,resident,invertebrates
+Passeriformes,Pericrocotus flammeus,Orange Minivet,scamin3,FOR,27.33760301,23.3,1.367355921,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Passeriformes,Phylloscopus nitidus,Green Warbler,grnwar1,FOR,23.33706107,8.3,0.892094603,Carnivore,Invertivore,NA,3,directional migratory,invertebrates
+Passeriformes,Phylloscopus trochiloides,Greenish Warbler,grewar3,OC,19.14556042,7.1,0.90579588,Carnivore,Invertivore,Full Migrant,3,directional migratory,invertebrates
+Piciformes,Picus xanthopygaeus,Streak-throated Woodpecker,sttwoo1,OC,22.34897824,99.7,1.998651596,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Passeriformes,Pomatorhinus horsfieldii,Indian Scimitar-Babbler,insbab1,OC,7.890830663,43,1.633468456,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Passeriformes,Prinia hodgsonii,Gray-breasted Prinia,gybpri1,OC,10.71805726,6.4,0.806179974,Carnivore,Invertivore,Altitudinal Migrant,1,resident,invertebrates
+Piciformes,Psilopogon haemacephalus,Coppersmith Barbet,copbar1,OC,25.0825522,46.7,1.648262406,Omnivore,Frugivore,Not a Migrant,1,resident,fruit
+Piciformes,Psilopogon malabaricus,Malabar Barbet,crfbar1,FOR,29.02505264,37.6,1.575187845,Omnivore,Frugivore,Not a Migrant,1,resident,NA
+Piciformes,Psilopogon viridis,White-cheeked Barbet,whcbar1,OC,20.66856819,80.5,1.90579588,Herbivore,Frugivore,Not a Migrant,1,resident,fruit
+Piciformes,Psilopogon zeylanicus,Brown-headed Barbet,brhbar1,OC,17.9836947,119,2.075546961,Herbivore,Frugivore,Not a Migrant,1,resident,fruit
+Psittaciformes,Psittacula columboides,Malabar Parakeet,malpar1,FOR,46.59881239,85.5,1.939469331,Herbivore,Omnivore,Nomadic,1,resident,omnivore
+Psittaciformes,Psittacula cyanocephala,Plum-headed Parakeet,plhpar1,OC,50.43591699,66,1.819478128,Herbivore,Frugivore,Not a Migrant,1,resident,fruit
+Psittaciformes,Psittacula krameri,Rose-ringed Parakeet,rorpar,OC,47.72960483,116.5,2.064869625,Herbivore,Omnivore,Not a Migrant,1,resident,fruit
+Passeriformes,Pycnonotus cafer,Red-vented Bulbul,revbul,OC,16.99361609,42.9,1.631950826,Herbivore,Omnivore,Not a Migrant,1,resident,omnivore
+Passeriformes,Pycnonotus jocosus,Red-whiskered Bulbul,rewbul,OC,14.25432338,27.4,1.469380136,Herbivore,Omnivore,Not a Migrant,1,resident,omnivore
+Passeriformes,Pycnonotus luteolus,White-browed Bulbul,whbbul2,OC,11.20238876,34.7,1.540329475,Herbivore,Frugivore,Not a Migrant,1,resident,fruit
+Passeriformes,Rubigula gularis,Flame-throated Bulbul,bkcbul1,FOR,11.93469737,29.5,1.469822016,Herbivore,Frugivore,NA,1,resident,NA
+Passeriformes,Saxicola caprata,Pied Bushchat,piebus1,OC,11.2556987,15.2,1.181843588,Carnivore,Invertivore,Full Migrant,3,directional migratory,invertebrates
+Passeriformes,Sitta frontalis,Velvet-fronted Nuthatch,vefnut1,FOR,23.06378825,16.5,1.217483944,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Columbiformes,Streptopelia chinensis,Spotted Dove,spodov,OC,30.6093332,159,2.201397124,Herbivore,Granivore,Full Migrant,1,dispersive migratory,seeds
+Passeriformes,Terpsiphone paradisi,Indian Paradise-Flycatcher,aspfly1,FOR,20.57106189,18.5,1.283979284,Carnivore,Invertivore,Full Migrant,2,directional migratory,invertebrates
+Columbiformes,Treron affinis,Gray-fronted Green-Pigeon,pomgrp2,FOR,35.56857414,234,2.369215857,Herbivore,Frugivore,Not a Migrant,1,resident,NA
+Passeriformes,Turdoides affinis,Yellow-billed Babbler,yebbab1,OC,11.75510103,66,1.80126647,Omnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Passeriformes,Turdoides striata,Jungle Babbler,junbab2,OC,9.46000401,66,1.819478128,Omnivore,Omnivore,Not a Migrant,1,resident,omnivore
+Passeriformes,Turdoides subrufa,Rufous Babbler,rufbab3,OC,7.066970696,67.5,1.823930455,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Passeriformes,Turdus simillimus,Indian Blackbird,eurbla2,OC,20.28216919,74.9,1.874481818,Omnivore,Omnivore,NA,1,directional migratory,NA
+Bucerotiformes,Upupa epops,Eurasian Hoopoe,hoopoe,OC,21.7746589,61.4,1.825620825,Carnivore,Invertivore,Full Migrant,3,directional migratory,invertebrates
+Piciformes,Yungipicus nanus,Brown-capped Woodpecker,bncwoo3,OC,27.36251687,14,1.208172527,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
+Passeriformes,Zosterops palpebrosus,Indian White-eye,indwhe1,OC,21.11433824,8.6,0.934498451,Omnivore,Omnivore,Full Migrant,1,resident,omnivore
+Passeriformes,Motacilla cinerea,Grey wagtail,,OC,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Passeriformes,Motacilla maderaspatensis,White-browed wagtail,,OC,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Passeriformes,Prinia socialis,Ashy prinia,,OC,NA,NA,NA,NA,NA,NA,NA,NA,NA
