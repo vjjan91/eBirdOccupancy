@@ -562,6 +562,7 @@ fig_lc_elev <-
     family = "Arial",
     x = 10,
     y = seq(7),
+    col = c(rep("grey20", 3), "grey90", rep("grey20", 3)),
     size = 3,
     label = lc_labels,
     hjust = "inward"
