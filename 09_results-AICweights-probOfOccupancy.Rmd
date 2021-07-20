@@ -42,7 +42,11 @@ source("R/fun_plot_interaction.r")
 
 ```{r }
 # list of species
-species <- read_csv("data/post_analysis_species_list.csv")
+# Removing two species after running a chi-square goodness of fit test
+species <- read_csv("data/species_list.csv") %>%
+  filter(scientific_name != "Montecincla fairbanki" &
+         scientific_name != "Orthotomus sutorius")
+
 list_of_species <- as.character(species$scientific_name)
 ```
 
@@ -208,6 +212,11 @@ model_est <- map(list_of_species, function(sn) {
 # assign names
 names(model_est) <- list_of_species
 
+# prepare model data
+model_data <- tibble(
+  scientific_name = list_of_species
+)
+
 # remove null data
 model_est = keep(model_est, .p = function(x) !is.null(x))
 
@@ -240,7 +249,8 @@ model_data <- model_data %>%
 
 # Keep only those predictors whose p-values are significant:
 model_data <- model_data %>%
-  filter(p_value < 0.05)
+  filter(p_value < 0.05) %>%
+  filter(predictor != "Int")
 ```
 
 Export predictor effects.
@@ -265,7 +275,7 @@ Export model data.
 model_data_to_file <- model_data %>%
   select(
     predictor, 
-    scientific_name, scale
+    scientific_name
   )
 
 # remove .y
