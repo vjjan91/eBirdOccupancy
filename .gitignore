@@ -52,15 +52,6 @@ data/data*.csv
 # no soib data
 *2020_state*
 
-# no excel
-*.xlsx
-
-# no trait data
-data/species-trait-dat.csv
-
-# allow species lists
-!data/post_analysis_species_list.csv
-
 docs/*.aux
 docs/*.fdb_latexmk
 docs/*.fls
