@@ -553,8 +553,8 @@ Plot density plots of climate seasonality per LC type.
 ```{r}
 # make labels
 lc_labels = c(
-      "Evergreen For.", "Deciduous For.",
-      "Mixed/Degr. For.", "Agri./Settlement",
+      "Evergr. For.", "Decid. For.",
+      "Mixed. For.", "Agri./Settl.",
       "Grassland", "Plantation",
       "Waterbody"
 )
@@ -573,14 +573,14 @@ lc_clim_plots = pmap(
         ),
         show.legend = F
       )+
-      theme_test(base_family = "Arial", base_size = 8) +
+      theme_test(base_family = "Arial") +
       theme(
         legend.key.width = unit(2, units = "mm"),
         axis.text.y = element_blank(),
+        axis.text.x = element_text(size = 6),
         axis.ticks.y = element_blank(),
         strip.background = element_blank(),
-        strip.text = element_text(size = 6),
-        axis.line.x = element_line()
+        strip.text = element_text(size = 6, face = "bold")
       )+
       facet_grid(
         ~ landcover,
@@ -737,9 +737,10 @@ dev.off()
 ```{r echo=FALSE}
 fig_clim_lc_elev <-
   wrap_plots(fig_climate_elev, 
-             # fig_lc_clim, 
+             fig_lc_clim,
              fig_lc_elev,
-    ncol = 1
+    ncol = 1,
+    design = "A\nB\nB\nC"
   ) +
   plot_annotation(
     tag_levels = "a",
@@ -758,7 +759,7 @@ fig_clim_lc_elev <-
 ggsave(fig_clim_lc_elev,
   filename = "figs/fig_02.png",
   dpi = 300,
-  height = 120, width = 150, units = "mm"
+  height = 170, width = 150, units = "mm"
 )
 ```
 
