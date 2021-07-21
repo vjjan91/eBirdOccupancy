@@ -736,9 +736,10 @@ dev.off()
 
 ```{r echo=FALSE}
 fig_clim_lc_elev <-
-  wrap_plots(fig_climate_elev, fig_lc_clim, fig_lc_elev,
-    ncol = 1,
-    design = "A\nB\nB\nC"
+  wrap_plots(fig_climate_elev, 
+             # fig_lc_clim, 
+             fig_lc_elev,
+    ncol = 1
   ) +
   plot_annotation(
     tag_levels = "a",
@@ -757,7 +758,7 @@ fig_clim_lc_elev <-
 ggsave(fig_clim_lc_elev,
   filename = "figs/fig_02.png",
   dpi = 300,
-  height = 150, width = 150, units = "mm"
+  height = 120, width = 150, units = "mm"
 )
 ```
 
