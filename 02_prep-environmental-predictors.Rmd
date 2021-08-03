@@ -1,5 +1,5 @@
 ---
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
@@ -7,10 +7,10 @@ editor_options:
 
 In this script, we processed climatic and landscape predictors for occupancy modeling.
 
-All climatic data was obtained from https://chelsa-climate.org/bioclim/ 
-All landscape data was derived from a high resolution land cover map (Roy et al 2015). This map provides sufficient classes to achieve a high land cover resolution. 
+All climatic data was obtained from https://chelsa-climate.org/bioclim/
+All landscape data was derived from a high resolution land cover map (Roy et al 2015). This map provides sufficient classes to achieve a high land cover resolution.
 
-The goal here is to resample all rasters so that they have the same resolution of 1km cells. We also tested for spatial autocorrelation among climatic predictors, which can be found in Section 4 of the Supplementary Material. 
+The goal here is to resample all rasters so that they have the same resolution of 1km cells. We also tested for spatial autocorrelation among climatic predictors, which can be found in Section 4 of the Supplementary Material.
 
 ## Prepare libraries
 
@@ -54,6 +54,7 @@ ci <- function(x) {
 ## Prepare spatial extent
 
 We prepare a 30km buffer around the boundary of the study area. This buffer will be used to mask the landscape rasters.The buffer procedure is done on data transformed to the UTM 43N CRS to avoid distortions.
+
 ```{r load_hills, , message=FALSE, warning=FALSE}
 # load hills
 library(sf)
@@ -256,7 +257,7 @@ env_data <- stack(elevData, bio_4a, bio_15)
 
 ## Resample landcover from 10m to 1km
 
-We read in a land cover classified image and resample that using the mode function to a 1km resolution. Please note that the resampling process need not be carried out as it has been done already and the resampled raster can be loaded with the subsequent code chunk. 
+We read in a land cover classified image and resample that using the mode function to a 1km resolution. Please note that the resampling process need not be carried out as it has been done already and the resampled raster can be loaded with the subsequent code chunk.
 
 ```{r landcover_raster, , message=FALSE, warning=FALSE, message=FALSE}
 # read in landcover raster location
@@ -402,7 +403,7 @@ land_names <- glue('data/spatial/landscape_resamp{c("01")}_km.tif')
 writeRaster(land_stack, filename = as.character(land_names), overwrite = TRUE)
 ```
 
-## Temperature and rainfall in relation to elevation
+## Climate seasonality in relation to elevation
 
 ### Load resampled environmental rasters
 
@@ -446,12 +447,15 @@ Figure code is hidden in versions rendered as HTML or PDF.
 ```{r plot_clim_elev, , echo=FALSE}
 # make labeller
 climvar_names <- c(
-  bio_15 = "Seasonality in\nPrecipitation (CV)",
-  bio_4a = "Seasonality in\nTemperature (CV)"
+  bio_4a = "Seasonality in\nTemperature (CV)",
+  bio_15 = "Seasonality in\nPrecipitation (CV)"
 )
 
 # split data to list
 land_data <- split(land_data, f = land_data$clim_var)
+
+# reorder list to match fig 1
+land_data = land_data[rev(names(land_data))]
 
 subplots_climate_elev <- Map(function(df, climvar) {
   ggplot(df) +
@@ -497,6 +501,131 @@ ggsave(fig_climate_elev,
 )
 ```
 
+## Climate seasonality across land cover types
+
+Get climate seasonlity values per (re-classified) landcover type from the 1km resampled raster.
+
+```{r}
+# make duplicate stack again
+lc_clim_data <- landscape[[c("landcover", chelsa_names)]]
+
+# convert to list
+lc_clim_data <- as.list(lc_clim_data)
+
+# map get values over the stack
+lc_clim_data <- purrr::map(lc_clim_data, getValues)
+names(lc_clim_data) <- c("landcover", chelsa_names)
+
+# conver to dataframe for histogram
+lc_clim_data <- bind_cols(lc_clim_data)
+
+# pivot long
+lc_clim_data = pivot_longer(
+  lc_clim_data,
+  cols = contains("bio"), 
+  names_to = "climvar"
+)
+
+# make landcover factor
+lc_clim_data = mutate(
+  lc_clim_data,
+  landcover = factor(landcover)
+)
+
+# filter bio 4a
+lc_clim_data = filter(
+  lc_clim_data,
+  !is.na(landcover)
+)
+
+# split by variable
+lc_clim_data = nest(lc_clim_data, data = c("landcover", "value"))
+
+# assign names
+lc_clim_data$climvar_name = c(
+  "Seasonality in Temperature (CV)",
+  "Seasonality in Precipitation (CV)"
+)
+```
+
+Plot density plots of climate seasonality per LC type.
+
+```{r}
+# make labels
+lc_labels = c(
+      "Evergr. For.", "Decid. For.",
+      "Mixed. For.", "Agri./Settl.",
+      "Grassland", "Plantation",
+      "Waterbody"
+)
+names(lc_labels) = c(seq(5), 7, 9)
+
+# plots
+lc_clim_plots = pmap(
+  lc_clim_data,
+  function(climvar_name, data, climvar) {
+    p = data |>
+      ggplot()+
+      geom_histogram(
+        aes(
+          x = value, y = ..density..,
+          fill = ..x..
+        ),
+        show.legend = F
+      )+
+      theme_test(base_family = "Arial") +
+      theme(
+        legend.key.width = unit(2, units = "mm"),
+        axis.text.y = element_blank(),
+        axis.text.x = element_text(size = 6),
+        axis.ticks.y = element_blank(),
+        strip.background = element_blank(),
+        strip.text = element_text(size = 6, face = "bold")
+      )+
+      facet_grid(
+        ~ landcover,
+        labeller = labeller(
+          landcover = lc_labels
+        )
+      )+
+      labs(
+        x = glue("{climvar_name}"),
+        y = "Density"
+      )
+    if(climvar == "bio_4a") {
+      p = p + 
+        scale_fill_continuous_diverging(
+          palette = "Blue-Red 2", 
+          mid = 0.7
+        )
+    } else {
+      p = p +
+        scale_x_continuous(
+          limits = c(20, 60)
+        )+
+        scale_fill_continuous_diverging(
+          palette = "Blue-Yellow 2", 
+          mid = 40
+        )
+    }
+    
+    p
+  }
+)
+
+# save to file and add figure
+fig_lc_clim <-
+  wrap_plots(lc_clim_plots, ncol = 1) &
+    plot_annotation(tag_levels = "A")
+
+# save as png
+ggsave(fig_lc_clim,
+  filename = "figs/fig_lc_climate.png",
+  height = 4, width = 6.5, device = png(), dpi = 300
+)
+```
+
+
 ## Land cover type in relation to elevation
 
 ```{r prep_lc_elev, , message=FALSE}
@@ -534,7 +663,7 @@ Figure code is hidden in versions rendered as HTML and PDF.
 # plot figure as tilemap
 
 # factor order
-lc_elev$landcover = factor(lc_elev$landcover) |> 
+lc_elev$landcover = factor(lc_elev$landcover) |>
   forcats::fct_rev()
 
 # factor labels
@@ -562,6 +691,7 @@ fig_lc_elev <-
     family = "Arial",
     x = 10,
     y = seq(7),
+    col = c(rep("grey20", 3), "grey90", rep("grey20", 3)),
     size = 3,
     label = lc_labels,
     hjust = "inward"
@@ -606,20 +736,30 @@ dev.off()
 
 ```{r echo=FALSE}
 fig_clim_lc_elev <-
-  wrap_plots(fig_climate_elev, fig_lc_elev,
-    ncol = 1
+  wrap_plots(fig_climate_elev, 
+             fig_lc_clim,
+             fig_lc_elev,
+    ncol = 1,
+    design = "A\nB\nB\nC"
   ) +
   plot_annotation(
     tag_levels = "a",
     tag_prefix = "(",
     tag_suffix = ")"
+  ) &
+  theme(
+    plot.tag = element_text(
+      size = 10,
+      face = "bold",
+      family = "Arial"
+    )
   )
 
 # save
 ggsave(fig_clim_lc_elev,
   filename = "figs/fig_02.png",
   dpi = 300,
-  height = 120, width = 150, units = "mm"
+  height = 170, width = 150, units = "mm"
 )
 ```
 
