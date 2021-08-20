@@ -8,9 +8,9 @@ editor_options:
 In this script, we processed climatic and landscape predictors for occupancy modeling.
 
 All climatic data was obtained from https://chelsa-climate.org/bioclim/
-All landscape data was derived from a high resolution land cover map (Roy et al 2015). This map provides sufficient classes to achieve a high land cover resolution.
+All landscape data was derived from a high resolution land cover map (Roy et al. 2015). This map provides sufficient classes to achieve a high land cover resolution and can be accessed here (https://daac.ornl.gov/VEGETATION/guides/Decadal_LULC_India.html)
 
-The goal here is to resample all rasters so that they have the same resolution of 1km cells. We also tested for spatial autocorrelation among climatic predictors, which can be found in Section 4 of the Supplementary Material.
+The goal here is to resample all rasters so that they have the same resolution of 1km cells. We also tested for spatial autocorrelation among climatic predictors (which can be found in the Supplementary material).
 
 ## Prepare libraries
 
@@ -564,7 +564,7 @@ names(lc_labels) = c(seq(5), 7, 9)
 lc_clim_plots = pmap(
   lc_clim_data,
   function(climvar_name, data, climvar) {
-    p = data |>
+    p = data %>%
       ggplot()+
       geom_histogram(
         aes(
@@ -663,7 +663,7 @@ Figure code is hidden in versions rendered as HTML and PDF.
 # plot figure as tilemap
 
 # factor order
-lc_elev$landcover = factor(lc_elev$landcover) |>
+lc_elev$landcover = factor(lc_elev$landcover) %>%
   forcats::fct_rev()
 
 # factor labels
@@ -763,4 +763,4 @@ ggsave(fig_clim_lc_elev,
 )
 ```
 
-![(a) Seasonality in precipitation and seasonality in temperature as a function of elevation is shown here. The coefficient of variation was calculated. (b) The proportion of land cover types varied across the study area as shown in this panel.](figs/fig_02.png)
+![(a) Precipitation seasonality and temperature seasonality as a function of elevation is shown here. The coefficient of variation was calculated. (b) The proportion of land cover types varied across the study area as shown in this panel.](figs/fig_02.png)
