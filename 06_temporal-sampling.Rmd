@@ -183,7 +183,7 @@ fig_hist_lag <-
   ) +
   coord_cartesian(
     expand = F
-  )+
+  ) +
   labs(
     x = "Timelag prev. obs.",
     y = "# checklists"
@@ -231,7 +231,7 @@ fig_lag_temporal <-
     style = north_arrow_fancy_orienteering
   ) +
   annotation_scale(
-    location = "bl", 
+    location = "bl",
     width_hint = 0.25,
     text_cex = 1,
     style = "ticks"
@@ -278,22 +278,22 @@ load("data/fig_checklists_grid.Rds")
 
 ```{r}
 # make figure
-fig_sampling_bias =
+fig_sampling_bias <-
   wrap_plots(
     fig_checklists_grid, fig_lag_temporal
-  )+
-  plot_annotation(
-    tag_levels = "a",
-    tag_prefix = "(",
-    tag_suffix = ")"
-  ) &
-  theme(
-    plot.tag = element_text(
-      size = 14,
-      family = "Arial",
-      face = "bold"
+  ) +
+    plot_annotation(
+      tag_levels = "a",
+      tag_prefix = "(",
+      tag_suffix = ")"
+    ) &
+    theme(
+      plot.tag = element_text(
+        size = 14,
+        family = "Arial",
+        face = "bold"
+      )
     )
-  )
 
 # save figure
 ggsave(

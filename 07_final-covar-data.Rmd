@@ -54,21 +54,22 @@ grid <- st_make_grid(hills, cellsize = gridsize)
 
 # filtering on !pres_abs keeps absences
 # this absence data will be thinned
-data_thin_absences = filter(dataGrouped, !pres_abs)
-data_presences = filter(dataGrouped, pres_abs)
+data_thin_absences <- filter(dataGrouped, !pres_abs)
+data_presences <- filter(dataGrouped, pres_abs)
 
 # split data by species
-data_thin_absences <- split(x = data_thin_absences,
-                           f = data_thin_absences$scientific_name)
+data_thin_absences <- split(
+  x = data_thin_absences,
+  f = data_thin_absences$scientific_name
+)
 ```
 
 ### Counting presence observation proportion
 
 ```{r}
-data_presence_prop = count(data_presences, scientific_name, name = "presences") %>%
+data_presence_prop <- count(data_presences, scientific_name, name = "presences") %>%
   mutate(
     absences = map_int(data_thin_absences, nrow),
-
     presence_prop = presences / (presences + absences)
   )
 
@@ -145,7 +146,7 @@ data_thin_absences <- map(data_thin_absences, function(df) {
       max(count(points_max, uid_cell)$n), 1
     )
   )
-  
+
   # return data without UID cell and coordinate Id
   dplyr::select(ungroup(points_max), -uid_cell, -coordId, -tot_effort)
 })
@@ -157,7 +158,7 @@ rm(dataGrouped)
 ### Count absences after spatial thinning
 
 ```{r}
-data_presence_prop = data_presence_prop %>%
+data_presence_prop <- data_presence_prop %>%
   mutate(
     absences_sp_thin = map_int(data_thin_absences, nrow)
   )
@@ -187,7 +188,7 @@ dataSubsample <- map(data_thin_absences, function(df) {
 ### Count absences after temporal thinning
 
 ```{r}
-data_presence_prop = data_presence_prop %>%
+data_presence_prop <- data_presence_prop %>%
   mutate(
     absences_tmp_thin = map_int(dataSubsample, nrow),
     presence_prop_post_thin = presences / (presences + absences_tmp_thin)
@@ -202,28 +203,28 @@ write_csv(data_presence_prop, file = "data/results/data_class_balance.csv")
 dataSubsample <- bind_rows(dataSubsample)
 
 # convert presence data to UTM 43 N and long-lat to X-Y
-data_presences = bind_cols(
+data_presences <- bind_cols(
   data_presences,
   as_tibble(
     st_as_sf(
       data_presences,
       coords = c("longitude", "latitude"),
       crs = 4326
-    ) %>% 
-      st_transform(32643) %>% 
+    ) %>%
+      st_transform(32643) %>%
       st_coordinates()
   )
 )
 
 # drop long lat
-data_presences = dplyr::select(data_presences, -longitude, -latitude)
+data_presences <- dplyr::select(data_presences, -longitude, -latitude)
 
-#join ALL PRESENCES and THINNED ABSENCES
-dataSubsample = bind_rows(dataSubsample, data_presences)
+# join ALL PRESENCES and THINNED ABSENCES
+dataSubsample <- bind_rows(dataSubsample, data_presences)
 
 # check joined data
 assertthat::assert_that(
-  max(apply(dataSubsample, 2, function(x)sum(is.na(x)))) == 0,
+  max(apply(dataSubsample, 2, function(x) sum(is.na(x)))) == 0,
   msg = "some columns missing from one of the datasets"
 )
 
@@ -304,8 +305,7 @@ sample_radius <- 2.5 * 1e3
 # get distinct points and make buffer
 ebird_buff <- dataSubsample %>%
   ungroup() %>%
-  distinct(X, Y) %>% 
-  
+  distinct(X, Y) %>%
   # remove NAs
   drop_na()
 
@@ -313,7 +313,7 @@ ebird_buff <- dataSubsample %>%
 # convert to spatial features
 ebird_buff <- st_as_sf(ebird_buff, coords = c("X", "Y"), crs = 32643) %>%
   # add long lat
-  bind_cols(as_tibble(st_coordinates(.))) %>% 
+  bind_cols(as_tibble(st_coordinates(.))) %>%
   # make buffer around points
   st_buffer(dist = sample_radius)
 ```
@@ -340,8 +340,9 @@ names(dextr) <- c("id", names(stk))
 env_area_mean <- as_tibble(dextr)
 
 # add id to buffer data
-ebird_buff = mutate(ebird_buff,
-                    id = seq(nrow(ebird_buff)))
+ebird_buff <- mutate(ebird_buff,
+  id = seq(nrow(ebird_buff))
+)
 
 # join to buffer data
 ebird_buff <- inner_join(ebird_buff, env_area_mean)
@@ -375,22 +376,23 @@ lc_prop <- count(lc_vals, id, lc) %>%
   ungroup()
 
 # join to data
-ebird_buff <- mutate( ebird_buff, lc_prop)
+ebird_buff <- mutate(ebird_buff, lc_prop)
 ```
 
 ### Link environmental covariates to checklists
 
 ```{r land_to_obs}
 # drop geometry
-ebird_buff = st_drop_geometry(ebird_buff)
+ebird_buff <- st_drop_geometry(ebird_buff)
 
 # link to dataSubsample
-dataSubsample = inner_join(dataSubsample, ebird_buff, 
-                           by = c("X", "Y"))
+dataSubsample <- inner_join(dataSubsample, ebird_buff,
+  by = c("X", "Y")
+)
 ```
 
 Save data to file.
 ```{r spit_scale}
 # write to file
-write_csv(dataSubsample, path = glue('data/04_data-covars-2.5km.csv'))
+write_csv(dataSubsample, path = glue("data/04_data-covars-2.5km.csv"))
 ```

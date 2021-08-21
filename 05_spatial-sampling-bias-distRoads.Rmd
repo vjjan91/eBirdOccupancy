@@ -111,7 +111,7 @@ hist_roads <-
   ) +
   coord_cartesian(
     expand = F
-  )+
+  ) +
   theme_test() +
   theme(
     plot.background = element_rect(fill = "white", colour = 1),
@@ -257,16 +257,16 @@ Figure code is hidden in versions rendered as HTML and PDF.
 
 ```{r plot_map_dist_roads, , echo=FALSE}
 # plot on maps
-fig_checklists_grid =
+fig_checklists_grid <-
   ggplot() +
   geom_sf(
-    data = land, 
-    fill = "grey90", 
+    data = land,
+    fill = "grey90",
     col = NA
   ) +
   geom_sf(
-    data = wg, 
-    fill = NA, 
+    data = wg,
+    fill = NA,
     col = 1,
     lty = 2
   ) +
@@ -294,7 +294,7 @@ fig_checklists_grid =
   ) +
   annotation_scale(
     location = "bl",
-    width_hint = 0.25, 
+    width_hint = 0.25,
     text_cex = 1,
     style = "ticks"
   ) +
