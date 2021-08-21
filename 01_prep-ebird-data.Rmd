@@ -28,6 +28,7 @@ sum.no.na <- function(x) {
 
 # set file paths for auk functions
 # To use these two datasets, please download the latest versions from https://ebird.org/data/download and set the file path accordingly. Since these two datasets are extremely large, we have not uploaded the same on github.
+# In this study, the version of data loaded corresponds to March 2021. 
 
 f_in_ebd <- file.path("data/ebd_IN_relMar-2021.txt")
 f_in_sampling <- file.path("data/ebd_sampling_relMar-2021.txt")
@@ -35,7 +36,9 @@ f_in_sampling <- file.path("data/ebd_sampling_relMar-2021.txt")
 
 ## Filter data
 
-Insert the list of species that we will be analyzing in this study. We initially chose those species that occurred in at least 5% of all checklists across 50% of the 25 x 25 km cells from where they have been reported, resulting in a total of 93 species. To arrive at this final list of species, we carried out further pre-processing which can be found in Section 2 of the Supplementary material.
+Insert the list of species that we will be analyzing in this study. We initially chose those species that occurred in at least 5% of all checklists across 50% of the 25 x 25 km cells from where they have been reported, resulting in a total of 82 species. To arrive at this final list of species, we carried out further pre-processing which can be found in the Supplementary material.
+
+For further details regarding the list of species, please refer to the main text of the manuscript. 
 
 ```{r soi,  message=FALSE, warning=FALSE}
 # add species of interest
@@ -170,6 +173,7 @@ save(data, file = "data/01_data_temp.rdata")
 ## Handle presence data
 
 Further pre-processing is required in the case of many checklists where species abundance is often unknown and an 'X' is denoted in such cases. Here, we convert all 'X' notations to a 1, suggesting a presence (as we are not concerned with abundance data in this analysis). We also removed those checklists where the duration in minutes is either not recorded or listed as zero. Lastly, we added an sampling effort based filter following [@johnston2019a], wherein we considered only those checklists with duration in minutes is less than 300 and distance in kilometres traveled is less than 5km. Lastly, we excluded those group checklists where the number of observers was greater than 10. Upon receiving comments from reviewers, we restrict all our checklists between December 1st and May 31st (non-rainy months)and checklists recorded between 5am and 7pm.
+
 ```{r proc_presence_data}
 # in the first set, replace X, for presences, with 1
 data[[1]] <- data[[1]] %>%
