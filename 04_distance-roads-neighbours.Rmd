@@ -5,6 +5,10 @@ The goal of this section is to determine how far each checklist location is from
 
 This section is implemented in Python 3, because we want to use `scipy`'s efficient spatial indexing functions based on "kDtrees".
 
+The code available in the 'readable version' is a conversion of a Jupyter notebook to an R Markdown notebook. This code will not run directly in R.
+
+To run this code from R/RStudio, use the `reticulate` package, or refer to the `ipynb` file in the code repository to run the Python code instead.
+
 ## Prepare libraries
 
 Here, we import required libraries --- you may need to install these for your system.
