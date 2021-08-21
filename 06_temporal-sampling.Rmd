@@ -269,7 +269,11 @@ ggsave(
 )
 ```
 
+![Most sites are resurveyed at least once, but some are visited much more frequently than others. There does not appear to be a link between roads and visit frequency.](fig_temporal_bias)
+
 ## Main Text Figure 3
+
+Combining figures for spatial and temporal clustering into main text figure 3.
 
 ```{r}
 # load spatial bias figure
@@ -304,7 +308,6 @@ ggsave(
   units = "mm"
 )
 ```
-
 
 ## Checklists per Month
 
@@ -354,3 +357,5 @@ ggplot(data_count) +
 
 ggsave(filename = "figs/fig_chk_per_month.png")
 ```
+
+![](fig_chk_per_month)
