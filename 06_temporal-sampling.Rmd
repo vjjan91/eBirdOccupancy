@@ -358,4 +358,4 @@ ggplot(data_count) +
 ggsave(filename = "figs/fig_chk_per_month.png")
 ```
 
-![](fig_chk_per_month)
+![Observations peak in the early months of the year, and decline towards the rainy months, slowly increasing until the following winter.](fig_chk_per_month)
