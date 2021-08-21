@@ -28,7 +28,7 @@ sum.no.na <- function(x) {
 
 # set file paths for auk functions
 # To use these two datasets, please download the latest versions from https://ebird.org/data/download and set the file path accordingly. Since these two datasets are extremely large, we have not uploaded the same on github.
-# In this study, the version of data loaded corresponds to March 2021. 
+# In this study, the version of data loaded corresponds to March 2021.
 
 f_in_ebd <- file.path("data/ebd_IN_relMar-2021.txt")
 f_in_sampling <- file.path("data/ebd_sampling_relMar-2021.txt")

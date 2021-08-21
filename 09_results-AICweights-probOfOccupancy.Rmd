@@ -45,7 +45,7 @@ source("R/fun_plot_interaction.r")
 # Removing two species after running a chi-square goodness of fit test
 species <- read_csv("data/species_list.csv") %>%
   filter(scientific_name != "Montecincla fairbanki" &
-         scientific_name != "Orthotomus sutorius")
+    scientific_name != "Orthotomus sutorius")
 
 list_of_species <- as.character(species$scientific_name)
 ```
@@ -191,24 +191,24 @@ file_read <- c("data/results/lc-clim-modelEst.xlsx")
 
 # read data as list column
 model_est <- map(list_of_species, function(sn) {
-    tryCatch(
-      {
-        readxl::read_excel(file_read, sheet = sn) %>%
-          rename(predictor = "...1") %>%
-          filter(str_detect(predictor, "psi")) %>%
-          mutate(
-            predictor = stringr::str_extract(predictor,
-                                             pattern = stringr::regex("\\((.*?)\\)")
-            ),
-            predictor = stringr::str_replace_all(predictor, "[//(//)]", ""),
-            predictor = stringr::str_remove(predictor, "\\.y")
-          )
-      },
-      error = function(e) {
-        message(as.character(e))
-      }
-    )
-  })
+  tryCatch(
+    {
+      readxl::read_excel(file_read, sheet = sn) %>%
+        rename(predictor = "...1") %>%
+        filter(str_detect(predictor, "psi")) %>%
+        mutate(
+          predictor = stringr::str_extract(predictor,
+            pattern = stringr::regex("\\((.*?)\\)")
+          ),
+          predictor = stringr::str_replace_all(predictor, "[//(//)]", ""),
+          predictor = stringr::str_remove(predictor, "\\.y")
+        )
+    },
+    error = function(e) {
+      message(as.character(e))
+    }
+  )
+})
 # assign names
 names(model_est) <- list_of_species
 
@@ -218,7 +218,7 @@ model_data <- tibble(
 )
 
 # remove null data
-model_est = keep(model_est, .p = function(x) !is.null(x))
+model_est <- keep(model_est, .p = function(x) !is.null(x))
 
 # rename model data components and separate predictors
 names <- c(
@@ -228,15 +228,15 @@ names <- c(
 
 # get data for plotting:
 model_est <- map(model_est, function(df) {
-    colnames(df) <- names
-    # df <- separate_interaction_terms(df)
-    # df <- make_response_data(df)
-    return(df)
+  colnames(df) <- names
+  # df <- separate_interaction_terms(df)
+  # df <- make_response_data(df)
+  return(df)
 })
 
 # add names and scales
 model_est <- imap(model_est, function(.x, .y) {
-    mutate(.x, scientific_name = .y)
+  mutate(.x, scientific_name = .y)
 })
 
 # remove modulators
@@ -274,7 +274,7 @@ Export model data.
 ```{r}
 model_data_to_file <- model_data %>%
   select(
-    predictor, 
+    predictor,
     scientific_name
   )
 
@@ -294,7 +294,8 @@ Read in data after clearing R session.
 species_trait <- read.csv("data/species-trait-dat.csv")
 sig_predictor <- read.csv("data/results/data_predictor_effect.csv")
 merged_species_traits <- inner_join(sig_predictor, species_trait,
-                                    by=c("scientific_name"="scientific_name"))
+  by = c("scientific_name" = "scientific_name")
+)
 write_csv(
   merged_species_traits,
   "data/results/results-predictors-species-traits.csv"
@@ -408,15 +409,15 @@ fig_predictor <-
       label = label
     ),
     angle = 90
-  )+
+  ) +
   scale_fill_discrete_diverging(
     palette = "Berlin",
     l1 = 50,
     rev = T
-  )+
+  ) +
   scale_x_discrete(labels = NULL) +
   scale_y_continuous(
-    labels = abs, 
+    labels = abs,
     limits = c(-30, 30)
   ) +
   # uncomment below to split by habitat

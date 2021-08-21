@@ -28,7 +28,7 @@
 <meta name="author" content="Ruth DeFries" />
 
 
-<meta name="date" content="2021-06-17" />
+<meta name="date" content="2021-08-21" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -54,32 +54,30 @@
 
 
 
-<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
 <style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -88,9 +86,9 @@ pre.numberSource code > span > a:first-child::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {   }
+  {  }
 @media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+a.sourceLine::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -137,15 +135,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
-<ul>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#attribution"><i class="fa fa-check"></i><b>1.1</b> Attribution</a></li>
 <li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#data-access"><i class="fa fa-check"></i><b>1.2</b> Data access</a></li>
 <li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#data-processing"><i class="fa fa-check"></i><b>1.3</b> Data processing</a></li>
 <li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#main-text-figure-1"><i class="fa fa-check"></i><b>1.4</b> Main Text Figure 1</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html"><i class="fa fa-check"></i><b>2</b> Preparing eBird Data</a>
-<ul>
+<li class="chapter" data-level="2" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html"><i class="fa fa-check"></i><b>2</b> Preparing eBird Data</a><ul>
 <li class="chapter" data-level="2.1" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#prepare-libraries-and-data-sources"><i class="fa fa-check"></i><b>2.1</b> Prepare libraries and data sources</a></li>
 <li class="chapter" data-level="2.2" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#filter-data"><i class="fa fa-check"></i><b>2.2</b> Filter data</a></li>
 <li class="chapter" data-level="2.3" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#process-filtered-data"><i class="fa fa-check"></i><b>2.3</b> Process filtered data</a></li>
@@ -153,34 +149,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.5" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#handle-presence-data"><i class="fa fa-check"></i><b>2.5</b> Handle presence data</a></li>
 <li class="chapter" data-level="2.6" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#add-decimal-time"><i class="fa fa-check"></i><b>2.6</b> Add decimal time</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html"><i class="fa fa-check"></i><b>3</b> Preparing Environmental Predictors</a>
-<ul>
+<li class="chapter" data-level="3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html"><i class="fa fa-check"></i><b>3</b> Preparing Environmental Predictors</a><ul>
 <li class="chapter" data-level="3.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-libraries"><i class="fa fa-check"></i><b>3.1</b> Prepare libraries</a></li>
 <li class="chapter" data-level="3.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-spatial-extent"><i class="fa fa-check"></i><b>3.2</b> Prepare spatial extent</a></li>
 <li class="chapter" data-level="3.3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-terrain-rasters"><i class="fa fa-check"></i><b>3.3</b> Prepare terrain rasters</a></li>
 <li class="chapter" data-level="3.4" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-4a-and-bioclim-15"><i class="fa fa-check"></i><b>3.4</b> Prepare Bioclim 4a and Bioclim 15</a></li>
-<li class="chapter" data-level="3.5" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-chelsa-rasters"><i class="fa fa-check"></i><b>3.5</b> Prepare CHELSA rasters</a>
-<ul>
+<li class="chapter" data-level="3.5" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-chelsa-rasters"><i class="fa fa-check"></i><b>3.5</b> Prepare CHELSA rasters</a><ul>
 <li class="chapter" data-level="3.5.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-4a-and-15"><i class="fa fa-check"></i><b>3.5.1</b> Prepare BIOCLIM 4a and 15</a></li>
 <li class="chapter" data-level="3.5.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-4a"><i class="fa fa-check"></i><b>3.5.2</b> Prepare BIOCLIM 4a</a></li>
 <li class="chapter" data-level="3.5.3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-15"><i class="fa fa-check"></i><b>3.5.3</b> Prepare Bioclim 15</a></li>
 <li class="chapter" data-level="3.5.4" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#stack-terrain-and-climate"><i class="fa fa-check"></i><b>3.5.4</b> Stack terrain and climate</a></li>
 </ul></li>
 <li class="chapter" data-level="3.6" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-landcover-from-10m-to-1km"><i class="fa fa-check"></i><b>3.6</b> Resample landcover from 10m to 1km</a></li>
-<li class="chapter" data-level="3.7" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-other-rasters-to-1km"><i class="fa fa-check"></i><b>3.7</b> Resample other rasters to 1km</a>
-<ul>
+<li class="chapter" data-level="3.7" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-other-rasters-to-1km"><i class="fa fa-check"></i><b>3.7</b> Resample other rasters to 1km</a><ul>
 <li class="chapter" data-level="3.7.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#read-in-resampled-landcover"><i class="fa fa-check"></i><b>3.7.1</b> Read in resampled landcover</a></li>
 <li class="chapter" data-level="3.7.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#reproject-environmental-data-using-landcover-as-a-template"><i class="fa fa-check"></i><b>3.7.2</b> Reproject environmental data using landcover as a template</a></li>
 </ul></li>
-<li class="chapter" data-level="3.8" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#temperature-and-rainfall-in-relation-to-elevation"><i class="fa fa-check"></i><b>3.8</b> Temperature and rainfall in relation to elevation</a>
-<ul>
+<li class="chapter" data-level="3.8" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#climate-seasonality-in-relation-to-elevation"><i class="fa fa-check"></i><b>3.8</b> Climate seasonality in relation to elevation</a><ul>
 <li class="chapter" data-level="3.8.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#load-resampled-environmental-rasters"><i class="fa fa-check"></i><b>3.8.1</b> Load resampled environmental rasters</a></li>
 </ul></li>
-<li class="chapter" data-level="3.9" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#land-cover-type-in-relation-to-elevation"><i class="fa fa-check"></i><b>3.9</b> Land cover type in relation to elevation</a></li>
-<li class="chapter" data-level="3.10" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#main-text-figure-2"><i class="fa fa-check"></i><b>3.10</b> Main Text Figure 2</a></li>
+<li class="chapter" data-level="3.9" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#climate-seasonality-across-land-cover-types"><i class="fa fa-check"></i><b>3.9</b> Climate seasonality across land cover types</a></li>
+<li class="chapter" data-level="3.10" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#land-cover-type-in-relation-to-elevation"><i class="fa fa-check"></i><b>3.10</b> Land cover type in relation to elevation</a></li>
+<li class="chapter" data-level="3.11" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#main-text-figure-2"><i class="fa fa-check"></i><b>3.11</b> Main Text Figure 2</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html"><i class="fa fa-check"></i><b>4</b> Preparing Observer Expertise Scores</a>
-<ul>
+<li class="chapter" data-level="4" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html"><i class="fa fa-check"></i><b>4</b> Preparing Observer Expertise Scores</a><ul>
 <li class="chapter" data-level="4.1" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#prepare-libraries-1"><i class="fa fa-check"></i><b>4.1</b> Prepare libraries</a></li>
 <li class="chapter" data-level="4.2" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#prepare-data"><i class="fa fa-check"></i><b>4.2</b> Prepare data</a></li>
 <li class="chapter" data-level="4.3" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#spatially-explicit-filter-on-checklists"><i class="fa fa-check"></i><b>4.3</b> Spatially explicit filter on checklists</a></li>
@@ -190,73 +182,74 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.7" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#filter-checklist-data"><i class="fa fa-check"></i><b>4.7</b> Filter checklist data</a></li>
 <li class="chapter" data-level="4.8" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#model-observer-expertise"><i class="fa fa-check"></i><b>4.8</b> Model observer expertise</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="prepare-nearest-neighbour-and-road-metrics.html"><a href="prepare-nearest-neighbour-and-road-metrics.html"><i class="fa fa-check"></i><b>5</b> Prepare Nearest Neighbour and Road Metrics</a>
-<ul>
+<li class="chapter" data-level="5" data-path="prepare-nearest-neighbour-and-road-metrics.html"><a href="prepare-nearest-neighbour-and-road-metrics.html"><i class="fa fa-check"></i><b>5</b> Prepare Nearest Neighbour and Road Metrics</a><ul>
 <li class="chapter" data-level="5.1" data-path="prepare-nearest-neighbour-and-road-metrics.html"><a href="prepare-nearest-neighbour-and-road-metrics.html#prepare-libraries-2"><i class="fa fa-check"></i><b>5.1</b> Prepare libraries</a></li>
 <li class="chapter" data-level="5.2" data-path="prepare-nearest-neighbour-and-road-metrics.html"><a href="prepare-nearest-neighbour-and-road-metrics.html#prepare-data-for-processing"><i class="fa fa-check"></i><b>5.2</b> Prepare data for processing</a></li>
 <li class="chapter" data-level="5.3" data-path="prepare-nearest-neighbour-and-road-metrics.html"><a href="prepare-nearest-neighbour-and-road-metrics.html#read-in-data"><i class="fa fa-check"></i><b>5.3</b> Read in data</a></li>
 <li class="chapter" data-level="5.4" data-path="prepare-nearest-neighbour-and-road-metrics.html"><a href="prepare-nearest-neighbour-and-road-metrics.html#define-functions-for-geometry-simplication-and-distances"><i class="fa fa-check"></i><b>5.4</b> Define functions for geometry simplication and distances</a></li>
 <li class="chapter" data-level="5.5" data-path="prepare-nearest-neighbour-and-road-metrics.html"><a href="prepare-nearest-neighbour-and-road-metrics.html#get-distance-from-sites-to-road-and-each-other"><i class="fa fa-check"></i><b>5.5</b> Get distance from sites to road and each other</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html"><i class="fa fa-check"></i><b>6</b> Examining Spatial Sampling Bias</a>
-<ul>
+<li class="chapter" data-level="6" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html"><i class="fa fa-check"></i><b>6</b> Examining Spatial Sampling Bias</a><ul>
 <li class="chapter" data-level="6.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-libraries-3"><i class="fa fa-check"></i><b>6.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="6.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#read-checklist-data"><i class="fa fa-check"></i><b>6.2</b> Read checklist data</a>
-<ul>
+<li class="chapter" data-level="6.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#read-checklist-data"><i class="fa fa-check"></i><b>6.2</b> Read checklist data</a><ul>
 <li class="chapter" data-level="6.2.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#spatially-explicit-filter-on-checklists-1"><i class="fa fa-check"></i><b>6.2.1</b> Spatially explicit filter on checklists</a></li>
 <li class="chapter" data-level="6.2.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#get-background-land-for-plotting"><i class="fa fa-check"></i><b>6.2.2</b> Get background land for plotting</a></li>
 </ul></li>
-<li class="chapter" data-level="6.3" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-main-text-figure-3"><i class="fa fa-check"></i><b>6.3</b> Prepare Main Text Figure 3</a>
-<ul>
+<li class="chapter" data-level="6.3" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-main-text-figure-3"><i class="fa fa-check"></i><b>6.3</b> Prepare Main Text Figure 3</a><ul>
 <li class="chapter" data-level="6.3.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-histogram-of-distance-to-roads"><i class="fa fa-check"></i><b>6.3.1</b> Prepare histogram of distance to roads</a></li>
 <li class="chapter" data-level="6.3.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#table-distance-to-roads"><i class="fa fa-check"></i><b>6.3.2</b> Table: Distance to roads</a></li>
 <li class="chapter" data-level="6.3.3" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#distance-to-nearest-neighbouring-site"><i class="fa fa-check"></i><b>6.3.3</b> Distance to nearest neighbouring site</a></li>
 <li class="chapter" data-level="6.3.4" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#spatial-distribution-of-distances-to-neighbours"><i class="fa fa-check"></i><b>6.3.4</b> Spatial distribution of distances to neighbours</a></li>
 </ul></li>
-<li class="chapter" data-level="6.4" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#main-text-figure-3"><i class="fa fa-check"></i><b>6.4</b> Main Text Figure 3</a></li>
+<li class="chapter" data-level="6.4" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#figure-spatial-sampling-bias"><i class="fa fa-check"></i><b>6.4</b> Figure: Spatial sampling bias</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html"><i class="fa fa-check"></i><b>7</b> Checking Temporal Sampling Frequency</a>
-<ul>
+<li class="chapter" data-level="7" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html"><i class="fa fa-check"></i><b>7</b> Checking Temporal Sampling Frequency</a><ul>
 <li class="chapter" data-level="7.1" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#load-libraries"><i class="fa fa-check"></i><b>7.1</b> Load libraries</a></li>
 <li class="chapter" data-level="7.2" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#load-checklist-data"><i class="fa fa-check"></i><b>7.2</b> Load checklist data</a></li>
 <li class="chapter" data-level="7.3" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#get-time-differences-per-grid-cell"><i class="fa fa-check"></i><b>7.3</b> Get time differences per grid cell</a></li>
-<li class="chapter" data-level="7.4" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#time-since-previous-checklist"><i class="fa fa-check"></i><b>7.4</b> Time Since Previous Checklist</a>
-<ul>
+<li class="chapter" data-level="7.4" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#time-since-previous-checklist"><i class="fa fa-check"></i><b>7.4</b> Time Since Previous Checklist</a><ul>
 <li class="chapter" data-level="7.4.1" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#get-aux-data"><i class="fa fa-check"></i><b>7.4.1</b> Get aux data</a></li>
 <li class="chapter" data-level="7.4.2" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#histogram-of-lags"><i class="fa fa-check"></i><b>7.4.2</b> Histogram of lags</a></li>
 </ul></li>
-<li class="chapter" data-level="7.5" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#checklists-per-month"><i class="fa fa-check"></i><b>7.5</b> Checklists per Month</a></li>
+<li class="chapter" data-level="7.5" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#main-text-figure-3"><i class="fa fa-check"></i><b>7.5</b> Main Text Figure 3</a></li>
+<li class="chapter" data-level="7.6" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#checklists-per-month"><i class="fa fa-check"></i><b>7.6</b> Checklists per Month</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html"><i class="fa fa-check"></i><b>8</b> Adding Covariates to Checklist Data</a>
-<ul>
+<li class="chapter" data-level="8" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html"><i class="fa fa-check"></i><b>8</b> Adding Covariates to Checklist Data</a><ul>
 <li class="chapter" data-level="8.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#prepare-libraries-and-data"><i class="fa fa-check"></i><b>8.1</b> Prepare libraries and data</a></li>
-<li class="chapter" data-level="8.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-subsampling"><i class="fa fa-check"></i><b>8.2</b> Spatial subsampling</a></li>
-<li class="chapter" data-level="8.3" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#temporal-subsampling"><i class="fa fa-check"></i><b>8.3</b> Temporal subsampling</a></li>
+<li class="chapter" data-level="8.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-subsampling"><i class="fa fa-check"></i><b>8.2</b> Spatial subsampling</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#counting-presence-observation-proportion"><i class="fa fa-check"></i><b>8.2.1</b> Counting presence observation proportion</a></li>
+<li class="chapter" data-level="8.2.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#count-absences-after-spatial-thinning"><i class="fa fa-check"></i><b>8.2.2</b> Count absences after spatial thinning</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#temporal-subsampling"><i class="fa fa-check"></i><b>8.3</b> Temporal subsampling</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#count-absences-after-temporal-thinning"><i class="fa fa-check"></i><b>8.3.1</b> Count absences after temporal thinning</a></li>
+</ul></li>
 <li class="chapter" data-level="8.4" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#add-checklist-calibration-index"><i class="fa fa-check"></i><b>8.4</b> Add checklist calibration index</a></li>
 <li class="chapter" data-level="8.5" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#add-climatic-and-landscape-covariates"><i class="fa fa-check"></i><b>8.5</b> Add climatic and landscape covariates</a></li>
 <li class="chapter" data-level="8.6" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-buffers-around-selected-checklists"><i class="fa fa-check"></i><b>8.6</b> Spatial buffers around selected checklists</a></li>
-<li class="chapter" data-level="8.7" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-buffer-wide-covariates"><i class="fa fa-check"></i><b>8.7</b> Spatial buffer-wide covariates</a>
-<ul>
+<li class="chapter" data-level="8.7" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-buffer-wide-covariates"><i class="fa fa-check"></i><b>8.7</b> Spatial buffer-wide covariates</a><ul>
 <li class="chapter" data-level="8.7.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#mean-climatic-covariates"><i class="fa fa-check"></i><b>8.7.1</b> Mean climatic covariates</a></li>
 <li class="chapter" data-level="8.7.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#proportions-of-land-cover-type"><i class="fa fa-check"></i><b>8.7.2</b> Proportions of land cover type</a></li>
 <li class="chapter" data-level="8.7.3" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#link-environmental-covariates-to-checklists"><i class="fa fa-check"></i><b>8.7.3</b> Link environmental covariates to checklists</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html"><i class="fa fa-check"></i><b>9</b> Modelling Species Occupancy</a>
-<ul>
+<li class="chapter" data-level="9" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html"><i class="fa fa-check"></i><b>9</b> Modelling Species Occupancy</a><ul>
 <li class="chapter" data-level="9.0.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#load-necessary-libraries"><i class="fa fa-check"></i><b>9.0.1</b> Load necessary libraries</a></li>
-<li class="chapter" data-level="9.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#load-dataframe-and-scale-covariates"><i class="fa fa-check"></i><b>9.1</b> Load dataframe and scale covariates</a></li>
+<li class="chapter" data-level="9.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#load-dataframe-and-prepare-covariates"><i class="fa fa-check"></i><b>9.1</b> Load dataframe and prepare covariates</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#handle-the-sampling-protocol"><i class="fa fa-check"></i><b>9.1.1</b> Handle the sampling protocol</a></li>
+<li class="chapter" data-level="9.1.2" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#handle-time-and-date"><i class="fa fa-check"></i><b>9.1.2</b> Handle time and date</a></li>
+<li class="chapter" data-level="9.1.3" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#scaling-covariates"><i class="fa fa-check"></i><b>9.1.3</b> Scaling covariates</a></li>
+<li class="chapter" data-level="9.1.4" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#correct-date-format"><i class="fa fa-check"></i><b>9.1.4</b> Correct date format</a></li>
+<li class="chapter" data-level="9.1.5" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#check-for-correlated-covariates"><i class="fa fa-check"></i><b>9.1.5</b> Check for correlated covariates</a></li>
+</ul></li>
 <li class="chapter" data-level="9.2" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#running-a-null-model"><i class="fa fa-check"></i><b>9.2</b> Running a null model</a></li>
 <li class="chapter" data-level="9.3" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#identifying-covariates-necessary-to-model-the-detection-process"><i class="fa fa-check"></i><b>9.3</b> Identifying covariates necessary to model the detection process</a></li>
 <li class="chapter" data-level="9.4" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#land-cover-and-climate"><i class="fa fa-check"></i><b>9.4</b> Land Cover and Climate</a></li>
 <li class="chapter" data-level="9.5" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#goodness-of-fit-tests"><i class="fa fa-check"></i><b>9.5</b> Goodness-of-fit tests</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html"><i class="fa fa-check"></i><b>10</b> Visualizing Occupancy Predictor Effects</a>
-<ul>
+<li class="chapter" data-level="10" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html"><i class="fa fa-check"></i><b>10</b> Visualizing Occupancy Predictor Effects</a><ul>
 <li class="chapter" data-level="10.1" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-libraries-4"><i class="fa fa-check"></i><b>10.1</b> Prepare libraries</a></li>
 <li class="chapter" data-level="10.2" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#load-species-list"><i class="fa fa-check"></i><b>10.2</b> Load species list</a></li>
-<li class="chapter" data-level="10.3" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#show-aic-weight-importance"><i class="fa fa-check"></i><b>10.3</b> Show AIC weight importance</a>
-<ul>
+<li class="chapter" data-level="10.3" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#show-aic-weight-importance"><i class="fa fa-check"></i><b>10.3</b> Show AIC weight importance</a><ul>
 <li class="chapter" data-level="10.3.1" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#read-in-aic-weight-data"><i class="fa fa-check"></i><b>10.3.1</b> Read in AIC weight data</a></li>
 <li class="chapter" data-level="10.3.2" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-cumulative-aic-weight-data"><i class="fa fa-check"></i><b>10.3.2</b> Prepare cumulative AIC weight data</a></li>
 </ul></li>
@@ -286,26 +279,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Section 5</span> Prepare Nearest Neighbour and Road Metrics</h1>
 <p>The goal of this section is to determine how far each checklist location is from the nearest road, and how far each site is from its nearest neighbour. This involves finding the pairwise distance between a large number of unique checklist locations to a vast number of roads, as well as to each other.</p>
 <p>This section is implemented in Python 3, because we want to use <code>scipy</code>’s efficient spatial indexing functions based on “kDtrees”.</p>
+<p>The code available in the ‘readable version’ is a conversion of a Jupyter notebook to an R Markdown notebook. This code will not run directly in R.</p>
+<p>To run this code from R/RStudio, use the <code>reticulate</code> package, or refer to the <code>ipynb</code> file in the code repository to run the Python code instead.</p>
 <div id="prepare-libraries-2" class="section level2">
 <h2><span class="header-section-number">5.1</span> Prepare libraries</h2>
 <p>Here, we import required libraries — you may need to install these for your system.</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb43-1"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-1"></a><span class="co"># import basic python libs</span></span>
-<span id="cb43-2"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-2"></a><span class="im">import</span> itertools</span>
-<span id="cb43-3"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-3"></a><span class="im">from</span> operator <span class="im">import</span> itemgetter</span>
-<span id="cb43-4"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-4"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb43-5"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-5"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb43-6"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-6"></a><span class="im">import</span> math</span>
-<span id="cb43-7"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-7"></a></span>
-<span id="cb43-8"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-8"></a><span class="co"># libs for dataframes</span></span>
-<span id="cb43-9"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-9"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb43-10"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-10"></a></span>
-<span id="cb43-11"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-11"></a><span class="co"># import libs for geodata</span></span>
-<span id="cb43-12"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-12"></a><span class="im">from</span> shapely.ops <span class="im">import</span> nearest_points</span>
-<span id="cb43-13"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-13"></a><span class="im">import</span> geopandas <span class="im">as</span> gpd</span>
-<span id="cb43-14"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-14"></a></span>
-<span id="cb43-15"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-15"></a><span class="co"># import ckdtree</span></span>
-<span id="cb43-16"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-16"></a><span class="im">from</span> scipy.spatial <span class="im">import</span> cKDTree</span>
-<span id="cb43-17"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb43-17"></a><span class="im">from</span> shapely.geometry <span class="im">import</span> Point, MultiPoint, LineString, MultiLineString</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb45-1" data-line-number="1"><span class="co"># import basic python libs</span></a>
+<a class="sourceLine" id="cb45-2" data-line-number="2"><span class="im">import</span> itertools</a>
+<a class="sourceLine" id="cb45-3" data-line-number="3"><span class="im">from</span> operator <span class="im">import</span> itemgetter</a>
+<a class="sourceLine" id="cb45-4" data-line-number="4"><span class="im">import</span> numpy <span class="im">as</span> np</a>
+<a class="sourceLine" id="cb45-5" data-line-number="5"><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</a>
+<a class="sourceLine" id="cb45-6" data-line-number="6"><span class="im">import</span> math</a>
+<a class="sourceLine" id="cb45-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb45-8" data-line-number="8"><span class="co"># libs for dataframes</span></a>
+<a class="sourceLine" id="cb45-9" data-line-number="9"><span class="im">import</span> pandas <span class="im">as</span> pd</a>
+<a class="sourceLine" id="cb45-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb45-11" data-line-number="11"><span class="co"># import libs for geodata</span></a>
+<a class="sourceLine" id="cb45-12" data-line-number="12"><span class="im">from</span> shapely.ops <span class="im">import</span> nearest_points</a>
+<a class="sourceLine" id="cb45-13" data-line-number="13"><span class="im">import</span> geopandas <span class="im">as</span> gpd</a>
+<a class="sourceLine" id="cb45-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb45-15" data-line-number="15"><span class="co"># import ckdtree</span></a>
+<a class="sourceLine" id="cb45-16" data-line-number="16"><span class="im">from</span> scipy.spatial <span class="im">import</span> cKDTree</a>
+<a class="sourceLine" id="cb45-17" data-line-number="17"><span class="im">from</span> shapely.geometry <span class="im">import</span> Point, MultiPoint, LineString, MultiLineString</a></code></pre></div>
 </div>
 <div id="prepare-data-for-processing" class="section level2">
 <h2><span class="header-section-number">5.2</span> Prepare data for processing</h2>
@@ -320,87 +315,87 @@ We define another function to find the distance between checklist locations and 
 <div id="read-in-data" class="section level2">
 <h2><span class="header-section-number">5.3</span> Read in data</h2>
 <p>Here we read in the data and convert it to a spatial format.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb44-1"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb44-1"></a><span class="co"># read in roads shapefile</span></span>
-<span id="cb44-2"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb44-2"></a>roads <span class="op">=</span> gpd.read_file(<span class="st">&quot;data/spatial/roads_studysite_2019/roads_studysite_2019.shp&quot;</span>)</span>
-<span id="cb44-3"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb44-3"></a>roads.head()</span></code></pre></div>
-<div class="sourceCode" id="cb45"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb45-1"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-1"></a><span class="co"># read in checklist covariates for conversion to gpd</span></span>
-<span id="cb45-2"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-2"></a><span class="co"># get unique coordinates, assign them to the df</span></span>
-<span id="cb45-3"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-3"></a><span class="co"># convert df to geo-df</span></span>
-<span id="cb45-4"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-4"></a>chkCovars <span class="op">=</span> pd.read_csv(<span class="st">&quot;data/03_data-covars-perChklist.csv&quot;</span>)</span>
-<span id="cb45-5"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-5"></a>unique_locs <span class="op">=</span> chkCovars.drop_duplicates(subset<span class="op">=</span>[<span class="st">&#39;longitude&#39;</span>,</span>
-<span id="cb45-6"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-6"></a>                                         <span class="st">&#39;latitude&#39;</span>])[[<span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;latitude&#39;</span>]]</span>
-<span id="cb45-7"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-7"></a>unique_locs[<span class="st">&#39;coordId&#39;</span>] <span class="op">=</span> np.arange(<span class="dv">1</span>, unique_locs.shape[<span class="dv">0</span>]<span class="op">+</span><span class="dv">1</span>)</span>
-<span id="cb45-8"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-8"></a>chkCovars <span class="op">=</span> chkCovars.merge(unique_locs, on<span class="op">=</span>[<span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;latitude&#39;</span>])</span>
-<span id="cb45-9"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-9"></a></span>
-<span id="cb45-10"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-10"></a>unique_locs <span class="op">=</span> gpd.GeoDataFrame(</span>
-<span id="cb45-11"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-11"></a>unique_locs, </span>
-<span id="cb45-12"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-12"></a>geometry <span class="op">=</span> gpd.points_from_xy(unique_locs.longitude, unique_locs.latitude))</span>
-<span id="cb45-13"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-13"></a>unique_locs.crs <span class="op">=</span> {<span class="st">&#39;init&#39;</span> :<span class="st">&#39;epsg:4326&#39;</span>}</span>
-<span id="cb45-14"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-14"></a></span>
-<span id="cb45-15"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-15"></a><span class="co"># reproject spatials to 43n epsg 32643</span></span>
-<span id="cb45-16"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-16"></a></span>
-<span id="cb45-17"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-17"></a>roads <span class="op">=</span> roads.to_crs({<span class="st">&#39;init&#39;</span>: <span class="st">&#39;epsg:32643&#39;</span>})</span>
-<span id="cb45-18"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb45-18"></a>unique_locs <span class="op">=</span> unique_locs.to_crs({<span class="st">&#39;init&#39;</span>: <span class="st">&#39;epsg:32643&#39;</span>})</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb46-1" data-line-number="1"><span class="co"># read in roads shapefile</span></a>
+<a class="sourceLine" id="cb46-2" data-line-number="2">roads <span class="op">=</span> gpd.read_file(<span class="st">&quot;data/spatial/roads_studysite_2019/roads_studysite_2019.shp&quot;</span>)</a>
+<a class="sourceLine" id="cb46-3" data-line-number="3">roads.head()</a></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb47-1" data-line-number="1"><span class="co"># read in checklist covariates for conversion to gpd</span></a>
+<a class="sourceLine" id="cb47-2" data-line-number="2"><span class="co"># get unique coordinates, assign them to the df</span></a>
+<a class="sourceLine" id="cb47-3" data-line-number="3"><span class="co"># convert df to geo-df</span></a>
+<a class="sourceLine" id="cb47-4" data-line-number="4">chkCovars <span class="op">=</span> pd.read_csv(<span class="st">&quot;data/03_data-covars-perChklist.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb47-5" data-line-number="5">unique_locs <span class="op">=</span> chkCovars.drop_duplicates(subset<span class="op">=</span>[<span class="st">&#39;longitude&#39;</span>,</a>
+<a class="sourceLine" id="cb47-6" data-line-number="6">                                         <span class="st">&#39;latitude&#39;</span>])[[<span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;latitude&#39;</span>]]</a>
+<a class="sourceLine" id="cb47-7" data-line-number="7">unique_locs[<span class="st">&#39;coordId&#39;</span>] <span class="op">=</span> np.arange(<span class="dv">1</span>, unique_locs.shape[<span class="dv">0</span>]<span class="op">+</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb47-8" data-line-number="8">chkCovars <span class="op">=</span> chkCovars.merge(unique_locs, on<span class="op">=</span>[<span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;latitude&#39;</span>])</a>
+<a class="sourceLine" id="cb47-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb47-10" data-line-number="10">unique_locs <span class="op">=</span> gpd.GeoDataFrame(</a>
+<a class="sourceLine" id="cb47-11" data-line-number="11">unique_locs, </a>
+<a class="sourceLine" id="cb47-12" data-line-number="12">geometry <span class="op">=</span> gpd.points_from_xy(unique_locs.longitude, unique_locs.latitude))</a>
+<a class="sourceLine" id="cb47-13" data-line-number="13">unique_locs.crs <span class="op">=</span> {<span class="st">&#39;init&#39;</span> :<span class="st">&#39;epsg:4326&#39;</span>}</a>
+<a class="sourceLine" id="cb47-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb47-15" data-line-number="15"><span class="co"># reproject spatials to 43n epsg 32643</span></a>
+<a class="sourceLine" id="cb47-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb47-17" data-line-number="17">roads <span class="op">=</span> roads.to_crs({<span class="st">&#39;init&#39;</span>: <span class="st">&#39;epsg:32643&#39;</span>})</a>
+<a class="sourceLine" id="cb47-18" data-line-number="18">unique_locs <span class="op">=</span> unique_locs.to_crs({<span class="st">&#39;init&#39;</span>: <span class="st">&#39;epsg:32643&#39;</span>})</a></code></pre></div>
 </div>
 <div id="define-functions-for-geometry-simplication-and-distances" class="section level2">
 <h2><span class="header-section-number">5.4</span> Define functions for geometry simplication and distances</h2>
-<div class="sourceCode" id="cb46"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb46-1"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-1"></a><span class="co"># function to simplify multilinestrings</span></span>
-<span id="cb46-2"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-2"></a><span class="kw">def</span> simplify_roads(complex_roads):</span>
-<span id="cb46-3"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-3"></a>    simpleRoads <span class="op">=</span> []</span>
-<span id="cb46-4"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-4"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(complex_roads.geometry)):</span>
-<span id="cb46-5"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-5"></a>        feature <span class="op">=</span> complex_roads.geometry.iloc[i]</span>
-<span id="cb46-6"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-6"></a>        <span class="cf">if</span> feature.geom_type <span class="op">==</span> <span class="st">&quot;LineString&quot;</span>:</span>
-<span id="cb46-7"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-7"></a>            simpleRoads.append(feature)</span>
-<span id="cb46-8"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-8"></a>        <span class="cf">elif</span> feature.geom_type <span class="op">==</span> <span class="st">&quot;MultiLineString&quot;</span>:</span>
-<span id="cb46-9"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-9"></a>            <span class="cf">for</span> road_level2 <span class="kw">in</span> feature:</span>
-<span id="cb46-10"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-10"></a>                simpleRoads.append(road_level2)</span>
-<span id="cb46-11"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-11"></a>    <span class="cf">return</span> simpleRoads</span>
-<span id="cb46-12"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-12"></a></span>
-<span id="cb46-13"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-13"></a><span class="co"># function to use ckdtrees to find the nearest road</span></span>
-<span id="cb46-14"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-14"></a><span class="kw">def</span> ckdnearest(gdfA, gdfB):</span>
-<span id="cb46-15"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-15"></a>    A <span class="op">=</span> np.concatenate(</span>
-<span id="cb46-16"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-16"></a>    [np.array(geom.coords) <span class="cf">for</span> geom <span class="kw">in</span> gdfA.geometry.to_list()])</span>
-<span id="cb46-17"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-17"></a>    simplified_features <span class="op">=</span> simplify_roads(gdfB)</span>
-<span id="cb46-18"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-18"></a>    B <span class="op">=</span> [np.array(geom.coords) <span class="cf">for</span> geom <span class="kw">in</span> simplified_features]</span>
-<span id="cb46-19"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-19"></a>    B <span class="op">=</span> np.concatenate(B)</span>
-<span id="cb46-20"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-20"></a>    ckd_tree <span class="op">=</span> cKDTree(B)</span>
-<span id="cb46-21"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-21"></a>    dist, idx <span class="op">=</span> ckd_tree.query(A, k<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb46-22"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-22"></a>    <span class="cf">return</span> dist</span>
-<span id="cb46-23"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-23"></a></span>
-<span id="cb46-24"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-24"></a><span class="co"># function to use ckdtrees for nearest other checklist point</span></span>
-<span id="cb46-25"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-25"></a><span class="kw">def</span> ckdnearest_point(gdfA, gdfB):</span>
-<span id="cb46-26"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-26"></a>    A <span class="op">=</span> np.concatenate(</span>
-<span id="cb46-27"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-27"></a>    [np.array(geom.coords) <span class="cf">for</span> geom <span class="kw">in</span> gdfA.geometry.to_list()])</span>
-<span id="cb46-28"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-28"></a>    <span class="co">#simplified_features = simplify_roads(gdfB)</span></span>
-<span id="cb46-29"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-29"></a>    B <span class="op">=</span> np.concatenate(</span>
-<span id="cb46-30"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-30"></a>    [np.array(geom.coords) <span class="cf">for</span> geom <span class="kw">in</span> gdfB.geometry.to_list()])</span>
-<span id="cb46-31"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-31"></a>    <span class="co">#B = np.concatenate(B)</span></span>
-<span id="cb46-32"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-32"></a>    ckd_tree <span class="op">=</span> cKDTree(B)</span>
-<span id="cb46-33"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-33"></a>    dist, idx <span class="op">=</span> ckd_tree.query(A, k<span class="op">=</span>[<span class="dv">2</span>])</span>
-<span id="cb46-34"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb46-34"></a>    <span class="cf">return</span> dist</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb48-1" data-line-number="1"><span class="co"># function to simplify multilinestrings</span></a>
+<a class="sourceLine" id="cb48-2" data-line-number="2"><span class="kw">def</span> simplify_roads(complex_roads):</a>
+<a class="sourceLine" id="cb48-3" data-line-number="3">    simpleRoads <span class="op">=</span> []</a>
+<a class="sourceLine" id="cb48-4" data-line-number="4">    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(complex_roads.geometry)):</a>
+<a class="sourceLine" id="cb48-5" data-line-number="5">        feature <span class="op">=</span> complex_roads.geometry.iloc[i]</a>
+<a class="sourceLine" id="cb48-6" data-line-number="6">        <span class="cf">if</span> feature.geom_type <span class="op">==</span> <span class="st">&quot;LineString&quot;</span>:</a>
+<a class="sourceLine" id="cb48-7" data-line-number="7">            simpleRoads.append(feature)</a>
+<a class="sourceLine" id="cb48-8" data-line-number="8">        <span class="cf">elif</span> feature.geom_type <span class="op">==</span> <span class="st">&quot;MultiLineString&quot;</span>:</a>
+<a class="sourceLine" id="cb48-9" data-line-number="9">            <span class="cf">for</span> road_level2 <span class="kw">in</span> feature:</a>
+<a class="sourceLine" id="cb48-10" data-line-number="10">                simpleRoads.append(road_level2)</a>
+<a class="sourceLine" id="cb48-11" data-line-number="11">    <span class="cf">return</span> simpleRoads</a>
+<a class="sourceLine" id="cb48-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb48-13" data-line-number="13"><span class="co"># function to use ckdtrees to find the nearest road</span></a>
+<a class="sourceLine" id="cb48-14" data-line-number="14"><span class="kw">def</span> ckdnearest(gdfA, gdfB):</a>
+<a class="sourceLine" id="cb48-15" data-line-number="15">    A <span class="op">=</span> np.concatenate(</a>
+<a class="sourceLine" id="cb48-16" data-line-number="16">    [np.array(geom.coords) <span class="cf">for</span> geom <span class="kw">in</span> gdfA.geometry.to_list()])</a>
+<a class="sourceLine" id="cb48-17" data-line-number="17">    simplified_features <span class="op">=</span> simplify_roads(gdfB)</a>
+<a class="sourceLine" id="cb48-18" data-line-number="18">    B <span class="op">=</span> [np.array(geom.coords) <span class="cf">for</span> geom <span class="kw">in</span> simplified_features]</a>
+<a class="sourceLine" id="cb48-19" data-line-number="19">    B <span class="op">=</span> np.concatenate(B)</a>
+<a class="sourceLine" id="cb48-20" data-line-number="20">    ckd_tree <span class="op">=</span> cKDTree(B)</a>
+<a class="sourceLine" id="cb48-21" data-line-number="21">    dist, idx <span class="op">=</span> ckd_tree.query(A, k<span class="op">=</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb48-22" data-line-number="22">    <span class="cf">return</span> dist</a>
+<a class="sourceLine" id="cb48-23" data-line-number="23"></a>
+<a class="sourceLine" id="cb48-24" data-line-number="24"><span class="co"># function to use ckdtrees for nearest other checklist point</span></a>
+<a class="sourceLine" id="cb48-25" data-line-number="25"><span class="kw">def</span> ckdnearest_point(gdfA, gdfB):</a>
+<a class="sourceLine" id="cb48-26" data-line-number="26">    A <span class="op">=</span> np.concatenate(</a>
+<a class="sourceLine" id="cb48-27" data-line-number="27">    [np.array(geom.coords) <span class="cf">for</span> geom <span class="kw">in</span> gdfA.geometry.to_list()])</a>
+<a class="sourceLine" id="cb48-28" data-line-number="28">    <span class="co">#simplified_features = simplify_roads(gdfB)</span></a>
+<a class="sourceLine" id="cb48-29" data-line-number="29">    B <span class="op">=</span> np.concatenate(</a>
+<a class="sourceLine" id="cb48-30" data-line-number="30">    [np.array(geom.coords) <span class="cf">for</span> geom <span class="kw">in</span> gdfB.geometry.to_list()])</a>
+<a class="sourceLine" id="cb48-31" data-line-number="31">    <span class="co">#B = np.concatenate(B)</span></a>
+<a class="sourceLine" id="cb48-32" data-line-number="32">    ckd_tree <span class="op">=</span> cKDTree(B)</a>
+<a class="sourceLine" id="cb48-33" data-line-number="33">    dist, idx <span class="op">=</span> ckd_tree.query(A, k<span class="op">=</span>[<span class="dv">2</span>])</a>
+<a class="sourceLine" id="cb48-34" data-line-number="34">    <span class="cf">return</span> dist</a></code></pre></div>
 </div>
 <div id="get-distance-from-sites-to-road-and-each-other" class="section level2">
 <h2><span class="header-section-number">5.5</span> Get distance from sites to road and each other</h2>
-<div class="sourceCode" id="cb47"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb47-1"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb47-1"></a><span class="co"># get distance to nearest road</span></span>
-<span id="cb47-2"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb47-2"></a>unique_locs[<span class="st">&#39;dist_road&#39;</span>] <span class="op">=</span> ckdnearest(unique_locs, roads)</span>
-<span id="cb47-3"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb47-3"></a></span>
-<span id="cb47-4"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb47-4"></a><span class="co"># get distance to nearest other site</span></span>
-<span id="cb47-5"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb47-5"></a>unique_locs[<span class="st">&#39;nnb&#39;</span>] <span class="op">=</span> ckdnearest_point(unique_locs, unique_locs)</span></code></pre></div>
-<div class="sourceCode" id="cb48"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb48-1"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb48-1"></a><span class="co"># check for added columns</span></span>
-<span id="cb48-2"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb48-2"></a>unique_locs.head()</span></code></pre></div>
-<div class="sourceCode" id="cb49"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb49-1"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb49-1"></a><span class="co"># write to file</span></span>
-<span id="cb49-2"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb49-2"></a>unique_locs <span class="op">=</span> pd.DataFrame(unique_locs.drop(columns<span class="op">=</span><span class="st">&#39;geometry&#39;</span>))</span>
-<span id="cb49-3"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb49-3"></a>unique_locs[<span class="st">&#39;dist_road&#39;</span>] <span class="op">=</span> unique_locs[<span class="st">&#39;dist_road&#39;</span>]</span>
-<span id="cb49-4"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb49-4"></a>unique_locs[<span class="st">&#39;nnb&#39;</span>] <span class="op">=</span> unique_locs[<span class="st">&#39;nnb&#39;</span>]</span>
-<span id="cb49-5"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb49-5"></a>unique_locs.to_csv(path_or_buf <span class="op">=</span> <span class="st">&quot;data/locs_dist_to_road.csv&quot;</span>, index<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb49-6"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb49-6"></a></span>
-<span id="cb49-7"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb49-7"></a><span class="co"># merge unique locs with chkCovars</span></span>
-<span id="cb49-8"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb49-8"></a>chkCovars <span class="op">=</span> chkCovars.merge(unique_locs, on<span class="op">=</span>[<span class="st">&#39;latitude&#39;</span>, <span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;coordId&#39;</span>])</span></code></pre></div>
-<div class="sourceCode" id="cb50"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb50-1"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb50-1"></a><span class="co"># check that metrics have been added to the data</span></span>
-<span id="cb50-2"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb50-2"></a>chkCovars.head()</span></code></pre></div>
-<div class="sourceCode" id="cb51"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb51-1"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb51-1"></a><span class="co"># save data to local file</span></span>
-<span id="cb51-2"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb51-2"></a><span class="co"># overwrite pre-existing data</span></span>
-<span id="cb51-3"><a href="prepare-nearest-neighbour-and-road-metrics.html#cb51-3"></a>chkCovars.to_csv(<span class="st">&quot;data/03_data-covars-perChklist.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb49-1" data-line-number="1"><span class="co"># get distance to nearest road</span></a>
+<a class="sourceLine" id="cb49-2" data-line-number="2">unique_locs[<span class="st">&#39;dist_road&#39;</span>] <span class="op">=</span> ckdnearest(unique_locs, roads)</a>
+<a class="sourceLine" id="cb49-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb49-4" data-line-number="4"><span class="co"># get distance to nearest other site</span></a>
+<a class="sourceLine" id="cb49-5" data-line-number="5">unique_locs[<span class="st">&#39;nnb&#39;</span>] <span class="op">=</span> ckdnearest_point(unique_locs, unique_locs)</a></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb50-1" data-line-number="1"><span class="co"># check for added columns</span></a>
+<a class="sourceLine" id="cb50-2" data-line-number="2">unique_locs.head()</a></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="co"># write to file</span></a>
+<a class="sourceLine" id="cb51-2" data-line-number="2">unique_locs <span class="op">=</span> pd.DataFrame(unique_locs.drop(columns<span class="op">=</span><span class="st">&#39;geometry&#39;</span>))</a>
+<a class="sourceLine" id="cb51-3" data-line-number="3">unique_locs[<span class="st">&#39;dist_road&#39;</span>] <span class="op">=</span> unique_locs[<span class="st">&#39;dist_road&#39;</span>]</a>
+<a class="sourceLine" id="cb51-4" data-line-number="4">unique_locs[<span class="st">&#39;nnb&#39;</span>] <span class="op">=</span> unique_locs[<span class="st">&#39;nnb&#39;</span>]</a>
+<a class="sourceLine" id="cb51-5" data-line-number="5">unique_locs.to_csv(path_or_buf <span class="op">=</span> <span class="st">&quot;data/locs_dist_to_road.csv&quot;</span>, index<span class="op">=</span><span class="va">False</span>)</a>
+<a class="sourceLine" id="cb51-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb51-7" data-line-number="7"><span class="co"># merge unique locs with chkCovars</span></a>
+<a class="sourceLine" id="cb51-8" data-line-number="8">chkCovars <span class="op">=</span> chkCovars.merge(unique_locs, on<span class="op">=</span>[<span class="st">&#39;latitude&#39;</span>, <span class="st">&#39;longitude&#39;</span>, <span class="st">&#39;coordId&#39;</span>])</a></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb52-1" data-line-number="1"><span class="co"># check that metrics have been added to the data</span></a>
+<a class="sourceLine" id="cb52-2" data-line-number="2">chkCovars.head()</a></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="co"># save data to local file</span></a>
+<a class="sourceLine" id="cb53-2" data-line-number="2"><span class="co"># overwrite pre-existing data</span></a>
+<a class="sourceLine" id="cb53-3" data-line-number="3">chkCovars.to_csv(<span class="st">&quot;data/03_data-covars-perChklist.csv&quot;</span>)</a></code></pre></div>
 
 </div>
 </div>
@@ -443,7 +438,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["ebird_occupancy_main_text.pdf"],
+"download": null,
 "toc": {
 "collapse": "section"
 }
