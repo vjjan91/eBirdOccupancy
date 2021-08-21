@@ -78,7 +78,6 @@ data_presence_prop %>%
   summarise(mean(presence_prop), sd(presence_prop))
 ```
 
-
 ```{r sp_thin_absences}
 # spatial thinning on each species retains
 # site with maximum visits per grid cell
