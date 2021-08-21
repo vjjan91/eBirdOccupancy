@@ -371,6 +371,8 @@ tmap_save(
 )
 ```
 
+![Resampling the Roy et al. (2015) landcover raster, reclassified into 7 main classes, to a resolution of 1km, preserves the important features of landcover over the study area.](fig_landcover_resample)
+
 ## Resample other rasters to 1km
 
 We now resample all other rasters to a resolution of 1km.
