@@ -193,12 +193,15 @@ hist_sites <-
 
 ### Spatial distribution of distances to neighbours
 
+Figure code is hidden in HTML and PDF versions, consult the Rmarkdown file.
+
 ```{r plot_map_nnb, echo=FALSE, eval=FALSE}
 # transform points to utm
 locs_unique <- locs_unique %>%
   st_as_sf(coords = c("X", "Y"), crs = 32643)
 
 # add nnb to locations
+fig_site_nnb = 
 ggplot() +
   geom_sf(data = land, fill = "grey90", col = NA) +
   geom_sf(data = wg, fill = NA, col = 1) +
@@ -212,12 +215,12 @@ ggplot() +
   geom_sf(data = roads, size = 0.2, col = "steelblue") +
   geom_sf(
     data = locs_unique, aes(col = nnb / 1000),
-    alpha = 0.6
+    alpha = 0.5
   ) +
-  scale_colour_scico(
+  scico::scale_colour_scico(
     palette = "lajolla",
     values = c(0, 1), direction = 1, limits = c(0, 5),
-    na.value = "indianred"
+    na.value = "dodgerblue"
   ) +
   annotation_north_arrow(
     location = "br", which_north = "true",
@@ -227,18 +230,32 @@ ggplot() +
   annotation_scale(location = "br", width_hint = 0.4, text_cex = 1) +
   theme_test() +
   theme(
-    legend.position = c(0.9, 0.55),
+    legend.position = c(0.9, 0.53),
     legend.background = element_blank(),
     legend.key = element_rect(fill = "grey90"),
+    legend.key.width = unit(2, units = "mm"),
+    legend.title = element_text(face = "bold"),
     axis.title = element_blank(),
+    axis.text.y = element_text(
+      angle = 90,
+      hjust = 0.5
+    ),
     panel.background = element_rect(fill = "lightblue")
   ) +
   coord_sf(
     expand = FALSE, xlim = bbox[c("xmin", "xmax")],
     ylim = bbox[c("ymin", "ymax")]
   ) +
-  labs(fill = "checklists", colour = NULL)
+  labs(colour = "Dist NN site")
+
+ggsave(
+  fig_site_nnb,
+  filename = "figs/fig_site_nnb.png",
+  width = 6, height = 6
+)
 ```
+
+![Most observation sites are within 300m of another site.](fig_site_nnb)
 
 ## Figure: Spatial sampling bias
 
@@ -331,6 +348,4 @@ ggsave(
 save(fig_checklists_grid, file = "data/fig_checklists_grid.Rds")
 ```
 
-```{r, message = FALSE, echo = FALSE, fig.cap="Spatial sampling bias of eBird observations across the Nilgiri and the Anamalai hills. A large proportion of localities/sites were next to roads and were on average only ~300m from another locality/site. Each cell here is 2.5km x 2.5km."}
-fig_checklists_grid
-```
+![Spatial sampling bias of eBird observations across the Nilgiri and the Anamalai hills. A large proportion of localities/sites were next to roads. Each cell here is 2.5km x 2.5km.](fig_spatial_bias)
