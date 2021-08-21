@@ -255,7 +255,7 @@ ggsave(
 )
 ```
 
-![Most observation sites are within 300m of another site.](fig_site_nnb)
+![Most observation sites are within 300m of another site.](figs/fig_site_nnb.png)
 
 ## Figure: Spatial sampling bias
 
@@ -348,4 +348,4 @@ ggsave(
 save(fig_checklists_grid, file = "data/fig_checklists_grid.Rds")
 ```
 
-![Spatial sampling bias of eBird observations across the Nilgiri and the Anamalai hills. A large proportion of localities/sites were next to roads. Each cell here is 2.5km x 2.5km.](fig_spatial_bias)
+![Spatial sampling bias of eBird observations across the Nilgiri and the Anamalai hills. A large proportion of localities/sites were next to roads. Each cell here is 2.5km x 2.5km.](figs/fig_spatial_bias.png)

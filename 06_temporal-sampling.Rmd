@@ -269,7 +269,7 @@ ggsave(
 )
 ```
 
-![Most sites are resurveyed at least once, but some are visited much more frequently than others. There does not appear to be a link between roads and visit frequency.](fig_temporal_bias)
+![Most sites are resurveyed at least once, but some are visited much more frequently than others. There does not appear to be a link between roads and visit frequency.](figs/fig_temporal_bias.png)
 
 ## Main Text Figure 3
 
@@ -358,4 +358,4 @@ ggplot(data_count) +
 ggsave(filename = "figs/fig_chk_per_month.png")
 ```
 
-![Observations peak in the early months of the year, and decline towards the rainy months, slowly increasing until the following winter.](fig_chk_per_month)
+![Observations peak in the early months of the year, and decline towards the rainy months, slowly increasing until the following winter.](figs/fig_chk_per_month.png)
