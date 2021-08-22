@@ -1,2 +1,3 @@
 # count ipynb as Python
 *.ipynb linguist-language=Python
+*.Rmd linguist-language=R
