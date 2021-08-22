@@ -348,4 +348,4 @@ ggsave(
 save(fig_checklists_grid, file = "data/fig_checklists_grid.Rds")
 ```
 
-![Spatial sampling bias of eBird observations across the Nilgiri and the Anamalai hills. A large proportion of localities/sites were next to roads. Each cell here is 2.5km x 2.5km.](figs/fig_spatial_bias.png)
+![Sampling effort across the Nilgiri and Anamalai Hills, in the form of eBird checklists reported by birdwatchers, mostly takes place along roads, with the majority of checklists located < 1 km from a roadway (see distribution in inset), and therefore, only about 300m, on average, from the location of another checklist. Each cell here is 2.5km x 2.5km.](figs/fig_spatial_bias.png)

@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Section 7 Checking Temporal Sampling Frequency | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</title>
-  <meta name="description" content="Section 7 Checking Temporal Sampling Frequency | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <title>Section 6 Checking Temporal Sampling Frequency | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</title>
+  <meta name="description" content="Section 6 Checking Temporal Sampling Frequency | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Section 7 Checking Temporal Sampling Frequency | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <meta property="og:title" content="Section 6 Checking Temporal Sampling Frequency | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="pratikunterwegs/eBirdOccupancy" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Section 7 Checking Temporal Sampling Frequency | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <meta name="twitter:title" content="Section 6 Checking Temporal Sampling Frequency | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
   
   
   
@@ -28,7 +28,7 @@
 <meta name="author" content="Ruth DeFries" />
 
 
-<meta name="date" content="2021-08-21" />
+<meta name="date" content="2021-08-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -182,82 +182,75 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.7" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#filter-checklist-data"><i class="fa fa-check"></i><b>4.7</b> Filter checklist data</a></li>
 <li class="chapter" data-level="4.8" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#model-observer-expertise"><i class="fa fa-check"></i><b>4.8</b> Model observer expertise</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="prepare-nearest-neighbour-and-road-metrics.html"><a href="prepare-nearest-neighbour-and-road-metrics.html"><i class="fa fa-check"></i><b>5</b> Prepare Nearest Neighbour and Road Metrics</a><ul>
-<li class="chapter" data-level="5.1" data-path="prepare-nearest-neighbour-and-road-metrics.html"><a href="prepare-nearest-neighbour-and-road-metrics.html#prepare-libraries-2"><i class="fa fa-check"></i><b>5.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="5.2" data-path="prepare-nearest-neighbour-and-road-metrics.html"><a href="prepare-nearest-neighbour-and-road-metrics.html#prepare-data-for-processing"><i class="fa fa-check"></i><b>5.2</b> Prepare data for processing</a></li>
-<li class="chapter" data-level="5.3" data-path="prepare-nearest-neighbour-and-road-metrics.html"><a href="prepare-nearest-neighbour-and-road-metrics.html#read-in-data"><i class="fa fa-check"></i><b>5.3</b> Read in data</a></li>
-<li class="chapter" data-level="5.4" data-path="prepare-nearest-neighbour-and-road-metrics.html"><a href="prepare-nearest-neighbour-and-road-metrics.html#define-functions-for-geometry-simplication-and-distances"><i class="fa fa-check"></i><b>5.4</b> Define functions for geometry simplication and distances</a></li>
-<li class="chapter" data-level="5.5" data-path="prepare-nearest-neighbour-and-road-metrics.html"><a href="prepare-nearest-neighbour-and-road-metrics.html#get-distance-from-sites-to-road-and-each-other"><i class="fa fa-check"></i><b>5.5</b> Get distance from sites to road and each other</a></li>
+<li class="chapter" data-level="5" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html"><i class="fa fa-check"></i><b>5</b> Examining Spatial Sampling Bias</a><ul>
+<li class="chapter" data-level="5.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-libraries-2"><i class="fa fa-check"></i><b>5.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="5.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#read-checklist-data"><i class="fa fa-check"></i><b>5.2</b> Read checklist data</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#spatially-explicit-filter-on-checklists-1"><i class="fa fa-check"></i><b>5.2.1</b> Spatially explicit filter on checklists</a></li>
+<li class="chapter" data-level="5.2.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#get-background-land-for-plotting"><i class="fa fa-check"></i><b>5.2.2</b> Get background land for plotting</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html"><i class="fa fa-check"></i><b>6</b> Examining Spatial Sampling Bias</a><ul>
-<li class="chapter" data-level="6.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-libraries-3"><i class="fa fa-check"></i><b>6.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="6.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#read-checklist-data"><i class="fa fa-check"></i><b>6.2</b> Read checklist data</a><ul>
-<li class="chapter" data-level="6.2.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#spatially-explicit-filter-on-checklists-1"><i class="fa fa-check"></i><b>6.2.1</b> Spatially explicit filter on checklists</a></li>
-<li class="chapter" data-level="6.2.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#get-background-land-for-plotting"><i class="fa fa-check"></i><b>6.2.2</b> Get background land for plotting</a></li>
+<li class="chapter" data-level="5.3" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-main-text-figure-3"><i class="fa fa-check"></i><b>5.3</b> Prepare Main Text Figure 3</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-histogram-of-distance-to-roads"><i class="fa fa-check"></i><b>5.3.1</b> Prepare histogram of distance to roads</a></li>
+<li class="chapter" data-level="5.3.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#table-distance-to-roads"><i class="fa fa-check"></i><b>5.3.2</b> Table: Distance to roads</a></li>
+<li class="chapter" data-level="5.3.3" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#distance-to-nearest-neighbouring-site"><i class="fa fa-check"></i><b>5.3.3</b> Distance to nearest neighbouring site</a></li>
+<li class="chapter" data-level="5.3.4" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#spatial-distribution-of-distances-to-neighbours"><i class="fa fa-check"></i><b>5.3.4</b> Spatial distribution of distances to neighbours</a></li>
 </ul></li>
-<li class="chapter" data-level="6.3" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-main-text-figure-3"><i class="fa fa-check"></i><b>6.3</b> Prepare Main Text Figure 3</a><ul>
-<li class="chapter" data-level="6.3.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-histogram-of-distance-to-roads"><i class="fa fa-check"></i><b>6.3.1</b> Prepare histogram of distance to roads</a></li>
-<li class="chapter" data-level="6.3.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#table-distance-to-roads"><i class="fa fa-check"></i><b>6.3.2</b> Table: Distance to roads</a></li>
-<li class="chapter" data-level="6.3.3" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#distance-to-nearest-neighbouring-site"><i class="fa fa-check"></i><b>6.3.3</b> Distance to nearest neighbouring site</a></li>
-<li class="chapter" data-level="6.3.4" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#spatial-distribution-of-distances-to-neighbours"><i class="fa fa-check"></i><b>6.3.4</b> Spatial distribution of distances to neighbours</a></li>
+<li class="chapter" data-level="5.4" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#figure-spatial-sampling-bias"><i class="fa fa-check"></i><b>5.4</b> Figure: Spatial sampling bias</a></li>
 </ul></li>
-<li class="chapter" data-level="6.4" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#figure-spatial-sampling-bias"><i class="fa fa-check"></i><b>6.4</b> Figure: Spatial sampling bias</a></li>
+<li class="chapter" data-level="6" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html"><i class="fa fa-check"></i><b>6</b> Checking Temporal Sampling Frequency</a><ul>
+<li class="chapter" data-level="6.1" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#load-libraries"><i class="fa fa-check"></i><b>6.1</b> Load libraries</a></li>
+<li class="chapter" data-level="6.2" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#load-checklist-data"><i class="fa fa-check"></i><b>6.2</b> Load checklist data</a></li>
+<li class="chapter" data-level="6.3" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#get-time-differences-per-grid-cell"><i class="fa fa-check"></i><b>6.3</b> Get time differences per grid cell</a></li>
+<li class="chapter" data-level="6.4" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#time-since-previous-checklist"><i class="fa fa-check"></i><b>6.4</b> Time Since Previous Checklist</a><ul>
+<li class="chapter" data-level="6.4.1" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#get-aux-data"><i class="fa fa-check"></i><b>6.4.1</b> Get aux data</a></li>
+<li class="chapter" data-level="6.4.2" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#histogram-of-lags"><i class="fa fa-check"></i><b>6.4.2</b> Histogram of lags</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html"><i class="fa fa-check"></i><b>7</b> Checking Temporal Sampling Frequency</a><ul>
-<li class="chapter" data-level="7.1" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#load-libraries"><i class="fa fa-check"></i><b>7.1</b> Load libraries</a></li>
-<li class="chapter" data-level="7.2" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#load-checklist-data"><i class="fa fa-check"></i><b>7.2</b> Load checklist data</a></li>
-<li class="chapter" data-level="7.3" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#get-time-differences-per-grid-cell"><i class="fa fa-check"></i><b>7.3</b> Get time differences per grid cell</a></li>
-<li class="chapter" data-level="7.4" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#time-since-previous-checklist"><i class="fa fa-check"></i><b>7.4</b> Time Since Previous Checklist</a><ul>
-<li class="chapter" data-level="7.4.1" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#get-aux-data"><i class="fa fa-check"></i><b>7.4.1</b> Get aux data</a></li>
-<li class="chapter" data-level="7.4.2" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#histogram-of-lags"><i class="fa fa-check"></i><b>7.4.2</b> Histogram of lags</a></li>
+<li class="chapter" data-level="6.5" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#main-text-figure-3"><i class="fa fa-check"></i><b>6.5</b> Main Text Figure 3</a></li>
+<li class="chapter" data-level="6.6" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#checklists-per-month"><i class="fa fa-check"></i><b>6.6</b> Checklists per Month</a></li>
 </ul></li>
-<li class="chapter" data-level="7.5" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#main-text-figure-3"><i class="fa fa-check"></i><b>7.5</b> Main Text Figure 3</a></li>
-<li class="chapter" data-level="7.6" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#checklists-per-month"><i class="fa fa-check"></i><b>7.6</b> Checklists per Month</a></li>
+<li class="chapter" data-level="7" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html"><i class="fa fa-check"></i><b>7</b> Adding Covariates to Checklist Data</a><ul>
+<li class="chapter" data-level="7.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#prepare-libraries-and-data"><i class="fa fa-check"></i><b>7.1</b> Prepare libraries and data</a></li>
+<li class="chapter" data-level="7.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-subsampling"><i class="fa fa-check"></i><b>7.2</b> Spatial subsampling</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#counting-presence-observation-proportion"><i class="fa fa-check"></i><b>7.2.1</b> Counting presence observation proportion</a></li>
+<li class="chapter" data-level="7.2.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#count-absences-after-spatial-thinning"><i class="fa fa-check"></i><b>7.2.2</b> Count absences after spatial thinning</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html"><i class="fa fa-check"></i><b>8</b> Adding Covariates to Checklist Data</a><ul>
-<li class="chapter" data-level="8.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#prepare-libraries-and-data"><i class="fa fa-check"></i><b>8.1</b> Prepare libraries and data</a></li>
-<li class="chapter" data-level="8.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-subsampling"><i class="fa fa-check"></i><b>8.2</b> Spatial subsampling</a><ul>
-<li class="chapter" data-level="8.2.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#counting-presence-observation-proportion"><i class="fa fa-check"></i><b>8.2.1</b> Counting presence observation proportion</a></li>
-<li class="chapter" data-level="8.2.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#count-absences-after-spatial-thinning"><i class="fa fa-check"></i><b>8.2.2</b> Count absences after spatial thinning</a></li>
+<li class="chapter" data-level="7.3" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#temporal-subsampling"><i class="fa fa-check"></i><b>7.3</b> Temporal subsampling</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#count-absences-after-temporal-thinning"><i class="fa fa-check"></i><b>7.3.1</b> Count absences after temporal thinning</a></li>
 </ul></li>
-<li class="chapter" data-level="8.3" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#temporal-subsampling"><i class="fa fa-check"></i><b>8.3</b> Temporal subsampling</a><ul>
-<li class="chapter" data-level="8.3.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#count-absences-after-temporal-thinning"><i class="fa fa-check"></i><b>8.3.1</b> Count absences after temporal thinning</a></li>
-</ul></li>
-<li class="chapter" data-level="8.4" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#add-checklist-calibration-index"><i class="fa fa-check"></i><b>8.4</b> Add checklist calibration index</a></li>
-<li class="chapter" data-level="8.5" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#add-climatic-and-landscape-covariates"><i class="fa fa-check"></i><b>8.5</b> Add climatic and landscape covariates</a></li>
-<li class="chapter" data-level="8.6" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-buffers-around-selected-checklists"><i class="fa fa-check"></i><b>8.6</b> Spatial buffers around selected checklists</a></li>
-<li class="chapter" data-level="8.7" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-buffer-wide-covariates"><i class="fa fa-check"></i><b>8.7</b> Spatial buffer-wide covariates</a><ul>
-<li class="chapter" data-level="8.7.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#mean-climatic-covariates"><i class="fa fa-check"></i><b>8.7.1</b> Mean climatic covariates</a></li>
-<li class="chapter" data-level="8.7.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#proportions-of-land-cover-type"><i class="fa fa-check"></i><b>8.7.2</b> Proportions of land cover type</a></li>
-<li class="chapter" data-level="8.7.3" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#link-environmental-covariates-to-checklists"><i class="fa fa-check"></i><b>8.7.3</b> Link environmental covariates to checklists</a></li>
+<li class="chapter" data-level="7.4" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#add-checklist-calibration-index"><i class="fa fa-check"></i><b>7.4</b> Add checklist calibration index</a></li>
+<li class="chapter" data-level="7.5" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#add-climatic-and-landscape-covariates"><i class="fa fa-check"></i><b>7.5</b> Add climatic and landscape covariates</a></li>
+<li class="chapter" data-level="7.6" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-buffers-around-selected-checklists"><i class="fa fa-check"></i><b>7.6</b> Spatial buffers around selected checklists</a></li>
+<li class="chapter" data-level="7.7" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-buffer-wide-covariates"><i class="fa fa-check"></i><b>7.7</b> Spatial buffer-wide covariates</a><ul>
+<li class="chapter" data-level="7.7.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#mean-climatic-covariates"><i class="fa fa-check"></i><b>7.7.1</b> Mean climatic covariates</a></li>
+<li class="chapter" data-level="7.7.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#proportions-of-land-cover-type"><i class="fa fa-check"></i><b>7.7.2</b> Proportions of land cover type</a></li>
+<li class="chapter" data-level="7.7.3" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#link-environmental-covariates-to-checklists"><i class="fa fa-check"></i><b>7.7.3</b> Link environmental covariates to checklists</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html"><i class="fa fa-check"></i><b>9</b> Modelling Species Occupancy</a><ul>
-<li class="chapter" data-level="9.0.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#load-necessary-libraries"><i class="fa fa-check"></i><b>9.0.1</b> Load necessary libraries</a></li>
-<li class="chapter" data-level="9.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#load-dataframe-and-prepare-covariates"><i class="fa fa-check"></i><b>9.1</b> Load dataframe and prepare covariates</a><ul>
-<li class="chapter" data-level="9.1.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#handle-the-sampling-protocol"><i class="fa fa-check"></i><b>9.1.1</b> Handle the sampling protocol</a></li>
-<li class="chapter" data-level="9.1.2" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#handle-time-and-date"><i class="fa fa-check"></i><b>9.1.2</b> Handle time and date</a></li>
-<li class="chapter" data-level="9.1.3" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#scaling-covariates"><i class="fa fa-check"></i><b>9.1.3</b> Scaling covariates</a></li>
-<li class="chapter" data-level="9.1.4" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#correct-date-format"><i class="fa fa-check"></i><b>9.1.4</b> Correct date format</a></li>
-<li class="chapter" data-level="9.1.5" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#check-for-correlated-covariates"><i class="fa fa-check"></i><b>9.1.5</b> Check for correlated covariates</a></li>
+<li class="chapter" data-level="8" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html"><i class="fa fa-check"></i><b>8</b> Modelling Species Occupancy</a><ul>
+<li class="chapter" data-level="8.0.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#load-necessary-libraries"><i class="fa fa-check"></i><b>8.0.1</b> Load necessary libraries</a></li>
+<li class="chapter" data-level="8.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#load-dataframe-and-prepare-covariates"><i class="fa fa-check"></i><b>8.1</b> Load dataframe and prepare covariates</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#handle-the-sampling-protocol"><i class="fa fa-check"></i><b>8.1.1</b> Handle the sampling protocol</a></li>
+<li class="chapter" data-level="8.1.2" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#handle-time-and-date"><i class="fa fa-check"></i><b>8.1.2</b> Handle time and date</a></li>
+<li class="chapter" data-level="8.1.3" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#scaling-covariates"><i class="fa fa-check"></i><b>8.1.3</b> Scaling covariates</a></li>
+<li class="chapter" data-level="8.1.4" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#correct-date-format"><i class="fa fa-check"></i><b>8.1.4</b> Correct date format</a></li>
+<li class="chapter" data-level="8.1.5" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#check-for-correlated-covariates"><i class="fa fa-check"></i><b>8.1.5</b> Check for correlated covariates</a></li>
 </ul></li>
-<li class="chapter" data-level="9.2" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#running-a-null-model"><i class="fa fa-check"></i><b>9.2</b> Running a null model</a></li>
-<li class="chapter" data-level="9.3" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#identifying-covariates-necessary-to-model-the-detection-process"><i class="fa fa-check"></i><b>9.3</b> Identifying covariates necessary to model the detection process</a></li>
-<li class="chapter" data-level="9.4" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#land-cover-and-climate"><i class="fa fa-check"></i><b>9.4</b> Land Cover and Climate</a></li>
-<li class="chapter" data-level="9.5" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#goodness-of-fit-tests"><i class="fa fa-check"></i><b>9.5</b> Goodness-of-fit tests</a></li>
+<li class="chapter" data-level="8.2" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#running-a-null-model"><i class="fa fa-check"></i><b>8.2</b> Running a null model</a></li>
+<li class="chapter" data-level="8.3" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#identifying-covariates-necessary-to-model-the-detection-process"><i class="fa fa-check"></i><b>8.3</b> Identifying covariates necessary to model the detection process</a></li>
+<li class="chapter" data-level="8.4" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#land-cover-and-climate"><i class="fa fa-check"></i><b>8.4</b> Land Cover and Climate</a></li>
+<li class="chapter" data-level="8.5" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#goodness-of-fit-tests"><i class="fa fa-check"></i><b>8.5</b> Goodness-of-fit tests</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html"><i class="fa fa-check"></i><b>10</b> Visualizing Occupancy Predictor Effects</a><ul>
-<li class="chapter" data-level="10.1" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-libraries-4"><i class="fa fa-check"></i><b>10.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="10.2" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#load-species-list"><i class="fa fa-check"></i><b>10.2</b> Load species list</a></li>
-<li class="chapter" data-level="10.3" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#show-aic-weight-importance"><i class="fa fa-check"></i><b>10.3</b> Show AIC weight importance</a><ul>
-<li class="chapter" data-level="10.3.1" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#read-in-aic-weight-data"><i class="fa fa-check"></i><b>10.3.1</b> Read in AIC weight data</a></li>
-<li class="chapter" data-level="10.3.2" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-cumulative-aic-weight-data"><i class="fa fa-check"></i><b>10.3.2</b> Prepare cumulative AIC weight data</a></li>
+<li class="chapter" data-level="9" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html"><i class="fa fa-check"></i><b>9</b> Visualizing Occupancy Predictor Effects</a><ul>
+<li class="chapter" data-level="9.1" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-libraries-3"><i class="fa fa-check"></i><b>9.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="9.2" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#load-species-list"><i class="fa fa-check"></i><b>9.2</b> Load species list</a></li>
+<li class="chapter" data-level="9.3" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#show-aic-weight-importance"><i class="fa fa-check"></i><b>9.3</b> Show AIC weight importance</a><ul>
+<li class="chapter" data-level="9.3.1" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#read-in-aic-weight-data"><i class="fa fa-check"></i><b>9.3.1</b> Read in AIC weight data</a></li>
+<li class="chapter" data-level="9.3.2" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-cumulative-aic-weight-data"><i class="fa fa-check"></i><b>9.3.2</b> Prepare cumulative AIC weight data</a></li>
 </ul></li>
-<li class="chapter" data-level="10.4" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-model-coefficient-data"><i class="fa fa-check"></i><b>10.4</b> Prepare model coefficient data</a></li>
-<li class="chapter" data-level="10.5" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#get-predictor-effects"><i class="fa fa-check"></i><b>10.5</b> Get predictor effects</a></li>
-<li class="chapter" data-level="10.6" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#main-text-figure-4"><i class="fa fa-check"></i><b>10.6</b> Main Text Figure 4</a></li>
+<li class="chapter" data-level="9.4" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-model-coefficient-data"><i class="fa fa-check"></i><b>9.4</b> Prepare model coefficient data</a></li>
+<li class="chapter" data-level="9.5" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#get-predictor-effects"><i class="fa fa-check"></i><b>9.5</b> Get predictor effects</a></li>
+<li class="chapter" data-level="9.6" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#main-text-figure-4"><i class="fa fa-check"></i><b>9.6</b> Main Text Figure 4</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>11</b> References</a></li>
+<li class="chapter" data-level="10" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>10</b> References</a></li>
 </ul>
 
       </nav>
@@ -276,326 +269,171 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="checking-temporal-sampling-frequency" class="section level1">
-<h1><span class="header-section-number">Section 7</span> Checking Temporal Sampling Frequency</h1>
+<h1><span class="header-section-number">Section 6</span> Checking Temporal Sampling Frequency</h1>
 <p>How often are checklists recorded in each grid cell?</p>
 <div id="load-libraries" class="section level2">
-<h2><span class="header-section-number">7.1</span> Load libraries</h2>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" data-line-number="1"><span class="co"># load libraries</span></a>
-<a class="sourceLine" id="cb62-2" data-line-number="2"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb62-3" data-line-number="3"><span class="kw">library</span>(sf)</a>
-<a class="sourceLine" id="cb62-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb62-5" data-line-number="5"><span class="co"># for plotting</span></a>
-<a class="sourceLine" id="cb62-6" data-line-number="6"><span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb62-7" data-line-number="7"><span class="kw">library</span>(colorspace)</a>
-<a class="sourceLine" id="cb62-8" data-line-number="8"><span class="kw">library</span>(scico)</a>
-<a class="sourceLine" id="cb62-9" data-line-number="9"><span class="kw">library</span>(ggthemes)</a>
-<a class="sourceLine" id="cb62-10" data-line-number="10"><span class="kw">library</span>(ggspatial)</a>
-<a class="sourceLine" id="cb62-11" data-line-number="11"><span class="kw">library</span>(patchwork)</a></code></pre></div>
+<h2><span class="header-section-number">6.1</span> Load libraries</h2>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="co"># load libraries</span></a>
+<a class="sourceLine" id="cb53-2" data-line-number="2"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb53-3" data-line-number="3"><span class="kw">library</span>(sf)</a>
+<a class="sourceLine" id="cb53-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb53-5" data-line-number="5"><span class="co"># for plotting</span></a>
+<a class="sourceLine" id="cb53-6" data-line-number="6"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb53-7" data-line-number="7"><span class="kw">library</span>(colorspace)</a>
+<a class="sourceLine" id="cb53-8" data-line-number="8"><span class="kw">library</span>(scico)</a>
+<a class="sourceLine" id="cb53-9" data-line-number="9"><span class="kw">library</span>(ggthemes)</a>
+<a class="sourceLine" id="cb53-10" data-line-number="10"><span class="kw">library</span>(ggspatial)</a>
+<a class="sourceLine" id="cb53-11" data-line-number="11"><span class="kw">library</span>(patchwork)</a></code></pre></div>
 </div>
 <div id="load-checklist-data" class="section level2">
-<h2><span class="header-section-number">7.2</span> Load checklist data</h2>
+<h2><span class="header-section-number">6.2</span> Load checklist data</h2>
 <p>Here we load filtered checklist data and convert to UTM 43N coordinates.</p>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" data-line-number="1"><span class="co"># load checklist data</span></a>
-<a class="sourceLine" id="cb63-2" data-line-number="2"><span class="kw">load</span>(<span class="st">&quot;data/01_ebird_data_prelim_processing.rdata&quot;</span>)</a>
-<a class="sourceLine" id="cb63-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb63-4" data-line-number="4"><span class="co"># get checklists</span></a>
-<a class="sourceLine" id="cb63-5" data-line-number="5">data &lt;-<span class="st"> </span><span class="kw">distinct</span>(</a>
-<a class="sourceLine" id="cb63-6" data-line-number="6">  dataGrouped, sampling_event_identifier, observation_date,</a>
-<a class="sourceLine" id="cb63-7" data-line-number="7">  longitude, latitude</a>
-<a class="sourceLine" id="cb63-8" data-line-number="8">)</a>
-<a class="sourceLine" id="cb63-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb63-10" data-line-number="10"><span class="co"># remove old data</span></a>
-<a class="sourceLine" id="cb63-11" data-line-number="11"><span class="kw">rm</span>(dataGrouped)</a>
-<a class="sourceLine" id="cb63-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb63-13" data-line-number="13"><span class="co"># transform to UTM 43N</span></a>
-<a class="sourceLine" id="cb63-14" data-line-number="14">data &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(data, <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>), <span class="dt">crs =</span> <span class="dv">4326</span>)</a>
-<a class="sourceLine" id="cb63-15" data-line-number="15">data &lt;-<span class="st"> </span><span class="kw">st_transform</span>(data, <span class="dt">crs =</span> <span class="dv">32643</span>)</a>
-<a class="sourceLine" id="cb63-16" data-line-number="16"></a>
-<a class="sourceLine" id="cb63-17" data-line-number="17"><span class="co"># get coordinates and bind to data</span></a>
-<a class="sourceLine" id="cb63-18" data-line-number="18">data &lt;-<span class="st"> </span><span class="kw">cbind</span>(</a>
-<a class="sourceLine" id="cb63-19" data-line-number="19">  <span class="kw">st_drop_geometry</span>(data),</a>
-<a class="sourceLine" id="cb63-20" data-line-number="20">  <span class="kw">st_coordinates</span>(data)</a>
-<a class="sourceLine" id="cb63-21" data-line-number="21">)</a>
-<a class="sourceLine" id="cb63-22" data-line-number="22"></a>
-<a class="sourceLine" id="cb63-23" data-line-number="23"><span class="co"># bin to 1000m</span></a>
-<a class="sourceLine" id="cb63-24" data-line-number="24">data &lt;-<span class="st"> </span><span class="kw">mutate</span>(data,</a>
-<a class="sourceLine" id="cb63-25" data-line-number="25">  <span class="dt">X =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(X, <span class="dv">2500</span>),</a>
-<a class="sourceLine" id="cb63-26" data-line-number="26">  <span class="dt">Y =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(Y, <span class="dv">2500</span>)</a>
-<a class="sourceLine" id="cb63-27" data-line-number="27">)</a></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1"><span class="co"># load checklist data</span></a>
+<a class="sourceLine" id="cb54-2" data-line-number="2"><span class="kw">load</span>(<span class="st">&quot;data/01_ebird_data_prelim_processing.rdata&quot;</span>)</a>
+<a class="sourceLine" id="cb54-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb54-4" data-line-number="4"><span class="co"># get checklists</span></a>
+<a class="sourceLine" id="cb54-5" data-line-number="5">data &lt;-<span class="st"> </span><span class="kw">distinct</span>(</a>
+<a class="sourceLine" id="cb54-6" data-line-number="6">  dataGrouped, sampling_event_identifier, observation_date,</a>
+<a class="sourceLine" id="cb54-7" data-line-number="7">  longitude, latitude</a>
+<a class="sourceLine" id="cb54-8" data-line-number="8">)</a>
+<a class="sourceLine" id="cb54-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb54-10" data-line-number="10"><span class="co"># remove old data</span></a>
+<a class="sourceLine" id="cb54-11" data-line-number="11"><span class="kw">rm</span>(dataGrouped)</a>
+<a class="sourceLine" id="cb54-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb54-13" data-line-number="13"><span class="co"># transform to UTM 43N</span></a>
+<a class="sourceLine" id="cb54-14" data-line-number="14">data &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(data, <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>), <span class="dt">crs =</span> <span class="dv">4326</span>)</a>
+<a class="sourceLine" id="cb54-15" data-line-number="15">data &lt;-<span class="st"> </span><span class="kw">st_transform</span>(data, <span class="dt">crs =</span> <span class="dv">32643</span>)</a>
+<a class="sourceLine" id="cb54-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb54-17" data-line-number="17"><span class="co"># get coordinates and bind to data</span></a>
+<a class="sourceLine" id="cb54-18" data-line-number="18">data &lt;-<span class="st"> </span><span class="kw">cbind</span>(</a>
+<a class="sourceLine" id="cb54-19" data-line-number="19">  <span class="kw">st_drop_geometry</span>(data),</a>
+<a class="sourceLine" id="cb54-20" data-line-number="20">  <span class="kw">st_coordinates</span>(data)</a>
+<a class="sourceLine" id="cb54-21" data-line-number="21">)</a>
+<a class="sourceLine" id="cb54-22" data-line-number="22"></a>
+<a class="sourceLine" id="cb54-23" data-line-number="23"><span class="co"># bin to 1000m</span></a>
+<a class="sourceLine" id="cb54-24" data-line-number="24">data &lt;-<span class="st"> </span><span class="kw">mutate</span>(data,</a>
+<a class="sourceLine" id="cb54-25" data-line-number="25">  <span class="dt">X =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(X, <span class="dv">2500</span>),</a>
+<a class="sourceLine" id="cb54-26" data-line-number="26">  <span class="dt">Y =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(Y, <span class="dv">2500</span>)</a>
+<a class="sourceLine" id="cb54-27" data-line-number="27">)</a></code></pre></div>
 </div>
 <div id="get-time-differences-per-grid-cell" class="section level2">
-<h2><span class="header-section-number">7.3</span> Get time differences per grid cell</h2>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" data-line-number="1"><span class="co"># get time differences in days</span></a>
-<a class="sourceLine" id="cb64-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw">mutate</span>(data, <span class="dt">observation_date =</span> <span class="kw">as.POSIXct</span>(observation_date))</a>
-<a class="sourceLine" id="cb64-3" data-line-number="3">data &lt;-<span class="st"> </span><span class="kw">nest</span>(data, <span class="dt">data =</span> <span class="kw">c</span>(<span class="st">&quot;sampling_event_identifier&quot;</span>, <span class="st">&quot;observation_date&quot;</span>))</a>
-<a class="sourceLine" id="cb64-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb64-5" data-line-number="5"><span class="co"># map over data</span></a>
-<a class="sourceLine" id="cb64-6" data-line-number="6">data &lt;-<span class="st"> </span><span class="kw">mutate</span>(data,</a>
-<a class="sourceLine" id="cb64-7" data-line-number="7">  <span class="dt">lag_metrics =</span> <span class="kw">lapply</span>(data, <span class="cf">function</span>(df) {</a>
-<a class="sourceLine" id="cb64-8" data-line-number="8">    df &lt;-<span class="st"> </span><span class="kw">arrange</span>(df, observation_date)</a>
-<a class="sourceLine" id="cb64-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb64-10" data-line-number="10">    lag &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">diff</span>(df<span class="op">$</span>observation_date, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">/</span><span class="st"> </span>(<span class="dv">24</span> <span class="op">*</span><span class="st"> </span><span class="dv">3600</span>))</a>
-<a class="sourceLine" id="cb64-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb64-12" data-line-number="12">    data &lt;-<span class="st"> </span><span class="kw">tibble</span>(</a>
-<a class="sourceLine" id="cb64-13" data-line-number="13">      <span class="dt">mean_lag =</span> <span class="kw">mean</span>(lag, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</a>
-<a class="sourceLine" id="cb64-14" data-line-number="14">      <span class="dt">median_lag =</span> <span class="kw">median</span>(lag, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</a>
-<a class="sourceLine" id="cb64-15" data-line-number="15">      <span class="dt">sd_lag =</span> <span class="kw">sd</span>(lag, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</a>
-<a class="sourceLine" id="cb64-16" data-line-number="16">      <span class="dt">n_chk =</span> <span class="kw">nrow</span>(df)</a>
-<a class="sourceLine" id="cb64-17" data-line-number="17">    )</a>
-<a class="sourceLine" id="cb64-18" data-line-number="18"></a>
-<a class="sourceLine" id="cb64-19" data-line-number="19">    data</a>
-<a class="sourceLine" id="cb64-20" data-line-number="20">  })</a>
-<a class="sourceLine" id="cb64-21" data-line-number="21">)</a></code></pre></div>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" data-line-number="1"><span class="co"># unnest lag metrics</span></a>
-<a class="sourceLine" id="cb65-2" data-line-number="2">data_lag &lt;-<span class="st"> </span><span class="kw">select</span>(data, <span class="op">-</span>data)</a>
-<a class="sourceLine" id="cb65-3" data-line-number="3">data_lag &lt;-<span class="st"> </span><span class="kw">unnest</span>(data_lag, <span class="dt">cols =</span> <span class="st">&quot;lag_metrics&quot;</span>)</a>
-<a class="sourceLine" id="cb65-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb65-5" data-line-number="5"><span class="co"># set the mean and median to infinity if nchk is 1</span></a>
-<a class="sourceLine" id="cb65-6" data-line-number="6">data_lag &lt;-<span class="st"> </span><span class="kw">mutate</span>(data_lag,</a>
-<a class="sourceLine" id="cb65-7" data-line-number="7">  <span class="dt">mean_lag =</span> <span class="kw">ifelse</span>(n_chk <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="ot">Inf</span>, mean_lag),</a>
-<a class="sourceLine" id="cb65-8" data-line-number="8">  <span class="dt">median_lag =</span> <span class="kw">ifelse</span>(n_chk <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="ot">Inf</span>, median_lag),</a>
-<a class="sourceLine" id="cb65-9" data-line-number="9">  <span class="dt">sd_lag =</span> <span class="kw">ifelse</span>(n_chk <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="ot">Inf</span>, sd_lag)</a>
-<a class="sourceLine" id="cb65-10" data-line-number="10">)</a>
-<a class="sourceLine" id="cb65-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb65-12" data-line-number="12"><span class="co"># set all 0 to 1</span></a>
-<a class="sourceLine" id="cb65-13" data-line-number="13">data_lag &lt;-<span class="st"> </span><span class="kw">mutate</span>(data_lag,</a>
-<a class="sourceLine" id="cb65-14" data-line-number="14">  <span class="dt">mean_lag =</span> mean_lag <span class="op">+</span><span class="st"> </span><span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb65-15" data-line-number="15">  <span class="dt">median_lag =</span> median_lag <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb65-16" data-line-number="16">)</a>
-<a class="sourceLine" id="cb65-17" data-line-number="17"><span class="co"># melt data by tile</span></a>
-<a class="sourceLine" id="cb65-18" data-line-number="18"><span class="co"># data_lag = pivot_longer(data_lag, cols = c(&quot;mean_lag&quot;, &quot;median_lag&quot;, &quot;sd_lag&quot;))</span></a></code></pre></div>
+<h2><span class="header-section-number">6.3</span> Get time differences per grid cell</h2>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1"><span class="co"># get time differences in days</span></a>
+<a class="sourceLine" id="cb55-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw">mutate</span>(data, <span class="dt">observation_date =</span> <span class="kw">as.POSIXct</span>(observation_date))</a>
+<a class="sourceLine" id="cb55-3" data-line-number="3">data &lt;-<span class="st"> </span><span class="kw">nest</span>(data, <span class="dt">data =</span> <span class="kw">c</span>(<span class="st">&quot;sampling_event_identifier&quot;</span>, <span class="st">&quot;observation_date&quot;</span>))</a>
+<a class="sourceLine" id="cb55-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb55-5" data-line-number="5"><span class="co"># map over data</span></a>
+<a class="sourceLine" id="cb55-6" data-line-number="6">data &lt;-<span class="st"> </span><span class="kw">mutate</span>(data,</a>
+<a class="sourceLine" id="cb55-7" data-line-number="7">  <span class="dt">lag_metrics =</span> <span class="kw">lapply</span>(data, <span class="cf">function</span>(df) {</a>
+<a class="sourceLine" id="cb55-8" data-line-number="8">    df &lt;-<span class="st"> </span><span class="kw">arrange</span>(df, observation_date)</a>
+<a class="sourceLine" id="cb55-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb55-10" data-line-number="10">    lag &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">diff</span>(df<span class="op">$</span>observation_date, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">/</span><span class="st"> </span>(<span class="dv">24</span> <span class="op">*</span><span class="st"> </span><span class="dv">3600</span>))</a>
+<a class="sourceLine" id="cb55-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb55-12" data-line-number="12">    data &lt;-<span class="st"> </span><span class="kw">tibble</span>(</a>
+<a class="sourceLine" id="cb55-13" data-line-number="13">      <span class="dt">mean_lag =</span> <span class="kw">mean</span>(lag, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</a>
+<a class="sourceLine" id="cb55-14" data-line-number="14">      <span class="dt">median_lag =</span> <span class="kw">median</span>(lag, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</a>
+<a class="sourceLine" id="cb55-15" data-line-number="15">      <span class="dt">sd_lag =</span> <span class="kw">sd</span>(lag, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</a>
+<a class="sourceLine" id="cb55-16" data-line-number="16">      <span class="dt">n_chk =</span> <span class="kw">nrow</span>(df)</a>
+<a class="sourceLine" id="cb55-17" data-line-number="17">    )</a>
+<a class="sourceLine" id="cb55-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb55-19" data-line-number="19">    data</a>
+<a class="sourceLine" id="cb55-20" data-line-number="20">  })</a>
+<a class="sourceLine" id="cb55-21" data-line-number="21">)</a></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1"><span class="co"># unnest lag metrics</span></a>
+<a class="sourceLine" id="cb56-2" data-line-number="2">data_lag &lt;-<span class="st"> </span><span class="kw">select</span>(data, <span class="op">-</span>data)</a>
+<a class="sourceLine" id="cb56-3" data-line-number="3">data_lag &lt;-<span class="st"> </span><span class="kw">unnest</span>(data_lag, <span class="dt">cols =</span> <span class="st">&quot;lag_metrics&quot;</span>)</a>
+<a class="sourceLine" id="cb56-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb56-5" data-line-number="5"><span class="co"># set the mean and median to infinity if nchk is 1</span></a>
+<a class="sourceLine" id="cb56-6" data-line-number="6">data_lag &lt;-<span class="st"> </span><span class="kw">mutate</span>(data_lag,</a>
+<a class="sourceLine" id="cb56-7" data-line-number="7">  <span class="dt">mean_lag =</span> <span class="kw">ifelse</span>(n_chk <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="ot">Inf</span>, mean_lag),</a>
+<a class="sourceLine" id="cb56-8" data-line-number="8">  <span class="dt">median_lag =</span> <span class="kw">ifelse</span>(n_chk <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="ot">Inf</span>, median_lag),</a>
+<a class="sourceLine" id="cb56-9" data-line-number="9">  <span class="dt">sd_lag =</span> <span class="kw">ifelse</span>(n_chk <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="ot">Inf</span>, sd_lag)</a>
+<a class="sourceLine" id="cb56-10" data-line-number="10">)</a>
+<a class="sourceLine" id="cb56-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb56-12" data-line-number="12"><span class="co"># set all 0 to 1</span></a>
+<a class="sourceLine" id="cb56-13" data-line-number="13">data_lag &lt;-<span class="st"> </span><span class="kw">mutate</span>(data_lag,</a>
+<a class="sourceLine" id="cb56-14" data-line-number="14">  <span class="dt">mean_lag =</span> mean_lag <span class="op">+</span><span class="st"> </span><span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb56-15" data-line-number="15">  <span class="dt">median_lag =</span> median_lag <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb56-16" data-line-number="16">)</a>
+<a class="sourceLine" id="cb56-17" data-line-number="17"><span class="co"># melt data by tile</span></a>
+<a class="sourceLine" id="cb56-18" data-line-number="18"><span class="co"># data_lag = pivot_longer(data_lag, cols = c(&quot;mean_lag&quot;, &quot;median_lag&quot;, &quot;sd_lag&quot;))</span></a></code></pre></div>
 </div>
 <div id="time-since-previous-checklist" class="section level2">
-<h2><span class="header-section-number">7.4</span> Time Since Previous Checklist</h2>
+<h2><span class="header-section-number">6.4</span> Time Since Previous Checklist</h2>
 <div id="get-aux-data" class="section level3">
-<h3><span class="header-section-number">7.4.1</span> Get aux data</h3>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" data-line-number="1"><span class="co"># hills data</span></a>
-<a class="sourceLine" id="cb66-2" data-line-number="2">wg &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb66-3" data-line-number="3"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
-<a class="sourceLine" id="cb66-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb66-5" data-line-number="5">roads &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/roads_studysite_2019/roads_studysite_2019.shp&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb66-6" data-line-number="6"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
-<a class="sourceLine" id="cb66-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb66-8" data-line-number="8"><span class="co"># add land</span></a>
-<a class="sourceLine" id="cb66-9" data-line-number="9"><span class="kw">library</span>(rnaturalearth)</a>
-<a class="sourceLine" id="cb66-10" data-line-number="10">land &lt;-<span class="st"> </span><span class="kw">ne_countries</span>(</a>
-<a class="sourceLine" id="cb66-11" data-line-number="11">  <span class="dt">scale =</span> <span class="dv">50</span>, <span class="dt">type =</span> <span class="st">&quot;countries&quot;</span>, <span class="dt">continent =</span> <span class="st">&quot;asia&quot;</span>,</a>
-<a class="sourceLine" id="cb66-12" data-line-number="12">  <span class="dt">country =</span> <span class="st">&quot;india&quot;</span>,</a>
-<a class="sourceLine" id="cb66-13" data-line-number="13">  <span class="dt">returnclass =</span> <span class="kw">c</span>(<span class="st">&quot;sf&quot;</span>)</a>
-<a class="sourceLine" id="cb66-14" data-line-number="14">) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb66-15" data-line-number="15"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
-<a class="sourceLine" id="cb66-16" data-line-number="16"></a>
-<a class="sourceLine" id="cb66-17" data-line-number="17">bbox &lt;-<span class="st"> </span><span class="kw">st_bbox</span>(wg)</a></code></pre></div>
+<h3><span class="header-section-number">6.4.1</span> Get aux data</h3>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="co"># hills data</span></a>
+<a class="sourceLine" id="cb57-2" data-line-number="2">wg &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb57-3" data-line-number="3"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
+<a class="sourceLine" id="cb57-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb57-5" data-line-number="5">roads &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/roads_studysite_2019/roads_studysite_2019.shp&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb57-6" data-line-number="6"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
+<a class="sourceLine" id="cb57-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb57-8" data-line-number="8"><span class="co"># add land</span></a>
+<a class="sourceLine" id="cb57-9" data-line-number="9"><span class="kw">library</span>(rnaturalearth)</a>
+<a class="sourceLine" id="cb57-10" data-line-number="10">land &lt;-<span class="st"> </span><span class="kw">ne_countries</span>(</a>
+<a class="sourceLine" id="cb57-11" data-line-number="11">  <span class="dt">scale =</span> <span class="dv">50</span>, <span class="dt">type =</span> <span class="st">&quot;countries&quot;</span>, <span class="dt">continent =</span> <span class="st">&quot;asia&quot;</span>,</a>
+<a class="sourceLine" id="cb57-12" data-line-number="12">  <span class="dt">country =</span> <span class="st">&quot;india&quot;</span>,</a>
+<a class="sourceLine" id="cb57-13" data-line-number="13">  <span class="dt">returnclass =</span> <span class="kw">c</span>(<span class="st">&quot;sf&quot;</span>)</a>
+<a class="sourceLine" id="cb57-14" data-line-number="14">) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb57-15" data-line-number="15"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
+<a class="sourceLine" id="cb57-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb57-17" data-line-number="17">bbox &lt;-<span class="st"> </span><span class="kw">st_bbox</span>(wg)</a></code></pre></div>
 </div>
 <div id="histogram-of-lags" class="section level3">
-<h3><span class="header-section-number">7.4.2</span> Histogram of lags</h3>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" data-line-number="1"><span class="co"># get lags</span></a>
-<a class="sourceLine" id="cb67-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw">mutate</span>(data,</a>
-<a class="sourceLine" id="cb67-3" data-line-number="3">  <span class="dt">lag_hist =</span> <span class="kw">lapply</span>(data, <span class="cf">function</span>(df) {</a>
-<a class="sourceLine" id="cb67-4" data-line-number="4">    df &lt;-<span class="st"> </span><span class="kw">arrange</span>(df, observation_date)</a>
-<a class="sourceLine" id="cb67-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb67-6" data-line-number="6">    lag &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">diff</span>(df<span class="op">$</span>observation_date, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">/</span><span class="st"> </span>(<span class="dv">24</span> <span class="op">*</span><span class="st"> </span><span class="dv">3600</span>))</a>
-<a class="sourceLine" id="cb67-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb67-8" data-line-number="8">    data &lt;-<span class="st"> </span><span class="kw">tibble</span>(</a>
-<a class="sourceLine" id="cb67-9" data-line-number="9">      <span class="dt">lag =</span> lag <span class="op">+</span><span class="st"> </span><span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb67-10" data-line-number="10">      <span class="dt">index =</span> <span class="kw">seq</span>(lag)</a>
-<a class="sourceLine" id="cb67-11" data-line-number="11">    )</a>
-<a class="sourceLine" id="cb67-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb67-13" data-line-number="13">    data</a>
-<a class="sourceLine" id="cb67-14" data-line-number="14">  })</a>
-<a class="sourceLine" id="cb67-15" data-line-number="15">)</a>
-<a class="sourceLine" id="cb67-16" data-line-number="16"></a>
-<a class="sourceLine" id="cb67-17" data-line-number="17"><span class="co"># unnest lags</span></a>
-<a class="sourceLine" id="cb67-18" data-line-number="18">data_hist &lt;-<span class="st"> </span><span class="kw">select</span>(data, X, Y, lag_hist) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb67-19" data-line-number="19"><span class="st">  </span><span class="kw">unnest</span>(<span class="dt">cols =</span> <span class="st">&quot;lag_hist&quot;</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" data-line-number="1">fig_hist_lag &lt;-</a>
-<a class="sourceLine" id="cb68-2" data-line-number="2"><span class="st">  </span><span class="kw">ggplot</span>(data_hist) <span class="op">+</span></a>
-<a class="sourceLine" id="cb68-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_histogram</span>(</a>
-<a class="sourceLine" id="cb68-4" data-line-number="4">    <span class="kw">aes</span>(<span class="dt">x =</span> lag),</a>
-<a class="sourceLine" id="cb68-5" data-line-number="5">    <span class="dt">bins =</span> <span class="dv">10</span>, <span class="dt">size =</span> <span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">&quot;steelblue&quot;</span></a>
-<a class="sourceLine" id="cb68-6" data-line-number="6">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb68-7" data-line-number="7"><span class="st">  </span><span class="kw">scale_x_log10</span>(</a>
-<a class="sourceLine" id="cb68-8" data-line-number="8">    <span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">30</span>, <span class="dv">365</span>),</a>
-<a class="sourceLine" id="cb68-9" data-line-number="9">    <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;1 day&quot;</span>, <span class="st">&quot;1 mo.&quot;</span>, <span class="st">&quot;1 yr.&quot;</span>)</a>
-<a class="sourceLine" id="cb68-10" data-line-number="10">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb68-11" data-line-number="11"><span class="st">  </span><span class="kw">scale_y_continuous</span>(</a>
-<a class="sourceLine" id="cb68-12" data-line-number="12">    <span class="dt">labels =</span> scales<span class="op">::</span><span class="kw">label_number</span>(</a>
-<a class="sourceLine" id="cb68-13" data-line-number="13">      <span class="dt">scale =</span> <span class="fl">0.001</span>, <span class="dt">accuracy =</span> <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb68-14" data-line-number="14">      <span class="dt">suffix =</span> <span class="st">&quot;K&quot;</span></a>
-<a class="sourceLine" id="cb68-15" data-line-number="15">    ),</a>
-<a class="sourceLine" id="cb68-16" data-line-number="16">    <span class="dt">limits =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">10.5e3</span>)</a>
-<a class="sourceLine" id="cb68-17" data-line-number="17">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb68-18" data-line-number="18"><span class="st">  </span><span class="kw">theme_few</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb68-19" data-line-number="19"><span class="st">  </span><span class="kw">theme</span>(</a>
-<a class="sourceLine" id="cb68-20" data-line-number="20">    <span class="dt">plot.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">colour =</span> <span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb68-21" data-line-number="21">    <span class="dt">panel.background =</span> <span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb68-22" data-line-number="22">    <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.line =</span> <span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb68-23" data-line-number="23">    <span class="dt">axis.text.y =</span> <span class="kw">element_text</span>(</a>
-<a class="sourceLine" id="cb68-24" data-line-number="24">      <span class="dt">angle =</span> <span class="dv">90</span>,</a>
-<a class="sourceLine" id="cb68-25" data-line-number="25">      <span class="dt">hjust =</span> <span class="fl">0.5</span></a>
-<a class="sourceLine" id="cb68-26" data-line-number="26">    )</a>
-<a class="sourceLine" id="cb68-27" data-line-number="27">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb68-28" data-line-number="28"><span class="st">  </span><span class="kw">coord_cartesian</span>(</a>
-<a class="sourceLine" id="cb68-29" data-line-number="29">    <span class="dt">expand =</span> F</a>
-<a class="sourceLine" id="cb68-30" data-line-number="30">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb68-31" data-line-number="31"><span class="st">  </span><span class="kw">labs</span>(</a>
-<a class="sourceLine" id="cb68-32" data-line-number="32">    <span class="dt">x =</span> <span class="st">&quot;Timelag prev. obs.&quot;</span>,</a>
-<a class="sourceLine" id="cb68-33" data-line-number="33">    <span class="dt">y =</span> <span class="st">&quot;# checklists&quot;</span></a>
-<a class="sourceLine" id="cb68-34" data-line-number="34">  )</a></code></pre></div>
-<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" data-line-number="1"><span class="co"># make plot</span></a>
-<a class="sourceLine" id="cb69-2" data-line-number="2">fig_lag_temporal &lt;-</a>
-<a class="sourceLine" id="cb69-3" data-line-number="3"><span class="st">  </span><span class="kw">ggplot</span>(data_lag) <span class="op">+</span></a>
-<a class="sourceLine" id="cb69-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> land, <span class="dt">fill =</span> <span class="st">&quot;grey90&quot;</span>, <span class="dt">col =</span> <span class="ot">NA</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb69-5" data-line-number="5"><span class="st">  </span><span class="kw">geom_sf</span>(</a>
-<a class="sourceLine" id="cb69-6" data-line-number="6">    <span class="dt">data =</span> wg,</a>
-<a class="sourceLine" id="cb69-7" data-line-number="7">    <span class="dt">fill =</span> <span class="ot">NA</span>,</a>
-<a class="sourceLine" id="cb69-8" data-line-number="8">    <span class="dt">lty =</span> <span class="dv">2</span></a>
-<a class="sourceLine" id="cb69-9" data-line-number="9">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb69-10" data-line-number="10"><span class="st">  </span><span class="kw">annotation_custom</span>(</a>
-<a class="sourceLine" id="cb69-11" data-line-number="11">    <span class="dt">grob =</span> fig_hist_lag <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplotGrob</span>(),</a>
-<a class="sourceLine" id="cb69-12" data-line-number="12">    <span class="dt">xmin =</span> bbox[<span class="st">&quot;xmax&quot;</span>] <span class="op">-</span><span class="st"> </span>(bbox[<span class="st">&quot;xmax&quot;</span>] <span class="op">-</span><span class="st"> </span>bbox[<span class="st">&quot;xmin&quot;</span>]) <span class="op">/</span><span class="st"> </span><span class="fl">2.5</span>,</a>
-<a class="sourceLine" id="cb69-13" data-line-number="13">    <span class="dt">xmax =</span> bbox[<span class="st">&quot;xmax&quot;</span>],</a>
-<a class="sourceLine" id="cb69-14" data-line-number="14">    <span class="dt">ymin =</span> bbox[<span class="st">&quot;ymax&quot;</span>] <span class="op">-</span><span class="st"> </span>(bbox[<span class="st">&quot;ymax&quot;</span>] <span class="op">-</span><span class="st"> </span>bbox[<span class="st">&quot;ymin&quot;</span>]) <span class="op">/</span><span class="st"> </span><span class="dv">3</span>,</a>
-<a class="sourceLine" id="cb69-15" data-line-number="15">    <span class="dt">ymax =</span> bbox[<span class="st">&quot;ymax&quot;</span>]</a>
-<a class="sourceLine" id="cb69-16" data-line-number="16">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb69-17" data-line-number="17"><span class="st">  </span><span class="kw">geom_tile</span>(</a>
-<a class="sourceLine" id="cb69-18" data-line-number="18">    <span class="kw">aes</span>(X, Y,</a>
-<a class="sourceLine" id="cb69-19" data-line-number="19">      <span class="dt">fill =</span> mean_lag</a>
-<a class="sourceLine" id="cb69-20" data-line-number="20">    ),</a>
-<a class="sourceLine" id="cb69-21" data-line-number="21">    <span class="dt">col =</span> <span class="st">&quot;grey90&quot;</span></a>
-<a class="sourceLine" id="cb69-22" data-line-number="22">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb69-23" data-line-number="23"><span class="st">  </span><span class="kw">geom_sf</span>(</a>
-<a class="sourceLine" id="cb69-24" data-line-number="24">    <span class="dt">data =</span> roads, <span class="dt">size =</span> <span class="fl">0.2</span>, <span class="dt">col =</span> <span class="st">&quot;indianred&quot;</span></a>
-<a class="sourceLine" id="cb69-25" data-line-number="25">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb69-26" data-line-number="26"><span class="st">  </span><span class="kw">scale_fill_scico</span>(</a>
-<a class="sourceLine" id="cb69-27" data-line-number="27">    <span class="dt">palette =</span> <span class="st">&quot;davos&quot;</span>,</a>
-<a class="sourceLine" id="cb69-28" data-line-number="28">    <span class="dt">trans =</span> <span class="st">&quot;log10&quot;</span>,</a>
-<a class="sourceLine" id="cb69-29" data-line-number="29">    <span class="dt">begin =</span> <span class="fl">0.1</span>,</a>
-<a class="sourceLine" id="cb69-30" data-line-number="30">    <span class="dt">limits =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">365</span>),</a>
-<a class="sourceLine" id="cb69-31" data-line-number="31">    <span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">7</span>, <span class="dv">30</span>, <span class="dv">180</span>, <span class="dv">365</span>),</a>
-<a class="sourceLine" id="cb69-32" data-line-number="32">    <span class="dt">label =</span> <span class="kw">c</span>(<span class="st">&quot;1 day&quot;</span>, <span class="st">&quot;1 wk.&quot;</span>, <span class="st">&quot;1 mo.&quot;</span>, <span class="st">&quot;6 mo.&quot;</span>, <span class="st">&quot;&gt; 1 yr.&quot;</span>),</a>
-<a class="sourceLine" id="cb69-33" data-line-number="33">    <span class="dt">na.value =</span> <span class="kw">alpha</span>(<span class="st">&quot;ivory&quot;</span>)</a>
-<a class="sourceLine" id="cb69-34" data-line-number="34">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb69-35" data-line-number="35"><span class="st">  </span><span class="kw">annotation_north_arrow</span>(</a>
-<a class="sourceLine" id="cb69-36" data-line-number="36">    <span class="dt">location =</span> <span class="st">&quot;bl&quot;</span>, <span class="dt">which_north =</span> <span class="st">&quot;true&quot;</span>,</a>
-<a class="sourceLine" id="cb69-37" data-line-number="37">    <span class="dt">pad_x =</span> <span class="kw">unit</span>(<span class="fl">0.1</span>, <span class="st">&quot;in&quot;</span>), <span class="dt">pad_y =</span> <span class="kw">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;in&quot;</span>),</a>
-<a class="sourceLine" id="cb69-38" data-line-number="38">    <span class="dt">style =</span> north_arrow_fancy_orienteering</a>
-<a class="sourceLine" id="cb69-39" data-line-number="39">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb69-40" data-line-number="40"><span class="st">  </span><span class="kw">annotation_scale</span>(</a>
-<a class="sourceLine" id="cb69-41" data-line-number="41">    <span class="dt">location =</span> <span class="st">&quot;bl&quot;</span>,</a>
-<a class="sourceLine" id="cb69-42" data-line-number="42">    <span class="dt">width_hint =</span> <span class="fl">0.25</span>,</a>
-<a class="sourceLine" id="cb69-43" data-line-number="43">    <span class="dt">text_cex =</span> <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb69-44" data-line-number="44">    <span class="dt">style =</span> <span class="st">&quot;ticks&quot;</span></a>
-<a class="sourceLine" id="cb69-45" data-line-number="45">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb69-46" data-line-number="46"><span class="st">  </span><span class="kw">coord_sf</span>(</a>
-<a class="sourceLine" id="cb69-47" data-line-number="47">    <span class="dt">expand =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb69-48" data-line-number="48">    <span class="dt">xlim =</span> bbox[<span class="kw">c</span>(<span class="st">&quot;xmin&quot;</span>, <span class="st">&quot;xmax&quot;</span>)],</a>
-<a class="sourceLine" id="cb69-49" data-line-number="49">    <span class="dt">ylim =</span> bbox[<span class="kw">c</span>(<span class="st">&quot;ymin&quot;</span>, <span class="st">&quot;ymax&quot;</span>)]</a>
-<a class="sourceLine" id="cb69-50" data-line-number="50">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb69-51" data-line-number="51"><span class="st">  </span><span class="kw">theme_test</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb69-52" data-line-number="52"><span class="st">  </span><span class="kw">theme</span>(</a>
-<a class="sourceLine" id="cb69-53" data-line-number="53">    <span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="fl">0.85</span>, <span class="fl">0.5</span>),</a>
-<a class="sourceLine" id="cb69-54" data-line-number="54">    <span class="dt">legend.background =</span> <span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb69-55" data-line-number="55">    <span class="dt">legend.key =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;grey90&quot;</span>),</a>
-<a class="sourceLine" id="cb69-56" data-line-number="56">    <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="dt">units =</span> <span class="st">&quot;mm&quot;</span>),</a>
-<a class="sourceLine" id="cb69-57" data-line-number="57">    <span class="dt">legend.title =</span> <span class="kw">element_text</span>(<span class="dt">face =</span> <span class="st">&quot;bold&quot;</span>),</a>
-<a class="sourceLine" id="cb69-58" data-line-number="58">    <span class="dt">axis.text.y =</span> <span class="kw">element_text</span>(</a>
-<a class="sourceLine" id="cb69-59" data-line-number="59">      <span class="dt">angle =</span> <span class="dv">90</span>,</a>
-<a class="sourceLine" id="cb69-60" data-line-number="60">      <span class="dt">hjust =</span> <span class="fl">0.5</span></a>
-<a class="sourceLine" id="cb69-61" data-line-number="61">    ),</a>
-<a class="sourceLine" id="cb69-62" data-line-number="62">    <span class="dt">axis.title =</span> <span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb69-63" data-line-number="63">    <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;lightblue&quot;</span>)</a>
-<a class="sourceLine" id="cb69-64" data-line-number="64">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb69-65" data-line-number="65"><span class="st">  </span><span class="kw">labs</span>(</a>
-<a class="sourceLine" id="cb69-66" data-line-number="66">    <span class="dt">fill =</span> <span class="st">&quot;Mean time</span><span class="ch">\n</span><span class="st">b/w checklists&quot;</span></a>
-<a class="sourceLine" id="cb69-67" data-line-number="67">  )</a></code></pre></div>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" data-line-number="1"><span class="co"># save figure</span></a>
-<a class="sourceLine" id="cb70-2" data-line-number="2"><span class="kw">ggsave</span>(</a>
-<a class="sourceLine" id="cb70-3" data-line-number="3">  fig_lag_temporal,</a>
-<a class="sourceLine" id="cb70-4" data-line-number="4">  <span class="dt">filename =</span> <span class="st">&quot;figs/fig_temporal_bias.png&quot;</span>,</a>
-<a class="sourceLine" id="cb70-5" data-line-number="5">  <span class="dt">device =</span> <span class="kw">png</span>()</a>
-<a class="sourceLine" id="cb70-6" data-line-number="6">)</a></code></pre></div>
+<h3><span class="header-section-number">6.4.2</span> Histogram of lags</h3>
+<p>Figure code hidden in HTML and PDF versions.</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" data-line-number="1"><span class="co"># get lags</span></a>
+<a class="sourceLine" id="cb58-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw">mutate</span>(data,</a>
+<a class="sourceLine" id="cb58-3" data-line-number="3">  <span class="dt">lag_hist =</span> <span class="kw">lapply</span>(data, <span class="cf">function</span>(df) {</a>
+<a class="sourceLine" id="cb58-4" data-line-number="4">    df &lt;-<span class="st"> </span><span class="kw">arrange</span>(df, observation_date)</a>
+<a class="sourceLine" id="cb58-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb58-6" data-line-number="6">    lag &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">diff</span>(df<span class="op">$</span>observation_date, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">/</span><span class="st"> </span>(<span class="dv">24</span> <span class="op">*</span><span class="st"> </span><span class="dv">3600</span>))</a>
+<a class="sourceLine" id="cb58-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb58-8" data-line-number="8">    data &lt;-<span class="st"> </span><span class="kw">tibble</span>(</a>
+<a class="sourceLine" id="cb58-9" data-line-number="9">      <span class="dt">lag =</span> lag <span class="op">+</span><span class="st"> </span><span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb58-10" data-line-number="10">      <span class="dt">index =</span> <span class="kw">seq</span>(lag)</a>
+<a class="sourceLine" id="cb58-11" data-line-number="11">    )</a>
+<a class="sourceLine" id="cb58-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb58-13" data-line-number="13">    data</a>
+<a class="sourceLine" id="cb58-14" data-line-number="14">  })</a>
+<a class="sourceLine" id="cb58-15" data-line-number="15">)</a>
+<a class="sourceLine" id="cb58-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb58-17" data-line-number="17"><span class="co"># unnest lags</span></a>
+<a class="sourceLine" id="cb58-18" data-line-number="18">data_hist &lt;-<span class="st"> </span><span class="kw">select</span>(data, X, Y, lag_hist) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb58-19" data-line-number="19"><span class="st">  </span><span class="kw">unnest</span>(<span class="dt">cols =</span> <span class="st">&quot;lag_hist&quot;</span>)</a></code></pre></div>
 <div class="figure">
-<img src="figs/fig_temporal_bias.png" alt="Most sites are resurveyed at least once, but some are visited much more frequently than others. There does not appear to be a link between roads and visit frequency." />
-<p class="caption">Most sites are resurveyed at least once, but some are visited much more frequently than others. There does not appear to be a link between roads and visit frequency.</p>
+<img src="figs/fig_temporal_bias.png" alt="Most sites are resurveyed at least once, but some are visited much more frequently than others. There does not appear to be a link between roads and visit frequency. eBird checklists are also strongly clustered in time, with some of the most sampled areas over the study period visited at intervals of &gt; 1 week, and with some less intensively sampled areas visited frequently, at intervals of &lt; 1 week. Overall, the majority of checklists are reported only a day after the previous checklist at that location (see inset)." />
+<p class="caption">Most sites are resurveyed at least once, but some are visited much more frequently than others. There does not appear to be a link between roads and visit frequency. eBird checklists are also strongly clustered in time, with some of the most sampled areas over the study period visited at intervals of &gt; 1 week, and with some less intensively sampled areas visited frequently, at intervals of &lt; 1 week. Overall, the majority of checklists are reported only a day after the previous checklist at that location (see inset).</p>
 </div>
 </div>
 </div>
 <div id="main-text-figure-3" class="section level2">
-<h2><span class="header-section-number">7.5</span> Main Text Figure 3</h2>
-<p>Combining figures for spatial and temporal clustering into main text figure 3.</p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" data-line-number="1"><span class="co"># load spatial bias figure</span></a>
-<a class="sourceLine" id="cb71-2" data-line-number="2"><span class="kw">load</span>(<span class="st">&quot;data/fig_checklists_grid.Rds&quot;</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" data-line-number="1"><span class="co"># make figure</span></a>
-<a class="sourceLine" id="cb72-2" data-line-number="2">fig_sampling_bias &lt;-</a>
-<a class="sourceLine" id="cb72-3" data-line-number="3"><span class="st">  </span><span class="kw">wrap_plots</span>(</a>
-<a class="sourceLine" id="cb72-4" data-line-number="4">    fig_checklists_grid, fig_lag_temporal</a>
-<a class="sourceLine" id="cb72-5" data-line-number="5">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb72-6" data-line-number="6"><span class="st">    </span><span class="kw">plot_annotation</span>(</a>
-<a class="sourceLine" id="cb72-7" data-line-number="7">      <span class="dt">tag_levels =</span> <span class="st">&quot;a&quot;</span>,</a>
-<a class="sourceLine" id="cb72-8" data-line-number="8">      <span class="dt">tag_prefix =</span> <span class="st">&quot;(&quot;</span>,</a>
-<a class="sourceLine" id="cb72-9" data-line-number="9">      <span class="dt">tag_suffix =</span> <span class="st">&quot;)&quot;</span></a>
-<a class="sourceLine" id="cb72-10" data-line-number="10">    ) <span class="op">&amp;</span></a>
-<a class="sourceLine" id="cb72-11" data-line-number="11"><span class="st">    </span><span class="kw">theme</span>(</a>
-<a class="sourceLine" id="cb72-12" data-line-number="12">      <span class="dt">plot.tag =</span> <span class="kw">element_text</span>(</a>
-<a class="sourceLine" id="cb72-13" data-line-number="13">        <span class="dt">size =</span> <span class="dv">14</span>,</a>
-<a class="sourceLine" id="cb72-14" data-line-number="14">        <span class="dt">family =</span> <span class="st">&quot;Arial&quot;</span>,</a>
-<a class="sourceLine" id="cb72-15" data-line-number="15">        <span class="dt">face =</span> <span class="st">&quot;bold&quot;</span></a>
-<a class="sourceLine" id="cb72-16" data-line-number="16">      )</a>
-<a class="sourceLine" id="cb72-17" data-line-number="17">    )</a>
-<a class="sourceLine" id="cb72-18" data-line-number="18"></a>
-<a class="sourceLine" id="cb72-19" data-line-number="19"><span class="co"># save figure</span></a>
-<a class="sourceLine" id="cb72-20" data-line-number="20"><span class="kw">ggsave</span>(</a>
-<a class="sourceLine" id="cb72-21" data-line-number="21">  fig_sampling_bias,</a>
-<a class="sourceLine" id="cb72-22" data-line-number="22">  <span class="dt">filename =</span> <span class="st">&quot;figs/fig_03.png&quot;</span>,</a>
-<a class="sourceLine" id="cb72-23" data-line-number="23">  <span class="dt">width =</span> <span class="dv">300</span>,</a>
-<a class="sourceLine" id="cb72-24" data-line-number="24">  <span class="dt">height =</span> <span class="dv">150</span>,</a>
-<a class="sourceLine" id="cb72-25" data-line-number="25">  <span class="dt">units =</span> <span class="st">&quot;mm&quot;</span></a>
-<a class="sourceLine" id="cb72-26" data-line-number="26">)</a></code></pre></div>
+<h2><span class="header-section-number">6.5</span> Main Text Figure 3</h2>
+<p>Combining figures for spatial and temporal clustering into main text figure 3. This overall figure is not shown here, see main text.</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1"><span class="co"># load spatial bias figure</span></a>
+<a class="sourceLine" id="cb59-2" data-line-number="2"><span class="kw">load</span>(<span class="st">&quot;data/fig_checklists_grid.Rds&quot;</span>)</a></code></pre></div>
 </div>
 <div id="checklists-per-month" class="section level2">
-<h2><span class="header-section-number">7.6</span> Checklists per Month</h2>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" data-line-number="1"><span class="co"># get two week period by date</span></a>
-<a class="sourceLine" id="cb73-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw">select</span>(data, X, Y, data)</a>
-<a class="sourceLine" id="cb73-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb73-4" data-line-number="4"><span class="co"># unnest</span></a>
-<a class="sourceLine" id="cb73-5" data-line-number="5">data &lt;-<span class="st"> </span><span class="kw">unnest</span>(data, <span class="dt">cols =</span> <span class="st">&quot;data&quot;</span>)</a>
-<a class="sourceLine" id="cb73-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb73-7" data-line-number="7"><span class="co"># get fortnight</span></a>
-<a class="sourceLine" id="cb73-8" data-line-number="8"><span class="kw">library</span>(lubridate)</a>
-<a class="sourceLine" id="cb73-9" data-line-number="9">data &lt;-<span class="st"> </span><span class="kw">mutate</span>(data,</a>
-<a class="sourceLine" id="cb73-10" data-line-number="10">  <span class="dt">week =</span> <span class="kw">week</span>(observation_date),</a>
-<a class="sourceLine" id="cb73-11" data-line-number="11">  <span class="dt">week =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(week, <span class="dv">2</span>),</a>
-<a class="sourceLine" id="cb73-12" data-line-number="12">  <span class="dt">year =</span> <span class="kw">year</span>(observation_date),</a>
-<a class="sourceLine" id="cb73-13" data-line-number="13">  <span class="dt">month =</span> <span class="kw">month</span>(observation_date)</a>
-<a class="sourceLine" id="cb73-14" data-line-number="14">)</a>
-<a class="sourceLine" id="cb73-15" data-line-number="15"></a>
-<a class="sourceLine" id="cb73-16" data-line-number="16"><span class="co"># count checklists per fortnight</span></a>
-<a class="sourceLine" id="cb73-17" data-line-number="17">data_count &lt;-<span class="st"> </span><span class="kw">count</span>(data, month, year)</a></code></pre></div>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" data-line-number="1"><span class="kw">ggplot</span>(data_count) <span class="op">+</span></a>
-<a class="sourceLine" id="cb74-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_boxplot</span>(</a>
-<a class="sourceLine" id="cb74-3" data-line-number="3">    <span class="kw">aes</span>(</a>
-<a class="sourceLine" id="cb74-4" data-line-number="4">      <span class="dt">x =</span> <span class="kw">factor</span>(month),</a>
-<a class="sourceLine" id="cb74-5" data-line-number="5">      <span class="dt">y =</span> n</a>
-<a class="sourceLine" id="cb74-6" data-line-number="6">    ),</a>
-<a class="sourceLine" id="cb74-7" data-line-number="7">    <span class="dt">fill =</span> <span class="st">&quot;steelblue&quot;</span></a>
-<a class="sourceLine" id="cb74-8" data-line-number="8">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb74-9" data-line-number="9"><span class="st">  </span><span class="kw">scale_y_log10</span>(</a>
-<a class="sourceLine" id="cb74-10" data-line-number="10">    <span class="dt">limits =</span> <span class="kw">c</span>(<span class="dv">10</span>, <span class="ot">NA</span>)</a>
-<a class="sourceLine" id="cb74-11" data-line-number="11">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb74-12" data-line-number="12"><span class="st">  </span><span class="kw">theme_classic</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb74-13" data-line-number="13"><span class="st">  </span><span class="kw">theme</span>(</a>
-<a class="sourceLine" id="cb74-14" data-line-number="14">    <span class="dt">axis.text.y =</span> <span class="kw">element_text</span>(</a>
-<a class="sourceLine" id="cb74-15" data-line-number="15">      <span class="dt">angle =</span> <span class="dv">90</span>,</a>
-<a class="sourceLine" id="cb74-16" data-line-number="16">      <span class="dt">hjust =</span> <span class="fl">0.5</span></a>
-<a class="sourceLine" id="cb74-17" data-line-number="17">    )</a>
-<a class="sourceLine" id="cb74-18" data-line-number="18">  ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb74-19" data-line-number="19"><span class="st">  </span><span class="kw">labs</span>(</a>
-<a class="sourceLine" id="cb74-20" data-line-number="20">    <span class="dt">x =</span> <span class="st">&quot;Month&quot;</span>,</a>
-<a class="sourceLine" id="cb74-21" data-line-number="21">    <span class="dt">y =</span> <span class="st">&quot;# checklists&quot;</span></a>
-<a class="sourceLine" id="cb74-22" data-line-number="22">  )</a>
-<a class="sourceLine" id="cb74-23" data-line-number="23"></a>
-<a class="sourceLine" id="cb74-24" data-line-number="24"><span class="kw">ggsave</span>(<span class="dt">filename =</span> <span class="st">&quot;figs/fig_chk_per_month.png&quot;</span>)</a></code></pre></div>
+<h2><span class="header-section-number">6.6</span> Checklists per Month</h2>
+<p>We counted the checklists per month, pooled over years, to determine how sampling effort varies over the year.</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" data-line-number="1"><span class="co"># get two week period by date</span></a>
+<a class="sourceLine" id="cb60-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw">select</span>(data, X, Y, data)</a>
+<a class="sourceLine" id="cb60-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb60-4" data-line-number="4"><span class="co"># unnest</span></a>
+<a class="sourceLine" id="cb60-5" data-line-number="5">data &lt;-<span class="st"> </span><span class="kw">unnest</span>(data, <span class="dt">cols =</span> <span class="st">&quot;data&quot;</span>)</a>
+<a class="sourceLine" id="cb60-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb60-7" data-line-number="7"><span class="co"># get fortnight</span></a>
+<a class="sourceLine" id="cb60-8" data-line-number="8"><span class="kw">library</span>(lubridate)</a>
+<a class="sourceLine" id="cb60-9" data-line-number="9">data &lt;-<span class="st"> </span><span class="kw">mutate</span>(data,</a>
+<a class="sourceLine" id="cb60-10" data-line-number="10">  <span class="dt">week =</span> <span class="kw">week</span>(observation_date),</a>
+<a class="sourceLine" id="cb60-11" data-line-number="11">  <span class="dt">week =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(week, <span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb60-12" data-line-number="12">  <span class="dt">year =</span> <span class="kw">year</span>(observation_date),</a>
+<a class="sourceLine" id="cb60-13" data-line-number="13">  <span class="dt">month =</span> <span class="kw">month</span>(observation_date)</a>
+<a class="sourceLine" id="cb60-14" data-line-number="14">)</a>
+<a class="sourceLine" id="cb60-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb60-16" data-line-number="16"><span class="co"># count checklists per fortnight</span></a>
+<a class="sourceLine" id="cb60-17" data-line-number="17">data_count &lt;-<span class="st"> </span><span class="kw">count</span>(data, month, year)</a></code></pre></div>
 <div class="figure">
 <img src="figs/fig_chk_per_month.png" alt="Observations peak in the early months of the year, and decline towards the rainy months, slowly increasing until the following winter." />
 <p class="caption">Observations peak in the early months of the year, and decline towards the rainy months, slowly increasing until the following winter.</p>
