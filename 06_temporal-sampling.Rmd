@@ -131,6 +131,8 @@ bbox <- st_bbox(wg)
 
 ### Histogram of lags
 
+Figure code hidden in HTML and PDF versions.
+
 ```{r}
 # get lags
 data <- mutate(data,
@@ -153,7 +155,7 @@ data_hist <- select(data, X, Y, lag_hist) %>%
   unnest(cols = "lag_hist")
 ```
 
-```{r}
+```{r echo=FALSE}
 fig_hist_lag <-
   ggplot(data_hist) +
   geom_histogram(
@@ -190,7 +192,7 @@ fig_hist_lag <-
   )
 ```
 
-```{r}
+```{r echo=FALSE}
 # make plot
 fig_lag_temporal <-
   ggplot(data_lag) +
@@ -260,7 +262,7 @@ fig_lag_temporal <-
   )
 ```
 
-```{r}
+```{r echo=FALSE}
 # save figure
 ggsave(
   fig_lag_temporal,
@@ -269,18 +271,18 @@ ggsave(
 )
 ```
 
-![Most sites are resurveyed at least once, but some are visited much more frequently than others. There does not appear to be a link between roads and visit frequency.](figs/fig_temporal_bias.png)
+![Most sites are resurveyed at least once, but some are visited much more frequently than others. There does not appear to be a link between roads and visit frequency. eBird checklists are also strongly clustered in time, with some of the most sampled areas over the study period visited at intervals of > 1 week, and with some less intensively sampled areas visited frequently, at intervals of < 1 week. Overall, the majority of checklists are reported only a day after the previous checklist at that location (see inset).](figs/fig_temporal_bias.png)
 
 ## Main Text Figure 3
 
-Combining figures for spatial and temporal clustering into main text figure 3.
+Combining figures for spatial and temporal clustering into main text figure 3. This overall figure is not shown here, see main text.
 
 ```{r}
 # load spatial bias figure
 load("data/fig_checklists_grid.Rds")
 ```
 
-```{r}
+```{r echo=FALSE}
 # make figure
 fig_sampling_bias <-
   wrap_plots(
@@ -311,6 +313,8 @@ ggsave(
 
 ## Checklists per Month
 
+We counted the checklists per month, pooled over years, to determine how sampling effort varies over the year.
+
 ```{r}
 # get two week period by date
 data <- select(data, X, Y, data)
@@ -331,7 +335,7 @@ data <- mutate(data,
 data_count <- count(data, month, year)
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(data_count) +
   geom_boxplot(
     aes(

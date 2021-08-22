@@ -141,7 +141,7 @@ model_imp <- left_join(model_imp, predictor_name)
 
 Prepare figure for cumulative AIC weight. Figure code is hidden in versions rendered as HTML and PDF.
 
-```{r}
+```{r echo=FALSE}
 fig_aic <-
   ggplot(model_imp) +
   geom_pointrange(aes(
@@ -458,4 +458,6 @@ ggsave(fig_predictor_effect,
 )
 ```
 
-![(a) Cumulative AIC weights suggest that climatic predictors have higher relative importance when compared to landscape predictors. (b) The direction of association between species-specific probability of occupancy and climatic and landscape is shown here. While climatic predictors were both positively and negatively associated with the probability of occupancy for a number of species, human-associated land cover types were largely negatively associated with species-specific probability of occupancy.](figs/fig_04.png)
+![**Relative importance of environmental predictors and species-specific associations.**
+(a) The examination of cumulative variable importance scores revealed that the probability of occupancy for all species was most strongly associated with temperature seasonality (mean across all species = 0.88; sd = 0.26), followed by the proportion of evergreen forests (mean across all species = 0.81; sd = 0.25) and the proportion of deciduous forests (mean across all species = 0.65; sd = 0.33). (b) The direction of association between species-specific probability of occupancy and climatic and landscape predictors is shown here (as a function of habitat preference). The probability of occupancy of ~79% (n=63/80) of species examined was significantly (p<0.05) associated with temperature seasonality. 
+](figs/fig_04.png)
