@@ -371,6 +371,8 @@ tmap_save(
 )
 ```
 
+![Resampling the Roy et al. (2015) landcover raster, reclassified into 7 main classes, to a resolution of 1km, preserves the important features of landcover over the study area.](figs/fig_landcover_resample.png)
+
 ## Resample other rasters to 1km
 
 We now resample all other rasters to a resolution of 1km.
@@ -455,7 +457,7 @@ climvar_names <- c(
 land_data <- split(land_data, f = land_data$clim_var)
 
 # reorder list to match fig 1
-land_data = land_data[rev(names(land_data))]
+land_data <- land_data[rev(names(land_data))]
 
 subplots_climate_elev <- Map(function(df, climvar) {
   ggplot(df) +
@@ -520,29 +522,29 @@ names(lc_clim_data) <- c("landcover", chelsa_names)
 lc_clim_data <- bind_cols(lc_clim_data)
 
 # pivot long
-lc_clim_data = pivot_longer(
+lc_clim_data <- pivot_longer(
   lc_clim_data,
-  cols = contains("bio"), 
+  cols = contains("bio"),
   names_to = "climvar"
 )
 
 # make landcover factor
-lc_clim_data = mutate(
+lc_clim_data <- mutate(
   lc_clim_data,
   landcover = factor(landcover)
 )
 
 # filter bio 4a
-lc_clim_data = filter(
+lc_clim_data <- filter(
   lc_clim_data,
   !is.na(landcover)
 )
 
 # split by variable
-lc_clim_data = nest(lc_clim_data, data = c("landcover", "value"))
+lc_clim_data <- nest(lc_clim_data, data = c("landcover", "value"))
 
 # assign names
-lc_clim_data$climvar_name = c(
+lc_clim_data$climvar_name <- c(
   "Seasonality in Temperature (CV)",
   "Seasonality in Precipitation (CV)"
 )
@@ -552,27 +554,27 @@ Plot density plots of climate seasonality per LC type.
 
 ```{r}
 # make labels
-lc_labels = c(
-      "Evergr. For.", "Decid. For.",
-      "Mixed. For.", "Agri./Settl.",
-      "Grassland", "Plantation",
-      "Waterbody"
+lc_labels <- c(
+  "Evergr. For.", "Decid. For.",
+  "Mixed. For.", "Agri./Settl.",
+  "Grassland", "Plantation",
+  "Waterbody"
 )
-names(lc_labels) = c(seq(5), 7, 9)
+names(lc_labels) <- c(seq(5), 7, 9)
 
 # plots
-lc_clim_plots = pmap(
+lc_clim_plots <- pmap(
   lc_clim_data,
   function(climvar_name, data, climvar) {
-    p = data %>%
-      ggplot()+
+    p <- data %>%
+      ggplot() +
       geom_histogram(
         aes(
           x = value, y = ..density..,
           fill = ..x..
         ),
         show.legend = F
-      )+
+      ) +
       theme_test(base_family = "Arial") +
       theme(
         legend.key.width = unit(2, units = "mm"),
@@ -581,34 +583,34 @@ lc_clim_plots = pmap(
         axis.ticks.y = element_blank(),
         strip.background = element_blank(),
         strip.text = element_text(size = 6, face = "bold")
-      )+
+      ) +
       facet_grid(
-        ~ landcover,
+        ~landcover,
         labeller = labeller(
           landcover = lc_labels
         )
-      )+
+      ) +
       labs(
         x = glue("{climvar_name}"),
         y = "Density"
       )
-    if(climvar == "bio_4a") {
-      p = p + 
+    if (climvar == "bio_4a") {
+      p <- p +
         scale_fill_continuous_diverging(
-          palette = "Blue-Red 2", 
+          palette = "Blue-Red 2",
           mid = 0.7
         )
     } else {
-      p = p +
+      p <- p +
         scale_x_continuous(
           limits = c(20, 60)
-        )+
+        ) +
         scale_fill_continuous_diverging(
-          palette = "Blue-Yellow 2", 
+          palette = "Blue-Yellow 2",
           mid = 40
         )
     }
-    
+
     p
   }
 )
@@ -663,17 +665,17 @@ Figure code is hidden in versions rendered as HTML and PDF.
 # plot figure as tilemap
 
 # factor order
-lc_elev$landcover = factor(lc_elev$landcover) %>%
+lc_elev$landcover <- factor(lc_elev$landcover) %>%
   forcats::fct_rev()
 
 # factor labels
-lc_labels = rev(
+lc_labels <- rev(
   c(
-      "Evergreen Forest", "Deciduous Forest",
-      "Mixed/Degraded Forest", "Agriculture/Settlements",
-      "Grassland", "Plantation",
-      "Waterbody"
-    )
+    "Evergreen Forest", "Deciduous Forest",
+    "Mixed/Degraded Forest", "Agriculture/Settlements",
+    "Grassland", "Plantation",
+    "Waterbody"
+  )
 )
 
 fig_lc_elev <-
@@ -736,24 +738,24 @@ dev.off()
 
 ```{r echo=FALSE}
 fig_clim_lc_elev <-
-  wrap_plots(fig_climate_elev, 
-             fig_lc_clim,
-             fig_lc_elev,
+  wrap_plots(fig_climate_elev,
+    fig_lc_clim,
+    fig_lc_elev,
     ncol = 1,
     design = "A\nB\nB\nC"
   ) +
-  plot_annotation(
-    tag_levels = "a",
-    tag_prefix = "(",
-    tag_suffix = ")"
-  ) &
-  theme(
-    plot.tag = element_text(
-      size = 10,
-      face = "bold",
-      family = "Arial"
+    plot_annotation(
+      tag_levels = "a",
+      tag_prefix = "(",
+      tag_suffix = ")"
+    ) &
+    theme(
+      plot.tag = element_text(
+        size = 10,
+        face = "bold",
+        family = "Arial"
+      )
     )
-  )
 
 # save
 ggsave(fig_clim_lc_elev,
@@ -763,4 +765,5 @@ ggsave(fig_clim_lc_elev,
 )
 ```
 
-![(a) Precipitation seasonality and temperature seasonality as a function of elevation is shown here. The coefficient of variation was calculated. (b) The proportion of land cover types varied across the study area as shown in this panel.](figs/fig_02.png)
+![**Climate and landcover vary strongly along the elevation gradient in the Nilgiri and Anamalai Hills.**
+Both (a) variation in temperature and (b) variation in rainfall, between the months of December and May, declines with increasing elevation across the Nilgiri and Anamalai Hills. Climatic variation is not very strongly associated with land cover type, as both natural habitats such as forests, and artificial habitats such as plantations show low variation in (c) temperature, and (d) rainfall. (e) Most elevations host a range of land cover types: while artificial types such as agriculture are concentrated at lower elevations, and more natural types such as grasslands and forests are associated with higher elevations, each of these types is also found outside their characteristic elevational bands. We calculated climate seasonalities (BIOCLIM 4a and 15: temperature and rainfall, respectively) using CHELSA data over 1979 – 2013, from December to May (Karger et al. 2017), and present mean seasonality values (vertical bars show standard deviation) per 200 m elevational band. Land cover types were taken from a reclassification of Roy et al. (2015; see main text) at 100 m elevational bands. Land cover types covering < 1% of an elevational band are shaded grey. All landscape layers were first resampled to 1 km resolution.](figs/fig_02.png)

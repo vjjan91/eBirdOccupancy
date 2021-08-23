@@ -43,7 +43,7 @@ Here, we load the required dataframe that contains 10 random visits to a site an
 ```{r load_dataframe}
 # Load in the prepared dataframe that contains 10 random visits to each site
 dat <- fread("data/04_data-covars-2.5km.csv", header = T)
-dat = as_tibble(dat)
+dat <- as_tibble(dat)
 head(dat)
 ```
 
@@ -66,8 +66,7 @@ dat <- dat %>%
     effort_distance_km == 0 &
       protocol_type == "Stationary",
     0.1, effort_distance_km
-    )
-  )
+  ))
 ```
 
 ### Handle time and date
@@ -124,23 +123,25 @@ dat <- dat %>%
 # Removing other unnecessary columns from the dataframe and creating a clean one without the rest
 names(dat)
 # select relevant columns BY NAME
-dat = dplyr::select(
+dat <- dplyr::select(
   dat,
-  c("duration_minutes", "effort_distance_km", "locality",
+  c(
+    "duration_minutes", "effort_distance_km", "locality",
     "locality_type", "locality_id", "observer_id",
     "observation_date", "scientific_name", "observation_count",
-    "protocol_type", "number_observers", "pres_abs"),
-  
+    "protocol_type", "number_observers", "pres_abs"
+  ),
+
   # rename X-Y but NOTE THEY ARE IN UTM COORDINATES
   longitude = "X", latitude = "Y",
   expertise,
-  
+
   # elevation and climate layers
-  elev, bio15a, bio4a, 
-  
+  elev, bio15a, bio4a,
+
   # all LANDCOVER COLUMNS
   matches("lc"),
-  
+
   # set new columns to old column names
   julian_date = "newjulianDate",
   min_obs_started = "newmin_obs_started"
@@ -157,13 +158,15 @@ dat.1 <- dat %>%
 dat.scaled <- dat.1
 
 # Note: Never refer to columns by numbers, numbers change, names remain
-cols_to_scale = c("duration_minutes", "effort_distance_km",
-                  "number_observers","expertise", "elev","bio15a",                           "bio4a", "lc_02", "lc_09", "lc_01", 
-                   "lc_05", "lc_04", "lc_07", "lc_03", 
-                    "julian_date", "min_obs_started") 
+cols_to_scale <- c(
+  "duration_minutes", "effort_distance_km",
+  "number_observers", "expertise", "elev", "bio15a", "bio4a", "lc_02", "lc_09", "lc_01",
+  "lc_05", "lc_04", "lc_07", "lc_03",
+  "julian_date", "min_obs_started"
+)
 
 # this scales the relevant columns between 0 and 1
-dat.scaled = mutate(
+dat.scaled <- mutate(
   dat.scaled,
   across(
     .cols = all_of(cols_to_scale), # referring to the columns
@@ -180,7 +183,7 @@ fwrite(dat.scaled, file = "data/05_scaled-covars-2.5km.csv")
 ```{r read_scaled_data}
 # Reload the scaled covariate data
 dat.scaled <- fread("data/05_scaled-covars-2.5km.csv", header = T)
-dat.scaled = as_tibble(dat.scaled)
+dat.scaled <- as_tibble(dat.scaled)
 head(dat.scaled)
 
 # Ensure observation_date column is in the right format
@@ -201,9 +204,11 @@ dat.scaled$observation_date <- format(
 source("R/fun_screen_cor.R")
 
 # SELECT COLUMNS to check BY NAME
-cols_to_check = c("expertise", "bio15a", "bio4a", "lc_02",
-                  "lc_09", "lc_01", 
-                   "lc_05", "lc_04", "lc_07", "lc_03") 
+cols_to_check <- c(
+  "expertise", "bio15a", "bio4a", "lc_02",
+  "lc_09", "lc_01",
+  "lc_05", "lc_04", "lc_07", "lc_03"
+)
 
 # screen covariates for correlation
 screen.cor(dat.scaled[, cols_to_check], threshold = 0.3)
@@ -226,8 +231,8 @@ dat.scaled$locality_id <- as.factor(dat.scaled$locality_id)
 all_null <- list()
 
 # define species and a counter
-species = unique(dat.scaled$scientific_name)
-counter = 0
+species <- unique(dat.scaled$scientific_name)
+counter <- 0
 
 # Add a progress bar for the loop
 pb <- txtProgressBar(
@@ -238,7 +243,7 @@ pb <- txtProgressBar(
 
 # loop over species
 for (i in species) {
-  
+
   # filter data by species
   data <- dat.scaled %>%
     filter(scientific_name == i)
@@ -278,10 +283,10 @@ for (i in species) {
   # Set up the model
   # the list is now automatically named
   all_null[[i]] <- occu(~1 ~ 1, data = occ_um)
-  
+
   # increase counter
-  counter = counter + 1
-  
+  counter <- counter + 1
+
   setTxtProgressBar(pb, counter)
 }
 close(pb)
@@ -340,7 +345,8 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
   occ_wide <- format_unmarked_occu(occ,
     site_id = "site",
     response = "pres_abs",
-    site_covs = c("locality_id", "lc_01", "lc_02", "lc_05",
+    site_covs = c(
+      "locality_id", "lc_01", "lc_02", "lc_05",
       "lc_04", "lc_09", "lc_07", "lc_03", "bio15a", "bio4a"
     ),
     obs_covs = obs_covs
@@ -350,7 +356,7 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
   occ_um <- formatWide(occ_wide, type = "unmarkedFrameOccu")
 
   # Fit a global model with all detection level covariates
-  global_mod <- occu(~ min_obs_started + 
+  global_mod <- occu(~ min_obs_started +
     julian_date +
     duration_minutes +
     effort_distance_km +
@@ -483,7 +489,8 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
   occ_wide <- format_unmarked_occu(occ,
     site_id = "site",
     response = "pres_abs",
-    site_covs = c("locality_id", "lc_01", "lc_02", "lc_05",
+    site_covs = c(
+      "locality_id", "lc_01", "lc_02", "lc_05",
       "lc_04", "lc_09", "lc_07", "lc_03", "bio15a", "bio4a"
     ),
     obs_covs = obs_covs
@@ -498,7 +505,7 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
     effort_distance_km +
     number_observers +
     expertise ~ lc_01 + lc_02 + lc_05 +
-      lc_04 + lc_09 + lc_07 + lc_03 + bio15a + bio4a, data = occ_um)
+    lc_04 + lc_09 + lc_07 + lc_03 + bio15a + bio4a, data = occ_um)
 
   # Set up the cluster
   clusterType <- if (length(find.package("snow", quiet = TRUE))) "SOCK" else "PSOCK"
@@ -619,7 +626,8 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
   occ_wide <- format_unmarked_occu(occ,
     site_id = "site",
     response = "pres_abs",
-    site_covs = c("locality_id", "lc_01", "lc_02", "lc_05",
+    site_covs = c(
+      "locality_id", "lc_01", "lc_02", "lc_05",
       "lc_04", "lc_09", "lc_07", "lc_03", "bio15a", "bio4a"
     ),
     obs_covs = obs_covs
@@ -635,7 +643,7 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
     number_observers +
     protocol_type +
     expertise ~ lc_01 + lc_02 + lc_05 +
-      lc_04 + lc_09 + lc_07 + lc_03 + bio15a + bio4a, data = occ_um)
+    lc_04 + lc_09 + lc_07 + lc_03 + bio15a + bio4a, data = occ_um)
 
   occ_gof <- mb.gof.test(model_lc_clim, nsim = 5000, plot.hist = FALSE)
 
