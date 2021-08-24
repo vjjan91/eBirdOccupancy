@@ -446,7 +446,7 @@ land_data <- drop_na(land_data) %>%
 
 Figure code is hidden in versions rendered as HTML or PDF.
 
-```{r plot_clim_elev, , echo=FALSE}
+```{r plot_clim_elev, echo=FALSE}
 # make labeller
 climvar_names <- c(
   bio_4a = "Seasonality in\nTemperature (CV)",
@@ -552,7 +552,7 @@ lc_clim_data$climvar_name <- c(
 
 Plot density plots of climate seasonality per LC type.
 
-```{r}
+```{r, echo=FALSE}
 # make labels
 lc_labels <- c(
   "Evergr. For.", "Decid. For.",
@@ -661,7 +661,7 @@ lc_elev <- replace_na(lc_elev, replace = list(n = 0, prop = 0))
 
 Figure code is hidden in versions rendered as HTML and PDF.
 
-```{r fig_lc_elev, , message=FALSE, echo=FALSE}
+```{r fig_lc_elev, message=FALSE, echo=FALSE}
 # plot figure as tilemap
 
 # factor order
