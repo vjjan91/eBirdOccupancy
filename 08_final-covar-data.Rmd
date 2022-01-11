@@ -31,7 +31,7 @@ library(velox)
 library(sf)
 
 # load saved data object
-load("data/01_ebird_data_prelim_processing.rdata")
+load("data/01_data_prelim_processing.rdata")
 ```
 
 ## Spatial subsampling
