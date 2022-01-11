@@ -251,6 +251,11 @@ writeRaster(bio_15, filename = "data/chelsa/CHELSA_bio10_15.tif", overwrite = T)
 We stack the terrain and climatic rasters.
 
 ```{r stack_rasters, , message=FALSE, warning=FALSE}
+
+# If bio4a and bio15 have already been prepared from previous runs/analysis - load them directly
+bio_4a <- raster("data/chelsa/CHELSA_bio10_4a.tif")
+bio_15 <- raster("data/chelsa/CHELSA_bio10_15.tif")
+
 # stack rasters for efficient reprojection later
 env_data <- stack(elevData, bio_4a, bio_15)
 ```
@@ -261,6 +266,8 @@ We read in a land cover classified image and resample that using the mode functi
 
 ```{r landcover_raster, , message=FALSE, warning=FALSE, message=FALSE}
 # read in landcover raster location
+# To access the land cover data, please visit: https://daac.ornl.gov/VEGETATION/guides/Decadal_LULC_India.html
+
 landcover <- "data/landUseClassification/landcover_roy_2015/"
 
 # read in and crop
@@ -314,9 +321,9 @@ gdalUtils::gdalwarp(
 We compare the frequency of landcover classes between the original raster and the resampled 1km raster to be certain that the resampling has not resulted in drastic misrepresentation of the frequency of any landcover type. This comparison is made using the figure below.
 
 ```{r get_resampled_lc, , echo=FALSE}
-# landcover <- mask(landcover, mask = as(hills, "Spatial"))
-lc_data <- raster("data/landUseClassification/lc_01000m.tif")
 # lc_data <- mask(lc_data, mask = as(hills, "Spatial"))
+
+lc_data <- raster("data/landUseClassification/lc_01000m.tif")
 lc_data[lc_data == 0] <- NA
 
 # make raster barplot data
@@ -336,7 +343,7 @@ library(tmap)
 fig_lc_roy_reclass <-
   tm_shape(landcover_reclassified) +
   tm_raster(
-    palette = c(viridis::turbo(6), "grey"), style = "cat",
+    palette = c(viridis::plasma(6), "grey"), style = "cat",
     title = "Landcover"
   ) +
   tm_shape(hills) +
@@ -350,7 +357,7 @@ fig_lc_roy_reclass <-
 fig_lc_1km <-
   tm_shape(lc_data) +
   tm_raster(
-    palette = c(viridis::turbo(6), "grey"), style = "cat",
+    palette = c(viridis::plasma(6), "grey"), style = "cat",
     title = "Landcover"
   ) +
   tm_shape(hills) +
@@ -449,8 +456,8 @@ Figure code is hidden in versions rendered as HTML or PDF.
 ```{r plot_clim_elev, , echo=FALSE}
 # make labeller
 climvar_names <- c(
-  bio_4a = "Seasonality in\nTemperature (CV)",
-  bio_15 = "Seasonality in\nPrecipitation (CV)"
+  bio_4a = "Temperature \nSeasonality (CV)",
+  bio_15 = "Precipitation \nSeasonality (CV)"
 )
 
 # split data to list
@@ -545,8 +552,8 @@ lc_clim_data <- nest(lc_clim_data, data = c("landcover", "value"))
 
 # assign names
 lc_clim_data$climvar_name <- c(
-  "Seasonality in Temperature (CV)",
-  "Seasonality in Precipitation (CV)"
+  "Temperature Seasonality (CV)",
+  "Precipitation Seasonality(CV)"
 )
 ```
 
@@ -556,7 +563,7 @@ Plot density plots of climate seasonality per LC type.
 # make labels
 lc_labels <- c(
   "Evergr. For.", "Decid. For.",
-  "Mixed. For.", "Agri./Settl.",
+  "Mixed./Degr.", "Agri./Settl.",
   "Grassland", "Plantation",
   "Waterbody"
 )
@@ -699,7 +706,7 @@ fig_lc_elev <-
     hjust = "inward"
   ) +
   scale_fill_continuous_sequential(
-    palette = "Batlow",
+    palette = "Terrain",
     # direction = -1,
     rev = T,
     limits = c(0.01, 1),

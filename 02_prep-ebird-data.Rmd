@@ -1,11 +1,7 @@
 ---
-editor_options:
+editor_options: 
   chunk_output_type: console
-output:
-  html_document:
-    df_print: paged
 ---
-
 # Preparing eBird Data
 
 ## Prepare libraries and data sources
@@ -28,15 +24,15 @@ sum.no.na <- function(x) {
 
 # set file paths for auk functions
 # To use these two datasets, please download the latest versions from https://ebird.org/data/download and set the file path accordingly. Since these two datasets are extremely large, we have not uploaded the same on github.
-# In this study, the version of data loaded corresponds to March 2021.
+# In this study, the version of data loaded corresponds to November 2021.
 
-f_in_ebd <- file.path("data/ebd_IN_relMar-2021.txt")
-f_in_sampling <- file.path("data/ebd_sampling_relMar-2021.txt")
+f_in_ebd <- file.path("data/ebd_IN_relNov-2021.txt")
+f_in_sampling <- file.path("data/ebd_sampling_relNov-2021.txt")
 ```
 
 ## Filter data
 
-Insert the list of species that we will be analyzing in this study. We initially chose those species that occurred in at least 5% of all checklists across 50% of the 25 x 25 km cells from where they have been reported, resulting in a total of 82 species. To arrive at this final list of species, we carried out further pre-processing which can be found in the Supplementary material.
+Insert the list of species that we will be analyzing in this study. We initially chose those species that occurred in at least 5% of all checklists across 50% of the 25 x 25 km cells from where they have been reported, resulting in a total of 80 species. To arrive at this final list of species, we carried out further pre-processing which can be found in the previous script.
 
 For further details regarding the list of species, please refer to the main text of the manuscript. 
 
@@ -47,7 +43,7 @@ speciesOfInterest <- as.character(specieslist$scientific_name)
 ```
 
 
-Here, we set broad spatial filters for the states of Kerala, Tamil Nadu and Karnataka and keep only those checklists for our list of species that were reported between 1st Jan 2013 and 31st Dec 2020.
+Here, we set broad spatial filters for the states of Kerala, Tamil Nadu and Karnataka and keep only those checklists for our list of species that were reported between 1st Jan 2013 and 31st May 2021.
 
 ```{r prep_ebd_filters}
 # run filters using auk packages
@@ -56,7 +52,7 @@ ebd_filters <- auk_ebd(f_in_ebd, f_in_sampling) %>%
   auk_country(country = "IN") %>%
   auk_state(c("IN-KL", "IN-TN", "IN-KA")) %>%
   # Restricting geography to TamilNadu, Kerala & Karnataka
-  auk_date(c("2013-01-01", "2020-12-31")) %>%
+  auk_date(c("2013-01-01", "2021-05-31")) %>%
   auk_complete()
 
 # check filters
