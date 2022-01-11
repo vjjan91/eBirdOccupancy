@@ -1,6 +1,6 @@
 #Remove data files
 *ebd*.txt
-.txt
+data/.txt
 
 data/eBird*
 data/ebird_*
