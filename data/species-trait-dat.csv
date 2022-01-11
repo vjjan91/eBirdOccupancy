@@ -4,7 +4,6 @@ Passeriformes,Acridotheres tristis,Common Myna,commyn,OC,21.84696376,116,2.06606
 Passeriformes,Acrocephalus dumetorum,Blyth's Reed Warbler,blrwar1,OC,21.82218576,11.2,1.049218023,Carnivore,Invertivore,Full Migrant,3,directional migratory,invertebrates
 Passeriformes,Aegithina tiphia,Common Iora,comior1,OC,9.442634919,12,1.079181246,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
 Passeriformes,Alcippe poioicephala,Brown-cheeked Fulvetta,brcful1,FOR,10.84852981,20.7,1.315970345,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
-Passeriformes,Artamus fuscus,Ashy Woodswallow,ashwoo2,OC,47.65872903,39.8,1.599883072,Carnivore,Invertivore,Full Migrant,1,resident,invertebrates
 Passeriformes,Cecropis daurica,Red-rumped Swallow,rerswa1,OC,52.54321181,22,1.346352974,Carnivore,Invertivore,Full Migrant,3,directional migratory,invertebrates
 Cuculiformes,Centropus sinensis,Greater Coucal,grecou1,OC,13.23180548,283,2.448242413,Carnivore,Vertivore,Not a Migrant,1,resident,vertebrates
 Columbiformes,Chalcophaps indica,Asian Emerald Dove,emedov2,FOR,28.69523682,136,2.135259899,Herbivore,Omnivore,Not a Migrant,1,resident,omnivore
@@ -59,8 +58,6 @@ Galliformes,Pavo cristatus,Indian Peafowl,compea,OC,28.71360931,4194,3.618551168
 Passeriformes,Pellorneum ruficeps,Puff-throated Babbler,putbab1,FOR,8.626835437,26,1.414973348,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
 Passeriformes,Pericrocotus cinnamomeus,Small Minivet,smamin1,OC,22.4781892,8.6,0.934498451,Carnivore,Invertivore,Not a Migrant,2,resident,invertebrates
 Passeriformes,Pericrocotus flammeus,Orange Minivet,scamin3,FOR,27.33760301,23.3,1.367355921,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
-Passeriformes,Phylloscopus nitidus,Green Warbler,grnwar1,FOR,23.33706107,8.3,0.892094603,Carnivore,Invertivore,NA,3,directional migratory,invertebrates
-Passeriformes,Phylloscopus trochiloides,Greenish Warbler,grewar3,OC,19.14556042,7.1,0.90579588,Carnivore,Invertivore,Full Migrant,3,directional migratory,invertebrates
 Piciformes,Picus xanthopygaeus,Streak-throated Woodpecker,sttwoo1,OC,22.34897824,99.7,1.998651596,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
 Passeriformes,Pomatorhinus horsfieldii,Indian Scimitar-Babbler,insbab1,OC,7.890830663,43,1.633468456,Carnivore,Invertivore,Not a Migrant,1,resident,invertebrates
 Passeriformes,Prinia hodgsonii,Gray-breasted Prinia,gybpri1,OC,10.71805726,6.4,0.806179974,Carnivore,Invertivore,Altitudinal Migrant,1,resident,invertebrates
