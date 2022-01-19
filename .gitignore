@@ -9,6 +9,9 @@ data/for-map
 data/spatial/elevation
 data/spatial/Elevation
 
+# no results uploaded here
+data/results/
+
 # no roads data
 data/spatial/geofabrik*
 
