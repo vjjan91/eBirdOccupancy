@@ -3,6 +3,9 @@
 data/*.txt
 data/*.rdata
 
+# no .csv files
+data/*.csv
+
 data/eBird*
 data/ebird_*
 data/for-map
