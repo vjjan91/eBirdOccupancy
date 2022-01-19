@@ -103,7 +103,7 @@ data_thin_absences <- map(data_thin_absences, function(df) {
   # whcih cell has which coords
   grid_overlap <- st_contains(grid, df) %>%
     unclass() %>%
-    discard(.p = is_empty)
+    purrr::discard(.p = is_empty)
 
   # count length of grid overlap list
   # this is the number of cells with points in them
@@ -194,7 +194,7 @@ data_presence_prop <- data_presence_prop %>%
   )
 
 # save data
-write_csv(data_presence_prop, file = "data/results/data_class_balance.csv")
+write_csv(data_presence_prop, "data/results/data_class_balance.csv")
 ```
 
 ```{r join_pres_abs}
@@ -288,7 +288,7 @@ landscape_data <- stack(landscape_files)
 
 # get proper names
 elev_names <- c("elev", "slope", "aspect")
-chelsa_names <- c("bio15a", "bio4a")
+chelsa_names <- c("bio4a", "bio15a")
 
 names(landscape_data) <- as.character(glue('{c(elev_names, chelsa_names, "landcover")}'))
 ```
@@ -307,7 +307,6 @@ ebird_buff <- dataSubsample %>%
   distinct(X, Y) %>%
   # remove NAs
   drop_na()
-
 
 # convert to spatial features
 ebird_buff <- st_as_sf(ebird_buff, coords = c("X", "Y"), crs = 32643) %>%
