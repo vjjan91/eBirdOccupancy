@@ -5,6 +5,8 @@ data/*.rdata
 
 # no .csv files
 data/*.csv
+data/*.xlsx
+
 
 data/eBird*
 data/ebird_*
@@ -13,7 +15,7 @@ data/spatial/elevation
 data/spatial/Elevation
 
 # no results uploaded here
-data/results/
+data/results
 
 # no roads data
 data/spatial/geofabrik*
