@@ -130,7 +130,7 @@ hist_roads <-
 # write the mean and ci95 to file
 chkCovars %>%
   st_drop_geometry() %>%
-  select(dist_road, nnb) %>%
+  dplyr::select(dist_road, nnb) %>%
   tidyr::pivot_longer(
     cols = c("dist_road", "nnb"),
     names_to = "variable"
