@@ -7,7 +7,7 @@ editor_options:
 
 Differences in local avifaunal expertise among citizen scientists can lead to biased species detection when compared with data collected by a consistent set of trained observers [@vanstrien2013]. Including observer expertise as a detection covariate in occupancy models using eBird data can help account for this variation [@johnston2018]. Observer-specific expertise in local avifauna was calculated following [@kelling2015a] as the normalized predicted number of species reported by an observer after 60 minutes of sampling across the most common land cover type within the study area. This score was calculated by examining checklists from anonymized observers across the study area. We modified Kelling et al. (2015) formulation by including only observations of the 82 species of interest in our calculations. An observer with a higher number of species of interest reported within 60 minutes would have a higher observer-specific expertise score, with respect to the study area. 
 
-Plots with respect to how observer expertise varied over time (2013-2020) for the list of species considered in this study (across the study area alone) can be accessed in the Supplementary material github repository.
+Plots with respect to how observer expertise varied over time (2013-2021) for the list of species considered in this study (across the study area alone) can be accessed in the Supplementary material github repository.
 
 ## Prepare libraries
 
@@ -49,7 +49,7 @@ ebd_filters <- auk_ebd(f_in_ebd, f_in_sampling) %>%
   auk_country(country = "IN") %>%
   auk_state(c("IN-KL", "IN-TN", "IN-KA")) %>%
   # Restricting geography to TamilNadu, Kerala & Karnataka
-  auk_date(c("2013-01-01", "2020-12-31")) %>%
+  auk_date(c("2013-01-01", "2021-05-31")) %>%
   auk_complete()
 
 # check filters
@@ -228,7 +228,7 @@ setnames(ebdChkSummary, c(
 
 # count data points per observer
 obscount <- count(ebdChkSummary, observer) %>%
-  filter(n >= 10)
+  filter(n >= 3)
 
 # make factor variables and remove obs not in obscount
 # also remove 0 durations
@@ -277,7 +277,7 @@ library(lmerTest)
 
 # here we specify a glmm with random effects for observer
 # time is considered a fixed log predictor and a random slope
-modObsExp <- glmer(nSoi ~ sqrt(duration) +
+modObsExp <- glmer(nSoi ~ duration + sqrt(duration) +
   landcover +
   sqrt(decimalTime) +
   I((sqrt(decimalTime))^2) +
