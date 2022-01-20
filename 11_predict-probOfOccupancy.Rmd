@@ -10,21 +10,14 @@ This script plots species-specific probabilities of occupancy as a function of s
 ## Prepare libraries
 
 ```{r load_libs_results02}
-# to load data
-library(readxl)
-
 # to handle data
 library(dplyr)
 library(readr)
-library(forcats)
 library(tidyr)
 library(purrr)
 library(stringr)
 library(glue)
 # library(data.table)
-
-# to wrangle models
-devtools::load_all(path = "R")
 
 # nice tables
 library(knitr)
@@ -168,21 +161,40 @@ data_poccu = select(
 
 ```{r}
 # select species
-soi = c("")
-which_predictors = c("")
+soi = c("Culicicapa ceylonensis", "Irena puella", 
+        "Copsychus fulicatus", "Pycnonotus jocosus")
+which_predictors = c("bio4a")
 ```
 
 ### Figure: Occupancy ~ predictors
 
 ```{r}
+data_fig = data_poccu %>% 
+  filter(
+    scientific_name %in% soi,
+    predictor %in% which_predictors
+  ) |> 
+  mutate(
+    cat = case_when(
+      scientific_name %in% c("Irena puella", "Culicicapa ceylonensis") ~ "forest",
+      T ~ "general"
+    )
+  )
+
+# split data
+data_fig = nest(
+  data_fig,
+  -cat
+)
+```
+
+
+```{r}
 # make plots
 # fig_occu_var =
-ggplot(
-  data_poccu %>% 
-    filter(
-      scientific_name %in% soi,
-      predictor %in% which_predictors
-    )
+make_occu_fig = function(df, this_fill) {
+  ggplot(
+    df
   )+
   geom_ribbon(
     aes(
@@ -190,7 +202,7 @@ ggplot(
       ymin = p_occu_low,
       ymax = p_occu_high
     ),
-    fill = "lightgrey",
+    fill = this_fill,
     alpha = 0.5
   )+
   geom_line(
@@ -199,24 +211,148 @@ ggplot(
     )
   )+
   facet_grid(
-    ~predictor, scales = "free_x"
+    ~scientific_name
+  )+
+  theme_test(
+    base_family = "Arial"
+  )+
+  theme(
+    strip.text = element_text(
+      face = "italic"
+    )
   )+
   labs(
-    
+   x = "Temperature seasonality",
+   y = "Probability of occupancy"
   )
+}
 
-# save intermediate figure
-ggsave(
-  fi
-)
+
+fig_occu = map2(data_fig$data, c("khaki", "seagreen"), make_occu_fig)
+
+fig_occu = wrap_plots(
+  fig_occu
+) & plot_annotation(
+  tag_levels = "A"
+) &
+  theme(
+    plot.tag = element_text(
+      face = "bold"
+    )
+  )
 ```
 
 ### Figures: Occupancy ~ predictors for all species
 
 ```{r}
-# WIP
+data_fig = nest(
+  data_poccu,
+  -scientific_name, -predictor
+)
+
+pred_names = c(
+  "bio4a" = "Temp. seasonality",
+  "bio15a" = "Ppt. seasonality",
+  "lc_01" = "Evergreen",
+  "lc_02" = "Deciduous",
+  "lc_03" = "Mixed/degraded",
+  "lc_04" = "Agro./Settled",
+  "lc_05" = "Grassland",
+  "lc_07" = "Plantation",
+  "lc_09" = "Water"
+)
+pred_names = tibble(
+  name = pred_names,
+  predictor = names(pred_names)
+)
+data_fig = left_join(
+  data_fig,
+  pred_names
+)
+
+data_fig = mutate(
+  data_fig,
+  plots = map(
+    data, function(df) {
+      ggplot(df)+
+      geom_ribbon(
+        aes(
+          pred_val,
+          ymin = p_occu_low,
+          ymax = p_occu_high
+        ),
+        fill = "grey",
+        alpha = 0.5
+      )+
+      geom_line(
+        aes(
+          pred_val, p_occu
+        )
+      )+
+      coord_cartesian(
+        ylim = c(0, 1)
+      )+
+      theme_test(
+        base_family = "Arial"
+      )+
+      labs(
+        x = "Predictor",
+        y = "p(Occupancy)"
+      )
+    }
+  )
+)
+
+# add names
+data_fig = mutate(
+  data_fig,
+  plots = map2(
+    plots, name,
+    function(p, name) {
+      p = p + labs(
+        x = name
+      )
+    }
+  )
+)
+
+# summarise as patchwork
+data_fig = group_by(
+  data_fig,
+  scientific_name
+) |> 
+  summarise(
+    plots = list(
+      wrap_plots(
+        plots,
+        ncol = 5
+      )
+    )
+  )
+
+# add title as sp
+data_fig = mutate(
+  data_fig,
+  plots = map2(
+    plots, scientific_name,
+    function(p, name) {
+      p = p & plot_annotation(
+        title = name
+      )
+    }
+  )
+)
 ```
 
+```{r}
+# save images
+cairo_pdf(
+  filename = "figs/fig_occupancy_predictors.pdf",
+  onefile = TRUE, width = 10, height = 2
+)
+data_fig$plots
+dev.off()
+```
 
 ## Mapping species occupancy
 
