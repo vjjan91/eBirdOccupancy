@@ -1,0 +1,74 @@
+---
+editor_options: 
+  chunk_output_type: console
+---
+
+# Predicting species-specific occupancy as a function of significant predictors
+
+This script plots species-specific probabilities of occupancy as a function of significant environmental predictors as well as coefficient plots. 
+
+## Prepare libraries
+
+```{r load_libs_results02}
+# to load data
+library(readxl)
+# to handle data
+library(dplyr)
+library(readr)
+library(forcats)
+library(tidyr)
+library(purrr)
+library(stringr)
+# plotting
+library(ggplot2)
+library(patchwork)
+```
+
+## Read data
+
+```{r}
+# read data
+data <- read_csv("data/results/data_predictor_effect.csv")
+```
+
+# Plot prob of occupancy as a function of environmental predictors
+
+```{r echo=FALSE}
+
+fig_occupancy <- map2(
+  data$scientific_name,
+  function(df, scientific_name) {
+    ggplot(df) +
+      geom_line(aes(coefficient, se,
+        col = predictor
+      )) +
+      coord_cartesian(
+        xlim = c(0, 1),
+        ylim = c(0, 1)
+      ) +
+      theme_grey(base_size = 6) +
+      theme(legend.position = "top") +
+      scale_colour_manual(values = pals::kovesi.rainbow(8)) +
+      labs(
+        x = "scaled predictor value",
+        y = "p(occupancy)",
+        title = name
+      )
+  }
+)
+```
+
+```{r echo=FALSE}
+cairo_pdf(
+  filename = "figs/fig_occupancy_predictors.pdf",
+  onefile = TRUE, width = 6, height = 4
+)
+fig_occupancy
+dev.off()
+```
+
+
+# Create raster surfaces and predict how occupancy varies across an area
+
+
+
