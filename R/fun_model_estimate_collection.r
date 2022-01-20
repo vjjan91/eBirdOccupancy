@@ -7,8 +7,6 @@
 #' @export
 #' @import magrittr
 
-source("R/fun_separate_interactions.r")
-
 get_model_estimates <- function(list_of_top_models) {
 
   #### handle cases where there is more than one top model ####
