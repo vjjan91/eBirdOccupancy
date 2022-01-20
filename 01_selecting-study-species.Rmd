@@ -80,9 +80,19 @@ ebd <- ebd %>%
 ebd$observation_count <- as.numeric(ebd$observation_count)
 
 totCount <- ebd %>%
-  select(scientific_name, common_name, observation_count) %>%
+  dplyr::select(scientific_name, common_name, observation_count) %>%
   group_by(scientific_name, common_name) %>%
   summarise(tot = sum(observation_count))
+
+# subset species with a min of 1000 detections
+tot1000 <- totCount %>%
+  filter(tot > 1000)
+
+species1000 <- tot1000$scientific_name
+
+ebd1000 <- ebd[scientific_name %in% species1000,]
+
+# From an overall sample of 3.37 million, we arrived at 3.33 million when we included only those species with >1000 detections. 
 
 # export the above list as .csv to carry out initial filtering based on natural history
 write.csv(totCount, "data/species_list.csv", row.names=F)

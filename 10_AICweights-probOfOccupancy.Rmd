@@ -44,8 +44,22 @@ source("R/fun_plot_interaction.r")
 # list of species
 # Removing two species after running a chi-square goodness of fit test
 species <- read_csv("data/species_list.csv") %>%
-  filter(scientific_name != "Montecincla fairbanki" &
-    scientific_name != "Orthotomus sutorius")
+  filter(scientific_name != "Pellorneum ruficeps" &
+    scientific_name != "Prinia hodgsonii" &
+      scientific_name != "Hypothymis azurea" & 
+      scientific_name != "Chalcophaps indica" & 
+      scientific_name != "Dendrocitta leucogastra" & 
+      scientific_name != "Terpsiphone paradisi" & 
+      scientific_name != "Rubigula gularis" & 
+      scientific_name != "Dicrurus aeneus" & 
+      scientific_name != "Muscicapa dauurica" & 
+      scientific_name != "Chrysocolaptes guttacristatus" & 
+      scientific_name != "Oriolus kundoo" & 
+      scientific_name != "Cyornis tickelliae" & 
+      scientific_name != "Alcippe poioicephala" & 
+      scientific_name != "Geokichla citrina" & 
+      scientific_name != "Orthotomus sutorius" & 
+      scientific_name != "Pericrocotus cinnamomeus")
 
 list_of_species <- as.character(species$scientific_name)
 ```
@@ -93,7 +107,9 @@ model_imp <- map(file_names, function(f) {
 ```{r}
 # bind rows
 model_imp <- map(model_imp, bind_rows) %>%
-  bind_rows()
+  bind_rows() %>%
+  filter(predictor != "Ibio4a^2" &
+    predictor != "Ibio15a^2")
 
 # convert to numeric
 model_imp$AIC_weight <- as.numeric(model_imp$AIC_weight)
@@ -109,8 +125,7 @@ model_imp <- group_by(model_imp, predictor) %>%
   )
 
 # write to file
-write_csv(model_imp,
-  file = "data/results/cumulative_AIC_weights.csv"
+write_csv(model_imp,"data/results/cumulative_AIC_weights.csv"
 )
 ```
 
@@ -152,7 +167,7 @@ fig_aic <-
   )) +
   geom_text(aes(
     x = predictor,
-    y = 1.2,
+    y = 0.5,
     label = pred_name
   ),
   size = 3,
@@ -164,7 +179,7 @@ fig_aic <-
   scale_x_discrete(labels = NULL) +
   # scale_color_brewer(palette = "RdBu", values = c(0.5, 1))+
   coord_flip(
-    ylim = c(0, 1.25)
+    ylim = c(0, 1)
     # ylim = c(45, 75)
   ) +
   theme_test() +
@@ -241,7 +256,7 @@ model_est <- imap(model_est, function(.x, .y) {
 
 # remove modulators
 model_est <- bind_rows(model_est) %>%
-  select(-matches("modulator"))
+  dplyr::select(-matches("modulator"))
 
 # join data to species name
 model_data <- model_data %>%
@@ -264,8 +279,7 @@ data_predictor_effect <- distinct(
 )
 
 # write to file
-write_csv(data_predictor_effect,
-  file = "data/results/data_predictor_effect.csv"
+write_csv(data_predictor_effect,"data/results/data_predictor_effect.csv"
 )
 ```
 
@@ -273,7 +287,7 @@ Export model data.
 
 ```{r}
 model_data_to_file <- model_data %>%
-  select(
+  dplyr::select(
     predictor,
     scientific_name
   )
@@ -323,8 +337,10 @@ model_data <- model_data %>%
 data_predictor <- mutate(model_data,
   direction = coefficient > 0
 ) %>%
-  filter(predictor != "Int") %>%
-  rename(habitat = "Habitat.use") %>%
+  filter(predictor != "Int" &
+        predictor != "Ibio4a^2" &
+    predictor != "Ibio15a^2") %>%
+  rename(habitat = "Habitat.type") %>%
   count(
     predictor,
     habitat,
@@ -334,7 +350,7 @@ data_predictor <- mutate(model_data,
 
 # wrangle data to get nice bars
 data_predictor <- data_predictor %>%
-  select(-n) %>%
+  dplyr::select(-n) %>%
   drop_na(direction) %>%
   mutate(direction = ifelse(direction, "positive", "negative")) %>%
   pivot_wider(values_from = "mag", names_from = "direction") %>%
@@ -352,7 +368,7 @@ data_predictor_long <- data_predictor %>%
 
 # write
 write_csv(data_predictor_long,
-  file = "data/results/data_predictor_direction_nSpecies.csv"
+  "data/results/data_predictor_direction_nSpecies.csv"
 )
 ```
 
@@ -368,8 +384,8 @@ Prepare figure of the number of species affected in each direction. Figure code 
 ```{r echo=FALSE}
 # habitat labels
 labels <- c(
-  "OC" = "Generalist Birds",
-  "FOR" = "Forest Birds"
+  "Generalist" = "Generalist Birds",
+  "Forest" = "Forest Birds"
 )
 
 fig_predictor <-
@@ -401,7 +417,7 @@ fig_predictor <-
   geom_text(
     data = tibble(
       x = c(5),
-      y = c(-20, 20),
+      y = c(-26, 26),
       label = c("Negative effect", "Positive effect")
     ),
     aes(
