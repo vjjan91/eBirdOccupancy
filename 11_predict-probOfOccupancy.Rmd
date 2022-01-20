@@ -12,6 +12,7 @@ This script plots species-specific probabilities of occupancy as a function of s
 ```{r load_libs_results02}
 # to load data
 library(readxl)
+
 # to handle data
 library(dplyr)
 library(readr)
@@ -19,6 +20,16 @@ library(forcats)
 library(tidyr)
 library(purrr)
 library(stringr)
+library(glue)
+# library(data.table)
+
+# to wrangle models
+devtools::load_all(path = "R")
+
+# nice tables
+library(knitr)
+library(kableExtra)
+
 # plotting
 library(ggplot2)
 library(patchwork)
@@ -27,48 +38,193 @@ library(patchwork)
 ## Read data
 
 ```{r}
-# read data
+# read coefficient effect data
 data <- read_csv("data/results/data_predictor_effect.csv")
 ```
 
-# Plot prob of occupancy as a function of environmental predictors
+```{r}
+# check for a predictor column
+assertthat::assert_that(
+  all(c("predictor", "coefficient", "se") %in% colnames(data)),
+  msg = "make_response_data: data must have columns called 'predictor',
+    'coefficient', and 'se'"
+)
 
-```{r echo=FALSE}
+# data <- filter(
+#   data
+#   # p_value <= 0.05 | predictor == "Int"
+# )
+```
 
-fig_occupancy <- map2(
-  data$scientific_name,
-  function(df, scientific_name) {
-    ggplot(df) +
-      geom_line(aes(coefficient, se,
-        col = predictor
-      )) +
-      coord_cartesian(
-        xlim = c(0, 1),
-        ylim = c(0, 1)
-      ) +
-      theme_grey(base_size = 6) +
-      theme(legend.position = "top") +
-      scale_colour_manual(values = pals::kovesi.rainbow(8)) +
-      labs(
-        x = "scaled predictor value",
-        y = "p(occupancy)",
-        title = name
-      )
-  }
+## Prepare predictor data
+
+```{r}
+# preparep predictors
+predictors = c("bio4a", "bio15a", glue("lc_0{seq(9)}"))
+
+# prepare predictor search strings and scaling power
+preds = glue("({predictors})")
+preds = str_flatten(preds, collapse = "|")
+power = as.numeric(str_extract(data$predictor, "2"))
+power[is.na(power)] = 1
+
+# assign predictor name and power
+data = mutate(
+  data,
+  predictor = str_extract(predictor, preds),
+  power = power
 )
 ```
 
-```{r echo=FALSE}
-cairo_pdf(
-  filename = "figs/fig_occupancy_predictors.pdf",
-  onefile = TRUE, width = 6, height = 4
+## Get predictor responses
+
+```{r}
+# make predictor sequences
+data = mutate(
+  data,
+  pred_val = map(
+    predictor,
+    function(x) { seq(0, 1, 0.05) }
+  ),
+  # handle squared terms
+  pred_val_pow = purrr::map2(
+    pred_val, power,
+    function(x, y) {x^y}
+  )
 )
-fig_occupancy
-dev.off()
+
+# get coefficient and error times terms
+data_resp = mutate(
+  data,
+  response = map2(
+    pred_val_pow, coefficient,
+    function(x, y) {x * y}
+  ),
+  resp_var = map2(
+    pred_val_pow, se,
+    function(x, y) {x * y}
+  )
+)
+```
+
+## Get probability of occupancy
+
+```{r}
+# unnest and get responses
+data_resp = unnest(
+  data_resp, 
+  cols = c("response", "resp_var", "pred_val")
+)
+
+# get responses for quadratic terms
+data_resp =
+  group_by(
+  data_resp,
+  scientific_name, predictor, pred_val
+) %>% 
+  select(-power, -coefficient, -se) %>% 
+  summarise(
+    across(
+      .cols = c("response", "resp_var"),
+      .fns = sum
+    ), 
+    .groups = "keep"
+  )
+
+# get probability of occupancy
+data_resp = ungroup(
+  data_resp
+) %>% 
+  mutate(
+    p_occu = 1 / (1 + exp(-response)),
+    p_occu_low = 1 / (1 + exp(-(response - resp_var))),
+    p_occu_high = 1 / (1 + exp(-(response + resp_var)))
+  )
+```
+
+## Add scaling for predictors
+
+```{r}
+# scale predictors
+scale_15a = 40
+scale_4a = 0.375
+
+# scale bio4a and bio15a by actual values
+data_resp = mutate(
+  data_resp,
+  pred_val = case_when(
+    predictor == "bio4a" ~ pred_val * scale_4a,
+    predictor == "bio15a" ~ pred_val * scale_15a,
+    T ~ pred_val
+  )
+)
+
+# make long
+data_poccu = select(
+  data_resp,
+  -response, -resp_var
+)
+```
+
+```{r}
+# select species
+soi = c("")
+which_predictors = c("")
+```
+
+### Figure: Occupancy ~ predictors
+
+```{r}
+# make plots
+# fig_occu_var =
+ggplot(
+  data_poccu %>% 
+    filter(
+      scientific_name %in% soi,
+      predictor %in% which_predictors
+    )
+  )+
+  geom_ribbon(
+    aes(
+      pred_val,
+      ymin = p_occu_low,
+      ymax = p_occu_high
+    ),
+    fill = "lightgrey",
+    alpha = 0.5
+  )+
+  geom_line(
+    aes(
+      pred_val, p_occu
+    )
+  )+
+  facet_grid(
+    ~predictor, scales = "free_x"
+  )+
+  labs(
+    
+  )
+
+# save intermediate figure
+ggsave(
+  fi
+)
+```
+
+### Figures: Occupancy ~ predictors for all species
+
+```{r}
+# WIP
 ```
 
 
-# Create raster surfaces and predict how occupancy varies across an area
+## Mapping species occupancy
 
+```{r}
 
+```
+
+```{r}
+
+```
 
