@@ -7,8 +7,6 @@
 #' @export
 #' @import magrittr
 
-source("R/fun_separate_interactions.r")
-
 get_model_estimates <- function(list_of_top_models) {
 
   #### handle cases where there is more than one top model ####
@@ -48,8 +46,7 @@ get_model_estimates <- function(list_of_top_models) {
     return_data <- list(model_estimate, model_imp)
     names(return_data) <- c("model_estimate", "predictor_importance")
     return(return_data)
-  }
-  else {
+  } else {
     model <- list_of_top_models # this is really only a single unmarked model
     # get the model coefficients, WHY
     model_coeff <- unmarked::coef(model) %>%
