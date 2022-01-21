@@ -232,7 +232,7 @@ fig_occu = map2(data_fig$data, "grey", make_occu_fig)
 
 fig_occu =
   wrap_plots(
-  fig_occu[c(2, 1)], ncol = 2
+  fig_occu[c(2, 1)], ncol = 1
 ) & plot_annotation(
   tag_levels = "A"
 ) &
@@ -246,7 +246,7 @@ fig_occu =
 ggsave(
   fig_occu,
   filename = "figs/fig_05.png",
-  width = 5, height = 4
+  width = 4, height = 4.5
 )
 ```
 
@@ -467,44 +467,44 @@ These will be multiplied with each layer to give the effect of each layer.
 
 ```{r}
 # get soi coefs
-soi_coefs = filter(
+sp_coefs = filter(
   data,
-  scientific_name %in% soi
+  # scientific_name %in% soi
 ) %>% 
   select(
     -pred_val, -pred_val_pow
   )
 
 # add missing landcover classes
-soi_preds = crossing(
+sp_preds = crossing(
   scientific_name = soi,
   predictor = pred_names$predictor,
   power = c(1,2)
 )
 
 # remove squared terms for landcover
-soi_preds = filter(
-  soi_preds,
+sp_preds = filter(
+  sp_preds,
   !(str_detect(predictor, "lc") & power == 2)
 )
 
-soi_coefs = full_join(
-  soi_coefs,
-  soi_preds
+sp_coefs = full_join(
+  sp_coefs,
+  sp_preds
 )
 
 # make wide
-soi_coefs =
+sp_coefs =
   pivot_wider(
-  soi_coefs, 
+  sp_coefs, 
   id_cols = c("scientific_name"), 
   names_from = c("predictor", "power"), 
   values_from = "coefficient"
 )
 
 # get into order
-soi_coefs = select(
-  soi_coefs,
+sp_coefs = select(
+  sp_coefs,
   scientific_name,
   c(
     "bio4a_1", "bio15a_1",
@@ -514,13 +514,13 @@ soi_coefs = select(
 )
 
 # get vectors of coefficients
-soi_coefs = nest(
-  soi_coefs,
+sp_coefs = nest(
+  sp_coefs,
   -scientific_name
 )
 ```
 
-### Prepare species occupancy
+### Prepare species occupancy for SOI
 
 Here, we shall simply multiply each landscape layer with the corresponding predictor coefficient.
 Where these are not available, we shall simply multiply the corresponding layer with NA.
@@ -529,7 +529,7 @@ The resulting layers will be summed together to get a single response layer, whi
 ```{r}
 # multiply coefficients with layers
 soi_occu = map(
-  soi_coefs$data,
+  sp_coefs[sp_coefs$scientific_name %in% soi,]$data,
   .f = function(df) {
     response = unlist(slice(df, 1), use.names = F) * landscape
     response = sum(response, na.rm = TRUE) # remove NA layers, i.e., non-sig preds
@@ -540,11 +540,11 @@ soi_occu = map(
 )
 
 # assign names
-names(soi_occu) = soi_coefs$scientific_name
+names(soi_occu) = soi
 
 # make single stack
 soi_occu = reduce(soi_occu, c)
-names(soi_occu) = str_replace(soi_coefs$scientific_name, " ", "_")
+names(soi_occu) = soi
 ```
 
 ```{r}
@@ -568,7 +568,7 @@ fig_occu_map = ggplot()+
   facet_wrap(
     ~band,
     labeller = labeller(
-      band = function(x) str_replace(x, "_", " ")
+      band = function(x) str_replace(x, "\\.", " ")
     )
   )+
   coord_sf(
@@ -600,3 +600,80 @@ ggsave(
 )
 ```
 
+### Prepare species occupancy for all species
+
+```{r}
+# multiply coefficients with layers
+sp_occu = map(
+  sp_coefs$data,
+  .f = function(df) {
+    response = unlist(slice(df, 1), use.names = F) * landscape
+    response = sum(response, na.rm = TRUE) # remove NA layers, i.e., non-sig preds
+    
+    # now transform for probability occupancy
+    response = 1 / (1 + exp(-response))
+  }
+)
+
+# make single stack
+sp_occu = reduce(sp_occu, c)
+# assign names
+names(sp_occu) = sp_coefs$scientific_name
+```
+
+```{r}
+# use stars for plotting with ggplot
+library(stars)
+library(colorspace)
+
+sp_occu = st_as_stars(sp_occu)
+
+fig_occu_map_all = 
+  ggplot()+
+  geom_stars(
+    data = sp_occu
+  )+
+  scale_fill_binned_sequential(
+    palette = "Hawaii",
+    name = "p(Occu.)",
+    rev = T,
+    limits = c(0, 1),
+    breaks = seq(0, 1, 0.1), show.limits = T
+  )+
+  facet_wrap(
+    ~band,
+    labeller = labeller(
+      band = function(x) str_replace(x, "\\.", " ")
+    )
+  )+
+  coord_sf(
+    crs = 32643,
+    expand = FALSE
+  )+
+  theme_test(
+    base_size = 8
+  )+
+  theme(
+    # legend.position = "rg",
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    legend.key.height = unit(10, "mm"),
+    legend.key.width = unit(1, "mm"),
+    strip.text = element_text(
+      face = "italic"
+    ),
+    strip.background = element_blank(),
+    legend.title = element_text(
+      vjust = 1
+    )
+  )
+```
+
+```{r}
+# save figure
+ggsave(
+  fig_occu_map_all,
+  filename = "figs/fig_occupancy_maps.png",
+  width = 16, height = 16
+)
+```
