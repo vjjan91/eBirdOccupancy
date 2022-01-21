@@ -147,15 +147,15 @@ data_resp <- ungroup(
 
 ```{r}
 # scale predictors
-scale_15a <- 40
-scale_4a <- 0.375
+scale_15a <- c(20, 60)
+scale_4a <- c(0.25, 1)
 
 # scale bio4a and bio15a by actual values
 data_resp <- mutate(
   data_resp,
   pred_val = case_when(
-    predictor == "bio4a" ~ pred_val * scale_4a,
-    predictor == "bio15a" ~ pred_val * scale_15a,
+    predictor == "bio4a" ~ scales::rescale(pred_val, to = scale_4a),
+    predictor == "bio15a" ~ scales::rescale(pred_val, to = scale_15a),
     T ~ pred_val
   )
 )
