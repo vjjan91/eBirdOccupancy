@@ -191,7 +191,6 @@ data_fig = nest(
 
 ```{r}
 # make plots
-# fig_occu_var =
 make_occu_fig = function(df, this_fill) {
   ggplot(
     df
@@ -208,7 +207,8 @@ make_occu_fig = function(df, this_fill) {
   geom_line(
     aes(
       pred_val, p_occu
-    )
+    ),
+    size = 1
   )+
   facet_grid(
     ~scientific_name
@@ -228,10 +228,11 @@ make_occu_fig = function(df, this_fill) {
 }
 
 
-fig_occu = map2(data_fig$data, c("khaki", "seagreen"), make_occu_fig)
+fig_occu = map2(data_fig$data, "grey", make_occu_fig)
 
-fig_occu = wrap_plots(
-  fig_occu
+fig_occu =
+  wrap_plots(
+  fig_occu[c(2, 1)], ncol = 2
 ) & plot_annotation(
   tag_levels = "A"
 ) &
@@ -240,6 +241,13 @@ fig_occu = wrap_plots(
       face = "bold"
     )
   )
+
+# save figure
+ggsave(
+  fig_occu,
+  filename = "figs/fig_05.png",
+  width = 5, height = 4
+)
 ```
 
 ### Figures: Occupancy ~ predictors for all species
@@ -356,11 +364,239 @@ dev.off()
 
 ## Mapping species occupancy
 
-```{r}
+### Read in raster layers
 
+```{r}
+library(terra)
+library(sf)
 ```
 
 ```{r}
+# read rasters
+bio_4a <- rast("data/chelsa/CHELSA_bio10_4a.tif")
+bio_15 <- rast("data/chelsa/CHELSA_bio10_15.tif")
+landcover = rast("data/landUseClassification/landcover_roy_2015_reclassified.tif")
+lc_1km = rast("data/landUseClassification/lc_01000m.tif")
+```
 
+### Split landcover into proportions per 1km
+
+```{r}
+# separate the fine-scale landcover raster into presence-absence of each class
+lc_split = segregate(landcover)
+
+# resample to 1km
+# bilinear resampling uses the mean function. 
+# mean of N 0s and 1s is the proportion of 1s, ie, proportion of each landcover
+lc_split = terra::resample(
+  lc_split,
+  lc_1km,
+  method = "bilinear" 
+)
+
+# rename rasters
+names(lc_split) = pred_names$name[-c(1,2)]
+
+# save raster of landcover proportion
+terra::writeRaster(
+  lc_split,
+  filename = "data/spatial/raster_landcover_proportion_1km.tif"
+)
+
+rm(landcover); gc()
+```
+
+```{r eval=FALSE}
+# plot proportion of landcover classes
+png(width = 1200 * 2, height = 1200 * 2, filename = "figs/fig_landcover_proportion_1km.png", res = 300)
+plot(
+  lc_split, 
+  col = colorspace::sequential_hcl(20, palette = "Viridis"),
+  range = c(0, 1)
+)
+dev.off()
+```
+
+### Prepare climatic layers
+
+```{r}
+# get ranges
+range_4a = terra::minmax(bio_4a)[, 1]
+range_15 = terra::minmax(bio_15)[, 1]
+
+# rescale
+bio_4a = (bio_4a - min(range_4a)) / (diff(range_4a))
+bio_15 = (bio_15 - min(range_15)) / (diff(range_15))
+
+# project to UTM
+climate = c(bio_4a, bio_15)
+climate = terra::project(
+  x = climate, y = lc_1km
+)
+
+# make squared terms
+climate2 = climate * climate
+
+# add to landcover proportions and plot
+landscape = c(climate, lc_split)
+```
+
+```{r eval=FALSE}
+# plot proportion of landcover classes
+png(width = 1200 * 2, height = 1200 * 2, filename = "figs/fig_landscape_1km.png", 
+    res = 300)
+plot(
+  landscape, 
+  col = colorspace::sequential_hcl(20, palette = "agSunset", rev = T),
+  range = c(0, 1)
+)
+dev.off()
+```
+
+```{r}
+# add squared terms
+landscape = c(
+  climate, climate2, lc_split
+)
+```
+
+### Prepare soi predictors
+
+Prepare the soi predictor coefficients as a vector of the same length as the number of raster layers.
+These will be multiplied with each layer to give the effect of each layer.
+
+```{r}
+# get soi coefs
+soi_coefs = filter(
+  data,
+  scientific_name %in% soi
+) %>% 
+  select(
+    -pred_val, -pred_val_pow
+  )
+
+# add missing landcover classes
+soi_preds = crossing(
+  scientific_name = soi,
+  predictor = pred_names$predictor,
+  power = c(1,2)
+)
+
+# remove squared terms for landcover
+soi_preds = filter(
+  soi_preds,
+  !(str_detect(predictor, "lc") & power == 2)
+)
+
+soi_coefs = full_join(
+  soi_coefs,
+  soi_preds
+)
+
+# make wide
+soi_coefs =
+  pivot_wider(
+  soi_coefs, 
+  id_cols = c("scientific_name"), 
+  names_from = c("predictor", "power"), 
+  values_from = "coefficient"
+)
+
+# get into order
+soi_coefs = select(
+  soi_coefs,
+  scientific_name,
+  c(
+    "bio4a_1", "bio15a_1",
+    "bio4a_2", "bio15a_2"
+  ),
+  matches("lc")
+)
+
+# get vectors of coefficients
+soi_coefs = nest(
+  soi_coefs,
+  -scientific_name
+)
+```
+
+### Prepare species occupancy
+
+Here, we shall simply multiply each landscape layer with the corresponding predictor coefficient.
+Where these are not available, we shall simply multiply the corresponding layer with NA.
+The resulting layers will be summed together to get a single response layer, which will then be inverse logit transformed to get the probability of occupancy.
+
+```{r}
+# multiply coefficients with layers
+soi_occu = map(
+  soi_coefs$data,
+  .f = function(df) {
+    response = unlist(slice(df, 1), use.names = F) * landscape
+    response = sum(response, na.rm = TRUE) # remove NA layers, i.e., non-sig preds
+    
+    # now transform for probability occupancy
+    response = 1 / (1 + exp(-response))
+  }
+)
+
+# assign names
+names(soi_occu) = soi_coefs$scientific_name
+
+# make single stack
+soi_occu = reduce(soi_occu, c)
+names(soi_occu) = str_replace(soi_coefs$scientific_name, " ", "_")
+```
+
+```{r}
+# use stars for plotting with ggplot
+library(stars)
+library(colorspace)
+
+soi_occu = st_as_stars(soi_occu)
+
+fig_occu_map = ggplot()+
+  geom_stars(
+    data = soi_occu
+  )+
+  scale_fill_binned_sequential(
+    palette = "Hawaii",
+    name = "p(Occu.)",
+    rev = T,
+    limits = c(0, 1),
+    breaks = seq(0, 1, 0.1), show.limits = T
+  )+
+  facet_wrap(
+    ~band,
+    labeller = labeller(
+      band = function(x) str_replace(x, "_", " ")
+    )
+  )+
+  coord_sf(
+    crs = 32643,
+    expand = FALSE
+  )+
+  theme_test()+
+  theme(
+    # legend.position = "rg",
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    legend.key.height = unit(10, "mm"),
+    legend.key.width = unit(1, "mm"),
+    strip.text = element_text(
+      face = "italic"
+    ),
+    legend.title = element_text(
+      vjust = 1
+    )
+  )
+```
+
+```{r}
+# save figure
+ggsave(
+  fig_occu_map,
+  filename = "figs/fig_06.png",
+  width = 6, height = 6
+)
 ```
 
