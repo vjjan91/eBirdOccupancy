@@ -53,16 +53,16 @@ assertthat::assert_that(
 
 ```{r}
 # preparep predictors
-predictors = c("bio4a", "bio15a", glue("lc_0{seq(9)}"))
+predictors <- c("bio4a", "bio15a", glue("lc_0{seq(9)}"))
 
 # prepare predictor search strings and scaling power
-preds = glue("({predictors})")
-preds = str_flatten(preds, collapse = "|")
-power = as.numeric(str_extract(data$predictor, "2"))
-power[is.na(power)] = 1
+preds <- glue("({predictors})")
+preds <- str_flatten(preds, collapse = "|")
+power <- as.numeric(str_extract(data$predictor, "2"))
+power[is.na(power)] <- 1
 
 # assign predictor name and power
-data = mutate(
+data <- mutate(
   data,
   predictor = str_extract(predictor, preds),
   power = power
@@ -73,29 +73,37 @@ data = mutate(
 
 ```{r}
 # make predictor sequences
-data = mutate(
+data <- mutate(
   data,
   pred_val = map(
     predictor,
-    function(x) { seq(0, 1, 0.05) }
+    function(x) {
+      seq(0, 1, 0.05)
+    }
   ),
   # handle squared terms
   pred_val_pow = purrr::map2(
     pred_val, power,
-    function(x, y) {x^y}
+    function(x, y) {
+      x^y
+    }
   )
 )
 
 # get coefficient and error times terms
-data_resp = mutate(
+data_resp <- mutate(
   data,
   response = map2(
     pred_val_pow, coefficient,
-    function(x, y) {x * y}
+    function(x, y) {
+      x * y
+    }
   ),
   resp_var = map2(
     pred_val_pow, se,
-    function(x, y) {x * y}
+    function(x, y) {
+      x * y
+    }
   )
 )
 ```
@@ -104,30 +112,30 @@ data_resp = mutate(
 
 ```{r}
 # unnest and get responses
-data_resp = unnest(
-  data_resp, 
+data_resp <- unnest(
+  data_resp,
   cols = c("response", "resp_var", "pred_val")
 )
 
 # get responses for quadratic terms
-data_resp =
+data_resp <-
   group_by(
-  data_resp,
-  scientific_name, predictor, pred_val
-) %>% 
-  select(-power, -coefficient, -se) %>% 
+    data_resp,
+    scientific_name, predictor, pred_val
+  ) %>%
+  select(-power, -coefficient, -se) %>%
   summarise(
     across(
       .cols = c("response", "resp_var"),
       .fns = sum
-    ), 
+    ),
     .groups = "keep"
   )
 
 # get probability of occupancy
-data_resp = ungroup(
+data_resp <- ungroup(
   data_resp
-) %>% 
+) %>%
   mutate(
     p_occu = 1 / (1 + exp(-response)),
     p_occu_low = 1 / (1 + exp(-(response - resp_var))),
@@ -139,11 +147,11 @@ data_resp = ungroup(
 
 ```{r}
 # scale predictors
-scale_15a = 40
-scale_4a = 0.375
+scale_15a <- 40
+scale_4a <- 0.375
 
 # scale bio4a and bio15a by actual values
-data_resp = mutate(
+data_resp <- mutate(
   data_resp,
   pred_val = case_when(
     predictor == "bio4a" ~ pred_val * scale_4a,
@@ -153,7 +161,7 @@ data_resp = mutate(
 )
 
 # make long
-data_poccu = select(
+data_poccu <- select(
   data_resp,
   -response, -resp_var
 )
@@ -161,19 +169,21 @@ data_poccu = select(
 
 ```{r}
 # select species
-soi = c("Culicicapa ceylonensis", "Irena puella", 
-        "Copsychus fulicatus", "Pycnonotus jocosus")
-which_predictors = c("bio4a")
+soi <- c(
+  "Culicicapa ceylonensis", "Irena puella",
+  "Copsychus fulicatus", "Pycnonotus jocosus"
+)
+which_predictors <- c("bio4a")
 ```
 
 ### Figure: Occupancy ~ predictors
 
 ```{r}
-data_fig = data_poccu %>% 
+data_fig <- data_poccu %>%
   filter(
     scientific_name %in% soi,
     predictor %in% which_predictors
-  ) |> 
+  ) |>
   mutate(
     cat = case_when(
       scientific_name %in% c("Irena puella", "Culicicapa ceylonensis") ~ "forest",
@@ -182,7 +192,7 @@ data_fig = data_poccu %>%
   )
 
 # split data
-data_fig = nest(
+data_fig <- nest(
   data_fig,
   -cat
 )
@@ -191,56 +201,57 @@ data_fig = nest(
 
 ```{r}
 # make plots
-make_occu_fig = function(df, this_fill) {
+make_occu_fig <- function(df, this_fill) {
   ggplot(
     df
-  )+
-  geom_ribbon(
-    aes(
-      pred_val,
-      ymin = p_occu_low,
-      ymax = p_occu_high
-    ),
-    fill = this_fill,
-    alpha = 0.5
-  )+
-  geom_line(
-    aes(
-      pred_val, p_occu
-    ),
-    size = 1
-  )+
-  facet_grid(
-    ~scientific_name
-  )+
-  theme_test(
-    base_family = "Arial"
-  )+
-  theme(
-    strip.text = element_text(
-      face = "italic"
+  ) +
+    geom_ribbon(
+      aes(
+        pred_val,
+        ymin = p_occu_low,
+        ymax = p_occu_high
+      ),
+      fill = this_fill,
+      alpha = 0.5
+    ) +
+    geom_line(
+      aes(
+        pred_val, p_occu
+      ),
+      size = 1
+    ) +
+    facet_grid(
+      ~scientific_name
+    ) +
+    theme_test(
+      base_family = "Arial"
+    ) +
+    theme(
+      strip.text = element_text(
+        face = "italic"
+      )
+    ) +
+    labs(
+      x = "Temperature seasonality",
+      y = "Probability of occupancy"
     )
-  )+
-  labs(
-   x = "Temperature seasonality",
-   y = "Probability of occupancy"
-  )
 }
 
 
-fig_occu = map2(data_fig$data, "grey", make_occu_fig)
+fig_occu <- map2(data_fig$data, "grey", make_occu_fig)
 
-fig_occu =
+fig_occu <-
   wrap_plots(
-  fig_occu[c(2, 1)], ncol = 1
-) & plot_annotation(
-  tag_levels = "A"
-) &
-  theme(
-    plot.tag = element_text(
-      face = "bold"
+    fig_occu[c(2, 1)],
+    ncol = 1
+  ) & plot_annotation(
+    tag_levels = "A"
+  ) &
+    theme(
+      plot.tag = element_text(
+        face = "bold"
+      )
     )
-  )
 
 # save figure
 ggsave(
@@ -253,12 +264,12 @@ ggsave(
 ### Figures: Occupancy ~ predictors for all species
 
 ```{r}
-data_fig = nest(
+data_fig <- nest(
   data_poccu,
   -scientific_name, -predictor
 )
 
-pred_names = c(
+pred_names <- c(
   "bio4a" = "Temp. seasonality",
   "bio15a" = "Ppt. seasonality",
   "lc_01" = "Evergreen",
@@ -269,55 +280,55 @@ pred_names = c(
   "lc_07" = "Plantation",
   "lc_09" = "Water"
 )
-pred_names = tibble(
+pred_names <- tibble(
   name = pred_names,
   predictor = names(pred_names)
 )
-data_fig = left_join(
+data_fig <- left_join(
   data_fig,
   pred_names
 )
 
-data_fig = mutate(
+data_fig <- mutate(
   data_fig,
   plots = map(
     data, function(df) {
-      ggplot(df)+
-      geom_ribbon(
-        aes(
-          pred_val,
-          ymin = p_occu_low,
-          ymax = p_occu_high
-        ),
-        fill = "grey",
-        alpha = 0.5
-      )+
-      geom_line(
-        aes(
-          pred_val, p_occu
+      ggplot(df) +
+        geom_ribbon(
+          aes(
+            pred_val,
+            ymin = p_occu_low,
+            ymax = p_occu_high
+          ),
+          fill = "grey",
+          alpha = 0.5
+        ) +
+        geom_line(
+          aes(
+            pred_val, p_occu
+          )
+        ) +
+        coord_cartesian(
+          ylim = c(0, 1)
+        ) +
+        theme_test(
+          base_family = "Arial"
+        ) +
+        labs(
+          x = "Predictor",
+          y = "p(Occupancy)"
         )
-      )+
-      coord_cartesian(
-        ylim = c(0, 1)
-      )+
-      theme_test(
-        base_family = "Arial"
-      )+
-      labs(
-        x = "Predictor",
-        y = "p(Occupancy)"
-      )
     }
   )
 )
 
 # add names
-data_fig = mutate(
+data_fig <- mutate(
   data_fig,
   plots = map2(
     plots, name,
     function(p, name) {
-      p = p + labs(
+      p <- p + labs(
         x = name
       )
     }
@@ -325,10 +336,10 @@ data_fig = mutate(
 )
 
 # summarise as patchwork
-data_fig = group_by(
+data_fig <- group_by(
   data_fig,
   scientific_name
-) |> 
+) |>
   summarise(
     plots = list(
       wrap_plots(
@@ -339,12 +350,12 @@ data_fig = group_by(
   )
 
 # add title as sp
-data_fig = mutate(
+data_fig <- mutate(
   data_fig,
   plots = map2(
     plots, scientific_name,
     function(p, name) {
-      p = p & plot_annotation(
+      p <- p & plot_annotation(
         title = name
       )
     }
@@ -375,27 +386,27 @@ library(sf)
 # read rasters
 bio_4a <- rast("data/chelsa/CHELSA_bio10_4a.tif")
 bio_15 <- rast("data/chelsa/CHELSA_bio10_15.tif")
-landcover = rast("data/landUseClassification/landcover_roy_2015_reclassified.tif")
-lc_1km = rast("data/landUseClassification/lc_01000m.tif")
+landcover <- rast("data/landUseClassification/landcover_roy_2015_reclassified.tif")
+lc_1km <- rast("data/landUseClassification/lc_01000m.tif")
 ```
 
 ### Split landcover into proportions per 1km
 
 ```{r}
 # separate the fine-scale landcover raster into presence-absence of each class
-lc_split = segregate(landcover)
+lc_split <- segregate(landcover)
 
 # resample to 1km
-# bilinear resampling uses the mean function. 
+# bilinear resampling uses the mean function.
 # mean of N 0s and 1s is the proportion of 1s, ie, proportion of each landcover
-lc_split = terra::resample(
+lc_split <- terra::resample(
   lc_split,
   lc_1km,
-  method = "bilinear" 
+  method = "bilinear"
 )
 
 # rename rasters
-names(lc_split) = pred_names$name[-c(1,2)]
+names(lc_split) <- pred_names$name[-c(1, 2)]
 
 # save raster of landcover proportion
 terra::writeRaster(
@@ -403,14 +414,15 @@ terra::writeRaster(
   filename = "data/spatial/raster_landcover_proportion_1km.tif"
 )
 
-rm(landcover); gc()
+rm(landcover)
+gc()
 ```
 
 ```{r eval=FALSE}
 # plot proportion of landcover classes
 png(width = 1200 * 2, height = 1200 * 2, filename = "figs/fig_landcover_proportion_1km.png", res = 300)
 plot(
-  lc_split, 
+  lc_split,
   col = colorspace::sequential_hcl(20, palette = "Viridis"),
   range = c(0, 1)
 )
@@ -421,32 +433,34 @@ dev.off()
 
 ```{r}
 # get ranges
-range_4a = terra::minmax(bio_4a)[, 1]
-range_15 = terra::minmax(bio_15)[, 1]
+range_4a <- terra::minmax(bio_4a)[, 1]
+range_15 <- terra::minmax(bio_15)[, 1]
 
 # rescale
-bio_4a = (bio_4a - min(range_4a)) / (diff(range_4a))
-bio_15 = (bio_15 - min(range_15)) / (diff(range_15))
+bio_4a <- (bio_4a - min(range_4a)) / (diff(range_4a))
+bio_15 <- (bio_15 - min(range_15)) / (diff(range_15))
 
 # project to UTM
-climate = c(bio_4a, bio_15)
-climate = terra::project(
+climate <- c(bio_4a, bio_15)
+climate <- terra::project(
   x = climate, y = lc_1km
 )
 
 # make squared terms
-climate2 = climate * climate
+climate2 <- climate * climate
 
 # add to landcover proportions and plot
-landscape = c(climate, lc_split)
+landscape <- c(climate, lc_split)
 ```
 
 ```{r eval=FALSE}
 # plot proportion of landcover classes
-png(width = 1200 * 2, height = 1200 * 2, filename = "figs/fig_landscape_1km.png", 
-    res = 300)
+png(
+  width = 1200 * 2, height = 1200 * 2, filename = "figs/fig_landscape_1km.png",
+  res = 300
+)
 plot(
-  landscape, 
+  landscape,
   col = colorspace::sequential_hcl(20, palette = "agSunset", rev = T),
   range = c(0, 1)
 )
@@ -455,7 +469,7 @@ dev.off()
 
 ```{r}
 # add squared terms
-landscape = c(
+landscape <- c(
   climate, climate2, lc_split
 )
 ```
@@ -467,43 +481,43 @@ These will be multiplied with each layer to give the effect of each layer.
 
 ```{r}
 # get soi coefs
-sp_coefs = filter(
+sp_coefs <- filter(
   data,
   # scientific_name %in% soi
-) %>% 
+) %>%
   select(
     -pred_val, -pred_val_pow
   )
 
 # add missing landcover classes
-sp_preds = crossing(
+sp_preds <- crossing(
   scientific_name = soi,
   predictor = pred_names$predictor,
-  power = c(1,2)
+  power = c(1, 2)
 )
 
 # remove squared terms for landcover
-sp_preds = filter(
+sp_preds <- filter(
   sp_preds,
   !(str_detect(predictor, "lc") & power == 2)
 )
 
-sp_coefs = full_join(
+sp_coefs <- full_join(
   sp_coefs,
   sp_preds
 )
 
 # make wide
-sp_coefs =
+sp_coefs <-
   pivot_wider(
-  sp_coefs, 
-  id_cols = c("scientific_name"), 
-  names_from = c("predictor", "power"), 
-  values_from = "coefficient"
-)
+    sp_coefs,
+    id_cols = c("scientific_name"),
+    names_from = c("predictor", "power"),
+    values_from = "coefficient"
+  )
 
 # get into order
-sp_coefs = select(
+sp_coefs <- select(
   sp_coefs,
   scientific_name,
   c(
@@ -514,7 +528,7 @@ sp_coefs = select(
 )
 
 # get vectors of coefficients
-sp_coefs = nest(
+sp_coefs <- nest(
   sp_coefs,
   -scientific_name
 )
@@ -528,23 +542,23 @@ The resulting layers will be summed together to get a single response layer, whi
 
 ```{r}
 # multiply coefficients with layers
-soi_occu = map(
-  sp_coefs[sp_coefs$scientific_name %in% soi,]$data,
+soi_occu <- map(
+  sp_coefs[sp_coefs$scientific_name %in% soi, ]$data,
   .f = function(df) {
-    response = unlist(slice(df, 1), use.names = F) * landscape
-    response = sum(response, na.rm = TRUE) # remove NA layers, i.e., non-sig preds
-    
+    response <- unlist(slice(df, 1), use.names = F) * landscape
+    response <- sum(response, na.rm = TRUE) # remove NA layers, i.e., non-sig preds
+
     # now transform for probability occupancy
-    response = 1 / (1 + exp(-response))
+    response <- 1 / (1 + exp(-response))
   }
 )
 
 # assign names
-names(soi_occu) = soi
+names(soi_occu) <- soi
 
 # make single stack
-soi_occu = reduce(soi_occu, c)
-names(soi_occu) = soi
+soi_occu <- reduce(soi_occu, c)
+names(soi_occu) <- soi
 ```
 
 ```{r}
@@ -552,30 +566,30 @@ names(soi_occu) = soi
 library(stars)
 library(colorspace)
 
-soi_occu = st_as_stars(soi_occu)
+soi_occu <- st_as_stars(soi_occu)
 
-fig_occu_map = ggplot()+
+fig_occu_map <- ggplot() +
   geom_stars(
     data = soi_occu
-  )+
+  ) +
   scale_fill_binned_sequential(
     palette = "Hawaii",
     name = "p(Occu.)",
     rev = T,
     limits = c(0, 1),
     breaks = seq(0, 1, 0.1), show.limits = T
-  )+
+  ) +
   facet_wrap(
     ~band,
     labeller = labeller(
       band = function(x) str_replace(x, "\\.", " ")
     )
-  )+
+  ) +
   coord_sf(
     crs = 32643,
     expand = FALSE
-  )+
-  theme_test()+
+  ) +
+  theme_test() +
   theme(
     # legend.position = "rg",
     axis.title = element_blank(),
@@ -604,21 +618,21 @@ ggsave(
 
 ```{r}
 # multiply coefficients with layers
-sp_occu = map(
+sp_occu <- map(
   sp_coefs$data,
   .f = function(df) {
-    response = unlist(slice(df, 1), use.names = F) * landscape
-    response = sum(response, na.rm = TRUE) # remove NA layers, i.e., non-sig preds
-    
+    response <- unlist(slice(df, 1), use.names = F) * landscape
+    response <- sum(response, na.rm = TRUE) # remove NA layers, i.e., non-sig preds
+
     # now transform for probability occupancy
-    response = 1 / (1 + exp(-response))
+    response <- 1 / (1 + exp(-response))
   }
 )
 
 # make single stack
-sp_occu = reduce(sp_occu, c)
+sp_occu <- reduce(sp_occu, c)
 # assign names
-names(sp_occu) = sp_coefs$scientific_name
+names(sp_occu) <- sp_coefs$scientific_name
 ```
 
 ```{r}
@@ -626,33 +640,33 @@ names(sp_occu) = sp_coefs$scientific_name
 library(stars)
 library(colorspace)
 
-sp_occu = st_as_stars(sp_occu)
+sp_occu <- st_as_stars(sp_occu)
 
-fig_occu_map_all = 
-  ggplot()+
+fig_occu_map_all <-
+  ggplot() +
   geom_stars(
     data = sp_occu
-  )+
+  ) +
   scale_fill_binned_sequential(
     palette = "Hawaii",
     name = "p(Occu.)",
     rev = T,
     limits = c(0, 1),
     breaks = seq(0, 1, 0.1), show.limits = T
-  )+
+  ) +
   facet_wrap(
     ~band,
     labeller = labeller(
       band = function(x) str_replace(x, "\\.", " ")
     )
-  )+
+  ) +
   coord_sf(
     crs = 32643,
     expand = FALSE
-  )+
+  ) +
   theme_test(
     base_size = 8
-  )+
+  ) +
   theme(
     # legend.position = "rg",
     axis.title = element_blank(),

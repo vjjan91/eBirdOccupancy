@@ -44,22 +44,16 @@ source("R/fun_plot_interaction.r")
 # list of species
 # Removing two species after running a chi-square goodness of fit test
 species <- read_csv("data/species_list.csv") %>%
-  filter(scientific_name != "Pellorneum ruficeps" &
-    scientific_name != "Prinia hodgsonii" &
-      scientific_name != "Hypothymis azurea" & 
-      scientific_name != "Chalcophaps indica" & 
-      scientific_name != "Dendrocitta leucogastra" & 
-      scientific_name != "Terpsiphone paradisi" & 
-      scientific_name != "Rubigula gularis" & 
-      scientific_name != "Dicrurus aeneus" & 
-      scientific_name != "Muscicapa dauurica" & 
-      scientific_name != "Chrysocolaptes guttacristatus" & 
-      scientific_name != "Oriolus kundoo" & 
-      scientific_name != "Cyornis tickelliae" & 
-      scientific_name != "Alcippe poioicephala" & 
-      scientific_name != "Geokichla citrina" & 
-      scientific_name != "Orthotomus sutorius" & 
-      scientific_name != "Pericrocotus cinnamomeus")
+  filter(
+    !scientific_name %in% c(
+      "Pellorneum ruficeps", "Prinia hodgsonii", "Hypothymis azurea",
+      "Chalcophaps indica", "Dendrocitta leucogastra", "Terpsiphone paradisi",
+      "Rubigula gularis", "Dicrurus aeneus", "Muscicapa dauurica",
+      "Chrysocolaptes guttacristatus", "Oriolus kundoo", "Cyornis tickelliae",
+      "Alcippe poioicephala", "Geokichla citrina", "Orthotomus sutorius",
+      "Pericrocotus cinnamomeus"
+    )
+  )
 
 list_of_species <- as.character(species$scientific_name)
 ```
@@ -125,8 +119,7 @@ model_imp <- group_by(model_imp, predictor) %>%
   )
 
 # write to file
-write_csv(model_imp,"data/results/cumulative_AIC_weights.csv"
-)
+write_csv(model_imp, "data/results/cumulative_AIC_weights.csv")
 ```
 
 Read data back in.
@@ -159,12 +152,14 @@ Prepare figure for cumulative AIC weight. Figure code is hidden in versions rend
 ```{r echo=FALSE}
 fig_aic <-
   ggplot(model_imp) +
-  geom_pointrange(aes(
-    x = reorder(predictor, mean_AIC),
-    y = mean_AIC,
-    ymin = mean_AIC - sd_AIC,
-    ymax = mean_AIC + sd_AIC
-  )) +
+  geom_pointrange(
+    aes(
+      x = reorder(predictor, mean_AIC),
+      y = mean_AIC,
+      ymin = mean_AIC - sd_AIC,
+      ymax = mean_AIC + sd_AIC
+    )
+  ) +
   geom_text(aes(
     x = predictor,
     y = 0.5,
@@ -172,7 +167,7 @@ fig_aic <-
   ),
   size = 3,
   angle = 0,
-  hjust = 1,
+  hjust = 0.5,
   vjust = 2
   ) +
   # scale_y_continuous(breaks = seq(45, 75, 10))+
@@ -279,8 +274,7 @@ data_predictor_effect <- distinct(
 )
 
 # write to file
-write_csv(data_predictor_effect,"data/results/data_predictor_effect.csv"
-)
+write_csv(data_predictor_effect, "data/results/data_predictor_effect.csv")
 ```
 
 Export model data.
@@ -337,8 +331,7 @@ model_data <- model_data %>%
 data_predictor <- mutate(model_data,
   direction = coefficient > 0
 ) %>%
-  filter(predictor != "Int" &
-        predictor != "Ibio4a^2" &
+  filter(predictor != "Int", predictor != "Ibio4a^2" &
     predictor != "Ibio15a^2") %>%
   rename(habitat = "Habitat.type") %>%
   count(
@@ -367,7 +360,8 @@ data_predictor_long <- data_predictor %>%
   )
 
 # write
-write_csv(data_predictor_long,
+write_csv(
+  data_predictor_long,
   "data/results/data_predictor_direction_nSpecies.csv"
 )
 ```

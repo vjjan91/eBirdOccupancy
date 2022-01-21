@@ -502,8 +502,9 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
     duration_minutes +
     effort_distance_km +
     number_observers +
-    expertise ~  lc_01 + lc_02 + lc_05 + lc_04 + lc_09 + lc_07 + lc_03 + bio4a + I(bio4a^2)+ bio15a + I(bio15a^2), data = occ_um)
-  
+    expertise ~ lc_01 + lc_02 + lc_05 + lc_04 + lc_09 + lc_07 + lc_03 + 
+      bio4a + I(bio4a^2) + bio15a + I(bio15a^2), data = occ_um)
+
   # Set up the cluster
   clusterType <- if (length(find.package("snow", quiet = TRUE))) "SOCK" else "PSOCK"
   clust <- try(makeCluster(getOption("cl.cores", 5), type = clusterType))
@@ -517,12 +518,14 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
     "p(julian_date)", "p(min_obs_started)",
     "p(number_observers)"
   )
-  
-  lc_clim[[i]] <- pdredge(model_lc_clim, clust, fixed = det_terms,
-                          subset = (dc("psi(bio4a)","psi(I(bio4a^2))") &
-                                    dc("psi(I(bio4a^2))", "psi(bio4a)") &
-                                    dc("psi(bio15a)","psi(I(bio15a^2))") &
-                                    dc("psi(I(bio15a^2))","psi(bio15a)")))
+
+  lc_clim[[i]] <- pdredge(model_lc_clim, clust,
+    fixed = det_terms,
+    subset = (dc("psi(bio4a)", "psi(I(bio4a^2))") &
+      dc("psi(I(bio4a^2))", "psi(bio4a)") &
+      dc("psi(bio15a)", "psi(I(bio15a^2))") &
+      dc("psi(I(bio15a^2))", "psi(bio15a)"))
+  )
   names(lc_clim)[i] <- unique(dat.scaled$scientific_name)[i]
 
   # Identiying top subset of models based on deltaAIC scores being less than 4 (Burnham et al., 2011)
@@ -645,10 +648,12 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
     number_observers +
     protocol_type +
     expertise ~ lc_01 + lc_02 + lc_05 +
-    lc_04 + lc_09 + lc_07 + lc_03 +  bio4a + I(bio4a^2)+ bio15a + I(bio15a^2), data = occ_um)
-  
-  occ_gof <- mb.gof.test(model_lc_clim, nsim = 100, parallel = T, ncores = 5, 
-                         plot.hist = FALSE)
+    lc_04 + lc_09 + lc_07 + lc_03 + bio4a + I(bio4a^2) + bio15a + I(bio15a^2), data = occ_um)
+
+  occ_gof <- mb.gof.test(model_lc_clim,
+    nsim = 100, parallel = T, ncores = 5,
+    plot.hist = FALSE
+  )
 
   p.value <- occ_gof$p.value
   c.hat <- occ_gof$c.hat.est
