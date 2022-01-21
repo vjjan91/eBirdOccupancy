@@ -39,7 +39,6 @@ round_any <- function(x, accuracy = 25000) {
 
 f_in_ebd <- file.path("data/ebd_IN_relNov-2021.txt")
 f_in_sampling <- file.path("data/ebd_sampling_relNov-2021.txt")
-
 ```
 
 ## Subset species by geographical confines of the study area
@@ -61,7 +60,7 @@ newNames <- str_replace_all(colnames(ebd), " ", "_") %>%
 setnames(ebd, newNames)
 # keep useful columns
 columnsOfInterest <- c(
-  "common_name","scientific_name", "observation_count", "locality",
+  "common_name", "scientific_name", "observation_count", "locality",
   "locality_id", "locality_type", "latitude",
   "longitude", "observation_date", "sampling_event_identifier"
 )
@@ -74,7 +73,8 @@ ebd <- ebd[, ..columnsOfInterest]
 # Convert all presences marked 'X' as '1'
 ebd <- ebd %>%
   mutate(observation_count = ifelse(observation_count == "X",
-    "1", observation_count))
+    "1", observation_count
+  ))
 
 # Convert observation count to numeric
 ebd$observation_count <- as.numeric(ebd$observation_count)
@@ -90,12 +90,12 @@ tot1000 <- totCount %>%
 
 species1000 <- tot1000$scientific_name
 
-ebd1000 <- ebd[scientific_name %in% species1000,]
+ebd1000 <- ebd[scientific_name %in% species1000, ]
 
-# From an overall sample of 3.37 million, we arrived at 3.33 million when we included only those species with >1000 detections. 
+# From an overall sample of 3.37 million, we arrived at 3.33 million when we included only those species with >1000 detections.
 
 # export the above list as .csv to carry out initial filtering based on natural history
-write.csv(totCount, "data/species_list.csv", row.names=F)
+write.csv(totCount, "data/species_list.csv", row.names = F)
 ```
 
 ## Read subset of species following filtering and removal of waterbirds, raptors, and other noctural species
