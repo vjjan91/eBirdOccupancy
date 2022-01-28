@@ -669,10 +669,11 @@ fig_occu_map_all <-
     data = sp_occu
   ) +
   scale_fill_binned_sequential(
-    palette = "Hawaii",
+    palette = "Purple-Yellow",
     name = "p(Occu.)",
     rev = T,
     limits = c(0, 1),
+    na.value = "grey99",
     breaks = seq(0, 1, 0.1), show.limits = T
   ) +
   facet_wrap(
@@ -702,9 +703,7 @@ fig_occu_map_all <-
       vjust = 1
     )
   )
-```
 
-```{r}
 # save figure
 ggsave(
   fig_occu_map_all,
