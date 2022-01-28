@@ -488,6 +488,11 @@ dev.off()
 landscape <- c(
   climate, climate2, lc_split
 )
+
+landscape = terra::mask(
+  landscape,
+  vect(hills)
+)
 ```
 
 ### Prepare soi predictors
