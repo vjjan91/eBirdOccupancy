@@ -458,6 +458,17 @@ climate2 <- climate * climate
 landscape <- c(climate, lc_split)
 ```
 
+```{r}
+# mask by hills
+hills = st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>% 
+  st_transform(32643)
+landscape = terra::mask(
+  landscape,
+  vect(hills)
+)
+```
+
+
 ```{r eval=FALSE}
 # plot proportion of landcover classes
 png(
