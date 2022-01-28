@@ -431,6 +431,12 @@ dev.off()
 ### Prepare climatic layers
 
 ```{r}
+# load landcover split
+lc_split = terra::rast("data/spatial/raster_landcover_proportion_1km.tif")
+```
+
+
+```{r}
 # get ranges
 range_4a <- terra::minmax(bio_4a)[, 1]
 range_15 <- terra::minmax(bio_15)[, 1]
