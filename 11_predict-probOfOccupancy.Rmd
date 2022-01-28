@@ -382,7 +382,10 @@ library(sf)
 # read rasters
 bio_4a <- rast("data/chelsa/CHELSA_bio10_4a.tif")
 bio_15 <- rast("data/chelsa/CHELSA_bio10_15.tif")
+
+# careful while loading this raster, large size
 landcover <- rast("data/landUseClassification/landcover_roy_2015_reclassified.tif")
+
 lc_1km <- rast("data/landUseClassification/lc_01000m.tif")
 ```
 
