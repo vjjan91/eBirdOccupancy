@@ -46,14 +46,11 @@ source("R/fun_plot_interaction.r")
 species <- read_csv("data/species_list.csv") %>%
   filter(
     !scientific_name %in% c(
-      "Pellorneum ruficeps", "Prinia hodgsonii", "Hypothymis azurea",
-      "Chalcophaps indica", "Dendrocitta leucogastra", "Terpsiphone paradisi",
-      "Rubigula gularis", "Dicrurus aeneus", "Muscicapa dauurica",
-      "Chrysocolaptes guttacristatus", "Oriolus kundoo", "Cyornis tickelliae",
-      "Alcippe poioicephala", "Geokichla citrina", "Orthotomus sutorius",
-      "Pericrocotus cinnamomeus"
-    )
-  )
+      "Terpsiphone paradisi", "Prinia hodgsonii", "Pellorneum ruficeps",
+      "Hypothymis azurea","Dicrurus aeneus","Chalcophaps indica",
+      "Pericrocotus cinnamomeus","Rubigula gularis","Dendrocitta leucogastra",
+      "Oriolus xanthornus","Muscicapa dauurica","Cyornis tickelliae",
+      "Chrysocolaptes guttacristatus"))
 
 list_of_species <- as.character(species$scientific_name)
 ```
@@ -102,8 +99,8 @@ model_imp <- map(file_names, function(f) {
 # bind rows
 model_imp <- map(model_imp, bind_rows) %>%
   bind_rows() %>%
-  filter(predictor != "Ibio4a^2" &
-    predictor != "Ibio15a^2")
+  filter(predictor != "Ibio_1^2" &
+    predictor != "Ibio_12^2")
 
 # convert to numeric
 model_imp$AIC_weight <- as.numeric(model_imp$AIC_weight)
@@ -135,8 +132,8 @@ model_imp$predictor <- as_factor(model_imp$predictor)
 predictor_name <- tibble(
   predictor = levels(model_imp$predictor),
   pred_name = c(
-    "Precipitation Seasonality",
-    "Temperature Seasonality",
+    "Mean Annual Temperature",
+    "Annual Precipitation",
     "% Evergreen Forest", "% Deciduous Forest",
     "% Mixed/Degraded Forest", "% Agriculture/Settlements",
     "% Grassland", "% Plantations", "% Water Bodies"
@@ -331,8 +328,8 @@ model_data <- model_data %>%
 data_predictor <- mutate(model_data,
   direction = coefficient > 0
 ) %>%
-  filter(predictor != "Int", predictor != "Ibio4a^2" &
-    predictor != "Ibio15a^2") %>%
+  filter(predictor != "Int", predictor != "Ibio_1^2" &
+    predictor != "Ibio_12^2") %>%
   rename(habitat = "Habitat.type") %>%
   count(
     predictor,

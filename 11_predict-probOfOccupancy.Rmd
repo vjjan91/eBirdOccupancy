@@ -52,8 +52,8 @@ assertthat::assert_that(
 ## Prepare predictor data
 
 ```{r}
-# preparep predictors
-predictors <- c("bio4a", "bio15a", glue("lc_0{seq(9)}"))
+# prepare predictors
+predictors <- c("bio_1", "bio_12", glue("lc_0{seq(9)}"))
 
 # prepare predictor search strings and scaling power
 preds <- glue("({predictors})")
@@ -123,7 +123,7 @@ data_resp <-
     data_resp,
     scientific_name, predictor, pred_val
   ) %>%
-  select(-power, -coefficient, -se) %>%
+  dplyr::select(-power, -coefficient, -se) %>%
   summarise(
     across(
       .cols = c("response", "resp_var"),
@@ -147,21 +147,21 @@ data_resp <- ungroup(
 
 ```{r}
 # scale predictors
-scale_15a <- c(20, 60)
-scale_4a <- c(0.25, 1)
+scale_12 <- c(1000, 3000)
+scale_1 <- c(10, 30)
 
-# scale bio4a and bio15a by actual values
+# scale bio_1 and bio_12 by actual values
 data_resp <- mutate(
   data_resp,
   pred_val = case_when(
-    predictor == "bio4a" ~ scales::rescale(pred_val, to = scale_4a),
-    predictor == "bio15a" ~ scales::rescale(pred_val, to = scale_15a),
+    predictor == "bio_1" ~ scales::rescale(pred_val, to = scale_1),
+    predictor == "bio_12" ~ scales::rescale(pred_val, to = scale_12),
     T ~ pred_val
   )
 )
 
 # make long
-data_poccu <- select(
+data_poccu <- dplyr::select(
   data_resp,
   -response, -resp_var
 )
@@ -173,7 +173,7 @@ soi <- c(
   "Culicicapa ceylonensis", "Irena puella",
   "Copsychus fulicatus", "Pycnonotus jocosus"
 )
-which_predictors <- c("bio4a")
+which_predictors <- c("bio_1")
 ```
 
 ### Figure: Occupancy ~ predictors
@@ -183,7 +183,7 @@ data_fig <- data_poccu %>%
   filter(
     scientific_name %in% soi,
     predictor %in% which_predictors
-  ) |>
+  ) %>%
   mutate(
     cat = case_when(
       scientific_name %in% c("Irena puella", "Culicicapa ceylonensis") ~ "forest",
@@ -232,7 +232,7 @@ make_occu_fig <- function(df, this_fill) {
       )
     ) +
     labs(
-      x = "Temperature seasonality",
+      x = "Mean Annual Temperature",
       y = "Probability of occupancy"
     )
 }
@@ -270,12 +270,12 @@ data_fig <- nest(
 )
 
 pred_names <- c(
-  "bio4a" = "Temp. seasonality",
-  "bio15a" = "Ppt. seasonality",
+  "bio_1" = "Mean Annual Temperature",
+  "bio_12" = "Annual Precipitation",
   "lc_01" = "Evergreen",
   "lc_02" = "Deciduous",
   "lc_03" = "Mixed/degraded",
-  "lc_04" = "Agro./Settled",
+  "lc_04" = "Agri./Settle",
   "lc_05" = "Grassland",
   "lc_07" = "Plantation",
   "lc_09" = "Water"
@@ -339,7 +339,7 @@ data_fig <- mutate(
 data_fig <- group_by(
   data_fig,
   scientific_name
-) |>
+) %>%
   summarise(
     plots = list(
       wrap_plots(
@@ -384,8 +384,8 @@ library(sf)
 
 ```{r}
 # read rasters
-bio_4a <- rast("data/chelsa/CHELSA_bio10_4a.tif")
-bio_15 <- rast("data/chelsa/CHELSA_bio10_15.tif")
+bio_1 <- rast("data/chelsa/CHELSA_bio1.tif")
+bio_12 <- rast("data/chelsa/CHELSA_bio12.tif")
 landcover <- rast("data/landUseClassification/landcover_roy_2015_reclassified.tif")
 lc_1km <- rast("data/landUseClassification/lc_01000m.tif")
 ```
@@ -433,15 +433,15 @@ dev.off()
 
 ```{r}
 # get ranges
-range_4a <- terra::minmax(bio_4a)[, 1]
-range_15 <- terra::minmax(bio_15)[, 1]
+range_1 <- terra::minmax(bio_1)[, 1]
+range_12 <- terra::minmax(bio_12)[, 1]
 
 # rescale
-bio_4a <- (bio_4a - min(range_4a)) / (diff(range_4a))
-bio_15 <- (bio_15 - min(range_15)) / (diff(range_15))
+bio_1 <- (bio_1 - min(range_1)) / (diff(range_1))
+bio_12 <- (bio_12 - min(range_12)) / (diff(range_12))
 
 # project to UTM
-climate <- c(bio_4a, bio_15)
+climate <- c(bio_1, bio_12)
 climate <- terra::project(
   x = climate, y = lc_1km
 )
@@ -485,13 +485,13 @@ sp_coefs <- filter(
   data,
   # scientific_name %in% soi
 ) %>%
-  select(
+  dplyr::select(
     -pred_val, -pred_val_pow
   )
 
 # add missing landcover classes
 sp_preds <- crossing(
-  scientific_name = soi,
+  scientific_name = unique(data$scientific_name),
   predictor = pred_names$predictor,
   power = c(1, 2)
 )
@@ -517,12 +517,12 @@ sp_coefs <-
   )
 
 # get into order
-sp_coefs <- select(
+sp_coefs <- dplyr::select(
   sp_coefs,
   scientific_name,
   c(
-    "bio4a_1", "bio15a_1",
-    "bio4a_2", "bio15a_2"
+    "bio_1_1", "bio_12_1",
+    "bio_1_2", "bio_12_2"
   ),
   matches("lc")
 )
@@ -543,7 +543,7 @@ The resulting layers will be summed together to get a single response layer, whi
 ```{r}
 # multiply coefficients with layers
 soi_occu <- map(
-  sp_coefs[sp_coefs$scientific_name %in% soi, ]$data,
+  sp_coefs[sp_coefs$scientific_name, ]$data,
   .f = function(df) {
     response <- unlist(slice(df, 1), use.names = F) * landscape
     response <- sum(response, na.rm = TRUE) # remove NA layers, i.e., non-sig preds

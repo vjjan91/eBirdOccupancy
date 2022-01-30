@@ -12,6 +12,8 @@ All landscape data was derived from a high resolution land cover map (Roy et al.
 
 The goal here is to resample all rasters so that they have the same resolution of 1km cells. We also tested for spatial autocorrelation among climatic predictors (which can be found in the Supplementary material).
 
+Note: Two other versions/runs tested the role of interannual variation in temperature/precipitation as well as temperature/precipitation seasonality
+
 ## Prepare libraries
 
 We load some common libraries for raster processing and define a custom mode function.
@@ -89,17 +91,13 @@ gc()
 chelsaFiles <- list.files("data/chelsa/", recursive = TRUE, pattern = "tif")
 
 # load Bio 1 and 12
-bio_1 <- raster("data/chelsa/envicloud/chelsa/chelsa_V1/climatologies/bio/CHELSA_bio10_01.tif")
-bio_12 <- raster("data/chelsa/envicloud/chelsa/chelsa_V1/climatologies/bio/CHELSA_bio10_12.tif")
+bio_1 <- raster("data/chelsa/CHELSA_bio1.tif")
+bio_12 <- raster("data/chelsa/CHELSA_bio12.tif")
 ```
 
 ## Prepare CHELSA rasters
 
 CHELSA rasters can be downloaded using the `get_chelsa.sh` shell script, which is a `wget` command pointing to the `envidatS3.txt` file.
-
-### Prepare BIOCLIM 4a and 15
-
-We prepare the CHELSA rasters for seasonality in temperature (Bio 4a) and seasonality in precipitation (Bio 15) in the same way, reading them in, cropping them to the study site buffer extent, and handling the temperature layer values which we divide by 10. The CHELSA rasters can be downloaded from https://chelsa-climate.org/bioclim/
 
 ```{r chelsa_rasters, , message=FALSE, warning=FALSE}
 # list chelsa files
@@ -107,7 +105,7 @@ We prepare the CHELSA rasters for seasonality in temperature (Bio 4a) and season
 chelsaFiles <- list.files("data/chelsa/",
   full.names = TRUE,
   recursive = TRUE,
-  pattern = "bio10"
+  pattern = "bio"
 )
 
 # gather chelsa rasters
@@ -118,12 +116,16 @@ chelsaData <- purrr::map(chelsaFiles, function(chr) {
   return(a)
 })
 
-# divide temperature by 10
-chelsaData[[1]] <- chelsaData[[1]] / 10
-
 # stack chelsa data
 chelsaData <- raster::stack(chelsaData)
 ```
+
+
+### Prepare BIOCLIM 4a and 15
+
+PLEASE NOTE: These predictors need not be prepared any longer as they are not being used for this version of the analysis. 
+
+We prepare the CHELSA rasters for seasonality in temperature (Bio 4a) and seasonality in precipitation (Bio 15) in the same way, reading them in, cropping them to the study site buffer extent, and handling the temperature layer values which we divide by 10. The CHELSA rasters can be downloaded from https://chelsa-climate.org/bioclim/
 
 ### Prepare BIOCLIM 4a
 
@@ -252,12 +254,8 @@ We stack the terrain and climatic rasters.
 
 ```{r stack_rasters, , message=FALSE, warning=FALSE}
 
-# If bio4a and bio15 have already been prepared from previous runs/analysis - load them directly
-bio_4a <- raster("data/chelsa/CHELSA_bio10_4a.tif")
-bio_15 <- raster("data/chelsa/CHELSA_bio10_15.tif")
-
 # stack rasters for efficient reprojection later
-env_data <- stack(elevData, bio_4a, bio_15)
+env_data <- stack(elevData, chelsaData)
 ```
 
 ## Resample landcover from 10m to 1km
@@ -412,7 +410,7 @@ land_names <- glue('data/spatial/landscape_resamp{c("01")}_km.tif')
 writeRaster(land_stack, filename = as.character(land_names), overwrite = TRUE)
 ```
 
-## Climate seasonality in relation to elevation
+## Climate in relation to elevation
 
 ### Load resampled environmental rasters
 
@@ -422,7 +420,7 @@ landscape <- stack("data/spatial/landscape_resamp01_km.tif")
 
 # get proper names
 elev_names <- c("elev", "slope", "aspect")
-chelsa_names <- c("bio_4a", "bio_15")
+chelsa_names <- c("bio_1", "bio_12")
 
 names(landscape) <- glue('{c(elev_names, chelsa_names, "landcover")}')
 ```
@@ -455,10 +453,8 @@ Figure code is hidden in versions rendered as HTML or PDF.
 
 ```{r plot_clim_elev, , echo=FALSE}
 # make labeller
-climvar_names <- c(
-  bio_4a = "Temperature \nSeasonality (CV)",
-  bio_15 = "Precipitation \nSeasonality (CV)"
-)
+climvar_names <- c(bio_12 = "Annual \nPrecipitation",
+                   bio_1 = "Mean Annual \nTemperature")
 
 # split data to list
 land_data <- split(land_data, f = land_data$clim_var)
@@ -510,9 +506,9 @@ ggsave(fig_climate_elev,
 )
 ```
 
-## Climate seasonality across land cover types
+## Climate across land cover types
 
-Get climate seasonlity values per (re-classified) landcover type from the 1km resampled raster.
+Get climate values per (re-classified) landcover type from the 1km resampled raster.
 
 ```{r}
 # make duplicate stack again
@@ -552,8 +548,8 @@ lc_clim_data <- nest(lc_clim_data, data = c("landcover", "value"))
 
 # assign names
 lc_clim_data$climvar_name <- c(
-  "Temperature Seasonality (CV)",
-  "Precipitation Seasonality(CV)"
+  "Mean Annual Temperature",
+  "Annual Precipitation"
 )
 ```
 
@@ -601,20 +597,20 @@ lc_clim_plots <- pmap(
         x = glue("{climvar_name}"),
         y = "Density"
       )
-    if (climvar == "bio_4a") {
+    if (climvar == "bio_1") {
       p <- p +
         scale_fill_continuous_diverging(
           palette = "Blue-Red 2",
-          mid = 0.7
+          mid = 15
         )
     } else {
       p <- p +
         scale_x_continuous(
-          limits = c(20, 60)
+          limits = c(900, 3000)
         ) +
         scale_fill_continuous_diverging(
           palette = "Blue-Yellow 2",
-          mid = 40
+          mid = 2000
         )
     }
 
