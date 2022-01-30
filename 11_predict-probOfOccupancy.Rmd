@@ -52,21 +52,17 @@ assertthat::assert_that(
 ## Prepare predictor data
 
 ```{r}
-# prepare predictors
-predictors <- c("bio_1", "bio_12", glue("lc_0{seq(9)}"))
-
 # prepare predictor search strings and scaling power
-preds <- glue("({predictors})")
-preds <- str_flatten(preds, collapse = "|")
-power <- as.numeric(str_extract(data$predictor, "2"))
+strings <- c("Ibio_12\\^2", "Ibio_1\\^2")
+power <- str_extract(data$predictor, paste(strings, collapse = "|"))
 power[is.na(power)] <- 1
+power <- as.numeric(power)
+power[is.na(power)] <- 2
 
 # assign predictor name and power
-data <- mutate(
-  data,
-  predictor = str_extract(predictor, preds),
-  power = power
-)
+data <- data %>%
+  mutate(predictor = str_replace_all(data$predictor,c("Ibio_12\\^2" = "bio_12","Ibio_1\\^2" = "bio_1"))) %>%
+  mutate(power=power)
 ```
 
 ## Get predictor responses
@@ -147,8 +143,8 @@ data_resp <- ungroup(
 
 ```{r}
 # scale predictors
-scale_12 <- c(1000, 3000)
-scale_1 <- c(10, 30)
+scale_12 <- c(1000, 4000)
+scale_1 <- c(10, 40)
 
 # scale bio_1 and bio_12 by actual values
 data_resp <- mutate(
@@ -270,11 +266,11 @@ data_fig <- nest(
 )
 
 pred_names <- c(
-  "bio_1" = "Mean Annual Temperature",
-  "bio_12" = "Annual Precipitation",
+  "bio_1" = "Mean ann. temp",
+  "bio_12" = "Ann. precip",
   "lc_01" = "Evergreen",
   "lc_02" = "Deciduous",
-  "lc_03" = "Mixed/degraded",
+  "lc_03" = "Mixed/degr",
   "lc_04" = "Agri./Settle",
   "lc_05" = "Grassland",
   "lc_07" = "Plantation",
@@ -541,9 +537,11 @@ Where these are not available, we shall simply multiply the corresponding layer 
 The resulting layers will be summed together to get a single response layer, which will then be inverse logit transformed to get the probability of occupancy.
 
 ```{r}
+soi <- sp_coefs$scientific_name
+
 # multiply coefficients with layers
 soi_occu <- map(
-  sp_coefs[sp_coefs$scientific_name, ]$data,
+  sp_coefs[sp_coefs$scientific_name %in% soi, ]$data,
   .f = function(df) {
     response <- unlist(slice(df, 1), use.names = F) * landscape
     response <- sum(response, na.rm = TRUE) # remove NA layers, i.e., non-sig preds
