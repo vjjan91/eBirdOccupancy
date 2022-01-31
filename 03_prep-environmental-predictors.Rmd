@@ -86,34 +86,6 @@ gc()
 
 CHELSA rasters can be downloaded using the `get_chelsa.sh` shell script, which is a `wget` command pointing to the `envidatS3.txt` file.
 
-### Read temperature and precipitation data
-
-Read the data for our dry season months; Jan -- May, and December.
-
-```{r chelsa_rasters, , message=FALSE, warning=FALSE}
-# list chelsa files
-# the chelsa data can be downloaded from the aforementioned link. They haven't been uploaded to github as a result of its large size.
-chelsaFiles <- list.files("data/chelsa/",
-  full.names = TRUE,
-  recursive = TRUE,
-  pattern = "bio10"
-)
-
-# gather chelsa rasters
-chelsaData <- purrr::map(chelsaFiles, function(chr) {
-  a <- raster(chr)
-  crs(a) <- crs(elevData)
-  a <- crop(a, as(buffer, "Spatial"))
-  return(a)
-})
-
-# divide temperature by 10
-chelsaData[[1]] <- chelsaData[[1]] / 10
-
-# stack chelsa data
-chelsaData <- raster::stack(chelsaData)
-```
-
 ### Prepare Bioclim 1 (mean temperature) for dry season
 
 ```{r check_for_4a}
@@ -177,7 +149,7 @@ tkAvg <- map2(tkAvg[["tmin"]], tkAvg[["tmax"]], function(tmin, tmax) {
 })
 
 # calculate Bio 1 for dry season
-bio_1 <- (calc(stack(tkAvg), fun = mean)
+bio_1 <- (calc(stack(tkAvg), fun = mean))
 names(bio_1) <- "CHELSA_bio10_1"
 
 # save bio_1
@@ -187,7 +159,7 @@ writeRaster(bio_1, filename = "data/chelsa/CHELSA_bio10_1.tif", overwrite = T)
 ### Prepare Bioclim 12 (total rainfall) for dry season
 
 ```{r check_for_15}
-if (file.exists("data/chelsa/CHELSA_bio10_15.tif")) {
+if (file.exists("data/chelsa/CHELSA_bio10_12.tif")) {
   message("Bio 12 already exists, will be overwritten")
 } else {
   message("Bio 12 does not exist, will be prepared")
