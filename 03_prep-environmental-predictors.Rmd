@@ -82,24 +82,13 @@ rm(alt.hills)
 gc()
 ```
 
-## Prepare Bioclim 4a and Bioclim 15
-
-```{r prepare_bio4a_bio15}
-# list chelsa files
-chelsaFiles <- list.files("data/chelsa/", recursive = TRUE, pattern = "tif")
-
-# load Bio 1 and 12
-bio_1 <- raster("data/chelsa/envicloud/chelsa/chelsa_V1/climatologies/bio/CHELSA_bio10_01.tif")
-bio_12 <- raster("data/chelsa/envicloud/chelsa/chelsa_V1/climatologies/bio/CHELSA_bio10_12.tif")
-```
-
 ## Prepare CHELSA rasters
 
 CHELSA rasters can be downloaded using the `get_chelsa.sh` shell script, which is a `wget` command pointing to the `envidatS3.txt` file.
 
-### Prepare BIOCLIM 4a and 15
+### Read temperature and precipitation data
 
-We prepare the CHELSA rasters for seasonality in temperature (Bio 4a) and seasonality in precipitation (Bio 15) in the same way, reading them in, cropping them to the study site buffer extent, and handling the temperature layer values which we divide by 10. The CHELSA rasters can be downloaded from https://chelsa-climate.org/bioclim/
+Read the data for our dry season months; Jan -- May, and December.
 
 ```{r chelsa_rasters, , message=FALSE, warning=FALSE}
 # list chelsa files
@@ -125,22 +114,20 @@ chelsaData[[1]] <- chelsaData[[1]] / 10
 chelsaData <- raster::stack(chelsaData)
 ```
 
-### Prepare BIOCLIM 4a
+### Prepare Bioclim 1 (mean temperature) for dry season
 
 ```{r check_for_4a}
-if (file.exists("data/chelsa/CHELSA_bio10_4a.tif")) {
-  message("Bio 4a already exists, will be overwritten")
+if (file.exists("data/chelsa/CHELSA_bio10_1.tif")) {
+  message("Bio 1 already exists, will be overwritten")
+} else {
+  message("Bio 1 does not exist, will be prepared")
 }
 ```
 
 
-Bioclim 4a, the coefficient of variation temperature seasonality is calculated as
+Bioclim 1, is $Tkavg_i = (Tkmin_i + Tkmax_i) / 2$.
 
-$$Bio\ 4a = \frac{SD\{ Tkavg_1, \ldots Tkavg_{12} \}}{(Bio\ 1 + 273.15)} \times 100$$
-
-where $Tkavg_i = (Tkmin_i + Tkmax_i) / 2$
-
-Here, we use only the months of December and Jan -- May for winter temperature variation.
+Here, we use only the months of December and Jan -- May for dry season temperature.
 
 ```{r bioclim_4a}
 # list rasters by pattern
@@ -189,29 +176,27 @@ tkAvg <- map2(tkAvg[["tmin"]], tkAvg[["tmax"]], function(tmin, tmax) {
   calc(stack(tmin, tmax), fun = mean)
 })
 
-# calculate Bio 4a
-bio_4a <- (calc(stack(tkAvg), fun = sd) / (chelsaData[[1]] + 273.15)) * 100
-names(bio_4a) <- "CHELSA_bio10_4a"
-# save bio_4a
-writeRaster(bio_4a, filename = "data/chelsa/CHELSA_bio10_4a.tif", overwrite = T)
+# calculate Bio 1 for dry season
+bio_1 <- (calc(stack(tkAvg), fun = mean)
+names(bio_1) <- "CHELSA_bio10_1"
+
+# save bio_1
+writeRaster(bio_1, filename = "data/chelsa/CHELSA_bio10_1.tif", overwrite = T)
 ```
 
-### Prepare Bioclim 15
+### Prepare Bioclim 12 (total rainfall) for dry season
 
 ```{r check_for_15}
 if (file.exists("data/chelsa/CHELSA_bio10_15.tif")) {
-  message("Bio 15 already exists, will be overwritten")
+  message("Bio 12 already exists, will be overwritten")
+} else {
+  message("Bio 12 does not exist, will be prepared")
 }
 ```
 
+Bioclim 12, the total precipitation (in our area, rainfall), and equals
 
-Bioclim 15, the coefficient of variation precipitation (in our area, rainfall) seasonality is calculated as
-
-$$Bio\ 15 = \frac{SD\{ PPT_1, \ldots PPT_{12} \}}{1 + (Bio\ 12 / 12)} \times 100$$
-
-where $PPT_i$ is the monthly precipitation.
-
-Here, we use only the months of December and Jan -- May for winter rainfall variation.
+where $\Sigma PPT_i$ is the monthly precipitation for the dry season months of December and Jan -- May.
 
 ```{r bioclim_15}
 # list rasters by pattern
@@ -240,10 +225,11 @@ pptTotal <- map(pptTotal, function(path) {
 })
 
 # calculate Bio 4a
-bio_15 <- (calc(stack(pptTotal), fun = sd) / (1 + (chelsaData[[2]] / 12))) * 100
-names(bio_15) <- "CHELSA_bio10_15"
+bio_12 <- (calc(stack(pptTotal), fun = sum))
+names(bio_12) <- "CHELSA_bio10_12"
+
 # save bio_4a
-writeRaster(bio_15, filename = "data/chelsa/CHELSA_bio10_15.tif", overwrite = T)
+writeRaster(bio_12, filename = "data/chelsa/CHELSA_bio10_12.tif", overwrite = T)
 ```
 
 ### Stack terrain and climate
@@ -251,13 +237,8 @@ writeRaster(bio_15, filename = "data/chelsa/CHELSA_bio10_15.tif", overwrite = T)
 We stack the terrain and climatic rasters.
 
 ```{r stack_rasters, , message=FALSE, warning=FALSE}
-
-# If bio4a and bio15 have already been prepared from previous runs/analysis - load them directly
-bio_4a <- raster("data/chelsa/CHELSA_bio10_4a.tif")
-bio_15 <- raster("data/chelsa/CHELSA_bio10_15.tif")
-
 # stack rasters for efficient reprojection later
-env_data <- stack(elevData, bio_4a, bio_15)
+env_data <- stack(elevData, bio_1, bio_12)
 ```
 
 ## Resample landcover from 10m to 1km
@@ -409,10 +390,13 @@ land_stack <- stack(env_data_resamp, lc_data)
 land_names <- glue('data/spatial/landscape_resamp{c("01")}_km.tif')
 
 # write to file
-writeRaster(land_stack, filename = as.character(land_names), overwrite = TRUE)
+writeRaster(
+  land_stack, filename = as.character(land_names), 
+  overwrite = TRUE
+)
 ```
 
-## Climate seasonality in relation to elevation
+## Climate variables in relation to elevation
 
 ### Load resampled environmental rasters
 
@@ -422,7 +406,7 @@ landscape <- stack("data/spatial/landscape_resamp01_km.tif")
 
 # get proper names
 elev_names <- c("elev", "slope", "aspect")
-chelsa_names <- c("bio_4a", "bio_15")
+chelsa_names <- c("bio_1", "bio_12")
 
 names(landscape) <- glue('{c(elev_names, chelsa_names, "landcover")}')
 ```
