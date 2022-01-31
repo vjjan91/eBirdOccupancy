@@ -29,9 +29,7 @@ library(patchwork)
 ```{r}
 # read coefficient effect data
 data <- read_csv("data/results/data_predictor_effect.csv")
-```
 
-```{r}
 # check for a predictor column
 assertthat::assert_that(
   all(c("predictor", "coefficient", "se") %in% colnames(data)),
@@ -48,17 +46,22 @@ assertthat::assert_that(
 ## Prepare predictor data
 
 ```{r}
-# preparep predictors
-predictors <- c("bio4a", "bio15a", glue("lc_0{seq(9)}"))
+# preparep predictors - now look only for any digits
+predictors <- c("bio_\\d+", glue("lc_0{seq(9)}"))
 
 # prepare predictor search strings and scaling power
 preds <- glue("({predictors})")
 preds <- str_flatten(preds, collapse = "|")
-power <- as.numeric(str_extract(data$predictor, "2"))
+
+# some way of identifying square terms
+power <- (str_extract(data$predictor, "Ibio"))
+power[!is.na(power)] = 2
 power[is.na(power)] <- 1
+power = as.numeric(power)
 
 # assign predictor name and power
-data <- mutate(
+data <-
+  mutate(
   data,
   predictor = str_extract(predictor, preds),
   power = power
@@ -143,15 +146,15 @@ data_resp <- ungroup(
 
 ```{r}
 # scale predictors
-scale_15a <- c(20, 60)
-scale_4a <- c(0.25, 1)
+scale_12 <- c(1000, 4000)
+scale_1 <- c(10, 40)
 
 # scale bio4a and bio15a by actual values
 data_resp <- mutate(
   data_resp,
   pred_val = case_when(
-    predictor == "bio4a" ~ scales::rescale(pred_val, to = scale_4a),
-    predictor == "bio15a" ~ scales::rescale(pred_val, to = scale_15a),
+    predictor == "bio_1" ~ scales::rescale(pred_val, to = scale_1),
+    predictor == "bio_12" ~ scales::rescale(pred_val, to = scale_12),
     T ~ pred_val
   )
 )
@@ -169,7 +172,7 @@ soi <- c(
   "Culicicapa ceylonensis", "Irena puella",
   "Copsychus fulicatus", "Pycnonotus jocosus"
 )
-which_predictors <- c("bio4a")
+which_predictors <- c("bio_1")
 ```
 
 ### Figure: Occupancy ~ predictors
@@ -228,7 +231,7 @@ make_occu_fig <- function(df, this_fill) {
       )
     ) +
     labs(
-      x = "Temperature seasonality",
+      x = "Mean Annual Temperature",
       y = "Probability of occupancy"
     )
 }
@@ -266,8 +269,8 @@ data_fig <- nest(
 )
 
 pred_names <- c(
-  "bio4a" = "Temp. seasonality",
-  "bio15a" = "Ppt. seasonality",
+  "bio_1" = "Mean ann. temp",
+  "bio_12" = "Ann. precip",
   "lc_01" = "Evergreen",
   "lc_02" = "Deciduous",
   "lc_03" = "Mixed/degraded",
@@ -276,10 +279,12 @@ pred_names <- c(
   "lc_07" = "Plantation",
   "lc_09" = "Water"
 )
+
 pred_names <- tibble(
   name = pred_names,
   predictor = names(pred_names)
 )
+
 data_fig <- left_join(
   data_fig,
   pred_names
@@ -379,9 +384,12 @@ library(sf)
 ```
 
 ```{r}
-# read rasters
-bio_4a <- rast("data/chelsa/CHELSA_bio10_4a.tif")
-bio_15 <- rast("data/chelsa/CHELSA_bio10_15.tif")
+# read saved rasters
+lscape = rast("data/spatial/landscape_resamp01_km.tif")
+
+# isolate temperature and rainfall
+bio_1 = lscape[[4]] / 10 # temp, divide by 10
+bio_12 = lscape[[5]] # rain
 
 # careful while loading this raster, large size
 landcover <- rast("data/landUseClassification/landcover_roy_2015_reclassified.tif")
@@ -438,21 +446,29 @@ lc_split = terra::rast("data/spatial/raster_landcover_proportion_1km.tif")
 
 ```{r}
 # get ranges
-range_4a <- terra::minmax(bio_4a)[, 1]
-range_15 <- terra::minmax(bio_15)[, 1]
+range_1 <- terra::minmax(bio_1)[, 1] # divide temp by 10
+range_12 <- terra::minmax(bio_12)[, 1]
 
 # rescale
-bio_4a <- (bio_4a - min(range_4a)) / (diff(range_4a))
-bio_15 <- (bio_15 - min(range_15)) / (diff(range_15))
+bio_1 <- (bio_1 - min(range_1)) / (diff(range_1))
+bio_12 <- (bio_12 - min(range_12)) / (diff(range_12))
 
 # project to UTM
-climate <- c(bio_4a, bio_15)
+climate <- c(bio_1, bio_12)
+names(climate) = c(
+  "CHELSA bio_1 mean ann. temp", 
+  "CHELSA bio_12 mean ann. ppt."
+)
+
 climate <- terra::project(
   x = climate, y = lc_1km
 )
 
 # make squared terms
 climate2 <- climate * climate
+
+# names
+names(climate2) = glue("{names(climate)} 2")
 
 # add to landcover proportions and plot
 landscape <- c(climate, lc_split)
@@ -462,6 +478,7 @@ landscape <- c(climate, lc_split)
 # mask by hills
 hills = st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>% 
   st_transform(32643)
+
 landscape = terra::mask(
   landscape,
   vect(hills)
@@ -523,12 +540,22 @@ sp_preds <- filter(
   !(str_detect(predictor, "lc") & power == 2)
 )
 
+# correct square LC terms
+sp_coefs = mutate(
+  sp_coefs,
+  power = if_else(
+    str_detect(predictor, "lc"),
+    1,
+    power
+  )
+)
+
 sp_coefs <- full_join(
   sp_coefs,
   sp_preds
 )
 
-# make wide
+# make wide --- this should give no warnings
 sp_coefs <-
   pivot_wider(
     sp_coefs,
@@ -542,8 +569,8 @@ sp_coefs <- select(
   sp_coefs,
   scientific_name,
   c(
-    "bio4a_1", "bio15a_1",
-    "bio4a_2", "bio15a_2"
+    "bio_1_1", "bio_12_1",
+    "bio_1_2", "bio_12_2"
   ),
   matches("lc")
 )
@@ -711,6 +738,8 @@ ggsave(
   width = 16, height = 16
 )
 ```
+
+## NO LONGER USED --- WIP --- TO BE REMOVED
 
 ### Seasonality differences among species
 
