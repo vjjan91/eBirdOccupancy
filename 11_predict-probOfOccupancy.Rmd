@@ -19,10 +19,6 @@ library(stringr)
 library(glue)
 # library(data.table)
 
-# nice tables
-library(knitr)
-library(kableExtra)
-
 # plotting
 library(ggplot2)
 library(patchwork)
@@ -33,9 +29,7 @@ library(patchwork)
 ```{r}
 # read coefficient effect data
 data <- read_csv("data/results/data_predictor_effect.csv")
-```
 
-```{r}
 # check for a predictor column
 assertthat::assert_that(
   all(c("predictor", "coefficient", "se") %in% colnames(data)),
@@ -52,17 +46,26 @@ assertthat::assert_that(
 ## Prepare predictor data
 
 ```{r}
+# preparep predictors - now look only for any digits
+predictors <- c("bio_\\d+", glue("lc_0{seq(9)}"))
+
 # prepare predictor search strings and scaling power
-strings <- c("Ibio_12\\^2", "Ibio_1\\^2")
-power <- str_extract(data$predictor, paste(strings, collapse = "|"))
+preds <- glue("({predictors})")
+preds <- str_flatten(preds, collapse = "|")
+
+# some way of identifying square terms
+power <- (str_extract(data$predictor, "Ibio"))
+power[!is.na(power)] = 2
 power[is.na(power)] <- 1
-power <- as.numeric(power)
-power[is.na(power)] <- 2
+power = as.numeric(power)
 
 # assign predictor name and power
-data <- data %>%
-  mutate(predictor = str_replace_all(data$predictor,c("Ibio_12\\^2" = "bio_12","Ibio_1\\^2" = "bio_1"))) %>%
-  mutate(power=power)
+data <-
+  mutate(
+  data,
+  predictor = str_extract(predictor, preds),
+  power = power
+)
 ```
 
 ## Get predictor responses
@@ -119,7 +122,7 @@ data_resp <-
     data_resp,
     scientific_name, predictor, pred_val
   ) %>%
-  dplyr::select(-power, -coefficient, -se) %>%
+  select(-power, -coefficient, -se) %>%
   summarise(
     across(
       .cols = c("response", "resp_var"),
@@ -146,7 +149,7 @@ data_resp <- ungroup(
 scale_12 <- c(1000, 4000)
 scale_1 <- c(10, 40)
 
-# scale bio_1 and bio_12 by actual values
+# scale bio4a and bio15a by actual values
 data_resp <- mutate(
   data_resp,
   pred_val = case_when(
@@ -157,7 +160,7 @@ data_resp <- mutate(
 )
 
 # make long
-data_poccu <- dplyr::select(
+data_poccu <- select(
   data_resp,
   -response, -resp_var
 )
@@ -179,7 +182,7 @@ data_fig <- data_poccu %>%
   filter(
     scientific_name %in% soi,
     predictor %in% which_predictors
-  ) %>%
+  ) |>
   mutate(
     cat = case_when(
       scientific_name %in% c("Irena puella", "Culicicapa ceylonensis") ~ "forest",
@@ -270,16 +273,18 @@ pred_names <- c(
   "bio_12" = "Ann. precip",
   "lc_01" = "Evergreen",
   "lc_02" = "Deciduous",
-  "lc_03" = "Mixed/degr",
-  "lc_04" = "Agri./Settle",
+  "lc_03" = "Mixed/degraded",
+  "lc_04" = "Agro./Settled",
   "lc_05" = "Grassland",
   "lc_07" = "Plantation",
   "lc_09" = "Water"
 )
+
 pred_names <- tibble(
   name = pred_names,
   predictor = names(pred_names)
 )
+
 data_fig <- left_join(
   data_fig,
   pred_names
@@ -335,7 +340,7 @@ data_fig <- mutate(
 data_fig <- group_by(
   data_fig,
   scientific_name
-) %>%
+) |>
   summarise(
     plots = list(
       wrap_plots(
@@ -379,10 +384,16 @@ library(sf)
 ```
 
 ```{r}
-# read rasters
-bio_1 <- rast("data/chelsa/CHELSA_bio1.tif")
-bio_12 <- rast("data/chelsa/CHELSA_bio12.tif")
+# read saved rasters
+lscape = rast("data/spatial/landscape_resamp01_km.tif")
+
+# isolate temperature and rainfall
+bio_1 = lscape[[4]] / 10 # temp, divide by 10
+bio_12 = lscape[[5]] # rain
+
+# careful while loading this raster, large size
 landcover <- rast("data/landUseClassification/landcover_roy_2015_reclassified.tif")
+
 lc_1km <- rast("data/landUseClassification/lc_01000m.tif")
 ```
 
@@ -428,8 +439,31 @@ dev.off()
 ### Prepare climatic layers
 
 ```{r}
+# load landcover split
+lc_split = terra::rast("data/spatial/raster_landcover_proportion_1km.tif")
+```
+
+### Mask by study area
+
+```{r}
+# mask by hills
+hills = st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>% 
+  st_transform(32643)
+
+bio_1 = terra::mask(
+  bio_1,
+  vect(hills)
+)
+
+bio_12 = terra::mask(
+  bio_12,
+  vect(hills)
+)
+```
+
+```{r}
 # get ranges
-range_1 <- terra::minmax(bio_1)[, 1]
+range_1 <- terra::minmax(bio_1)[, 1] # divide temp by 10
 range_12 <- terra::minmax(bio_12)[, 1]
 
 # rescale
@@ -438,6 +472,11 @@ bio_12 <- (bio_12 - min(range_12)) / (diff(range_12))
 
 # project to UTM
 climate <- c(bio_1, bio_12)
+names(climate) = c(
+  "CHELSA bio_1 mean seaonal. temp", 
+  "CHELSA bio_12 total seasonal. ppt."
+)
+
 climate <- terra::project(
   x = climate, y = lc_1km
 )
@@ -445,9 +484,14 @@ climate <- terra::project(
 # make squared terms
 climate2 <- climate * climate
 
+# names
+names(climate2) = glue("{names(climate)} 2")
+
 # add to landcover proportions and plot
 landscape <- c(climate, lc_split)
 ```
+
+### Plot full bounds of landscape variables
 
 ```{r eval=FALSE}
 # plot proportion of landcover classes
@@ -468,6 +512,11 @@ dev.off()
 landscape <- c(
   climate, climate2, lc_split
 )
+
+landscape = terra::mask(
+  landscape,
+  vect(hills)
+)
 ```
 
 ### Prepare soi predictors
@@ -481,13 +530,13 @@ sp_coefs <- filter(
   data,
   # scientific_name %in% soi
 ) %>%
-  dplyr::select(
+  select(
     -pred_val, -pred_val_pow
   )
 
 # add missing landcover classes
 sp_preds <- crossing(
-  scientific_name = unique(data$scientific_name),
+  scientific_name = soi,
   predictor = pred_names$predictor,
   power = c(1, 2)
 )
@@ -498,12 +547,22 @@ sp_preds <- filter(
   !(str_detect(predictor, "lc") & power == 2)
 )
 
+# correct square LC terms
+sp_coefs = mutate(
+  sp_coefs,
+  power = if_else(
+    str_detect(predictor, "lc"),
+    1,
+    power
+  )
+)
+
 sp_coefs <- full_join(
   sp_coefs,
   sp_preds
 )
 
-# make wide
+# make wide --- this should give no warnings
 sp_coefs <-
   pivot_wider(
     sp_coefs,
@@ -513,7 +572,7 @@ sp_coefs <-
   )
 
 # get into order
-sp_coefs <- dplyr::select(
+sp_coefs <- select(
   sp_coefs,
   scientific_name,
   c(
@@ -537,8 +596,6 @@ Where these are not available, we shall simply multiply the corresponding layer 
 The resulting layers will be summed together to get a single response layer, which will then be inverse logit transformed to get the probability of occupancy.
 
 ```{r}
-soi <- sp_coefs$scientific_name
-
 # multiply coefficients with layers
 soi_occu <- map(
   sp_coefs[sp_coefs$scientific_name %in% soi, ]$data,
@@ -571,11 +628,13 @@ fig_occu_map <- ggplot() +
     data = soi_occu
   ) +
   scale_fill_binned_sequential(
-    palette = "Hawaii",
+    palette = "Purple-Yellow",
     name = "p(Occu.)",
     rev = T,
     limits = c(0, 1),
-    breaks = seq(0, 1, 0.1), show.limits = T
+    breaks = seq(0, 1, 0.1), 
+    na.value = "grey99",
+    show.limits = T
   ) +
   facet_wrap(
     ~band,
@@ -601,9 +660,7 @@ fig_occu_map <- ggplot() +
       vjust = 1
     )
   )
-```
 
-```{r}
 # save figure
 ggsave(
   fig_occu_map,
@@ -646,10 +703,11 @@ fig_occu_map_all <-
     data = sp_occu
   ) +
   scale_fill_binned_sequential(
-    palette = "Hawaii",
+    palette = "Purple-Yellow",
     name = "p(Occu.)",
     rev = T,
     limits = c(0, 1),
+    na.value = "grey99",
     breaks = seq(0, 1, 0.1), show.limits = T
   ) +
   facet_wrap(
@@ -679,13 +737,122 @@ fig_occu_map_all <-
       vjust = 1
     )
   )
-```
 
-```{r}
 # save figure
 ggsave(
   fig_occu_map_all,
   filename = "figs/fig_occupancy_maps.png",
   width = 16, height = 16
+)
+```
+
+## NO LONGER USED --- WIP --- TO BE REMOVED
+
+### Seasonality differences among species
+
+### Prepare species occupancy for all species
+
+```{r}
+# multiply coefficients with layers
+occu_50 <- map(
+  sp_coefs$data,
+  .f = function(df) {
+    response <- unlist(slice(df, 1), use.names = F) * landscape
+    response <- sum(response, na.rm = TRUE) # remove NA layers, i.e., non-sig preds
+
+    # now transform for probability occupancy
+    response <- 1 / (1 + exp(-response))
+    
+    # filter p occup < 0.5
+    response[response < 0.5] = NA
+    response
+  }
+)
+
+# subset the climate maps by study area
+climate = mask(climate, vect(hills))
+
+# mask by occu50
+climate_used = map2(
+  occu_50, sp_coefs$scientific_name,
+  function(le, sp) {
+    
+    if (all(is.na(values(le)))) {
+      return(NULL)
+    } else {
+      # mask climate layers where p(occupancy) is < 0.5
+    clim_poccu_50 = terra::mask(
+      climate,
+      le
+    )
+
+    # make data frame and return
+    df = as.data.frame(clim_poccu_50)
+    df$sp = sp
+    
+    as_tibble(df) 
+    }
+  }
+)
+
+# remove empty list elements
+climate_used = climate_used[!map_lgl(climate_used, is_empty)]
+
+# bind rows
+climate_used = bind_rows(climate_used)
+```
+
+```{r}
+# link with species traits
+sp_traits = read_csv("data/species-trait-dat.csv")
+
+climate_used = left_join(
+  climate_used,
+  sp_traits,
+  by = c("sp" = "scientific_name")
+)
+
+# scale climate layers back
+climate_used = mutate(
+  climate_used,
+  CHELSA_bio10_4a = scales::rescale(CHELSA_bio10_4a, range_4a),
+  CHELSA_bio10_15 = scales::rescale(CHELSA_bio10_15, range_15)
+)
+
+# save
+write_csv(
+  climate_used,
+  file = "data/results/data_occupied_seasonalities.csv"
+)
+```
+
+### Plot seasonalities by habitat preference
+
+```{r}
+# pivot long
+cl_used_data = climate_used %>% 
+  select(
+    matches("CHELSA"),
+    sp,
+    habitat = `Habitat use`
+  ) %>% 
+  pivot_longer(
+    cols = matches("CHELSA")
+  )
+
+# make plot
+fig_season_diff = ggplot(cl_used_data)+
+  geom_boxplot(
+    aes(
+      habitat, value
+    )
+  )+
+  facet_wrap(
+    ~name, scales = "free"
+  )
+
+ggsave(
+  fig_season_diff,
+  filename = "figs/fig_occupied_seasonalities.png"
 )
 ```
