@@ -443,6 +443,23 @@ dev.off()
 lc_split = terra::rast("data/spatial/raster_landcover_proportion_1km.tif")
 ```
 
+### Mask by study area
+
+```{r}
+# mask by hills
+hills = st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>% 
+  st_transform(32643)
+
+bio_1 = terra::mask(
+  bio_1,
+  vect(hills)
+)
+
+bio_12 = terra::mask(
+  bio_12,
+  vect(hills)
+)
+```
 
 ```{r}
 # get ranges
@@ -488,19 +505,6 @@ plot(
   range = c(0, 1)
 )
 dev.off()
-```
-
-### Mask by study area
-
-```{r}
-# mask by hills
-hills = st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>% 
-  st_transform(32643)
-
-landscape = terra::mask(
-  landscape,
-  vect(hills)
-)
 ```
 
 ```{r}
