@@ -19,10 +19,6 @@ library(stringr)
 library(glue)
 # library(data.table)
 
-# nice tables
-library(knitr)
-library(kableExtra)
-
 # plotting
 library(ggplot2)
 library(patchwork)
@@ -382,7 +378,9 @@ library(sf)
 # read rasters
 bio_1 <- rast("data/chelsa/CHELSA_bio1.tif")
 bio_12 <- rast("data/chelsa/CHELSA_bio12.tif")
+
 landcover <- rast("data/landUseClassification/landcover_roy_2015_reclassified.tif")
+
 lc_1km <- rast("data/landUseClassification/lc_01000m.tif")
 ```
 
@@ -428,6 +426,12 @@ dev.off()
 ### Prepare climatic layers
 
 ```{r}
+# load landcover split
+lc_split = terra::rast("data/spatial/raster_landcover_proportion_1km.tif")
+```
+
+
+```{r}
 # get ranges
 range_1 <- terra::minmax(bio_1)[, 1]
 range_12 <- terra::minmax(bio_12)[, 1]
@@ -449,6 +453,17 @@ climate2 <- climate * climate
 landscape <- c(climate, lc_split)
 ```
 
+```{r}
+# mask by hills
+hills = st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>% 
+  st_transform(32643)
+landscape = terra::mask(
+  landscape,
+  vect(hills)
+)
+```
+
+
 ```{r eval=FALSE}
 # plot proportion of landcover classes
 png(
@@ -467,6 +482,11 @@ dev.off()
 # add squared terms
 landscape <- c(
   climate, climate2, lc_split
+)
+
+landscape = terra::mask(
+  landscape,
+  vect(hills)
 )
 ```
 
@@ -571,11 +591,13 @@ fig_occu_map <- ggplot() +
     data = soi_occu
   ) +
   scale_fill_binned_sequential(
-    palette = "Hawaii",
+    palette = "Purple-Yellow",
     name = "p(Occu.)",
     rev = T,
     limits = c(0, 1),
-    breaks = seq(0, 1, 0.1), show.limits = T
+    breaks = seq(0, 1, 0.1), 
+    na.value = "grey99",
+    show.limits = T
   ) +
   facet_wrap(
     ~band,
@@ -601,9 +623,7 @@ fig_occu_map <- ggplot() +
       vjust = 1
     )
   )
-```
 
-```{r}
 # save figure
 ggsave(
   fig_occu_map,
@@ -646,10 +666,11 @@ fig_occu_map_all <-
     data = sp_occu
   ) +
   scale_fill_binned_sequential(
-    palette = "Hawaii",
+    palette = "Purple-Yellow",
     name = "p(Occu.)",
     rev = T,
     limits = c(0, 1),
+    na.value = "grey99",
     breaks = seq(0, 1, 0.1), show.limits = T
   ) +
   facet_wrap(
@@ -679,13 +700,120 @@ fig_occu_map_all <-
       vjust = 1
     )
   )
-```
 
-```{r}
 # save figure
 ggsave(
   fig_occu_map_all,
   filename = "figs/fig_occupancy_maps.png",
   width = 16, height = 16
+)
+```
+
+### Seasonality differences among species
+
+### Prepare species occupancy for all species
+
+```{r}
+# multiply coefficients with layers
+occu_50 <- map(
+  sp_coefs$data,
+  .f = function(df) {
+    response <- unlist(slice(df, 1), use.names = F) * landscape
+    response <- sum(response, na.rm = TRUE) # remove NA layers, i.e., non-sig preds
+
+    # now transform for probability occupancy
+    response <- 1 / (1 + exp(-response))
+    
+    # filter p occup < 0.5
+    response[response < 0.5] = NA
+    response
+  }
+)
+
+# subset the climate maps by study area
+climate = mask(climate, vect(hills))
+
+# mask by occu50
+climate_used = map2(
+  occu_50, sp_coefs$scientific_name,
+  function(le, sp) {
+    
+    if (all(is.na(values(le)))) {
+      return(NULL)
+    } else {
+      # mask climate layers where p(occupancy) is < 0.5
+    clim_poccu_50 = terra::mask(
+      climate,
+      le
+    )
+
+    # make data frame and return
+    df = as.data.frame(clim_poccu_50)
+    df$sp = sp
+    
+    as_tibble(df) 
+    }
+  }
+)
+
+# remove empty list elements
+climate_used = climate_used[!map_lgl(climate_used, is_empty)]
+
+# bind rows
+climate_used = bind_rows(climate_used)
+```
+
+```{r}
+# link with species traits
+sp_traits = read_csv("data/species-trait-dat.csv")
+
+climate_used = left_join(
+  climate_used,
+  sp_traits,
+  by = c("sp" = "scientific_name")
+)
+
+# scale climate layers back
+climate_used = mutate(
+  climate_used,
+  CHELSA_bio10_4a = scales::rescale(CHELSA_bio10_4a, range_4a),
+  CHELSA_bio10_15 = scales::rescale(CHELSA_bio10_15, range_15)
+)
+
+# save
+write_csv(
+  climate_used,
+  file = "data/results/data_occupied_seasonalities.csv"
+)
+```
+
+### Plot seasonalities by habitat preference
+
+```{r}
+# pivot long
+cl_used_data = climate_used %>% 
+  select(
+    matches("CHELSA"),
+    sp,
+    habitat = `Habitat use`
+  ) %>% 
+  pivot_longer(
+    cols = matches("CHELSA")
+  )
+
+# make plot
+fig_season_diff = ggplot(cl_used_data)+
+  geom_boxplot(
+    aes(
+      habitat, value
+    )
+  )+
+  facet_wrap(
+    ~name, scales = "free"
+  )
+
+ggsave(
+  fig_season_diff,
+  filename = "figs/fig_occupied_seasonalities.png"
 )
 ```
