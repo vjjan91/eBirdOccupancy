@@ -456,8 +456,8 @@ bio_12 <- (bio_12 - min(range_12)) / (diff(range_12))
 # project to UTM
 climate <- c(bio_1, bio_12)
 names(climate) = c(
-  "CHELSA bio_1 mean ann. temp", 
-  "CHELSA bio_12 mean ann. ppt."
+  "CHELSA bio_1 mean seaonal. temp", 
+  "CHELSA bio_12 total seasonal. ppt."
 )
 
 climate <- terra::project(
@@ -474,17 +474,7 @@ names(climate2) = glue("{names(climate)} 2")
 landscape <- c(climate, lc_split)
 ```
 
-```{r}
-# mask by hills
-hills = st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>% 
-  st_transform(32643)
-
-landscape = terra::mask(
-  landscape,
-  vect(hills)
-)
-```
-
+### Plot full bounds of landscape variables
 
 ```{r eval=FALSE}
 # plot proportion of landcover classes
@@ -498,6 +488,19 @@ plot(
   range = c(0, 1)
 )
 dev.off()
+```
+
+### Mask by study area
+
+```{r}
+# mask by hills
+hills = st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>% 
+  st_transform(32643)
+
+landscape = terra::mask(
+  landscape,
+  vect(hills)
+)
 ```
 
 ```{r}
