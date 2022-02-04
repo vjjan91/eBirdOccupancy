@@ -412,9 +412,8 @@ Figure code is hidden in versions rendered as HTML or PDF.
 ```{r plot_clim_elev, , echo=FALSE}
 # make labeller
 climvar_names <- c(
-  bio_4a = "Temperature \nSeasonality (CV)",
-  bio_15 = "Precipitation \nSeasonality (CV)"
-)
+  bio_12 = "Annual \nPrecipitation",
+  bio_1 = "Mean Annual \nTemperature")
 
 # split data to list
 land_data <- split(land_data, f = land_data$clim_var)
@@ -508,8 +507,8 @@ lc_clim_data <- nest(lc_clim_data, data = c("landcover", "value"))
 
 # assign names
 lc_clim_data$climvar_name <- c(
-  "Temperature Seasonality (CV)",
-  "Precipitation Seasonality(CV)"
+  "Mean Annual Temperature",
+  "Annual Precipitation"
 )
 ```
 
@@ -557,20 +556,20 @@ lc_clim_plots <- pmap(
         x = glue("{climvar_name}"),
         y = "Density"
       )
-    if (climvar == "bio_4a") {
+    if (climvar == "bio_1") {
       p <- p +
         scale_fill_continuous_diverging(
           palette = "Blue-Red 2",
-          mid = 0.7
+          mid = 29.5
         )
     } else {
       p <- p +
         scale_x_continuous(
-          limits = c(20, 60)
+          limits = c(200, 500)
         ) +
         scale_fill_continuous_diverging(
           palette = "Blue-Yellow 2",
-          mid = 40
+          mid = 350
         )
     }
 

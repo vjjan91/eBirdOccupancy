@@ -54,17 +54,17 @@ preds <- glue("({predictors})")
 preds <- str_flatten(preds, collapse = "|")
 
 # some way of identifying square terms
-power <- (str_extract(data$predictor, "Ibio"))
-power[!is.na(power)] = 2
-power[is.na(power)] <- 1
-power = as.numeric(power)
+#power <- (str_extract(data$predictor, "Ibio"))
+#power[!is.na(power)] = 2
+#power[is.na(power)] <- 1
+#power = as.numeric(power)
 
 # assign predictor name and power
 data <-
   mutate(
   data,
-  predictor = str_extract(predictor, preds),
-  power = power
+  predictor = str_extract(predictor, preds)
+  #power = power
 )
 ```
 
@@ -79,15 +79,15 @@ data <- mutate(
     function(x) {
       seq(0, 1, 0.05)
     }
-  ),
+  ))#,
   # handle squared terms
-  pred_val_pow = purrr::map2(
-    pred_val, power,
-    function(x, y) {
-      x^y
-    }
-  )
-)
+  #pred_val_pow = purrr::map2(
+   # pred_val, power,
+   # function(x, y) {
+    #  x^y
+    #}
+  
+
 
 # get coefficient and error times terms
 data_resp <- mutate(
@@ -122,7 +122,7 @@ data_resp <-
     data_resp,
     scientific_name, predictor, pred_val
   ) %>%
-  select(-power, -coefficient, -se) %>%
+  dplyr::select(-power, -coefficient, -se) %>%
   summarise(
     across(
       .cols = c("response", "resp_var"),
@@ -146,8 +146,8 @@ data_resp <- ungroup(
 
 ```{r}
 # scale predictors
-scale_12 <- c(1000, 4000)
-scale_1 <- c(10, 40)
+scale_12 <- c(200, 1000)
+scale_1 <- c(20, 40)
 
 # scale bio4a and bio15a by actual values
 data_resp <- mutate(
@@ -160,7 +160,7 @@ data_resp <- mutate(
 )
 
 # make long
-data_poccu <- select(
+data_poccu <- dplyr::select(
   data_resp,
   -response, -resp_var
 )
@@ -340,7 +340,7 @@ data_fig <- mutate(
 data_fig <- group_by(
   data_fig,
   scientific_name
-) |>
+) %>%
   summarise(
     plots = list(
       wrap_plots(

@@ -46,11 +46,13 @@ source("R/fun_plot_interaction.r")
 species <- read_csv("data/species_list.csv") %>%
   filter(
     !scientific_name %in% c(
-      "Terpsiphone paradisi", "Prinia hodgsonii", "Pellorneum ruficeps",
-      "Hypothymis azurea","Dicrurus aeneus","Chalcophaps indica",
-      "Pericrocotus cinnamomeus","Rubigula gularis","Dendrocitta leucogastra",
-      "Oriolus xanthornus","Muscicapa dauurica","Cyornis tickelliae",
-      "Chrysocolaptes guttacristatus"))
+      "Prinia hodgsonii", "Pellorneum ruficeps","Hypothymis azurea",
+      "Dicrurus aeneus", "Dendrocitta leucogastra","Chalcophaps indica",
+      "Rubigula gularis","Oriolus xanthornus", "Alcippe poioicephala",
+      "Muscicapa dauurica", "Geokichla citrina", "Chrysocolaptes guttacristatus",
+      "Terpsiphone paradisi", "Oriolus kundoo", "Cyornis tickelliae",
+      "Cinnyris lotenius", "Dicrurus paradiseus", "Psittacula columboides",
+      "Saxicola caprata","Yungipicus nanus"))
 
 list_of_species <- as.character(species$scientific_name)
 ```
@@ -98,9 +100,7 @@ model_imp <- map(file_names, function(f) {
 ```{r}
 # bind rows
 model_imp <- map(model_imp, bind_rows) %>%
-  bind_rows() %>%
-  filter(predictor != "Ibio_1^2" &
-    predictor != "Ibio_12^2")
+  bind_rows() 
 
 # convert to numeric
 model_imp$AIC_weight <- as.numeric(model_imp$AIC_weight)
