@@ -54,17 +54,17 @@ preds <- glue("({predictors})")
 preds <- str_flatten(preds, collapse = "|")
 
 # some way of identifying square terms
-#power <- (str_extract(data$predictor, "Ibio"))
-#power[!is.na(power)] = 2
-#power[is.na(power)] <- 1
-#power = as.numeric(power)
+power <- (str_extract(data$predictor, "Ibio"))
+power[!is.na(power)] = 2
+power[is.na(power)] <- 1
+power = as.numeric(power)
 
 # assign predictor name and power
 data <-
   mutate(
   data,
-  predictor = str_extract(predictor, preds)
-  #power = power
+  predictor = str_extract(predictor, preds),
+  power = power
 )
 ```
 
@@ -79,14 +79,14 @@ data <- mutate(
     function(x) {
       seq(0, 1, 0.05)
     }
-  ))#,
-  # handle squared terms
-  #pred_val_pow = purrr::map2(
-   # pred_val, power,
-   # function(x, y) {
-    #  x^y
-    #}
-  
+  ),
+  #handle squared terms
+  pred_val_pow = purrr::map2(
+    pred_val, power,
+    function(x, y) {
+      x^y
+    }
+))
 
 
 # get coefficient and error times terms
@@ -169,8 +169,8 @@ data_poccu <- dplyr::select(
 ```{r}
 # select species
 soi <- c(
-  "Culicicapa ceylonensis", "Irena puella",
-  "Copsychus fulicatus", "Pycnonotus jocosus"
+  "Iole indica", "Ficedula nigrorufa",
+  "Pycnonotus cafer", "Pycnonotus jocosus"
 )
 which_predictors <- c("bio_1")
 ```
@@ -182,10 +182,10 @@ data_fig <- data_poccu %>%
   filter(
     scientific_name %in% soi,
     predictor %in% which_predictors
-  ) |>
+  ) %>%
   mutate(
     cat = case_when(
-      scientific_name %in% c("Irena puella", "Culicicapa ceylonensis") ~ "forest",
+      scientific_name %in% c("Iole indica", "Ficedula nigrorufa") ~ "forest",
       T ~ "general"
     )
   )
@@ -256,7 +256,7 @@ fig_occu <-
 ggsave(
   fig_occu,
   filename = "figs/fig_05.png",
-  width = 4, height = 4.5
+  width = 5, height = 5.5
 )
 ```
 
@@ -418,7 +418,8 @@ names(lc_split) <- pred_names$name[-c(1, 2)]
 # save raster of landcover proportion
 terra::writeRaster(
   lc_split,
-  filename = "data/spatial/raster_landcover_proportion_1km.tif"
+  filename = "data/spatial/raster_landcover_proportion_1km.tif",
+  overwrite=TRUE
 )
 
 rm(landcover)
@@ -473,8 +474,8 @@ bio_12 <- (bio_12 - min(range_12)) / (diff(range_12))
 # project to UTM
 climate <- c(bio_1, bio_12)
 names(climate) = c(
-  "CHELSA bio_1 mean seaonal. temp", 
-  "CHELSA bio_12 total seasonal. ppt."
+  "CHELSA bio_1 mean annnual temp.", 
+  "CHELSA bio_12 total ppt."
 )
 
 climate <- terra::project(
@@ -528,9 +529,9 @@ These will be multiplied with each layer to give the effect of each layer.
 # get soi coefs
 sp_coefs <- filter(
   data,
-  # scientific_name %in% soi
+  scientific_name %in% soi
 ) %>%
-  select(
+  dplyr::select(
     -pred_val, -pred_val_pow
   )
 
@@ -572,7 +573,7 @@ sp_coefs <-
   )
 
 # get into order
-sp_coefs <- select(
+sp_coefs <- dplyr::select(
   sp_coefs,
   scientific_name,
   c(

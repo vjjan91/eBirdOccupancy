@@ -408,7 +408,7 @@ fig_predictor <-
   geom_text(
     data = tibble(
       x = c(5),
-      y = c(-26, 26),
+      y = c(-30, 30),
       label = c("Negative effect", "Positive effect")
     ),
     aes(
