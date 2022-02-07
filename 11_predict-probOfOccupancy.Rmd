@@ -29,9 +29,7 @@ library(patchwork)
 ```{r}
 # read coefficient effect data
 data <- read_csv("data/results/data_predictor_effect.csv")
-```
 
-```{r}
 # check for a predictor column
 assertthat::assert_that(
   all(c("predictor", "coefficient", "se") %in% colnames(data)),
@@ -48,17 +46,26 @@ assertthat::assert_that(
 ## Prepare predictor data
 
 ```{r}
+# preparep predictors - now look only for any digits
+predictors <- c("bio_\\d+", glue("lc_0{seq(9)}"))
+
 # prepare predictor search strings and scaling power
-strings <- c("Ibio_12\\^2", "Ibio_1\\^2")
-power <- str_extract(data$predictor, paste(strings, collapse = "|"))
+preds <- glue("({predictors})")
+preds <- str_flatten(preds, collapse = "|")
+
+# some way of identifying square terms
+power <- (str_extract(data$predictor, "Ibio"))
+power[!is.na(power)] = 2
 power[is.na(power)] <- 1
-power <- as.numeric(power)
-power[is.na(power)] <- 2
+power = as.numeric(power)
 
 # assign predictor name and power
-data <- data %>%
-  mutate(predictor = str_replace_all(data$predictor,c("Ibio_12\\^2" = "bio_12","Ibio_1\\^2" = "bio_1"))) %>%
-  mutate(power=power)
+data <-
+  mutate(
+  data,
+  predictor = str_extract(predictor, preds),
+  power = power
+)
 ```
 
 ## Get predictor responses
@@ -73,14 +80,14 @@ data <- mutate(
       seq(0, 1, 0.05)
     }
   ),
-  # handle squared terms
+  #handle squared terms
   pred_val_pow = purrr::map2(
     pred_val, power,
     function(x, y) {
       x^y
     }
-  )
-)
+))
+
 
 # get coefficient and error times terms
 data_resp <- mutate(
@@ -139,10 +146,10 @@ data_resp <- ungroup(
 
 ```{r}
 # scale predictors
-scale_12 <- c(1000, 4000)
-scale_1 <- c(10, 40)
+scale_12 <- c(200, 1000)
+scale_1 <- c(20, 40)
 
-# scale bio_1 and bio_12 by actual values
+# scale bio4a and bio15a by actual values
 data_resp <- mutate(
   data_resp,
   pred_val = case_when(
@@ -162,8 +169,8 @@ data_poccu <- dplyr::select(
 ```{r}
 # select species
 soi <- c(
-  "Culicicapa ceylonensis", "Irena puella",
-  "Copsychus fulicatus", "Pycnonotus jocosus"
+  "Iole indica", "Ficedula nigrorufa",
+  "Pycnonotus cafer", "Pycnonotus jocosus"
 )
 which_predictors <- c("bio_1")
 ```
@@ -178,7 +185,7 @@ data_fig <- data_poccu %>%
   ) %>%
   mutate(
     cat = case_when(
-      scientific_name %in% c("Irena puella", "Culicicapa ceylonensis") ~ "forest",
+      scientific_name %in% c("Iole indica", "Ficedula nigrorufa") ~ "forest",
       T ~ "general"
     )
   )
@@ -249,7 +256,7 @@ fig_occu <-
 ggsave(
   fig_occu,
   filename = "figs/fig_05.png",
-  width = 4, height = 4.5
+  width = 5, height = 5.5
 )
 ```
 
@@ -266,16 +273,18 @@ pred_names <- c(
   "bio_12" = "Ann. precip",
   "lc_01" = "Evergreen",
   "lc_02" = "Deciduous",
-  "lc_03" = "Mixed/degr",
-  "lc_04" = "Agri./Settle",
+  "lc_03" = "Mixed/degraded",
+  "lc_04" = "Agro./Settled",
   "lc_05" = "Grassland",
   "lc_07" = "Plantation",
   "lc_09" = "Water"
 )
+
 pred_names <- tibble(
   name = pred_names,
   predictor = names(pred_names)
 )
+
 data_fig <- left_join(
   data_fig,
   pred_names
@@ -375,10 +384,14 @@ library(sf)
 ```
 
 ```{r}
-# read rasters
-bio_1 <- rast("data/chelsa/CHELSA_bio1.tif")
-bio_12 <- rast("data/chelsa/CHELSA_bio12.tif")
+# read saved rasters
+lscape = rast("data/spatial/landscape_resamp01_km.tif")
 
+# isolate temperature and rainfall
+bio_1 = lscape[[4]] / 10 # temp, divide by 10
+bio_12 = lscape[[5]] # rain
+
+# careful while loading this raster, large size
 landcover <- rast("data/landUseClassification/landcover_roy_2015_reclassified.tif")
 
 lc_1km <- rast("data/landUseClassification/lc_01000m.tif")
@@ -405,7 +418,8 @@ names(lc_split) <- pred_names$name[-c(1, 2)]
 # save raster of landcover proportion
 terra::writeRaster(
   lc_split,
-  filename = "data/spatial/raster_landcover_proportion_1km.tif"
+  filename = "data/spatial/raster_landcover_proportion_1km.tif",
+  overwrite=TRUE
 )
 
 rm(landcover)
@@ -430,10 +444,27 @@ dev.off()
 lc_split = terra::rast("data/spatial/raster_landcover_proportion_1km.tif")
 ```
 
+### Mask by study area
+
+```{r}
+# mask by hills
+hills = st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>% 
+  st_transform(32643)
+
+bio_1 = terra::mask(
+  bio_1,
+  vect(hills)
+)
+
+bio_12 = terra::mask(
+  bio_12,
+  vect(hills)
+)
+```
 
 ```{r}
 # get ranges
-range_1 <- terra::minmax(bio_1)[, 1]
+range_1 <- terra::minmax(bio_1)[, 1] # divide temp by 10
 range_12 <- terra::minmax(bio_12)[, 1]
 
 # rescale
@@ -442,6 +473,11 @@ bio_12 <- (bio_12 - min(range_12)) / (diff(range_12))
 
 # project to UTM
 climate <- c(bio_1, bio_12)
+names(climate) = c(
+  "CHELSA bio_1 mean annnual temp.", 
+  "CHELSA bio_12 total ppt."
+)
+
 climate <- terra::project(
   x = climate, y = lc_1km
 )
@@ -449,20 +485,14 @@ climate <- terra::project(
 # make squared terms
 climate2 <- climate * climate
 
+# names
+names(climate2) = glue("{names(climate)} 2")
+
 # add to landcover proportions and plot
 landscape <- c(climate, lc_split)
 ```
 
-```{r}
-# mask by hills
-hills = st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>% 
-  st_transform(32643)
-landscape = terra::mask(
-  landscape,
-  vect(hills)
-)
-```
-
+### Plot full bounds of landscape variables
 
 ```{r eval=FALSE}
 # plot proportion of landcover classes
@@ -499,7 +529,7 @@ These will be multiplied with each layer to give the effect of each layer.
 # get soi coefs
 sp_coefs <- filter(
   data,
-  # scientific_name %in% soi
+  scientific_name %in% soi
 ) %>%
   dplyr::select(
     -pred_val, -pred_val_pow
@@ -507,7 +537,7 @@ sp_coefs <- filter(
 
 # add missing landcover classes
 sp_preds <- crossing(
-  scientific_name = unique(data$scientific_name),
+  scientific_name = soi,
   predictor = pred_names$predictor,
   power = c(1, 2)
 )
@@ -518,12 +548,22 @@ sp_preds <- filter(
   !(str_detect(predictor, "lc") & power == 2)
 )
 
+# correct square LC terms
+sp_coefs = mutate(
+  sp_coefs,
+  power = if_else(
+    str_detect(predictor, "lc"),
+    1,
+    power
+  )
+)
+
 sp_coefs <- full_join(
   sp_coefs,
   sp_preds
 )
 
-# make wide
+# make wide --- this should give no warnings
 sp_coefs <-
   pivot_wider(
     sp_coefs,
@@ -557,8 +597,6 @@ Where these are not available, we shall simply multiply the corresponding layer 
 The resulting layers will be summed together to get a single response layer, which will then be inverse logit transformed to get the probability of occupancy.
 
 ```{r}
-soi <- sp_coefs$scientific_name
-
 # multiply coefficients with layers
 soi_occu <- map(
   sp_coefs[sp_coefs$scientific_name %in% soi, ]$data,
@@ -708,6 +746,8 @@ ggsave(
   width = 16, height = 16
 )
 ```
+
+## NO LONGER USED --- WIP --- TO BE REMOVED
 
 ### Seasonality differences among species
 
