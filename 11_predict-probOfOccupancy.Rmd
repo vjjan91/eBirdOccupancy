@@ -36,11 +36,6 @@ assertthat::assert_that(
   msg = "make_response_data: data must have columns called 'predictor',
     'coefficient', and 'se'"
 )
-
-# data <- filter(
-#   data
-#   # p_value <= 0.05 | predictor == "Int"
-# )
 ```
 
 ## Prepare predictor data
@@ -392,7 +387,7 @@ bio_1 = lscape[[4]] / 10 # temp, divide by 10
 bio_12 = lscape[[5]] # rain
 
 # careful while loading this raster, large size
-landcover <- rast("data/landUseClassification/landcover_roy_2015_reclassified.tif")
+# landcover <- rast("data/landUseClassification/landcover_roy_2015_reclassified.tif")
 
 lc_1km <- rast("data/landUseClassification/lc_01000m.tif")
 ```
@@ -528,8 +523,7 @@ These will be multiplied with each layer to give the effect of each layer.
 ```{r}
 # get soi coefs
 sp_coefs <- filter(
-  data,
-  scientific_name %in% soi
+  data
 ) %>%
   dplyr::select(
     -pred_val, -pred_val_pow
@@ -744,116 +738,5 @@ ggsave(
   fig_occu_map_all,
   filename = "figs/fig_occupancy_maps.png",
   width = 16, height = 16
-)
-```
-
-## NO LONGER USED --- WIP --- TO BE REMOVED
-
-### Seasonality differences among species
-
-### Prepare species occupancy for all species
-
-```{r}
-# multiply coefficients with layers
-occu_50 <- map(
-  sp_coefs$data,
-  .f = function(df) {
-    response <- unlist(slice(df, 1), use.names = F) * landscape
-    response <- sum(response, na.rm = TRUE) # remove NA layers, i.e., non-sig preds
-
-    # now transform for probability occupancy
-    response <- 1 / (1 + exp(-response))
-    
-    # filter p occup < 0.5
-    response[response < 0.5] = NA
-    response
-  }
-)
-
-# subset the climate maps by study area
-climate = mask(climate, vect(hills))
-
-# mask by occu50
-climate_used = map2(
-  occu_50, sp_coefs$scientific_name,
-  function(le, sp) {
-    
-    if (all(is.na(values(le)))) {
-      return(NULL)
-    } else {
-      # mask climate layers where p(occupancy) is < 0.5
-    clim_poccu_50 = terra::mask(
-      climate,
-      le
-    )
-
-    # make data frame and return
-    df = as.data.frame(clim_poccu_50)
-    df$sp = sp
-    
-    as_tibble(df) 
-    }
-  }
-)
-
-# remove empty list elements
-climate_used = climate_used[!map_lgl(climate_used, is_empty)]
-
-# bind rows
-climate_used = bind_rows(climate_used)
-```
-
-```{r}
-# link with species traits
-sp_traits = read_csv("data/species-trait-dat.csv")
-
-climate_used = left_join(
-  climate_used,
-  sp_traits,
-  by = c("sp" = "scientific_name")
-)
-
-# scale climate layers back
-climate_used = mutate(
-  climate_used,
-  CHELSA_bio10_4a = scales::rescale(CHELSA_bio10_4a, range_4a),
-  CHELSA_bio10_15 = scales::rescale(CHELSA_bio10_15, range_15)
-)
-
-# save
-write_csv(
-  climate_used,
-  file = "data/results/data_occupied_seasonalities.csv"
-)
-```
-
-### Plot seasonalities by habitat preference
-
-```{r}
-# pivot long
-cl_used_data = climate_used %>% 
-  select(
-    matches("CHELSA"),
-    sp,
-    habitat = `Habitat use`
-  ) %>% 
-  pivot_longer(
-    cols = matches("CHELSA")
-  )
-
-# make plot
-fig_season_diff = ggplot(cl_used_data)+
-  geom_boxplot(
-    aes(
-      habitat, value
-    )
-  )+
-  facet_wrap(
-    ~name, scales = "free"
-  )
-
-ggsave(
-  fig_season_diff,
-  filename = "figs/fig_occupied_seasonalities.png"
 )
 ```
