@@ -286,6 +286,8 @@ modObsExp <- glmer(nSoi ~ duration + sqrt(duration) +
   (1 | observer) + (0 + duration | observer),
 data = ebdChkSummary, family = "poisson"
 )
+
+equatiomatic::extract_eq(modObsExp) # render equation
 ``` 
 
 ```{r write_obsexp_model}
