@@ -14,3 +14,4 @@
 ^codemeta\.json$
 ^\.github$
 ^.*\.Rproj$
+^data/*$
