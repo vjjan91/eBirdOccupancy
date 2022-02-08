@@ -8,9 +8,9 @@ output:
 
 # Selecting species of interest
 
-Prior to preparing eBird data for analysis, we selected a list of species using a simple and objective criteria. Our primary focus is to understand how terrestrial birds (largely passerine species) across the Nilgiri and the Anamalai hills of the Western Ghats.
+Prior to preparing eBird data for occupancy modeling, we selected a list of species using a simple and objective criteria. Our primary focus is to understand how terrestrial bird species occupancy (largely passerine species) varied as a function of climate and land cover across the Nilgiri and the Anamalai hills of the Western Ghats.
 
-We derived this list from inclusion criteria adapted from the State of India’s Birds 2020 [@viswanathan2020]. Initially, we considered all species reported on eBird that occurred within the outlines of our study area. We then added a filter to consider only terrestrial birds and removed species that are often easily confused for their congeners (eg. green/greenish warbler). In addition, we considered only those species that had a minimum of 1000 detections each between 2013 and 2020. Next, the study area was divided into 25 x 25 km cells following Viswanathan et al. (2020). We then kept only those species that occurred in at least 5% of all checklists across 50% of the 25 x 25 km cells from where they have been reported (reducing to 80 species). We used the above criteria to ensure as much uniform sampling of a species as possible across our study area and to reduce any erroneous associations between environmental drivers and species occupancy. 
+We derived this list from inclusion criteria adapted from the State of India’s Birds 2020 [@viswanathan2020]. Initially, we considered all species reported on eBird that occurred within the outlines of our study area. We then added a filter to consider only terrestrial birds and removed species that are often easily confused for their congeners (eg. green/greenish warbler). In addition, we considered only those species that had a minimum of 1000 detections each between 2013 and 2021. Next, the study area was divided into 25 x 25 km cells following Viswanathan et al. (2020). We then kept only those species that occurred in at least 5% of all checklists across half of the 25 x 25 km cells from where they have been reported (there are 42 unique 25 x 25 km grid cells across our study area). We used the above criteria to ensure as much uniform sampling of a species as possible across our study area and to reduce any erroneous associations between environmental drivers and species occupancy. This resulted in a total of 79 species, prior to occupancy modeling.
 
 This script shows the proportion of checklists that report a particular species across every 25km by 25km grid across the Nilgiris and the Anamalais. Using this analysis, we arrived at a final list of species for occupancy modeling.
 
@@ -67,7 +67,7 @@ columnsOfInterest <- c(
 ebd <- ebd[, ..columnsOfInterest]
 ```
 
-## Subset an initial list of terrestrial birds based on a) minimum of 1000 detections between 2013-2020 and b) remove species that are often easily confused with congeners
+## Subset an initial list of terrestrial birds based on a) minimum of 1000 detections between 2013-2021 and b) remove species that are often easily confused with congeners
 
 ```{r}
 # Convert all presences marked 'X' as '1'
@@ -92,7 +92,7 @@ species1000 <- tot1000$scientific_name
 
 ebd1000 <- ebd[scientific_name %in% species1000, ]
 
-# From an overall sample of 3.37 million, we arrived at 3.33 million when we included only those species with >1000 detections.
+# Beginning with 3.37 million observations of 684 species in eBird that occurred within the outlines of our study area (Fig. 1), over the years 2013–2021, we retained only those species that had a minimum of 1,000 detections each between 2013 and 2021 (347 species remaining; 3.33 million observations). Next, we divided the study area into 25x25 km cells following State of India’s Birds 2020 methodology. We kept only those species that occurred in at least 5% of all checklists across half of the grids (42 unique grid cells) from which they had been reported. 
 
 # export the above list as .csv to carry out initial filtering based on natural history
 write.csv(totCount, "data/species_list.csv", row.names = F)
@@ -298,7 +298,7 @@ ggsave(plotDistributions,
 dev.off()
 ```
 
-![Proportion of checklists reporting a species in each grid cell (25km side) between 2013 and 2019. Checklists were filtered to be within the boundaries of the Nilgiris and the Anamalai hills (black outline), but rounding to 25km cells may place cells outside the boundary. Deeper shades of red indicate a higher proportion of checklists reporting a species.](figs/fig_species_distributions.png)
+![Proportion of checklists reporting a species in each grid cell (25km side) between 2013 and 2021. Checklists were filtered to be within the boundaries of the Nilgiris and the Anamalai hills (black outline), but rounding to 25km cells may place cells outside the boundary. Deeper shades of red indicate a higher proportion of checklists reporting a species.](figs/fig_species_distributions.png)
 
 ## Prepare the species list
 

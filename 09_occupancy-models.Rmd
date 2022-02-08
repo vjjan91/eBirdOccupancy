@@ -317,8 +317,7 @@ pb <- txtProgressBar(
   max = length(unique(dat.scaled$scientific_name)), style = 3
 ) # text based bar
 
-
-for (i in 79:length(unique(dat.scaled$scientific_name))) {
+for (i in 1:length(unique(dat.scaled$scientific_name))) {
   data <- dat.scaled %>%
     filter(dat.scaled$scientific_name == unique(dat.scaled$scientific_name)[i])
 
@@ -443,9 +442,9 @@ a <- purrr::map(det_imp, ~ purrr::compact(.)) %>% purrr::keep(~ length(.) != 0)
 
 Occupancy models estimate the probability of occurrence of a given species while controlling for the probability of detection and allow us to model the factors affecting occurrence and detection independently [@johnston2018; @mackenzie2002]. The flexible eBird observation process contributes to the largest source of variation in the likelihood of detecting a particular species [@johnston2019a]; hence, we included seven covariates that influence the probability of detection for each checklist: ordinal day of year, duration of observation, distance travelled, protocol type, time observations started, number of observers and the checklist calibration index (CCI). 
 
-Using a multi-model information-theoretic approach, we tested how strongly our occurrence data fit our candidate set of environmental covariates [@burnham2002a]. We fitted single-species occupancy models for each species, to simultaneously estimate a probability of detection (p) and a probability of occupancy ($\psi$) [@fiske2011; @mackenzie2002]. For each species, we fit models, each with a unique combination of the climate and land cover occupancy covariates and all seven detection covariates (Appendix S5). 
+Using a multi-model information-theoretic approach, we tested how strongly our occurrence data fit our candidate set of environmental covariates [@burnham2002a]. We fitted single-species occupancy models for each species, to simultaneously estimate a probability of detection ($\p$) and a probability of occupancy ($\psi$) [@fiske2011; @mackenzie2002]. For each species, we fit models, each with a unique combination of the climate and land cover occupancy covariates and all seven detection covariates. 
 
-Across the models tested for each species, the model with highest support was determined using AICc scores. However, across the majority of the species, no single model had overwhelming support. Hence, for each species, we examined those models which had $\Delta$AICc < 4, as these top models were considered to explain a large proportion of the association between the species-specific probability of occupancy and environmental drivers [@burnham2011; @elsen2017]. Using these restricted model sets for each species; we created a model-averaged coefficient estimate for each predictor and assessed its direction and significance [@MuMIn]. We considered a predictor to be significantly associated with occupancy if the range of the 95% confidence interval around the model-averaged coefficient did not contain zero. Next, we obtained a measure of relative importance of climatic and landscape predictors by calculating cumulative variable importance scores. These scores were calculated by obtaining the sum of model weights (AIC weights) across all models (including the top models) for each predictor across all species.  
+Across the models tested for each species, the model with highest support was determined using AICc scores. However, across the majority of the species, no single model had overwhelming support. Hence, for each species, we examined those models which had $\Delta$AICc < 4, as these top models were considered to explain a large proportion of the association between the species-specific probability of occupancy and environmental drivers [@burnham2011; @elsen2017]. Using these restricted model sets for each species; we created a model-averaged coefficient estimate for each predictor and assessed its direction and significance [@MuMIn]. We considered a predictor to be significantly associated with occupancy if the range of the 95% confidence interval around the model-averaged coefficient did not contain zero.   
 ```{r lc_clim}
 # All models are stored in lists below
 lc_clim <- list()
@@ -463,7 +462,7 @@ lc_clim_modelEst <- list()
 # Add a progress bar for the loop
 pb <- txtProgressBar(min = 0, max = length(unique(dat.scaled$scientific_name)), style = 3) # text based bar
 
-for (i in 79:length(unique(dat.scaled$scientific_name))) {
+for (i in 1:length(unique(dat.scaled$scientific_name))) {
   data <- dat.scaled %>% filter(dat.scaled$scientific_name == unique(dat.scaled$scientific_name)[i])
 
   # Preparing data for the unmarked model
@@ -593,7 +592,7 @@ a <- purrr::map(lc_clim_modelEst, ~ purrr::compact(.)) %>% purrr::keep(~ length(
 
 ## Goodness-of-fit tests
 
-Adequate model fit was assessed using a chi-square goodness-of-fit test using 5000 parametric bootstrap simulations on a global model that included all occupancy and detection covariates (MacKenzie & Bailey, 2004). 
+Adequate model fit was assessed using a chi-square goodness-of-fit test using 1,000 parametric bootstrap simulations on a global model that included all occupancy and detection covariates (MacKenzie & Bailey, 2004). 
 ```{r}
 goodness_of_fit <- data.frame()
 
@@ -645,8 +644,9 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
     expertise ~ lc_01 + lc_02 + lc_05 +
     lc_04 + lc_09 + lc_07 + lc_03 + bio_1 + bio_12, data = occ_um)
 
+  # note: reduce nsim as this takes a very long time even with parallelization
   occ_gof <- mb.gof.test(model_lc_clim,
-    nsim = 100, parallel = T, ncores = 5,
+    nsim = 1000, parallel = T, ncores = 5,
     plot.hist = FALSE
   )
 
