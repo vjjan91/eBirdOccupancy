@@ -40,8 +40,8 @@ data/spatial/*land*
 data/chelsa/envicloud/*.tif
 
 # but allow processed layers 4a and 15
-!data/chelsa/CHELSA_bio10_4a.tif
-!data/chelsa/CHELSA_bio10_15.tif
+!data/chelsa/CHELSA_bio10_1.tif
+!data/chelsa/CHELSA_bio10_12.tif
 
 # downloaded landuse data from roy et al.
 data/landUseClassification/landcover_roy_2015

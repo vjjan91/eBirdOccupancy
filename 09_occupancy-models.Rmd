@@ -137,7 +137,7 @@ dat <- dplyr::select(
   expertise,
 
   # elevation and climate layers
-  elev, bio4a, bio15a,
+  elev, bio_1, bio_12,
 
   # all LANDCOVER COLUMNS
   matches("lc"),
@@ -160,7 +160,7 @@ dat.scaled <- dat.1
 # Note: Never refer to columns by numbers, numbers change, names remain
 cols_to_scale <- c(
   "duration_minutes", "effort_distance_km",
-  "number_observers", "expertise", "elev", "bio4a", "bio15a", "lc_02", "lc_09", "lc_01", "lc_05", "lc_04", "lc_07", "lc_03", "julian_date", "min_obs_started"
+  "number_observers", "expertise", "elev", "bio_1", "bio_12", "lc_02", "lc_09", "lc_01", "lc_05", "lc_04", "lc_07", "lc_03", "julian_date", "min_obs_started"
 )
 
 # this scales the relevant columns between 0 and 1
@@ -203,7 +203,7 @@ source("R/fun_screen_cor.R")
 
 # SELECT COLUMNS to check BY NAME
 cols_to_check <- c(
-  "expertise", "bio4a", "bio15a", "lc_02",
+  "expertise", "bio_1", "bio_12", "lc_02",
   "lc_09", "lc_01",
   "lc_05", "lc_04", "lc_07", "lc_03"
 )
@@ -270,7 +270,7 @@ for (i in species) {
     response = "pres_abs",
     site_covs = c(
       "locality_id", "lc_01", "lc_02", "lc_05",
-      "lc_04", "lc_09", "lc_07", "lc_03", "bio4a", "bio15a"
+      "lc_04", "lc_09", "lc_07", "lc_03", "bio_1", "bio_12"
     ),
     obs_covs = obs_covs
   )
@@ -317,7 +317,8 @@ pb <- txtProgressBar(
   max = length(unique(dat.scaled$scientific_name)), style = 3
 ) # text based bar
 
-for (i in 1:length(unique(dat.scaled$scientific_name))) {
+
+for (i in 79:length(unique(dat.scaled$scientific_name))) {
   data <- dat.scaled %>%
     filter(dat.scaled$scientific_name == unique(dat.scaled$scientific_name)[i])
 
@@ -345,7 +346,7 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
     response = "pres_abs",
     site_covs = c(
       "locality_id", "lc_01", "lc_02", "lc_05",
-      "lc_04", "lc_09", "lc_07", "lc_03", "bio4a", "bio15a"
+      "lc_04", "lc_09", "lc_07", "lc_03", "bio_1", "bio_12"
     ),
     obs_covs = obs_covs
   )
@@ -363,7 +364,7 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
 
   # Set up the cluster
   clusterType <- if (length(find.package("snow", quiet = TRUE))) "SOCK" else "PSOCK"
-  clust <- try(makeCluster(getOption("cl.cores", 10), type = clusterType))
+  clust <- try(makeCluster(getOption("cl.cores", 5), type = clusterType))
 
   clusterEvalQ(clust, library(unmarked))
   clusterExport(clust, "occ_um")
@@ -462,7 +463,7 @@ lc_clim_modelEst <- list()
 # Add a progress bar for the loop
 pb <- txtProgressBar(min = 0, max = length(unique(dat.scaled$scientific_name)), style = 3) # text based bar
 
-for (i in 1:length(unique(dat.scaled$scientific_name))) {
+for (i in 79:length(unique(dat.scaled$scientific_name))) {
   data <- dat.scaled %>% filter(dat.scaled$scientific_name == unique(dat.scaled$scientific_name)[i])
 
   # Preparing data for the unmarked model
@@ -489,7 +490,7 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
     response = "pres_abs",
     site_covs = c(
       "locality_id", "lc_01", "lc_02", "lc_05",
-      "lc_04", "lc_09", "lc_07", "lc_03", "bio4a", "bio15a"
+      "lc_04", "lc_09", "lc_07", "lc_03", "bio_1", "bio_12"
     ),
     obs_covs = obs_covs
   )
@@ -502,8 +503,9 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
     duration_minutes +
     effort_distance_km +
     number_observers +
-    expertise ~  lc_01 + lc_02 + lc_05 + lc_04 + lc_09 + lc_07 + lc_03 + bio4a + I(bio4a^2)+ bio15a + I(bio15a^2), data = occ_um)
-  
+    expertise ~ lc_01 + lc_02 + lc_05 + lc_04 + lc_09 + lc_07 + lc_03 + 
+      bio_1 + bio_12, data = occ_um)
+
   # Set up the cluster
   clusterType <- if (length(find.package("snow", quiet = TRUE))) "SOCK" else "PSOCK"
   clust <- try(makeCluster(getOption("cl.cores", 5), type = clusterType))
@@ -517,12 +519,8 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
     "p(julian_date)", "p(min_obs_started)",
     "p(number_observers)"
   )
-  
-  lc_clim[[i]] <- pdredge(model_lc_clim, clust, fixed = det_terms,
-                          subset = (dc("psi(bio4a)","psi(I(bio4a^2))") &
-                                    dc("psi(I(bio4a^2))", "psi(bio4a)") &
-                                    dc("psi(bio15a)","psi(I(bio15a^2))") &
-                                    dc("psi(I(bio15a^2))","psi(bio15a)")))
+
+  lc_clim[[i]] <- pdredge(model_lc_clim, clust, fixed = det_terms)
   names(lc_clim)[i] <- unique(dat.scaled$scientific_name)[i]
 
   # Identiying top subset of models based on deltaAIC scores being less than 4 (Burnham et al., 2011)
@@ -603,7 +601,7 @@ goodness_of_fit <- data.frame()
 pb <- txtProgressBar(min = 0, max = length(unique(dat.scaled$scientific_name)), style = 3) # text based bar
 
 for (i in 1:length(unique(dat.scaled$scientific_name))) {
-  dat.scaled %>% filter(dat.scaled$scientific_name == unique(dat.scaled$scientific_name)[i])
+  data <- dat.scaled %>% filter(dat.scaled$scientific_name == unique(dat.scaled$scientific_name)[i])
 
   # Preparing data for the unmarked model
   occ <- filter_repeat_visits(data,
@@ -630,7 +628,7 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
     response = "pres_abs",
     site_covs = c(
       "locality_id", "lc_01", "lc_02", "lc_05",
-      "lc_04", "lc_09", "lc_07", "lc_03", "bio4a", "bio15a"
+      "lc_04", "lc_09", "lc_07", "lc_03", "bio_1", "bio_12"
     ),
     obs_covs = obs_covs
   )
@@ -645,10 +643,12 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
     number_observers +
     protocol_type +
     expertise ~ lc_01 + lc_02 + lc_05 +
-    lc_04 + lc_09 + lc_07 + lc_03 +  bio4a + I(bio4a^2)+ bio15a + I(bio15a^2), data = occ_um)
-  
-  occ_gof <- mb.gof.test(model_lc_clim, nsim = 100, parallel = T, ncores = 5, 
-                         plot.hist = FALSE)
+    lc_04 + lc_09 + lc_07 + lc_03 + bio_1 + bio_12, data = occ_um)
+
+  occ_gof <- mb.gof.test(model_lc_clim,
+    nsim = 100, parallel = T, ncores = 5,
+    plot.hist = FALSE
+  )
 
   p.value <- occ_gof$p.value
   c.hat <- occ_gof$c.hat.est
@@ -662,5 +662,5 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
 }
 close(pb)
 
-write.csv(goodness_of_fit, "data/results/05_goodness-of-fit-2.5km.csv")
+write.csv(goodness_of_fit, "data/results/goodness-of-fit-2.5km.csv", row.names = F)
 ```

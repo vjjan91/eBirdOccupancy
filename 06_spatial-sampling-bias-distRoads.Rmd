@@ -201,8 +201,8 @@ locs_unique <- locs_unique %>%
   st_as_sf(coords = c("X", "Y"), crs = 32643)
 
 # add nnb to locations
-fig_site_nnb = 
-ggplot() +
+fig_site_nnb <-
+  ggplot() +
   geom_sf(data = land, fill = "grey90", col = NA) +
   geom_sf(data = wg, fill = NA, col = 1) +
   annotation_custom(
