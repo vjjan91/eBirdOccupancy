@@ -20,7 +20,7 @@ output:
 bibliography: [references_ebird.bib]
 biblio-style: apalike
 link-citations: yes
-github-repo: pratikunterwegs/eBirdOccupancy
+github-repo: vjjan91/eBirdOccupancy
 ---
 
 # Introduction

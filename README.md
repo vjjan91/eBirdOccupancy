@@ -7,7 +7,7 @@
 
 This repository contains code and analysis for a manuscript that uses citizen science data to parse the role of climate and land cover on avian occupancy across the Western Ghats.
 
-## [Readable version](https://pratikunterwegs.github.io/hillybirds/)
+## [Readable version](https://vjjan91.github.io/eBirdOccupancy/)
 
 A readable version of this analysis is available in bookdown format by clicking on the heading above.
 
