@@ -4,19 +4,19 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Section 5 Examining Spatial Sampling Bias | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</title>
-  <meta name="description" content="Section 5 Examining Spatial Sampling Bias | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
-  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+  <title>Section 6 Examining Spatial Sampling Bias | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</title>
+  <meta name="description" content="Section 6 Examining Spatial Sampling Bias | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Section 5 Examining Spatial Sampling Bias | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <meta property="og:title" content="Section 6 Examining Spatial Sampling Bias | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
   <meta property="og:type" content="book" />
   
   
   
-  <meta name="github-repo" content="pratikunterwegs/eBirdOccupancy" />
+  <meta name="github-repo" content="vjjan91/eBirdOccupancy" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Section 5 Examining Spatial Sampling Bias | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <meta name="twitter:title" content="Section 6 Examining Spatial Sampling Bias | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
   
   
   
@@ -28,16 +28,17 @@
 <meta name="author" content="Ruth DeFries" />
 
 
-<meta name="date" content="2021-08-22" />
+<meta name="date" content="2022-02-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="preparing-observer-expertise-scores.html"/>
+<link rel="prev" href="preparing-checklist-calibration-index.html"/>
 <link rel="next" href="checking-temporal-sampling-frequency.html"/>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -53,15 +54,15 @@
 
 
 
-
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -70,14 +71,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -86,9 +89,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -141,116 +144,145 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#data-processing"><i class="fa fa-check"></i><b>1.3</b> Data processing</a></li>
 <li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#main-text-figure-1"><i class="fa fa-check"></i><b>1.4</b> Main Text Figure 1</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html"><i class="fa fa-check"></i><b>2</b> Preparing eBird Data</a><ul>
-<li class="chapter" data-level="2.1" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#prepare-libraries-and-data-sources"><i class="fa fa-check"></i><b>2.1</b> Prepare libraries and data sources</a></li>
-<li class="chapter" data-level="2.2" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#filter-data"><i class="fa fa-check"></i><b>2.2</b> Filter data</a></li>
-<li class="chapter" data-level="2.3" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#process-filtered-data"><i class="fa fa-check"></i><b>2.3</b> Process filtered data</a></li>
-<li class="chapter" data-level="2.4" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#spatial-filter"><i class="fa fa-check"></i><b>2.4</b> Spatial filter</a></li>
-<li class="chapter" data-level="2.5" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#handle-presence-data"><i class="fa fa-check"></i><b>2.5</b> Handle presence data</a></li>
-<li class="chapter" data-level="2.6" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#add-decimal-time"><i class="fa fa-check"></i><b>2.6</b> Add decimal time</a></li>
+<li class="chapter" data-level="2" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html"><i class="fa fa-check"></i><b>2</b> Selecting species of interest</a><ul>
+<li class="chapter" data-level="2.1" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#prepare-libraries"><i class="fa fa-check"></i><b>2.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="2.2" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#subset-species-by-geographical-confines-of-the-study-area"><i class="fa fa-check"></i><b>2.2</b> Subset species by geographical confines of the study area</a></li>
+<li class="chapter" data-level="2.3" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#subset-an-initial-list-of-terrestrial-birds-based-on-a-minimum-of-1000-detections-between-2013-2021-and-b-remove-species-that-are-often-easily-confused-with-congeners"><i class="fa fa-check"></i><b>2.3</b> Subset an initial list of terrestrial birds based on a) minimum of 1000 detections between 2013-2021 and b) remove species that are often easily confused with congeners</a></li>
+<li class="chapter" data-level="2.4" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#read-subset-of-species-following-filtering-and-removal-of-waterbirds-raptors-and-other-noctural-species"><i class="fa fa-check"></i><b>2.4</b> Read subset of species following filtering and removal of waterbirds, raptors, and other noctural species</a></li>
+<li class="chapter" data-level="2.5" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#load-raw-data-for-locations"><i class="fa fa-check"></i><b>2.5</b> Load raw data for locations</a></li>
+<li class="chapter" data-level="2.6" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#get-proportional-obs-counts-in-25km-cells"><i class="fa fa-check"></i><b>2.6</b> Get proportional obs counts in 25km cells</a></li>
+<li class="chapter" data-level="2.7" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#which-species-are-reported-sufficiently-in-checklists"><i class="fa fa-check"></i><b>2.7</b> Which species are reported sufficiently in checklists?</a></li>
+<li class="chapter" data-level="2.8" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#figure-checklist-distribution"><i class="fa fa-check"></i><b>2.8</b> Figure: Checklist distribution</a></li>
+<li class="chapter" data-level="2.9" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#prepare-the-species-list"><i class="fa fa-check"></i><b>2.9</b> Prepare the species list</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html"><i class="fa fa-check"></i><b>3</b> Preparing Environmental Predictors</a><ul>
-<li class="chapter" data-level="3.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-libraries"><i class="fa fa-check"></i><b>3.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="3.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-spatial-extent"><i class="fa fa-check"></i><b>3.2</b> Prepare spatial extent</a></li>
-<li class="chapter" data-level="3.3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-terrain-rasters"><i class="fa fa-check"></i><b>3.3</b> Prepare terrain rasters</a></li>
-<li class="chapter" data-level="3.4" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-4a-and-bioclim-15"><i class="fa fa-check"></i><b>3.4</b> Prepare Bioclim 4a and Bioclim 15</a></li>
-<li class="chapter" data-level="3.5" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-chelsa-rasters"><i class="fa fa-check"></i><b>3.5</b> Prepare CHELSA rasters</a><ul>
-<li class="chapter" data-level="3.5.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-4a-and-15"><i class="fa fa-check"></i><b>3.5.1</b> Prepare BIOCLIM 4a and 15</a></li>
-<li class="chapter" data-level="3.5.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-4a"><i class="fa fa-check"></i><b>3.5.2</b> Prepare BIOCLIM 4a</a></li>
-<li class="chapter" data-level="3.5.3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-15"><i class="fa fa-check"></i><b>3.5.3</b> Prepare Bioclim 15</a></li>
-<li class="chapter" data-level="3.5.4" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#stack-terrain-and-climate"><i class="fa fa-check"></i><b>3.5.4</b> Stack terrain and climate</a></li>
+<li class="chapter" data-level="3" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html"><i class="fa fa-check"></i><b>3</b> Preparing eBird Data</a><ul>
+<li class="chapter" data-level="3.1" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#prepare-libraries-and-data-sources"><i class="fa fa-check"></i><b>3.1</b> Prepare libraries and data sources</a></li>
+<li class="chapter" data-level="3.2" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#filter-data"><i class="fa fa-check"></i><b>3.2</b> Filter data</a></li>
+<li class="chapter" data-level="3.3" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#process-filtered-data"><i class="fa fa-check"></i><b>3.3</b> Process filtered data</a></li>
+<li class="chapter" data-level="3.4" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#spatial-filter"><i class="fa fa-check"></i><b>3.4</b> Spatial filter</a></li>
+<li class="chapter" data-level="3.5" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#handle-presence-data"><i class="fa fa-check"></i><b>3.5</b> Handle presence data</a></li>
+<li class="chapter" data-level="3.6" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#add-decimal-time"><i class="fa fa-check"></i><b>3.6</b> Add decimal time</a></li>
 </ul></li>
-<li class="chapter" data-level="3.6" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-landcover-from-10m-to-1km"><i class="fa fa-check"></i><b>3.6</b> Resample landcover from 10m to 1km</a></li>
-<li class="chapter" data-level="3.7" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-other-rasters-to-1km"><i class="fa fa-check"></i><b>3.7</b> Resample other rasters to 1km</a><ul>
-<li class="chapter" data-level="3.7.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#read-in-resampled-landcover"><i class="fa fa-check"></i><b>3.7.1</b> Read in resampled landcover</a></li>
-<li class="chapter" data-level="3.7.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#reproject-environmental-data-using-landcover-as-a-template"><i class="fa fa-check"></i><b>3.7.2</b> Reproject environmental data using landcover as a template</a></li>
+<li class="chapter" data-level="4" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html"><i class="fa fa-check"></i><b>4</b> Preparing Environmental Predictors</a><ul>
+<li class="chapter" data-level="4.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-libraries-1"><i class="fa fa-check"></i><b>4.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="4.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-spatial-extent"><i class="fa fa-check"></i><b>4.2</b> Prepare spatial extent</a></li>
+<li class="chapter" data-level="4.3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-terrain-rasters"><i class="fa fa-check"></i><b>4.3</b> Prepare terrain rasters</a></li>
+<li class="chapter" data-level="4.4" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-chelsa-rasters"><i class="fa fa-check"></i><b>4.4</b> Prepare CHELSA rasters</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-1-mean-temperature-for-dry-season-december-to-may"><i class="fa fa-check"></i><b>4.4.1</b> Prepare Bioclim 1 (mean temperature) for dry season (December to May)</a></li>
+<li class="chapter" data-level="4.4.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-12-total-rainfall-for-dry-season"><i class="fa fa-check"></i><b>4.4.2</b> Prepare Bioclim 12 (total rainfall) for dry season</a></li>
+<li class="chapter" data-level="4.4.3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#stack-terrain-and-climate"><i class="fa fa-check"></i><b>4.4.3</b> Stack terrain and climate</a></li>
 </ul></li>
-<li class="chapter" data-level="3.8" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#climate-seasonality-in-relation-to-elevation"><i class="fa fa-check"></i><b>3.8</b> Climate seasonality in relation to elevation</a><ul>
-<li class="chapter" data-level="3.8.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#load-resampled-environmental-rasters"><i class="fa fa-check"></i><b>3.8.1</b> Load resampled environmental rasters</a></li>
+<li class="chapter" data-level="4.5" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-landcover-from-10m-to-1km"><i class="fa fa-check"></i><b>4.5</b> Resample landcover from 10m to 1km</a></li>
+<li class="chapter" data-level="4.6" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-other-rasters-to-1km"><i class="fa fa-check"></i><b>4.6</b> Resample other rasters to 1km</a><ul>
+<li class="chapter" data-level="4.6.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#read-in-resampled-landcover"><i class="fa fa-check"></i><b>4.6.1</b> Read in resampled landcover</a></li>
+<li class="chapter" data-level="4.6.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#reproject-environmental-data-using-landcover-as-a-template"><i class="fa fa-check"></i><b>4.6.2</b> Reproject environmental data using landcover as a template</a></li>
 </ul></li>
-<li class="chapter" data-level="3.9" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#climate-seasonality-across-land-cover-types"><i class="fa fa-check"></i><b>3.9</b> Climate seasonality across land cover types</a></li>
-<li class="chapter" data-level="3.10" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#land-cover-type-in-relation-to-elevation"><i class="fa fa-check"></i><b>3.10</b> Land cover type in relation to elevation</a></li>
-<li class="chapter" data-level="3.11" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#main-text-figure-2"><i class="fa fa-check"></i><b>3.11</b> Main Text Figure 2</a></li>
+<li class="chapter" data-level="4.7" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#climate-variables-in-relation-to-elevation"><i class="fa fa-check"></i><b>4.7</b> Climate variables in relation to elevation</a><ul>
+<li class="chapter" data-level="4.7.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#load-resampled-environmental-rasters"><i class="fa fa-check"></i><b>4.7.1</b> Load resampled environmental rasters</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html"><i class="fa fa-check"></i><b>4</b> Preparing Observer Expertise Scores</a><ul>
-<li class="chapter" data-level="4.1" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#prepare-libraries-1"><i class="fa fa-check"></i><b>4.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="4.2" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#prepare-data"><i class="fa fa-check"></i><b>4.2</b> Prepare data</a></li>
-<li class="chapter" data-level="4.3" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#spatially-explicit-filter-on-checklists"><i class="fa fa-check"></i><b>4.3</b> Spatially explicit filter on checklists</a></li>
-<li class="chapter" data-level="4.4" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#prepare-species-of-interest"><i class="fa fa-check"></i><b>4.4</b> Prepare species of interest</a></li>
-<li class="chapter" data-level="4.5" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#prepare-checklists-for-observer-score"><i class="fa fa-check"></i><b>4.5</b> Prepare checklists for observer score</a></li>
-<li class="chapter" data-level="4.6" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#get-landcover"><i class="fa fa-check"></i><b>4.6</b> Get landcover</a></li>
-<li class="chapter" data-level="4.7" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#filter-checklist-data"><i class="fa fa-check"></i><b>4.7</b> Filter checklist data</a></li>
-<li class="chapter" data-level="4.8" data-path="preparing-observer-expertise-scores.html"><a href="preparing-observer-expertise-scores.html#model-observer-expertise"><i class="fa fa-check"></i><b>4.8</b> Model observer expertise</a></li>
+<li class="chapter" data-level="4.8" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#climate-across-land-cover-types"><i class="fa fa-check"></i><b>4.8</b> Climate across land cover types</a></li>
+<li class="chapter" data-level="4.9" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#land-cover-type-in-relation-to-elevation"><i class="fa fa-check"></i><b>4.9</b> Land cover type in relation to elevation</a></li>
+<li class="chapter" data-level="4.10" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#main-text-figure-2"><i class="fa fa-check"></i><b>4.10</b> Main Text Figure 2</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html"><i class="fa fa-check"></i><b>5</b> Examining Spatial Sampling Bias</a><ul>
-<li class="chapter" data-level="5.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-libraries-2"><i class="fa fa-check"></i><b>5.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="5.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#read-checklist-data"><i class="fa fa-check"></i><b>5.2</b> Read checklist data</a><ul>
-<li class="chapter" data-level="5.2.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#spatially-explicit-filter-on-checklists-1"><i class="fa fa-check"></i><b>5.2.1</b> Spatially explicit filter on checklists</a></li>
-<li class="chapter" data-level="5.2.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#get-background-land-for-plotting"><i class="fa fa-check"></i><b>5.2.2</b> Get background land for plotting</a></li>
+<li class="chapter" data-level="5" data-path="preparing-checklist-calibration-index.html"><a href="preparing-checklist-calibration-index.html"><i class="fa fa-check"></i><b>5</b> Preparing Checklist Calibration Index</a><ul>
+<li class="chapter" data-level="5.1" data-path="preparing-checklist-calibration-index.html"><a href="preparing-checklist-calibration-index.html#prepare-libraries-2"><i class="fa fa-check"></i><b>5.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="5.2" data-path="preparing-checklist-calibration-index.html"><a href="preparing-checklist-calibration-index.html#prepare-data"><i class="fa fa-check"></i><b>5.2</b> Prepare data</a></li>
+<li class="chapter" data-level="5.3" data-path="preparing-checklist-calibration-index.html"><a href="preparing-checklist-calibration-index.html#spatially-explicit-filter-on-checklists"><i class="fa fa-check"></i><b>5.3</b> Spatially explicit filter on checklists</a></li>
+<li class="chapter" data-level="5.4" data-path="preparing-checklist-calibration-index.html"><a href="preparing-checklist-calibration-index.html#prepare-species-of-interest"><i class="fa fa-check"></i><b>5.4</b> Prepare species of interest</a></li>
+<li class="chapter" data-level="5.5" data-path="preparing-checklist-calibration-index.html"><a href="preparing-checklist-calibration-index.html#prepare-checklists-for-observer-score"><i class="fa fa-check"></i><b>5.5</b> Prepare checklists for observer score</a></li>
+<li class="chapter" data-level="5.6" data-path="preparing-checklist-calibration-index.html"><a href="preparing-checklist-calibration-index.html#get-landcover"><i class="fa fa-check"></i><b>5.6</b> Get landcover</a></li>
+<li class="chapter" data-level="5.7" data-path="preparing-checklist-calibration-index.html"><a href="preparing-checklist-calibration-index.html#filter-checklist-data"><i class="fa fa-check"></i><b>5.7</b> Filter checklist data</a></li>
+<li class="chapter" data-level="5.8" data-path="preparing-checklist-calibration-index.html"><a href="preparing-checklist-calibration-index.html#model-observer-expertise"><i class="fa fa-check"></i><b>5.8</b> Model observer expertise</a></li>
 </ul></li>
-<li class="chapter" data-level="5.3" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-main-text-figure-3"><i class="fa fa-check"></i><b>5.3</b> Prepare Main Text Figure 3</a><ul>
-<li class="chapter" data-level="5.3.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-histogram-of-distance-to-roads"><i class="fa fa-check"></i><b>5.3.1</b> Prepare histogram of distance to roads</a></li>
-<li class="chapter" data-level="5.3.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#table-distance-to-roads"><i class="fa fa-check"></i><b>5.3.2</b> Table: Distance to roads</a></li>
-<li class="chapter" data-level="5.3.3" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#distance-to-nearest-neighbouring-site"><i class="fa fa-check"></i><b>5.3.3</b> Distance to nearest neighbouring site</a></li>
-<li class="chapter" data-level="5.3.4" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#spatial-distribution-of-distances-to-neighbours"><i class="fa fa-check"></i><b>5.3.4</b> Spatial distribution of distances to neighbours</a></li>
+<li class="chapter" data-level="6" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html"><i class="fa fa-check"></i><b>6</b> Examining Spatial Sampling Bias</a><ul>
+<li class="chapter" data-level="6.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-libraries-3"><i class="fa fa-check"></i><b>6.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="6.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#read-checklist-data"><i class="fa fa-check"></i><b>6.2</b> Read checklist data</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#spatially-explicit-filter-on-checklists-1"><i class="fa fa-check"></i><b>6.2.1</b> Spatially explicit filter on checklists</a></li>
+<li class="chapter" data-level="6.2.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#get-background-land-for-plotting"><i class="fa fa-check"></i><b>6.2.2</b> Get background land for plotting</a></li>
 </ul></li>
-<li class="chapter" data-level="5.4" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#figure-spatial-sampling-bias"><i class="fa fa-check"></i><b>5.4</b> Figure: Spatial sampling bias</a></li>
+<li class="chapter" data-level="6.3" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-main-text-figure-3"><i class="fa fa-check"></i><b>6.3</b> Prepare Main Text Figure 3</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-histogram-of-distance-to-roads"><i class="fa fa-check"></i><b>6.3.1</b> Prepare histogram of distance to roads</a></li>
+<li class="chapter" data-level="6.3.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#table-distance-to-roads"><i class="fa fa-check"></i><b>6.3.2</b> Table: Distance to roads</a></li>
+<li class="chapter" data-level="6.3.3" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#distance-to-nearest-neighbouring-site"><i class="fa fa-check"></i><b>6.3.3</b> Distance to nearest neighbouring site</a></li>
+<li class="chapter" data-level="6.3.4" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#spatial-distribution-of-distances-to-neighbours"><i class="fa fa-check"></i><b>6.3.4</b> Spatial distribution of distances to neighbours</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html"><i class="fa fa-check"></i><b>6</b> Checking Temporal Sampling Frequency</a><ul>
-<li class="chapter" data-level="6.1" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#load-libraries"><i class="fa fa-check"></i><b>6.1</b> Load libraries</a></li>
-<li class="chapter" data-level="6.2" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#load-checklist-data"><i class="fa fa-check"></i><b>6.2</b> Load checklist data</a></li>
-<li class="chapter" data-level="6.3" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#get-time-differences-per-grid-cell"><i class="fa fa-check"></i><b>6.3</b> Get time differences per grid cell</a></li>
-<li class="chapter" data-level="6.4" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#time-since-previous-checklist"><i class="fa fa-check"></i><b>6.4</b> Time Since Previous Checklist</a><ul>
-<li class="chapter" data-level="6.4.1" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#get-aux-data"><i class="fa fa-check"></i><b>6.4.1</b> Get aux data</a></li>
-<li class="chapter" data-level="6.4.2" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#histogram-of-lags"><i class="fa fa-check"></i><b>6.4.2</b> Histogram of lags</a></li>
+<li class="chapter" data-level="6.4" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#figure-spatial-sampling-bias"><i class="fa fa-check"></i><b>6.4</b> Figure: Spatial sampling bias</a></li>
 </ul></li>
-<li class="chapter" data-level="6.5" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#main-text-figure-3"><i class="fa fa-check"></i><b>6.5</b> Main Text Figure 3</a></li>
-<li class="chapter" data-level="6.6" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#checklists-per-month"><i class="fa fa-check"></i><b>6.6</b> Checklists per Month</a></li>
+<li class="chapter" data-level="7" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html"><i class="fa fa-check"></i><b>7</b> Checking Temporal Sampling Frequency</a><ul>
+<li class="chapter" data-level="7.1" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#load-libraries"><i class="fa fa-check"></i><b>7.1</b> Load libraries</a></li>
+<li class="chapter" data-level="7.2" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#load-checklist-data"><i class="fa fa-check"></i><b>7.2</b> Load checklist data</a></li>
+<li class="chapter" data-level="7.3" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#get-time-differences-per-grid-cell"><i class="fa fa-check"></i><b>7.3</b> Get time differences per grid cell</a></li>
+<li class="chapter" data-level="7.4" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#time-since-previous-checklist"><i class="fa fa-check"></i><b>7.4</b> Time Since Previous Checklist</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#get-aux-data"><i class="fa fa-check"></i><b>7.4.1</b> Get aux data</a></li>
+<li class="chapter" data-level="7.4.2" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#histogram-of-lags"><i class="fa fa-check"></i><b>7.4.2</b> Histogram of lags</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html"><i class="fa fa-check"></i><b>7</b> Adding Covariates to Checklist Data</a><ul>
-<li class="chapter" data-level="7.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#prepare-libraries-and-data"><i class="fa fa-check"></i><b>7.1</b> Prepare libraries and data</a></li>
-<li class="chapter" data-level="7.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-subsampling"><i class="fa fa-check"></i><b>7.2</b> Spatial subsampling</a><ul>
-<li class="chapter" data-level="7.2.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#counting-presence-observation-proportion"><i class="fa fa-check"></i><b>7.2.1</b> Counting presence observation proportion</a></li>
-<li class="chapter" data-level="7.2.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#count-absences-after-spatial-thinning"><i class="fa fa-check"></i><b>7.2.2</b> Count absences after spatial thinning</a></li>
+<li class="chapter" data-level="7.5" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#main-text-figure-3"><i class="fa fa-check"></i><b>7.5</b> Main Text Figure 3</a></li>
+<li class="chapter" data-level="7.6" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#checklists-per-month"><i class="fa fa-check"></i><b>7.6</b> Checklists per Month</a></li>
 </ul></li>
-<li class="chapter" data-level="7.3" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#temporal-subsampling"><i class="fa fa-check"></i><b>7.3</b> Temporal subsampling</a><ul>
-<li class="chapter" data-level="7.3.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#count-absences-after-temporal-thinning"><i class="fa fa-check"></i><b>7.3.1</b> Count absences after temporal thinning</a></li>
+<li class="chapter" data-level="8" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html"><i class="fa fa-check"></i><b>8</b> Adding Covariates to Checklist Data</a><ul>
+<li class="chapter" data-level="8.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#prepare-libraries-and-data"><i class="fa fa-check"></i><b>8.1</b> Prepare libraries and data</a></li>
+<li class="chapter" data-level="8.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-subsampling"><i class="fa fa-check"></i><b>8.2</b> Spatial subsampling</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#counting-presence-observation-proportion"><i class="fa fa-check"></i><b>8.2.1</b> Counting presence observation proportion</a></li>
+<li class="chapter" data-level="8.2.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#count-absences-after-spatial-thinning"><i class="fa fa-check"></i><b>8.2.2</b> Count absences after spatial thinning</a></li>
 </ul></li>
-<li class="chapter" data-level="7.4" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#add-checklist-calibration-index"><i class="fa fa-check"></i><b>7.4</b> Add checklist calibration index</a></li>
-<li class="chapter" data-level="7.5" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#add-climatic-and-landscape-covariates"><i class="fa fa-check"></i><b>7.5</b> Add climatic and landscape covariates</a></li>
-<li class="chapter" data-level="7.6" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-buffers-around-selected-checklists"><i class="fa fa-check"></i><b>7.6</b> Spatial buffers around selected checklists</a></li>
-<li class="chapter" data-level="7.7" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-buffer-wide-covariates"><i class="fa fa-check"></i><b>7.7</b> Spatial buffer-wide covariates</a><ul>
-<li class="chapter" data-level="7.7.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#mean-climatic-covariates"><i class="fa fa-check"></i><b>7.7.1</b> Mean climatic covariates</a></li>
-<li class="chapter" data-level="7.7.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#proportions-of-land-cover-type"><i class="fa fa-check"></i><b>7.7.2</b> Proportions of land cover type</a></li>
-<li class="chapter" data-level="7.7.3" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#link-environmental-covariates-to-checklists"><i class="fa fa-check"></i><b>7.7.3</b> Link environmental covariates to checklists</a></li>
+<li class="chapter" data-level="8.3" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#temporal-subsampling"><i class="fa fa-check"></i><b>8.3</b> Temporal subsampling</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#count-absences-after-temporal-thinning"><i class="fa fa-check"></i><b>8.3.1</b> Count absences after temporal thinning</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#add-checklist-calibration-index"><i class="fa fa-check"></i><b>8.4</b> Add checklist calibration index</a></li>
+<li class="chapter" data-level="8.5" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#add-climatic-and-landscape-covariates"><i class="fa fa-check"></i><b>8.5</b> Add climatic and landscape covariates</a></li>
+<li class="chapter" data-level="8.6" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-buffers-around-selected-checklists"><i class="fa fa-check"></i><b>8.6</b> Spatial buffers around selected checklists</a></li>
+<li class="chapter" data-level="8.7" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-buffer-wide-covariates"><i class="fa fa-check"></i><b>8.7</b> Spatial buffer-wide covariates</a><ul>
+<li class="chapter" data-level="8.7.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#mean-climatic-covariates"><i class="fa fa-check"></i><b>8.7.1</b> Mean climatic covariates</a></li>
+<li class="chapter" data-level="8.7.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#proportions-of-land-cover-type"><i class="fa fa-check"></i><b>8.7.2</b> Proportions of land cover type</a></li>
+<li class="chapter" data-level="8.7.3" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#link-environmental-covariates-to-checklists"><i class="fa fa-check"></i><b>8.7.3</b> Link environmental covariates to checklists</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html"><i class="fa fa-check"></i><b>8</b> Modelling Species Occupancy</a><ul>
-<li class="chapter" data-level="8.0.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#load-necessary-libraries"><i class="fa fa-check"></i><b>8.0.1</b> Load necessary libraries</a></li>
-<li class="chapter" data-level="8.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#load-dataframe-and-prepare-covariates"><i class="fa fa-check"></i><b>8.1</b> Load dataframe and prepare covariates</a><ul>
-<li class="chapter" data-level="8.1.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#handle-the-sampling-protocol"><i class="fa fa-check"></i><b>8.1.1</b> Handle the sampling protocol</a></li>
-<li class="chapter" data-level="8.1.2" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#handle-time-and-date"><i class="fa fa-check"></i><b>8.1.2</b> Handle time and date</a></li>
-<li class="chapter" data-level="8.1.3" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#scaling-covariates"><i class="fa fa-check"></i><b>8.1.3</b> Scaling covariates</a></li>
-<li class="chapter" data-level="8.1.4" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#correct-date-format"><i class="fa fa-check"></i><b>8.1.4</b> Correct date format</a></li>
-<li class="chapter" data-level="8.1.5" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#check-for-correlated-covariates"><i class="fa fa-check"></i><b>8.1.5</b> Check for correlated covariates</a></li>
+<li class="chapter" data-level="9" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html"><i class="fa fa-check"></i><b>9</b> Modelling Species Occupancy</a><ul>
+<li class="chapter" data-level="9.0.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#load-necessary-libraries"><i class="fa fa-check"></i><b>9.0.1</b> Load necessary libraries</a></li>
+<li class="chapter" data-level="9.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#load-dataframe-and-prepare-covariates"><i class="fa fa-check"></i><b>9.1</b> Load dataframe and prepare covariates</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#handle-the-sampling-protocol"><i class="fa fa-check"></i><b>9.1.1</b> Handle the sampling protocol</a></li>
+<li class="chapter" data-level="9.1.2" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#handle-time-and-date"><i class="fa fa-check"></i><b>9.1.2</b> Handle time and date</a></li>
+<li class="chapter" data-level="9.1.3" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#scaling-covariates"><i class="fa fa-check"></i><b>9.1.3</b> Scaling covariates</a></li>
+<li class="chapter" data-level="9.1.4" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#correct-date-format"><i class="fa fa-check"></i><b>9.1.4</b> Correct date format</a></li>
+<li class="chapter" data-level="9.1.5" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#check-for-correlated-covariates"><i class="fa fa-check"></i><b>9.1.5</b> Check for correlated covariates</a></li>
 </ul></li>
-<li class="chapter" data-level="8.2" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#running-a-null-model"><i class="fa fa-check"></i><b>8.2</b> Running a null model</a></li>
-<li class="chapter" data-level="8.3" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#identifying-covariates-necessary-to-model-the-detection-process"><i class="fa fa-check"></i><b>8.3</b> Identifying covariates necessary to model the detection process</a></li>
-<li class="chapter" data-level="8.4" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#land-cover-and-climate"><i class="fa fa-check"></i><b>8.4</b> Land Cover and Climate</a></li>
-<li class="chapter" data-level="8.5" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#goodness-of-fit-tests"><i class="fa fa-check"></i><b>8.5</b> Goodness-of-fit tests</a></li>
+<li class="chapter" data-level="9.2" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#running-a-null-model"><i class="fa fa-check"></i><b>9.2</b> Running a null model</a></li>
+<li class="chapter" data-level="9.3" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#identifying-covariates-necessary-to-model-the-detection-process"><i class="fa fa-check"></i><b>9.3</b> Identifying covariates necessary to model the detection process</a></li>
+<li class="chapter" data-level="9.4" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#land-cover-and-climate"><i class="fa fa-check"></i><b>9.4</b> Land Cover and Climate</a></li>
+<li class="chapter" data-level="9.5" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#goodness-of-fit-tests"><i class="fa fa-check"></i><b>9.5</b> Goodness-of-fit tests</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html"><i class="fa fa-check"></i><b>9</b> Visualizing Occupancy Predictor Effects</a><ul>
-<li class="chapter" data-level="9.1" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-libraries-3"><i class="fa fa-check"></i><b>9.1</b> Prepare libraries</a></li>
-<li class="chapter" data-level="9.2" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#load-species-list"><i class="fa fa-check"></i><b>9.2</b> Load species list</a></li>
-<li class="chapter" data-level="9.3" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#show-aic-weight-importance"><i class="fa fa-check"></i><b>9.3</b> Show AIC weight importance</a><ul>
-<li class="chapter" data-level="9.3.1" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#read-in-aic-weight-data"><i class="fa fa-check"></i><b>9.3.1</b> Read in AIC weight data</a></li>
-<li class="chapter" data-level="9.3.2" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-cumulative-aic-weight-data"><i class="fa fa-check"></i><b>9.3.2</b> Prepare cumulative AIC weight data</a></li>
+<li class="chapter" data-level="10" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html"><i class="fa fa-check"></i><b>10</b> Visualizing Occupancy Predictor Effects</a><ul>
+<li class="chapter" data-level="10.1" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-libraries-4"><i class="fa fa-check"></i><b>10.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="10.2" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#load-species-list"><i class="fa fa-check"></i><b>10.2</b> Load species list</a></li>
+<li class="chapter" data-level="10.3" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#show-aic-weight-importance"><i class="fa fa-check"></i><b>10.3</b> Show AIC weight importance</a><ul>
+<li class="chapter" data-level="10.3.1" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#read-in-aic-weight-data"><i class="fa fa-check"></i><b>10.3.1</b> Read in AIC weight data</a></li>
+<li class="chapter" data-level="10.3.2" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-cumulative-aic-weight-data"><i class="fa fa-check"></i><b>10.3.2</b> Prepare cumulative AIC weight data</a></li>
 </ul></li>
-<li class="chapter" data-level="9.4" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-model-coefficient-data"><i class="fa fa-check"></i><b>9.4</b> Prepare model coefficient data</a></li>
-<li class="chapter" data-level="9.5" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#get-predictor-effects"><i class="fa fa-check"></i><b>9.5</b> Get predictor effects</a></li>
-<li class="chapter" data-level="9.6" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#main-text-figure-4"><i class="fa fa-check"></i><b>9.6</b> Main Text Figure 4</a></li>
+<li class="chapter" data-level="10.4" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-model-coefficient-data"><i class="fa fa-check"></i><b>10.4</b> Prepare model coefficient data</a></li>
+<li class="chapter" data-level="10.5" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#get-predictor-effects"><i class="fa fa-check"></i><b>10.5</b> Get predictor effects</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>10</b> References</a></li>
+<li class="chapter" data-level="11" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><i class="fa fa-check"></i><b>11</b> Predicting species-specific occupancy as a function of significant predictors</a><ul>
+<li class="chapter" data-level="11.1" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#prepare-libraries-5"><i class="fa fa-check"></i><b>11.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="11.2" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#read-data"><i class="fa fa-check"></i><b>11.2</b> Read data</a></li>
+<li class="chapter" data-level="11.3" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#prepare-predictor-data"><i class="fa fa-check"></i><b>11.3</b> Prepare predictor data</a></li>
+<li class="chapter" data-level="11.4" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#get-predictor-responses"><i class="fa fa-check"></i><b>11.4</b> Get predictor responses</a></li>
+<li class="chapter" data-level="11.5" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#get-probability-of-occupancy"><i class="fa fa-check"></i><b>11.5</b> Get probability of occupancy</a></li>
+<li class="chapter" data-level="11.6" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#add-scaling-for-predictors"><i class="fa fa-check"></i><b>11.6</b> Add scaling for predictors</a><ul>
+<li class="chapter" data-level="11.6.1" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#figure-occupancy-predictors"><i class="fa fa-check"></i><b>11.6.1</b> Figure: Occupancy ~ predictors</a></li>
+<li class="chapter" data-level="11.6.2" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#figures-occupancy-predictors-for-all-species"><i class="fa fa-check"></i><b>11.6.2</b> Figures: Occupancy ~ predictors for all species</a></li>
+</ul></li>
+<li class="chapter" data-level="11.7" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#mapping-species-occupancy"><i class="fa fa-check"></i><b>11.7</b> Mapping species occupancy</a><ul>
+<li class="chapter" data-level="11.7.1" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#read-in-raster-layers"><i class="fa fa-check"></i><b>11.7.1</b> Read in raster layers</a></li>
+<li class="chapter" data-level="11.7.2" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#split-landcover-into-proportions-per-1km"><i class="fa fa-check"></i><b>11.7.2</b> Split landcover into proportions per 1km</a></li>
+<li class="chapter" data-level="11.7.3" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#prepare-climatic-layers"><i class="fa fa-check"></i><b>11.7.3</b> Prepare climatic layers</a></li>
+<li class="chapter" data-level="11.7.4" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#mask-by-study-area"><i class="fa fa-check"></i><b>11.7.4</b> Mask by study area</a></li>
+<li class="chapter" data-level="11.7.5" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#plot-full-bounds-of-landscape-variables"><i class="fa fa-check"></i><b>11.7.5</b> Plot full bounds of landscape variables</a></li>
+<li class="chapter" data-level="11.7.6" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#prepare-soi-predictors"><i class="fa fa-check"></i><b>11.7.6</b> Prepare soi predictors</a></li>
+<li class="chapter" data-level="11.7.7" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#prepare-species-occupancy-for-soi"><i class="fa fa-check"></i><b>11.7.7</b> Prepare species occupancy for SOI</a></li>
+<li class="chapter" data-level="11.7.8" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#prepare-species-occupancy-for-all-species"><i class="fa fa-check"></i><b>11.7.8</b> Prepare species occupancy for all species</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>12</b> References</a></li>
 </ul>
 
       </nav>
@@ -269,136 +301,136 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="examining-spatial-sampling-bias" class="section level1">
-<h1><span class="header-section-number">Section 5</span> Examining Spatial Sampling Bias</h1>
+<h1><span class="header-section-number">Section 6</span> Examining Spatial Sampling Bias</h1>
 <p>The goal of this section is to show how far each checklist location is from the nearest road, and how far each site is from its nearest neighbour. This follows finding the pairwise distance between a large number of unique checklist locations to a vast number of roads, as well as to each other.</p>
-<div id="prepare-libraries-2" class="section level2">
-<h2><span class="header-section-number">5.1</span> Prepare libraries</h2>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1"><span class="co"># load libraries</span></a>
-<a class="sourceLine" id="cb45-2" data-line-number="2"><span class="co"># for data</span></a>
-<a class="sourceLine" id="cb45-3" data-line-number="3"><span class="kw">library</span>(sf)</a>
-<a class="sourceLine" id="cb45-4" data-line-number="4"><span class="kw">library</span>(rnaturalearth)</a>
-<a class="sourceLine" id="cb45-5" data-line-number="5"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb45-6" data-line-number="6"><span class="kw">library</span>(readr)</a>
-<a class="sourceLine" id="cb45-7" data-line-number="7"><span class="kw">library</span>(purrr)</a>
-<a class="sourceLine" id="cb45-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb45-9" data-line-number="9"><span class="co"># for plotting</span></a>
-<a class="sourceLine" id="cb45-10" data-line-number="10"><span class="kw">library</span>(scales)</a>
-<a class="sourceLine" id="cb45-11" data-line-number="11"><span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb45-12" data-line-number="12"><span class="kw">library</span>(ggspatial)</a>
-<a class="sourceLine" id="cb45-13" data-line-number="13"><span class="kw">library</span>(colorspace)</a>
-<a class="sourceLine" id="cb45-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb45-15" data-line-number="15"><span class="co"># round any function</span></a>
-<a class="sourceLine" id="cb45-16" data-line-number="16">round_any &lt;-<span class="st"> </span><span class="cf">function</span>(x, <span class="dt">accuracy =</span> <span class="dv">20000</span>) {</a>
-<a class="sourceLine" id="cb45-17" data-line-number="17">  <span class="kw">round</span>(x <span class="op">/</span><span class="st"> </span>accuracy) <span class="op">*</span><span class="st"> </span>accuracy</a>
-<a class="sourceLine" id="cb45-18" data-line-number="18">}</a>
-<a class="sourceLine" id="cb45-19" data-line-number="19"><span class="co"># ci function</span></a>
-<a class="sourceLine" id="cb45-20" data-line-number="20">ci &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</a>
-<a class="sourceLine" id="cb45-21" data-line-number="21">  <span class="kw">qnorm</span>(<span class="fl">0.975</span>) <span class="op">*</span><span class="st"> </span><span class="kw">sd</span>(x, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">length</span>(x))</a>
-<a class="sourceLine" id="cb45-22" data-line-number="22">}</a></code></pre></div>
+<div id="prepare-libraries-3" class="section level2">
+<h2><span class="header-section-number">6.1</span> Prepare libraries</h2>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="examining-spatial-sampling-bias.html#cb52-1"></a><span class="co"># load libraries</span></span>
+<span id="cb52-2"><a href="examining-spatial-sampling-bias.html#cb52-2"></a><span class="co"># for data</span></span>
+<span id="cb52-3"><a href="examining-spatial-sampling-bias.html#cb52-3"></a><span class="kw">library</span>(sf)</span>
+<span id="cb52-4"><a href="examining-spatial-sampling-bias.html#cb52-4"></a><span class="kw">library</span>(rnaturalearth)</span>
+<span id="cb52-5"><a href="examining-spatial-sampling-bias.html#cb52-5"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb52-6"><a href="examining-spatial-sampling-bias.html#cb52-6"></a><span class="kw">library</span>(readr)</span>
+<span id="cb52-7"><a href="examining-spatial-sampling-bias.html#cb52-7"></a><span class="kw">library</span>(purrr)</span>
+<span id="cb52-8"><a href="examining-spatial-sampling-bias.html#cb52-8"></a></span>
+<span id="cb52-9"><a href="examining-spatial-sampling-bias.html#cb52-9"></a><span class="co"># for plotting</span></span>
+<span id="cb52-10"><a href="examining-spatial-sampling-bias.html#cb52-10"></a><span class="kw">library</span>(scales)</span>
+<span id="cb52-11"><a href="examining-spatial-sampling-bias.html#cb52-11"></a><span class="kw">library</span>(ggplot2)</span>
+<span id="cb52-12"><a href="examining-spatial-sampling-bias.html#cb52-12"></a><span class="kw">library</span>(ggspatial)</span>
+<span id="cb52-13"><a href="examining-spatial-sampling-bias.html#cb52-13"></a><span class="kw">library</span>(colorspace)</span>
+<span id="cb52-14"><a href="examining-spatial-sampling-bias.html#cb52-14"></a></span>
+<span id="cb52-15"><a href="examining-spatial-sampling-bias.html#cb52-15"></a><span class="co"># round any function</span></span>
+<span id="cb52-16"><a href="examining-spatial-sampling-bias.html#cb52-16"></a>round_any &lt;-<span class="st"> </span><span class="cf">function</span>(x, <span class="dt">accuracy =</span> <span class="dv">20000</span>) {</span>
+<span id="cb52-17"><a href="examining-spatial-sampling-bias.html#cb52-17"></a>  <span class="kw">round</span>(x <span class="op">/</span><span class="st"> </span>accuracy) <span class="op">*</span><span class="st"> </span>accuracy</span>
+<span id="cb52-18"><a href="examining-spatial-sampling-bias.html#cb52-18"></a>}</span>
+<span id="cb52-19"><a href="examining-spatial-sampling-bias.html#cb52-19"></a><span class="co"># ci function</span></span>
+<span id="cb52-20"><a href="examining-spatial-sampling-bias.html#cb52-20"></a>ci &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
+<span id="cb52-21"><a href="examining-spatial-sampling-bias.html#cb52-21"></a>  <span class="kw">qnorm</span>(<span class="fl">0.975</span>) <span class="op">*</span><span class="st"> </span><span class="kw">sd</span>(x, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">length</span>(x))</span>
+<span id="cb52-22"><a href="examining-spatial-sampling-bias.html#cb52-22"></a>}</span></code></pre></div>
 </div>
 <div id="read-checklist-data" class="section level2">
-<h2><span class="header-section-number">5.2</span> Read checklist data</h2>
+<h2><span class="header-section-number">6.2</span> Read checklist data</h2>
 <p>Read in checklist data with distance to nearest neighbouring site, and the distance to the nearest road.</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1"><span class="co"># read from local file</span></a>
-<a class="sourceLine" id="cb46-2" data-line-number="2">chkCovars &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/03_data-covars-perChklist.csv&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="examining-spatial-sampling-bias.html#cb53-1"></a><span class="co"># read from local file</span></span>
+<span id="cb53-2"><a href="examining-spatial-sampling-bias.html#cb53-2"></a>chkCovars &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/03_data-covars-perChklist.csv&quot;</span>)</span></code></pre></div>
 <div id="spatially-explicit-filter-on-checklists-1" class="section level3">
-<h3><span class="header-section-number">5.2.1</span> Spatially explicit filter on checklists</h3>
+<h3><span class="header-section-number">6.2.1</span> Spatially explicit filter on checklists</h3>
 <p>We filter the checklists by the boundary of the study area. This is <em>not</em> the extent.</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1">chkCovars &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(chkCovars, <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb47-2" data-line-number="2"><span class="st">  `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb47-3" data-line-number="3"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
-<a class="sourceLine" id="cb47-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb47-5" data-line-number="5"><span class="co"># read wg</span></a>
-<a class="sourceLine" id="cb47-6" data-line-number="6">wg &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb47-7" data-line-number="7"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
-<a class="sourceLine" id="cb47-8" data-line-number="8"><span class="co"># get bounding box</span></a>
-<a class="sourceLine" id="cb47-9" data-line-number="9">bbox &lt;-<span class="st"> </span><span class="kw">st_bbox</span>(wg)</a>
-<a class="sourceLine" id="cb47-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb47-11" data-line-number="11"><span class="co"># spatial subset</span></a>
-<a class="sourceLine" id="cb47-12" data-line-number="12">chkCovars &lt;-<span class="st"> </span>chkCovars <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb47-13" data-line-number="13"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(.)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb47-14" data-line-number="14"><span class="st">  </span><span class="kw">filter</span>(id <span class="op">%in%</span><span class="st"> </span><span class="kw">unlist</span>(<span class="kw">st_contains</span>(wg, chkCovars)))</a></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="examining-spatial-sampling-bias.html#cb54-1"></a>chkCovars &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(chkCovars, <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb54-2"><a href="examining-spatial-sampling-bias.html#cb54-2"></a><span class="st">  `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span></span>
+<span id="cb54-3"><a href="examining-spatial-sampling-bias.html#cb54-3"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</span>
+<span id="cb54-4"><a href="examining-spatial-sampling-bias.html#cb54-4"></a></span>
+<span id="cb54-5"><a href="examining-spatial-sampling-bias.html#cb54-5"></a><span class="co"># read wg</span></span>
+<span id="cb54-6"><a href="examining-spatial-sampling-bias.html#cb54-6"></a>wg &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb54-7"><a href="examining-spatial-sampling-bias.html#cb54-7"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</span>
+<span id="cb54-8"><a href="examining-spatial-sampling-bias.html#cb54-8"></a><span class="co"># get bounding box</span></span>
+<span id="cb54-9"><a href="examining-spatial-sampling-bias.html#cb54-9"></a>bbox &lt;-<span class="st"> </span><span class="kw">st_bbox</span>(wg)</span>
+<span id="cb54-10"><a href="examining-spatial-sampling-bias.html#cb54-10"></a></span>
+<span id="cb54-11"><a href="examining-spatial-sampling-bias.html#cb54-11"></a><span class="co"># spatial subset</span></span>
+<span id="cb54-12"><a href="examining-spatial-sampling-bias.html#cb54-12"></a>chkCovars &lt;-<span class="st"> </span>chkCovars <span class="op">%&gt;%</span></span>
+<span id="cb54-13"><a href="examining-spatial-sampling-bias.html#cb54-13"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(.)) <span class="op">%&gt;%</span></span>
+<span id="cb54-14"><a href="examining-spatial-sampling-bias.html#cb54-14"></a><span class="st">  </span><span class="kw">filter</span>(id <span class="op">%in%</span><span class="st"> </span><span class="kw">unlist</span>(<span class="kw">st_contains</span>(wg, chkCovars)))</span></code></pre></div>
 </div>
 <div id="get-background-land-for-plotting" class="section level3">
-<h3><span class="header-section-number">5.2.2</span> Get background land for plotting</h3>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1"><span class="co"># add land</span></a>
-<a class="sourceLine" id="cb48-2" data-line-number="2">land &lt;-<span class="st"> </span><span class="kw">ne_countries</span>(</a>
-<a class="sourceLine" id="cb48-3" data-line-number="3">  <span class="dt">scale =</span> <span class="dv">50</span>, <span class="dt">type =</span> <span class="st">&quot;countries&quot;</span>, <span class="dt">continent =</span> <span class="st">&quot;asia&quot;</span>,</a>
-<a class="sourceLine" id="cb48-4" data-line-number="4">  <span class="dt">country =</span> <span class="st">&quot;india&quot;</span>,</a>
-<a class="sourceLine" id="cb48-5" data-line-number="5">  <span class="dt">returnclass =</span> <span class="kw">c</span>(<span class="st">&quot;sf&quot;</span>)</a>
-<a class="sourceLine" id="cb48-6" data-line-number="6">) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb48-7" data-line-number="7"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a>
-<a class="sourceLine" id="cb48-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb48-9" data-line-number="9"><span class="co"># add roads data</span></a>
-<a class="sourceLine" id="cb48-10" data-line-number="10">roads &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/roads_studysite_2019/roads_studysite_2019.shp&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb48-11" data-line-number="11"><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</a></code></pre></div>
+<h3><span class="header-section-number">6.2.2</span> Get background land for plotting</h3>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="examining-spatial-sampling-bias.html#cb55-1"></a><span class="co"># add land</span></span>
+<span id="cb55-2"><a href="examining-spatial-sampling-bias.html#cb55-2"></a>land &lt;-<span class="st"> </span><span class="kw">ne_countries</span>(</span>
+<span id="cb55-3"><a href="examining-spatial-sampling-bias.html#cb55-3"></a>  <span class="dt">scale =</span> <span class="dv">50</span>, <span class="dt">type =</span> <span class="st">&quot;countries&quot;</span>, <span class="dt">continent =</span> <span class="st">&quot;asia&quot;</span>,</span>
+<span id="cb55-4"><a href="examining-spatial-sampling-bias.html#cb55-4"></a>  <span class="dt">country =</span> <span class="st">&quot;india&quot;</span>,</span>
+<span id="cb55-5"><a href="examining-spatial-sampling-bias.html#cb55-5"></a>  <span class="dt">returnclass =</span> <span class="kw">c</span>(<span class="st">&quot;sf&quot;</span>)</span>
+<span id="cb55-6"><a href="examining-spatial-sampling-bias.html#cb55-6"></a>) <span class="op">%&gt;%</span></span>
+<span id="cb55-7"><a href="examining-spatial-sampling-bias.html#cb55-7"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</span>
+<span id="cb55-8"><a href="examining-spatial-sampling-bias.html#cb55-8"></a></span>
+<span id="cb55-9"><a href="examining-spatial-sampling-bias.html#cb55-9"></a><span class="co"># add roads data</span></span>
+<span id="cb55-10"><a href="examining-spatial-sampling-bias.html#cb55-10"></a>roads &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/roads_studysite_2019/roads_studysite_2019.shp&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb55-11"><a href="examining-spatial-sampling-bias.html#cb55-11"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="prepare-main-text-figure-3" class="section level2">
-<h2><span class="header-section-number">5.3</span> Prepare Main Text Figure 3</h2>
+<h2><span class="header-section-number">6.3</span> Prepare Main Text Figure 3</h2>
 <div id="prepare-histogram-of-distance-to-roads" class="section level3">
-<h3><span class="header-section-number">5.3.1</span> Prepare histogram of distance to roads</h3>
+<h3><span class="header-section-number">6.3.1</span> Prepare histogram of distance to roads</h3>
 <p>Figure code is hidden in versions rendered as HTML or PDF.</p>
 </div>
 <div id="table-distance-to-roads" class="section level3">
-<h3><span class="header-section-number">5.3.2</span> Table: Distance to roads</h3>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1"><span class="co"># write the mean and ci95 to file</span></a>
-<a class="sourceLine" id="cb49-2" data-line-number="2">chkCovars <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb49-3" data-line-number="3"><span class="st">  </span><span class="kw">st_drop_geometry</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb49-4" data-line-number="4"><span class="st">  </span><span class="kw">select</span>(dist_road, nnb) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb49-5" data-line-number="5"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">pivot_longer</span>(</a>
-<a class="sourceLine" id="cb49-6" data-line-number="6">    <span class="dt">cols =</span> <span class="kw">c</span>(<span class="st">&quot;dist_road&quot;</span>, <span class="st">&quot;nnb&quot;</span>),</a>
-<a class="sourceLine" id="cb49-7" data-line-number="7">    <span class="dt">names_to =</span> <span class="st">&quot;variable&quot;</span></a>
-<a class="sourceLine" id="cb49-8" data-line-number="8">  ) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb49-9" data-line-number="9"><span class="st">  </span><span class="kw">group_by</span>(variable) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb49-10" data-line-number="10"><span class="st">  </span><span class="kw">summarise_at</span>(</a>
-<a class="sourceLine" id="cb49-11" data-line-number="11">    <span class="kw">vars</span>(value),</a>
-<a class="sourceLine" id="cb49-12" data-line-number="12">    <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span><span class="kw">mean</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">sd</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">min</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">max</span>(.))</a>
-<a class="sourceLine" id="cb49-13" data-line-number="13">  ) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb49-14" data-line-number="14"><span class="st">  </span><span class="kw">write_csv</span>(<span class="st">&quot;data/results/distance_roads_sites.csv&quot;</span>)</a></code></pre></div>
+<h3><span class="header-section-number">6.3.2</span> Table: Distance to roads</h3>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="examining-spatial-sampling-bias.html#cb56-1"></a><span class="co"># write the mean and ci95 to file</span></span>
+<span id="cb56-2"><a href="examining-spatial-sampling-bias.html#cb56-2"></a>chkCovars <span class="op">%&gt;%</span></span>
+<span id="cb56-3"><a href="examining-spatial-sampling-bias.html#cb56-3"></a><span class="st">  </span><span class="kw">st_drop_geometry</span>() <span class="op">%&gt;%</span></span>
+<span id="cb56-4"><a href="examining-spatial-sampling-bias.html#cb56-4"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(dist_road, nnb) <span class="op">%&gt;%</span></span>
+<span id="cb56-5"><a href="examining-spatial-sampling-bias.html#cb56-5"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">pivot_longer</span>(</span>
+<span id="cb56-6"><a href="examining-spatial-sampling-bias.html#cb56-6"></a>    <span class="dt">cols =</span> <span class="kw">c</span>(<span class="st">&quot;dist_road&quot;</span>, <span class="st">&quot;nnb&quot;</span>),</span>
+<span id="cb56-7"><a href="examining-spatial-sampling-bias.html#cb56-7"></a>    <span class="dt">names_to =</span> <span class="st">&quot;variable&quot;</span></span>
+<span id="cb56-8"><a href="examining-spatial-sampling-bias.html#cb56-8"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb56-9"><a href="examining-spatial-sampling-bias.html#cb56-9"></a><span class="st">  </span><span class="kw">group_by</span>(variable) <span class="op">%&gt;%</span></span>
+<span id="cb56-10"><a href="examining-spatial-sampling-bias.html#cb56-10"></a><span class="st">  </span><span class="kw">summarise_at</span>(</span>
+<span id="cb56-11"><a href="examining-spatial-sampling-bias.html#cb56-11"></a>    <span class="kw">vars</span>(value),</span>
+<span id="cb56-12"><a href="examining-spatial-sampling-bias.html#cb56-12"></a>    <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span><span class="kw">mean</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">sd</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">min</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">max</span>(.))</span>
+<span id="cb56-13"><a href="examining-spatial-sampling-bias.html#cb56-13"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb56-14"><a href="examining-spatial-sampling-bias.html#cb56-14"></a><span class="st">  </span><span class="kw">write_csv</span>(<span class="st">&quot;data/results/distance_roads_sites.csv&quot;</span>)</span></code></pre></div>
 </div>
 <div id="distance-to-nearest-neighbouring-site" class="section level3">
-<h3><span class="header-section-number">5.3.3</span> Distance to nearest neighbouring site</h3>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1"><span class="co"># get unique locations from checklists</span></a>
-<a class="sourceLine" id="cb50-2" data-line-number="2">locs_unique &lt;-<span class="st"> </span><span class="kw">cbind</span>(</a>
-<a class="sourceLine" id="cb50-3" data-line-number="3">  <span class="kw">st_drop_geometry</span>(chkCovars),</a>
-<a class="sourceLine" id="cb50-4" data-line-number="4">  <span class="kw">st_coordinates</span>(chkCovars)</a>
-<a class="sourceLine" id="cb50-5" data-line-number="5">) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb50-6" data-line-number="6"><span class="st">  </span><span class="kw">as_tibble</span>()</a>
-<a class="sourceLine" id="cb50-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb50-8" data-line-number="8">locs_unique &lt;-<span class="st"> </span><span class="kw">distinct</span>(locs_unique, X, Y, <span class="dt">.keep_all =</span> T)</a></code></pre></div>
+<h3><span class="header-section-number">6.3.3</span> Distance to nearest neighbouring site</h3>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="examining-spatial-sampling-bias.html#cb57-1"></a><span class="co"># get unique locations from checklists</span></span>
+<span id="cb57-2"><a href="examining-spatial-sampling-bias.html#cb57-2"></a>locs_unique &lt;-<span class="st"> </span><span class="kw">cbind</span>(</span>
+<span id="cb57-3"><a href="examining-spatial-sampling-bias.html#cb57-3"></a>  <span class="kw">st_drop_geometry</span>(chkCovars),</span>
+<span id="cb57-4"><a href="examining-spatial-sampling-bias.html#cb57-4"></a>  <span class="kw">st_coordinates</span>(chkCovars)</span>
+<span id="cb57-5"><a href="examining-spatial-sampling-bias.html#cb57-5"></a>) <span class="op">%&gt;%</span></span>
+<span id="cb57-6"><a href="examining-spatial-sampling-bias.html#cb57-6"></a><span class="st">  </span><span class="kw">as_tibble</span>()</span>
+<span id="cb57-7"><a href="examining-spatial-sampling-bias.html#cb57-7"></a></span>
+<span id="cb57-8"><a href="examining-spatial-sampling-bias.html#cb57-8"></a>locs_unique &lt;-<span class="st"> </span><span class="kw">distinct</span>(locs_unique, X, Y, <span class="dt">.keep_all =</span> T)</span></code></pre></div>
 <p>Figure code is hidden in versions rendered as HTML and PDF.</p>
 </div>
 <div id="spatial-distribution-of-distances-to-neighbours" class="section level3">
-<h3><span class="header-section-number">5.3.4</span> Spatial distribution of distances to neighbours</h3>
+<h3><span class="header-section-number">6.3.4</span> Spatial distribution of distances to neighbours</h3>
 <p>Figure code is hidden in HTML and PDF versions, consult the Rmarkdown file.</p>
 <div class="figure">
-<img src="figs/fig_site_nnb.png" alt="Most observation sites are within 300m of another site." />
+<img src="figs/fig_site_nnb.png" alt="" />
 <p class="caption">Most observation sites are within 300m of another site.</p>
 </div>
 </div>
 </div>
 <div id="figure-spatial-sampling-bias" class="section level2">
-<h2><span class="header-section-number">5.4</span> Figure: Spatial sampling bias</h2>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="co"># get locations</span></a>
-<a class="sourceLine" id="cb51-2" data-line-number="2">points &lt;-<span class="st"> </span>chkCovars <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb51-3" data-line-number="3"><span class="st">  </span><span class="kw">bind_cols</span>(<span class="kw">as_tibble</span>(<span class="kw">st_coordinates</span>(.))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb51-4" data-line-number="4"><span class="st">  </span><span class="kw">st_drop_geometry</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb51-5" data-line-number="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">X =</span> <span class="kw">round_any</span>(X, <span class="dv">2500</span>), <span class="dt">Y =</span> <span class="kw">round_any</span>(Y, <span class="dv">2500</span>))</a>
-<a class="sourceLine" id="cb51-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb51-7" data-line-number="7"><span class="co"># count points</span></a>
-<a class="sourceLine" id="cb51-8" data-line-number="8">points &lt;-<span class="st"> </span><span class="kw">count</span>(points, X, Y)</a></code></pre></div>
+<h2><span class="header-section-number">6.4</span> Figure: Spatial sampling bias</h2>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="examining-spatial-sampling-bias.html#cb58-1"></a><span class="co"># get locations</span></span>
+<span id="cb58-2"><a href="examining-spatial-sampling-bias.html#cb58-2"></a>points &lt;-<span class="st"> </span>chkCovars <span class="op">%&gt;%</span></span>
+<span id="cb58-3"><a href="examining-spatial-sampling-bias.html#cb58-3"></a><span class="st">  </span><span class="kw">bind_cols</span>(<span class="kw">as_tibble</span>(<span class="kw">st_coordinates</span>(.))) <span class="op">%&gt;%</span></span>
+<span id="cb58-4"><a href="examining-spatial-sampling-bias.html#cb58-4"></a><span class="st">  </span><span class="kw">st_drop_geometry</span>() <span class="op">%&gt;%</span></span>
+<span id="cb58-5"><a href="examining-spatial-sampling-bias.html#cb58-5"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">X =</span> <span class="kw">round_any</span>(X, <span class="dv">2500</span>), <span class="dt">Y =</span> <span class="kw">round_any</span>(Y, <span class="dv">2500</span>))</span>
+<span id="cb58-6"><a href="examining-spatial-sampling-bias.html#cb58-6"></a></span>
+<span id="cb58-7"><a href="examining-spatial-sampling-bias.html#cb58-7"></a><span class="co"># count points</span></span>
+<span id="cb58-8"><a href="examining-spatial-sampling-bias.html#cb58-8"></a>points &lt;-<span class="st"> </span><span class="kw">count</span>(points, X, Y)</span></code></pre></div>
 <p>Figure code is hidden in versions rendered as HTML and PDF.</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1"><span class="co"># save as png</span></a>
-<a class="sourceLine" id="cb52-2" data-line-number="2"><span class="kw">ggsave</span>(</a>
-<a class="sourceLine" id="cb52-3" data-line-number="3">  fig_checklists_grid,</a>
-<a class="sourceLine" id="cb52-4" data-line-number="4">  <span class="dt">filename =</span> <span class="st">&quot;figs/fig_spatial_bias.png&quot;</span></a>
-<a class="sourceLine" id="cb52-5" data-line-number="5">)</a>
-<a class="sourceLine" id="cb52-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb52-7" data-line-number="7"><span class="co"># save figure as Robject for next plot</span></a>
-<a class="sourceLine" id="cb52-8" data-line-number="8"><span class="kw">save</span>(fig_checklists_grid, <span class="dt">file =</span> <span class="st">&quot;data/fig_checklists_grid.Rds&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="examining-spatial-sampling-bias.html#cb59-1"></a><span class="co"># save as png</span></span>
+<span id="cb59-2"><a href="examining-spatial-sampling-bias.html#cb59-2"></a><span class="kw">ggsave</span>(</span>
+<span id="cb59-3"><a href="examining-spatial-sampling-bias.html#cb59-3"></a>  fig_checklists_grid,</span>
+<span id="cb59-4"><a href="examining-spatial-sampling-bias.html#cb59-4"></a>  <span class="dt">filename =</span> <span class="st">&quot;figs/fig_spatial_bias.png&quot;</span></span>
+<span id="cb59-5"><a href="examining-spatial-sampling-bias.html#cb59-5"></a>)</span>
+<span id="cb59-6"><a href="examining-spatial-sampling-bias.html#cb59-6"></a></span>
+<span id="cb59-7"><a href="examining-spatial-sampling-bias.html#cb59-7"></a><span class="co"># save figure as Robject for next plot</span></span>
+<span id="cb59-8"><a href="examining-spatial-sampling-bias.html#cb59-8"></a><span class="kw">save</span>(fig_checklists_grid, <span class="dt">file =</span> <span class="st">&quot;data/fig_checklists_grid.Rds&quot;</span>)</span></code></pre></div>
 <div class="figure">
-<img src="figs/fig_spatial_bias.png" alt="Sampling effort across the Nilgiri and Anamalai Hills, in the form of eBird checklists reported by birdwatchers, mostly takes place along roads, with the majority of checklists located &lt; 1 km from a roadway (see distribution in inset), and therefore, only about 300m, on average, from the location of another checklist. Each cell here is 2.5km x 2.5km." />
+<img src="figs/fig_spatial_bias.png" alt="" />
 <p class="caption">Sampling effort across the Nilgiri and Anamalai Hills, in the form of eBird checklists reported by birdwatchers, mostly takes place along roads, with the majority of checklists located &lt; 1 km from a roadway (see distribution in inset), and therefore, only about 300m, on average, from the location of another checklist. Each cell here is 2.5km x 2.5km.</p>
 </div>
 
@@ -409,12 +441,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="preparing-observer-expertise-scores.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="preparing-checklist-calibration-index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="checking-temporal-sampling-frequency.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -432,7 +463,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/pratikunterwegs/eBirdOccupancy/edit/master/05_spatial-sampling-bias-distRoads.Rmd",
+"link": "https://github.com/pratikunterwegs/eBirdOccupancy/edit/master/06_spatial-sampling-bias-distRoads.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -444,6 +475,10 @@ gitbook.start({
 "text": null
 },
 "download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "section"
 }

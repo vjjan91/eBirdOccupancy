@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Section 5 Preparing Checklist Calibration Index | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</title>
+  <meta name="description" content="Section 5 Preparing Checklist Calibration Index | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Section 5 Preparing Checklist Calibration Index | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  <meta name="github-repo" content="vjjan91/eBirdOccupancy" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Section 5 Preparing Checklist Calibration Index | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  
+  
+  
+
+<meta name="author" content="Vijay Ramesh" />
+<meta name="author" content="Pratik R. Gupte" />
+<meta name="author" content="Morgan W. Tingley" />
+<meta name="author" content="VV Robin" />
+<meta name="author" content="Ruth DeFries" />
+
+
+<meta name="date" content="2022-02-09" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="preparing-environmental-predictors.html"/>
+<link rel="next" href="examining-spatial-sampling-bias.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#attribution"><i class="fa fa-check"></i><b>1.1</b> Attribution</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#data-access"><i class="fa fa-check"></i><b>1.2</b> Data access</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#data-processing"><i class="fa fa-check"></i><b>1.3</b> Data processing</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#main-text-figure-1"><i class="fa fa-check"></i><b>1.4</b> Main Text Figure 1</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html"><i class="fa fa-check"></i><b>2</b> Selecting species of interest</a><ul>
+<li class="chapter" data-level="2.1" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#prepare-libraries"><i class="fa fa-check"></i><b>2.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="2.2" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#subset-species-by-geographical-confines-of-the-study-area"><i class="fa fa-check"></i><b>2.2</b> Subset species by geographical confines of the study area</a></li>
+<li class="chapter" data-level="2.3" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#subset-an-initial-list-of-terrestrial-birds-based-on-a-minimum-of-1000-detections-between-2013-2021-and-b-remove-species-that-are-often-easily-confused-with-congeners"><i class="fa fa-check"></i><b>2.3</b> Subset an initial list of terrestrial birds based on a) minimum of 1000 detections between 2013-2021 and b) remove species that are often easily confused with congeners</a></li>
+<li class="chapter" data-level="2.4" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#read-subset-of-species-following-filtering-and-removal-of-waterbirds-raptors-and-other-noctural-species"><i class="fa fa-check"></i><b>2.4</b> Read subset of species following filtering and removal of waterbirds, raptors, and other noctural species</a></li>
+<li class="chapter" data-level="2.5" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#load-raw-data-for-locations"><i class="fa fa-check"></i><b>2.5</b> Load raw data for locations</a></li>
+<li class="chapter" data-level="2.6" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#get-proportional-obs-counts-in-25km-cells"><i class="fa fa-check"></i><b>2.6</b> Get proportional obs counts in 25km cells</a></li>
+<li class="chapter" data-level="2.7" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#which-species-are-reported-sufficiently-in-checklists"><i class="fa fa-check"></i><b>2.7</b> Which species are reported sufficiently in checklists?</a></li>
+<li class="chapter" data-level="2.8" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#figure-checklist-distribution"><i class="fa fa-check"></i><b>2.8</b> Figure: Checklist distribution</a></li>
+<li class="chapter" data-level="2.9" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#prepare-the-species-list"><i class="fa fa-check"></i><b>2.9</b> Prepare the species list</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html"><i class="fa fa-check"></i><b>3</b> Preparing eBird Data</a><ul>
+<li class="chapter" data-level="3.1" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#prepare-libraries-and-data-sources"><i class="fa fa-check"></i><b>3.1</b> Prepare libraries and data sources</a></li>
+<li class="chapter" data-level="3.2" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#filter-data"><i class="fa fa-check"></i><b>3.2</b> Filter data</a></li>
+<li class="chapter" data-level="3.3" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#process-filtered-data"><i class="fa fa-check"></i><b>3.3</b> Process filtered data</a></li>
+<li class="chapter" data-level="3.4" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#spatial-filter"><i class="fa fa-check"></i><b>3.4</b> Spatial filter</a></li>
+<li class="chapter" data-level="3.5" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#handle-presence-data"><i class="fa fa-check"></i><b>3.5</b> Handle presence data</a></li>
+<li class="chapter" data-level="3.6" data-path="preparing-ebird-data.html"><a href="preparing-ebird-data.html#add-decimal-time"><i class="fa fa-check"></i><b>3.6</b> Add decimal time</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html"><i class="fa fa-check"></i><b>4</b> Preparing Environmental Predictors</a><ul>
+<li class="chapter" data-level="4.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-libraries-1"><i class="fa fa-check"></i><b>4.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="4.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-spatial-extent"><i class="fa fa-check"></i><b>4.2</b> Prepare spatial extent</a></li>
+<li class="chapter" data-level="4.3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-terrain-rasters"><i class="fa fa-check"></i><b>4.3</b> Prepare terrain rasters</a></li>
+<li class="chapter" data-level="4.4" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-chelsa-rasters"><i class="fa fa-check"></i><b>4.4</b> Prepare CHELSA rasters</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-1-mean-temperature-for-dry-season-december-to-may"><i class="fa fa-check"></i><b>4.4.1</b> Prepare Bioclim 1 (mean temperature) for dry season (December to May)</a></li>
+<li class="chapter" data-level="4.4.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-12-total-rainfall-for-dry-season"><i class="fa fa-check"></i><b>4.4.2</b> Prepare Bioclim 12 (total rainfall) for dry season</a></li>
+<li class="chapter" data-level="4.4.3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#stack-terrain-and-climate"><i class="fa fa-check"></i><b>4.4.3</b> Stack terrain and climate</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-landcover-from-10m-to-1km"><i class="fa fa-check"></i><b>4.5</b> Resample landcover from 10m to 1km</a></li>
+<li class="chapter" data-level="4.6" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-other-rasters-to-1km"><i class="fa fa-check"></i><b>4.6</b> Resample other rasters to 1km</a><ul>
+<li class="chapter" data-level="4.6.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#read-in-resampled-landcover"><i class="fa fa-check"></i><b>4.6.1</b> Read in resampled landcover</a></li>
+<li class="chapter" data-level="4.6.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#reproject-environmental-data-using-landcover-as-a-template"><i class="fa fa-check"></i><b>4.6.2</b> Reproject environmental data using landcover as a template</a></li>
+</ul></li>
+<li class="chapter" data-level="4.7" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#climate-variables-in-relation-to-elevation"><i class="fa fa-check"></i><b>4.7</b> Climate variables in relation to elevation</a><ul>
+<li class="chapter" data-level="4.7.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#load-resampled-environmental-rasters"><i class="fa fa-check"></i><b>4.7.1</b> Load resampled environmental rasters</a></li>
+</ul></li>
+<li class="chapter" data-level="4.8" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#climate-across-land-cover-types"><i class="fa fa-check"></i><b>4.8</b> Climate across land cover types</a></li>
+<li class="chapter" data-level="4.9" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#land-cover-type-in-relation-to-elevation"><i class="fa fa-check"></i><b>4.9</b> Land cover type in relation to elevation</a></li>
+<li class="chapter" data-level="4.10" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#main-text-figure-2"><i class="fa fa-check"></i><b>4.10</b> Main Text Figure 2</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="preparing-checklist-calibration-index.html"><a href="preparing-checklist-calibration-index.html"><i class="fa fa-check"></i><b>5</b> Preparing Checklist Calibration Index</a><ul>
+<li class="chapter" data-level="5.1" data-path="preparing-checklist-calibration-index.html"><a href="preparing-checklist-calibration-index.html#prepare-libraries-2"><i class="fa fa-check"></i><b>5.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="5.2" data-path="preparing-checklist-calibration-index.html"><a href="preparing-checklist-calibration-index.html#prepare-data"><i class="fa fa-check"></i><b>5.2</b> Prepare data</a></li>
+<li class="chapter" data-level="5.3" data-path="preparing-checklist-calibration-index.html"><a href="preparing-checklist-calibration-index.html#spatially-explicit-filter-on-checklists"><i class="fa fa-check"></i><b>5.3</b> Spatially explicit filter on checklists</a></li>
+<li class="chapter" data-level="5.4" data-path="preparing-checklist-calibration-index.html"><a href="preparing-checklist-calibration-index.html#prepare-species-of-interest"><i class="fa fa-check"></i><b>5.4</b> Prepare species of interest</a></li>
+<li class="chapter" data-level="5.5" data-path="preparing-checklist-calibration-index.html"><a href="preparing-checklist-calibration-index.html#prepare-checklists-for-observer-score"><i class="fa fa-check"></i><b>5.5</b> Prepare checklists for observer score</a></li>
+<li class="chapter" data-level="5.6" data-path="preparing-checklist-calibration-index.html"><a href="preparing-checklist-calibration-index.html#get-landcover"><i class="fa fa-check"></i><b>5.6</b> Get landcover</a></li>
+<li class="chapter" data-level="5.7" data-path="preparing-checklist-calibration-index.html"><a href="preparing-checklist-calibration-index.html#filter-checklist-data"><i class="fa fa-check"></i><b>5.7</b> Filter checklist data</a></li>
+<li class="chapter" data-level="5.8" data-path="preparing-checklist-calibration-index.html"><a href="preparing-checklist-calibration-index.html#model-observer-expertise"><i class="fa fa-check"></i><b>5.8</b> Model observer expertise</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html"><i class="fa fa-check"></i><b>6</b> Examining Spatial Sampling Bias</a><ul>
+<li class="chapter" data-level="6.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-libraries-3"><i class="fa fa-check"></i><b>6.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="6.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#read-checklist-data"><i class="fa fa-check"></i><b>6.2</b> Read checklist data</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#spatially-explicit-filter-on-checklists-1"><i class="fa fa-check"></i><b>6.2.1</b> Spatially explicit filter on checklists</a></li>
+<li class="chapter" data-level="6.2.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#get-background-land-for-plotting"><i class="fa fa-check"></i><b>6.2.2</b> Get background land for plotting</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-main-text-figure-3"><i class="fa fa-check"></i><b>6.3</b> Prepare Main Text Figure 3</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#prepare-histogram-of-distance-to-roads"><i class="fa fa-check"></i><b>6.3.1</b> Prepare histogram of distance to roads</a></li>
+<li class="chapter" data-level="6.3.2" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#table-distance-to-roads"><i class="fa fa-check"></i><b>6.3.2</b> Table: Distance to roads</a></li>
+<li class="chapter" data-level="6.3.3" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#distance-to-nearest-neighbouring-site"><i class="fa fa-check"></i><b>6.3.3</b> Distance to nearest neighbouring site</a></li>
+<li class="chapter" data-level="6.3.4" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#spatial-distribution-of-distances-to-neighbours"><i class="fa fa-check"></i><b>6.3.4</b> Spatial distribution of distances to neighbours</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="examining-spatial-sampling-bias.html"><a href="examining-spatial-sampling-bias.html#figure-spatial-sampling-bias"><i class="fa fa-check"></i><b>6.4</b> Figure: Spatial sampling bias</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html"><i class="fa fa-check"></i><b>7</b> Checking Temporal Sampling Frequency</a><ul>
+<li class="chapter" data-level="7.1" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#load-libraries"><i class="fa fa-check"></i><b>7.1</b> Load libraries</a></li>
+<li class="chapter" data-level="7.2" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#load-checklist-data"><i class="fa fa-check"></i><b>7.2</b> Load checklist data</a></li>
+<li class="chapter" data-level="7.3" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#get-time-differences-per-grid-cell"><i class="fa fa-check"></i><b>7.3</b> Get time differences per grid cell</a></li>
+<li class="chapter" data-level="7.4" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#time-since-previous-checklist"><i class="fa fa-check"></i><b>7.4</b> Time Since Previous Checklist</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#get-aux-data"><i class="fa fa-check"></i><b>7.4.1</b> Get aux data</a></li>
+<li class="chapter" data-level="7.4.2" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#histogram-of-lags"><i class="fa fa-check"></i><b>7.4.2</b> Histogram of lags</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#main-text-figure-3"><i class="fa fa-check"></i><b>7.5</b> Main Text Figure 3</a></li>
+<li class="chapter" data-level="7.6" data-path="checking-temporal-sampling-frequency.html"><a href="checking-temporal-sampling-frequency.html#checklists-per-month"><i class="fa fa-check"></i><b>7.6</b> Checklists per Month</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html"><i class="fa fa-check"></i><b>8</b> Adding Covariates to Checklist Data</a><ul>
+<li class="chapter" data-level="8.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#prepare-libraries-and-data"><i class="fa fa-check"></i><b>8.1</b> Prepare libraries and data</a></li>
+<li class="chapter" data-level="8.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-subsampling"><i class="fa fa-check"></i><b>8.2</b> Spatial subsampling</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#counting-presence-observation-proportion"><i class="fa fa-check"></i><b>8.2.1</b> Counting presence observation proportion</a></li>
+<li class="chapter" data-level="8.2.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#count-absences-after-spatial-thinning"><i class="fa fa-check"></i><b>8.2.2</b> Count absences after spatial thinning</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#temporal-subsampling"><i class="fa fa-check"></i><b>8.3</b> Temporal subsampling</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#count-absences-after-temporal-thinning"><i class="fa fa-check"></i><b>8.3.1</b> Count absences after temporal thinning</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#add-checklist-calibration-index"><i class="fa fa-check"></i><b>8.4</b> Add checklist calibration index</a></li>
+<li class="chapter" data-level="8.5" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#add-climatic-and-landscape-covariates"><i class="fa fa-check"></i><b>8.5</b> Add climatic and landscape covariates</a></li>
+<li class="chapter" data-level="8.6" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-buffers-around-selected-checklists"><i class="fa fa-check"></i><b>8.6</b> Spatial buffers around selected checklists</a></li>
+<li class="chapter" data-level="8.7" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#spatial-buffer-wide-covariates"><i class="fa fa-check"></i><b>8.7</b> Spatial buffer-wide covariates</a><ul>
+<li class="chapter" data-level="8.7.1" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#mean-climatic-covariates"><i class="fa fa-check"></i><b>8.7.1</b> Mean climatic covariates</a></li>
+<li class="chapter" data-level="8.7.2" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#proportions-of-land-cover-type"><i class="fa fa-check"></i><b>8.7.2</b> Proportions of land cover type</a></li>
+<li class="chapter" data-level="8.7.3" data-path="adding-covariates-to-checklist-data.html"><a href="adding-covariates-to-checklist-data.html#link-environmental-covariates-to-checklists"><i class="fa fa-check"></i><b>8.7.3</b> Link environmental covariates to checklists</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html"><i class="fa fa-check"></i><b>9</b> Modelling Species Occupancy</a><ul>
+<li class="chapter" data-level="9.0.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#load-necessary-libraries"><i class="fa fa-check"></i><b>9.0.1</b> Load necessary libraries</a></li>
+<li class="chapter" data-level="9.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#load-dataframe-and-prepare-covariates"><i class="fa fa-check"></i><b>9.1</b> Load dataframe and prepare covariates</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#handle-the-sampling-protocol"><i class="fa fa-check"></i><b>9.1.1</b> Handle the sampling protocol</a></li>
+<li class="chapter" data-level="9.1.2" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#handle-time-and-date"><i class="fa fa-check"></i><b>9.1.2</b> Handle time and date</a></li>
+<li class="chapter" data-level="9.1.3" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#scaling-covariates"><i class="fa fa-check"></i><b>9.1.3</b> Scaling covariates</a></li>
+<li class="chapter" data-level="9.1.4" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#correct-date-format"><i class="fa fa-check"></i><b>9.1.4</b> Correct date format</a></li>
+<li class="chapter" data-level="9.1.5" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#check-for-correlated-covariates"><i class="fa fa-check"></i><b>9.1.5</b> Check for correlated covariates</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#running-a-null-model"><i class="fa fa-check"></i><b>9.2</b> Running a null model</a></li>
+<li class="chapter" data-level="9.3" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#identifying-covariates-necessary-to-model-the-detection-process"><i class="fa fa-check"></i><b>9.3</b> Identifying covariates necessary to model the detection process</a></li>
+<li class="chapter" data-level="9.4" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#land-cover-and-climate"><i class="fa fa-check"></i><b>9.4</b> Land Cover and Climate</a></li>
+<li class="chapter" data-level="9.5" data-path="modelling-species-occupancy.html"><a href="modelling-species-occupancy.html#goodness-of-fit-tests"><i class="fa fa-check"></i><b>9.5</b> Goodness-of-fit tests</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html"><i class="fa fa-check"></i><b>10</b> Visualizing Occupancy Predictor Effects</a><ul>
+<li class="chapter" data-level="10.1" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-libraries-4"><i class="fa fa-check"></i><b>10.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="10.2" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#load-species-list"><i class="fa fa-check"></i><b>10.2</b> Load species list</a></li>
+<li class="chapter" data-level="10.3" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#show-aic-weight-importance"><i class="fa fa-check"></i><b>10.3</b> Show AIC weight importance</a><ul>
+<li class="chapter" data-level="10.3.1" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#read-in-aic-weight-data"><i class="fa fa-check"></i><b>10.3.1</b> Read in AIC weight data</a></li>
+<li class="chapter" data-level="10.3.2" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-cumulative-aic-weight-data"><i class="fa fa-check"></i><b>10.3.2</b> Prepare cumulative AIC weight data</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#prepare-model-coefficient-data"><i class="fa fa-check"></i><b>10.4</b> Prepare model coefficient data</a></li>
+<li class="chapter" data-level="10.5" data-path="visualizing-occupancy-predictor-effects.html"><a href="visualizing-occupancy-predictor-effects.html#get-predictor-effects"><i class="fa fa-check"></i><b>10.5</b> Get predictor effects</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><i class="fa fa-check"></i><b>11</b> Predicting species-specific occupancy as a function of significant predictors</a><ul>
+<li class="chapter" data-level="11.1" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#prepare-libraries-5"><i class="fa fa-check"></i><b>11.1</b> Prepare libraries</a></li>
+<li class="chapter" data-level="11.2" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#read-data"><i class="fa fa-check"></i><b>11.2</b> Read data</a></li>
+<li class="chapter" data-level="11.3" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#prepare-predictor-data"><i class="fa fa-check"></i><b>11.3</b> Prepare predictor data</a></li>
+<li class="chapter" data-level="11.4" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#get-predictor-responses"><i class="fa fa-check"></i><b>11.4</b> Get predictor responses</a></li>
+<li class="chapter" data-level="11.5" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#get-probability-of-occupancy"><i class="fa fa-check"></i><b>11.5</b> Get probability of occupancy</a></li>
+<li class="chapter" data-level="11.6" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#add-scaling-for-predictors"><i class="fa fa-check"></i><b>11.6</b> Add scaling for predictors</a><ul>
+<li class="chapter" data-level="11.6.1" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#figure-occupancy-predictors"><i class="fa fa-check"></i><b>11.6.1</b> Figure: Occupancy ~ predictors</a></li>
+<li class="chapter" data-level="11.6.2" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#figures-occupancy-predictors-for-all-species"><i class="fa fa-check"></i><b>11.6.2</b> Figures: Occupancy ~ predictors for all species</a></li>
+</ul></li>
+<li class="chapter" data-level="11.7" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#mapping-species-occupancy"><i class="fa fa-check"></i><b>11.7</b> Mapping species occupancy</a><ul>
+<li class="chapter" data-level="11.7.1" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#read-in-raster-layers"><i class="fa fa-check"></i><b>11.7.1</b> Read in raster layers</a></li>
+<li class="chapter" data-level="11.7.2" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#split-landcover-into-proportions-per-1km"><i class="fa fa-check"></i><b>11.7.2</b> Split landcover into proportions per 1km</a></li>
+<li class="chapter" data-level="11.7.3" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#prepare-climatic-layers"><i class="fa fa-check"></i><b>11.7.3</b> Prepare climatic layers</a></li>
+<li class="chapter" data-level="11.7.4" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#mask-by-study-area"><i class="fa fa-check"></i><b>11.7.4</b> Mask by study area</a></li>
+<li class="chapter" data-level="11.7.5" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#plot-full-bounds-of-landscape-variables"><i class="fa fa-check"></i><b>11.7.5</b> Plot full bounds of landscape variables</a></li>
+<li class="chapter" data-level="11.7.6" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#prepare-soi-predictors"><i class="fa fa-check"></i><b>11.7.6</b> Prepare soi predictors</a></li>
+<li class="chapter" data-level="11.7.7" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#prepare-species-occupancy-for-soi"><i class="fa fa-check"></i><b>11.7.7</b> Prepare species occupancy for SOI</a></li>
+<li class="chapter" data-level="11.7.8" data-path="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#prepare-species-occupancy-for-all-species"><i class="fa fa-check"></i><b>11.7.8</b> Prepare species occupancy for all species</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>12</b> References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Source code for <em>Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</em></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="preparing-checklist-calibration-index" class="section level1">
+<h1><span class="header-section-number">Section 5</span> Preparing Checklist Calibration Index</h1>
+<p>Differences in local avifaunal expertise among citizen scientists can lead to biased species detection when compared with data collected by a consistent set of trained observers <span class="citation">(van Strien, van Swaay, and Termaat <a href="#ref-vanstrien2013" role="doc-biblioref">2013</a>)</span>. Including observer expertise as a detection covariate in occupancy models using eBird data can help account for this variation <span class="citation">(Johnston et al. <a href="#ref-johnston2018" role="doc-biblioref">2018</a>)</span>. Observer-specific expertise in local avifauna was calculated following <span class="citation">(Kelling et al. <a href="#ref-kelling2015a" role="doc-biblioref">2015</a>)</span> as the normalized predicted number of species reported by an observer after 60 minutes of sampling across the most common land cover type within the study area. This score was calculated by examining checklists from anonymized observers across the study area. We modified Kelling et al. (2015) formulation by including only observations of the 82 species of interest in our calculations. An observer with a higher number of species of interest reported within 60 minutes would have a higher observer-specific expertise score, with respect to the study area.</p>
+<div id="prepare-libraries-2" class="section level2">
+<h2><span class="header-section-number">5.1</span> Prepare libraries</h2>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="preparing-checklist-calibration-index.html#cb39-1"></a></span>
+<span id="cb39-2"><a href="preparing-checklist-calibration-index.html#cb39-2"></a><span class="co"># load libs</span></span>
+<span id="cb39-3"><a href="preparing-checklist-calibration-index.html#cb39-3"></a><span class="kw">library</span>(data.table)</span>
+<span id="cb39-4"><a href="preparing-checklist-calibration-index.html#cb39-4"></a><span class="kw">library</span>(readxl)</span>
+<span id="cb39-5"><a href="preparing-checklist-calibration-index.html#cb39-5"></a><span class="kw">library</span>(magrittr)</span>
+<span id="cb39-6"><a href="preparing-checklist-calibration-index.html#cb39-6"></a><span class="kw">library</span>(stringr)</span>
+<span id="cb39-7"><a href="preparing-checklist-calibration-index.html#cb39-7"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb39-8"><a href="preparing-checklist-calibration-index.html#cb39-8"></a><span class="kw">library</span>(tidyr)</span>
+<span id="cb39-9"><a href="preparing-checklist-calibration-index.html#cb39-9"></a><span class="kw">library</span>(auk)</span>
+<span id="cb39-10"><a href="preparing-checklist-calibration-index.html#cb39-10"></a></span>
+<span id="cb39-11"><a href="preparing-checklist-calibration-index.html#cb39-11"></a><span class="co"># get decimal time function</span></span>
+<span id="cb39-12"><a href="preparing-checklist-calibration-index.html#cb39-12"></a><span class="kw">library</span>(lubridate)</span>
+<span id="cb39-13"><a href="preparing-checklist-calibration-index.html#cb39-13"></a>time_to_decimal &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
+<span id="cb39-14"><a href="preparing-checklist-calibration-index.html#cb39-14"></a>  x &lt;-<span class="st"> </span>lubridate<span class="op">::</span><span class="kw">hms</span>(x, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb39-15"><a href="preparing-checklist-calibration-index.html#cb39-15"></a>  lubridate<span class="op">::</span><span class="kw">hour</span>(x) <span class="op">+</span><span class="st"> </span>lubridate<span class="op">::</span><span class="kw">minute</span>(x) <span class="op">/</span><span class="st"> </span><span class="dv">60</span> <span class="op">+</span><span class="st"> </span>lubridate<span class="op">::</span><span class="kw">second</span>(x) <span class="op">/</span><span class="st"> </span><span class="dv">3600</span></span>
+<span id="cb39-16"><a href="preparing-checklist-calibration-index.html#cb39-16"></a>}</span></code></pre></div>
+</div>
+<div id="prepare-data" class="section level2">
+<h2><span class="header-section-number">5.2</span> Prepare data</h2>
+<p>Here, we go through the data preparation process again because we might want to assess observer expertise over a larger area than the study site.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="preparing-checklist-calibration-index.html#cb40-1"></a><span class="co"># Read in shapefile of study area to subset by bounding box</span></span>
+<span id="cb40-2"><a href="preparing-checklist-calibration-index.html#cb40-2"></a><span class="kw">library</span>(sf)</span>
+<span id="cb40-3"><a href="preparing-checklist-calibration-index.html#cb40-3"></a>wg &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb40-4"><a href="preparing-checklist-calibration-index.html#cb40-4"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</span>
+<span id="cb40-5"><a href="preparing-checklist-calibration-index.html#cb40-5"></a></span>
+<span id="cb40-6"><a href="preparing-checklist-calibration-index.html#cb40-6"></a><span class="co"># set file paths for auk functions</span></span>
+<span id="cb40-7"><a href="preparing-checklist-calibration-index.html#cb40-7"></a>f_in_ebd &lt;-<span class="st"> </span><span class="kw">file.path</span>(<span class="st">&quot;data/01_ebird-filtered-EBD-westernGhats.txt&quot;</span>)</span>
+<span id="cb40-8"><a href="preparing-checklist-calibration-index.html#cb40-8"></a>f_in_sampling &lt;-<span class="st"> </span><span class="kw">file.path</span>(<span class="st">&quot;data/01_ebird-filtered-sampling-westernGhats.txt&quot;</span>)</span>
+<span id="cb40-9"><a href="preparing-checklist-calibration-index.html#cb40-9"></a></span>
+<span id="cb40-10"><a href="preparing-checklist-calibration-index.html#cb40-10"></a><span class="co"># run filters using auk packages</span></span>
+<span id="cb40-11"><a href="preparing-checklist-calibration-index.html#cb40-11"></a>ebd_filters &lt;-<span class="st"> </span><span class="kw">auk_ebd</span>(f_in_ebd, f_in_sampling) <span class="op">%&gt;%</span></span>
+<span id="cb40-12"><a href="preparing-checklist-calibration-index.html#cb40-12"></a><span class="st">  </span><span class="kw">auk_country</span>(<span class="dt">country =</span> <span class="st">&quot;IN&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb40-13"><a href="preparing-checklist-calibration-index.html#cb40-13"></a><span class="st">  </span><span class="kw">auk_state</span>(<span class="kw">c</span>(<span class="st">&quot;IN-KL&quot;</span>, <span class="st">&quot;IN-TN&quot;</span>, <span class="st">&quot;IN-KA&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb40-14"><a href="preparing-checklist-calibration-index.html#cb40-14"></a><span class="st">  </span><span class="co"># Restricting geography to TamilNadu, Kerala &amp; Karnataka</span></span>
+<span id="cb40-15"><a href="preparing-checklist-calibration-index.html#cb40-15"></a><span class="st">  </span><span class="kw">auk_date</span>(<span class="kw">c</span>(<span class="st">&quot;2013-01-01&quot;</span>, <span class="st">&quot;2021-05-31&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb40-16"><a href="preparing-checklist-calibration-index.html#cb40-16"></a><span class="st">  </span><span class="kw">auk_complete</span>()</span>
+<span id="cb40-17"><a href="preparing-checklist-calibration-index.html#cb40-17"></a></span>
+<span id="cb40-18"><a href="preparing-checklist-calibration-index.html#cb40-18"></a><span class="co"># check filters</span></span>
+<span id="cb40-19"><a href="preparing-checklist-calibration-index.html#cb40-19"></a>ebd_filters</span>
+<span id="cb40-20"><a href="preparing-checklist-calibration-index.html#cb40-20"></a></span>
+<span id="cb40-21"><a href="preparing-checklist-calibration-index.html#cb40-21"></a><span class="co"># specify output location and perform filter</span></span>
+<span id="cb40-22"><a href="preparing-checklist-calibration-index.html#cb40-22"></a>f_out_ebd &lt;-<span class="st"> &quot;data/ebird_for_expertise.txt&quot;</span></span>
+<span id="cb40-23"><a href="preparing-checklist-calibration-index.html#cb40-23"></a>f_out_sampling &lt;-<span class="st"> &quot;data/ebird_sampling_for_expertise.txt&quot;</span></span>
+<span id="cb40-24"><a href="preparing-checklist-calibration-index.html#cb40-24"></a></span>
+<span id="cb40-25"><a href="preparing-checklist-calibration-index.html#cb40-25"></a>ebd_filtered &lt;-<span class="st"> </span><span class="kw">auk_filter</span>(ebd_filters,</span>
+<span id="cb40-26"><a href="preparing-checklist-calibration-index.html#cb40-26"></a>  <span class="dt">file =</span> f_out_ebd,</span>
+<span id="cb40-27"><a href="preparing-checklist-calibration-index.html#cb40-27"></a>  <span class="dt">file_sampling =</span> f_out_sampling, <span class="dt">overwrite =</span> <span class="ot">TRUE</span></span>
+<span id="cb40-28"><a href="preparing-checklist-calibration-index.html#cb40-28"></a>)</span></code></pre></div>
+<p>Load in the filtered data and columns of interest.</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="preparing-checklist-calibration-index.html#cb41-1"></a><span class="co">## Process filtered data</span></span>
+<span id="cb41-2"><a href="preparing-checklist-calibration-index.html#cb41-2"></a><span class="co"># read in the data</span></span>
+<span id="cb41-3"><a href="preparing-checklist-calibration-index.html#cb41-3"></a>ebd &lt;-<span class="st"> </span><span class="kw">fread</span>(f_out_ebd)</span>
+<span id="cb41-4"><a href="preparing-checklist-calibration-index.html#cb41-4"></a>names &lt;-<span class="st"> </span><span class="kw">names</span>(ebd) <span class="op">%&gt;%</span></span>
+<span id="cb41-5"><a href="preparing-checklist-calibration-index.html#cb41-5"></a><span class="st">  </span>stringr<span class="op">::</span><span class="kw">str_to_lower</span>() <span class="op">%&gt;%</span></span>
+<span id="cb41-6"><a href="preparing-checklist-calibration-index.html#cb41-6"></a><span class="st">  </span>stringr<span class="op">::</span><span class="kw">str_replace_all</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;_&quot;</span>)</span>
+<span id="cb41-7"><a href="preparing-checklist-calibration-index.html#cb41-7"></a></span>
+<span id="cb41-8"><a href="preparing-checklist-calibration-index.html#cb41-8"></a><span class="kw">setnames</span>(ebd, names)</span>
+<span id="cb41-9"><a href="preparing-checklist-calibration-index.html#cb41-9"></a><span class="co"># choose columns of interest</span></span>
+<span id="cb41-10"><a href="preparing-checklist-calibration-index.html#cb41-10"></a>columnsOfInterest &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
+<span id="cb41-11"><a href="preparing-checklist-calibration-index.html#cb41-11"></a>  <span class="st">&quot;global_unique_identifier&quot;</span>, <span class="st">&quot;scientific_name&quot;</span>, <span class="st">&quot;observation_count&quot;</span>,</span>
+<span id="cb41-12"><a href="preparing-checklist-calibration-index.html#cb41-12"></a>  <span class="st">&quot;locality&quot;</span>, <span class="st">&quot;locality_id&quot;</span>, <span class="st">&quot;locality_type&quot;</span>, <span class="st">&quot;latitude&quot;</span>,</span>
+<span id="cb41-13"><a href="preparing-checklist-calibration-index.html#cb41-13"></a>  <span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;observation_date&quot;</span>,</span>
+<span id="cb41-14"><a href="preparing-checklist-calibration-index.html#cb41-14"></a>  <span class="st">&quot;time_observations_started&quot;</span>, <span class="st">&quot;observer_id&quot;</span>,</span>
+<span id="cb41-15"><a href="preparing-checklist-calibration-index.html#cb41-15"></a>  <span class="st">&quot;sampling_event_identifier&quot;</span>, <span class="st">&quot;protocol_type&quot;</span>,</span>
+<span id="cb41-16"><a href="preparing-checklist-calibration-index.html#cb41-16"></a>  <span class="st">&quot;duration_minutes&quot;</span>, <span class="st">&quot;effort_distance_km&quot;</span>, <span class="st">&quot;effort_area_ha&quot;</span>,</span>
+<span id="cb41-17"><a href="preparing-checklist-calibration-index.html#cb41-17"></a>  <span class="st">&quot;number_observers&quot;</span>, <span class="st">&quot;all_species_reported&quot;</span>, <span class="st">&quot;reviewed&quot;</span></span>
+<span id="cb41-18"><a href="preparing-checklist-calibration-index.html#cb41-18"></a>)</span>
+<span id="cb41-19"><a href="preparing-checklist-calibration-index.html#cb41-19"></a></span>
+<span id="cb41-20"><a href="preparing-checklist-calibration-index.html#cb41-20"></a>ebd &lt;-<span class="st"> </span><span class="kw">setDF</span>(ebd) <span class="op">%&gt;%</span></span>
+<span id="cb41-21"><a href="preparing-checklist-calibration-index.html#cb41-21"></a><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span></span>
+<span id="cb41-22"><a href="preparing-checklist-calibration-index.html#cb41-22"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="kw">one_of</span>(columnsOfInterest))</span>
+<span id="cb41-23"><a href="preparing-checklist-calibration-index.html#cb41-23"></a></span>
+<span id="cb41-24"><a href="preparing-checklist-calibration-index.html#cb41-24"></a><span class="kw">setDT</span>(ebd)</span>
+<span id="cb41-25"><a href="preparing-checklist-calibration-index.html#cb41-25"></a></span>
+<span id="cb41-26"><a href="preparing-checklist-calibration-index.html#cb41-26"></a><span class="co"># remove checklists or seis with more than 10 obervers</span></span>
+<span id="cb41-27"><a href="preparing-checklist-calibration-index.html#cb41-27"></a>ebd &lt;-<span class="st"> </span><span class="kw">filter</span>(ebd, number_observers <span class="op">&lt;=</span><span class="st"> </span><span class="dv">10</span>)</span>
+<span id="cb41-28"><a href="preparing-checklist-calibration-index.html#cb41-28"></a></span>
+<span id="cb41-29"><a href="preparing-checklist-calibration-index.html#cb41-29"></a><span class="co"># keep only checklists between 5AM and 7PM</span></span>
+<span id="cb41-30"><a href="preparing-checklist-calibration-index.html#cb41-30"></a>ebd &lt;-<span class="st"> </span><span class="kw">filter</span>(ebd, time_observations_started <span class="op">&gt;=</span><span class="st"> &quot;05:00:00&quot;</span> <span class="op">&amp;</span><span class="st"> </span>time_observations_started <span class="op">&lt;=</span><span class="st"> &quot;19:00:00&quot;</span>)</span>
+<span id="cb41-31"><a href="preparing-checklist-calibration-index.html#cb41-31"></a></span>
+<span id="cb41-32"><a href="preparing-checklist-calibration-index.html#cb41-32"></a><span class="co"># keep only checklists between December 1st and May 31st</span></span>
+<span id="cb41-33"><a href="preparing-checklist-calibration-index.html#cb41-33"></a>ebd &lt;-<span class="st"> </span><span class="kw">filter</span>(ebd, <span class="kw">month</span>(observation_date) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">12</span>))</span></code></pre></div>
+</div>
+<div id="spatially-explicit-filter-on-checklists" class="section level2">
+<h2><span class="header-section-number">5.3</span> Spatially explicit filter on checklists</h2>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="preparing-checklist-calibration-index.html#cb42-1"></a><span class="co"># get checklist locations</span></span>
+<span id="cb42-2"><a href="preparing-checklist-calibration-index.html#cb42-2"></a>ebd_locs &lt;-<span class="st"> </span>ebd[, .(longitude, latitude)]</span>
+<span id="cb42-3"><a href="preparing-checklist-calibration-index.html#cb42-3"></a>ebd_locs &lt;-<span class="st"> </span><span class="kw">setDF</span>(ebd_locs) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>()</span>
+<span id="cb42-4"><a href="preparing-checklist-calibration-index.html#cb42-4"></a>ebd_locs &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(ebd_locs,</span>
+<span id="cb42-5"><a href="preparing-checklist-calibration-index.html#cb42-5"></a>  <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>)</span>
+<span id="cb42-6"><a href="preparing-checklist-calibration-index.html#cb42-6"></a>) <span class="op">%&gt;%</span></span>
+<span id="cb42-7"><a href="preparing-checklist-calibration-index.html#cb42-7"></a><span class="st">  `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span></span>
+<span id="cb42-8"><a href="preparing-checklist-calibration-index.html#cb42-8"></a><span class="st">  </span><span class="kw">bind_cols</span>(<span class="kw">as_tibble</span>(<span class="kw">st_coordinates</span>(.))) <span class="op">%&gt;%</span></span>
+<span id="cb42-9"><a href="preparing-checklist-calibration-index.html#cb42-9"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>) <span class="op">%&gt;%</span></span>
+<span id="cb42-10"><a href="preparing-checklist-calibration-index.html#cb42-10"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(.))</span>
+<span id="cb42-11"><a href="preparing-checklist-calibration-index.html#cb42-11"></a></span>
+<span id="cb42-12"><a href="preparing-checklist-calibration-index.html#cb42-12"></a><span class="co"># check whether to include</span></span>
+<span id="cb42-13"><a href="preparing-checklist-calibration-index.html#cb42-13"></a>to_keep &lt;-<span class="st"> </span><span class="kw">unlist</span>(<span class="kw">st_contains</span>(wg, ebd_locs))</span>
+<span id="cb42-14"><a href="preparing-checklist-calibration-index.html#cb42-14"></a></span>
+<span id="cb42-15"><a href="preparing-checklist-calibration-index.html#cb42-15"></a><span class="co"># filter locs</span></span>
+<span id="cb42-16"><a href="preparing-checklist-calibration-index.html#cb42-16"></a>ebd_locs &lt;-<span class="st"> </span><span class="kw">filter</span>(ebd_locs, id <span class="op">%in%</span><span class="st"> </span>to_keep) <span class="op">%&gt;%</span></span>
+<span id="cb42-17"><a href="preparing-checklist-calibration-index.html#cb42-17"></a><span class="st">  </span><span class="kw">bind_cols</span>(<span class="kw">as_tibble</span>(<span class="kw">st_coordinates</span>(<span class="kw">st_as_sf</span>(.)))) <span class="op">%&gt;%</span></span>
+<span id="cb42-18"><a href="preparing-checklist-calibration-index.html#cb42-18"></a><span class="st">  </span><span class="kw">st_drop_geometry</span>()</span>
+<span id="cb42-19"><a href="preparing-checklist-calibration-index.html#cb42-19"></a><span class="kw">names</span>(ebd_locs) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;longitudeWGS&quot;</span>, <span class="st">&quot;latitudeWGS&quot;</span>, <span class="st">&quot;id&quot;</span>, <span class="st">&quot;longitudeUTM&quot;</span>, <span class="st">&quot;latitudeUTM&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="preparing-checklist-calibration-index.html#cb43-1"></a>ebd &lt;-<span class="st"> </span>ebd[longitude <span class="op">%in%</span><span class="st"> </span>ebd_locs<span class="op">$</span>longitudeWGS <span class="op">&amp;</span><span class="st"> </span>latitude <span class="op">%in%</span><span class="st"> </span>ebd_locs<span class="op">$</span>latitudeWGS, ]</span></code></pre></div>
+</div>
+<div id="prepare-species-of-interest" class="section level2">
+<h2><span class="header-section-number">5.4</span> Prepare species of interest</h2>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="preparing-checklist-calibration-index.html#cb44-1"></a><span class="co"># read in species list</span></span>
+<span id="cb44-2"><a href="preparing-checklist-calibration-index.html#cb44-2"></a>specieslist &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/species_list.csv&quot;</span>)</span>
+<span id="cb44-3"><a href="preparing-checklist-calibration-index.html#cb44-3"></a></span>
+<span id="cb44-4"><a href="preparing-checklist-calibration-index.html#cb44-4"></a><span class="co"># set species of interest</span></span>
+<span id="cb44-5"><a href="preparing-checklist-calibration-index.html#cb44-5"></a>soi &lt;-<span class="st"> </span>specieslist<span class="op">$</span>scientific_name</span>
+<span id="cb44-6"><a href="preparing-checklist-calibration-index.html#cb44-6"></a></span>
+<span id="cb44-7"><a href="preparing-checklist-calibration-index.html#cb44-7"></a>ebdSpSum &lt;-<span class="st"> </span>ebd[, .(</span>
+<span id="cb44-8"><a href="preparing-checklist-calibration-index.html#cb44-8"></a>  <span class="dt">nSp =</span> .N,</span>
+<span id="cb44-9"><a href="preparing-checklist-calibration-index.html#cb44-9"></a>  <span class="dt">totSoiSeen =</span> <span class="kw">length</span>(<span class="kw">intersect</span>(scientific_name, soi))</span>
+<span id="cb44-10"><a href="preparing-checklist-calibration-index.html#cb44-10"></a>),</span>
+<span id="cb44-11"><a href="preparing-checklist-calibration-index.html#cb44-11"></a>by =<span class="st"> </span><span class="kw">list</span>(sampling_event_identifier)</span>
+<span id="cb44-12"><a href="preparing-checklist-calibration-index.html#cb44-12"></a>]</span>
+<span id="cb44-13"><a href="preparing-checklist-calibration-index.html#cb44-13"></a></span>
+<span id="cb44-14"><a href="preparing-checklist-calibration-index.html#cb44-14"></a><span class="co"># write to file and link with checklist id later</span></span>
+<span id="cb44-15"><a href="preparing-checklist-calibration-index.html#cb44-15"></a><span class="kw">fwrite</span>(ebdSpSum, <span class="dt">file =</span> <span class="st">&quot;data/03_data-nspp-per-chk.csv&quot;</span>)</span></code></pre></div>
+</div>
+<div id="prepare-checklists-for-observer-score" class="section level2">
+<h2><span class="header-section-number">5.5</span> Prepare checklists for observer score</h2>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="preparing-checklist-calibration-index.html#cb45-1"></a><span class="co"># 1. add new columns of decimal time and julian date</span></span>
+<span id="cb45-2"><a href="preparing-checklist-calibration-index.html#cb45-2"></a>ebd[, <span class="st">`</span><span class="dt">:=</span><span class="st">`</span>(</span>
+<span id="cb45-3"><a href="preparing-checklist-calibration-index.html#cb45-3"></a>  <span class="dt">decimalTime =</span> <span class="kw">time_to_decimal</span>(time_observations_started),</span>
+<span id="cb45-4"><a href="preparing-checklist-calibration-index.html#cb45-4"></a>  <span class="dt">julianDate =</span> <span class="kw">yday</span>(<span class="kw">as.POSIXct</span>(observation_date))</span>
+<span id="cb45-5"><a href="preparing-checklist-calibration-index.html#cb45-5"></a>)]</span>
+<span id="cb45-6"><a href="preparing-checklist-calibration-index.html#cb45-6"></a></span>
+<span id="cb45-7"><a href="preparing-checklist-calibration-index.html#cb45-7"></a>ebdEffChk &lt;-<span class="st"> </span><span class="kw">setDF</span>(ebd) <span class="op">%&gt;%</span></span>
+<span id="cb45-8"><a href="preparing-checklist-calibration-index.html#cb45-8"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">year =</span> <span class="kw">year</span>(observation_date)) <span class="op">%&gt;%</span></span>
+<span id="cb45-9"><a href="preparing-checklist-calibration-index.html#cb45-9"></a><span class="st">  </span><span class="kw">distinct</span>(</span>
+<span id="cb45-10"><a href="preparing-checklist-calibration-index.html#cb45-10"></a>    sampling_event_identifier, observer_id,</span>
+<span id="cb45-11"><a href="preparing-checklist-calibration-index.html#cb45-11"></a>    year,</span>
+<span id="cb45-12"><a href="preparing-checklist-calibration-index.html#cb45-12"></a>    duration_minutes, effort_distance_km, effort_area_ha,</span>
+<span id="cb45-13"><a href="preparing-checklist-calibration-index.html#cb45-13"></a>    longitude, latitude,</span>
+<span id="cb45-14"><a href="preparing-checklist-calibration-index.html#cb45-14"></a>    locality, locality_id,</span>
+<span id="cb45-15"><a href="preparing-checklist-calibration-index.html#cb45-15"></a>    decimalTime, julianDate, number_observers</span>
+<span id="cb45-16"><a href="preparing-checklist-calibration-index.html#cb45-16"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb45-17"><a href="preparing-checklist-calibration-index.html#cb45-17"></a><span class="st">  </span><span class="co"># drop rows with NAs in cols used in the model</span></span>
+<span id="cb45-18"><a href="preparing-checklist-calibration-index.html#cb45-18"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">drop_na</span>(</span>
+<span id="cb45-19"><a href="preparing-checklist-calibration-index.html#cb45-19"></a>    sampling_event_identifier, observer_id,</span>
+<span id="cb45-20"><a href="preparing-checklist-calibration-index.html#cb45-20"></a>    duration_minutes, decimalTime, julianDate</span>
+<span id="cb45-21"><a href="preparing-checklist-calibration-index.html#cb45-21"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb45-22"><a href="preparing-checklist-calibration-index.html#cb45-22"></a><span class="st">  </span><span class="co"># drop years below 2013</span></span>
+<span id="cb45-23"><a href="preparing-checklist-calibration-index.html#cb45-23"></a><span class="st">  </span><span class="kw">filter</span>(year <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2013</span>)</span>
+<span id="cb45-24"><a href="preparing-checklist-calibration-index.html#cb45-24"></a></span>
+<span id="cb45-25"><a href="preparing-checklist-calibration-index.html#cb45-25"></a><span class="co"># 3. join to covariates and remove large groups (&gt; 10)</span></span>
+<span id="cb45-26"><a href="preparing-checklist-calibration-index.html#cb45-26"></a>ebdChkSummary &lt;-<span class="st"> </span><span class="kw">inner_join</span>(ebdEffChk, ebdSpSum)</span>
+<span id="cb45-27"><a href="preparing-checklist-calibration-index.html#cb45-27"></a></span>
+<span id="cb45-28"><a href="preparing-checklist-calibration-index.html#cb45-28"></a><span class="co"># remove ebird data</span></span>
+<span id="cb45-29"><a href="preparing-checklist-calibration-index.html#cb45-29"></a><span class="kw">rm</span>(ebd)</span>
+<span id="cb45-30"><a href="preparing-checklist-calibration-index.html#cb45-30"></a><span class="kw">gc</span>()</span></code></pre></div>
+</div>
+<div id="get-landcover" class="section level2">
+<h2><span class="header-section-number">5.6</span> Get landcover</h2>
+<p>Read in land cover type data resampled at 1km resolution.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="preparing-checklist-calibration-index.html#cb46-1"></a><span class="co"># read in 1km landcover and set 0 to NA</span></span>
+<span id="cb46-2"><a href="preparing-checklist-calibration-index.html#cb46-2"></a><span class="kw">library</span>(raster)</span>
+<span id="cb46-3"><a href="preparing-checklist-calibration-index.html#cb46-3"></a>landcover &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw">raster</span>(<span class="st">&quot;data/landUseClassification/lc_01000m.tif&quot;</span>)</span>
+<span id="cb46-4"><a href="preparing-checklist-calibration-index.html#cb46-4"></a>landcover[landcover <span class="op">==</span><span class="st"> </span><span class="dv">0</span>] &lt;-<span class="st"> </span><span class="ot">NA</span></span>
+<span id="cb46-5"><a href="preparing-checklist-calibration-index.html#cb46-5"></a></span>
+<span id="cb46-6"><a href="preparing-checklist-calibration-index.html#cb46-6"></a><span class="co"># get locs in utm coords</span></span>
+<span id="cb46-7"><a href="preparing-checklist-calibration-index.html#cb46-7"></a>locs &lt;-<span class="st"> </span><span class="kw">distinct</span>(</span>
+<span id="cb46-8"><a href="preparing-checklist-calibration-index.html#cb46-8"></a>  ebdChkSummary, sampling_event_identifier, longitude, latitude,</span>
+<span id="cb46-9"><a href="preparing-checklist-calibration-index.html#cb46-9"></a>  locality, locality_id</span>
+<span id="cb46-10"><a href="preparing-checklist-calibration-index.html#cb46-10"></a>)</span>
+<span id="cb46-11"><a href="preparing-checklist-calibration-index.html#cb46-11"></a>locs &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(locs, <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb46-12"><a href="preparing-checklist-calibration-index.html#cb46-12"></a><span class="st">  `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span></span>
+<span id="cb46-13"><a href="preparing-checklist-calibration-index.html#cb46-13"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>) <span class="op">%&gt;%</span></span>
+<span id="cb46-14"><a href="preparing-checklist-calibration-index.html#cb46-14"></a><span class="st">  </span><span class="kw">st_coordinates</span>()</span>
+<span id="cb46-15"><a href="preparing-checklist-calibration-index.html#cb46-15"></a></span>
+<span id="cb46-16"><a href="preparing-checklist-calibration-index.html#cb46-16"></a><span class="co"># get for unique points</span></span>
+<span id="cb46-17"><a href="preparing-checklist-calibration-index.html#cb46-17"></a>landcoverVec &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw">extract</span>(</span>
+<span id="cb46-18"><a href="preparing-checklist-calibration-index.html#cb46-18"></a>  <span class="dt">x =</span> landcover,</span>
+<span id="cb46-19"><a href="preparing-checklist-calibration-index.html#cb46-19"></a>  <span class="dt">y =</span> locs</span>
+<span id="cb46-20"><a href="preparing-checklist-calibration-index.html#cb46-20"></a>)</span>
+<span id="cb46-21"><a href="preparing-checklist-calibration-index.html#cb46-21"></a></span>
+<span id="cb46-22"><a href="preparing-checklist-calibration-index.html#cb46-22"></a><span class="co"># assign to df and overwrite</span></span>
+<span id="cb46-23"><a href="preparing-checklist-calibration-index.html#cb46-23"></a><span class="kw">setDT</span>(ebdChkSummary)[, landcover <span class="op">:</span><span class="er">=</span><span class="st"> </span>landcoverVec]</span></code></pre></div>
+</div>
+<div id="filter-checklist-data" class="section level2">
+<h2><span class="header-section-number">5.7</span> Filter checklist data</h2>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="preparing-checklist-calibration-index.html#cb47-1"></a><span class="co"># change names for easy handling</span></span>
+<span id="cb47-2"><a href="preparing-checklist-calibration-index.html#cb47-2"></a><span class="kw">setnames</span>(ebdChkSummary, <span class="kw">c</span>(</span>
+<span id="cb47-3"><a href="preparing-checklist-calibration-index.html#cb47-3"></a>  <span class="st">&quot;locality&quot;</span>,</span>
+<span id="cb47-4"><a href="preparing-checklist-calibration-index.html#cb47-4"></a>  <span class="st">&quot;locality_id&quot;</span>, <span class="st">&quot;latitude&quot;</span>, <span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;observer&quot;</span>, <span class="st">&quot;sei&quot;</span>,</span>
+<span id="cb47-5"><a href="preparing-checklist-calibration-index.html#cb47-5"></a>  <span class="st">&quot;duration&quot;</span>, <span class="st">&quot;distance&quot;</span>, <span class="st">&quot;area&quot;</span>, <span class="st">&quot;nObs&quot;</span>, <span class="st">&quot;decimalTime&quot;</span>, <span class="st">&quot;julianDate&quot;</span>,</span>
+<span id="cb47-6"><a href="preparing-checklist-calibration-index.html#cb47-6"></a>  <span class="st">&quot;year&quot;</span>, <span class="st">&quot;nSp&quot;</span>, <span class="st">&quot;nSoi&quot;</span>, <span class="st">&quot;landcover&quot;</span></span>
+<span id="cb47-7"><a href="preparing-checklist-calibration-index.html#cb47-7"></a>))</span>
+<span id="cb47-8"><a href="preparing-checklist-calibration-index.html#cb47-8"></a></span>
+<span id="cb47-9"><a href="preparing-checklist-calibration-index.html#cb47-9"></a><span class="co"># count data points per observer</span></span>
+<span id="cb47-10"><a href="preparing-checklist-calibration-index.html#cb47-10"></a>obscount &lt;-<span class="st"> </span><span class="kw">count</span>(ebdChkSummary, observer) <span class="op">%&gt;%</span></span>
+<span id="cb47-11"><a href="preparing-checklist-calibration-index.html#cb47-11"></a><span class="st">  </span><span class="kw">filter</span>(n <span class="op">&gt;=</span><span class="st"> </span><span class="dv">3</span>)</span>
+<span id="cb47-12"><a href="preparing-checklist-calibration-index.html#cb47-12"></a></span>
+<span id="cb47-13"><a href="preparing-checklist-calibration-index.html#cb47-13"></a><span class="co"># make factor variables and remove obs not in obscount</span></span>
+<span id="cb47-14"><a href="preparing-checklist-calibration-index.html#cb47-14"></a><span class="co"># also remove 0 durations</span></span>
+<span id="cb47-15"><a href="preparing-checklist-calibration-index.html#cb47-15"></a>ebdChkSummary &lt;-<span class="st"> </span>ebdChkSummary <span class="op">%&gt;%</span></span>
+<span id="cb47-16"><a href="preparing-checklist-calibration-index.html#cb47-16"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb47-17"><a href="preparing-checklist-calibration-index.html#cb47-17"></a>    <span class="dt">distance =</span> <span class="kw">ifelse</span>(<span class="kw">is.na</span>(distance), <span class="dv">0</span>, distance),</span>
+<span id="cb47-18"><a href="preparing-checklist-calibration-index.html#cb47-18"></a>    <span class="dt">duration =</span> <span class="kw">if_else</span>(<span class="kw">is.na</span>(duration), <span class="fl">0.0</span>, <span class="kw">as.double</span>(duration))</span>
+<span id="cb47-19"><a href="preparing-checklist-calibration-index.html#cb47-19"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb47-20"><a href="preparing-checklist-calibration-index.html#cb47-20"></a><span class="st">  </span><span class="kw">filter</span>(</span>
+<span id="cb47-21"><a href="preparing-checklist-calibration-index.html#cb47-21"></a>    observer <span class="op">%in%</span><span class="st"> </span>obscount<span class="op">$</span>observer,</span>
+<span id="cb47-22"><a href="preparing-checklist-calibration-index.html#cb47-22"></a>    duration <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>,</span>
+<span id="cb47-23"><a href="preparing-checklist-calibration-index.html#cb47-23"></a>    duration <span class="op">&lt;=</span><span class="st"> </span><span class="dv">300</span>,</span>
+<span id="cb47-24"><a href="preparing-checklist-calibration-index.html#cb47-24"></a>    nSoi <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>,</span>
+<span id="cb47-25"><a href="preparing-checklist-calibration-index.html#cb47-25"></a>    distance <span class="op">&lt;=</span><span class="st"> </span><span class="dv">5</span>,</span>
+<span id="cb47-26"><a href="preparing-checklist-calibration-index.html#cb47-26"></a>    <span class="op">!</span><span class="kw">is.na</span>(nSoi)</span>
+<span id="cb47-27"><a href="preparing-checklist-calibration-index.html#cb47-27"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb47-28"><a href="preparing-checklist-calibration-index.html#cb47-28"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb47-29"><a href="preparing-checklist-calibration-index.html#cb47-29"></a>    <span class="dt">landcover =</span> <span class="kw">as.factor</span>(landcover),</span>
+<span id="cb47-30"><a href="preparing-checklist-calibration-index.html#cb47-30"></a>    <span class="dt">observer =</span> <span class="kw">as.factor</span>(observer)</span>
+<span id="cb47-31"><a href="preparing-checklist-calibration-index.html#cb47-31"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb47-32"><a href="preparing-checklist-calibration-index.html#cb47-32"></a><span class="st">  </span><span class="kw">drop_na</span>(landcover)</span>
+<span id="cb47-33"><a href="preparing-checklist-calibration-index.html#cb47-33"></a></span>
+<span id="cb47-34"><a href="preparing-checklist-calibration-index.html#cb47-34"></a><span class="co"># editing julian date to model it in a linear fashion</span></span>
+<span id="cb47-35"><a href="preparing-checklist-calibration-index.html#cb47-35"></a><span class="kw">unique</span>(ebdChkSummary<span class="op">$</span>julianDate)</span>
+<span id="cb47-36"><a href="preparing-checklist-calibration-index.html#cb47-36"></a></span>
+<span id="cb47-37"><a href="preparing-checklist-calibration-index.html#cb47-37"></a>ebdChkSummary &lt;-<span class="st"> </span>ebdChkSummary <span class="op">%&gt;%</span></span>
+<span id="cb47-38"><a href="preparing-checklist-calibration-index.html#cb47-38"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb47-39"><a href="preparing-checklist-calibration-index.html#cb47-39"></a>    <span class="dt">newjulianDate =</span></span>
+<span id="cb47-40"><a href="preparing-checklist-calibration-index.html#cb47-40"></a>      <span class="kw">case_when</span>(</span>
+<span id="cb47-41"><a href="preparing-checklist-calibration-index.html#cb47-41"></a>        julianDate <span class="op">&gt;=</span><span class="st"> </span><span class="dv">334</span> <span class="op">&amp;</span><span class="st"> </span>julianDate <span class="op">&lt;=</span><span class="st"> </span><span class="dv">365</span> <span class="op">~</span><span class="st"> </span>(julianDate <span class="op">-</span><span class="st"> </span><span class="dv">333</span>),</span>
+<span id="cb47-42"><a href="preparing-checklist-calibration-index.html#cb47-42"></a>        julianDate <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span> <span class="op">&amp;</span><span class="st"> </span>julianDate <span class="op">&lt;=</span><span class="st"> </span><span class="dv">152</span> <span class="op">~</span><span class="st"> </span>(julianDate <span class="op">+</span><span class="st"> </span><span class="dv">31</span>)</span>
+<span id="cb47-43"><a href="preparing-checklist-calibration-index.html#cb47-43"></a>      )</span>
+<span id="cb47-44"><a href="preparing-checklist-calibration-index.html#cb47-44"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb47-45"><a href="preparing-checklist-calibration-index.html#cb47-45"></a><span class="st">  </span><span class="kw">drop_na</span>(newjulianDate)</span>
+<span id="cb47-46"><a href="preparing-checklist-calibration-index.html#cb47-46"></a></span>
+<span id="cb47-47"><a href="preparing-checklist-calibration-index.html#cb47-47"></a><span class="co"># save to file for later reuse</span></span>
+<span id="cb47-48"><a href="preparing-checklist-calibration-index.html#cb47-48"></a><span class="kw">fwrite</span>(ebdChkSummary, <span class="dt">file =</span> <span class="st">&quot;data/03_data-covars-perChklist.csv&quot;</span>)</span></code></pre></div>
+</div>
+<div id="model-observer-expertise" class="section level2">
+<h2><span class="header-section-number">5.8</span> Model observer expertise</h2>
+<p>Our observer expertise model aims to include the random intercept effect of observer identity, with a random slope effect of duration. This models the different rate of species accumulation by different observers, as well as their different starting points.</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="preparing-checklist-calibration-index.html#cb48-1"></a><span class="co"># uses either a subset or all data</span></span>
+<span id="cb48-2"><a href="preparing-checklist-calibration-index.html#cb48-2"></a><span class="kw">library</span>(lmerTest)</span>
+<span id="cb48-3"><a href="preparing-checklist-calibration-index.html#cb48-3"></a></span>
+<span id="cb48-4"><a href="preparing-checklist-calibration-index.html#cb48-4"></a><span class="co"># here we specify a glmm with random effects for observer</span></span>
+<span id="cb48-5"><a href="preparing-checklist-calibration-index.html#cb48-5"></a><span class="co"># time is considered a fixed log predictor and a random slope</span></span>
+<span id="cb48-6"><a href="preparing-checklist-calibration-index.html#cb48-6"></a>modObsExp &lt;-<span class="st"> </span><span class="kw">glmer</span>(nSoi <span class="op">~</span><span class="st"> </span>duration <span class="op">+</span><span class="st"> </span><span class="kw">sqrt</span>(duration) <span class="op">+</span></span>
+<span id="cb48-7"><a href="preparing-checklist-calibration-index.html#cb48-7"></a><span class="st">  </span>landcover <span class="op">+</span></span>
+<span id="cb48-8"><a href="preparing-checklist-calibration-index.html#cb48-8"></a><span class="st">  </span><span class="kw">sqrt</span>(decimalTime) <span class="op">+</span></span>
+<span id="cb48-9"><a href="preparing-checklist-calibration-index.html#cb48-9"></a><span class="st">  </span><span class="kw">I</span>((<span class="kw">sqrt</span>(decimalTime))<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span></span>
+<span id="cb48-10"><a href="preparing-checklist-calibration-index.html#cb48-10"></a><span class="st">  </span><span class="kw">log</span>(newjulianDate) <span class="op">+</span></span>
+<span id="cb48-11"><a href="preparing-checklist-calibration-index.html#cb48-11"></a><span class="st">  </span><span class="kw">I</span>((<span class="kw">log</span>(newjulianDate)<span class="op">^</span><span class="dv">2</span>)) <span class="op">+</span></span>
+<span id="cb48-12"><a href="preparing-checklist-calibration-index.html#cb48-12"></a><span class="st">  </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>observer) <span class="op">+</span><span class="st"> </span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>duration <span class="op">|</span><span class="st"> </span>observer),</span>
+<span id="cb48-13"><a href="preparing-checklist-calibration-index.html#cb48-13"></a><span class="dt">data =</span> ebdChkSummary, <span class="dt">family =</span> <span class="st">&quot;poisson&quot;</span></span>
+<span id="cb48-14"><a href="preparing-checklist-calibration-index.html#cb48-14"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="preparing-checklist-calibration-index.html#cb49-1"></a><span class="co"># make dir if absent</span></span>
+<span id="cb49-2"><a href="preparing-checklist-calibration-index.html#cb49-2"></a><span class="cf">if</span> (<span class="op">!</span><span class="kw">dir.exists</span>(<span class="st">&quot;data/modOutput&quot;</span>)) {</span>
+<span id="cb49-3"><a href="preparing-checklist-calibration-index.html#cb49-3"></a>  <span class="kw">dir.create</span>(<span class="st">&quot;data/modOutput&quot;</span>)</span>
+<span id="cb49-4"><a href="preparing-checklist-calibration-index.html#cb49-4"></a>}</span>
+<span id="cb49-5"><a href="preparing-checklist-calibration-index.html#cb49-5"></a></span>
+<span id="cb49-6"><a href="preparing-checklist-calibration-index.html#cb49-6"></a><span class="co"># write model output to text file</span></span>
+<span id="cb49-7"><a href="preparing-checklist-calibration-index.html#cb49-7"></a>{</span>
+<span id="cb49-8"><a href="preparing-checklist-calibration-index.html#cb49-8"></a>  <span class="kw">writeLines</span>(R.utils<span class="op">::</span><span class="kw">captureOutput</span>(<span class="kw">list</span>(<span class="kw">Sys.time</span>(), <span class="kw">summary</span>(modObsExp))),</span>
+<span id="cb49-9"><a href="preparing-checklist-calibration-index.html#cb49-9"></a>    <span class="dt">con =</span> <span class="st">&quot;data/modOutput/03_model-output-expertise.txt&quot;</span></span>
+<span id="cb49-10"><a href="preparing-checklist-calibration-index.html#cb49-10"></a>  )</span>
+<span id="cb49-11"><a href="preparing-checklist-calibration-index.html#cb49-11"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="preparing-checklist-calibration-index.html#cb50-1"></a><span class="co"># make df with means</span></span>
+<span id="cb50-2"><a href="preparing-checklist-calibration-index.html#cb50-2"></a>observer &lt;-<span class="st"> </span><span class="kw">unique</span>(ebdChkSummary<span class="op">$</span>observer)</span>
+<span id="cb50-3"><a href="preparing-checklist-calibration-index.html#cb50-3"></a></span>
+<span id="cb50-4"><a href="preparing-checklist-calibration-index.html#cb50-4"></a><span class="co"># predict at 60 mins on the most common landcover (deciduous forests)</span></span>
+<span id="cb50-5"><a href="preparing-checklist-calibration-index.html#cb50-5"></a>dfPredict &lt;-<span class="st"> </span>ebdChkSummary <span class="op">%&gt;%</span></span>
+<span id="cb50-6"><a href="preparing-checklist-calibration-index.html#cb50-6"></a><span class="st">  </span><span class="kw">summarise_at</span>(<span class="kw">vars</span>(duration, decimalTime, newjulianDate), <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span><span class="kw">mean</span>(.))) <span class="op">%&gt;%</span></span>
+<span id="cb50-7"><a href="preparing-checklist-calibration-index.html#cb50-7"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">duration =</span> <span class="dv">60</span>, <span class="dt">landcover =</span> <span class="kw">as.factor</span>(<span class="dv">2</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb50-8"><a href="preparing-checklist-calibration-index.html#cb50-8"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">crossing</span>(observer)</span>
+<span id="cb50-9"><a href="preparing-checklist-calibration-index.html#cb50-9"></a></span>
+<span id="cb50-10"><a href="preparing-checklist-calibration-index.html#cb50-10"></a><span class="co"># run predict from model on it</span></span>
+<span id="cb50-11"><a href="preparing-checklist-calibration-index.html#cb50-11"></a>dfPredict &lt;-<span class="st"> </span><span class="kw">mutate</span>(dfPredict,</span>
+<span id="cb50-12"><a href="preparing-checklist-calibration-index.html#cb50-12"></a>  <span class="dt">score =</span> <span class="kw">predict</span>(modObsExp,</span>
+<span id="cb50-13"><a href="preparing-checklist-calibration-index.html#cb50-13"></a>    <span class="dt">newdata =</span> dfPredict,</span>
+<span id="cb50-14"><a href="preparing-checklist-calibration-index.html#cb50-14"></a>    <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>,</span>
+<span id="cb50-15"><a href="preparing-checklist-calibration-index.html#cb50-15"></a>    <span class="dt">allow.new.levels =</span> <span class="ot">TRUE</span></span>
+<span id="cb50-16"><a href="preparing-checklist-calibration-index.html#cb50-16"></a>  )</span>
+<span id="cb50-17"><a href="preparing-checklist-calibration-index.html#cb50-17"></a>) <span class="op">%&gt;%</span></span>
+<span id="cb50-18"><a href="preparing-checklist-calibration-index.html#cb50-18"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">score =</span> scales<span class="op">::</span><span class="kw">rescale</span>(score))</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="preparing-checklist-calibration-index.html#cb51-1"></a><span class="kw">fwrite</span>(dfPredict <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(observer, score),</span>
+<span id="cb51-2"><a href="preparing-checklist-calibration-index.html#cb51-2"></a>  <span class="dt">file =</span> <span class="st">&quot;data/03_data-obsExpertise-score.csv&quot;</span></span>
+<span id="cb51-3"><a href="preparing-checklist-calibration-index.html#cb51-3"></a>)</span></code></pre></div>
+
+</div>
+</div>
+<h3> References</h3>
+<div id="refs" class="references">
+<div id="ref-johnston2018">
+<p>Johnston, Alison, Daniel Fink, Wesley M. Hochachka, and Steve Kelling. 2018. “Estimates of Observer Expertise Improve Species Distributions from Citizen Science Data.” Edited by Nick Isaac. <em>Methods in Ecology and Evolution</em> 9 (1): 88–97. <a href="https://doi.org/10.1111/2041-210X.12838">https://doi.org/10.1111/2041-210X.12838</a>.</p>
+</div>
+<div id="ref-kelling2015a">
+<p>Kelling, Steve, Alison Johnston, Wesley M. Hochachka, Marshall Iliff, Daniel Fink, Jeff Gerbracht, Carl Lagoze, et al. 2015. “Can Observation Skills of Citizen Scientists Be Estimated Using Species Accumulation Curves?” Edited by Stefano Goffredo. <em>PLOS ONE</em> 10 (10): e0139600. <a href="https://doi.org/10.1371/journal.pone.0139600">https://doi.org/10.1371/journal.pone.0139600</a>.</p>
+</div>
+<div id="ref-vanstrien2013">
+<p>van Strien, Arco J., Chris A. M. van Swaay, and Tim Termaat. 2013. “Opportunistic Citizen Science Data of Animal Species Produce Reliable Estimates of Distribution Trends If Analysed with Occupancy Models.” Edited by Vincent Devictor. <em>Journal of Applied Ecology</em> 50 (6): 1450–8. <a href="https://doi.org/10.1111/1365-2664.12158">https://doi.org/10.1111/1365-2664.12158</a>.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="preparing-environmental-predictors.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="examining-spatial-sampling-bias.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": false,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/pratikunterwegs/eBirdOccupancy/edit/master/04_checklist-calibration-index.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

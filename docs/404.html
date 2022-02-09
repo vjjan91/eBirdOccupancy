@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Section 3 Preparing eBird Data | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</title>
-  <meta name="description" content="Section 3 Preparing eBird Data | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <title>Page not found | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</title>
+  <meta name="description" content="Page not found | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
   <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Section 3 Preparing eBird Data | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <meta property="og:title" content="Page not found | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="vjjan91/eBirdOccupancy" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Section 3 Preparing eBird Data | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <meta name="twitter:title" content="Page not found | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
   
   
   
@@ -35,8 +35,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="selecting-species-of-interest.html"/>
-<link rel="next" href="preparing-environmental-predictors.html"/>
+
+
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -300,232 +300,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="preparing-ebird-data" class="section level1">
-<h1><span class="header-section-number">Section 3</span> Preparing eBird Data</h1>
-<div id="prepare-libraries-and-data-sources" class="section level2">
-<h2><span class="header-section-number">3.1</span> Prepare libraries and data sources</h2>
-<p>Here, we will load the necessary libraries required for preparing the eBird data. Please download the latest versions of the eBird Basic Dataset (for India) and the eBird Sampling dataset from <a href="https://ebird.org/data/download" class="uri">https://ebird.org/data/download</a>.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="preparing-ebird-data.html#cb10-1"></a><span class="co"># load libraries</span></span>
-<span id="cb10-2"><a href="preparing-ebird-data.html#cb10-2"></a><span class="kw">library</span>(tidyverse)</span>
-<span id="cb10-3"><a href="preparing-ebird-data.html#cb10-3"></a><span class="kw">library</span>(readr)</span>
-<span id="cb10-4"><a href="preparing-ebird-data.html#cb10-4"></a><span class="kw">library</span>(sf)</span>
-<span id="cb10-5"><a href="preparing-ebird-data.html#cb10-5"></a><span class="kw">library</span>(auk)</span>
-<span id="cb10-6"><a href="preparing-ebird-data.html#cb10-6"></a><span class="kw">library</span>(readxl)</span>
-<span id="cb10-7"><a href="preparing-ebird-data.html#cb10-7"></a><span class="kw">library</span>(lubridate)</span>
-<span id="cb10-8"><a href="preparing-ebird-data.html#cb10-8"></a></span>
-<span id="cb10-9"><a href="preparing-ebird-data.html#cb10-9"></a><span class="co"># custom sum function</span></span>
-<span id="cb10-10"><a href="preparing-ebird-data.html#cb10-10"></a>sum.no.na &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
-<span id="cb10-11"><a href="preparing-ebird-data.html#cb10-11"></a>  <span class="kw">sum</span>(x, <span class="dt">na.rm =</span> T)</span>
-<span id="cb10-12"><a href="preparing-ebird-data.html#cb10-12"></a>}</span>
-<span id="cb10-13"><a href="preparing-ebird-data.html#cb10-13"></a></span>
-<span id="cb10-14"><a href="preparing-ebird-data.html#cb10-14"></a><span class="co"># set file paths for auk functions</span></span>
-<span id="cb10-15"><a href="preparing-ebird-data.html#cb10-15"></a><span class="co"># To use these two datasets, please download the latest versions from https://ebird.org/data/download and set the file path accordingly. Since these two datasets are extremely large, we have not uploaded the same on github.</span></span>
-<span id="cb10-16"><a href="preparing-ebird-data.html#cb10-16"></a><span class="co"># In this study, the version of data loaded corresponds to November 2021.</span></span>
-<span id="cb10-17"><a href="preparing-ebird-data.html#cb10-17"></a></span>
-<span id="cb10-18"><a href="preparing-ebird-data.html#cb10-18"></a>f_in_ebd &lt;-<span class="st"> </span><span class="kw">file.path</span>(<span class="st">&quot;data/ebd_IN_relNov-2021.txt&quot;</span>)</span>
-<span id="cb10-19"><a href="preparing-ebird-data.html#cb10-19"></a>f_in_sampling &lt;-<span class="st"> </span><span class="kw">file.path</span>(<span class="st">&quot;data/ebd_sampling_relNov-2021.txt&quot;</span>)</span></code></pre></div>
-</div>
-<div id="filter-data" class="section level2">
-<h2><span class="header-section-number">3.2</span> Filter data</h2>
-<p>Insert the list of species that we will be analyzing in this study. We initially chose those species that occurred in at least 5% of all checklists across 50% of the 25 x 25 km cells from where they have been reported, resulting in a total of 79 species. To arrive at this final list of species, we carried out further pre-processing which can be found in the previous script.</p>
-<p>For further details regarding the list of species, please refer to the main text of the manuscript.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="preparing-ebird-data.html#cb11-1"></a><span class="co"># add species of interest</span></span>
-<span id="cb11-2"><a href="preparing-ebird-data.html#cb11-2"></a>specieslist &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/species_list.csv&quot;</span>)</span>
-<span id="cb11-3"><a href="preparing-ebird-data.html#cb11-3"></a>speciesOfInterest &lt;-<span class="st"> </span><span class="kw">as.character</span>(specieslist<span class="op">$</span>scientific_name)</span></code></pre></div>
-<p>Here, we set broad spatial filters for the states of Kerala, Tamil Nadu and Karnataka and keep only those checklists for our list of species that were reported between 1st Jan 2013 and 31st May 2021.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="preparing-ebird-data.html#cb12-1"></a><span class="co"># run filters using auk packages</span></span>
-<span id="cb12-2"><a href="preparing-ebird-data.html#cb12-2"></a>ebd_filters &lt;-<span class="st"> </span><span class="kw">auk_ebd</span>(f_in_ebd, f_in_sampling) <span class="op">%&gt;%</span></span>
-<span id="cb12-3"><a href="preparing-ebird-data.html#cb12-3"></a><span class="st">  </span><span class="kw">auk_species</span>(speciesOfInterest) <span class="op">%&gt;%</span></span>
-<span id="cb12-4"><a href="preparing-ebird-data.html#cb12-4"></a><span class="st">  </span><span class="kw">auk_country</span>(<span class="dt">country =</span> <span class="st">&quot;IN&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb12-5"><a href="preparing-ebird-data.html#cb12-5"></a><span class="st">  </span><span class="kw">auk_state</span>(<span class="kw">c</span>(<span class="st">&quot;IN-KL&quot;</span>, <span class="st">&quot;IN-TN&quot;</span>, <span class="st">&quot;IN-KA&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb12-6"><a href="preparing-ebird-data.html#cb12-6"></a><span class="st">  </span><span class="co"># Restricting geography to TamilNadu, Kerala &amp; Karnataka</span></span>
-<span id="cb12-7"><a href="preparing-ebird-data.html#cb12-7"></a><span class="st">  </span><span class="kw">auk_date</span>(<span class="kw">c</span>(<span class="st">&quot;2013-01-01&quot;</span>, <span class="st">&quot;2021-05-31&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb12-8"><a href="preparing-ebird-data.html#cb12-8"></a><span class="st">  </span><span class="kw">auk_complete</span>()</span>
-<span id="cb12-9"><a href="preparing-ebird-data.html#cb12-9"></a></span>
-<span id="cb12-10"><a href="preparing-ebird-data.html#cb12-10"></a><span class="co"># check filters</span></span>
-<span id="cb12-11"><a href="preparing-ebird-data.html#cb12-11"></a>ebd_filters</span></code></pre></div>
-<p>Below code need not be run if it has been filtered once already and the above path leads to the right dataset. NB: This is a computation heavy process, run with caution.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="preparing-ebird-data.html#cb13-1"></a><span class="co"># specify output location and perform filter</span></span>
-<span id="cb13-2"><a href="preparing-ebird-data.html#cb13-2"></a>f_out_ebd &lt;-<span class="st"> &quot;data/01_ebird-filtered-EBD-westernGhats.txt&quot;</span></span>
-<span id="cb13-3"><a href="preparing-ebird-data.html#cb13-3"></a>f_out_sampling &lt;-<span class="st"> &quot;data/01_ebird-filtered-sampling-westernGhats.txt&quot;</span></span></code></pre></div>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="preparing-ebird-data.html#cb14-1"></a>ebd_filtered &lt;-<span class="st"> </span><span class="kw">auk_filter</span>(ebd_filters,</span>
-<span id="cb14-2"><a href="preparing-ebird-data.html#cb14-2"></a>  <span class="dt">file =</span> f_out_ebd,</span>
-<span id="cb14-3"><a href="preparing-ebird-data.html#cb14-3"></a>  <span class="dt">file_sampling =</span> f_out_sampling, <span class="dt">overwrite =</span> <span class="ot">TRUE</span></span>
-<span id="cb14-4"><a href="preparing-ebird-data.html#cb14-4"></a>)</span></code></pre></div>
-</div>
-<div id="process-filtered-data" class="section level2">
-<h2><span class="header-section-number">3.3</span> Process filtered data</h2>
-<p>The data has been filtered above using the auk functions. We will now work with the filtered checklist observations (Please note that we have not yet spatially filtered the checklists to the confines of our study area, which is the Nilgiris and the Anamalai hills. This step is carried out further on).</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="preparing-ebird-data.html#cb15-1"></a><span class="co"># read in the data</span></span>
-<span id="cb15-2"><a href="preparing-ebird-data.html#cb15-2"></a>ebd &lt;-<span class="st"> </span><span class="kw">read_ebd</span>(f_out_ebd)</span></code></pre></div>
-<p>eBird checklists only suggest whether a species was reported at a particular location. To arrive at absence data, we use a process known as zero-filling <span class="citation">(Johnston et al. <a href="#ref-johnston2019a" role="doc-biblioref">2019</a>)</span>, wherein a new dataframe is created with a 0 marked for each checklist when the bird was not observed.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="preparing-ebird-data.html#cb16-1"></a><span class="co"># fill zeroes</span></span>
-<span id="cb16-2"><a href="preparing-ebird-data.html#cb16-2"></a>zf &lt;-<span class="st"> </span><span class="kw">auk_zerofill</span>(f_out_ebd, f_out_sampling)</span>
-<span id="cb16-3"><a href="preparing-ebird-data.html#cb16-3"></a>new_zf &lt;-<span class="st"> </span><span class="kw">collapse_zerofill</span>(zf)</span></code></pre></div>
-<p>Let us now choose specific columns necessary for further analysis.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="preparing-ebird-data.html#cb17-1"></a><span class="co"># choose columns of interest</span></span>
-<span id="cb17-2"><a href="preparing-ebird-data.html#cb17-2"></a>columnsOfInterest &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
-<span id="cb17-3"><a href="preparing-ebird-data.html#cb17-3"></a>  <span class="st">&quot;checklist_id&quot;</span>, <span class="st">&quot;scientific_name&quot;</span>, <span class="st">&quot;common_name&quot;</span>,</span>
-<span id="cb17-4"><a href="preparing-ebird-data.html#cb17-4"></a>  <span class="st">&quot;observation_count&quot;</span>, <span class="st">&quot;locality&quot;</span>, <span class="st">&quot;locality_id&quot;</span>,</span>
-<span id="cb17-5"><a href="preparing-ebird-data.html#cb17-5"></a>  <span class="st">&quot;locality_type&quot;</span>, <span class="st">&quot;latitude&quot;</span>, <span class="st">&quot;longitude&quot;</span>,</span>
-<span id="cb17-6"><a href="preparing-ebird-data.html#cb17-6"></a>  <span class="st">&quot;observation_date&quot;</span>, <span class="st">&quot;time_observations_started&quot;</span>,</span>
-<span id="cb17-7"><a href="preparing-ebird-data.html#cb17-7"></a>  <span class="st">&quot;observer_id&quot;</span>, <span class="st">&quot;sampling_event_identifier&quot;</span>,</span>
-<span id="cb17-8"><a href="preparing-ebird-data.html#cb17-8"></a>  <span class="st">&quot;protocol_type&quot;</span>, <span class="st">&quot;duration_minutes&quot;</span>,</span>
-<span id="cb17-9"><a href="preparing-ebird-data.html#cb17-9"></a>  <span class="st">&quot;effort_distance_km&quot;</span>, <span class="st">&quot;effort_area_ha&quot;</span>,</span>
-<span id="cb17-10"><a href="preparing-ebird-data.html#cb17-10"></a>  <span class="st">&quot;number_observers&quot;</span>, <span class="st">&quot;species_observed&quot;</span>,</span>
-<span id="cb17-11"><a href="preparing-ebird-data.html#cb17-11"></a>  <span class="st">&quot;reviewed&quot;</span></span>
-<span id="cb17-12"><a href="preparing-ebird-data.html#cb17-12"></a>)</span>
-<span id="cb17-13"><a href="preparing-ebird-data.html#cb17-13"></a></span>
-<span id="cb17-14"><a href="preparing-ebird-data.html#cb17-14"></a><span class="co"># make list of presence and absence data and choose cols of interest</span></span>
-<span id="cb17-15"><a href="preparing-ebird-data.html#cb17-15"></a>data &lt;-<span class="st"> </span><span class="kw">list</span>(ebd, new_zf) <span class="op">%&gt;%</span></span>
-<span id="cb17-16"><a href="preparing-ebird-data.html#cb17-16"></a><span class="st">  </span><span class="kw">map</span>(<span class="cf">function</span>(x) {</span>
-<span id="cb17-17"><a href="preparing-ebird-data.html#cb17-17"></a>    x <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">one_of</span>(columnsOfInterest))</span>
-<span id="cb17-18"><a href="preparing-ebird-data.html#cb17-18"></a>  })</span>
-<span id="cb17-19"><a href="preparing-ebird-data.html#cb17-19"></a></span>
-<span id="cb17-20"><a href="preparing-ebird-data.html#cb17-20"></a><span class="co"># remove zerofills to save working memory</span></span>
-<span id="cb17-21"><a href="preparing-ebird-data.html#cb17-21"></a><span class="kw">rm</span>(zf, new_zf)</span>
-<span id="cb17-22"><a href="preparing-ebird-data.html#cb17-22"></a><span class="kw">gc</span>()</span>
-<span id="cb17-23"><a href="preparing-ebird-data.html#cb17-23"></a></span>
-<span id="cb17-24"><a href="preparing-ebird-data.html#cb17-24"></a><span class="co"># check for presences and absence in absences df, remove essentially the presences df which may lead to erroneous analysis</span></span>
-<span id="cb17-25"><a href="preparing-ebird-data.html#cb17-25"></a>data[[<span class="dv">2</span>]] &lt;-<span class="st"> </span>data[[<span class="dv">2</span>]] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(species_observed <span class="op">==</span><span class="st"> </span>F)</span></code></pre></div>
-</div>
-<div id="spatial-filter" class="section level2">
-<h2><span class="header-section-number">3.4</span> Spatial filter</h2>
-<p>A spatial filter is now supplied to further restrict our list of observations to the confines of the Nilgiris and the Anamalai hills of the Western Ghats biodiversity hotspot.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="preparing-ebird-data.html#cb18-1"></a><span class="co"># load shapefile of the study area</span></span>
-<span id="cb18-2"><a href="preparing-ebird-data.html#cb18-2"></a><span class="kw">library</span>(sf)</span>
-<span id="cb18-3"><a href="preparing-ebird-data.html#cb18-3"></a>hills &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>)</span>
-<span id="cb18-4"><a href="preparing-ebird-data.html#cb18-4"></a></span>
-<span id="cb18-5"><a href="preparing-ebird-data.html#cb18-5"></a><span class="co"># write a prelim filter by bounding box</span></span>
-<span id="cb18-6"><a href="preparing-ebird-data.html#cb18-6"></a>box &lt;-<span class="st"> </span><span class="kw">st_bbox</span>(hills)</span>
-<span id="cb18-7"><a href="preparing-ebird-data.html#cb18-7"></a></span>
-<span id="cb18-8"><a href="preparing-ebird-data.html#cb18-8"></a><span class="co"># get data spatial coordinates</span></span>
-<span id="cb18-9"><a href="preparing-ebird-data.html#cb18-9"></a>dataLocs &lt;-<span class="st"> </span>data <span class="op">%&gt;%</span></span>
-<span id="cb18-10"><a href="preparing-ebird-data.html#cb18-10"></a><span class="st">  </span><span class="kw">map</span>(<span class="cf">function</span>(x) {</span>
-<span id="cb18-11"><a href="preparing-ebird-data.html#cb18-11"></a>    <span class="kw">select</span>(x, longitude, latitude) <span class="op">%&gt;%</span></span>
-<span id="cb18-12"><a href="preparing-ebird-data.html#cb18-12"></a><span class="st">      </span><span class="kw">filter</span>(<span class="kw">between</span>(longitude, box[<span class="st">&quot;xmin&quot;</span>], box[<span class="st">&quot;xmax&quot;</span>]) <span class="op">&amp;</span></span>
-<span id="cb18-13"><a href="preparing-ebird-data.html#cb18-13"></a><span class="st">        </span><span class="kw">between</span>(latitude, box[<span class="st">&quot;ymin&quot;</span>], box[<span class="st">&quot;ymax&quot;</span>]))</span>
-<span id="cb18-14"><a href="preparing-ebird-data.html#cb18-14"></a>  }) <span class="op">%&gt;%</span></span>
-<span id="cb18-15"><a href="preparing-ebird-data.html#cb18-15"></a><span class="st">  </span><span class="kw">bind_rows</span>() <span class="op">%&gt;%</span></span>
-<span id="cb18-16"><a href="preparing-ebird-data.html#cb18-16"></a><span class="st">  </span><span class="kw">distinct</span>() <span class="op">%&gt;%</span></span>
-<span id="cb18-17"><a href="preparing-ebird-data.html#cb18-17"></a><span class="st">  </span><span class="kw">st_as_sf</span>(<span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb18-18"><a href="preparing-ebird-data.html#cb18-18"></a><span class="st">  </span><span class="kw">st_set_crs</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span></span>
-<span id="cb18-19"><a href="preparing-ebird-data.html#cb18-19"></a><span class="st">  </span><span class="kw">st_intersection</span>(hills)</span>
-<span id="cb18-20"><a href="preparing-ebird-data.html#cb18-20"></a></span>
-<span id="cb18-21"><a href="preparing-ebird-data.html#cb18-21"></a><span class="co"># get simplified data and drop geometry</span></span>
-<span id="cb18-22"><a href="preparing-ebird-data.html#cb18-22"></a>dataLocs &lt;-<span class="st"> </span><span class="kw">mutate</span>(dataLocs, <span class="dt">spatialKeep =</span> T) <span class="op">%&gt;%</span></span>
-<span id="cb18-23"><a href="preparing-ebird-data.html#cb18-23"></a><span class="st">  </span><span class="kw">bind_cols</span>(., <span class="kw">as_tibble</span>(<span class="kw">st_coordinates</span>(dataLocs))) <span class="op">%&gt;%</span></span>
-<span id="cb18-24"><a href="preparing-ebird-data.html#cb18-24"></a><span class="st">  </span><span class="kw">st_drop_geometry</span>()</span>
-<span id="cb18-25"><a href="preparing-ebird-data.html#cb18-25"></a></span>
-<span id="cb18-26"><a href="preparing-ebird-data.html#cb18-26"></a><span class="co"># bind to data and then filter</span></span>
-<span id="cb18-27"><a href="preparing-ebird-data.html#cb18-27"></a>data &lt;-<span class="st"> </span>data <span class="op">%&gt;%</span></span>
-<span id="cb18-28"><a href="preparing-ebird-data.html#cb18-28"></a><span class="st">  </span><span class="kw">map</span>(<span class="cf">function</span>(x) {</span>
-<span id="cb18-29"><a href="preparing-ebird-data.html#cb18-29"></a>    <span class="kw">left_join</span>(x, dataLocs, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span> =<span class="st"> &quot;X&quot;</span>, <span class="st">&quot;latitude&quot;</span> =<span class="st"> &quot;Y&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb18-30"><a href="preparing-ebird-data.html#cb18-30"></a><span class="st">      </span><span class="kw">filter</span>(spatialKeep <span class="op">==</span><span class="st"> </span>T) <span class="op">%&gt;%</span></span>
-<span id="cb18-31"><a href="preparing-ebird-data.html#cb18-31"></a><span class="st">      </span><span class="kw">select</span>(<span class="op">-</span>Id, <span class="op">-</span>spatialKeep)</span>
-<span id="cb18-32"><a href="preparing-ebird-data.html#cb18-32"></a>  })</span></code></pre></div>
-<p>Save temporary data created so far.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="preparing-ebird-data.html#cb19-1"></a><span class="co"># save a temp data file</span></span>
-<span id="cb19-2"><a href="preparing-ebird-data.html#cb19-2"></a><span class="kw">save</span>(data, <span class="dt">file =</span> <span class="st">&quot;data/01_data_temp.rdata&quot;</span>)</span></code></pre></div>
-</div>
-<div id="handle-presence-data" class="section level2">
-<h2><span class="header-section-number">3.5</span> Handle presence data</h2>
-<p>Further pre-processing is required in the case of many checklists where species abundance is often unknown and an ‘X’ is denoted in such cases. Here, we convert all ‘X’ notations to a 1, suggesting a presence (as we are not concerned with abundance data in this analysis). We also removed those checklists where the duration in minutes is either not recorded or listed as zero. Lastly, we added an sampling effort based filter following <span class="citation">(Johnston et al. <a href="#ref-johnston2019a" role="doc-biblioref">2019</a>)</span>, wherein we considered only those checklists with duration in minutes is less than 300 and distance in kilometres traveled is less than 5km. Lastly, we excluded those group checklists where the number of observers was greater than 10. For the sake of occupancy modeling of appropriate detection and occupancy covariates, we restrict all our checklists between December 1st and May 31st (non-rainy months)and checklists recorded between 5am and 7pm.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="preparing-ebird-data.html#cb20-1"></a><span class="co"># in the first set, replace X, for presences, with 1</span></span>
-<span id="cb20-2"><a href="preparing-ebird-data.html#cb20-2"></a>data[[<span class="dv">1</span>]] &lt;-<span class="st"> </span>data[[<span class="dv">1</span>]] <span class="op">%&gt;%</span></span>
-<span id="cb20-3"><a href="preparing-ebird-data.html#cb20-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">observation_count =</span> <span class="kw">ifelse</span>(observation_count <span class="op">==</span><span class="st"> &quot;X&quot;</span>,</span>
-<span id="cb20-4"><a href="preparing-ebird-data.html#cb20-4"></a>    <span class="st">&quot;1&quot;</span>, observation_count</span>
-<span id="cb20-5"><a href="preparing-ebird-data.html#cb20-5"></a>  ))</span>
-<span id="cb20-6"><a href="preparing-ebird-data.html#cb20-6"></a></span>
-<span id="cb20-7"><a href="preparing-ebird-data.html#cb20-7"></a><span class="co"># remove records where duration is 0</span></span>
-<span id="cb20-8"><a href="preparing-ebird-data.html#cb20-8"></a>data &lt;-<span class="st"> </span><span class="kw">map</span>(data, <span class="cf">function</span>(x) <span class="kw">filter</span>(x, duration_minutes <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>))</span>
-<span id="cb20-9"><a href="preparing-ebird-data.html#cb20-9"></a></span>
-<span id="cb20-10"><a href="preparing-ebird-data.html#cb20-10"></a><span class="co"># group data by site and sampling event identifier</span></span>
-<span id="cb20-11"><a href="preparing-ebird-data.html#cb20-11"></a><span class="co"># then, summarise relevant variables as the sum</span></span>
-<span id="cb20-12"><a href="preparing-ebird-data.html#cb20-12"></a>dataGrouped &lt;-<span class="st"> </span><span class="kw">map</span>(data, <span class="cf">function</span>(x) {</span>
-<span id="cb20-13"><a href="preparing-ebird-data.html#cb20-13"></a>  x <span class="op">%&gt;%</span></span>
-<span id="cb20-14"><a href="preparing-ebird-data.html#cb20-14"></a><span class="st">    </span><span class="kw">group_by</span>(sampling_event_identifier) <span class="op">%&gt;%</span></span>
-<span id="cb20-15"><a href="preparing-ebird-data.html#cb20-15"></a><span class="st">    </span><span class="kw">summarise_at</span>(</span>
-<span id="cb20-16"><a href="preparing-ebird-data.html#cb20-16"></a>      <span class="kw">vars</span>(</span>
-<span id="cb20-17"><a href="preparing-ebird-data.html#cb20-17"></a>        duration_minutes, effort_distance_km,</span>
-<span id="cb20-18"><a href="preparing-ebird-data.html#cb20-18"></a>        effort_area_ha</span>
-<span id="cb20-19"><a href="preparing-ebird-data.html#cb20-19"></a>      ),</span>
-<span id="cb20-20"><a href="preparing-ebird-data.html#cb20-20"></a>      <span class="kw">list</span>(sum.no.na)</span>
-<span id="cb20-21"><a href="preparing-ebird-data.html#cb20-21"></a>    )</span>
-<span id="cb20-22"><a href="preparing-ebird-data.html#cb20-22"></a>})</span>
-<span id="cb20-23"><a href="preparing-ebird-data.html#cb20-23"></a></span>
-<span id="cb20-24"><a href="preparing-ebird-data.html#cb20-24"></a><span class="co"># bind rows combining data frames, and filter</span></span>
-<span id="cb20-25"><a href="preparing-ebird-data.html#cb20-25"></a>dataGrouped &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(dataGrouped) <span class="op">%&gt;%</span></span>
-<span id="cb20-26"><a href="preparing-ebird-data.html#cb20-26"></a><span class="st">  </span><span class="kw">filter</span>(</span>
-<span id="cb20-27"><a href="preparing-ebird-data.html#cb20-27"></a>    duration_minutes <span class="op">&lt;=</span><span class="st"> </span><span class="dv">300</span>,</span>
-<span id="cb20-28"><a href="preparing-ebird-data.html#cb20-28"></a>    effort_distance_km <span class="op">&lt;=</span><span class="st"> </span><span class="dv">5</span>,</span>
-<span id="cb20-29"><a href="preparing-ebird-data.html#cb20-29"></a>    effort_area_ha <span class="op">&lt;=</span><span class="st"> </span><span class="dv">500</span></span>
-<span id="cb20-30"><a href="preparing-ebird-data.html#cb20-30"></a>  )</span>
-<span id="cb20-31"><a href="preparing-ebird-data.html#cb20-31"></a></span>
-<span id="cb20-32"><a href="preparing-ebird-data.html#cb20-32"></a><span class="co"># get data identifiers, such as sampling identifier etc</span></span>
-<span id="cb20-33"><a href="preparing-ebird-data.html#cb20-33"></a>dataConstants &lt;-<span class="st"> </span>data <span class="op">%&gt;%</span></span>
-<span id="cb20-34"><a href="preparing-ebird-data.html#cb20-34"></a><span class="st">  </span><span class="kw">bind_rows</span>() <span class="op">%&gt;%</span></span>
-<span id="cb20-35"><a href="preparing-ebird-data.html#cb20-35"></a><span class="st">  </span><span class="kw">select</span>(</span>
-<span id="cb20-36"><a href="preparing-ebird-data.html#cb20-36"></a>    sampling_event_identifier, time_observations_started,</span>
-<span id="cb20-37"><a href="preparing-ebird-data.html#cb20-37"></a>    locality, locality_type, locality_id,</span>
-<span id="cb20-38"><a href="preparing-ebird-data.html#cb20-38"></a>    observer_id, observation_date, scientific_name,</span>
-<span id="cb20-39"><a href="preparing-ebird-data.html#cb20-39"></a>    observation_count, protocol_type, number_observers,</span>
-<span id="cb20-40"><a href="preparing-ebird-data.html#cb20-40"></a>    longitude, latitude</span>
-<span id="cb20-41"><a href="preparing-ebird-data.html#cb20-41"></a>  )</span>
-<span id="cb20-42"><a href="preparing-ebird-data.html#cb20-42"></a></span>
-<span id="cb20-43"><a href="preparing-ebird-data.html#cb20-43"></a><span class="co"># join the summarised data with the identifiers,</span></span>
-<span id="cb20-44"><a href="preparing-ebird-data.html#cb20-44"></a><span class="co"># using sampling_event_identifier as the key</span></span>
-<span id="cb20-45"><a href="preparing-ebird-data.html#cb20-45"></a>dataGrouped &lt;-<span class="st"> </span><span class="kw">left_join</span>(dataGrouped, dataConstants,</span>
-<span id="cb20-46"><a href="preparing-ebird-data.html#cb20-46"></a>  <span class="dt">by =</span> <span class="st">&quot;sampling_event_identifier&quot;</span></span>
-<span id="cb20-47"><a href="preparing-ebird-data.html#cb20-47"></a>)</span>
-<span id="cb20-48"><a href="preparing-ebird-data.html#cb20-48"></a></span>
-<span id="cb20-49"><a href="preparing-ebird-data.html#cb20-49"></a><span class="co"># remove checklists or seis with more than 10 obervers</span></span>
-<span id="cb20-50"><a href="preparing-ebird-data.html#cb20-50"></a><span class="kw">count</span>(dataGrouped, number_observers <span class="op">&gt;</span><span class="st"> </span><span class="dv">10</span>) <span class="co"># count how many have 10+ obs</span></span>
-<span id="cb20-51"><a href="preparing-ebird-data.html#cb20-51"></a>dataGrouped &lt;-<span class="st"> </span><span class="kw">filter</span>(dataGrouped, number_observers <span class="op">&lt;=</span><span class="st"> </span><span class="dv">10</span>)</span>
-<span id="cb20-52"><a href="preparing-ebird-data.html#cb20-52"></a></span>
-<span id="cb20-53"><a href="preparing-ebird-data.html#cb20-53"></a><span class="co"># keep only checklists between 5AM and 7PM</span></span>
-<span id="cb20-54"><a href="preparing-ebird-data.html#cb20-54"></a>dataGrouped &lt;-<span class="st"> </span><span class="kw">filter</span>(dataGrouped, time_observations_started <span class="op">&gt;=</span><span class="st"> &quot;05:00:00&quot;</span> <span class="op">&amp;</span><span class="st"> </span>time_observations_started <span class="op">&lt;=</span><span class="st"> &quot;19:00:00&quot;</span>)</span>
-<span id="cb20-55"><a href="preparing-ebird-data.html#cb20-55"></a></span>
-<span id="cb20-56"><a href="preparing-ebird-data.html#cb20-56"></a><span class="co"># keep only checklists between December 1st and May 31st</span></span>
-<span id="cb20-57"><a href="preparing-ebird-data.html#cb20-57"></a>dataGrouped &lt;-<span class="st"> </span><span class="kw">filter</span>(dataGrouped, <span class="kw">month</span>(observation_date) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">12</span>))</span></code></pre></div>
-</div>
-<div id="add-decimal-time" class="section level2">
-<h2><span class="header-section-number">3.6</span> Add decimal time</h2>
-<p>We added a column where time is denoted in decimal hours since midnight.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="preparing-ebird-data.html#cb21-1"></a><span class="co"># assign present or not, and get time in decimal hours since midnight</span></span>
-<span id="cb21-2"><a href="preparing-ebird-data.html#cb21-2"></a><span class="kw">library</span>(lubridate)</span>
-<span id="cb21-3"><a href="preparing-ebird-data.html#cb21-3"></a>time_to_decimal &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
-<span id="cb21-4"><a href="preparing-ebird-data.html#cb21-4"></a>  x &lt;-<span class="st"> </span><span class="kw">hms</span>(x, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb21-5"><a href="preparing-ebird-data.html#cb21-5"></a>  <span class="kw">hour</span>(x) <span class="op">+</span><span class="st"> </span><span class="kw">minute</span>(x) <span class="op">/</span><span class="st"> </span><span class="dv">60</span> <span class="op">+</span><span class="st"> </span><span class="kw">second</span>(x) <span class="op">/</span><span class="st"> </span><span class="dv">3600</span></span>
-<span id="cb21-6"><a href="preparing-ebird-data.html#cb21-6"></a>}</span>
-<span id="cb21-7"><a href="preparing-ebird-data.html#cb21-7"></a></span>
-<span id="cb21-8"><a href="preparing-ebird-data.html#cb21-8"></a><span class="co"># will cause issues if using time obs started as a linear effect and not quadratic</span></span>
-<span id="cb21-9"><a href="preparing-ebird-data.html#cb21-9"></a>dataGrouped &lt;-<span class="st"> </span><span class="kw">mutate</span>(dataGrouped,</span>
-<span id="cb21-10"><a href="preparing-ebird-data.html#cb21-10"></a>  <span class="dt">pres_abs =</span> observation_count <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span>,</span>
-<span id="cb21-11"><a href="preparing-ebird-data.html#cb21-11"></a>  <span class="dt">decimalTime =</span> <span class="kw">time_to_decimal</span>(time_observations_started)</span>
-<span id="cb21-12"><a href="preparing-ebird-data.html#cb21-12"></a>)</span>
-<span id="cb21-13"><a href="preparing-ebird-data.html#cb21-13"></a></span>
-<span id="cb21-14"><a href="preparing-ebird-data.html#cb21-14"></a><span class="co"># check class of dataGrouped, make sure not sf</span></span>
-<span id="cb21-15"><a href="preparing-ebird-data.html#cb21-15"></a>assertthat<span class="op">::</span><span class="kw">assert_that</span>(<span class="op">!</span><span class="st">&quot;sf&quot;</span> <span class="op">%in%</span><span class="st"> </span><span class="kw">class</span>(dataGrouped))</span></code></pre></div>
-<p>The above data is saved to a file.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="preparing-ebird-data.html#cb22-1"></a><span class="co"># save a temp data file</span></span>
-<span id="cb22-2"><a href="preparing-ebird-data.html#cb22-2"></a><span class="kw">save</span>(dataGrouped, <span class="dt">file =</span> <span class="st">&quot;data/01_data_prelim_processing.Rdata&quot;</span>)</span></code></pre></div>
-
-</div>
-</div>
-<h3> References</h3>
-<div id="refs" class="references">
-<div id="ref-johnston2019a">
-<p>Johnston, A, Wm Hochachka, Me Strimas-Mackey, V Ruiz Gutierrez, Oj Robinson, Et Miller, T Auer, St Kelling, and D Fink. 2019. “Analytical Guidelines to Increase the Value of Citizen Science Data: Using eBird Data to Estimate Species Occurrence.” Preprint. Ecology. <a href="https://doi.org/10.1101/574392">https://doi.org/10.1101/574392</a>.</p>
-</div>
+<div id="page-not-found" class="section level1">
+<h1>Page not found</h1>
+<p>The page you requested cannot be found (perhaps it was moved or renamed).</p>
+<p>You may want to try searching to find the page's new location, or use
+the table of contents to find the page you are looking for.</p>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="selecting-species-of-interest.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="preparing-environmental-predictors.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -546,7 +333,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/pratikunterwegs/eBirdOccupancy/edit/master/02_prep-ebird-data.Rmd",
+"link": "https://github.com/pratikunterwegs/eBirdOccupancy/edit/master/%s",
 "text": "Edit"
 },
 "history": {
