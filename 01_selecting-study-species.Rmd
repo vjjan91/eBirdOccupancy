@@ -298,7 +298,7 @@ ggsave(plotDistributions,
 dev.off()
 ```
 
-![Proportion of checklists reporting a species in each grid cell (25km side) between 2013 and 2021. Checklists were filtered to be within the boundaries of the Nilgiris and the Anamalai hills (black outline), but rounding to 25km cells may place cells outside the boundary. Deeper shades of red indicate a higher proportion of checklists reporting a species.](figs/fig_species_distributions.png)
+![Proportion of checklists reporting a species in each grid cell (25km side) between 2013 and 2021. Checklists were filtered to be within the boundaries of the Nilgiris and the Anamalai hills (black outline), but rounding to 25km cells may place cells outside the boundary. Deeper shades of red indicate a higher proportion of checklists reporting a species.](figs/fig_species_prop_checklists_25kmgrids.png)
 
 ## Prepare the species list
 
