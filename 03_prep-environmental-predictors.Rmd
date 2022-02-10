@@ -86,22 +86,52 @@ gc()
 
 CHELSA rasters can be downloaded using the `get_chelsa.sh` shell script, which is a `wget` command pointing to the `envidatS3.txt` file.
 
-### Prepare Bioclim 1 (mean temperature) for dry season (December to May)
+### Prepare BIOCLIM 4a and 15
 
-```{r check_for_1}
-if (file.exists("data/chelsa/CHELSA_bio10_1.tif")) {
-  message("Bio 1 already exists, will be overwritten")
-} else {
-  message("Bio 1 does not exist, will be prepared")
+We prepare the CHELSA rasters for seasonality in temperature (Bio 4a) and seasonality in precipitation (Bio 15) in the same way, reading them in, cropping them to the study site buffer extent, and handling the temperature layer values which we divide by 10. The CHELSA rasters can be downloaded from https://chelsa-climate.org/bioclim/
+
+```{r chelsa_rasters, , message=FALSE, warning=FALSE}
+# list chelsa files
+# the chelsa data can be downloaded from the aforementioned link. They haven't been uploaded to github as a result of its large size.
+chelsaFiles <- list.files("data/chelsa/",
+  full.names = TRUE,
+  recursive = TRUE,
+  pattern = "bio10"
+)
+
+# gather chelsa rasters
+chelsaData <- purrr::map(chelsaFiles, function(chr) {
+  a <- raster(chr)
+  crs(a) <- crs(elevData)
+  a <- crop(a, as(buffer, "Spatial"))
+  return(a)
+})
+
+# divide temperature by 10
+chelsaData[[1]] <- chelsaData[[1]] / 10
+
+# stack chelsa data
+chelsaData <- raster::stack(chelsaData)
+```
+
+### Prepare BIOCLIM 4a
+
+```{r check_for_4a}
+if (file.exists("data/chelsa/CHELSA_bio10_4a.tif")) {
+  message("Bio 4a already exists, will be overwritten")
 }
 ```
 
 
-Bioclim 1, is $Tkavg_i = (Tkmin_i + Tkmax_i) / 2$.
+Bioclim 4a, the coefficient of variation temperature seasonality is calculated as
 
-Here, we use only the months of December and Jan to May for dry season temperature.
+$$Bio\ 4a = \frac{SD\{ Tkavg_1, \ldots Tkavg_{12} \}}{(Bio\ 1 + 273.15)} \times 100$$
 
-```{r bioclim_1}
+where $Tkavg_i = (Tkmin_i + Tkmax_i) / 2$
+
+Here, we use only the months of December and Jan -- May for winter temperature variation.
+
+```{r bioclim_4a}
 # list rasters by pattern
 patterns <- c("tmin", "tmax")
 
@@ -148,29 +178,31 @@ tkAvg <- map2(tkAvg[["tmin"]], tkAvg[["tmax"]], function(tmin, tmax) {
   calc(stack(tmin, tmax), fun = mean)
 })
 
-# calculate Bio 1 for dry season
-bio_1 <- (calc(stack(tkAvg), fun = mean))
-names(bio_1) <- "CHELSA_bio10_1"
-
-# save bio_1
-writeRaster(bio_1, filename = "data/chelsa/CHELSA_bio10_1.tif", overwrite = T)
+# calculate Bio 4a
+bio_4a <- (calc(stack(tkAvg), fun = sd) / (chelsaData[[1]] + 273.15)) * 100
+names(bio_4a) <- "CHELSA_bio10_4a"
+# save bio_4a
+writeRaster(bio_4a, filename = "data/chelsa/CHELSA_bio10_4a.tif", overwrite = T)
 ```
 
-### Prepare Bioclim 12 (total rainfall) for dry season
+### Prepare Bioclim 15
 
-```{r check_for_12}
-if (file.exists("data/chelsa/CHELSA_bio10_12.tif")) {
-  message("Bio 12 already exists, will be overwritten")
-} else {
-  message("Bio 12 does not exist, will be prepared")
+```{r check_for_15}
+if (file.exists("data/chelsa/CHELSA_bio10_15.tif")) {
+  message("Bio 15 already exists, will be overwritten")
 }
 ```
 
-Bioclim 12, the total precipitation (in our area, rainfall), and equals
 
-where $\Sigma PPT_i$ is the monthly precipitation for the dry season months of December and Jan to May.
+Bioclim 15, the coefficient of variation precipitation (in our area, rainfall) seasonality is calculated as
 
-```{r bioclim_12}
+$$Bio\ 15 = \frac{SD\{ PPT_1, \ldots PPT_{12} \}}{1 + (Bio\ 12 / 12)} \times 100$$
+
+where $PPT_i$ is the monthly precipitation.
+
+Here, we use only the months of December and Jan -- May for winter rainfall variation.
+
+```{r bioclim_15}
 # list rasters by pattern
 pattern <- "prec"
 
@@ -196,12 +228,22 @@ pptTotal <- map(pptTotal, function(path) {
   a
 })
 
-# calculate Bio 12
-bio_12 <- (calc(stack(pptTotal), fun = sum))
-names(bio_12) <- "CHELSA_bio10_12"
+# calculate Bio 4a
+bio_15 <- (calc(stack(pptTotal), fun = sd) / (1 + (chelsaData[[2]] / 12))) * 100
+names(bio_15) <- "CHELSA_bio10_15"
+# save bio_4a
+writeRaster(bio_15, filename = "data/chelsa/CHELSA_bio10_15.tif", overwrite = T)
+```
 
-# save bio_12
-writeRaster(bio_12, filename = "data/chelsa/CHELSA_bio10_12.tif", overwrite = T)
+### Stack terrain and climate
+
+We stack the terrain and climatic rasters.
+
+```{r stack_rasters, , message=FALSE, warning=FALSE}
+
+# If bio4a and bio15 have already been prepared from previous runs/analysis - load them directly
+bio_4a <- raster("data/chelsa/CHELSA_bio10_4a.tif")
+bio_15 <- raster("data/chelsa/CHELSA_bio10_15.tif")
 ```
 
 ### Stack terrain and climate
@@ -210,7 +252,7 @@ We stack the terrain and climatic rasters.
 
 ```{r stack_rasters, , message=FALSE, warning=FALSE}
 # stack rasters for efficient reprojection later
-env_data <- stack(elevData, bio_1, bio_12)
+env_data <- stack(elevData, bio_4a, bio_15)
 ```
 
 ## Resample landcover from 10m to 1km
@@ -412,8 +454,8 @@ Figure code is hidden in versions rendered as HTML or PDF.
 ```{r plot_clim_elev, , echo=FALSE}
 # make labeller
 climvar_names <- c(
-  bio_12 = "Annual \nPrecipitation",
-  bio_1 = "Mean Annual \nTemperature")
+  bio_12 = "Precipitation \nSeasonality",
+  bio_1 = "Temperature \nSeasonality")
 
 # split data to list
 land_data <- split(land_data, f = land_data$clim_var)
@@ -728,4 +770,4 @@ ggsave(fig_clim_lc_elev,
 ```
 
 ![**Climate and landcover vary strongly along the elevation gradient in the Nilgiri and Anamalai Hills.**
-(a) Mean annual temperature and (b) annual precipitation, between the months of December and May, declines and increases with increasing elevation across the Nilgiri and Anamalai Hills, respectively. (c) Mean annual temperature (in celsius) is higher in human-modified landscapes such as agriculture/settlements when compared to evergreen forests, while (d) annual precipitation (in mm) is higher in naturally occurring land cover types when compared to human-modified land cover types. (e) Most elevations host a range of land cover types: while human-associated habitats such as agriculture are concentrated at lower elevations, and more natural types such as forests are associated with mid- and higher elevations, each of these types is also found outside their characteristic elevational bands. We calculated climate (BIOCLIM 1 and 12: mean annual temperature and annual precipitation, respectively) using CHELSA data over 1979 – 2013, from December to May (Karger et al. 2017), and present mean values (vertical bars show standard deviation) for every 200 m elevational band. Land cover types were taken from a reclassification of Roy et al. (2015; see main text) at 100 m elevational bands. Land cover types covering < 1% of an elevational band are shaded grey. All landscape layers were first resampled to 1 km resolution.](figs/fig_02.png)
+Both (a) variation in temperature and (b) variation in rainfall, between the months of December and May, declines with increasing elevation across the Nilgiri and Anamalai Hills. Climatic variation is not very strongly associated with land cover type, as both natural habitats such as forests, and artificial habitats such as plantations show low variation in (c) temperature, and (d) rainfall. (e) Most elevations host a range of land cover types: while artificial types such as agriculture are concentrated at lower elevations, and more natural types such as grasslands and forests are associated with higher elevations, each of these types is also found outside their characteristic elevational bands. We calculated climate seasonalities (BIOCLIM 4a and 15: temperature and rainfall, respectively) using CHELSA data over 1979 – 2013, from December to May (Karger et al. 2017), and present mean seasonality values (vertical bars show standard deviation) per 200 m elevational band. Land cover types were taken from a reclassification of Roy et al. (2015; see main text) at 100 m elevational bands. Land cover types covering < 1% of an elevational band are shaded grey. All landscape layers were first resampled to 1 km resolution.](figs/fig_02.png)
