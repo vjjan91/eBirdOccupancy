@@ -239,8 +239,7 @@ writeRaster(bio_15, filename = "data/chelsa/CHELSA_bio10_15.tif", overwrite = T)
 
 We stack the terrain and climatic rasters.
 
-```{r stack_rasters, , message=FALSE, warning=FALSE}
-
+```{r}
 # If bio4a and bio15 have already been prepared from previous runs/analysis - load them directly
 bio_4a <- raster("data/chelsa/CHELSA_bio10_4a.tif")
 bio_15 <- raster("data/chelsa/CHELSA_bio10_15.tif")
@@ -250,7 +249,7 @@ bio_15 <- raster("data/chelsa/CHELSA_bio10_15.tif")
 
 We stack the terrain and climatic rasters.
 
-```{r stack_rasters, , message=FALSE, warning=FALSE}
+```{r stack_rasters, message=FALSE, warning=FALSE}
 # stack rasters for efficient reprojection later
 env_data <- stack(elevData, bio_4a, bio_15)
 ```
