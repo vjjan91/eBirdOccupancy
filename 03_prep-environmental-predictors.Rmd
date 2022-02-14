@@ -420,7 +420,7 @@ landscape <- stack("data/spatial/landscape_resamp01_km.tif")
 
 # get proper names
 elev_names <- c("elev", "slope", "aspect")
-chelsa_names <- c("bio_1", "bio_12")
+chelsa_names <- c("bio_4a", "bio_15")
 
 names(landscape) <- glue('{c(elev_names, chelsa_names, "landcover")}')
 ```
@@ -549,8 +549,8 @@ lc_clim_data <- nest(lc_clim_data, data = c("landcover", "value"))
 
 # assign names
 lc_clim_data$climvar_name <- c(
-  "Mean Annual Temperature",
-  "Annual Precipitation"
+  "Temperature seasonality",
+  "Precipitation seasonality"
 )
 ```
 
@@ -769,5 +769,6 @@ ggsave(fig_clim_lc_elev,
 )
 ```
 
-![**Climate and landcover vary strongly along the elevation gradient in the Nilgiri and Anamalai Hills.**
-Both (a) variation in temperature and (b) variation in rainfall, between the months of December and May, declines with increasing elevation across the Nilgiri and Anamalai Hills. Climatic variation is not very strongly associated with land cover type, as both natural habitats such as forests, and artificial habitats such as plantations show low variation in (c) temperature, and (d) rainfall. (e) Most elevations host a range of land cover types: while artificial types such as agriculture are concentrated at lower elevations, and more natural types such as grasslands and forests are associated with higher elevations, each of these types is also found outside their characteristic elevational bands. We calculated climate seasonalities (BIOCLIM 4a and 15: temperature and rainfall, respectively) using CHELSA data over 1979 – 2013, from December to May (Karger et al. 2017), and present mean seasonality values (vertical bars show standard deviation) per 200 m elevational band. Land cover types were taken from a reclassification of Roy et al. (2015; see main text) at 100 m elevational bands. Land cover types covering < 1% of an elevational band are shaded grey. All landscape layers were first resampled to 1 km resolution.](figs/fig_02.png)
+![**Climate and land cover vary strongly along the elevation gradient in the Nilgiri and Anamalai Hills.**
+Both (a) temperature seasonality and (b) precipitation seasonality, between the months of December and May, declines with increasing elevation across the Nilgiri and Anamalai Hills. Climatic variation is not very strongly associated with land cover type, as both natural habitats such as forests, and human-associated habitat types such as plantations show low seasonality in (c) temperature, and (d) precipitation. (e) Most elevations host a range of land cover types: while human-associated habitats such as agriculture are concentrated at lower elevations, and more natural types such as grasslands and forests are associated with higher elevations, each of these types is also found outside their characteristic elevational bands. We calculated climate seasonalities (BIOCLIM 4a and 15: temperature and precipitation, respectively) using CHELSA data over 1979 – 2013, from December to May (Karger et al. 2017), and present mean seasonality values (vertical bars show standard deviation) for every 200 m elevational band. Land cover types were taken from a reclassification of Roy et al. (2015; see main text) at 100 m elevational bands. Land cover types covering < 1% of an elevational band are shaded grey. All landscape layers were first resampled to 1 km resolution.
+](figs/fig_02.png)

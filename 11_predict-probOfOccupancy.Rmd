@@ -42,7 +42,7 @@ assertthat::assert_that(
 
 ```{r}
 # preparep predictors - now look only for any digits
-predictors <- c("bio_\\d+", glue("lc_0{seq(9)}"))
+predictors <- c("bio\\d+", glue("lc_0{seq(9)}"))
 
 # prepare predictor search strings and scaling power
 preds <- glue("({predictors})")
@@ -141,15 +141,15 @@ data_resp <- ungroup(
 
 ```{r}
 # scale predictors
-scale_12 <- c(200, 1000) # range of precpitation
-scale_1 <- c(20, 40) # range of temperatures
+scale15 <- c(30, 50) # range of precpitation
+scale4 <- c(0, 1) # range of temperatures
 
 # scale bio4a and bio15a by actual values
 data_resp <- mutate(
   data_resp,
   pred_val = case_when(
-    predictor == "bio_1" ~ scales::rescale(pred_val, to = scale_1),
-    predictor == "bio_12" ~ scales::rescale(pred_val, to = scale_12),
+    predictor == "bio4" ~ scales::rescale(pred_val, to = scale4),
+    predictor == "bio15" ~ scales::rescale(pred_val, to = scale15),
     T ~ pred_val
   )
 )
@@ -164,10 +164,10 @@ data_poccu <- dplyr::select(
 ```{r}
 # select species
 soi <- c(
-  "Pomatorhinus horsfieldii", "Ficedula nigrorufa",
-  "Pycnonotus cafer", "Psittacula krameri"
+  "Myophonus horsfieldii", "Merops leschenaulti",
+  "Acrocephalus dumetorum", "Pycnonotus cafer"
 )
-which_predictors <- c("bio_1")
+which_predictors <- c("bio4")
 ```
 
 ### Figure: Occupancy ~ predictors
@@ -180,7 +180,7 @@ data_fig <- data_poccu %>%
   ) %>%
   mutate(
     cat = case_when(
-      scientific_name %in% c("Pomatorhinus horsfieldii", "Ficedula nigrorufa") ~ "forest",
+      scientific_name %in% c("Myophonus horsfieldii", "Merops leschenaulti") ~ "forest",
       T ~ "general"
     )
   )
@@ -226,7 +226,7 @@ make_occu_fig <- function(df, this_fill) {
       )
     ) +
     labs(
-      x = "Mean Annual Temperature",
+      x = "Temperature seasonality",
       y = "Probability of occupancy"
     )
 }
@@ -239,7 +239,7 @@ fig_occu <-
     fig_occu[c(2, 1)],
     ncol = 1
   ) & plot_annotation(
-    tag_levels = "A"
+    tag_levels = "a"
   ) &
     theme(
       plot.tag = element_text(
@@ -255,8 +255,8 @@ ggsave(
 )
 ```
 
-![**Probability of occupancy as a function of mean annual temperature.**
-Predicted probability of occupancy curves as a function of mean annual temperature (in celsius) for two (a) generalist and (b) forest species are shown here. (a) Mean annual temperature is positively associated with the rose-ringed parakeet _Psittacula krameri_ and the red-vented bulbul _Pycnonotus cafer_. (b) Mean annual temperature is negatively associated with the black-and-orange flycatcher _Ficedula nigrorufa_ and the indian scimitar-babbler _Pomatorhinus horsfieldii_.](figs/fig_05.png)
+![**Probability of occupancy as a function of temperature seasonality.**
+Predicted probability of occupancy curves as a function of temperature seasonality for two (a) generalist and (b) forest species are shown here. (a) Temperature seasonality is negatively associated with the probability of occupancy of the chestnut-headed bee-eater _Merops leschenaulti_ and the Malabar whistling-thrush _Myophonus horsfieldii_. (b) Temperature seasonality is positively associated with the probability of occupancy of the Blyth’s reed warbler _Acrocephalus dumetorum_ and the red-vented bulbul _Pycnonotus cafer_. ](figs/fig_05.png)
 
 
 ### Figures: Occupancy ~ predictors for all species
@@ -268,12 +268,12 @@ data_fig <- nest(
 )
 
 pred_names <- c(
-  "bio_1" = "Mean ann. temp",
-  "bio_12" = "Ann. precip",
+  "bio4" = "Temp. seasonality",
+  "bio15" = "Precip. seasonality",
   "lc_01" = "Evergreen",
   "lc_02" = "Deciduous",
   "lc_03" = "Mixed/degraded",
-  "lc_04" = "Agro./Settled",
+  "lc_04" = "Agri./Settl.",
   "lc_05" = "Grassland",
   "lc_07" = "Plantation",
   "lc_09" = "Water"
@@ -387,8 +387,8 @@ library(sf)
 lscape = rast("data/spatial/landscape_resamp01_km.tif")
 
 # isolate temperature and rainfall
-bio_1 = lscape[[4]] / 10 # temp, divide by 10
-bio_12 = lscape[[5]] # rain
+bio4 = lscape[[4]] 
+bio15 = lscape[[5]] # rain
 
 # careful while loading this raster, large size
 landcover <- rast("data/landUseClassification/landcover_roy_2015_reclassified.tif")
@@ -464,18 +464,18 @@ hills = st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>%
 
 ```{r}
 # get ranges
-range_1 <- terra::minmax(bio_1)[, 1] 
-range_12 <- terra::minmax(bio_12)[, 1]
+range4 <- terra::minmax(bio4)[, 1] 
+range15 <- terra::minmax(bio15)[, 1]
 
 # rescale
-bio_1 <- (bio_1 - min(range_1)) / (diff(range_1))
-bio_12 <- (bio_12 - min(range_12)) / (diff(range_12))
+bio4 <- (bio4 - min(range4)) / (diff(range4))
+bio15 <- (bio15 - min(range15)) / (diff(range15))
 
 # project to UTM
-climate <- c(bio_1, bio_12)
+climate <- c(bio4, bio15)
 names(climate) = c(
-  "Mean annual temp.", 
-  "Annual precip."
+  "Temp. seasonality", 
+  "Precip. seasonality"
 )
 
 climate <- terra::project(
@@ -514,10 +514,10 @@ landscape <- c(
   climate, climate2, lc_split
 )
 
-landscape = terra::mask(
-  landscape,
-  vect(hills)
-)
+#landscape = terra::mask(
+#  landscape,
+#  vect(hills)
+#)
 ```
 
 ### Prepare soi predictors
@@ -576,8 +576,8 @@ sp_coefs <- dplyr::select(
   sp_coefs,
   scientific_name,
   c(
-    "bio_1_1", "bio_12_1",
-    "bio_1_2", "bio_12_2"
+    "bio4_1", "bio15_1",
+    "bio4_2", "bio15_2"
   ),
   matches("lc")
 )
@@ -611,7 +611,7 @@ names(soi_occu) <- soi
 
 # make single stack
 soi_occu <- reduce(soi_occu, c)
-names(soi_occu) <- c("Ficedula nigrorufa","Pomatorhinus horsfieldii","Pycnonotus cafer","Psittacula krameri")
+names(soi_occu) <- c("Myophonus horsfieldii", "Merops leschenaulti","Acrocephalus dumetorum","Pycnonotus cafer")
 ```
 
 ```{r}
@@ -666,10 +666,6 @@ ggsave(
   width = 6, height = 6
 )
 ```
-
-![**Predicted area of occurrence as a function of mean annual temperature.**
-Predicted area of occurrence as a function of mean annual temperature (in celsius) for two forest and two generalist species are shown here. The endemic and range-restricted black-and-orange flycatcher _Ficedula nigrorufa_ has a higher probability of occupancy at high elevations across the Nilgiris and the Anamalai hills while the Indian scimitar-babbler _Pomatorhinus horsfieldii_ is predicted to occur at higher probabilities at mid and high elevations. The red-vented bulbul _Pycnonotus cafer_ and the rose-ringed parakeet _Psittacula krameri_, both generalist species, are widely distributed at low elevations and have reduced probability of occurrence at mid and high elevations across our study area. ](figs/fig_06.png)
-
 
 ### Prepare species occupancy for all species
 

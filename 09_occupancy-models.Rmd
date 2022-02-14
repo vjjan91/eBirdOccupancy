@@ -137,7 +137,7 @@ dat <- dplyr::select(
   expertise,
 
   # elevation and climate layers
-  elev, bio_1, bio_12,
+  elev, bio4, bio15,
 
   # all LANDCOVER COLUMNS
   matches("lc"),
@@ -160,7 +160,7 @@ dat.scaled <- dat.1
 # Note: Never refer to columns by numbers, numbers change, names remain
 cols_to_scale <- c(
   "duration_minutes", "effort_distance_km",
-  "number_observers", "expertise", "elev", "bio_1", "bio_12", "lc_02", "lc_09", "lc_01", "lc_05", "lc_04", "lc_07", "lc_03", "julian_date", "min_obs_started"
+  "number_observers", "expertise", "elev", "bio4a", "bio15a", "lc_02", "lc_09", "lc_01", "lc_05", "lc_04", "lc_07", "lc_03", "julian_date", "min_obs_started"
 )
 
 # this scales the relevant columns between 0 and 1
@@ -203,7 +203,7 @@ source("R/fun_screen_cor.R")
 
 # SELECT COLUMNS to check BY NAME
 cols_to_check <- c(
-  "expertise", "bio_1", "bio_12", "lc_02",
+  "expertise", "bio4a", "bio15a", "lc_02",
   "lc_09", "lc_01",
   "lc_05", "lc_04", "lc_07", "lc_03"
 )
@@ -270,7 +270,7 @@ for (i in species) {
     response = "pres_abs",
     site_covs = c(
       "locality_id", "lc_01", "lc_02", "lc_05",
-      "lc_04", "lc_09", "lc_07", "lc_03", "bio_1", "bio_12"
+      "lc_04", "lc_09", "lc_07", "lc_03", "bio4a", "bio15a"
     ),
     obs_covs = obs_covs
   )
@@ -345,7 +345,7 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
     response = "pres_abs",
     site_covs = c(
       "locality_id", "lc_01", "lc_02", "lc_05",
-      "lc_04", "lc_09", "lc_07", "lc_03", "bio_1", "bio_12"
+      "lc_04", "lc_09", "lc_07", "lc_03", "bio4a", "bio15a"
     ),
     obs_covs = obs_covs
   )
@@ -489,7 +489,7 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
     response = "pres_abs",
     site_covs = c(
       "locality_id", "lc_01", "lc_02", "lc_05",
-      "lc_04", "lc_09", "lc_07", "lc_03", "bio_1", "bio_12"
+      "lc_04", "lc_09", "lc_07", "lc_03", "bio4a", "bio15a"
     ),
     obs_covs = obs_covs
   )
@@ -503,7 +503,7 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
     effort_distance_km +
     number_observers +
     expertise ~ lc_01 + lc_02 + lc_05 + lc_04 + lc_09 + lc_07 + lc_03 + 
-      bio_1 + bio_12, data = occ_um)
+      bio4a + bio15a, data = occ_um)
 
   # Set up the cluster
   clusterType <- if (length(find.package("snow", quiet = TRUE))) "SOCK" else "PSOCK"
@@ -627,7 +627,7 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
     response = "pres_abs",
     site_covs = c(
       "locality_id", "lc_01", "lc_02", "lc_05",
-      "lc_04", "lc_09", "lc_07", "lc_03", "bio_1", "bio_12"
+      "lc_04", "lc_09", "lc_07", "lc_03", "bio4a", "bio15a"
     ),
     obs_covs = obs_covs
   )
@@ -642,7 +642,7 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
     number_observers +
     protocol_type +
     expertise ~ lc_01 + lc_02 + lc_05 +
-    lc_04 + lc_09 + lc_07 + lc_03 + bio_1 + bio_12, data = occ_um)
+    lc_04 + lc_09 + lc_07 + lc_03 + bio4a + bio15a, data = occ_um)
 
   # note: reduce nsim as this takes a very long time even with parallelization
   occ_gof <- mb.gof.test(model_lc_clim,
