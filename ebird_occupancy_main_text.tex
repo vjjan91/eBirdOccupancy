@@ -121,7 +121,7 @@
 
 \title{Source code for \emph{Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot}}
 \author{Vijay Ramesh \and Pratik R. Gupte \and Morgan W. Tingley \and VV Robin \and Ruth DeFries}
-\date{2022-02-09}
+\date{2022-02-14}
 
 \begin{document}
 \maketitle
@@ -180,8 +180,8 @@ Figure prepared in QGIS 3.20.
 \begin{figure}
 \centering
 \includegraphics{figs/fig_01.png}
-\caption{\textbf{The Nilgiri and Anamalai Hills in southern India provide a convenient geography for studying the interplay of land cover, elevation, and climate on the distributions of bird species.}
-(a) The Nilgiri and Anamalai Hills of the Southern Western Ghats are topographically complex, with maximum elevations \textgreater{} 2,000 m, and are separated by the very low-lying Palghat Gap, which serves as a natural barrier to the dispersal of many montane birds. (b) Lower elevations are primarily covered by agriculture and settlements, reflecting the intense human pressure on this region, while mid- and higher elevations show a mix of natural and human-modified land cover types (see Fig. 2 for details). (c) The coastal edge of the area, and the windward hill slopes show higher mean annual temperature across the December -- May period; the temperature decreases at higher elevations across our study area. (d) The Nilgiri hills receives comparatively lesser rainfall across the December - May period when compared to the Anamalai hills; the western part of the Anamalais receives more annual precipitation compared to other parts. Our study area (bounds shown as dashed lines) includes multiple combinations of elevation, land cover type, and mean annual temperature and annual precipitation, resulting in a naturally occurring crossed-factorial design that allows us to study the effects of climate and land cover on bird occupancy. Representative forest and generalist birds from the study area are shown between panels (all images were obtained from Wikimedia commons and credit is assigned for each species in brackets); From L to R: (1) Malabar grey hornbill (by Koshy), (2) Crimson-backed sunbird (by Mandar Godbole), (3) Asian emerald dove (by Selvaganesh), (4) Black-and-orange flycatcher (by LKanth), (5) Grey-headed canary flycatcher (by David Raju), (6) Greater-racket tailed drongo (by MD Shahanshah Bappy), (7) Eurasian hoopoe (by Zeynel cebeci), (8) Chestnut-headed bee-eater (by MikeBirds), (9) Coppersmith barbet (by Raju Kasambe), (10) Red-vented bulbul (by TR Shankar Raman), (11) Pied bushchat (by TR Shankar Raman), (12) Ashy prinia (by Rison Thumboor). Elevation is from 30 m resolution SRTM data (Farr et al.~2007), land cover, at 1 km resolution, is reclassified from Roy et al.~(2015), while climatic variation is represented by CHELSA layers (temperature: BIOCLIM 1, precipitation: BIOCLIM 12), at 1km resolution (Karger et al.~2017). All layers were resampled to 1 km resolution for analyses.}
+\caption{\textbf{The Nilgiri and Anamalai Hills in southern India provide a convenient geography for studying the interplay of land cover and climate on the distributions of bird species.}
+(a) The Nilgiri and Anamalai Hills of the Southern Western Ghats are topographically complex, with maximum elevations \textgreater{} 2,000 m, and are separated by the very low-lying Palghat Gap, which serves as a natural barrier to the dispersal of many hill birds. (b) Lower elevations are primarily covered by agriculture and settlements, reflecting the intense human pressure on this region, while mid- and higher elevations show a mix of natural and human-modified land cover types (see Fig. 2 for details). (c) The coastal edge of the area, and the windward hill slopes show limited temperature seasonality across the December -- May period; this seasonality increases with distance from the coast but is lower at higher elevations inland. (d) Higher elevations also show limited precipitation seasonality than both low-lying coastal and inland regions. Our study area (bounds shown as dashed lines) includes multiple combinations of elevation, land cover type, and temperature and rainfall seasonality, resulting in a naturally occurring crossed-factorial design that allows us to study the effects of climate and land cover on bird occupancy. Representative forest-restricted and habitat-generalist birds from the study area are shown between panels (all images were obtained from Wikimedia commons and credit is assigned for each species in brackets); From L to R: (1) Malabar grey hornbill (by Koshy), (2) Crimson-backed sunbird (by Mandar Godbole), (3) Asian emerald dove (by Selvaganesh), (4) Black-and-orange flycatcher (by LKanth), (5) Grey-headed canary flycatcher (by David Raju), (6) Greater-racket tailed drongo (by MD Shahanshah Bappy), (7) Eurasian hoopoe (by Zeynel cebeci), (8) Chestnut-headed bee-eater (by MikeBirds), (9) Coppersmith barbet (by Raju Kasambe), (10) Red-vented bulbul (by TR Shankar Raman), (11) Pied bushchat (by TR Shankar Raman), (12) Ashy prinia (by Rison Thumboor). Elevation is from 30 m resolution SRTM data (Farr et al.~2007), land cover, at 1 km resolution, is reclassified from Roy et al.~(2015), while climatic variation is represented by CHELSA seasonality layers (temperature: BIOCLIM 4a, rainfall: BIOCLIM 15), at 1km resolution (Karger et al.~2017). All layers were resampled to 1 km resolution for analyses.}
 \end{figure}
 
 \hypertarget{selecting-species-of-interest}{%
@@ -435,7 +435,7 @@ Add a spatial filter and assign grids of 25km x 25km.
 
 \begin{figure}
 \centering
-\includegraphics{figs/fig_species_distributions.png}
+\includegraphics{figs/fig_species_prop_checklists_25kmgrids.png}
 \caption{Proportion of checklists reporting a species in each grid cell (25km side) between 2013 and 2021. Checklists were filtered to be within the boundaries of the Nilgiris and the Anamalai hills (black outline), but rounding to 25km cells may place cells outside the boundary. Deeper shades of red indicate a higher proportion of checklists reporting a species.}
 \end{figure}
 
@@ -642,7 +642,7 @@ Save temporary data created so far.
 \hypertarget{handle-presence-data}{%
 \subsection{Handle presence data}\label{handle-presence-data}}
 
-Further pre-processing is required in the case of many checklists where species abundance is often unknown and an `X' is denoted in such cases. Here, we convert all `X' notations to a 1, suggesting a presence (as we are not concerned with abundance data in this analysis). We also removed those checklists where the duration in minutes is either not recorded or listed as zero. Lastly, we added an sampling effort based filter following (Johnston et al. \protect\hyperlink{ref-johnston2019a}{2019}), wherein we considered only those checklists with duration in minutes is less than 300 and distance in kilometres traveled is less than 5km. Lastly, we excluded those group checklists where the number of observers was greater than 10. For the sake of occupancy modeling of appropriate detection and occupancy covariates, we restrict all our checklists between December 1st and May 31st (non-rainy months)and checklists recorded between 5am and 7pm.
+Further pre-processing is required in the case of many checklists where species abundance is often unknown and an `X' is denoted in such cases. Here, we convert all `X' notations to a 1, suggesting a presence (as we are not concerned with abundance data in this analysis). We also removed those checklists where the duration in minutes is either not recorded or listed as zero. Lastly, we added an sampling effort based filter following (Johnston et al. \protect\hyperlink{ref-johnston2019a}{2019}), wherein we considered only those checklists with duration in minutes is less than 300 and distance in kilometers traveled is less than 5km. Lastly, we excluded those group checklists where the number of observers was greater than 10. For the sake of occupancy modeling of appropriate detection and occupancy covariates, we restrict all our checklists between December 1st and May 31st (non-rainy months)and checklists recorded between 5am and 7pm.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -835,22 +835,55 @@ We prepare the elevation data which is an SRTM raster layer, and derive the slop
 
 CHELSA rasters can be downloaded using the \texttt{get\_chelsa.sh} shell script, which is a \texttt{wget} command pointing to the \texttt{envidatS3.txt} file.
 
-\hypertarget{prepare-bioclim-1-mean-temperature-for-dry-season-december-to-may}{%
-\subsubsection{Prepare Bioclim 1 (mean temperature) for dry season (December to May)}\label{prepare-bioclim-1-mean-temperature-for-dry-season-december-to-may}}
+\hypertarget{prepare-bioclim-4a-and-15}{%
+\subsubsection{Prepare BIOCLIM 4a and 15}\label{prepare-bioclim-4a-and-15}}
+
+We prepare the CHELSA rasters for seasonality in temperature (Bio 4a) and seasonality in precipitation (Bio 15) in the same way, reading them in, cropping them to the study site buffer extent, and handling the temperature layer values which we divide by 10. The CHELSA rasters can be downloaded from \url{https://chelsa-climate.org/bioclim/}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\ControlFlowTok{if}\NormalTok{ (}\KeywordTok{file.exists}\NormalTok{(}\StringTok{"data/chelsa/CHELSA_bio10_1.tif"}\NormalTok{)) \{}
-  \KeywordTok{message}\NormalTok{(}\StringTok{"Bio 1 already exists, will be overwritten"}\NormalTok{)}
-\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
-  \KeywordTok{message}\NormalTok{(}\StringTok{"Bio 1 does not exist, will be prepared"}\NormalTok{)}
+\CommentTok{# list chelsa files}
+\CommentTok{# the chelsa data can be downloaded from the aforementioned link. They haven't been uploaded to github as a result of its large size.}
+\NormalTok{chelsaFiles <-}\StringTok{ }\KeywordTok{list.files}\NormalTok{(}\StringTok{"data/chelsa/"}\NormalTok{,}
+  \DataTypeTok{full.names =} \OtherTok{TRUE}\NormalTok{,}
+  \DataTypeTok{recursive =} \OtherTok{TRUE}\NormalTok{,}
+  \DataTypeTok{pattern =} \StringTok{"bio10"}
+\NormalTok{)}
+
+\CommentTok{# gather chelsa rasters}
+\NormalTok{chelsaData <-}\StringTok{ }\NormalTok{purrr}\OperatorTok{::}\KeywordTok{map}\NormalTok{(chelsaFiles, }\ControlFlowTok{function}\NormalTok{(chr) \{}
+\NormalTok{  a <-}\StringTok{ }\KeywordTok{raster}\NormalTok{(chr)}
+  \KeywordTok{crs}\NormalTok{(a) <-}\StringTok{ }\KeywordTok{crs}\NormalTok{(elevData)}
+\NormalTok{  a <-}\StringTok{ }\KeywordTok{crop}\NormalTok{(a, }\KeywordTok{as}\NormalTok{(buffer, }\StringTok{"Spatial"}\NormalTok{))}
+  \KeywordTok{return}\NormalTok{(a)}
+\NormalTok{\})}
+
+\CommentTok{# divide temperature by 10}
+\NormalTok{chelsaData[[}\DecValTok{1}\NormalTok{]] <-}\StringTok{ }\NormalTok{chelsaData[[}\DecValTok{1}\NormalTok{]] }\OperatorTok{/}\StringTok{ }\DecValTok{10}
+
+\CommentTok{# stack chelsa data}
+\NormalTok{chelsaData <-}\StringTok{ }\NormalTok{raster}\OperatorTok{::}\KeywordTok{stack}\NormalTok{(chelsaData)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{prepare-bioclim-4a}{%
+\subsubsection{Prepare BIOCLIM 4a}\label{prepare-bioclim-4a}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\NormalTok{ (}\KeywordTok{file.exists}\NormalTok{(}\StringTok{"data/chelsa/CHELSA_bio10_4a.tif"}\NormalTok{)) \{}
+  \KeywordTok{message}\NormalTok{(}\StringTok{"Bio 4a already exists, will be overwritten"}\NormalTok{)}
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
 
-Bioclim 1, is \(Tkavg_i = (Tkmin_i + Tkmax_i) / 2\).
+Bioclim 4a, the coefficient of variation temperature seasonality is calculated as
 
-Here, we use only the months of December and Jan to May for dry season temperature.
+\[Bio\ 4a = \frac{SD\{ Tkavg_1, \ldots Tkavg_{12} \}}{(Bio\ 1 + 273.15)} \times 100\]
+
+where \(Tkavg_i = (Tkmin_i + Tkmax_i) / 2\)
+
+Here, we use only the months of December and Jan -- May for winter temperature variation.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -900,31 +933,32 @@ Here, we use only the months of December and Jan to May for dry season temperatu
   \KeywordTok{calc}\NormalTok{(}\KeywordTok{stack}\NormalTok{(tmin, tmax), }\DataTypeTok{fun =}\NormalTok{ mean)}
 \NormalTok{\})}
 
-\CommentTok{# calculate Bio 1 for dry season}
-\NormalTok{bio_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\NormalTok{(}\KeywordTok{calc}\NormalTok{(}\KeywordTok{stack}\NormalTok{(tkAvg), }\DataTypeTok{fun =}\NormalTok{ mean))}
-\KeywordTok{names}\NormalTok{(bio_}\DecValTok{1}\NormalTok{) <-}\StringTok{ "CHELSA_bio10_1"}
-
-\CommentTok{# save bio_1}
-\KeywordTok{writeRaster}\NormalTok{(bio_}\DecValTok{1}\NormalTok{, }\DataTypeTok{filename =} \StringTok{"data/chelsa/CHELSA_bio10_1.tif"}\NormalTok{, }\DataTypeTok{overwrite =}\NormalTok{ T)}
+\CommentTok{# calculate Bio 4a}
+\NormalTok{bio_4a <-}\StringTok{ }\NormalTok{(}\KeywordTok{calc}\NormalTok{(}\KeywordTok{stack}\NormalTok{(tkAvg), }\DataTypeTok{fun =}\NormalTok{ sd) }\OperatorTok{/}\StringTok{ }\NormalTok{(chelsaData[[}\DecValTok{1}\NormalTok{]] }\OperatorTok{+}\StringTok{ }\FloatTok{273.15}\NormalTok{)) }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\KeywordTok{names}\NormalTok{(bio_4a) <-}\StringTok{ "CHELSA_bio10_4a"}
+\CommentTok{# save bio_4a}
+\KeywordTok{writeRaster}\NormalTok{(bio_4a, }\DataTypeTok{filename =} \StringTok{"data/chelsa/CHELSA_bio10_4a.tif"}\NormalTok{, }\DataTypeTok{overwrite =}\NormalTok{ T)}
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{prepare-bioclim-12-total-rainfall-for-dry-season}{%
-\subsubsection{Prepare Bioclim 12 (total rainfall) for dry season}\label{prepare-bioclim-12-total-rainfall-for-dry-season}}
+\hypertarget{prepare-bioclim-15}{%
+\subsubsection{Prepare Bioclim 15}\label{prepare-bioclim-15}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\ControlFlowTok{if}\NormalTok{ (}\KeywordTok{file.exists}\NormalTok{(}\StringTok{"data/chelsa/CHELSA_bio10_12.tif"}\NormalTok{)) \{}
-  \KeywordTok{message}\NormalTok{(}\StringTok{"Bio 12 already exists, will be overwritten"}\NormalTok{)}
-\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
-  \KeywordTok{message}\NormalTok{(}\StringTok{"Bio 12 does not exist, will be prepared"}\NormalTok{)}
+\ControlFlowTok{if}\NormalTok{ (}\KeywordTok{file.exists}\NormalTok{(}\StringTok{"data/chelsa/CHELSA_bio10_15.tif"}\NormalTok{)) \{}
+  \KeywordTok{message}\NormalTok{(}\StringTok{"Bio 15 already exists, will be overwritten"}\NormalTok{)}
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
 
-Bioclim 12, the total precipitation (in our area, rainfall), and equals
+Bioclim 15, the coefficient of variation precipitation (in our area, rainfall) seasonality is calculated as
 
-where \(\Sigma PPT_i\) is the monthly precipitation for the dry season months of December and Jan to May.
+\[Bio\ 15 = \frac{SD\{ PPT_1, \ldots PPT_{12} \}}{1 + (Bio\ 12 / 12)} \times 100\]
+
+where \(PPT_i\) is the monthly precipitation.
+
+Here, we use only the months of December and Jan -- May for winter rainfall variation.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -953,12 +987,11 @@ where \(\Sigma PPT_i\) is the monthly precipitation for the dry season months of
 \NormalTok{  a}
 \NormalTok{\})}
 
-\CommentTok{# calculate Bio 12}
-\NormalTok{bio_}\DecValTok{12}\NormalTok{ <-}\StringTok{ }\NormalTok{(}\KeywordTok{calc}\NormalTok{(}\KeywordTok{stack}\NormalTok{(pptTotal), }\DataTypeTok{fun =}\NormalTok{ sum))}
-\KeywordTok{names}\NormalTok{(bio_}\DecValTok{12}\NormalTok{) <-}\StringTok{ "CHELSA_bio10_12"}
-
-\CommentTok{# save bio_12}
-\KeywordTok{writeRaster}\NormalTok{(bio_}\DecValTok{12}\NormalTok{, }\DataTypeTok{filename =} \StringTok{"data/chelsa/CHELSA_bio10_12.tif"}\NormalTok{, }\DataTypeTok{overwrite =}\NormalTok{ T)}
+\CommentTok{# calculate Bio 4a}
+\NormalTok{bio_}\DecValTok{15}\NormalTok{ <-}\StringTok{ }\NormalTok{(}\KeywordTok{calc}\NormalTok{(}\KeywordTok{stack}\NormalTok{(pptTotal), }\DataTypeTok{fun =}\NormalTok{ sd) }\OperatorTok{/}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{(chelsaData[[}\DecValTok{2}\NormalTok{]] }\OperatorTok{/}\StringTok{ }\DecValTok{12}\NormalTok{))) }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\KeywordTok{names}\NormalTok{(bio_}\DecValTok{15}\NormalTok{) <-}\StringTok{ "CHELSA_bio10_15"}
+\CommentTok{# save bio_4a}
+\KeywordTok{writeRaster}\NormalTok{(bio_}\DecValTok{15}\NormalTok{, }\DataTypeTok{filename =} \StringTok{"data/chelsa/CHELSA_bio10_15.tif"}\NormalTok{, }\DataTypeTok{overwrite =}\NormalTok{ T)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -969,8 +1002,21 @@ We stack the terrain and climatic rasters.
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{# If bio4a and bio15 have already been prepared from previous runs/analysis - load them directly}
+\NormalTok{bio_4a <-}\StringTok{ }\KeywordTok{raster}\NormalTok{(}\StringTok{"data/chelsa/CHELSA_bio10_4a.tif"}\NormalTok{)}
+\NormalTok{bio_}\DecValTok{15}\NormalTok{ <-}\StringTok{ }\KeywordTok{raster}\NormalTok{(}\StringTok{"data/chelsa/CHELSA_bio10_15.tif"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{stack-terrain-and-climate-1}{%
+\subsubsection{Stack terrain and climate}\label{stack-terrain-and-climate-1}}
+
+We stack the terrain and climatic rasters.
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \CommentTok{# stack rasters for efficient reprojection later}
-\NormalTok{env_data <-}\StringTok{ }\KeywordTok{stack}\NormalTok{(elevData, bio_}\DecValTok{1}\NormalTok{, bio_}\DecValTok{12}\NormalTok{)}
+\NormalTok{env_data <-}\StringTok{ }\KeywordTok{stack}\NormalTok{(elevData, bio_4a, bio_}\DecValTok{15}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1098,7 +1144,7 @@ Here, we read in the 1km landcover raster and set 0 to NA.
 
 \CommentTok{# get proper names}
 \NormalTok{elev_names <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"elev"}\NormalTok{, }\StringTok{"slope"}\NormalTok{, }\StringTok{"aspect"}\NormalTok{)}
-\NormalTok{chelsa_names <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"bio_1"}\NormalTok{, }\StringTok{"bio_12"}\NormalTok{)}
+\NormalTok{chelsa_names <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"bio_4a"}\NormalTok{, }\StringTok{"bio_15"}\NormalTok{)}
 
 \KeywordTok{names}\NormalTok{(landscape) <-}\StringTok{ }\KeywordTok{glue}\NormalTok{(}\StringTok{'\{c(elev_names, chelsa_names, "landcover")\}'}\NormalTok{)}
 \end{Highlighting}
@@ -1176,8 +1222,8 @@ Get climate values per (re-classified) landcover type from the 1km resampled ras
 
 \CommentTok{# assign names}
 \NormalTok{lc_clim_data}\OperatorTok{$}\NormalTok{climvar_name <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}
-  \StringTok{"Mean Annual Temperature"}\NormalTok{,}
-  \StringTok{"Annual Precipitation"}
+  \StringTok{"Temperature seasonality"}\NormalTok{,}
+  \StringTok{"Precipitation seasonality"}
 \NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -1303,14 +1349,14 @@ Figure code is hidden in versions rendered as HTML and PDF.
 \begin{figure}
 \centering
 \includegraphics{figs/fig_02.png}
-\caption{\textbf{Climate and landcover vary strongly along the elevation gradient in the Nilgiri and Anamalai Hills.}
-(a) Mean annual temperature and (b) annual precipitation, between the months of December and May, declines and increases with increasing elevation across the Nilgiri and Anamalai Hills, respectively. (c) Mean annual temperature (in celsius) is higher in human-modified landscapes such as agriculture/settlements when compared to evergreen forests, while (d) annual precipitation (in mm) is higher in naturally occurring land cover types when compared to human-modified land cover types. (e) Most elevations host a range of land cover types: while human-associated habitats such as agriculture are concentrated at lower elevations, and more natural types such as forests are associated with mid- and higher elevations, each of these types is also found outside their characteristic elevational bands. We calculated climate (BIOCLIM 1 and 12: mean annual temperature and annual precipitation, respectively) using CHELSA data over 1979 -- 2013, from December to May (Karger et al.~2017), and present mean values (vertical bars show standard deviation) for every 200 m elevational band. Land cover types were taken from a reclassification of Roy et al.~(2015; see main text) at 100 m elevational bands. Land cover types covering \textless{} 1\% of an elevational band are shaded grey. All landscape layers were first resampled to 1 km resolution.}
+\caption{\textbf{Climate and land cover vary strongly along the elevation gradient in the Nilgiri and Anamalai Hills.}
+Both (a) temperature seasonality and (b) precipitation seasonality, between the months of December and May, declines with increasing elevation across the Nilgiri and Anamalai Hills. Climatic variation is not very strongly associated with land cover type, as both natural habitats such as forests, and human-associated habitat types such as plantations show low seasonality in (c) temperature, and (d) precipitation. (e) Most elevations host a range of land cover types: while human-associated habitats such as agriculture are concentrated at lower elevations, and more natural types such as grasslands and forests are associated with higher elevations, each of these types is also found outside their characteristic elevational bands. We calculated climate seasonalities (BIOCLIM 4a and 15: temperature and precipitation, respectively) using CHELSA data over 1979 -- 2013, from December to May (Karger et al.~2017), and present mean seasonality values (vertical bars show standard deviation) for every 200 m elevational band. Land cover types were taken from a reclassification of Roy et al.~(2015; see main text) at 100 m elevational bands. Land cover types covering \textless{} 1\% of an elevational band are shaded grey. All landscape layers were first resampled to 1 km resolution.}
 \end{figure}
 
 \hypertarget{preparing-checklist-calibration-index}{%
 \section{Preparing Checklist Calibration Index}\label{preparing-checklist-calibration-index}}
 
-Differences in local avifaunal expertise among citizen scientists can lead to biased species detection when compared with data collected by a consistent set of trained observers (van Strien, van Swaay, and Termaat \protect\hyperlink{ref-vanstrien2013}{2013}). Including observer expertise as a detection covariate in occupancy models using eBird data can help account for this variation (Johnston et al. \protect\hyperlink{ref-johnston2018}{2018}). Observer-specific expertise in local avifauna was calculated following (Kelling et al. \protect\hyperlink{ref-kelling2015a}{2015}) as the normalized predicted number of species reported by an observer after 60 minutes of sampling across the most common land cover type within the study area. This score was calculated by examining checklists from anonymized observers across the study area. We modified Kelling et al.~(2015) formulation by including only observations of the 82 species of interest in our calculations. An observer with a higher number of species of interest reported within 60 minutes would have a higher observer-specific expertise score, with respect to the study area.
+Differences in local avifaunal expertise among citizen scientists can lead to biased species detection when compared with data collected by a consistent set of trained observers (van Strien, van Swaay, and Termaat \protect\hyperlink{ref-vanstrien2013}{2013}). Including observer expertise as a detection covariate in occupancy models using eBird data can help account for this variation (Johnston et al. \protect\hyperlink{ref-johnston2018}{2018}). Observer-specific expertise in local avifauna was calculated following (Kelling et al. \protect\hyperlink{ref-kelling2015a}{2015}) as the normalized predicted number of species reported by an observer after 60 minutes of sampling across the most common land cover type within the study area. This score was calculated by examining checklists from anonymized observers across the study area. We modified Kelling et al.~(2015) formulation by including only observations of the 79 species of interest in our calculations. An observer with a higher number of species of interest reported within 60 minutes would have a higher observer-specific expertise score, with respect to the study area.
 
 \hypertarget{prepare-libraries-2}{%
 \subsection{Prepare libraries}\label{prepare-libraries-2}}
@@ -2666,7 +2712,7 @@ Convert time and date to julian date and minutes since day.
 \NormalTok{  expertise,}
 
   \CommentTok{# elevation and climate layers}
-\NormalTok{  elev, bio_}\DecValTok{1}\NormalTok{, bio_}\DecValTok{12}\NormalTok{,}
+\NormalTok{  elev, bio4, bio15,}
 
   \CommentTok{# all LANDCOVER COLUMNS}
   \KeywordTok{matches}\NormalTok{(}\StringTok{"lc"}\NormalTok{),}
@@ -2689,7 +2735,7 @@ Convert time and date to julian date and minutes since day.
 \CommentTok{# Note: Never refer to columns by numbers, numbers change, names remain}
 \NormalTok{cols_to_scale <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}
   \StringTok{"duration_minutes"}\NormalTok{, }\StringTok{"effort_distance_km"}\NormalTok{,}
-  \StringTok{"number_observers"}\NormalTok{, }\StringTok{"expertise"}\NormalTok{, }\StringTok{"elev"}\NormalTok{, }\StringTok{"bio_1"}\NormalTok{, }\StringTok{"bio_12"}\NormalTok{, }\StringTok{"lc_02"}\NormalTok{, }\StringTok{"lc_09"}\NormalTok{, }\StringTok{"lc_01"}\NormalTok{, }\StringTok{"lc_05"}\NormalTok{, }\StringTok{"lc_04"}\NormalTok{, }\StringTok{"lc_07"}\NormalTok{, }\StringTok{"lc_03"}\NormalTok{, }\StringTok{"julian_date"}\NormalTok{, }\StringTok{"min_obs_started"}
+  \StringTok{"number_observers"}\NormalTok{, }\StringTok{"expertise"}\NormalTok{, }\StringTok{"elev"}\NormalTok{, }\StringTok{"bio4a"}\NormalTok{, }\StringTok{"bio15a"}\NormalTok{, }\StringTok{"lc_02"}\NormalTok{, }\StringTok{"lc_09"}\NormalTok{, }\StringTok{"lc_01"}\NormalTok{, }\StringTok{"lc_05"}\NormalTok{, }\StringTok{"lc_04"}\NormalTok{, }\StringTok{"lc_07"}\NormalTok{, }\StringTok{"lc_03"}\NormalTok{, }\StringTok{"julian_date"}\NormalTok{, }\StringTok{"min_obs_started"}
 \NormalTok{)}
 
 \CommentTok{# this scales the relevant columns between 0 and 1}
@@ -2738,7 +2784,7 @@ Convert time and date to julian date and minutes since day.
 
 \CommentTok{# SELECT COLUMNS to check BY NAME}
 \NormalTok{cols_to_check <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}
-  \StringTok{"expertise"}\NormalTok{, }\StringTok{"bio_1"}\NormalTok{, }\StringTok{"bio_12"}\NormalTok{, }\StringTok{"lc_02"}\NormalTok{,}
+  \StringTok{"expertise"}\NormalTok{, }\StringTok{"bio4a"}\NormalTok{, }\StringTok{"bio15a"}\NormalTok{, }\StringTok{"lc_02"}\NormalTok{,}
   \StringTok{"lc_09"}\NormalTok{, }\StringTok{"lc_01"}\NormalTok{,}
   \StringTok{"lc_05"}\NormalTok{, }\StringTok{"lc_04"}\NormalTok{, }\StringTok{"lc_07"}\NormalTok{, }\StringTok{"lc_03"}
 \NormalTok{)}
@@ -2808,7 +2854,7 @@ Convert time and date to julian date and minutes since day.
     \DataTypeTok{response =} \StringTok{"pres_abs"}\NormalTok{,}
     \DataTypeTok{site_covs =} \KeywordTok{c}\NormalTok{(}
       \StringTok{"locality_id"}\NormalTok{, }\StringTok{"lc_01"}\NormalTok{, }\StringTok{"lc_02"}\NormalTok{, }\StringTok{"lc_05"}\NormalTok{,}
-      \StringTok{"lc_04"}\NormalTok{, }\StringTok{"lc_09"}\NormalTok{, }\StringTok{"lc_07"}\NormalTok{, }\StringTok{"lc_03"}\NormalTok{, }\StringTok{"bio_1"}\NormalTok{, }\StringTok{"bio_12"}
+      \StringTok{"lc_04"}\NormalTok{, }\StringTok{"lc_09"}\NormalTok{, }\StringTok{"lc_07"}\NormalTok{, }\StringTok{"lc_03"}\NormalTok{, }\StringTok{"bio4a"}\NormalTok{, }\StringTok{"bio15a"}
 \NormalTok{    ),}
     \DataTypeTok{obs_covs =}\NormalTok{ obs_covs}
 \NormalTok{  )}
@@ -2886,7 +2932,7 @@ Here, we use the \texttt{unmarked} package in R (Fiske and Chandler \protect\hyp
     \DataTypeTok{response =} \StringTok{"pres_abs"}\NormalTok{,}
     \DataTypeTok{site_covs =} \KeywordTok{c}\NormalTok{(}
       \StringTok{"locality_id"}\NormalTok{, }\StringTok{"lc_01"}\NormalTok{, }\StringTok{"lc_02"}\NormalTok{, }\StringTok{"lc_05"}\NormalTok{,}
-      \StringTok{"lc_04"}\NormalTok{, }\StringTok{"lc_09"}\NormalTok{, }\StringTok{"lc_07"}\NormalTok{, }\StringTok{"lc_03"}\NormalTok{, }\StringTok{"bio_1"}\NormalTok{, }\StringTok{"bio_12"}
+      \StringTok{"lc_04"}\NormalTok{, }\StringTok{"lc_09"}\NormalTok{, }\StringTok{"lc_07"}\NormalTok{, }\StringTok{"lc_03"}\NormalTok{, }\StringTok{"bio4a"}\NormalTok{, }\StringTok{"bio15a"}
 \NormalTok{    ),}
     \DataTypeTok{obs_covs =}\NormalTok{ obs_covs}
 \NormalTok{  )}
@@ -3033,7 +3079,7 @@ Across the models tested for each species, the model with highest support was de
     \DataTypeTok{response =} \StringTok{"pres_abs"}\NormalTok{,}
     \DataTypeTok{site_covs =} \KeywordTok{c}\NormalTok{(}
       \StringTok{"locality_id"}\NormalTok{, }\StringTok{"lc_01"}\NormalTok{, }\StringTok{"lc_02"}\NormalTok{, }\StringTok{"lc_05"}\NormalTok{,}
-      \StringTok{"lc_04"}\NormalTok{, }\StringTok{"lc_09"}\NormalTok{, }\StringTok{"lc_07"}\NormalTok{, }\StringTok{"lc_03"}\NormalTok{, }\StringTok{"bio_1"}\NormalTok{, }\StringTok{"bio_12"}
+      \StringTok{"lc_04"}\NormalTok{, }\StringTok{"lc_09"}\NormalTok{, }\StringTok{"lc_07"}\NormalTok{, }\StringTok{"lc_03"}\NormalTok{, }\StringTok{"bio4a"}\NormalTok{, }\StringTok{"bio15a"}
 \NormalTok{    ),}
     \DataTypeTok{obs_covs =}\NormalTok{ obs_covs}
 \NormalTok{  )}
@@ -3047,7 +3093,7 @@ Across the models tested for each species, the model with highest support was de
 \StringTok{    }\NormalTok{effort_distance_km }\OperatorTok{+}
 \StringTok{    }\NormalTok{number_observers }\OperatorTok{+}
 \StringTok{    }\NormalTok{expertise }\OperatorTok{~}\StringTok{ }\NormalTok{lc_}\DecValTok{01} \OperatorTok{+}\StringTok{ }\NormalTok{lc_}\DecValTok{02} \OperatorTok{+}\StringTok{ }\NormalTok{lc_}\DecValTok{05} \OperatorTok{+}\StringTok{ }\NormalTok{lc_}\DecValTok{04} \OperatorTok{+}\StringTok{ }\NormalTok{lc_}\DecValTok{09} \OperatorTok{+}\StringTok{ }\NormalTok{lc_}\DecValTok{07} \OperatorTok{+}\StringTok{ }\NormalTok{lc_}\DecValTok{03} \OperatorTok{+}\StringTok{ }
-\StringTok{      }\NormalTok{bio_}\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{bio_}\DecValTok{12}\NormalTok{, }\DataTypeTok{data =}\NormalTok{ occ_um)}
+\StringTok{      }\NormalTok{bio4a }\OperatorTok{+}\StringTok{ }\NormalTok{bio15a, }\DataTypeTok{data =}\NormalTok{ occ_um)}
 
   \CommentTok{# Set up the cluster}
 \NormalTok{  clusterType <-}\StringTok{ }\ControlFlowTok{if}\NormalTok{ (}\KeywordTok{length}\NormalTok{(}\KeywordTok{find.package}\NormalTok{(}\StringTok{"snow"}\NormalTok{, }\DataTypeTok{quiet =} \OtherTok{TRUE}\NormalTok{))) }\StringTok{"SOCK"} \ControlFlowTok{else} \StringTok{"PSOCK"}
@@ -3175,7 +3221,7 @@ Adequate model fit was assessed using a chi-square goodness-of-fit test using 1,
     \DataTypeTok{response =} \StringTok{"pres_abs"}\NormalTok{,}
     \DataTypeTok{site_covs =} \KeywordTok{c}\NormalTok{(}
       \StringTok{"locality_id"}\NormalTok{, }\StringTok{"lc_01"}\NormalTok{, }\StringTok{"lc_02"}\NormalTok{, }\StringTok{"lc_05"}\NormalTok{,}
-      \StringTok{"lc_04"}\NormalTok{, }\StringTok{"lc_09"}\NormalTok{, }\StringTok{"lc_07"}\NormalTok{, }\StringTok{"lc_03"}\NormalTok{, }\StringTok{"bio_1"}\NormalTok{, }\StringTok{"bio_12"}
+      \StringTok{"lc_04"}\NormalTok{, }\StringTok{"lc_09"}\NormalTok{, }\StringTok{"lc_07"}\NormalTok{, }\StringTok{"lc_03"}\NormalTok{, }\StringTok{"bio4a"}\NormalTok{, }\StringTok{"bio15a"}
 \NormalTok{    ),}
     \DataTypeTok{obs_covs =}\NormalTok{ obs_covs}
 \NormalTok{  )}
@@ -3190,7 +3236,7 @@ Adequate model fit was assessed using a chi-square goodness-of-fit test using 1,
 \StringTok{    }\NormalTok{number_observers }\OperatorTok{+}
 \StringTok{    }\NormalTok{protocol_type }\OperatorTok{+}
 \StringTok{    }\NormalTok{expertise }\OperatorTok{~}\StringTok{ }\NormalTok{lc_}\DecValTok{01} \OperatorTok{+}\StringTok{ }\NormalTok{lc_}\DecValTok{02} \OperatorTok{+}\StringTok{ }\NormalTok{lc_}\DecValTok{05} \OperatorTok{+}
-\StringTok{    }\NormalTok{lc_}\DecValTok{04} \OperatorTok{+}\StringTok{ }\NormalTok{lc_}\DecValTok{09} \OperatorTok{+}\StringTok{ }\NormalTok{lc_}\DecValTok{07} \OperatorTok{+}\StringTok{ }\NormalTok{lc_}\DecValTok{03} \OperatorTok{+}\StringTok{ }\NormalTok{bio_}\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{bio_}\DecValTok{12}\NormalTok{, }\DataTypeTok{data =}\NormalTok{ occ_um)}
+\StringTok{    }\NormalTok{lc_}\DecValTok{04} \OperatorTok{+}\StringTok{ }\NormalTok{lc_}\DecValTok{09} \OperatorTok{+}\StringTok{ }\NormalTok{lc_}\DecValTok{07} \OperatorTok{+}\StringTok{ }\NormalTok{lc_}\DecValTok{03} \OperatorTok{+}\StringTok{ }\NormalTok{bio4a }\OperatorTok{+}\StringTok{ }\NormalTok{bio15a, }\DataTypeTok{data =}\NormalTok{ occ_um)}
 
   \CommentTok{# note: reduce nsim as this takes a very long time even with parallelization}
 \NormalTok{  occ_gof <-}\StringTok{ }\KeywordTok{mb.gof.test}\NormalTok{(model_lc_clim,}
@@ -3259,15 +3305,15 @@ In this section, we will visualize the magnitude and direction of species-specif
 \CommentTok{# list of species}
 \CommentTok{# Removing species after running a chi-square goodness of fit test}
 \NormalTok{species <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"data/species_list.csv"}\NormalTok{) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{filter}\NormalTok{(}
-    \OperatorTok{!}\NormalTok{scientific_name }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}
-      \StringTok{"Prinia hodgsonii"}\NormalTok{, }\StringTok{"Pellorneum ruficeps"}\NormalTok{,}\StringTok{"Hypothymis azurea"}\NormalTok{,}
-      \StringTok{"Dicrurus aeneus"}\NormalTok{, }\StringTok{"Dendrocitta leucogastra"}\NormalTok{,}\StringTok{"Chalcophaps indica"}\NormalTok{,}
-      \StringTok{"Rubigula gularis"}\NormalTok{,}\StringTok{"Oriolus xanthornus"}\NormalTok{, }\StringTok{"Alcippe poioicephala"}\NormalTok{,}
-      \StringTok{"Muscicapa dauurica"}\NormalTok{, }\StringTok{"Geokichla citrina"}\NormalTok{, }\StringTok{"Chrysocolaptes guttacristatus"}\NormalTok{,}
-      \StringTok{"Terpsiphone paradisi"}\NormalTok{, }\StringTok{"Oriolus kundoo"}\NormalTok{, }\StringTok{"Cyornis tickelliae"}\NormalTok{,}
-      \StringTok{"Cinnyris lotenius"}\NormalTok{, }\StringTok{"Dicrurus paradiseus"}\NormalTok{, }\StringTok{"Psittacula columboides"}\NormalTok{,}
-      \StringTok{"Saxicola caprata"}\NormalTok{,}\StringTok{"Yungipicus nanus"}\NormalTok{))}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(}\OperatorTok{!}\NormalTok{scientific_name }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}
+      \StringTok{"Treron affinis"}\NormalTok{, }\StringTok{"Prinia hodgsonii"}\NormalTok{, }\StringTok{"Pellorneum ruficeps"}\NormalTok{,}
+      \StringTok{"Hypothymis azurea"}\NormalTok{,}\StringTok{"Dendrocitta leucogastra"}\NormalTok{,}\StringTok{"Chalcophaps indica"}\NormalTok{,}
+      \StringTok{"Rubigula gularis"}\NormalTok{,  }\StringTok{"Muscicapa dauurica"}\NormalTok{, }\StringTok{"Geokichla citrina"}\NormalTok{, }
+      \StringTok{"Chrysocolaptes guttacristatus"}\NormalTok{,}\StringTok{"Terpsiphone paradisi"}\NormalTok{,}\StringTok{"Orthotomus sutorius"}\NormalTok{,}
+      \StringTok{"Oriolus kundoo"}\NormalTok{, }\StringTok{"Dicrurus aeneus"}\NormalTok{, }\StringTok{"Cyornis tickelliae"}\NormalTok{,}
+      \StringTok{"Copsychus fulicatus"}\NormalTok{, }\StringTok{"Oriolus xanthornus"}\NormalTok{, }\StringTok{"Alcippe poioicephala"}\NormalTok{,}
+      \StringTok{"Ficedula nigrorufa"}\NormalTok{,}\StringTok{"Dendrocitta vagabunda"}\NormalTok{, }\StringTok{"Dicrurus paradiseus"}\NormalTok{,}
+      \StringTok{"Ocyceros griseus"}\NormalTok{, }\StringTok{"Psilopogon viridis"}\NormalTok{, }\StringTok{"Psittacula cyanocephala"}\NormalTok{))}
 
 \NormalTok{list_of_species <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(species}\OperatorTok{$}\NormalTok{scientific_name)}
 \end{Highlighting}
@@ -3360,8 +3406,8 @@ Read data back in.
 \NormalTok{predictor_name <-}\StringTok{ }\KeywordTok{tibble}\NormalTok{(}
   \DataTypeTok{predictor =} \KeywordTok{levels}\NormalTok{(model_imp}\OperatorTok{$}\NormalTok{predictor),}
   \DataTypeTok{pred_name =} \KeywordTok{c}\NormalTok{(}
-    \StringTok{"Mean Annual Temperature"}\NormalTok{,}
-    \StringTok{"Annual Precipitation"}\NormalTok{,}
+    \StringTok{"Precipitation seasonality"}\NormalTok{,}
+    \StringTok{"Temperature seasonality"}\NormalTok{,}
     \StringTok{"% Evergreen Forest"}\NormalTok{, }\StringTok{"% Deciduous Forest"}\NormalTok{,}
     \StringTok{"% Mixed/Degraded Forest"}\NormalTok{, }\StringTok{"% Agriculture/Settlements"}\NormalTok{,}
     \StringTok{"% Grassland"}\NormalTok{, }\StringTok{"% Plantations"}\NormalTok{, }\StringTok{"% Water Bodies"}
@@ -3530,8 +3576,8 @@ Fix predictor name.
 \NormalTok{data_predictor <-}\StringTok{ }\KeywordTok{mutate}\NormalTok{(model_data,}
   \DataTypeTok{direction =}\NormalTok{ coefficient }\OperatorTok{>}\StringTok{ }\DecValTok{0}
 \NormalTok{) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{filter}\NormalTok{(predictor }\OperatorTok{!=}\StringTok{ "Int"}\NormalTok{, predictor }\OperatorTok{!=}\StringTok{ "Ibio_1^2"} \OperatorTok{&}
-\StringTok{    }\NormalTok{predictor }\OperatorTok{!=}\StringTok{ "Ibio_12^2"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(predictor }\OperatorTok{!=}\StringTok{ "Int"}\NormalTok{, predictor }\OperatorTok{!=}\StringTok{ "Ibio4^2"} \OperatorTok{&}
+\StringTok{    }\NormalTok{predictor }\OperatorTok{!=}\StringTok{ "Ibio15^2"}\NormalTok{) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{habitat =} \StringTok{"Habitat.type"}\NormalTok{) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{count}\NormalTok{(}
 \NormalTok{    predictor,}
@@ -3632,7 +3678,7 @@ This script plots species-specific probabilities of occupancy as a function of s
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# preparep predictors - now look only for any digits}
-\NormalTok{predictors <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"bio_}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{d+"}\NormalTok{, }\KeywordTok{glue}\NormalTok{(}\StringTok{"lc_0\{seq(9)\}"}\NormalTok{))}
+\NormalTok{predictors <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"bio}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{d+"}\NormalTok{, }\KeywordTok{glue}\NormalTok{(}\StringTok{"lc_0\{seq(9)\}"}\NormalTok{))}
 
 \CommentTok{# prepare predictor search strings and scaling power}
 \NormalTok{preds <-}\StringTok{ }\KeywordTok{glue}\NormalTok{(}\StringTok{"(\{predictors\})"}\NormalTok{)}
@@ -3740,15 +3786,15 @@ This script plots species-specific probabilities of occupancy as a function of s
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# scale predictors}
-\NormalTok{scale_}\DecValTok{12}\NormalTok{ <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{200}\NormalTok{, }\DecValTok{1000}\NormalTok{) }\CommentTok{# range of precpitation}
-\NormalTok{scale_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{20}\NormalTok{, }\DecValTok{40}\NormalTok{) }\CommentTok{# range of temperatures}
+\NormalTok{scale15 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{30}\NormalTok{, }\DecValTok{50}\NormalTok{) }\CommentTok{# range of precpitation}
+\NormalTok{scale4 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{) }\CommentTok{# range of temperatures}
 
 \CommentTok{# scale bio4a and bio15a by actual values}
 \NormalTok{data_resp <-}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}
 \NormalTok{  data_resp,}
   \DataTypeTok{pred_val =} \KeywordTok{case_when}\NormalTok{(}
-\NormalTok{    predictor }\OperatorTok{==}\StringTok{ "bio_1"} \OperatorTok{~}\StringTok{ }\NormalTok{scales}\OperatorTok{::}\KeywordTok{rescale}\NormalTok{(pred_val, }\DataTypeTok{to =}\NormalTok{ scale_}\DecValTok{1}\NormalTok{),}
-\NormalTok{    predictor }\OperatorTok{==}\StringTok{ "bio_12"} \OperatorTok{~}\StringTok{ }\NormalTok{scales}\OperatorTok{::}\KeywordTok{rescale}\NormalTok{(pred_val, }\DataTypeTok{to =}\NormalTok{ scale_}\DecValTok{12}\NormalTok{),}
+\NormalTok{    predictor }\OperatorTok{==}\StringTok{ "bio4"} \OperatorTok{~}\StringTok{ }\NormalTok{scales}\OperatorTok{::}\KeywordTok{rescale}\NormalTok{(pred_val, }\DataTypeTok{to =}\NormalTok{ scale4),}
+\NormalTok{    predictor }\OperatorTok{==}\StringTok{ "bio15"} \OperatorTok{~}\StringTok{ }\NormalTok{scales}\OperatorTok{::}\KeywordTok{rescale}\NormalTok{(pred_val, }\DataTypeTok{to =}\NormalTok{ scale15),}
 \NormalTok{    T }\OperatorTok{~}\StringTok{ }\NormalTok{pred_val}
 \NormalTok{  )}
 \NormalTok{)}
@@ -3765,10 +3811,10 @@ This script plots species-specific probabilities of occupancy as a function of s
 \begin{Highlighting}[]
 \CommentTok{# select species}
 \NormalTok{soi <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}
-  \StringTok{"Pomatorhinus horsfieldii"}\NormalTok{, }\StringTok{"Ficedula nigrorufa"}\NormalTok{,}
-  \StringTok{"Pycnonotus cafer"}\NormalTok{, }\StringTok{"Psittacula krameri"}
+  \StringTok{"Myophonus horsfieldii"}\NormalTok{, }\StringTok{"Merops leschenaulti"}\NormalTok{,}
+  \StringTok{"Acrocephalus dumetorum"}\NormalTok{, }\StringTok{"Pycnonotus cafer"}
 \NormalTok{)}
-\NormalTok{which_predictors <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"bio_1"}\NormalTok{)}
+\NormalTok{which_predictors <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"bio4"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -3784,7 +3830,7 @@ This script plots species-specific probabilities of occupancy as a function of s
 \NormalTok{  ) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{mutate}\NormalTok{(}
     \DataTypeTok{cat =} \KeywordTok{case_when}\NormalTok{(}
-\NormalTok{      scientific_name }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Pomatorhinus horsfieldii"}\NormalTok{, }\StringTok{"Ficedula nigrorufa"}\NormalTok{) }\OperatorTok{~}\StringTok{ "forest"}\NormalTok{,}
+\NormalTok{      scientific_name }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Myophonus horsfieldii"}\NormalTok{, }\StringTok{"Merops leschenaulti"}\NormalTok{) }\OperatorTok{~}\StringTok{ "forest"}\NormalTok{,}
 \NormalTok{      T }\OperatorTok{~}\StringTok{ "general"}
 \NormalTok{    )}
 \NormalTok{  )}
@@ -3831,7 +3877,7 @@ This script plots species-specific probabilities of occupancy as a function of s
 \NormalTok{      )}
 \NormalTok{    ) }\OperatorTok{+}
 \StringTok{    }\KeywordTok{labs}\NormalTok{(}
-      \DataTypeTok{x =} \StringTok{"Mean Annual Temperature"}\NormalTok{,}
+      \DataTypeTok{x =} \StringTok{"Temperature seasonality"}\NormalTok{,}
       \DataTypeTok{y =} \StringTok{"Probability of occupancy"}
 \NormalTok{    )}
 \NormalTok{\}}
@@ -3844,7 +3890,7 @@ This script plots species-specific probabilities of occupancy as a function of s
 \NormalTok{    fig_occu[}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{)],}
     \DataTypeTok{ncol =} \DecValTok{1}
 \NormalTok{  ) }\OperatorTok{&}\StringTok{ }\KeywordTok{plot_annotation}\NormalTok{(}
-    \DataTypeTok{tag_levels =} \StringTok{"A"}
+    \DataTypeTok{tag_levels =} \StringTok{"a"}
 \NormalTok{  ) }\OperatorTok{&}
 \StringTok{    }\KeywordTok{theme}\NormalTok{(}
       \DataTypeTok{plot.tag =} \KeywordTok{element_text}\NormalTok{(}
@@ -3864,8 +3910,8 @@ This script plots species-specific probabilities of occupancy as a function of s
 \begin{figure}
 \centering
 \includegraphics{figs/fig_05.png}
-\caption{\textbf{Probability of occupancy as a function of mean annual temperature.}
-Predicted probability of occupancy curves as a function of mean annual temperature (in celsius) for two (a) generalist and (b) forest species are shown here. (a) Mean annual temperature is positively associated with the rose-ringed parakeet \emph{Psittacula krameri} and the red-vented bulbul \emph{Pycnonotus cafer}. (b) Mean annual temperature is negatively associated with the black-and-orange flycatcher \emph{Ficedula nigrorufa} and the indian scimitar-babbler \emph{Pomatorhinus horsfieldii}.}
+\caption{\textbf{Probability of occupancy as a function of temperature seasonality.}
+Predicted probability of occupancy curves as a function of temperature seasonality for two (a) generalist and (b) forest species are shown here. (a) Temperature seasonality is negatively associated with the probability of occupancy of the chestnut-headed bee-eater \emph{Merops leschenaulti} and the Malabar whistling-thrush \emph{Myophonus horsfieldii}. (b) Temperature seasonality is positively associated with the probability of occupancy of the Blyth's reed warbler \emph{Acrocephalus dumetorum} and the red-vented bulbul \emph{Pycnonotus cafer}.}
 \end{figure}
 
 \hypertarget{figures-occupancy-predictors-for-all-species}{%
@@ -3879,12 +3925,12 @@ Predicted probability of occupancy curves as a function of mean annual temperatu
 \NormalTok{)}
 
 \NormalTok{pred_names <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}
-  \StringTok{"bio_1"}\NormalTok{ =}\StringTok{ "Mean ann. temp"}\NormalTok{,}
-  \StringTok{"bio_12"}\NormalTok{ =}\StringTok{ "Ann. precip"}\NormalTok{,}
+  \StringTok{"bio4"}\NormalTok{ =}\StringTok{ "Temp. seasonality"}\NormalTok{,}
+  \StringTok{"bio15"}\NormalTok{ =}\StringTok{ "Precip. seasonality"}\NormalTok{,}
   \StringTok{"lc_01"}\NormalTok{ =}\StringTok{ "Evergreen"}\NormalTok{,}
   \StringTok{"lc_02"}\NormalTok{ =}\StringTok{ "Deciduous"}\NormalTok{,}
   \StringTok{"lc_03"}\NormalTok{ =}\StringTok{ "Mixed/degraded"}\NormalTok{,}
-  \StringTok{"lc_04"}\NormalTok{ =}\StringTok{ "Agro./Settled"}\NormalTok{,}
+  \StringTok{"lc_04"}\NormalTok{ =}\StringTok{ "Agri./Settl."}\NormalTok{,}
   \StringTok{"lc_05"}\NormalTok{ =}\StringTok{ "Grassland"}\NormalTok{,}
   \StringTok{"lc_07"}\NormalTok{ =}\StringTok{ "Plantation"}\NormalTok{,}
   \StringTok{"lc_09"}\NormalTok{ =}\StringTok{ "Water"}
@@ -4006,8 +4052,8 @@ Predicted probability of occupancy curves as a function of mean annual temperatu
 \NormalTok{lscape =}\StringTok{ }\KeywordTok{rast}\NormalTok{(}\StringTok{"data/spatial/landscape_resamp01_km.tif"}\NormalTok{)}
 
 \CommentTok{# isolate temperature and rainfall}
-\NormalTok{bio_}\DecValTok{1}\NormalTok{ =}\StringTok{ }\NormalTok{lscape[[}\DecValTok{4}\NormalTok{]] }\OperatorTok{/}\StringTok{ }\DecValTok{10} \CommentTok{# temp, divide by 10}
-\NormalTok{bio_}\DecValTok{12}\NormalTok{ =}\StringTok{ }\NormalTok{lscape[[}\DecValTok{5}\NormalTok{]] }\CommentTok{# rain}
+\NormalTok{bio4 =}\StringTok{ }\NormalTok{lscape[[}\DecValTok{4}\NormalTok{]] }
+\NormalTok{bio15 =}\StringTok{ }\NormalTok{lscape[[}\DecValTok{5}\NormalTok{]] }\CommentTok{# rain}
 
 \CommentTok{# careful while loading this raster, large size}
 \NormalTok{landcover <-}\StringTok{ }\KeywordTok{rast}\NormalTok{(}\StringTok{"data/landUseClassification/landcover_roy_2015_reclassified.tif"}\NormalTok{)}
@@ -4096,18 +4142,18 @@ Predicted probability of occupancy curves as a function of mean annual temperatu
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# get ranges}
-\NormalTok{range_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\NormalTok{terra}\OperatorTok{::}\KeywordTok{minmax}\NormalTok{(bio_}\DecValTok{1}\NormalTok{)[, }\DecValTok{1}\NormalTok{] }
-\NormalTok{range_}\DecValTok{12}\NormalTok{ <-}\StringTok{ }\NormalTok{terra}\OperatorTok{::}\KeywordTok{minmax}\NormalTok{(bio_}\DecValTok{12}\NormalTok{)[, }\DecValTok{1}\NormalTok{]}
+\NormalTok{range4 <-}\StringTok{ }\NormalTok{terra}\OperatorTok{::}\KeywordTok{minmax}\NormalTok{(bio4)[, }\DecValTok{1}\NormalTok{] }
+\NormalTok{range15 <-}\StringTok{ }\NormalTok{terra}\OperatorTok{::}\KeywordTok{minmax}\NormalTok{(bio15)[, }\DecValTok{1}\NormalTok{]}
 
 \CommentTok{# rescale}
-\NormalTok{bio_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\NormalTok{(bio_}\DecValTok{1} \OperatorTok{-}\StringTok{ }\KeywordTok{min}\NormalTok{(range_}\DecValTok{1}\NormalTok{)) }\OperatorTok{/}\StringTok{ }\NormalTok{(}\KeywordTok{diff}\NormalTok{(range_}\DecValTok{1}\NormalTok{))}
-\NormalTok{bio_}\DecValTok{12}\NormalTok{ <-}\StringTok{ }\NormalTok{(bio_}\DecValTok{12} \OperatorTok{-}\StringTok{ }\KeywordTok{min}\NormalTok{(range_}\DecValTok{12}\NormalTok{)) }\OperatorTok{/}\StringTok{ }\NormalTok{(}\KeywordTok{diff}\NormalTok{(range_}\DecValTok{12}\NormalTok{))}
+\NormalTok{bio4 <-}\StringTok{ }\NormalTok{(bio4 }\OperatorTok{-}\StringTok{ }\KeywordTok{min}\NormalTok{(range4)) }\OperatorTok{/}\StringTok{ }\NormalTok{(}\KeywordTok{diff}\NormalTok{(range4))}
+\NormalTok{bio15 <-}\StringTok{ }\NormalTok{(bio15 }\OperatorTok{-}\StringTok{ }\KeywordTok{min}\NormalTok{(range15)) }\OperatorTok{/}\StringTok{ }\NormalTok{(}\KeywordTok{diff}\NormalTok{(range15))}
 
 \CommentTok{# project to UTM}
-\NormalTok{climate <-}\StringTok{ }\KeywordTok{c}\NormalTok{(bio_}\DecValTok{1}\NormalTok{, bio_}\DecValTok{12}\NormalTok{)}
+\NormalTok{climate <-}\StringTok{ }\KeywordTok{c}\NormalTok{(bio4, bio15)}
 \KeywordTok{names}\NormalTok{(climate) =}\StringTok{ }\KeywordTok{c}\NormalTok{(}
-  \StringTok{"Mean annual temp."}\NormalTok{, }
-  \StringTok{"Annual precip."}
+  \StringTok{"Temp. seasonality"}\NormalTok{, }
+  \StringTok{"Precip. seasonality"}
 \NormalTok{)}
 
 \NormalTok{climate <-}\StringTok{ }\NormalTok{terra}\OperatorTok{::}\KeywordTok{project}\NormalTok{(}
@@ -4151,10 +4197,10 @@ Predicted probability of occupancy curves as a function of mean annual temperatu
 \NormalTok{  climate, climate2, lc_split}
 \NormalTok{)}
 
-\NormalTok{landscape =}\StringTok{ }\NormalTok{terra}\OperatorTok{::}\KeywordTok{mask}\NormalTok{(}
-\NormalTok{  landscape,}
-  \KeywordTok{vect}\NormalTok{(hills)}
-\NormalTok{)}
+\CommentTok{#landscape = terra::mask(}
+\CommentTok{#  landscape,}
+\CommentTok{#  vect(hills)}
+\CommentTok{#)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -4216,8 +4262,8 @@ These will be multiplied with each layer to give the effect of each layer.
 \NormalTok{  sp_coefs,}
 \NormalTok{  scientific_name,}
   \KeywordTok{c}\NormalTok{(}
-    \StringTok{"bio_1_1"}\NormalTok{, }\StringTok{"bio_12_1"}\NormalTok{,}
-    \StringTok{"bio_1_2"}\NormalTok{, }\StringTok{"bio_12_2"}
+    \StringTok{"bio4_1"}\NormalTok{, }\StringTok{"bio15_1"}\NormalTok{,}
+    \StringTok{"bio4_2"}\NormalTok{, }\StringTok{"bio15_2"}
 \NormalTok{  ),}
   \KeywordTok{matches}\NormalTok{(}\StringTok{"lc"}\NormalTok{)}
 \NormalTok{)}
@@ -4254,7 +4300,7 @@ Here, we shall simply multiply each landscape layer with the corresponding predi
 
 \CommentTok{# make single stack}
 \NormalTok{soi_occu <-}\StringTok{ }\KeywordTok{reduce}\NormalTok{(soi_occu, c)}
-\KeywordTok{names}\NormalTok{(soi_occu) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Ficedula nigrorufa"}\NormalTok{,}\StringTok{"Pomatorhinus horsfieldii"}\NormalTok{,}\StringTok{"Pycnonotus cafer"}\NormalTok{,}\StringTok{"Psittacula krameri"}\NormalTok{)}
+\KeywordTok{names}\NormalTok{(soi_occu) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Myophonus horsfieldii"}\NormalTok{, }\StringTok{"Merops leschenaulti"}\NormalTok{,}\StringTok{"Acrocephalus dumetorum"}\NormalTok{,}\StringTok{"Pycnonotus cafer"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -4312,13 +4358,6 @@ Here, we shall simply multiply each landscape layer with the corresponding predi
 \NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-
-\begin{figure}
-\centering
-\includegraphics{figs/fig_06.png}
-\caption{\textbf{Predicted area of occurrence as a function of mean annual temperature.}
-Predicted area of occurrence as a function of mean annual temperature (in celsius) for two forest and two generalist species are shown here. The endemic and range-restricted black-and-orange flycatcher \emph{Ficedula nigrorufa} has a higher probability of occupancy at high elevations across the Nilgiris and the Anamalai hills while the Indian scimitar-babbler \emph{Pomatorhinus horsfieldii} is predicted to occur at higher probabilities at mid and high elevations. The red-vented bulbul \emph{Pycnonotus cafer} and the rose-ringed parakeet \emph{Psittacula krameri}, both generalist species, are widely distributed at low elevations and have reduced probability of occurrence at mid and high elevations across our study area.}
-\end{figure}
 
 \hypertarget{prepare-species-occupancy-for-all-species}{%
 \subsubsection{Prepare species occupancy for all species}\label{prepare-species-occupancy-for-all-species}}

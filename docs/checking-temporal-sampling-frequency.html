@@ -28,7 +28,7 @@
 <meta name="author" content="Ruth DeFries" />
 
 
-<meta name="date" content="2022-02-09" />
+<meta name="date" content="2022-02-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -168,9 +168,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-spatial-extent"><i class="fa fa-check"></i><b>4.2</b> Prepare spatial extent</a></li>
 <li class="chapter" data-level="4.3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-terrain-rasters"><i class="fa fa-check"></i><b>4.3</b> Prepare terrain rasters</a></li>
 <li class="chapter" data-level="4.4" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-chelsa-rasters"><i class="fa fa-check"></i><b>4.4</b> Prepare CHELSA rasters</a><ul>
-<li class="chapter" data-level="4.4.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-1-mean-temperature-for-dry-season-december-to-may"><i class="fa fa-check"></i><b>4.4.1</b> Prepare Bioclim 1 (mean temperature) for dry season (December to May)</a></li>
-<li class="chapter" data-level="4.4.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-12-total-rainfall-for-dry-season"><i class="fa fa-check"></i><b>4.4.2</b> Prepare Bioclim 12 (total rainfall) for dry season</a></li>
-<li class="chapter" data-level="4.4.3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#stack-terrain-and-climate"><i class="fa fa-check"></i><b>4.4.3</b> Stack terrain and climate</a></li>
+<li class="chapter" data-level="4.4.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-4a-and-15"><i class="fa fa-check"></i><b>4.4.1</b> Prepare BIOCLIM 4a and 15</a></li>
+<li class="chapter" data-level="4.4.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-4a"><i class="fa fa-check"></i><b>4.4.2</b> Prepare BIOCLIM 4a</a></li>
+<li class="chapter" data-level="4.4.3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-15"><i class="fa fa-check"></i><b>4.4.3</b> Prepare Bioclim 15</a></li>
+<li class="chapter" data-level="4.4.4" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#stack-terrain-and-climate"><i class="fa fa-check"></i><b>4.4.4</b> Stack terrain and climate</a></li>
+<li class="chapter" data-level="4.4.5" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#stack-terrain-and-climate-1"><i class="fa fa-check"></i><b>4.4.5</b> Stack terrain and climate</a></li>
 </ul></li>
 <li class="chapter" data-level="4.5" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-landcover-from-10m-to-1km"><i class="fa fa-check"></i><b>4.5</b> Resample landcover from 10m to 1km</a></li>
 <li class="chapter" data-level="4.6" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-other-rasters-to-1km"><i class="fa fa-check"></i><b>4.6</b> Resample other rasters to 1km</a><ul>
@@ -305,135 +307,135 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>How often are checklists recorded in each grid cell?</p>
 <div id="load-libraries" class="section level2">
 <h2><span class="header-section-number">7.1</span> Load libraries</h2>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="checking-temporal-sampling-frequency.html#cb60-1"></a><span class="co"># load libraries</span></span>
-<span id="cb60-2"><a href="checking-temporal-sampling-frequency.html#cb60-2"></a><span class="kw">library</span>(tidyverse)</span>
-<span id="cb60-3"><a href="checking-temporal-sampling-frequency.html#cb60-3"></a><span class="kw">library</span>(sf)</span>
-<span id="cb60-4"><a href="checking-temporal-sampling-frequency.html#cb60-4"></a></span>
-<span id="cb60-5"><a href="checking-temporal-sampling-frequency.html#cb60-5"></a><span class="co"># for plotting</span></span>
-<span id="cb60-6"><a href="checking-temporal-sampling-frequency.html#cb60-6"></a><span class="kw">library</span>(ggplot2)</span>
-<span id="cb60-7"><a href="checking-temporal-sampling-frequency.html#cb60-7"></a><span class="kw">library</span>(colorspace)</span>
-<span id="cb60-8"><a href="checking-temporal-sampling-frequency.html#cb60-8"></a><span class="kw">library</span>(scico)</span>
-<span id="cb60-9"><a href="checking-temporal-sampling-frequency.html#cb60-9"></a><span class="kw">library</span>(ggthemes)</span>
-<span id="cb60-10"><a href="checking-temporal-sampling-frequency.html#cb60-10"></a><span class="kw">library</span>(ggspatial)</span>
-<span id="cb60-11"><a href="checking-temporal-sampling-frequency.html#cb60-11"></a><span class="kw">library</span>(patchwork)</span></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="checking-temporal-sampling-frequency.html#cb62-1"></a><span class="co"># load libraries</span></span>
+<span id="cb62-2"><a href="checking-temporal-sampling-frequency.html#cb62-2"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb62-3"><a href="checking-temporal-sampling-frequency.html#cb62-3"></a><span class="kw">library</span>(sf)</span>
+<span id="cb62-4"><a href="checking-temporal-sampling-frequency.html#cb62-4"></a></span>
+<span id="cb62-5"><a href="checking-temporal-sampling-frequency.html#cb62-5"></a><span class="co"># for plotting</span></span>
+<span id="cb62-6"><a href="checking-temporal-sampling-frequency.html#cb62-6"></a><span class="kw">library</span>(ggplot2)</span>
+<span id="cb62-7"><a href="checking-temporal-sampling-frequency.html#cb62-7"></a><span class="kw">library</span>(colorspace)</span>
+<span id="cb62-8"><a href="checking-temporal-sampling-frequency.html#cb62-8"></a><span class="kw">library</span>(scico)</span>
+<span id="cb62-9"><a href="checking-temporal-sampling-frequency.html#cb62-9"></a><span class="kw">library</span>(ggthemes)</span>
+<span id="cb62-10"><a href="checking-temporal-sampling-frequency.html#cb62-10"></a><span class="kw">library</span>(ggspatial)</span>
+<span id="cb62-11"><a href="checking-temporal-sampling-frequency.html#cb62-11"></a><span class="kw">library</span>(patchwork)</span></code></pre></div>
 </div>
 <div id="load-checklist-data" class="section level2">
 <h2><span class="header-section-number">7.2</span> Load checklist data</h2>
 <p>Here we load filtered checklist data and convert to UTM 43N coordinates.</p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="checking-temporal-sampling-frequency.html#cb61-1"></a><span class="co"># load checklist data</span></span>
-<span id="cb61-2"><a href="checking-temporal-sampling-frequency.html#cb61-2"></a><span class="kw">load</span>(<span class="st">&quot;data/01_data_prelim_processing.rdata&quot;</span>)</span>
-<span id="cb61-3"><a href="checking-temporal-sampling-frequency.html#cb61-3"></a></span>
-<span id="cb61-4"><a href="checking-temporal-sampling-frequency.html#cb61-4"></a><span class="co"># get checklists</span></span>
-<span id="cb61-5"><a href="checking-temporal-sampling-frequency.html#cb61-5"></a>data &lt;-<span class="st"> </span><span class="kw">distinct</span>(</span>
-<span id="cb61-6"><a href="checking-temporal-sampling-frequency.html#cb61-6"></a>  dataGrouped, sampling_event_identifier, observation_date,</span>
-<span id="cb61-7"><a href="checking-temporal-sampling-frequency.html#cb61-7"></a>  longitude, latitude</span>
-<span id="cb61-8"><a href="checking-temporal-sampling-frequency.html#cb61-8"></a>)</span>
-<span id="cb61-9"><a href="checking-temporal-sampling-frequency.html#cb61-9"></a></span>
-<span id="cb61-10"><a href="checking-temporal-sampling-frequency.html#cb61-10"></a><span class="co"># remove old data</span></span>
-<span id="cb61-11"><a href="checking-temporal-sampling-frequency.html#cb61-11"></a><span class="kw">rm</span>(dataGrouped)</span>
-<span id="cb61-12"><a href="checking-temporal-sampling-frequency.html#cb61-12"></a></span>
-<span id="cb61-13"><a href="checking-temporal-sampling-frequency.html#cb61-13"></a><span class="co"># transform to UTM 43N</span></span>
-<span id="cb61-14"><a href="checking-temporal-sampling-frequency.html#cb61-14"></a>data &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(data, <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>), <span class="dt">crs =</span> <span class="dv">4326</span>)</span>
-<span id="cb61-15"><a href="checking-temporal-sampling-frequency.html#cb61-15"></a>data &lt;-<span class="st"> </span><span class="kw">st_transform</span>(data, <span class="dt">crs =</span> <span class="dv">32643</span>)</span>
-<span id="cb61-16"><a href="checking-temporal-sampling-frequency.html#cb61-16"></a></span>
-<span id="cb61-17"><a href="checking-temporal-sampling-frequency.html#cb61-17"></a><span class="co"># get coordinates and bind to data</span></span>
-<span id="cb61-18"><a href="checking-temporal-sampling-frequency.html#cb61-18"></a>data &lt;-<span class="st"> </span><span class="kw">cbind</span>(</span>
-<span id="cb61-19"><a href="checking-temporal-sampling-frequency.html#cb61-19"></a>  <span class="kw">st_drop_geometry</span>(data),</span>
-<span id="cb61-20"><a href="checking-temporal-sampling-frequency.html#cb61-20"></a>  <span class="kw">st_coordinates</span>(data)</span>
-<span id="cb61-21"><a href="checking-temporal-sampling-frequency.html#cb61-21"></a>)</span>
-<span id="cb61-22"><a href="checking-temporal-sampling-frequency.html#cb61-22"></a></span>
-<span id="cb61-23"><a href="checking-temporal-sampling-frequency.html#cb61-23"></a><span class="co"># bin to 1000m</span></span>
-<span id="cb61-24"><a href="checking-temporal-sampling-frequency.html#cb61-24"></a>data &lt;-<span class="st"> </span><span class="kw">mutate</span>(data,</span>
-<span id="cb61-25"><a href="checking-temporal-sampling-frequency.html#cb61-25"></a>  <span class="dt">X =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(X, <span class="dv">2500</span>),</span>
-<span id="cb61-26"><a href="checking-temporal-sampling-frequency.html#cb61-26"></a>  <span class="dt">Y =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(Y, <span class="dv">2500</span>)</span>
-<span id="cb61-27"><a href="checking-temporal-sampling-frequency.html#cb61-27"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="checking-temporal-sampling-frequency.html#cb63-1"></a><span class="co"># load checklist data</span></span>
+<span id="cb63-2"><a href="checking-temporal-sampling-frequency.html#cb63-2"></a><span class="kw">load</span>(<span class="st">&quot;data/01_data_prelim_processing.rdata&quot;</span>)</span>
+<span id="cb63-3"><a href="checking-temporal-sampling-frequency.html#cb63-3"></a></span>
+<span id="cb63-4"><a href="checking-temporal-sampling-frequency.html#cb63-4"></a><span class="co"># get checklists</span></span>
+<span id="cb63-5"><a href="checking-temporal-sampling-frequency.html#cb63-5"></a>data &lt;-<span class="st"> </span><span class="kw">distinct</span>(</span>
+<span id="cb63-6"><a href="checking-temporal-sampling-frequency.html#cb63-6"></a>  dataGrouped, sampling_event_identifier, observation_date,</span>
+<span id="cb63-7"><a href="checking-temporal-sampling-frequency.html#cb63-7"></a>  longitude, latitude</span>
+<span id="cb63-8"><a href="checking-temporal-sampling-frequency.html#cb63-8"></a>)</span>
+<span id="cb63-9"><a href="checking-temporal-sampling-frequency.html#cb63-9"></a></span>
+<span id="cb63-10"><a href="checking-temporal-sampling-frequency.html#cb63-10"></a><span class="co"># remove old data</span></span>
+<span id="cb63-11"><a href="checking-temporal-sampling-frequency.html#cb63-11"></a><span class="kw">rm</span>(dataGrouped)</span>
+<span id="cb63-12"><a href="checking-temporal-sampling-frequency.html#cb63-12"></a></span>
+<span id="cb63-13"><a href="checking-temporal-sampling-frequency.html#cb63-13"></a><span class="co"># transform to UTM 43N</span></span>
+<span id="cb63-14"><a href="checking-temporal-sampling-frequency.html#cb63-14"></a>data &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(data, <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>), <span class="dt">crs =</span> <span class="dv">4326</span>)</span>
+<span id="cb63-15"><a href="checking-temporal-sampling-frequency.html#cb63-15"></a>data &lt;-<span class="st"> </span><span class="kw">st_transform</span>(data, <span class="dt">crs =</span> <span class="dv">32643</span>)</span>
+<span id="cb63-16"><a href="checking-temporal-sampling-frequency.html#cb63-16"></a></span>
+<span id="cb63-17"><a href="checking-temporal-sampling-frequency.html#cb63-17"></a><span class="co"># get coordinates and bind to data</span></span>
+<span id="cb63-18"><a href="checking-temporal-sampling-frequency.html#cb63-18"></a>data &lt;-<span class="st"> </span><span class="kw">cbind</span>(</span>
+<span id="cb63-19"><a href="checking-temporal-sampling-frequency.html#cb63-19"></a>  <span class="kw">st_drop_geometry</span>(data),</span>
+<span id="cb63-20"><a href="checking-temporal-sampling-frequency.html#cb63-20"></a>  <span class="kw">st_coordinates</span>(data)</span>
+<span id="cb63-21"><a href="checking-temporal-sampling-frequency.html#cb63-21"></a>)</span>
+<span id="cb63-22"><a href="checking-temporal-sampling-frequency.html#cb63-22"></a></span>
+<span id="cb63-23"><a href="checking-temporal-sampling-frequency.html#cb63-23"></a><span class="co"># bin to 1000m</span></span>
+<span id="cb63-24"><a href="checking-temporal-sampling-frequency.html#cb63-24"></a>data &lt;-<span class="st"> </span><span class="kw">mutate</span>(data,</span>
+<span id="cb63-25"><a href="checking-temporal-sampling-frequency.html#cb63-25"></a>  <span class="dt">X =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(X, <span class="dv">2500</span>),</span>
+<span id="cb63-26"><a href="checking-temporal-sampling-frequency.html#cb63-26"></a>  <span class="dt">Y =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(Y, <span class="dv">2500</span>)</span>
+<span id="cb63-27"><a href="checking-temporal-sampling-frequency.html#cb63-27"></a>)</span></code></pre></div>
 </div>
 <div id="get-time-differences-per-grid-cell" class="section level2">
 <h2><span class="header-section-number">7.3</span> Get time differences per grid cell</h2>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="checking-temporal-sampling-frequency.html#cb62-1"></a><span class="co"># get time differences in days</span></span>
-<span id="cb62-2"><a href="checking-temporal-sampling-frequency.html#cb62-2"></a>data &lt;-<span class="st"> </span><span class="kw">mutate</span>(data, <span class="dt">observation_date =</span> <span class="kw">as.POSIXct</span>(observation_date))</span>
-<span id="cb62-3"><a href="checking-temporal-sampling-frequency.html#cb62-3"></a>data &lt;-<span class="st"> </span><span class="kw">nest</span>(data, <span class="dt">data =</span> <span class="kw">c</span>(<span class="st">&quot;sampling_event_identifier&quot;</span>, <span class="st">&quot;observation_date&quot;</span>))</span>
-<span id="cb62-4"><a href="checking-temporal-sampling-frequency.html#cb62-4"></a></span>
-<span id="cb62-5"><a href="checking-temporal-sampling-frequency.html#cb62-5"></a><span class="co"># map over data</span></span>
-<span id="cb62-6"><a href="checking-temporal-sampling-frequency.html#cb62-6"></a>data &lt;-<span class="st"> </span><span class="kw">mutate</span>(data,</span>
-<span id="cb62-7"><a href="checking-temporal-sampling-frequency.html#cb62-7"></a>  <span class="dt">lag_metrics =</span> <span class="kw">lapply</span>(data, <span class="cf">function</span>(df) {</span>
-<span id="cb62-8"><a href="checking-temporal-sampling-frequency.html#cb62-8"></a>    df &lt;-<span class="st"> </span><span class="kw">arrange</span>(df, observation_date)</span>
-<span id="cb62-9"><a href="checking-temporal-sampling-frequency.html#cb62-9"></a></span>
-<span id="cb62-10"><a href="checking-temporal-sampling-frequency.html#cb62-10"></a>    lag &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">diff</span>(df<span class="op">$</span>observation_date, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">/</span><span class="st"> </span>(<span class="dv">24</span> <span class="op">*</span><span class="st"> </span><span class="dv">3600</span>))</span>
-<span id="cb62-11"><a href="checking-temporal-sampling-frequency.html#cb62-11"></a></span>
-<span id="cb62-12"><a href="checking-temporal-sampling-frequency.html#cb62-12"></a>    data &lt;-<span class="st"> </span><span class="kw">tibble</span>(</span>
-<span id="cb62-13"><a href="checking-temporal-sampling-frequency.html#cb62-13"></a>      <span class="dt">mean_lag =</span> <span class="kw">mean</span>(lag, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</span>
-<span id="cb62-14"><a href="checking-temporal-sampling-frequency.html#cb62-14"></a>      <span class="dt">median_lag =</span> <span class="kw">median</span>(lag, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</span>
-<span id="cb62-15"><a href="checking-temporal-sampling-frequency.html#cb62-15"></a>      <span class="dt">sd_lag =</span> <span class="kw">sd</span>(lag, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</span>
-<span id="cb62-16"><a href="checking-temporal-sampling-frequency.html#cb62-16"></a>      <span class="dt">n_chk =</span> <span class="kw">nrow</span>(df)</span>
-<span id="cb62-17"><a href="checking-temporal-sampling-frequency.html#cb62-17"></a>    )</span>
-<span id="cb62-18"><a href="checking-temporal-sampling-frequency.html#cb62-18"></a></span>
-<span id="cb62-19"><a href="checking-temporal-sampling-frequency.html#cb62-19"></a>    data</span>
-<span id="cb62-20"><a href="checking-temporal-sampling-frequency.html#cb62-20"></a>  })</span>
-<span id="cb62-21"><a href="checking-temporal-sampling-frequency.html#cb62-21"></a>)</span></code></pre></div>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="checking-temporal-sampling-frequency.html#cb63-1"></a><span class="co"># unnest lag metrics</span></span>
-<span id="cb63-2"><a href="checking-temporal-sampling-frequency.html#cb63-2"></a>data_lag &lt;-<span class="st"> </span><span class="kw">select</span>(data, <span class="op">-</span>data)</span>
-<span id="cb63-3"><a href="checking-temporal-sampling-frequency.html#cb63-3"></a>data_lag &lt;-<span class="st"> </span><span class="kw">unnest</span>(data_lag, <span class="dt">cols =</span> <span class="st">&quot;lag_metrics&quot;</span>)</span>
-<span id="cb63-4"><a href="checking-temporal-sampling-frequency.html#cb63-4"></a></span>
-<span id="cb63-5"><a href="checking-temporal-sampling-frequency.html#cb63-5"></a><span class="co"># set the mean and median to infinity if nchk is 1</span></span>
-<span id="cb63-6"><a href="checking-temporal-sampling-frequency.html#cb63-6"></a>data_lag &lt;-<span class="st"> </span><span class="kw">mutate</span>(data_lag,</span>
-<span id="cb63-7"><a href="checking-temporal-sampling-frequency.html#cb63-7"></a>  <span class="dt">mean_lag =</span> <span class="kw">ifelse</span>(n_chk <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="ot">Inf</span>, mean_lag),</span>
-<span id="cb63-8"><a href="checking-temporal-sampling-frequency.html#cb63-8"></a>  <span class="dt">median_lag =</span> <span class="kw">ifelse</span>(n_chk <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="ot">Inf</span>, median_lag),</span>
-<span id="cb63-9"><a href="checking-temporal-sampling-frequency.html#cb63-9"></a>  <span class="dt">sd_lag =</span> <span class="kw">ifelse</span>(n_chk <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="ot">Inf</span>, sd_lag)</span>
-<span id="cb63-10"><a href="checking-temporal-sampling-frequency.html#cb63-10"></a>)</span>
-<span id="cb63-11"><a href="checking-temporal-sampling-frequency.html#cb63-11"></a></span>
-<span id="cb63-12"><a href="checking-temporal-sampling-frequency.html#cb63-12"></a><span class="co"># set all 0 to 1</span></span>
-<span id="cb63-13"><a href="checking-temporal-sampling-frequency.html#cb63-13"></a>data_lag &lt;-<span class="st"> </span><span class="kw">mutate</span>(data_lag,</span>
-<span id="cb63-14"><a href="checking-temporal-sampling-frequency.html#cb63-14"></a>  <span class="dt">mean_lag =</span> mean_lag <span class="op">+</span><span class="st"> </span><span class="dv">1</span>,</span>
-<span id="cb63-15"><a href="checking-temporal-sampling-frequency.html#cb63-15"></a>  <span class="dt">median_lag =</span> median_lag <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
-<span id="cb63-16"><a href="checking-temporal-sampling-frequency.html#cb63-16"></a>)</span>
-<span id="cb63-17"><a href="checking-temporal-sampling-frequency.html#cb63-17"></a><span class="co"># melt data by tile</span></span>
-<span id="cb63-18"><a href="checking-temporal-sampling-frequency.html#cb63-18"></a><span class="co"># data_lag = pivot_longer(data_lag, cols = c(&quot;mean_lag&quot;, &quot;median_lag&quot;, &quot;sd_lag&quot;))</span></span></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="checking-temporal-sampling-frequency.html#cb64-1"></a><span class="co"># get time differences in days</span></span>
+<span id="cb64-2"><a href="checking-temporal-sampling-frequency.html#cb64-2"></a>data &lt;-<span class="st"> </span><span class="kw">mutate</span>(data, <span class="dt">observation_date =</span> <span class="kw">as.POSIXct</span>(observation_date))</span>
+<span id="cb64-3"><a href="checking-temporal-sampling-frequency.html#cb64-3"></a>data &lt;-<span class="st"> </span><span class="kw">nest</span>(data, <span class="dt">data =</span> <span class="kw">c</span>(<span class="st">&quot;sampling_event_identifier&quot;</span>, <span class="st">&quot;observation_date&quot;</span>))</span>
+<span id="cb64-4"><a href="checking-temporal-sampling-frequency.html#cb64-4"></a></span>
+<span id="cb64-5"><a href="checking-temporal-sampling-frequency.html#cb64-5"></a><span class="co"># map over data</span></span>
+<span id="cb64-6"><a href="checking-temporal-sampling-frequency.html#cb64-6"></a>data &lt;-<span class="st"> </span><span class="kw">mutate</span>(data,</span>
+<span id="cb64-7"><a href="checking-temporal-sampling-frequency.html#cb64-7"></a>  <span class="dt">lag_metrics =</span> <span class="kw">lapply</span>(data, <span class="cf">function</span>(df) {</span>
+<span id="cb64-8"><a href="checking-temporal-sampling-frequency.html#cb64-8"></a>    df &lt;-<span class="st"> </span><span class="kw">arrange</span>(df, observation_date)</span>
+<span id="cb64-9"><a href="checking-temporal-sampling-frequency.html#cb64-9"></a></span>
+<span id="cb64-10"><a href="checking-temporal-sampling-frequency.html#cb64-10"></a>    lag &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">diff</span>(df<span class="op">$</span>observation_date, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">/</span><span class="st"> </span>(<span class="dv">24</span> <span class="op">*</span><span class="st"> </span><span class="dv">3600</span>))</span>
+<span id="cb64-11"><a href="checking-temporal-sampling-frequency.html#cb64-11"></a></span>
+<span id="cb64-12"><a href="checking-temporal-sampling-frequency.html#cb64-12"></a>    data &lt;-<span class="st"> </span><span class="kw">tibble</span>(</span>
+<span id="cb64-13"><a href="checking-temporal-sampling-frequency.html#cb64-13"></a>      <span class="dt">mean_lag =</span> <span class="kw">mean</span>(lag, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb64-14"><a href="checking-temporal-sampling-frequency.html#cb64-14"></a>      <span class="dt">median_lag =</span> <span class="kw">median</span>(lag, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb64-15"><a href="checking-temporal-sampling-frequency.html#cb64-15"></a>      <span class="dt">sd_lag =</span> <span class="kw">sd</span>(lag, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb64-16"><a href="checking-temporal-sampling-frequency.html#cb64-16"></a>      <span class="dt">n_chk =</span> <span class="kw">nrow</span>(df)</span>
+<span id="cb64-17"><a href="checking-temporal-sampling-frequency.html#cb64-17"></a>    )</span>
+<span id="cb64-18"><a href="checking-temporal-sampling-frequency.html#cb64-18"></a></span>
+<span id="cb64-19"><a href="checking-temporal-sampling-frequency.html#cb64-19"></a>    data</span>
+<span id="cb64-20"><a href="checking-temporal-sampling-frequency.html#cb64-20"></a>  })</span>
+<span id="cb64-21"><a href="checking-temporal-sampling-frequency.html#cb64-21"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="checking-temporal-sampling-frequency.html#cb65-1"></a><span class="co"># unnest lag metrics</span></span>
+<span id="cb65-2"><a href="checking-temporal-sampling-frequency.html#cb65-2"></a>data_lag &lt;-<span class="st"> </span><span class="kw">select</span>(data, <span class="op">-</span>data)</span>
+<span id="cb65-3"><a href="checking-temporal-sampling-frequency.html#cb65-3"></a>data_lag &lt;-<span class="st"> </span><span class="kw">unnest</span>(data_lag, <span class="dt">cols =</span> <span class="st">&quot;lag_metrics&quot;</span>)</span>
+<span id="cb65-4"><a href="checking-temporal-sampling-frequency.html#cb65-4"></a></span>
+<span id="cb65-5"><a href="checking-temporal-sampling-frequency.html#cb65-5"></a><span class="co"># set the mean and median to infinity if nchk is 1</span></span>
+<span id="cb65-6"><a href="checking-temporal-sampling-frequency.html#cb65-6"></a>data_lag &lt;-<span class="st"> </span><span class="kw">mutate</span>(data_lag,</span>
+<span id="cb65-7"><a href="checking-temporal-sampling-frequency.html#cb65-7"></a>  <span class="dt">mean_lag =</span> <span class="kw">ifelse</span>(n_chk <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="ot">Inf</span>, mean_lag),</span>
+<span id="cb65-8"><a href="checking-temporal-sampling-frequency.html#cb65-8"></a>  <span class="dt">median_lag =</span> <span class="kw">ifelse</span>(n_chk <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="ot">Inf</span>, median_lag),</span>
+<span id="cb65-9"><a href="checking-temporal-sampling-frequency.html#cb65-9"></a>  <span class="dt">sd_lag =</span> <span class="kw">ifelse</span>(n_chk <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="ot">Inf</span>, sd_lag)</span>
+<span id="cb65-10"><a href="checking-temporal-sampling-frequency.html#cb65-10"></a>)</span>
+<span id="cb65-11"><a href="checking-temporal-sampling-frequency.html#cb65-11"></a></span>
+<span id="cb65-12"><a href="checking-temporal-sampling-frequency.html#cb65-12"></a><span class="co"># set all 0 to 1</span></span>
+<span id="cb65-13"><a href="checking-temporal-sampling-frequency.html#cb65-13"></a>data_lag &lt;-<span class="st"> </span><span class="kw">mutate</span>(data_lag,</span>
+<span id="cb65-14"><a href="checking-temporal-sampling-frequency.html#cb65-14"></a>  <span class="dt">mean_lag =</span> mean_lag <span class="op">+</span><span class="st"> </span><span class="dv">1</span>,</span>
+<span id="cb65-15"><a href="checking-temporal-sampling-frequency.html#cb65-15"></a>  <span class="dt">median_lag =</span> median_lag <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb65-16"><a href="checking-temporal-sampling-frequency.html#cb65-16"></a>)</span>
+<span id="cb65-17"><a href="checking-temporal-sampling-frequency.html#cb65-17"></a><span class="co"># melt data by tile</span></span>
+<span id="cb65-18"><a href="checking-temporal-sampling-frequency.html#cb65-18"></a><span class="co"># data_lag = pivot_longer(data_lag, cols = c(&quot;mean_lag&quot;, &quot;median_lag&quot;, &quot;sd_lag&quot;))</span></span></code></pre></div>
 </div>
 <div id="time-since-previous-checklist" class="section level2">
 <h2><span class="header-section-number">7.4</span> Time Since Previous Checklist</h2>
 <div id="get-aux-data" class="section level3">
 <h3><span class="header-section-number">7.4.1</span> Get aux data</h3>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="checking-temporal-sampling-frequency.html#cb64-1"></a><span class="co"># hills data</span></span>
-<span id="cb64-2"><a href="checking-temporal-sampling-frequency.html#cb64-2"></a>wg &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb64-3"><a href="checking-temporal-sampling-frequency.html#cb64-3"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</span>
-<span id="cb64-4"><a href="checking-temporal-sampling-frequency.html#cb64-4"></a></span>
-<span id="cb64-5"><a href="checking-temporal-sampling-frequency.html#cb64-5"></a>roads &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/roads_studysite_2019/roads_studysite_2019.shp&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb64-6"><a href="checking-temporal-sampling-frequency.html#cb64-6"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</span>
-<span id="cb64-7"><a href="checking-temporal-sampling-frequency.html#cb64-7"></a></span>
-<span id="cb64-8"><a href="checking-temporal-sampling-frequency.html#cb64-8"></a><span class="co"># add land</span></span>
-<span id="cb64-9"><a href="checking-temporal-sampling-frequency.html#cb64-9"></a><span class="kw">library</span>(rnaturalearth)</span>
-<span id="cb64-10"><a href="checking-temporal-sampling-frequency.html#cb64-10"></a>land &lt;-<span class="st"> </span><span class="kw">ne_countries</span>(</span>
-<span id="cb64-11"><a href="checking-temporal-sampling-frequency.html#cb64-11"></a>  <span class="dt">scale =</span> <span class="dv">50</span>, <span class="dt">type =</span> <span class="st">&quot;countries&quot;</span>, <span class="dt">continent =</span> <span class="st">&quot;asia&quot;</span>,</span>
-<span id="cb64-12"><a href="checking-temporal-sampling-frequency.html#cb64-12"></a>  <span class="dt">country =</span> <span class="st">&quot;india&quot;</span>,</span>
-<span id="cb64-13"><a href="checking-temporal-sampling-frequency.html#cb64-13"></a>  <span class="dt">returnclass =</span> <span class="kw">c</span>(<span class="st">&quot;sf&quot;</span>)</span>
-<span id="cb64-14"><a href="checking-temporal-sampling-frequency.html#cb64-14"></a>) <span class="op">%&gt;%</span></span>
-<span id="cb64-15"><a href="checking-temporal-sampling-frequency.html#cb64-15"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</span>
-<span id="cb64-16"><a href="checking-temporal-sampling-frequency.html#cb64-16"></a></span>
-<span id="cb64-17"><a href="checking-temporal-sampling-frequency.html#cb64-17"></a>bbox &lt;-<span class="st"> </span><span class="kw">st_bbox</span>(wg)</span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="checking-temporal-sampling-frequency.html#cb66-1"></a><span class="co"># hills data</span></span>
+<span id="cb66-2"><a href="checking-temporal-sampling-frequency.html#cb66-2"></a>wg &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb66-3"><a href="checking-temporal-sampling-frequency.html#cb66-3"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</span>
+<span id="cb66-4"><a href="checking-temporal-sampling-frequency.html#cb66-4"></a></span>
+<span id="cb66-5"><a href="checking-temporal-sampling-frequency.html#cb66-5"></a>roads &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/roads_studysite_2019/roads_studysite_2019.shp&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb66-6"><a href="checking-temporal-sampling-frequency.html#cb66-6"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</span>
+<span id="cb66-7"><a href="checking-temporal-sampling-frequency.html#cb66-7"></a></span>
+<span id="cb66-8"><a href="checking-temporal-sampling-frequency.html#cb66-8"></a><span class="co"># add land</span></span>
+<span id="cb66-9"><a href="checking-temporal-sampling-frequency.html#cb66-9"></a><span class="kw">library</span>(rnaturalearth)</span>
+<span id="cb66-10"><a href="checking-temporal-sampling-frequency.html#cb66-10"></a>land &lt;-<span class="st"> </span><span class="kw">ne_countries</span>(</span>
+<span id="cb66-11"><a href="checking-temporal-sampling-frequency.html#cb66-11"></a>  <span class="dt">scale =</span> <span class="dv">50</span>, <span class="dt">type =</span> <span class="st">&quot;countries&quot;</span>, <span class="dt">continent =</span> <span class="st">&quot;asia&quot;</span>,</span>
+<span id="cb66-12"><a href="checking-temporal-sampling-frequency.html#cb66-12"></a>  <span class="dt">country =</span> <span class="st">&quot;india&quot;</span>,</span>
+<span id="cb66-13"><a href="checking-temporal-sampling-frequency.html#cb66-13"></a>  <span class="dt">returnclass =</span> <span class="kw">c</span>(<span class="st">&quot;sf&quot;</span>)</span>
+<span id="cb66-14"><a href="checking-temporal-sampling-frequency.html#cb66-14"></a>) <span class="op">%&gt;%</span></span>
+<span id="cb66-15"><a href="checking-temporal-sampling-frequency.html#cb66-15"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</span>
+<span id="cb66-16"><a href="checking-temporal-sampling-frequency.html#cb66-16"></a></span>
+<span id="cb66-17"><a href="checking-temporal-sampling-frequency.html#cb66-17"></a>bbox &lt;-<span class="st"> </span><span class="kw">st_bbox</span>(wg)</span></code></pre></div>
 </div>
 <div id="histogram-of-lags" class="section level3">
 <h3><span class="header-section-number">7.4.2</span> Histogram of lags</h3>
 <p>Figure code hidden in HTML and PDF versions.</p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="checking-temporal-sampling-frequency.html#cb65-1"></a><span class="co"># get lags</span></span>
-<span id="cb65-2"><a href="checking-temporal-sampling-frequency.html#cb65-2"></a>data &lt;-<span class="st"> </span><span class="kw">mutate</span>(data,</span>
-<span id="cb65-3"><a href="checking-temporal-sampling-frequency.html#cb65-3"></a>  <span class="dt">lag_hist =</span> <span class="kw">lapply</span>(data, <span class="cf">function</span>(df) {</span>
-<span id="cb65-4"><a href="checking-temporal-sampling-frequency.html#cb65-4"></a>    df &lt;-<span class="st"> </span><span class="kw">arrange</span>(df, observation_date)</span>
-<span id="cb65-5"><a href="checking-temporal-sampling-frequency.html#cb65-5"></a></span>
-<span id="cb65-6"><a href="checking-temporal-sampling-frequency.html#cb65-6"></a>    lag &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">diff</span>(df<span class="op">$</span>observation_date, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">/</span><span class="st"> </span>(<span class="dv">24</span> <span class="op">*</span><span class="st"> </span><span class="dv">3600</span>))</span>
-<span id="cb65-7"><a href="checking-temporal-sampling-frequency.html#cb65-7"></a></span>
-<span id="cb65-8"><a href="checking-temporal-sampling-frequency.html#cb65-8"></a>    data &lt;-<span class="st"> </span><span class="kw">tibble</span>(</span>
-<span id="cb65-9"><a href="checking-temporal-sampling-frequency.html#cb65-9"></a>      <span class="dt">lag =</span> lag <span class="op">+</span><span class="st"> </span><span class="dv">1</span>,</span>
-<span id="cb65-10"><a href="checking-temporal-sampling-frequency.html#cb65-10"></a>      <span class="dt">index =</span> <span class="kw">seq</span>(lag)</span>
-<span id="cb65-11"><a href="checking-temporal-sampling-frequency.html#cb65-11"></a>    )</span>
-<span id="cb65-12"><a href="checking-temporal-sampling-frequency.html#cb65-12"></a></span>
-<span id="cb65-13"><a href="checking-temporal-sampling-frequency.html#cb65-13"></a>    data</span>
-<span id="cb65-14"><a href="checking-temporal-sampling-frequency.html#cb65-14"></a>  })</span>
-<span id="cb65-15"><a href="checking-temporal-sampling-frequency.html#cb65-15"></a>)</span>
-<span id="cb65-16"><a href="checking-temporal-sampling-frequency.html#cb65-16"></a></span>
-<span id="cb65-17"><a href="checking-temporal-sampling-frequency.html#cb65-17"></a><span class="co"># unnest lags</span></span>
-<span id="cb65-18"><a href="checking-temporal-sampling-frequency.html#cb65-18"></a>data_hist &lt;-<span class="st"> </span><span class="kw">select</span>(data, X, Y, lag_hist) <span class="op">%&gt;%</span></span>
-<span id="cb65-19"><a href="checking-temporal-sampling-frequency.html#cb65-19"></a><span class="st">  </span><span class="kw">unnest</span>(<span class="dt">cols =</span> <span class="st">&quot;lag_hist&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="checking-temporal-sampling-frequency.html#cb67-1"></a><span class="co"># get lags</span></span>
+<span id="cb67-2"><a href="checking-temporal-sampling-frequency.html#cb67-2"></a>data &lt;-<span class="st"> </span><span class="kw">mutate</span>(data,</span>
+<span id="cb67-3"><a href="checking-temporal-sampling-frequency.html#cb67-3"></a>  <span class="dt">lag_hist =</span> <span class="kw">lapply</span>(data, <span class="cf">function</span>(df) {</span>
+<span id="cb67-4"><a href="checking-temporal-sampling-frequency.html#cb67-4"></a>    df &lt;-<span class="st"> </span><span class="kw">arrange</span>(df, observation_date)</span>
+<span id="cb67-5"><a href="checking-temporal-sampling-frequency.html#cb67-5"></a></span>
+<span id="cb67-6"><a href="checking-temporal-sampling-frequency.html#cb67-6"></a>    lag &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">diff</span>(df<span class="op">$</span>observation_date, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">/</span><span class="st"> </span>(<span class="dv">24</span> <span class="op">*</span><span class="st"> </span><span class="dv">3600</span>))</span>
+<span id="cb67-7"><a href="checking-temporal-sampling-frequency.html#cb67-7"></a></span>
+<span id="cb67-8"><a href="checking-temporal-sampling-frequency.html#cb67-8"></a>    data &lt;-<span class="st"> </span><span class="kw">tibble</span>(</span>
+<span id="cb67-9"><a href="checking-temporal-sampling-frequency.html#cb67-9"></a>      <span class="dt">lag =</span> lag <span class="op">+</span><span class="st"> </span><span class="dv">1</span>,</span>
+<span id="cb67-10"><a href="checking-temporal-sampling-frequency.html#cb67-10"></a>      <span class="dt">index =</span> <span class="kw">seq</span>(lag)</span>
+<span id="cb67-11"><a href="checking-temporal-sampling-frequency.html#cb67-11"></a>    )</span>
+<span id="cb67-12"><a href="checking-temporal-sampling-frequency.html#cb67-12"></a></span>
+<span id="cb67-13"><a href="checking-temporal-sampling-frequency.html#cb67-13"></a>    data</span>
+<span id="cb67-14"><a href="checking-temporal-sampling-frequency.html#cb67-14"></a>  })</span>
+<span id="cb67-15"><a href="checking-temporal-sampling-frequency.html#cb67-15"></a>)</span>
+<span id="cb67-16"><a href="checking-temporal-sampling-frequency.html#cb67-16"></a></span>
+<span id="cb67-17"><a href="checking-temporal-sampling-frequency.html#cb67-17"></a><span class="co"># unnest lags</span></span>
+<span id="cb67-18"><a href="checking-temporal-sampling-frequency.html#cb67-18"></a>data_hist &lt;-<span class="st"> </span><span class="kw">select</span>(data, X, Y, lag_hist) <span class="op">%&gt;%</span></span>
+<span id="cb67-19"><a href="checking-temporal-sampling-frequency.html#cb67-19"></a><span class="st">  </span><span class="kw">unnest</span>(<span class="dt">cols =</span> <span class="st">&quot;lag_hist&quot;</span>)</span></code></pre></div>
 <div class="figure">
 <img src="figs/fig_temporal_bias.png" alt="" />
 <p class="caption">Most sites are resurveyed at least once, but some are visited much more frequently than others. There does not appear to be a link between roads and visit frequency. eBird checklists are also strongly clustered in time, with some of the most sampled areas over the study period visited at intervals of &gt; 1 week, and with some less intensively sampled areas visited frequently, at intervals of &lt; 1 week. Overall, the majority of checklists are reported only a day after the previous checklist at that location (see inset).</p>
@@ -443,8 +445,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="main-text-figure-3" class="section level2">
 <h2><span class="header-section-number">7.5</span> Main Text Figure 3</h2>
 <p>Combining figures for spatial and temporal clustering into main text figure 3. This overall figure is not shown here, see main text.</p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="checking-temporal-sampling-frequency.html#cb66-1"></a><span class="co"># load spatial bias figure</span></span>
-<span id="cb66-2"><a href="checking-temporal-sampling-frequency.html#cb66-2"></a><span class="kw">load</span>(<span class="st">&quot;data/fig_checklists_grid.Rds&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="checking-temporal-sampling-frequency.html#cb68-1"></a><span class="co"># load spatial bias figure</span></span>
+<span id="cb68-2"><a href="checking-temporal-sampling-frequency.html#cb68-2"></a><span class="kw">load</span>(<span class="st">&quot;data/fig_checklists_grid.Rds&quot;</span>)</span></code></pre></div>
 <div class="figure">
 <img src="figs/fig_03.png" alt="" />
 <p class="caption"><strong>Distribution of sampling effort in the form of eBird checklists in the Nilgiri and Anamalai Hills between 2013 and 2021.</strong>
@@ -454,23 +456,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="checklists-per-month" class="section level2">
 <h2><span class="header-section-number">7.6</span> Checklists per Month</h2>
 <p>We counted the checklists per month, pooled over years, to determine how sampling effort varies over the year.</p>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="checking-temporal-sampling-frequency.html#cb67-1"></a><span class="co"># get two week period by date</span></span>
-<span id="cb67-2"><a href="checking-temporal-sampling-frequency.html#cb67-2"></a>data &lt;-<span class="st"> </span><span class="kw">select</span>(data, X, Y, data)</span>
-<span id="cb67-3"><a href="checking-temporal-sampling-frequency.html#cb67-3"></a></span>
-<span id="cb67-4"><a href="checking-temporal-sampling-frequency.html#cb67-4"></a><span class="co"># unnest</span></span>
-<span id="cb67-5"><a href="checking-temporal-sampling-frequency.html#cb67-5"></a>data &lt;-<span class="st"> </span><span class="kw">unnest</span>(data, <span class="dt">cols =</span> <span class="st">&quot;data&quot;</span>)</span>
-<span id="cb67-6"><a href="checking-temporal-sampling-frequency.html#cb67-6"></a></span>
-<span id="cb67-7"><a href="checking-temporal-sampling-frequency.html#cb67-7"></a><span class="co"># get fortnight</span></span>
-<span id="cb67-8"><a href="checking-temporal-sampling-frequency.html#cb67-8"></a><span class="kw">library</span>(lubridate)</span>
-<span id="cb67-9"><a href="checking-temporal-sampling-frequency.html#cb67-9"></a>data &lt;-<span class="st"> </span><span class="kw">mutate</span>(data,</span>
-<span id="cb67-10"><a href="checking-temporal-sampling-frequency.html#cb67-10"></a>  <span class="dt">week =</span> <span class="kw">week</span>(observation_date),</span>
-<span id="cb67-11"><a href="checking-temporal-sampling-frequency.html#cb67-11"></a>  <span class="dt">week =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(week, <span class="dv">2</span>),</span>
-<span id="cb67-12"><a href="checking-temporal-sampling-frequency.html#cb67-12"></a>  <span class="dt">year =</span> <span class="kw">year</span>(observation_date),</span>
-<span id="cb67-13"><a href="checking-temporal-sampling-frequency.html#cb67-13"></a>  <span class="dt">month =</span> <span class="kw">month</span>(observation_date)</span>
-<span id="cb67-14"><a href="checking-temporal-sampling-frequency.html#cb67-14"></a>)</span>
-<span id="cb67-15"><a href="checking-temporal-sampling-frequency.html#cb67-15"></a></span>
-<span id="cb67-16"><a href="checking-temporal-sampling-frequency.html#cb67-16"></a><span class="co"># count checklists per fortnight</span></span>
-<span id="cb67-17"><a href="checking-temporal-sampling-frequency.html#cb67-17"></a>data_count &lt;-<span class="st"> </span><span class="kw">count</span>(data, month, year)</span></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="checking-temporal-sampling-frequency.html#cb69-1"></a><span class="co"># get two week period by date</span></span>
+<span id="cb69-2"><a href="checking-temporal-sampling-frequency.html#cb69-2"></a>data &lt;-<span class="st"> </span><span class="kw">select</span>(data, X, Y, data)</span>
+<span id="cb69-3"><a href="checking-temporal-sampling-frequency.html#cb69-3"></a></span>
+<span id="cb69-4"><a href="checking-temporal-sampling-frequency.html#cb69-4"></a><span class="co"># unnest</span></span>
+<span id="cb69-5"><a href="checking-temporal-sampling-frequency.html#cb69-5"></a>data &lt;-<span class="st"> </span><span class="kw">unnest</span>(data, <span class="dt">cols =</span> <span class="st">&quot;data&quot;</span>)</span>
+<span id="cb69-6"><a href="checking-temporal-sampling-frequency.html#cb69-6"></a></span>
+<span id="cb69-7"><a href="checking-temporal-sampling-frequency.html#cb69-7"></a><span class="co"># get fortnight</span></span>
+<span id="cb69-8"><a href="checking-temporal-sampling-frequency.html#cb69-8"></a><span class="kw">library</span>(lubridate)</span>
+<span id="cb69-9"><a href="checking-temporal-sampling-frequency.html#cb69-9"></a>data &lt;-<span class="st"> </span><span class="kw">mutate</span>(data,</span>
+<span id="cb69-10"><a href="checking-temporal-sampling-frequency.html#cb69-10"></a>  <span class="dt">week =</span> <span class="kw">week</span>(observation_date),</span>
+<span id="cb69-11"><a href="checking-temporal-sampling-frequency.html#cb69-11"></a>  <span class="dt">week =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(week, <span class="dv">2</span>),</span>
+<span id="cb69-12"><a href="checking-temporal-sampling-frequency.html#cb69-12"></a>  <span class="dt">year =</span> <span class="kw">year</span>(observation_date),</span>
+<span id="cb69-13"><a href="checking-temporal-sampling-frequency.html#cb69-13"></a>  <span class="dt">month =</span> <span class="kw">month</span>(observation_date)</span>
+<span id="cb69-14"><a href="checking-temporal-sampling-frequency.html#cb69-14"></a>)</span>
+<span id="cb69-15"><a href="checking-temporal-sampling-frequency.html#cb69-15"></a></span>
+<span id="cb69-16"><a href="checking-temporal-sampling-frequency.html#cb69-16"></a><span class="co"># count checklists per fortnight</span></span>
+<span id="cb69-17"><a href="checking-temporal-sampling-frequency.html#cb69-17"></a>data_count &lt;-<span class="st"> </span><span class="kw">count</span>(data, month, year)</span></code></pre></div>
 <div class="figure">
 <img src="figs/fig_chk_per_month.png" alt="" />
 <p class="caption">Observations peak in the early months of the year, and decline towards the rainy months, slowly increasing until the following winter.</p>

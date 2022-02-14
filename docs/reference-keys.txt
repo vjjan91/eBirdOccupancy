@@ -25,9 +25,11 @@ prepare-libraries-1
 prepare-spatial-extent
 prepare-terrain-rasters
 prepare-chelsa-rasters
-prepare-bioclim-1-mean-temperature-for-dry-season-december-to-may
-prepare-bioclim-12-total-rainfall-for-dry-season
+prepare-bioclim-4a-and-15
+prepare-bioclim-4a
+prepare-bioclim-15
 stack-terrain-and-climate
+stack-terrain-and-climate-1
 resample-landcover-from-10m-to-1km
 resample-other-rasters-to-1km
 read-in-resampled-landcover

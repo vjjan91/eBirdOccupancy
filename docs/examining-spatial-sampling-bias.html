@@ -28,7 +28,7 @@
 <meta name="author" content="Ruth DeFries" />
 
 
-<meta name="date" content="2022-02-09" />
+<meta name="date" content="2022-02-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -168,9 +168,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-spatial-extent"><i class="fa fa-check"></i><b>4.2</b> Prepare spatial extent</a></li>
 <li class="chapter" data-level="4.3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-terrain-rasters"><i class="fa fa-check"></i><b>4.3</b> Prepare terrain rasters</a></li>
 <li class="chapter" data-level="4.4" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-chelsa-rasters"><i class="fa fa-check"></i><b>4.4</b> Prepare CHELSA rasters</a><ul>
-<li class="chapter" data-level="4.4.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-1-mean-temperature-for-dry-season-december-to-may"><i class="fa fa-check"></i><b>4.4.1</b> Prepare Bioclim 1 (mean temperature) for dry season (December to May)</a></li>
-<li class="chapter" data-level="4.4.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-12-total-rainfall-for-dry-season"><i class="fa fa-check"></i><b>4.4.2</b> Prepare Bioclim 12 (total rainfall) for dry season</a></li>
-<li class="chapter" data-level="4.4.3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#stack-terrain-and-climate"><i class="fa fa-check"></i><b>4.4.3</b> Stack terrain and climate</a></li>
+<li class="chapter" data-level="4.4.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-4a-and-15"><i class="fa fa-check"></i><b>4.4.1</b> Prepare BIOCLIM 4a and 15</a></li>
+<li class="chapter" data-level="4.4.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-4a"><i class="fa fa-check"></i><b>4.4.2</b> Prepare BIOCLIM 4a</a></li>
+<li class="chapter" data-level="4.4.3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-15"><i class="fa fa-check"></i><b>4.4.3</b> Prepare Bioclim 15</a></li>
+<li class="chapter" data-level="4.4.4" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#stack-terrain-and-climate"><i class="fa fa-check"></i><b>4.4.4</b> Stack terrain and climate</a></li>
+<li class="chapter" data-level="4.4.5" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#stack-terrain-and-climate-1"><i class="fa fa-check"></i><b>4.4.5</b> Stack terrain and climate</a></li>
 </ul></li>
 <li class="chapter" data-level="4.5" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-landcover-from-10m-to-1km"><i class="fa fa-check"></i><b>4.5</b> Resample landcover from 10m to 1km</a></li>
 <li class="chapter" data-level="4.6" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-other-rasters-to-1km"><i class="fa fa-check"></i><b>4.6</b> Resample other rasters to 1km</a><ul>
@@ -305,65 +307,65 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The goal of this section is to show how far each checklist location is from the nearest road, and how far each site is from its nearest neighbour. This follows finding the pairwise distance between a large number of unique checklist locations to a vast number of roads, as well as to each other.</p>
 <div id="prepare-libraries-3" class="section level2">
 <h2><span class="header-section-number">6.1</span> Prepare libraries</h2>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="examining-spatial-sampling-bias.html#cb52-1"></a><span class="co"># load libraries</span></span>
-<span id="cb52-2"><a href="examining-spatial-sampling-bias.html#cb52-2"></a><span class="co"># for data</span></span>
-<span id="cb52-3"><a href="examining-spatial-sampling-bias.html#cb52-3"></a><span class="kw">library</span>(sf)</span>
-<span id="cb52-4"><a href="examining-spatial-sampling-bias.html#cb52-4"></a><span class="kw">library</span>(rnaturalearth)</span>
-<span id="cb52-5"><a href="examining-spatial-sampling-bias.html#cb52-5"></a><span class="kw">library</span>(dplyr)</span>
-<span id="cb52-6"><a href="examining-spatial-sampling-bias.html#cb52-6"></a><span class="kw">library</span>(readr)</span>
-<span id="cb52-7"><a href="examining-spatial-sampling-bias.html#cb52-7"></a><span class="kw">library</span>(purrr)</span>
-<span id="cb52-8"><a href="examining-spatial-sampling-bias.html#cb52-8"></a></span>
-<span id="cb52-9"><a href="examining-spatial-sampling-bias.html#cb52-9"></a><span class="co"># for plotting</span></span>
-<span id="cb52-10"><a href="examining-spatial-sampling-bias.html#cb52-10"></a><span class="kw">library</span>(scales)</span>
-<span id="cb52-11"><a href="examining-spatial-sampling-bias.html#cb52-11"></a><span class="kw">library</span>(ggplot2)</span>
-<span id="cb52-12"><a href="examining-spatial-sampling-bias.html#cb52-12"></a><span class="kw">library</span>(ggspatial)</span>
-<span id="cb52-13"><a href="examining-spatial-sampling-bias.html#cb52-13"></a><span class="kw">library</span>(colorspace)</span>
-<span id="cb52-14"><a href="examining-spatial-sampling-bias.html#cb52-14"></a></span>
-<span id="cb52-15"><a href="examining-spatial-sampling-bias.html#cb52-15"></a><span class="co"># round any function</span></span>
-<span id="cb52-16"><a href="examining-spatial-sampling-bias.html#cb52-16"></a>round_any &lt;-<span class="st"> </span><span class="cf">function</span>(x, <span class="dt">accuracy =</span> <span class="dv">20000</span>) {</span>
-<span id="cb52-17"><a href="examining-spatial-sampling-bias.html#cb52-17"></a>  <span class="kw">round</span>(x <span class="op">/</span><span class="st"> </span>accuracy) <span class="op">*</span><span class="st"> </span>accuracy</span>
-<span id="cb52-18"><a href="examining-spatial-sampling-bias.html#cb52-18"></a>}</span>
-<span id="cb52-19"><a href="examining-spatial-sampling-bias.html#cb52-19"></a><span class="co"># ci function</span></span>
-<span id="cb52-20"><a href="examining-spatial-sampling-bias.html#cb52-20"></a>ci &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
-<span id="cb52-21"><a href="examining-spatial-sampling-bias.html#cb52-21"></a>  <span class="kw">qnorm</span>(<span class="fl">0.975</span>) <span class="op">*</span><span class="st"> </span><span class="kw">sd</span>(x, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">length</span>(x))</span>
-<span id="cb52-22"><a href="examining-spatial-sampling-bias.html#cb52-22"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="examining-spatial-sampling-bias.html#cb54-1"></a><span class="co"># load libraries</span></span>
+<span id="cb54-2"><a href="examining-spatial-sampling-bias.html#cb54-2"></a><span class="co"># for data</span></span>
+<span id="cb54-3"><a href="examining-spatial-sampling-bias.html#cb54-3"></a><span class="kw">library</span>(sf)</span>
+<span id="cb54-4"><a href="examining-spatial-sampling-bias.html#cb54-4"></a><span class="kw">library</span>(rnaturalearth)</span>
+<span id="cb54-5"><a href="examining-spatial-sampling-bias.html#cb54-5"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb54-6"><a href="examining-spatial-sampling-bias.html#cb54-6"></a><span class="kw">library</span>(readr)</span>
+<span id="cb54-7"><a href="examining-spatial-sampling-bias.html#cb54-7"></a><span class="kw">library</span>(purrr)</span>
+<span id="cb54-8"><a href="examining-spatial-sampling-bias.html#cb54-8"></a></span>
+<span id="cb54-9"><a href="examining-spatial-sampling-bias.html#cb54-9"></a><span class="co"># for plotting</span></span>
+<span id="cb54-10"><a href="examining-spatial-sampling-bias.html#cb54-10"></a><span class="kw">library</span>(scales)</span>
+<span id="cb54-11"><a href="examining-spatial-sampling-bias.html#cb54-11"></a><span class="kw">library</span>(ggplot2)</span>
+<span id="cb54-12"><a href="examining-spatial-sampling-bias.html#cb54-12"></a><span class="kw">library</span>(ggspatial)</span>
+<span id="cb54-13"><a href="examining-spatial-sampling-bias.html#cb54-13"></a><span class="kw">library</span>(colorspace)</span>
+<span id="cb54-14"><a href="examining-spatial-sampling-bias.html#cb54-14"></a></span>
+<span id="cb54-15"><a href="examining-spatial-sampling-bias.html#cb54-15"></a><span class="co"># round any function</span></span>
+<span id="cb54-16"><a href="examining-spatial-sampling-bias.html#cb54-16"></a>round_any &lt;-<span class="st"> </span><span class="cf">function</span>(x, <span class="dt">accuracy =</span> <span class="dv">20000</span>) {</span>
+<span id="cb54-17"><a href="examining-spatial-sampling-bias.html#cb54-17"></a>  <span class="kw">round</span>(x <span class="op">/</span><span class="st"> </span>accuracy) <span class="op">*</span><span class="st"> </span>accuracy</span>
+<span id="cb54-18"><a href="examining-spatial-sampling-bias.html#cb54-18"></a>}</span>
+<span id="cb54-19"><a href="examining-spatial-sampling-bias.html#cb54-19"></a><span class="co"># ci function</span></span>
+<span id="cb54-20"><a href="examining-spatial-sampling-bias.html#cb54-20"></a>ci &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
+<span id="cb54-21"><a href="examining-spatial-sampling-bias.html#cb54-21"></a>  <span class="kw">qnorm</span>(<span class="fl">0.975</span>) <span class="op">*</span><span class="st"> </span><span class="kw">sd</span>(x, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">length</span>(x))</span>
+<span id="cb54-22"><a href="examining-spatial-sampling-bias.html#cb54-22"></a>}</span></code></pre></div>
 </div>
 <div id="read-checklist-data" class="section level2">
 <h2><span class="header-section-number">6.2</span> Read checklist data</h2>
 <p>Read in checklist data with distance to nearest neighbouring site, and the distance to the nearest road.</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="examining-spatial-sampling-bias.html#cb53-1"></a><span class="co"># read from local file</span></span>
-<span id="cb53-2"><a href="examining-spatial-sampling-bias.html#cb53-2"></a>chkCovars &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/03_data-covars-perChklist.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="examining-spatial-sampling-bias.html#cb55-1"></a><span class="co"># read from local file</span></span>
+<span id="cb55-2"><a href="examining-spatial-sampling-bias.html#cb55-2"></a>chkCovars &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/03_data-covars-perChklist.csv&quot;</span>)</span></code></pre></div>
 <div id="spatially-explicit-filter-on-checklists-1" class="section level3">
 <h3><span class="header-section-number">6.2.1</span> Spatially explicit filter on checklists</h3>
 <p>We filter the checklists by the boundary of the study area. This is <em>not</em> the extent.</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="examining-spatial-sampling-bias.html#cb54-1"></a>chkCovars &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(chkCovars, <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb54-2"><a href="examining-spatial-sampling-bias.html#cb54-2"></a><span class="st">  `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span></span>
-<span id="cb54-3"><a href="examining-spatial-sampling-bias.html#cb54-3"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</span>
-<span id="cb54-4"><a href="examining-spatial-sampling-bias.html#cb54-4"></a></span>
-<span id="cb54-5"><a href="examining-spatial-sampling-bias.html#cb54-5"></a><span class="co"># read wg</span></span>
-<span id="cb54-6"><a href="examining-spatial-sampling-bias.html#cb54-6"></a>wg &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb54-7"><a href="examining-spatial-sampling-bias.html#cb54-7"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</span>
-<span id="cb54-8"><a href="examining-spatial-sampling-bias.html#cb54-8"></a><span class="co"># get bounding box</span></span>
-<span id="cb54-9"><a href="examining-spatial-sampling-bias.html#cb54-9"></a>bbox &lt;-<span class="st"> </span><span class="kw">st_bbox</span>(wg)</span>
-<span id="cb54-10"><a href="examining-spatial-sampling-bias.html#cb54-10"></a></span>
-<span id="cb54-11"><a href="examining-spatial-sampling-bias.html#cb54-11"></a><span class="co"># spatial subset</span></span>
-<span id="cb54-12"><a href="examining-spatial-sampling-bias.html#cb54-12"></a>chkCovars &lt;-<span class="st"> </span>chkCovars <span class="op">%&gt;%</span></span>
-<span id="cb54-13"><a href="examining-spatial-sampling-bias.html#cb54-13"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(.)) <span class="op">%&gt;%</span></span>
-<span id="cb54-14"><a href="examining-spatial-sampling-bias.html#cb54-14"></a><span class="st">  </span><span class="kw">filter</span>(id <span class="op">%in%</span><span class="st"> </span><span class="kw">unlist</span>(<span class="kw">st_contains</span>(wg, chkCovars)))</span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="examining-spatial-sampling-bias.html#cb56-1"></a>chkCovars &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(chkCovars, <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb56-2"><a href="examining-spatial-sampling-bias.html#cb56-2"></a><span class="st">  `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span></span>
+<span id="cb56-3"><a href="examining-spatial-sampling-bias.html#cb56-3"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</span>
+<span id="cb56-4"><a href="examining-spatial-sampling-bias.html#cb56-4"></a></span>
+<span id="cb56-5"><a href="examining-spatial-sampling-bias.html#cb56-5"></a><span class="co"># read wg</span></span>
+<span id="cb56-6"><a href="examining-spatial-sampling-bias.html#cb56-6"></a>wg &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb56-7"><a href="examining-spatial-sampling-bias.html#cb56-7"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</span>
+<span id="cb56-8"><a href="examining-spatial-sampling-bias.html#cb56-8"></a><span class="co"># get bounding box</span></span>
+<span id="cb56-9"><a href="examining-spatial-sampling-bias.html#cb56-9"></a>bbox &lt;-<span class="st"> </span><span class="kw">st_bbox</span>(wg)</span>
+<span id="cb56-10"><a href="examining-spatial-sampling-bias.html#cb56-10"></a></span>
+<span id="cb56-11"><a href="examining-spatial-sampling-bias.html#cb56-11"></a><span class="co"># spatial subset</span></span>
+<span id="cb56-12"><a href="examining-spatial-sampling-bias.html#cb56-12"></a>chkCovars &lt;-<span class="st"> </span>chkCovars <span class="op">%&gt;%</span></span>
+<span id="cb56-13"><a href="examining-spatial-sampling-bias.html#cb56-13"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(.)) <span class="op">%&gt;%</span></span>
+<span id="cb56-14"><a href="examining-spatial-sampling-bias.html#cb56-14"></a><span class="st">  </span><span class="kw">filter</span>(id <span class="op">%in%</span><span class="st"> </span><span class="kw">unlist</span>(<span class="kw">st_contains</span>(wg, chkCovars)))</span></code></pre></div>
 </div>
 <div id="get-background-land-for-plotting" class="section level3">
 <h3><span class="header-section-number">6.2.2</span> Get background land for plotting</h3>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="examining-spatial-sampling-bias.html#cb55-1"></a><span class="co"># add land</span></span>
-<span id="cb55-2"><a href="examining-spatial-sampling-bias.html#cb55-2"></a>land &lt;-<span class="st"> </span><span class="kw">ne_countries</span>(</span>
-<span id="cb55-3"><a href="examining-spatial-sampling-bias.html#cb55-3"></a>  <span class="dt">scale =</span> <span class="dv">50</span>, <span class="dt">type =</span> <span class="st">&quot;countries&quot;</span>, <span class="dt">continent =</span> <span class="st">&quot;asia&quot;</span>,</span>
-<span id="cb55-4"><a href="examining-spatial-sampling-bias.html#cb55-4"></a>  <span class="dt">country =</span> <span class="st">&quot;india&quot;</span>,</span>
-<span id="cb55-5"><a href="examining-spatial-sampling-bias.html#cb55-5"></a>  <span class="dt">returnclass =</span> <span class="kw">c</span>(<span class="st">&quot;sf&quot;</span>)</span>
-<span id="cb55-6"><a href="examining-spatial-sampling-bias.html#cb55-6"></a>) <span class="op">%&gt;%</span></span>
-<span id="cb55-7"><a href="examining-spatial-sampling-bias.html#cb55-7"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</span>
-<span id="cb55-8"><a href="examining-spatial-sampling-bias.html#cb55-8"></a></span>
-<span id="cb55-9"><a href="examining-spatial-sampling-bias.html#cb55-9"></a><span class="co"># add roads data</span></span>
-<span id="cb55-10"><a href="examining-spatial-sampling-bias.html#cb55-10"></a>roads &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/roads_studysite_2019/roads_studysite_2019.shp&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb55-11"><a href="examining-spatial-sampling-bias.html#cb55-11"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="examining-spatial-sampling-bias.html#cb57-1"></a><span class="co"># add land</span></span>
+<span id="cb57-2"><a href="examining-spatial-sampling-bias.html#cb57-2"></a>land &lt;-<span class="st"> </span><span class="kw">ne_countries</span>(</span>
+<span id="cb57-3"><a href="examining-spatial-sampling-bias.html#cb57-3"></a>  <span class="dt">scale =</span> <span class="dv">50</span>, <span class="dt">type =</span> <span class="st">&quot;countries&quot;</span>, <span class="dt">continent =</span> <span class="st">&quot;asia&quot;</span>,</span>
+<span id="cb57-4"><a href="examining-spatial-sampling-bias.html#cb57-4"></a>  <span class="dt">country =</span> <span class="st">&quot;india&quot;</span>,</span>
+<span id="cb57-5"><a href="examining-spatial-sampling-bias.html#cb57-5"></a>  <span class="dt">returnclass =</span> <span class="kw">c</span>(<span class="st">&quot;sf&quot;</span>)</span>
+<span id="cb57-6"><a href="examining-spatial-sampling-bias.html#cb57-6"></a>) <span class="op">%&gt;%</span></span>
+<span id="cb57-7"><a href="examining-spatial-sampling-bias.html#cb57-7"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</span>
+<span id="cb57-8"><a href="examining-spatial-sampling-bias.html#cb57-8"></a></span>
+<span id="cb57-9"><a href="examining-spatial-sampling-bias.html#cb57-9"></a><span class="co"># add roads data</span></span>
+<span id="cb57-10"><a href="examining-spatial-sampling-bias.html#cb57-10"></a>roads &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/roads_studysite_2019/roads_studysite_2019.shp&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb57-11"><a href="examining-spatial-sampling-bias.html#cb57-11"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="prepare-main-text-figure-3" class="section level2">
@@ -374,31 +376,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="table-distance-to-roads" class="section level3">
 <h3><span class="header-section-number">6.3.2</span> Table: Distance to roads</h3>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="examining-spatial-sampling-bias.html#cb56-1"></a><span class="co"># write the mean and ci95 to file</span></span>
-<span id="cb56-2"><a href="examining-spatial-sampling-bias.html#cb56-2"></a>chkCovars <span class="op">%&gt;%</span></span>
-<span id="cb56-3"><a href="examining-spatial-sampling-bias.html#cb56-3"></a><span class="st">  </span><span class="kw">st_drop_geometry</span>() <span class="op">%&gt;%</span></span>
-<span id="cb56-4"><a href="examining-spatial-sampling-bias.html#cb56-4"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(dist_road, nnb) <span class="op">%&gt;%</span></span>
-<span id="cb56-5"><a href="examining-spatial-sampling-bias.html#cb56-5"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">pivot_longer</span>(</span>
-<span id="cb56-6"><a href="examining-spatial-sampling-bias.html#cb56-6"></a>    <span class="dt">cols =</span> <span class="kw">c</span>(<span class="st">&quot;dist_road&quot;</span>, <span class="st">&quot;nnb&quot;</span>),</span>
-<span id="cb56-7"><a href="examining-spatial-sampling-bias.html#cb56-7"></a>    <span class="dt">names_to =</span> <span class="st">&quot;variable&quot;</span></span>
-<span id="cb56-8"><a href="examining-spatial-sampling-bias.html#cb56-8"></a>  ) <span class="op">%&gt;%</span></span>
-<span id="cb56-9"><a href="examining-spatial-sampling-bias.html#cb56-9"></a><span class="st">  </span><span class="kw">group_by</span>(variable) <span class="op">%&gt;%</span></span>
-<span id="cb56-10"><a href="examining-spatial-sampling-bias.html#cb56-10"></a><span class="st">  </span><span class="kw">summarise_at</span>(</span>
-<span id="cb56-11"><a href="examining-spatial-sampling-bias.html#cb56-11"></a>    <span class="kw">vars</span>(value),</span>
-<span id="cb56-12"><a href="examining-spatial-sampling-bias.html#cb56-12"></a>    <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span><span class="kw">mean</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">sd</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">min</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">max</span>(.))</span>
-<span id="cb56-13"><a href="examining-spatial-sampling-bias.html#cb56-13"></a>  ) <span class="op">%&gt;%</span></span>
-<span id="cb56-14"><a href="examining-spatial-sampling-bias.html#cb56-14"></a><span class="st">  </span><span class="kw">write_csv</span>(<span class="st">&quot;data/results/distance_roads_sites.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="examining-spatial-sampling-bias.html#cb58-1"></a><span class="co"># write the mean and ci95 to file</span></span>
+<span id="cb58-2"><a href="examining-spatial-sampling-bias.html#cb58-2"></a>chkCovars <span class="op">%&gt;%</span></span>
+<span id="cb58-3"><a href="examining-spatial-sampling-bias.html#cb58-3"></a><span class="st">  </span><span class="kw">st_drop_geometry</span>() <span class="op">%&gt;%</span></span>
+<span id="cb58-4"><a href="examining-spatial-sampling-bias.html#cb58-4"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(dist_road, nnb) <span class="op">%&gt;%</span></span>
+<span id="cb58-5"><a href="examining-spatial-sampling-bias.html#cb58-5"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">pivot_longer</span>(</span>
+<span id="cb58-6"><a href="examining-spatial-sampling-bias.html#cb58-6"></a>    <span class="dt">cols =</span> <span class="kw">c</span>(<span class="st">&quot;dist_road&quot;</span>, <span class="st">&quot;nnb&quot;</span>),</span>
+<span id="cb58-7"><a href="examining-spatial-sampling-bias.html#cb58-7"></a>    <span class="dt">names_to =</span> <span class="st">&quot;variable&quot;</span></span>
+<span id="cb58-8"><a href="examining-spatial-sampling-bias.html#cb58-8"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb58-9"><a href="examining-spatial-sampling-bias.html#cb58-9"></a><span class="st">  </span><span class="kw">group_by</span>(variable) <span class="op">%&gt;%</span></span>
+<span id="cb58-10"><a href="examining-spatial-sampling-bias.html#cb58-10"></a><span class="st">  </span><span class="kw">summarise_at</span>(</span>
+<span id="cb58-11"><a href="examining-spatial-sampling-bias.html#cb58-11"></a>    <span class="kw">vars</span>(value),</span>
+<span id="cb58-12"><a href="examining-spatial-sampling-bias.html#cb58-12"></a>    <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span><span class="kw">mean</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">sd</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">min</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">max</span>(.))</span>
+<span id="cb58-13"><a href="examining-spatial-sampling-bias.html#cb58-13"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb58-14"><a href="examining-spatial-sampling-bias.html#cb58-14"></a><span class="st">  </span><span class="kw">write_csv</span>(<span class="st">&quot;data/results/distance_roads_sites.csv&quot;</span>)</span></code></pre></div>
 </div>
 <div id="distance-to-nearest-neighbouring-site" class="section level3">
 <h3><span class="header-section-number">6.3.3</span> Distance to nearest neighbouring site</h3>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="examining-spatial-sampling-bias.html#cb57-1"></a><span class="co"># get unique locations from checklists</span></span>
-<span id="cb57-2"><a href="examining-spatial-sampling-bias.html#cb57-2"></a>locs_unique &lt;-<span class="st"> </span><span class="kw">cbind</span>(</span>
-<span id="cb57-3"><a href="examining-spatial-sampling-bias.html#cb57-3"></a>  <span class="kw">st_drop_geometry</span>(chkCovars),</span>
-<span id="cb57-4"><a href="examining-spatial-sampling-bias.html#cb57-4"></a>  <span class="kw">st_coordinates</span>(chkCovars)</span>
-<span id="cb57-5"><a href="examining-spatial-sampling-bias.html#cb57-5"></a>) <span class="op">%&gt;%</span></span>
-<span id="cb57-6"><a href="examining-spatial-sampling-bias.html#cb57-6"></a><span class="st">  </span><span class="kw">as_tibble</span>()</span>
-<span id="cb57-7"><a href="examining-spatial-sampling-bias.html#cb57-7"></a></span>
-<span id="cb57-8"><a href="examining-spatial-sampling-bias.html#cb57-8"></a>locs_unique &lt;-<span class="st"> </span><span class="kw">distinct</span>(locs_unique, X, Y, <span class="dt">.keep_all =</span> T)</span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="examining-spatial-sampling-bias.html#cb59-1"></a><span class="co"># get unique locations from checklists</span></span>
+<span id="cb59-2"><a href="examining-spatial-sampling-bias.html#cb59-2"></a>locs_unique &lt;-<span class="st"> </span><span class="kw">cbind</span>(</span>
+<span id="cb59-3"><a href="examining-spatial-sampling-bias.html#cb59-3"></a>  <span class="kw">st_drop_geometry</span>(chkCovars),</span>
+<span id="cb59-4"><a href="examining-spatial-sampling-bias.html#cb59-4"></a>  <span class="kw">st_coordinates</span>(chkCovars)</span>
+<span id="cb59-5"><a href="examining-spatial-sampling-bias.html#cb59-5"></a>) <span class="op">%&gt;%</span></span>
+<span id="cb59-6"><a href="examining-spatial-sampling-bias.html#cb59-6"></a><span class="st">  </span><span class="kw">as_tibble</span>()</span>
+<span id="cb59-7"><a href="examining-spatial-sampling-bias.html#cb59-7"></a></span>
+<span id="cb59-8"><a href="examining-spatial-sampling-bias.html#cb59-8"></a>locs_unique &lt;-<span class="st"> </span><span class="kw">distinct</span>(locs_unique, X, Y, <span class="dt">.keep_all =</span> T)</span></code></pre></div>
 <p>Figure code is hidden in versions rendered as HTML and PDF.</p>
 </div>
 <div id="spatial-distribution-of-distances-to-neighbours" class="section level3">
@@ -412,23 +414,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="figure-spatial-sampling-bias" class="section level2">
 <h2><span class="header-section-number">6.4</span> Figure: Spatial sampling bias</h2>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="examining-spatial-sampling-bias.html#cb58-1"></a><span class="co"># get locations</span></span>
-<span id="cb58-2"><a href="examining-spatial-sampling-bias.html#cb58-2"></a>points &lt;-<span class="st"> </span>chkCovars <span class="op">%&gt;%</span></span>
-<span id="cb58-3"><a href="examining-spatial-sampling-bias.html#cb58-3"></a><span class="st">  </span><span class="kw">bind_cols</span>(<span class="kw">as_tibble</span>(<span class="kw">st_coordinates</span>(.))) <span class="op">%&gt;%</span></span>
-<span id="cb58-4"><a href="examining-spatial-sampling-bias.html#cb58-4"></a><span class="st">  </span><span class="kw">st_drop_geometry</span>() <span class="op">%&gt;%</span></span>
-<span id="cb58-5"><a href="examining-spatial-sampling-bias.html#cb58-5"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">X =</span> <span class="kw">round_any</span>(X, <span class="dv">2500</span>), <span class="dt">Y =</span> <span class="kw">round_any</span>(Y, <span class="dv">2500</span>))</span>
-<span id="cb58-6"><a href="examining-spatial-sampling-bias.html#cb58-6"></a></span>
-<span id="cb58-7"><a href="examining-spatial-sampling-bias.html#cb58-7"></a><span class="co"># count points</span></span>
-<span id="cb58-8"><a href="examining-spatial-sampling-bias.html#cb58-8"></a>points &lt;-<span class="st"> </span><span class="kw">count</span>(points, X, Y)</span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="examining-spatial-sampling-bias.html#cb60-1"></a><span class="co"># get locations</span></span>
+<span id="cb60-2"><a href="examining-spatial-sampling-bias.html#cb60-2"></a>points &lt;-<span class="st"> </span>chkCovars <span class="op">%&gt;%</span></span>
+<span id="cb60-3"><a href="examining-spatial-sampling-bias.html#cb60-3"></a><span class="st">  </span><span class="kw">bind_cols</span>(<span class="kw">as_tibble</span>(<span class="kw">st_coordinates</span>(.))) <span class="op">%&gt;%</span></span>
+<span id="cb60-4"><a href="examining-spatial-sampling-bias.html#cb60-4"></a><span class="st">  </span><span class="kw">st_drop_geometry</span>() <span class="op">%&gt;%</span></span>
+<span id="cb60-5"><a href="examining-spatial-sampling-bias.html#cb60-5"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">X =</span> <span class="kw">round_any</span>(X, <span class="dv">2500</span>), <span class="dt">Y =</span> <span class="kw">round_any</span>(Y, <span class="dv">2500</span>))</span>
+<span id="cb60-6"><a href="examining-spatial-sampling-bias.html#cb60-6"></a></span>
+<span id="cb60-7"><a href="examining-spatial-sampling-bias.html#cb60-7"></a><span class="co"># count points</span></span>
+<span id="cb60-8"><a href="examining-spatial-sampling-bias.html#cb60-8"></a>points &lt;-<span class="st"> </span><span class="kw">count</span>(points, X, Y)</span></code></pre></div>
 <p>Figure code is hidden in versions rendered as HTML and PDF.</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="examining-spatial-sampling-bias.html#cb59-1"></a><span class="co"># save as png</span></span>
-<span id="cb59-2"><a href="examining-spatial-sampling-bias.html#cb59-2"></a><span class="kw">ggsave</span>(</span>
-<span id="cb59-3"><a href="examining-spatial-sampling-bias.html#cb59-3"></a>  fig_checklists_grid,</span>
-<span id="cb59-4"><a href="examining-spatial-sampling-bias.html#cb59-4"></a>  <span class="dt">filename =</span> <span class="st">&quot;figs/fig_spatial_bias.png&quot;</span></span>
-<span id="cb59-5"><a href="examining-spatial-sampling-bias.html#cb59-5"></a>)</span>
-<span id="cb59-6"><a href="examining-spatial-sampling-bias.html#cb59-6"></a></span>
-<span id="cb59-7"><a href="examining-spatial-sampling-bias.html#cb59-7"></a><span class="co"># save figure as Robject for next plot</span></span>
-<span id="cb59-8"><a href="examining-spatial-sampling-bias.html#cb59-8"></a><span class="kw">save</span>(fig_checklists_grid, <span class="dt">file =</span> <span class="st">&quot;data/fig_checklists_grid.Rds&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="examining-spatial-sampling-bias.html#cb61-1"></a><span class="co"># save as png</span></span>
+<span id="cb61-2"><a href="examining-spatial-sampling-bias.html#cb61-2"></a><span class="kw">ggsave</span>(</span>
+<span id="cb61-3"><a href="examining-spatial-sampling-bias.html#cb61-3"></a>  fig_checklists_grid,</span>
+<span id="cb61-4"><a href="examining-spatial-sampling-bias.html#cb61-4"></a>  <span class="dt">filename =</span> <span class="st">&quot;figs/fig_spatial_bias.png&quot;</span></span>
+<span id="cb61-5"><a href="examining-spatial-sampling-bias.html#cb61-5"></a>)</span>
+<span id="cb61-6"><a href="examining-spatial-sampling-bias.html#cb61-6"></a></span>
+<span id="cb61-7"><a href="examining-spatial-sampling-bias.html#cb61-7"></a><span class="co"># save figure as Robject for next plot</span></span>
+<span id="cb61-8"><a href="examining-spatial-sampling-bias.html#cb61-8"></a><span class="kw">save</span>(fig_checklists_grid, <span class="dt">file =</span> <span class="st">&quot;data/fig_checklists_grid.Rds&quot;</span>)</span></code></pre></div>
 <div class="figure">
 <img src="figs/fig_spatial_bias.png" alt="" />
 <p class="caption">Sampling effort across the Nilgiri and Anamalai Hills, in the form of eBird checklists reported by birdwatchers, mostly takes place along roads, with the majority of checklists located &lt; 1 km from a roadway (see distribution in inset), and therefore, only about 300m, on average, from the location of another checklist. Each cell here is 2.5km x 2.5km.</p>

@@ -28,7 +28,7 @@
 <meta name="author" content="Ruth DeFries" />
 
 
-<meta name="date" content="2022-02-09" />
+<meta name="date" content="2022-02-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -168,9 +168,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-spatial-extent"><i class="fa fa-check"></i><b>4.2</b> Prepare spatial extent</a></li>
 <li class="chapter" data-level="4.3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-terrain-rasters"><i class="fa fa-check"></i><b>4.3</b> Prepare terrain rasters</a></li>
 <li class="chapter" data-level="4.4" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-chelsa-rasters"><i class="fa fa-check"></i><b>4.4</b> Prepare CHELSA rasters</a><ul>
-<li class="chapter" data-level="4.4.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-1-mean-temperature-for-dry-season-december-to-may"><i class="fa fa-check"></i><b>4.4.1</b> Prepare Bioclim 1 (mean temperature) for dry season (December to May)</a></li>
-<li class="chapter" data-level="4.4.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-12-total-rainfall-for-dry-season"><i class="fa fa-check"></i><b>4.4.2</b> Prepare Bioclim 12 (total rainfall) for dry season</a></li>
-<li class="chapter" data-level="4.4.3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#stack-terrain-and-climate"><i class="fa fa-check"></i><b>4.4.3</b> Stack terrain and climate</a></li>
+<li class="chapter" data-level="4.4.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-4a-and-15"><i class="fa fa-check"></i><b>4.4.1</b> Prepare BIOCLIM 4a and 15</a></li>
+<li class="chapter" data-level="4.4.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-4a"><i class="fa fa-check"></i><b>4.4.2</b> Prepare BIOCLIM 4a</a></li>
+<li class="chapter" data-level="4.4.3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-15"><i class="fa fa-check"></i><b>4.4.3</b> Prepare Bioclim 15</a></li>
+<li class="chapter" data-level="4.4.4" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#stack-terrain-and-climate"><i class="fa fa-check"></i><b>4.4.4</b> Stack terrain and climate</a></li>
+<li class="chapter" data-level="4.4.5" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#stack-terrain-and-climate-1"><i class="fa fa-check"></i><b>4.4.5</b> Stack terrain and climate</a></li>
 </ul></li>
 <li class="chapter" data-level="4.5" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-landcover-from-10m-to-1km"><i class="fa fa-check"></i><b>4.5</b> Resample landcover from 10m to 1km</a></li>
 <li class="chapter" data-level="4.6" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-other-rasters-to-1km"><i class="fa fa-check"></i><b>4.6</b> Resample other rasters to 1km</a><ul>
@@ -302,293 +304,293 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="preparing-checklist-calibration-index" class="section level1">
 <h1><span class="header-section-number">Section 5</span> Preparing Checklist Calibration Index</h1>
-<p>Differences in local avifaunal expertise among citizen scientists can lead to biased species detection when compared with data collected by a consistent set of trained observers <span class="citation">(van Strien, van Swaay, and Termaat <a href="#ref-vanstrien2013" role="doc-biblioref">2013</a>)</span>. Including observer expertise as a detection covariate in occupancy models using eBird data can help account for this variation <span class="citation">(Johnston et al. <a href="#ref-johnston2018" role="doc-biblioref">2018</a>)</span>. Observer-specific expertise in local avifauna was calculated following <span class="citation">(Kelling et al. <a href="#ref-kelling2015a" role="doc-biblioref">2015</a>)</span> as the normalized predicted number of species reported by an observer after 60 minutes of sampling across the most common land cover type within the study area. This score was calculated by examining checklists from anonymized observers across the study area. We modified Kelling et al. (2015) formulation by including only observations of the 82 species of interest in our calculations. An observer with a higher number of species of interest reported within 60 minutes would have a higher observer-specific expertise score, with respect to the study area.</p>
+<p>Differences in local avifaunal expertise among citizen scientists can lead to biased species detection when compared with data collected by a consistent set of trained observers <span class="citation">(van Strien, van Swaay, and Termaat <a href="#ref-vanstrien2013" role="doc-biblioref">2013</a>)</span>. Including observer expertise as a detection covariate in occupancy models using eBird data can help account for this variation <span class="citation">(Johnston et al. <a href="#ref-johnston2018" role="doc-biblioref">2018</a>)</span>. Observer-specific expertise in local avifauna was calculated following <span class="citation">(Kelling et al. <a href="#ref-kelling2015a" role="doc-biblioref">2015</a>)</span> as the normalized predicted number of species reported by an observer after 60 minutes of sampling across the most common land cover type within the study area. This score was calculated by examining checklists from anonymized observers across the study area. We modified Kelling et al. (2015) formulation by including only observations of the 79 species of interest in our calculations. An observer with a higher number of species of interest reported within 60 minutes would have a higher observer-specific expertise score, with respect to the study area.</p>
 <div id="prepare-libraries-2" class="section level2">
 <h2><span class="header-section-number">5.1</span> Prepare libraries</h2>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="preparing-checklist-calibration-index.html#cb39-1"></a></span>
-<span id="cb39-2"><a href="preparing-checklist-calibration-index.html#cb39-2"></a><span class="co"># load libs</span></span>
-<span id="cb39-3"><a href="preparing-checklist-calibration-index.html#cb39-3"></a><span class="kw">library</span>(data.table)</span>
-<span id="cb39-4"><a href="preparing-checklist-calibration-index.html#cb39-4"></a><span class="kw">library</span>(readxl)</span>
-<span id="cb39-5"><a href="preparing-checklist-calibration-index.html#cb39-5"></a><span class="kw">library</span>(magrittr)</span>
-<span id="cb39-6"><a href="preparing-checklist-calibration-index.html#cb39-6"></a><span class="kw">library</span>(stringr)</span>
-<span id="cb39-7"><a href="preparing-checklist-calibration-index.html#cb39-7"></a><span class="kw">library</span>(dplyr)</span>
-<span id="cb39-8"><a href="preparing-checklist-calibration-index.html#cb39-8"></a><span class="kw">library</span>(tidyr)</span>
-<span id="cb39-9"><a href="preparing-checklist-calibration-index.html#cb39-9"></a><span class="kw">library</span>(auk)</span>
-<span id="cb39-10"><a href="preparing-checklist-calibration-index.html#cb39-10"></a></span>
-<span id="cb39-11"><a href="preparing-checklist-calibration-index.html#cb39-11"></a><span class="co"># get decimal time function</span></span>
-<span id="cb39-12"><a href="preparing-checklist-calibration-index.html#cb39-12"></a><span class="kw">library</span>(lubridate)</span>
-<span id="cb39-13"><a href="preparing-checklist-calibration-index.html#cb39-13"></a>time_to_decimal &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
-<span id="cb39-14"><a href="preparing-checklist-calibration-index.html#cb39-14"></a>  x &lt;-<span class="st"> </span>lubridate<span class="op">::</span><span class="kw">hms</span>(x, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb39-15"><a href="preparing-checklist-calibration-index.html#cb39-15"></a>  lubridate<span class="op">::</span><span class="kw">hour</span>(x) <span class="op">+</span><span class="st"> </span>lubridate<span class="op">::</span><span class="kw">minute</span>(x) <span class="op">/</span><span class="st"> </span><span class="dv">60</span> <span class="op">+</span><span class="st"> </span>lubridate<span class="op">::</span><span class="kw">second</span>(x) <span class="op">/</span><span class="st"> </span><span class="dv">3600</span></span>
-<span id="cb39-16"><a href="preparing-checklist-calibration-index.html#cb39-16"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="preparing-checklist-calibration-index.html#cb41-1"></a></span>
+<span id="cb41-2"><a href="preparing-checklist-calibration-index.html#cb41-2"></a><span class="co"># load libs</span></span>
+<span id="cb41-3"><a href="preparing-checklist-calibration-index.html#cb41-3"></a><span class="kw">library</span>(data.table)</span>
+<span id="cb41-4"><a href="preparing-checklist-calibration-index.html#cb41-4"></a><span class="kw">library</span>(readxl)</span>
+<span id="cb41-5"><a href="preparing-checklist-calibration-index.html#cb41-5"></a><span class="kw">library</span>(magrittr)</span>
+<span id="cb41-6"><a href="preparing-checklist-calibration-index.html#cb41-6"></a><span class="kw">library</span>(stringr)</span>
+<span id="cb41-7"><a href="preparing-checklist-calibration-index.html#cb41-7"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb41-8"><a href="preparing-checklist-calibration-index.html#cb41-8"></a><span class="kw">library</span>(tidyr)</span>
+<span id="cb41-9"><a href="preparing-checklist-calibration-index.html#cb41-9"></a><span class="kw">library</span>(auk)</span>
+<span id="cb41-10"><a href="preparing-checklist-calibration-index.html#cb41-10"></a></span>
+<span id="cb41-11"><a href="preparing-checklist-calibration-index.html#cb41-11"></a><span class="co"># get decimal time function</span></span>
+<span id="cb41-12"><a href="preparing-checklist-calibration-index.html#cb41-12"></a><span class="kw">library</span>(lubridate)</span>
+<span id="cb41-13"><a href="preparing-checklist-calibration-index.html#cb41-13"></a>time_to_decimal &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
+<span id="cb41-14"><a href="preparing-checklist-calibration-index.html#cb41-14"></a>  x &lt;-<span class="st"> </span>lubridate<span class="op">::</span><span class="kw">hms</span>(x, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb41-15"><a href="preparing-checklist-calibration-index.html#cb41-15"></a>  lubridate<span class="op">::</span><span class="kw">hour</span>(x) <span class="op">+</span><span class="st"> </span>lubridate<span class="op">::</span><span class="kw">minute</span>(x) <span class="op">/</span><span class="st"> </span><span class="dv">60</span> <span class="op">+</span><span class="st"> </span>lubridate<span class="op">::</span><span class="kw">second</span>(x) <span class="op">/</span><span class="st"> </span><span class="dv">3600</span></span>
+<span id="cb41-16"><a href="preparing-checklist-calibration-index.html#cb41-16"></a>}</span></code></pre></div>
 </div>
 <div id="prepare-data" class="section level2">
 <h2><span class="header-section-number">5.2</span> Prepare data</h2>
 <p>Here, we go through the data preparation process again because we might want to assess observer expertise over a larger area than the study site.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="preparing-checklist-calibration-index.html#cb40-1"></a><span class="co"># Read in shapefile of study area to subset by bounding box</span></span>
-<span id="cb40-2"><a href="preparing-checklist-calibration-index.html#cb40-2"></a><span class="kw">library</span>(sf)</span>
-<span id="cb40-3"><a href="preparing-checklist-calibration-index.html#cb40-3"></a>wg &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb40-4"><a href="preparing-checklist-calibration-index.html#cb40-4"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</span>
-<span id="cb40-5"><a href="preparing-checklist-calibration-index.html#cb40-5"></a></span>
-<span id="cb40-6"><a href="preparing-checklist-calibration-index.html#cb40-6"></a><span class="co"># set file paths for auk functions</span></span>
-<span id="cb40-7"><a href="preparing-checklist-calibration-index.html#cb40-7"></a>f_in_ebd &lt;-<span class="st"> </span><span class="kw">file.path</span>(<span class="st">&quot;data/01_ebird-filtered-EBD-westernGhats.txt&quot;</span>)</span>
-<span id="cb40-8"><a href="preparing-checklist-calibration-index.html#cb40-8"></a>f_in_sampling &lt;-<span class="st"> </span><span class="kw">file.path</span>(<span class="st">&quot;data/01_ebird-filtered-sampling-westernGhats.txt&quot;</span>)</span>
-<span id="cb40-9"><a href="preparing-checklist-calibration-index.html#cb40-9"></a></span>
-<span id="cb40-10"><a href="preparing-checklist-calibration-index.html#cb40-10"></a><span class="co"># run filters using auk packages</span></span>
-<span id="cb40-11"><a href="preparing-checklist-calibration-index.html#cb40-11"></a>ebd_filters &lt;-<span class="st"> </span><span class="kw">auk_ebd</span>(f_in_ebd, f_in_sampling) <span class="op">%&gt;%</span></span>
-<span id="cb40-12"><a href="preparing-checklist-calibration-index.html#cb40-12"></a><span class="st">  </span><span class="kw">auk_country</span>(<span class="dt">country =</span> <span class="st">&quot;IN&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb40-13"><a href="preparing-checklist-calibration-index.html#cb40-13"></a><span class="st">  </span><span class="kw">auk_state</span>(<span class="kw">c</span>(<span class="st">&quot;IN-KL&quot;</span>, <span class="st">&quot;IN-TN&quot;</span>, <span class="st">&quot;IN-KA&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb40-14"><a href="preparing-checklist-calibration-index.html#cb40-14"></a><span class="st">  </span><span class="co"># Restricting geography to TamilNadu, Kerala &amp; Karnataka</span></span>
-<span id="cb40-15"><a href="preparing-checklist-calibration-index.html#cb40-15"></a><span class="st">  </span><span class="kw">auk_date</span>(<span class="kw">c</span>(<span class="st">&quot;2013-01-01&quot;</span>, <span class="st">&quot;2021-05-31&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb40-16"><a href="preparing-checklist-calibration-index.html#cb40-16"></a><span class="st">  </span><span class="kw">auk_complete</span>()</span>
-<span id="cb40-17"><a href="preparing-checklist-calibration-index.html#cb40-17"></a></span>
-<span id="cb40-18"><a href="preparing-checklist-calibration-index.html#cb40-18"></a><span class="co"># check filters</span></span>
-<span id="cb40-19"><a href="preparing-checklist-calibration-index.html#cb40-19"></a>ebd_filters</span>
-<span id="cb40-20"><a href="preparing-checklist-calibration-index.html#cb40-20"></a></span>
-<span id="cb40-21"><a href="preparing-checklist-calibration-index.html#cb40-21"></a><span class="co"># specify output location and perform filter</span></span>
-<span id="cb40-22"><a href="preparing-checklist-calibration-index.html#cb40-22"></a>f_out_ebd &lt;-<span class="st"> &quot;data/ebird_for_expertise.txt&quot;</span></span>
-<span id="cb40-23"><a href="preparing-checklist-calibration-index.html#cb40-23"></a>f_out_sampling &lt;-<span class="st"> &quot;data/ebird_sampling_for_expertise.txt&quot;</span></span>
-<span id="cb40-24"><a href="preparing-checklist-calibration-index.html#cb40-24"></a></span>
-<span id="cb40-25"><a href="preparing-checklist-calibration-index.html#cb40-25"></a>ebd_filtered &lt;-<span class="st"> </span><span class="kw">auk_filter</span>(ebd_filters,</span>
-<span id="cb40-26"><a href="preparing-checklist-calibration-index.html#cb40-26"></a>  <span class="dt">file =</span> f_out_ebd,</span>
-<span id="cb40-27"><a href="preparing-checklist-calibration-index.html#cb40-27"></a>  <span class="dt">file_sampling =</span> f_out_sampling, <span class="dt">overwrite =</span> <span class="ot">TRUE</span></span>
-<span id="cb40-28"><a href="preparing-checklist-calibration-index.html#cb40-28"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="preparing-checklist-calibration-index.html#cb42-1"></a><span class="co"># Read in shapefile of study area to subset by bounding box</span></span>
+<span id="cb42-2"><a href="preparing-checklist-calibration-index.html#cb42-2"></a><span class="kw">library</span>(sf)</span>
+<span id="cb42-3"><a href="preparing-checklist-calibration-index.html#cb42-3"></a>wg &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb42-4"><a href="preparing-checklist-calibration-index.html#cb42-4"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>)</span>
+<span id="cb42-5"><a href="preparing-checklist-calibration-index.html#cb42-5"></a></span>
+<span id="cb42-6"><a href="preparing-checklist-calibration-index.html#cb42-6"></a><span class="co"># set file paths for auk functions</span></span>
+<span id="cb42-7"><a href="preparing-checklist-calibration-index.html#cb42-7"></a>f_in_ebd &lt;-<span class="st"> </span><span class="kw">file.path</span>(<span class="st">&quot;data/01_ebird-filtered-EBD-westernGhats.txt&quot;</span>)</span>
+<span id="cb42-8"><a href="preparing-checklist-calibration-index.html#cb42-8"></a>f_in_sampling &lt;-<span class="st"> </span><span class="kw">file.path</span>(<span class="st">&quot;data/01_ebird-filtered-sampling-westernGhats.txt&quot;</span>)</span>
+<span id="cb42-9"><a href="preparing-checklist-calibration-index.html#cb42-9"></a></span>
+<span id="cb42-10"><a href="preparing-checklist-calibration-index.html#cb42-10"></a><span class="co"># run filters using auk packages</span></span>
+<span id="cb42-11"><a href="preparing-checklist-calibration-index.html#cb42-11"></a>ebd_filters &lt;-<span class="st"> </span><span class="kw">auk_ebd</span>(f_in_ebd, f_in_sampling) <span class="op">%&gt;%</span></span>
+<span id="cb42-12"><a href="preparing-checklist-calibration-index.html#cb42-12"></a><span class="st">  </span><span class="kw">auk_country</span>(<span class="dt">country =</span> <span class="st">&quot;IN&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb42-13"><a href="preparing-checklist-calibration-index.html#cb42-13"></a><span class="st">  </span><span class="kw">auk_state</span>(<span class="kw">c</span>(<span class="st">&quot;IN-KL&quot;</span>, <span class="st">&quot;IN-TN&quot;</span>, <span class="st">&quot;IN-KA&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb42-14"><a href="preparing-checklist-calibration-index.html#cb42-14"></a><span class="st">  </span><span class="co"># Restricting geography to TamilNadu, Kerala &amp; Karnataka</span></span>
+<span id="cb42-15"><a href="preparing-checklist-calibration-index.html#cb42-15"></a><span class="st">  </span><span class="kw">auk_date</span>(<span class="kw">c</span>(<span class="st">&quot;2013-01-01&quot;</span>, <span class="st">&quot;2021-05-31&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb42-16"><a href="preparing-checklist-calibration-index.html#cb42-16"></a><span class="st">  </span><span class="kw">auk_complete</span>()</span>
+<span id="cb42-17"><a href="preparing-checklist-calibration-index.html#cb42-17"></a></span>
+<span id="cb42-18"><a href="preparing-checklist-calibration-index.html#cb42-18"></a><span class="co"># check filters</span></span>
+<span id="cb42-19"><a href="preparing-checklist-calibration-index.html#cb42-19"></a>ebd_filters</span>
+<span id="cb42-20"><a href="preparing-checklist-calibration-index.html#cb42-20"></a></span>
+<span id="cb42-21"><a href="preparing-checklist-calibration-index.html#cb42-21"></a><span class="co"># specify output location and perform filter</span></span>
+<span id="cb42-22"><a href="preparing-checklist-calibration-index.html#cb42-22"></a>f_out_ebd &lt;-<span class="st"> &quot;data/ebird_for_expertise.txt&quot;</span></span>
+<span id="cb42-23"><a href="preparing-checklist-calibration-index.html#cb42-23"></a>f_out_sampling &lt;-<span class="st"> &quot;data/ebird_sampling_for_expertise.txt&quot;</span></span>
+<span id="cb42-24"><a href="preparing-checklist-calibration-index.html#cb42-24"></a></span>
+<span id="cb42-25"><a href="preparing-checklist-calibration-index.html#cb42-25"></a>ebd_filtered &lt;-<span class="st"> </span><span class="kw">auk_filter</span>(ebd_filters,</span>
+<span id="cb42-26"><a href="preparing-checklist-calibration-index.html#cb42-26"></a>  <span class="dt">file =</span> f_out_ebd,</span>
+<span id="cb42-27"><a href="preparing-checklist-calibration-index.html#cb42-27"></a>  <span class="dt">file_sampling =</span> f_out_sampling, <span class="dt">overwrite =</span> <span class="ot">TRUE</span></span>
+<span id="cb42-28"><a href="preparing-checklist-calibration-index.html#cb42-28"></a>)</span></code></pre></div>
 <p>Load in the filtered data and columns of interest.</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="preparing-checklist-calibration-index.html#cb41-1"></a><span class="co">## Process filtered data</span></span>
-<span id="cb41-2"><a href="preparing-checklist-calibration-index.html#cb41-2"></a><span class="co"># read in the data</span></span>
-<span id="cb41-3"><a href="preparing-checklist-calibration-index.html#cb41-3"></a>ebd &lt;-<span class="st"> </span><span class="kw">fread</span>(f_out_ebd)</span>
-<span id="cb41-4"><a href="preparing-checklist-calibration-index.html#cb41-4"></a>names &lt;-<span class="st"> </span><span class="kw">names</span>(ebd) <span class="op">%&gt;%</span></span>
-<span id="cb41-5"><a href="preparing-checklist-calibration-index.html#cb41-5"></a><span class="st">  </span>stringr<span class="op">::</span><span class="kw">str_to_lower</span>() <span class="op">%&gt;%</span></span>
-<span id="cb41-6"><a href="preparing-checklist-calibration-index.html#cb41-6"></a><span class="st">  </span>stringr<span class="op">::</span><span class="kw">str_replace_all</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;_&quot;</span>)</span>
-<span id="cb41-7"><a href="preparing-checklist-calibration-index.html#cb41-7"></a></span>
-<span id="cb41-8"><a href="preparing-checklist-calibration-index.html#cb41-8"></a><span class="kw">setnames</span>(ebd, names)</span>
-<span id="cb41-9"><a href="preparing-checklist-calibration-index.html#cb41-9"></a><span class="co"># choose columns of interest</span></span>
-<span id="cb41-10"><a href="preparing-checklist-calibration-index.html#cb41-10"></a>columnsOfInterest &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
-<span id="cb41-11"><a href="preparing-checklist-calibration-index.html#cb41-11"></a>  <span class="st">&quot;global_unique_identifier&quot;</span>, <span class="st">&quot;scientific_name&quot;</span>, <span class="st">&quot;observation_count&quot;</span>,</span>
-<span id="cb41-12"><a href="preparing-checklist-calibration-index.html#cb41-12"></a>  <span class="st">&quot;locality&quot;</span>, <span class="st">&quot;locality_id&quot;</span>, <span class="st">&quot;locality_type&quot;</span>, <span class="st">&quot;latitude&quot;</span>,</span>
-<span id="cb41-13"><a href="preparing-checklist-calibration-index.html#cb41-13"></a>  <span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;observation_date&quot;</span>,</span>
-<span id="cb41-14"><a href="preparing-checklist-calibration-index.html#cb41-14"></a>  <span class="st">&quot;time_observations_started&quot;</span>, <span class="st">&quot;observer_id&quot;</span>,</span>
-<span id="cb41-15"><a href="preparing-checklist-calibration-index.html#cb41-15"></a>  <span class="st">&quot;sampling_event_identifier&quot;</span>, <span class="st">&quot;protocol_type&quot;</span>,</span>
-<span id="cb41-16"><a href="preparing-checklist-calibration-index.html#cb41-16"></a>  <span class="st">&quot;duration_minutes&quot;</span>, <span class="st">&quot;effort_distance_km&quot;</span>, <span class="st">&quot;effort_area_ha&quot;</span>,</span>
-<span id="cb41-17"><a href="preparing-checklist-calibration-index.html#cb41-17"></a>  <span class="st">&quot;number_observers&quot;</span>, <span class="st">&quot;all_species_reported&quot;</span>, <span class="st">&quot;reviewed&quot;</span></span>
-<span id="cb41-18"><a href="preparing-checklist-calibration-index.html#cb41-18"></a>)</span>
-<span id="cb41-19"><a href="preparing-checklist-calibration-index.html#cb41-19"></a></span>
-<span id="cb41-20"><a href="preparing-checklist-calibration-index.html#cb41-20"></a>ebd &lt;-<span class="st"> </span><span class="kw">setDF</span>(ebd) <span class="op">%&gt;%</span></span>
-<span id="cb41-21"><a href="preparing-checklist-calibration-index.html#cb41-21"></a><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span></span>
-<span id="cb41-22"><a href="preparing-checklist-calibration-index.html#cb41-22"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="kw">one_of</span>(columnsOfInterest))</span>
-<span id="cb41-23"><a href="preparing-checklist-calibration-index.html#cb41-23"></a></span>
-<span id="cb41-24"><a href="preparing-checklist-calibration-index.html#cb41-24"></a><span class="kw">setDT</span>(ebd)</span>
-<span id="cb41-25"><a href="preparing-checklist-calibration-index.html#cb41-25"></a></span>
-<span id="cb41-26"><a href="preparing-checklist-calibration-index.html#cb41-26"></a><span class="co"># remove checklists or seis with more than 10 obervers</span></span>
-<span id="cb41-27"><a href="preparing-checklist-calibration-index.html#cb41-27"></a>ebd &lt;-<span class="st"> </span><span class="kw">filter</span>(ebd, number_observers <span class="op">&lt;=</span><span class="st"> </span><span class="dv">10</span>)</span>
-<span id="cb41-28"><a href="preparing-checklist-calibration-index.html#cb41-28"></a></span>
-<span id="cb41-29"><a href="preparing-checklist-calibration-index.html#cb41-29"></a><span class="co"># keep only checklists between 5AM and 7PM</span></span>
-<span id="cb41-30"><a href="preparing-checklist-calibration-index.html#cb41-30"></a>ebd &lt;-<span class="st"> </span><span class="kw">filter</span>(ebd, time_observations_started <span class="op">&gt;=</span><span class="st"> &quot;05:00:00&quot;</span> <span class="op">&amp;</span><span class="st"> </span>time_observations_started <span class="op">&lt;=</span><span class="st"> &quot;19:00:00&quot;</span>)</span>
-<span id="cb41-31"><a href="preparing-checklist-calibration-index.html#cb41-31"></a></span>
-<span id="cb41-32"><a href="preparing-checklist-calibration-index.html#cb41-32"></a><span class="co"># keep only checklists between December 1st and May 31st</span></span>
-<span id="cb41-33"><a href="preparing-checklist-calibration-index.html#cb41-33"></a>ebd &lt;-<span class="st"> </span><span class="kw">filter</span>(ebd, <span class="kw">month</span>(observation_date) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">12</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="preparing-checklist-calibration-index.html#cb43-1"></a><span class="co">## Process filtered data</span></span>
+<span id="cb43-2"><a href="preparing-checklist-calibration-index.html#cb43-2"></a><span class="co"># read in the data</span></span>
+<span id="cb43-3"><a href="preparing-checklist-calibration-index.html#cb43-3"></a>ebd &lt;-<span class="st"> </span><span class="kw">fread</span>(f_out_ebd)</span>
+<span id="cb43-4"><a href="preparing-checklist-calibration-index.html#cb43-4"></a>names &lt;-<span class="st"> </span><span class="kw">names</span>(ebd) <span class="op">%&gt;%</span></span>
+<span id="cb43-5"><a href="preparing-checklist-calibration-index.html#cb43-5"></a><span class="st">  </span>stringr<span class="op">::</span><span class="kw">str_to_lower</span>() <span class="op">%&gt;%</span></span>
+<span id="cb43-6"><a href="preparing-checklist-calibration-index.html#cb43-6"></a><span class="st">  </span>stringr<span class="op">::</span><span class="kw">str_replace_all</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;_&quot;</span>)</span>
+<span id="cb43-7"><a href="preparing-checklist-calibration-index.html#cb43-7"></a></span>
+<span id="cb43-8"><a href="preparing-checklist-calibration-index.html#cb43-8"></a><span class="kw">setnames</span>(ebd, names)</span>
+<span id="cb43-9"><a href="preparing-checklist-calibration-index.html#cb43-9"></a><span class="co"># choose columns of interest</span></span>
+<span id="cb43-10"><a href="preparing-checklist-calibration-index.html#cb43-10"></a>columnsOfInterest &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
+<span id="cb43-11"><a href="preparing-checklist-calibration-index.html#cb43-11"></a>  <span class="st">&quot;global_unique_identifier&quot;</span>, <span class="st">&quot;scientific_name&quot;</span>, <span class="st">&quot;observation_count&quot;</span>,</span>
+<span id="cb43-12"><a href="preparing-checklist-calibration-index.html#cb43-12"></a>  <span class="st">&quot;locality&quot;</span>, <span class="st">&quot;locality_id&quot;</span>, <span class="st">&quot;locality_type&quot;</span>, <span class="st">&quot;latitude&quot;</span>,</span>
+<span id="cb43-13"><a href="preparing-checklist-calibration-index.html#cb43-13"></a>  <span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;observation_date&quot;</span>,</span>
+<span id="cb43-14"><a href="preparing-checklist-calibration-index.html#cb43-14"></a>  <span class="st">&quot;time_observations_started&quot;</span>, <span class="st">&quot;observer_id&quot;</span>,</span>
+<span id="cb43-15"><a href="preparing-checklist-calibration-index.html#cb43-15"></a>  <span class="st">&quot;sampling_event_identifier&quot;</span>, <span class="st">&quot;protocol_type&quot;</span>,</span>
+<span id="cb43-16"><a href="preparing-checklist-calibration-index.html#cb43-16"></a>  <span class="st">&quot;duration_minutes&quot;</span>, <span class="st">&quot;effort_distance_km&quot;</span>, <span class="st">&quot;effort_area_ha&quot;</span>,</span>
+<span id="cb43-17"><a href="preparing-checklist-calibration-index.html#cb43-17"></a>  <span class="st">&quot;number_observers&quot;</span>, <span class="st">&quot;all_species_reported&quot;</span>, <span class="st">&quot;reviewed&quot;</span></span>
+<span id="cb43-18"><a href="preparing-checklist-calibration-index.html#cb43-18"></a>)</span>
+<span id="cb43-19"><a href="preparing-checklist-calibration-index.html#cb43-19"></a></span>
+<span id="cb43-20"><a href="preparing-checklist-calibration-index.html#cb43-20"></a>ebd &lt;-<span class="st"> </span><span class="kw">setDF</span>(ebd) <span class="op">%&gt;%</span></span>
+<span id="cb43-21"><a href="preparing-checklist-calibration-index.html#cb43-21"></a><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span></span>
+<span id="cb43-22"><a href="preparing-checklist-calibration-index.html#cb43-22"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="kw">one_of</span>(columnsOfInterest))</span>
+<span id="cb43-23"><a href="preparing-checklist-calibration-index.html#cb43-23"></a></span>
+<span id="cb43-24"><a href="preparing-checklist-calibration-index.html#cb43-24"></a><span class="kw">setDT</span>(ebd)</span>
+<span id="cb43-25"><a href="preparing-checklist-calibration-index.html#cb43-25"></a></span>
+<span id="cb43-26"><a href="preparing-checklist-calibration-index.html#cb43-26"></a><span class="co"># remove checklists or seis with more than 10 obervers</span></span>
+<span id="cb43-27"><a href="preparing-checklist-calibration-index.html#cb43-27"></a>ebd &lt;-<span class="st"> </span><span class="kw">filter</span>(ebd, number_observers <span class="op">&lt;=</span><span class="st"> </span><span class="dv">10</span>)</span>
+<span id="cb43-28"><a href="preparing-checklist-calibration-index.html#cb43-28"></a></span>
+<span id="cb43-29"><a href="preparing-checklist-calibration-index.html#cb43-29"></a><span class="co"># keep only checklists between 5AM and 7PM</span></span>
+<span id="cb43-30"><a href="preparing-checklist-calibration-index.html#cb43-30"></a>ebd &lt;-<span class="st"> </span><span class="kw">filter</span>(ebd, time_observations_started <span class="op">&gt;=</span><span class="st"> &quot;05:00:00&quot;</span> <span class="op">&amp;</span><span class="st"> </span>time_observations_started <span class="op">&lt;=</span><span class="st"> &quot;19:00:00&quot;</span>)</span>
+<span id="cb43-31"><a href="preparing-checklist-calibration-index.html#cb43-31"></a></span>
+<span id="cb43-32"><a href="preparing-checklist-calibration-index.html#cb43-32"></a><span class="co"># keep only checklists between December 1st and May 31st</span></span>
+<span id="cb43-33"><a href="preparing-checklist-calibration-index.html#cb43-33"></a>ebd &lt;-<span class="st"> </span><span class="kw">filter</span>(ebd, <span class="kw">month</span>(observation_date) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">12</span>))</span></code></pre></div>
 </div>
 <div id="spatially-explicit-filter-on-checklists" class="section level2">
 <h2><span class="header-section-number">5.3</span> Spatially explicit filter on checklists</h2>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="preparing-checklist-calibration-index.html#cb42-1"></a><span class="co"># get checklist locations</span></span>
-<span id="cb42-2"><a href="preparing-checklist-calibration-index.html#cb42-2"></a>ebd_locs &lt;-<span class="st"> </span>ebd[, .(longitude, latitude)]</span>
-<span id="cb42-3"><a href="preparing-checklist-calibration-index.html#cb42-3"></a>ebd_locs &lt;-<span class="st"> </span><span class="kw">setDF</span>(ebd_locs) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>()</span>
-<span id="cb42-4"><a href="preparing-checklist-calibration-index.html#cb42-4"></a>ebd_locs &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(ebd_locs,</span>
-<span id="cb42-5"><a href="preparing-checklist-calibration-index.html#cb42-5"></a>  <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>)</span>
-<span id="cb42-6"><a href="preparing-checklist-calibration-index.html#cb42-6"></a>) <span class="op">%&gt;%</span></span>
-<span id="cb42-7"><a href="preparing-checklist-calibration-index.html#cb42-7"></a><span class="st">  `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span></span>
-<span id="cb42-8"><a href="preparing-checklist-calibration-index.html#cb42-8"></a><span class="st">  </span><span class="kw">bind_cols</span>(<span class="kw">as_tibble</span>(<span class="kw">st_coordinates</span>(.))) <span class="op">%&gt;%</span></span>
-<span id="cb42-9"><a href="preparing-checklist-calibration-index.html#cb42-9"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>) <span class="op">%&gt;%</span></span>
-<span id="cb42-10"><a href="preparing-checklist-calibration-index.html#cb42-10"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(.))</span>
-<span id="cb42-11"><a href="preparing-checklist-calibration-index.html#cb42-11"></a></span>
-<span id="cb42-12"><a href="preparing-checklist-calibration-index.html#cb42-12"></a><span class="co"># check whether to include</span></span>
-<span id="cb42-13"><a href="preparing-checklist-calibration-index.html#cb42-13"></a>to_keep &lt;-<span class="st"> </span><span class="kw">unlist</span>(<span class="kw">st_contains</span>(wg, ebd_locs))</span>
-<span id="cb42-14"><a href="preparing-checklist-calibration-index.html#cb42-14"></a></span>
-<span id="cb42-15"><a href="preparing-checklist-calibration-index.html#cb42-15"></a><span class="co"># filter locs</span></span>
-<span id="cb42-16"><a href="preparing-checklist-calibration-index.html#cb42-16"></a>ebd_locs &lt;-<span class="st"> </span><span class="kw">filter</span>(ebd_locs, id <span class="op">%in%</span><span class="st"> </span>to_keep) <span class="op">%&gt;%</span></span>
-<span id="cb42-17"><a href="preparing-checklist-calibration-index.html#cb42-17"></a><span class="st">  </span><span class="kw">bind_cols</span>(<span class="kw">as_tibble</span>(<span class="kw">st_coordinates</span>(<span class="kw">st_as_sf</span>(.)))) <span class="op">%&gt;%</span></span>
-<span id="cb42-18"><a href="preparing-checklist-calibration-index.html#cb42-18"></a><span class="st">  </span><span class="kw">st_drop_geometry</span>()</span>
-<span id="cb42-19"><a href="preparing-checklist-calibration-index.html#cb42-19"></a><span class="kw">names</span>(ebd_locs) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;longitudeWGS&quot;</span>, <span class="st">&quot;latitudeWGS&quot;</span>, <span class="st">&quot;id&quot;</span>, <span class="st">&quot;longitudeUTM&quot;</span>, <span class="st">&quot;latitudeUTM&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="preparing-checklist-calibration-index.html#cb43-1"></a>ebd &lt;-<span class="st"> </span>ebd[longitude <span class="op">%in%</span><span class="st"> </span>ebd_locs<span class="op">$</span>longitudeWGS <span class="op">&amp;</span><span class="st"> </span>latitude <span class="op">%in%</span><span class="st"> </span>ebd_locs<span class="op">$</span>latitudeWGS, ]</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="preparing-checklist-calibration-index.html#cb44-1"></a><span class="co"># get checklist locations</span></span>
+<span id="cb44-2"><a href="preparing-checklist-calibration-index.html#cb44-2"></a>ebd_locs &lt;-<span class="st"> </span>ebd[, .(longitude, latitude)]</span>
+<span id="cb44-3"><a href="preparing-checklist-calibration-index.html#cb44-3"></a>ebd_locs &lt;-<span class="st"> </span><span class="kw">setDF</span>(ebd_locs) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>()</span>
+<span id="cb44-4"><a href="preparing-checklist-calibration-index.html#cb44-4"></a>ebd_locs &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(ebd_locs,</span>
+<span id="cb44-5"><a href="preparing-checklist-calibration-index.html#cb44-5"></a>  <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>)</span>
+<span id="cb44-6"><a href="preparing-checklist-calibration-index.html#cb44-6"></a>) <span class="op">%&gt;%</span></span>
+<span id="cb44-7"><a href="preparing-checklist-calibration-index.html#cb44-7"></a><span class="st">  `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span></span>
+<span id="cb44-8"><a href="preparing-checklist-calibration-index.html#cb44-8"></a><span class="st">  </span><span class="kw">bind_cols</span>(<span class="kw">as_tibble</span>(<span class="kw">st_coordinates</span>(.))) <span class="op">%&gt;%</span></span>
+<span id="cb44-9"><a href="preparing-checklist-calibration-index.html#cb44-9"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>) <span class="op">%&gt;%</span></span>
+<span id="cb44-10"><a href="preparing-checklist-calibration-index.html#cb44-10"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(.))</span>
+<span id="cb44-11"><a href="preparing-checklist-calibration-index.html#cb44-11"></a></span>
+<span id="cb44-12"><a href="preparing-checklist-calibration-index.html#cb44-12"></a><span class="co"># check whether to include</span></span>
+<span id="cb44-13"><a href="preparing-checklist-calibration-index.html#cb44-13"></a>to_keep &lt;-<span class="st"> </span><span class="kw">unlist</span>(<span class="kw">st_contains</span>(wg, ebd_locs))</span>
+<span id="cb44-14"><a href="preparing-checklist-calibration-index.html#cb44-14"></a></span>
+<span id="cb44-15"><a href="preparing-checklist-calibration-index.html#cb44-15"></a><span class="co"># filter locs</span></span>
+<span id="cb44-16"><a href="preparing-checklist-calibration-index.html#cb44-16"></a>ebd_locs &lt;-<span class="st"> </span><span class="kw">filter</span>(ebd_locs, id <span class="op">%in%</span><span class="st"> </span>to_keep) <span class="op">%&gt;%</span></span>
+<span id="cb44-17"><a href="preparing-checklist-calibration-index.html#cb44-17"></a><span class="st">  </span><span class="kw">bind_cols</span>(<span class="kw">as_tibble</span>(<span class="kw">st_coordinates</span>(<span class="kw">st_as_sf</span>(.)))) <span class="op">%&gt;%</span></span>
+<span id="cb44-18"><a href="preparing-checklist-calibration-index.html#cb44-18"></a><span class="st">  </span><span class="kw">st_drop_geometry</span>()</span>
+<span id="cb44-19"><a href="preparing-checklist-calibration-index.html#cb44-19"></a><span class="kw">names</span>(ebd_locs) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;longitudeWGS&quot;</span>, <span class="st">&quot;latitudeWGS&quot;</span>, <span class="st">&quot;id&quot;</span>, <span class="st">&quot;longitudeUTM&quot;</span>, <span class="st">&quot;latitudeUTM&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="preparing-checklist-calibration-index.html#cb45-1"></a>ebd &lt;-<span class="st"> </span>ebd[longitude <span class="op">%in%</span><span class="st"> </span>ebd_locs<span class="op">$</span>longitudeWGS <span class="op">&amp;</span><span class="st"> </span>latitude <span class="op">%in%</span><span class="st"> </span>ebd_locs<span class="op">$</span>latitudeWGS, ]</span></code></pre></div>
 </div>
 <div id="prepare-species-of-interest" class="section level2">
 <h2><span class="header-section-number">5.4</span> Prepare species of interest</h2>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="preparing-checklist-calibration-index.html#cb44-1"></a><span class="co"># read in species list</span></span>
-<span id="cb44-2"><a href="preparing-checklist-calibration-index.html#cb44-2"></a>specieslist &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/species_list.csv&quot;</span>)</span>
-<span id="cb44-3"><a href="preparing-checklist-calibration-index.html#cb44-3"></a></span>
-<span id="cb44-4"><a href="preparing-checklist-calibration-index.html#cb44-4"></a><span class="co"># set species of interest</span></span>
-<span id="cb44-5"><a href="preparing-checklist-calibration-index.html#cb44-5"></a>soi &lt;-<span class="st"> </span>specieslist<span class="op">$</span>scientific_name</span>
-<span id="cb44-6"><a href="preparing-checklist-calibration-index.html#cb44-6"></a></span>
-<span id="cb44-7"><a href="preparing-checklist-calibration-index.html#cb44-7"></a>ebdSpSum &lt;-<span class="st"> </span>ebd[, .(</span>
-<span id="cb44-8"><a href="preparing-checklist-calibration-index.html#cb44-8"></a>  <span class="dt">nSp =</span> .N,</span>
-<span id="cb44-9"><a href="preparing-checklist-calibration-index.html#cb44-9"></a>  <span class="dt">totSoiSeen =</span> <span class="kw">length</span>(<span class="kw">intersect</span>(scientific_name, soi))</span>
-<span id="cb44-10"><a href="preparing-checklist-calibration-index.html#cb44-10"></a>),</span>
-<span id="cb44-11"><a href="preparing-checklist-calibration-index.html#cb44-11"></a>by =<span class="st"> </span><span class="kw">list</span>(sampling_event_identifier)</span>
-<span id="cb44-12"><a href="preparing-checklist-calibration-index.html#cb44-12"></a>]</span>
-<span id="cb44-13"><a href="preparing-checklist-calibration-index.html#cb44-13"></a></span>
-<span id="cb44-14"><a href="preparing-checklist-calibration-index.html#cb44-14"></a><span class="co"># write to file and link with checklist id later</span></span>
-<span id="cb44-15"><a href="preparing-checklist-calibration-index.html#cb44-15"></a><span class="kw">fwrite</span>(ebdSpSum, <span class="dt">file =</span> <span class="st">&quot;data/03_data-nspp-per-chk.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="preparing-checklist-calibration-index.html#cb46-1"></a><span class="co"># read in species list</span></span>
+<span id="cb46-2"><a href="preparing-checklist-calibration-index.html#cb46-2"></a>specieslist &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/species_list.csv&quot;</span>)</span>
+<span id="cb46-3"><a href="preparing-checklist-calibration-index.html#cb46-3"></a></span>
+<span id="cb46-4"><a href="preparing-checklist-calibration-index.html#cb46-4"></a><span class="co"># set species of interest</span></span>
+<span id="cb46-5"><a href="preparing-checklist-calibration-index.html#cb46-5"></a>soi &lt;-<span class="st"> </span>specieslist<span class="op">$</span>scientific_name</span>
+<span id="cb46-6"><a href="preparing-checklist-calibration-index.html#cb46-6"></a></span>
+<span id="cb46-7"><a href="preparing-checklist-calibration-index.html#cb46-7"></a>ebdSpSum &lt;-<span class="st"> </span>ebd[, .(</span>
+<span id="cb46-8"><a href="preparing-checklist-calibration-index.html#cb46-8"></a>  <span class="dt">nSp =</span> .N,</span>
+<span id="cb46-9"><a href="preparing-checklist-calibration-index.html#cb46-9"></a>  <span class="dt">totSoiSeen =</span> <span class="kw">length</span>(<span class="kw">intersect</span>(scientific_name, soi))</span>
+<span id="cb46-10"><a href="preparing-checklist-calibration-index.html#cb46-10"></a>),</span>
+<span id="cb46-11"><a href="preparing-checklist-calibration-index.html#cb46-11"></a>by =<span class="st"> </span><span class="kw">list</span>(sampling_event_identifier)</span>
+<span id="cb46-12"><a href="preparing-checklist-calibration-index.html#cb46-12"></a>]</span>
+<span id="cb46-13"><a href="preparing-checklist-calibration-index.html#cb46-13"></a></span>
+<span id="cb46-14"><a href="preparing-checklist-calibration-index.html#cb46-14"></a><span class="co"># write to file and link with checklist id later</span></span>
+<span id="cb46-15"><a href="preparing-checklist-calibration-index.html#cb46-15"></a><span class="kw">fwrite</span>(ebdSpSum, <span class="dt">file =</span> <span class="st">&quot;data/03_data-nspp-per-chk.csv&quot;</span>)</span></code></pre></div>
 </div>
 <div id="prepare-checklists-for-observer-score" class="section level2">
 <h2><span class="header-section-number">5.5</span> Prepare checklists for observer score</h2>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="preparing-checklist-calibration-index.html#cb45-1"></a><span class="co"># 1. add new columns of decimal time and julian date</span></span>
-<span id="cb45-2"><a href="preparing-checklist-calibration-index.html#cb45-2"></a>ebd[, <span class="st">`</span><span class="dt">:=</span><span class="st">`</span>(</span>
-<span id="cb45-3"><a href="preparing-checklist-calibration-index.html#cb45-3"></a>  <span class="dt">decimalTime =</span> <span class="kw">time_to_decimal</span>(time_observations_started),</span>
-<span id="cb45-4"><a href="preparing-checklist-calibration-index.html#cb45-4"></a>  <span class="dt">julianDate =</span> <span class="kw">yday</span>(<span class="kw">as.POSIXct</span>(observation_date))</span>
-<span id="cb45-5"><a href="preparing-checklist-calibration-index.html#cb45-5"></a>)]</span>
-<span id="cb45-6"><a href="preparing-checklist-calibration-index.html#cb45-6"></a></span>
-<span id="cb45-7"><a href="preparing-checklist-calibration-index.html#cb45-7"></a>ebdEffChk &lt;-<span class="st"> </span><span class="kw">setDF</span>(ebd) <span class="op">%&gt;%</span></span>
-<span id="cb45-8"><a href="preparing-checklist-calibration-index.html#cb45-8"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">year =</span> <span class="kw">year</span>(observation_date)) <span class="op">%&gt;%</span></span>
-<span id="cb45-9"><a href="preparing-checklist-calibration-index.html#cb45-9"></a><span class="st">  </span><span class="kw">distinct</span>(</span>
-<span id="cb45-10"><a href="preparing-checklist-calibration-index.html#cb45-10"></a>    sampling_event_identifier, observer_id,</span>
-<span id="cb45-11"><a href="preparing-checklist-calibration-index.html#cb45-11"></a>    year,</span>
-<span id="cb45-12"><a href="preparing-checklist-calibration-index.html#cb45-12"></a>    duration_minutes, effort_distance_km, effort_area_ha,</span>
-<span id="cb45-13"><a href="preparing-checklist-calibration-index.html#cb45-13"></a>    longitude, latitude,</span>
-<span id="cb45-14"><a href="preparing-checklist-calibration-index.html#cb45-14"></a>    locality, locality_id,</span>
-<span id="cb45-15"><a href="preparing-checklist-calibration-index.html#cb45-15"></a>    decimalTime, julianDate, number_observers</span>
-<span id="cb45-16"><a href="preparing-checklist-calibration-index.html#cb45-16"></a>  ) <span class="op">%&gt;%</span></span>
-<span id="cb45-17"><a href="preparing-checklist-calibration-index.html#cb45-17"></a><span class="st">  </span><span class="co"># drop rows with NAs in cols used in the model</span></span>
-<span id="cb45-18"><a href="preparing-checklist-calibration-index.html#cb45-18"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">drop_na</span>(</span>
-<span id="cb45-19"><a href="preparing-checklist-calibration-index.html#cb45-19"></a>    sampling_event_identifier, observer_id,</span>
-<span id="cb45-20"><a href="preparing-checklist-calibration-index.html#cb45-20"></a>    duration_minutes, decimalTime, julianDate</span>
-<span id="cb45-21"><a href="preparing-checklist-calibration-index.html#cb45-21"></a>  ) <span class="op">%&gt;%</span></span>
-<span id="cb45-22"><a href="preparing-checklist-calibration-index.html#cb45-22"></a><span class="st">  </span><span class="co"># drop years below 2013</span></span>
-<span id="cb45-23"><a href="preparing-checklist-calibration-index.html#cb45-23"></a><span class="st">  </span><span class="kw">filter</span>(year <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2013</span>)</span>
-<span id="cb45-24"><a href="preparing-checklist-calibration-index.html#cb45-24"></a></span>
-<span id="cb45-25"><a href="preparing-checklist-calibration-index.html#cb45-25"></a><span class="co"># 3. join to covariates and remove large groups (&gt; 10)</span></span>
-<span id="cb45-26"><a href="preparing-checklist-calibration-index.html#cb45-26"></a>ebdChkSummary &lt;-<span class="st"> </span><span class="kw">inner_join</span>(ebdEffChk, ebdSpSum)</span>
-<span id="cb45-27"><a href="preparing-checklist-calibration-index.html#cb45-27"></a></span>
-<span id="cb45-28"><a href="preparing-checklist-calibration-index.html#cb45-28"></a><span class="co"># remove ebird data</span></span>
-<span id="cb45-29"><a href="preparing-checklist-calibration-index.html#cb45-29"></a><span class="kw">rm</span>(ebd)</span>
-<span id="cb45-30"><a href="preparing-checklist-calibration-index.html#cb45-30"></a><span class="kw">gc</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="preparing-checklist-calibration-index.html#cb47-1"></a><span class="co"># 1. add new columns of decimal time and julian date</span></span>
+<span id="cb47-2"><a href="preparing-checklist-calibration-index.html#cb47-2"></a>ebd[, <span class="st">`</span><span class="dt">:=</span><span class="st">`</span>(</span>
+<span id="cb47-3"><a href="preparing-checklist-calibration-index.html#cb47-3"></a>  <span class="dt">decimalTime =</span> <span class="kw">time_to_decimal</span>(time_observations_started),</span>
+<span id="cb47-4"><a href="preparing-checklist-calibration-index.html#cb47-4"></a>  <span class="dt">julianDate =</span> <span class="kw">yday</span>(<span class="kw">as.POSIXct</span>(observation_date))</span>
+<span id="cb47-5"><a href="preparing-checklist-calibration-index.html#cb47-5"></a>)]</span>
+<span id="cb47-6"><a href="preparing-checklist-calibration-index.html#cb47-6"></a></span>
+<span id="cb47-7"><a href="preparing-checklist-calibration-index.html#cb47-7"></a>ebdEffChk &lt;-<span class="st"> </span><span class="kw">setDF</span>(ebd) <span class="op">%&gt;%</span></span>
+<span id="cb47-8"><a href="preparing-checklist-calibration-index.html#cb47-8"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">year =</span> <span class="kw">year</span>(observation_date)) <span class="op">%&gt;%</span></span>
+<span id="cb47-9"><a href="preparing-checklist-calibration-index.html#cb47-9"></a><span class="st">  </span><span class="kw">distinct</span>(</span>
+<span id="cb47-10"><a href="preparing-checklist-calibration-index.html#cb47-10"></a>    sampling_event_identifier, observer_id,</span>
+<span id="cb47-11"><a href="preparing-checklist-calibration-index.html#cb47-11"></a>    year,</span>
+<span id="cb47-12"><a href="preparing-checklist-calibration-index.html#cb47-12"></a>    duration_minutes, effort_distance_km, effort_area_ha,</span>
+<span id="cb47-13"><a href="preparing-checklist-calibration-index.html#cb47-13"></a>    longitude, latitude,</span>
+<span id="cb47-14"><a href="preparing-checklist-calibration-index.html#cb47-14"></a>    locality, locality_id,</span>
+<span id="cb47-15"><a href="preparing-checklist-calibration-index.html#cb47-15"></a>    decimalTime, julianDate, number_observers</span>
+<span id="cb47-16"><a href="preparing-checklist-calibration-index.html#cb47-16"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb47-17"><a href="preparing-checklist-calibration-index.html#cb47-17"></a><span class="st">  </span><span class="co"># drop rows with NAs in cols used in the model</span></span>
+<span id="cb47-18"><a href="preparing-checklist-calibration-index.html#cb47-18"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">drop_na</span>(</span>
+<span id="cb47-19"><a href="preparing-checklist-calibration-index.html#cb47-19"></a>    sampling_event_identifier, observer_id,</span>
+<span id="cb47-20"><a href="preparing-checklist-calibration-index.html#cb47-20"></a>    duration_minutes, decimalTime, julianDate</span>
+<span id="cb47-21"><a href="preparing-checklist-calibration-index.html#cb47-21"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb47-22"><a href="preparing-checklist-calibration-index.html#cb47-22"></a><span class="st">  </span><span class="co"># drop years below 2013</span></span>
+<span id="cb47-23"><a href="preparing-checklist-calibration-index.html#cb47-23"></a><span class="st">  </span><span class="kw">filter</span>(year <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2013</span>)</span>
+<span id="cb47-24"><a href="preparing-checklist-calibration-index.html#cb47-24"></a></span>
+<span id="cb47-25"><a href="preparing-checklist-calibration-index.html#cb47-25"></a><span class="co"># 3. join to covariates and remove large groups (&gt; 10)</span></span>
+<span id="cb47-26"><a href="preparing-checklist-calibration-index.html#cb47-26"></a>ebdChkSummary &lt;-<span class="st"> </span><span class="kw">inner_join</span>(ebdEffChk, ebdSpSum)</span>
+<span id="cb47-27"><a href="preparing-checklist-calibration-index.html#cb47-27"></a></span>
+<span id="cb47-28"><a href="preparing-checklist-calibration-index.html#cb47-28"></a><span class="co"># remove ebird data</span></span>
+<span id="cb47-29"><a href="preparing-checklist-calibration-index.html#cb47-29"></a><span class="kw">rm</span>(ebd)</span>
+<span id="cb47-30"><a href="preparing-checklist-calibration-index.html#cb47-30"></a><span class="kw">gc</span>()</span></code></pre></div>
 </div>
 <div id="get-landcover" class="section level2">
 <h2><span class="header-section-number">5.6</span> Get landcover</h2>
 <p>Read in land cover type data resampled at 1km resolution.</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="preparing-checklist-calibration-index.html#cb46-1"></a><span class="co"># read in 1km landcover and set 0 to NA</span></span>
-<span id="cb46-2"><a href="preparing-checklist-calibration-index.html#cb46-2"></a><span class="kw">library</span>(raster)</span>
-<span id="cb46-3"><a href="preparing-checklist-calibration-index.html#cb46-3"></a>landcover &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw">raster</span>(<span class="st">&quot;data/landUseClassification/lc_01000m.tif&quot;</span>)</span>
-<span id="cb46-4"><a href="preparing-checklist-calibration-index.html#cb46-4"></a>landcover[landcover <span class="op">==</span><span class="st"> </span><span class="dv">0</span>] &lt;-<span class="st"> </span><span class="ot">NA</span></span>
-<span id="cb46-5"><a href="preparing-checklist-calibration-index.html#cb46-5"></a></span>
-<span id="cb46-6"><a href="preparing-checklist-calibration-index.html#cb46-6"></a><span class="co"># get locs in utm coords</span></span>
-<span id="cb46-7"><a href="preparing-checklist-calibration-index.html#cb46-7"></a>locs &lt;-<span class="st"> </span><span class="kw">distinct</span>(</span>
-<span id="cb46-8"><a href="preparing-checklist-calibration-index.html#cb46-8"></a>  ebdChkSummary, sampling_event_identifier, longitude, latitude,</span>
-<span id="cb46-9"><a href="preparing-checklist-calibration-index.html#cb46-9"></a>  locality, locality_id</span>
-<span id="cb46-10"><a href="preparing-checklist-calibration-index.html#cb46-10"></a>)</span>
-<span id="cb46-11"><a href="preparing-checklist-calibration-index.html#cb46-11"></a>locs &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(locs, <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb46-12"><a href="preparing-checklist-calibration-index.html#cb46-12"></a><span class="st">  `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span></span>
-<span id="cb46-13"><a href="preparing-checklist-calibration-index.html#cb46-13"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>) <span class="op">%&gt;%</span></span>
-<span id="cb46-14"><a href="preparing-checklist-calibration-index.html#cb46-14"></a><span class="st">  </span><span class="kw">st_coordinates</span>()</span>
-<span id="cb46-15"><a href="preparing-checklist-calibration-index.html#cb46-15"></a></span>
-<span id="cb46-16"><a href="preparing-checklist-calibration-index.html#cb46-16"></a><span class="co"># get for unique points</span></span>
-<span id="cb46-17"><a href="preparing-checklist-calibration-index.html#cb46-17"></a>landcoverVec &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw">extract</span>(</span>
-<span id="cb46-18"><a href="preparing-checklist-calibration-index.html#cb46-18"></a>  <span class="dt">x =</span> landcover,</span>
-<span id="cb46-19"><a href="preparing-checklist-calibration-index.html#cb46-19"></a>  <span class="dt">y =</span> locs</span>
-<span id="cb46-20"><a href="preparing-checklist-calibration-index.html#cb46-20"></a>)</span>
-<span id="cb46-21"><a href="preparing-checklist-calibration-index.html#cb46-21"></a></span>
-<span id="cb46-22"><a href="preparing-checklist-calibration-index.html#cb46-22"></a><span class="co"># assign to df and overwrite</span></span>
-<span id="cb46-23"><a href="preparing-checklist-calibration-index.html#cb46-23"></a><span class="kw">setDT</span>(ebdChkSummary)[, landcover <span class="op">:</span><span class="er">=</span><span class="st"> </span>landcoverVec]</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="preparing-checklist-calibration-index.html#cb48-1"></a><span class="co"># read in 1km landcover and set 0 to NA</span></span>
+<span id="cb48-2"><a href="preparing-checklist-calibration-index.html#cb48-2"></a><span class="kw">library</span>(raster)</span>
+<span id="cb48-3"><a href="preparing-checklist-calibration-index.html#cb48-3"></a>landcover &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw">raster</span>(<span class="st">&quot;data/landUseClassification/lc_01000m.tif&quot;</span>)</span>
+<span id="cb48-4"><a href="preparing-checklist-calibration-index.html#cb48-4"></a>landcover[landcover <span class="op">==</span><span class="st"> </span><span class="dv">0</span>] &lt;-<span class="st"> </span><span class="ot">NA</span></span>
+<span id="cb48-5"><a href="preparing-checklist-calibration-index.html#cb48-5"></a></span>
+<span id="cb48-6"><a href="preparing-checklist-calibration-index.html#cb48-6"></a><span class="co"># get locs in utm coords</span></span>
+<span id="cb48-7"><a href="preparing-checklist-calibration-index.html#cb48-7"></a>locs &lt;-<span class="st"> </span><span class="kw">distinct</span>(</span>
+<span id="cb48-8"><a href="preparing-checklist-calibration-index.html#cb48-8"></a>  ebdChkSummary, sampling_event_identifier, longitude, latitude,</span>
+<span id="cb48-9"><a href="preparing-checklist-calibration-index.html#cb48-9"></a>  locality, locality_id</span>
+<span id="cb48-10"><a href="preparing-checklist-calibration-index.html#cb48-10"></a>)</span>
+<span id="cb48-11"><a href="preparing-checklist-calibration-index.html#cb48-11"></a>locs &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(locs, <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb48-12"><a href="preparing-checklist-calibration-index.html#cb48-12"></a><span class="st">  `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span></span>
+<span id="cb48-13"><a href="preparing-checklist-calibration-index.html#cb48-13"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>) <span class="op">%&gt;%</span></span>
+<span id="cb48-14"><a href="preparing-checklist-calibration-index.html#cb48-14"></a><span class="st">  </span><span class="kw">st_coordinates</span>()</span>
+<span id="cb48-15"><a href="preparing-checklist-calibration-index.html#cb48-15"></a></span>
+<span id="cb48-16"><a href="preparing-checklist-calibration-index.html#cb48-16"></a><span class="co"># get for unique points</span></span>
+<span id="cb48-17"><a href="preparing-checklist-calibration-index.html#cb48-17"></a>landcoverVec &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw">extract</span>(</span>
+<span id="cb48-18"><a href="preparing-checklist-calibration-index.html#cb48-18"></a>  <span class="dt">x =</span> landcover,</span>
+<span id="cb48-19"><a href="preparing-checklist-calibration-index.html#cb48-19"></a>  <span class="dt">y =</span> locs</span>
+<span id="cb48-20"><a href="preparing-checklist-calibration-index.html#cb48-20"></a>)</span>
+<span id="cb48-21"><a href="preparing-checklist-calibration-index.html#cb48-21"></a></span>
+<span id="cb48-22"><a href="preparing-checklist-calibration-index.html#cb48-22"></a><span class="co"># assign to df and overwrite</span></span>
+<span id="cb48-23"><a href="preparing-checklist-calibration-index.html#cb48-23"></a><span class="kw">setDT</span>(ebdChkSummary)[, landcover <span class="op">:</span><span class="er">=</span><span class="st"> </span>landcoverVec]</span></code></pre></div>
 </div>
 <div id="filter-checklist-data" class="section level2">
 <h2><span class="header-section-number">5.7</span> Filter checklist data</h2>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="preparing-checklist-calibration-index.html#cb47-1"></a><span class="co"># change names for easy handling</span></span>
-<span id="cb47-2"><a href="preparing-checklist-calibration-index.html#cb47-2"></a><span class="kw">setnames</span>(ebdChkSummary, <span class="kw">c</span>(</span>
-<span id="cb47-3"><a href="preparing-checklist-calibration-index.html#cb47-3"></a>  <span class="st">&quot;locality&quot;</span>,</span>
-<span id="cb47-4"><a href="preparing-checklist-calibration-index.html#cb47-4"></a>  <span class="st">&quot;locality_id&quot;</span>, <span class="st">&quot;latitude&quot;</span>, <span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;observer&quot;</span>, <span class="st">&quot;sei&quot;</span>,</span>
-<span id="cb47-5"><a href="preparing-checklist-calibration-index.html#cb47-5"></a>  <span class="st">&quot;duration&quot;</span>, <span class="st">&quot;distance&quot;</span>, <span class="st">&quot;area&quot;</span>, <span class="st">&quot;nObs&quot;</span>, <span class="st">&quot;decimalTime&quot;</span>, <span class="st">&quot;julianDate&quot;</span>,</span>
-<span id="cb47-6"><a href="preparing-checklist-calibration-index.html#cb47-6"></a>  <span class="st">&quot;year&quot;</span>, <span class="st">&quot;nSp&quot;</span>, <span class="st">&quot;nSoi&quot;</span>, <span class="st">&quot;landcover&quot;</span></span>
-<span id="cb47-7"><a href="preparing-checklist-calibration-index.html#cb47-7"></a>))</span>
-<span id="cb47-8"><a href="preparing-checklist-calibration-index.html#cb47-8"></a></span>
-<span id="cb47-9"><a href="preparing-checklist-calibration-index.html#cb47-9"></a><span class="co"># count data points per observer</span></span>
-<span id="cb47-10"><a href="preparing-checklist-calibration-index.html#cb47-10"></a>obscount &lt;-<span class="st"> </span><span class="kw">count</span>(ebdChkSummary, observer) <span class="op">%&gt;%</span></span>
-<span id="cb47-11"><a href="preparing-checklist-calibration-index.html#cb47-11"></a><span class="st">  </span><span class="kw">filter</span>(n <span class="op">&gt;=</span><span class="st"> </span><span class="dv">3</span>)</span>
-<span id="cb47-12"><a href="preparing-checklist-calibration-index.html#cb47-12"></a></span>
-<span id="cb47-13"><a href="preparing-checklist-calibration-index.html#cb47-13"></a><span class="co"># make factor variables and remove obs not in obscount</span></span>
-<span id="cb47-14"><a href="preparing-checklist-calibration-index.html#cb47-14"></a><span class="co"># also remove 0 durations</span></span>
-<span id="cb47-15"><a href="preparing-checklist-calibration-index.html#cb47-15"></a>ebdChkSummary &lt;-<span class="st"> </span>ebdChkSummary <span class="op">%&gt;%</span></span>
-<span id="cb47-16"><a href="preparing-checklist-calibration-index.html#cb47-16"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
-<span id="cb47-17"><a href="preparing-checklist-calibration-index.html#cb47-17"></a>    <span class="dt">distance =</span> <span class="kw">ifelse</span>(<span class="kw">is.na</span>(distance), <span class="dv">0</span>, distance),</span>
-<span id="cb47-18"><a href="preparing-checklist-calibration-index.html#cb47-18"></a>    <span class="dt">duration =</span> <span class="kw">if_else</span>(<span class="kw">is.na</span>(duration), <span class="fl">0.0</span>, <span class="kw">as.double</span>(duration))</span>
-<span id="cb47-19"><a href="preparing-checklist-calibration-index.html#cb47-19"></a>  ) <span class="op">%&gt;%</span></span>
-<span id="cb47-20"><a href="preparing-checklist-calibration-index.html#cb47-20"></a><span class="st">  </span><span class="kw">filter</span>(</span>
-<span id="cb47-21"><a href="preparing-checklist-calibration-index.html#cb47-21"></a>    observer <span class="op">%in%</span><span class="st"> </span>obscount<span class="op">$</span>observer,</span>
-<span id="cb47-22"><a href="preparing-checklist-calibration-index.html#cb47-22"></a>    duration <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>,</span>
-<span id="cb47-23"><a href="preparing-checklist-calibration-index.html#cb47-23"></a>    duration <span class="op">&lt;=</span><span class="st"> </span><span class="dv">300</span>,</span>
-<span id="cb47-24"><a href="preparing-checklist-calibration-index.html#cb47-24"></a>    nSoi <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>,</span>
-<span id="cb47-25"><a href="preparing-checklist-calibration-index.html#cb47-25"></a>    distance <span class="op">&lt;=</span><span class="st"> </span><span class="dv">5</span>,</span>
-<span id="cb47-26"><a href="preparing-checklist-calibration-index.html#cb47-26"></a>    <span class="op">!</span><span class="kw">is.na</span>(nSoi)</span>
-<span id="cb47-27"><a href="preparing-checklist-calibration-index.html#cb47-27"></a>  ) <span class="op">%&gt;%</span></span>
-<span id="cb47-28"><a href="preparing-checklist-calibration-index.html#cb47-28"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
-<span id="cb47-29"><a href="preparing-checklist-calibration-index.html#cb47-29"></a>    <span class="dt">landcover =</span> <span class="kw">as.factor</span>(landcover),</span>
-<span id="cb47-30"><a href="preparing-checklist-calibration-index.html#cb47-30"></a>    <span class="dt">observer =</span> <span class="kw">as.factor</span>(observer)</span>
-<span id="cb47-31"><a href="preparing-checklist-calibration-index.html#cb47-31"></a>  ) <span class="op">%&gt;%</span></span>
-<span id="cb47-32"><a href="preparing-checklist-calibration-index.html#cb47-32"></a><span class="st">  </span><span class="kw">drop_na</span>(landcover)</span>
-<span id="cb47-33"><a href="preparing-checklist-calibration-index.html#cb47-33"></a></span>
-<span id="cb47-34"><a href="preparing-checklist-calibration-index.html#cb47-34"></a><span class="co"># editing julian date to model it in a linear fashion</span></span>
-<span id="cb47-35"><a href="preparing-checklist-calibration-index.html#cb47-35"></a><span class="kw">unique</span>(ebdChkSummary<span class="op">$</span>julianDate)</span>
-<span id="cb47-36"><a href="preparing-checklist-calibration-index.html#cb47-36"></a></span>
-<span id="cb47-37"><a href="preparing-checklist-calibration-index.html#cb47-37"></a>ebdChkSummary &lt;-<span class="st"> </span>ebdChkSummary <span class="op">%&gt;%</span></span>
-<span id="cb47-38"><a href="preparing-checklist-calibration-index.html#cb47-38"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
-<span id="cb47-39"><a href="preparing-checklist-calibration-index.html#cb47-39"></a>    <span class="dt">newjulianDate =</span></span>
-<span id="cb47-40"><a href="preparing-checklist-calibration-index.html#cb47-40"></a>      <span class="kw">case_when</span>(</span>
-<span id="cb47-41"><a href="preparing-checklist-calibration-index.html#cb47-41"></a>        julianDate <span class="op">&gt;=</span><span class="st"> </span><span class="dv">334</span> <span class="op">&amp;</span><span class="st"> </span>julianDate <span class="op">&lt;=</span><span class="st"> </span><span class="dv">365</span> <span class="op">~</span><span class="st"> </span>(julianDate <span class="op">-</span><span class="st"> </span><span class="dv">333</span>),</span>
-<span id="cb47-42"><a href="preparing-checklist-calibration-index.html#cb47-42"></a>        julianDate <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span> <span class="op">&amp;</span><span class="st"> </span>julianDate <span class="op">&lt;=</span><span class="st"> </span><span class="dv">152</span> <span class="op">~</span><span class="st"> </span>(julianDate <span class="op">+</span><span class="st"> </span><span class="dv">31</span>)</span>
-<span id="cb47-43"><a href="preparing-checklist-calibration-index.html#cb47-43"></a>      )</span>
-<span id="cb47-44"><a href="preparing-checklist-calibration-index.html#cb47-44"></a>  ) <span class="op">%&gt;%</span></span>
-<span id="cb47-45"><a href="preparing-checklist-calibration-index.html#cb47-45"></a><span class="st">  </span><span class="kw">drop_na</span>(newjulianDate)</span>
-<span id="cb47-46"><a href="preparing-checklist-calibration-index.html#cb47-46"></a></span>
-<span id="cb47-47"><a href="preparing-checklist-calibration-index.html#cb47-47"></a><span class="co"># save to file for later reuse</span></span>
-<span id="cb47-48"><a href="preparing-checklist-calibration-index.html#cb47-48"></a><span class="kw">fwrite</span>(ebdChkSummary, <span class="dt">file =</span> <span class="st">&quot;data/03_data-covars-perChklist.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="preparing-checklist-calibration-index.html#cb49-1"></a><span class="co"># change names for easy handling</span></span>
+<span id="cb49-2"><a href="preparing-checklist-calibration-index.html#cb49-2"></a><span class="kw">setnames</span>(ebdChkSummary, <span class="kw">c</span>(</span>
+<span id="cb49-3"><a href="preparing-checklist-calibration-index.html#cb49-3"></a>  <span class="st">&quot;locality&quot;</span>,</span>
+<span id="cb49-4"><a href="preparing-checklist-calibration-index.html#cb49-4"></a>  <span class="st">&quot;locality_id&quot;</span>, <span class="st">&quot;latitude&quot;</span>, <span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;observer&quot;</span>, <span class="st">&quot;sei&quot;</span>,</span>
+<span id="cb49-5"><a href="preparing-checklist-calibration-index.html#cb49-5"></a>  <span class="st">&quot;duration&quot;</span>, <span class="st">&quot;distance&quot;</span>, <span class="st">&quot;area&quot;</span>, <span class="st">&quot;nObs&quot;</span>, <span class="st">&quot;decimalTime&quot;</span>, <span class="st">&quot;julianDate&quot;</span>,</span>
+<span id="cb49-6"><a href="preparing-checklist-calibration-index.html#cb49-6"></a>  <span class="st">&quot;year&quot;</span>, <span class="st">&quot;nSp&quot;</span>, <span class="st">&quot;nSoi&quot;</span>, <span class="st">&quot;landcover&quot;</span></span>
+<span id="cb49-7"><a href="preparing-checklist-calibration-index.html#cb49-7"></a>))</span>
+<span id="cb49-8"><a href="preparing-checklist-calibration-index.html#cb49-8"></a></span>
+<span id="cb49-9"><a href="preparing-checklist-calibration-index.html#cb49-9"></a><span class="co"># count data points per observer</span></span>
+<span id="cb49-10"><a href="preparing-checklist-calibration-index.html#cb49-10"></a>obscount &lt;-<span class="st"> </span><span class="kw">count</span>(ebdChkSummary, observer) <span class="op">%&gt;%</span></span>
+<span id="cb49-11"><a href="preparing-checklist-calibration-index.html#cb49-11"></a><span class="st">  </span><span class="kw">filter</span>(n <span class="op">&gt;=</span><span class="st"> </span><span class="dv">3</span>)</span>
+<span id="cb49-12"><a href="preparing-checklist-calibration-index.html#cb49-12"></a></span>
+<span id="cb49-13"><a href="preparing-checklist-calibration-index.html#cb49-13"></a><span class="co"># make factor variables and remove obs not in obscount</span></span>
+<span id="cb49-14"><a href="preparing-checklist-calibration-index.html#cb49-14"></a><span class="co"># also remove 0 durations</span></span>
+<span id="cb49-15"><a href="preparing-checklist-calibration-index.html#cb49-15"></a>ebdChkSummary &lt;-<span class="st"> </span>ebdChkSummary <span class="op">%&gt;%</span></span>
+<span id="cb49-16"><a href="preparing-checklist-calibration-index.html#cb49-16"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb49-17"><a href="preparing-checklist-calibration-index.html#cb49-17"></a>    <span class="dt">distance =</span> <span class="kw">ifelse</span>(<span class="kw">is.na</span>(distance), <span class="dv">0</span>, distance),</span>
+<span id="cb49-18"><a href="preparing-checklist-calibration-index.html#cb49-18"></a>    <span class="dt">duration =</span> <span class="kw">if_else</span>(<span class="kw">is.na</span>(duration), <span class="fl">0.0</span>, <span class="kw">as.double</span>(duration))</span>
+<span id="cb49-19"><a href="preparing-checklist-calibration-index.html#cb49-19"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb49-20"><a href="preparing-checklist-calibration-index.html#cb49-20"></a><span class="st">  </span><span class="kw">filter</span>(</span>
+<span id="cb49-21"><a href="preparing-checklist-calibration-index.html#cb49-21"></a>    observer <span class="op">%in%</span><span class="st"> </span>obscount<span class="op">$</span>observer,</span>
+<span id="cb49-22"><a href="preparing-checklist-calibration-index.html#cb49-22"></a>    duration <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>,</span>
+<span id="cb49-23"><a href="preparing-checklist-calibration-index.html#cb49-23"></a>    duration <span class="op">&lt;=</span><span class="st"> </span><span class="dv">300</span>,</span>
+<span id="cb49-24"><a href="preparing-checklist-calibration-index.html#cb49-24"></a>    nSoi <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>,</span>
+<span id="cb49-25"><a href="preparing-checklist-calibration-index.html#cb49-25"></a>    distance <span class="op">&lt;=</span><span class="st"> </span><span class="dv">5</span>,</span>
+<span id="cb49-26"><a href="preparing-checklist-calibration-index.html#cb49-26"></a>    <span class="op">!</span><span class="kw">is.na</span>(nSoi)</span>
+<span id="cb49-27"><a href="preparing-checklist-calibration-index.html#cb49-27"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb49-28"><a href="preparing-checklist-calibration-index.html#cb49-28"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb49-29"><a href="preparing-checklist-calibration-index.html#cb49-29"></a>    <span class="dt">landcover =</span> <span class="kw">as.factor</span>(landcover),</span>
+<span id="cb49-30"><a href="preparing-checklist-calibration-index.html#cb49-30"></a>    <span class="dt">observer =</span> <span class="kw">as.factor</span>(observer)</span>
+<span id="cb49-31"><a href="preparing-checklist-calibration-index.html#cb49-31"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb49-32"><a href="preparing-checklist-calibration-index.html#cb49-32"></a><span class="st">  </span><span class="kw">drop_na</span>(landcover)</span>
+<span id="cb49-33"><a href="preparing-checklist-calibration-index.html#cb49-33"></a></span>
+<span id="cb49-34"><a href="preparing-checklist-calibration-index.html#cb49-34"></a><span class="co"># editing julian date to model it in a linear fashion</span></span>
+<span id="cb49-35"><a href="preparing-checklist-calibration-index.html#cb49-35"></a><span class="kw">unique</span>(ebdChkSummary<span class="op">$</span>julianDate)</span>
+<span id="cb49-36"><a href="preparing-checklist-calibration-index.html#cb49-36"></a></span>
+<span id="cb49-37"><a href="preparing-checklist-calibration-index.html#cb49-37"></a>ebdChkSummary &lt;-<span class="st"> </span>ebdChkSummary <span class="op">%&gt;%</span></span>
+<span id="cb49-38"><a href="preparing-checklist-calibration-index.html#cb49-38"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb49-39"><a href="preparing-checklist-calibration-index.html#cb49-39"></a>    <span class="dt">newjulianDate =</span></span>
+<span id="cb49-40"><a href="preparing-checklist-calibration-index.html#cb49-40"></a>      <span class="kw">case_when</span>(</span>
+<span id="cb49-41"><a href="preparing-checklist-calibration-index.html#cb49-41"></a>        julianDate <span class="op">&gt;=</span><span class="st"> </span><span class="dv">334</span> <span class="op">&amp;</span><span class="st"> </span>julianDate <span class="op">&lt;=</span><span class="st"> </span><span class="dv">365</span> <span class="op">~</span><span class="st"> </span>(julianDate <span class="op">-</span><span class="st"> </span><span class="dv">333</span>),</span>
+<span id="cb49-42"><a href="preparing-checklist-calibration-index.html#cb49-42"></a>        julianDate <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span> <span class="op">&amp;</span><span class="st"> </span>julianDate <span class="op">&lt;=</span><span class="st"> </span><span class="dv">152</span> <span class="op">~</span><span class="st"> </span>(julianDate <span class="op">+</span><span class="st"> </span><span class="dv">31</span>)</span>
+<span id="cb49-43"><a href="preparing-checklist-calibration-index.html#cb49-43"></a>      )</span>
+<span id="cb49-44"><a href="preparing-checklist-calibration-index.html#cb49-44"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb49-45"><a href="preparing-checklist-calibration-index.html#cb49-45"></a><span class="st">  </span><span class="kw">drop_na</span>(newjulianDate)</span>
+<span id="cb49-46"><a href="preparing-checklist-calibration-index.html#cb49-46"></a></span>
+<span id="cb49-47"><a href="preparing-checklist-calibration-index.html#cb49-47"></a><span class="co"># save to file for later reuse</span></span>
+<span id="cb49-48"><a href="preparing-checklist-calibration-index.html#cb49-48"></a><span class="kw">fwrite</span>(ebdChkSummary, <span class="dt">file =</span> <span class="st">&quot;data/03_data-covars-perChklist.csv&quot;</span>)</span></code></pre></div>
 </div>
 <div id="model-observer-expertise" class="section level2">
 <h2><span class="header-section-number">5.8</span> Model observer expertise</h2>
 <p>Our observer expertise model aims to include the random intercept effect of observer identity, with a random slope effect of duration. This models the different rate of species accumulation by different observers, as well as their different starting points.</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="preparing-checklist-calibration-index.html#cb48-1"></a><span class="co"># uses either a subset or all data</span></span>
-<span id="cb48-2"><a href="preparing-checklist-calibration-index.html#cb48-2"></a><span class="kw">library</span>(lmerTest)</span>
-<span id="cb48-3"><a href="preparing-checklist-calibration-index.html#cb48-3"></a></span>
-<span id="cb48-4"><a href="preparing-checklist-calibration-index.html#cb48-4"></a><span class="co"># here we specify a glmm with random effects for observer</span></span>
-<span id="cb48-5"><a href="preparing-checklist-calibration-index.html#cb48-5"></a><span class="co"># time is considered a fixed log predictor and a random slope</span></span>
-<span id="cb48-6"><a href="preparing-checklist-calibration-index.html#cb48-6"></a>modObsExp &lt;-<span class="st"> </span><span class="kw">glmer</span>(nSoi <span class="op">~</span><span class="st"> </span>duration <span class="op">+</span><span class="st"> </span><span class="kw">sqrt</span>(duration) <span class="op">+</span></span>
-<span id="cb48-7"><a href="preparing-checklist-calibration-index.html#cb48-7"></a><span class="st">  </span>landcover <span class="op">+</span></span>
-<span id="cb48-8"><a href="preparing-checklist-calibration-index.html#cb48-8"></a><span class="st">  </span><span class="kw">sqrt</span>(decimalTime) <span class="op">+</span></span>
-<span id="cb48-9"><a href="preparing-checklist-calibration-index.html#cb48-9"></a><span class="st">  </span><span class="kw">I</span>((<span class="kw">sqrt</span>(decimalTime))<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span></span>
-<span id="cb48-10"><a href="preparing-checklist-calibration-index.html#cb48-10"></a><span class="st">  </span><span class="kw">log</span>(newjulianDate) <span class="op">+</span></span>
-<span id="cb48-11"><a href="preparing-checklist-calibration-index.html#cb48-11"></a><span class="st">  </span><span class="kw">I</span>((<span class="kw">log</span>(newjulianDate)<span class="op">^</span><span class="dv">2</span>)) <span class="op">+</span></span>
-<span id="cb48-12"><a href="preparing-checklist-calibration-index.html#cb48-12"></a><span class="st">  </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>observer) <span class="op">+</span><span class="st"> </span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>duration <span class="op">|</span><span class="st"> </span>observer),</span>
-<span id="cb48-13"><a href="preparing-checklist-calibration-index.html#cb48-13"></a><span class="dt">data =</span> ebdChkSummary, <span class="dt">family =</span> <span class="st">&quot;poisson&quot;</span></span>
-<span id="cb48-14"><a href="preparing-checklist-calibration-index.html#cb48-14"></a>)</span></code></pre></div>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="preparing-checklist-calibration-index.html#cb49-1"></a><span class="co"># make dir if absent</span></span>
-<span id="cb49-2"><a href="preparing-checklist-calibration-index.html#cb49-2"></a><span class="cf">if</span> (<span class="op">!</span><span class="kw">dir.exists</span>(<span class="st">&quot;data/modOutput&quot;</span>)) {</span>
-<span id="cb49-3"><a href="preparing-checklist-calibration-index.html#cb49-3"></a>  <span class="kw">dir.create</span>(<span class="st">&quot;data/modOutput&quot;</span>)</span>
-<span id="cb49-4"><a href="preparing-checklist-calibration-index.html#cb49-4"></a>}</span>
-<span id="cb49-5"><a href="preparing-checklist-calibration-index.html#cb49-5"></a></span>
-<span id="cb49-6"><a href="preparing-checklist-calibration-index.html#cb49-6"></a><span class="co"># write model output to text file</span></span>
-<span id="cb49-7"><a href="preparing-checklist-calibration-index.html#cb49-7"></a>{</span>
-<span id="cb49-8"><a href="preparing-checklist-calibration-index.html#cb49-8"></a>  <span class="kw">writeLines</span>(R.utils<span class="op">::</span><span class="kw">captureOutput</span>(<span class="kw">list</span>(<span class="kw">Sys.time</span>(), <span class="kw">summary</span>(modObsExp))),</span>
-<span id="cb49-9"><a href="preparing-checklist-calibration-index.html#cb49-9"></a>    <span class="dt">con =</span> <span class="st">&quot;data/modOutput/03_model-output-expertise.txt&quot;</span></span>
-<span id="cb49-10"><a href="preparing-checklist-calibration-index.html#cb49-10"></a>  )</span>
-<span id="cb49-11"><a href="preparing-checklist-calibration-index.html#cb49-11"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="preparing-checklist-calibration-index.html#cb50-1"></a><span class="co"># make df with means</span></span>
-<span id="cb50-2"><a href="preparing-checklist-calibration-index.html#cb50-2"></a>observer &lt;-<span class="st"> </span><span class="kw">unique</span>(ebdChkSummary<span class="op">$</span>observer)</span>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="preparing-checklist-calibration-index.html#cb50-1"></a><span class="co"># uses either a subset or all data</span></span>
+<span id="cb50-2"><a href="preparing-checklist-calibration-index.html#cb50-2"></a><span class="kw">library</span>(lmerTest)</span>
 <span id="cb50-3"><a href="preparing-checklist-calibration-index.html#cb50-3"></a></span>
-<span id="cb50-4"><a href="preparing-checklist-calibration-index.html#cb50-4"></a><span class="co"># predict at 60 mins on the most common landcover (deciduous forests)</span></span>
-<span id="cb50-5"><a href="preparing-checklist-calibration-index.html#cb50-5"></a>dfPredict &lt;-<span class="st"> </span>ebdChkSummary <span class="op">%&gt;%</span></span>
-<span id="cb50-6"><a href="preparing-checklist-calibration-index.html#cb50-6"></a><span class="st">  </span><span class="kw">summarise_at</span>(<span class="kw">vars</span>(duration, decimalTime, newjulianDate), <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span><span class="kw">mean</span>(.))) <span class="op">%&gt;%</span></span>
-<span id="cb50-7"><a href="preparing-checklist-calibration-index.html#cb50-7"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">duration =</span> <span class="dv">60</span>, <span class="dt">landcover =</span> <span class="kw">as.factor</span>(<span class="dv">2</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb50-8"><a href="preparing-checklist-calibration-index.html#cb50-8"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">crossing</span>(observer)</span>
-<span id="cb50-9"><a href="preparing-checklist-calibration-index.html#cb50-9"></a></span>
-<span id="cb50-10"><a href="preparing-checklist-calibration-index.html#cb50-10"></a><span class="co"># run predict from model on it</span></span>
-<span id="cb50-11"><a href="preparing-checklist-calibration-index.html#cb50-11"></a>dfPredict &lt;-<span class="st"> </span><span class="kw">mutate</span>(dfPredict,</span>
-<span id="cb50-12"><a href="preparing-checklist-calibration-index.html#cb50-12"></a>  <span class="dt">score =</span> <span class="kw">predict</span>(modObsExp,</span>
-<span id="cb50-13"><a href="preparing-checklist-calibration-index.html#cb50-13"></a>    <span class="dt">newdata =</span> dfPredict,</span>
-<span id="cb50-14"><a href="preparing-checklist-calibration-index.html#cb50-14"></a>    <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>,</span>
-<span id="cb50-15"><a href="preparing-checklist-calibration-index.html#cb50-15"></a>    <span class="dt">allow.new.levels =</span> <span class="ot">TRUE</span></span>
-<span id="cb50-16"><a href="preparing-checklist-calibration-index.html#cb50-16"></a>  )</span>
-<span id="cb50-17"><a href="preparing-checklist-calibration-index.html#cb50-17"></a>) <span class="op">%&gt;%</span></span>
-<span id="cb50-18"><a href="preparing-checklist-calibration-index.html#cb50-18"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">score =</span> scales<span class="op">::</span><span class="kw">rescale</span>(score))</span></code></pre></div>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="preparing-checklist-calibration-index.html#cb51-1"></a><span class="kw">fwrite</span>(dfPredict <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(observer, score),</span>
-<span id="cb51-2"><a href="preparing-checklist-calibration-index.html#cb51-2"></a>  <span class="dt">file =</span> <span class="st">&quot;data/03_data-obsExpertise-score.csv&quot;</span></span>
-<span id="cb51-3"><a href="preparing-checklist-calibration-index.html#cb51-3"></a>)</span></code></pre></div>
+<span id="cb50-4"><a href="preparing-checklist-calibration-index.html#cb50-4"></a><span class="co"># here we specify a glmm with random effects for observer</span></span>
+<span id="cb50-5"><a href="preparing-checklist-calibration-index.html#cb50-5"></a><span class="co"># time is considered a fixed log predictor and a random slope</span></span>
+<span id="cb50-6"><a href="preparing-checklist-calibration-index.html#cb50-6"></a>modObsExp &lt;-<span class="st"> </span><span class="kw">glmer</span>(nSoi <span class="op">~</span><span class="st"> </span>duration <span class="op">+</span><span class="st"> </span><span class="kw">sqrt</span>(duration) <span class="op">+</span></span>
+<span id="cb50-7"><a href="preparing-checklist-calibration-index.html#cb50-7"></a><span class="st">  </span>landcover <span class="op">+</span></span>
+<span id="cb50-8"><a href="preparing-checklist-calibration-index.html#cb50-8"></a><span class="st">  </span><span class="kw">sqrt</span>(decimalTime) <span class="op">+</span></span>
+<span id="cb50-9"><a href="preparing-checklist-calibration-index.html#cb50-9"></a><span class="st">  </span><span class="kw">I</span>((<span class="kw">sqrt</span>(decimalTime))<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span></span>
+<span id="cb50-10"><a href="preparing-checklist-calibration-index.html#cb50-10"></a><span class="st">  </span><span class="kw">log</span>(newjulianDate) <span class="op">+</span></span>
+<span id="cb50-11"><a href="preparing-checklist-calibration-index.html#cb50-11"></a><span class="st">  </span><span class="kw">I</span>((<span class="kw">log</span>(newjulianDate)<span class="op">^</span><span class="dv">2</span>)) <span class="op">+</span></span>
+<span id="cb50-12"><a href="preparing-checklist-calibration-index.html#cb50-12"></a><span class="st">  </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>observer) <span class="op">+</span><span class="st"> </span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>duration <span class="op">|</span><span class="st"> </span>observer),</span>
+<span id="cb50-13"><a href="preparing-checklist-calibration-index.html#cb50-13"></a><span class="dt">data =</span> ebdChkSummary, <span class="dt">family =</span> <span class="st">&quot;poisson&quot;</span></span>
+<span id="cb50-14"><a href="preparing-checklist-calibration-index.html#cb50-14"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="preparing-checklist-calibration-index.html#cb51-1"></a><span class="co"># make dir if absent</span></span>
+<span id="cb51-2"><a href="preparing-checklist-calibration-index.html#cb51-2"></a><span class="cf">if</span> (<span class="op">!</span><span class="kw">dir.exists</span>(<span class="st">&quot;data/modOutput&quot;</span>)) {</span>
+<span id="cb51-3"><a href="preparing-checklist-calibration-index.html#cb51-3"></a>  <span class="kw">dir.create</span>(<span class="st">&quot;data/modOutput&quot;</span>)</span>
+<span id="cb51-4"><a href="preparing-checklist-calibration-index.html#cb51-4"></a>}</span>
+<span id="cb51-5"><a href="preparing-checklist-calibration-index.html#cb51-5"></a></span>
+<span id="cb51-6"><a href="preparing-checklist-calibration-index.html#cb51-6"></a><span class="co"># write model output to text file</span></span>
+<span id="cb51-7"><a href="preparing-checklist-calibration-index.html#cb51-7"></a>{</span>
+<span id="cb51-8"><a href="preparing-checklist-calibration-index.html#cb51-8"></a>  <span class="kw">writeLines</span>(R.utils<span class="op">::</span><span class="kw">captureOutput</span>(<span class="kw">list</span>(<span class="kw">Sys.time</span>(), <span class="kw">summary</span>(modObsExp))),</span>
+<span id="cb51-9"><a href="preparing-checklist-calibration-index.html#cb51-9"></a>    <span class="dt">con =</span> <span class="st">&quot;data/modOutput/03_model-output-expertise.txt&quot;</span></span>
+<span id="cb51-10"><a href="preparing-checklist-calibration-index.html#cb51-10"></a>  )</span>
+<span id="cb51-11"><a href="preparing-checklist-calibration-index.html#cb51-11"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="preparing-checklist-calibration-index.html#cb52-1"></a><span class="co"># make df with means</span></span>
+<span id="cb52-2"><a href="preparing-checklist-calibration-index.html#cb52-2"></a>observer &lt;-<span class="st"> </span><span class="kw">unique</span>(ebdChkSummary<span class="op">$</span>observer)</span>
+<span id="cb52-3"><a href="preparing-checklist-calibration-index.html#cb52-3"></a></span>
+<span id="cb52-4"><a href="preparing-checklist-calibration-index.html#cb52-4"></a><span class="co"># predict at 60 mins on the most common landcover (deciduous forests)</span></span>
+<span id="cb52-5"><a href="preparing-checklist-calibration-index.html#cb52-5"></a>dfPredict &lt;-<span class="st"> </span>ebdChkSummary <span class="op">%&gt;%</span></span>
+<span id="cb52-6"><a href="preparing-checklist-calibration-index.html#cb52-6"></a><span class="st">  </span><span class="kw">summarise_at</span>(<span class="kw">vars</span>(duration, decimalTime, newjulianDate), <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span><span class="kw">mean</span>(.))) <span class="op">%&gt;%</span></span>
+<span id="cb52-7"><a href="preparing-checklist-calibration-index.html#cb52-7"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">duration =</span> <span class="dv">60</span>, <span class="dt">landcover =</span> <span class="kw">as.factor</span>(<span class="dv">2</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb52-8"><a href="preparing-checklist-calibration-index.html#cb52-8"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">crossing</span>(observer)</span>
+<span id="cb52-9"><a href="preparing-checklist-calibration-index.html#cb52-9"></a></span>
+<span id="cb52-10"><a href="preparing-checklist-calibration-index.html#cb52-10"></a><span class="co"># run predict from model on it</span></span>
+<span id="cb52-11"><a href="preparing-checklist-calibration-index.html#cb52-11"></a>dfPredict &lt;-<span class="st"> </span><span class="kw">mutate</span>(dfPredict,</span>
+<span id="cb52-12"><a href="preparing-checklist-calibration-index.html#cb52-12"></a>  <span class="dt">score =</span> <span class="kw">predict</span>(modObsExp,</span>
+<span id="cb52-13"><a href="preparing-checklist-calibration-index.html#cb52-13"></a>    <span class="dt">newdata =</span> dfPredict,</span>
+<span id="cb52-14"><a href="preparing-checklist-calibration-index.html#cb52-14"></a>    <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>,</span>
+<span id="cb52-15"><a href="preparing-checklist-calibration-index.html#cb52-15"></a>    <span class="dt">allow.new.levels =</span> <span class="ot">TRUE</span></span>
+<span id="cb52-16"><a href="preparing-checklist-calibration-index.html#cb52-16"></a>  )</span>
+<span id="cb52-17"><a href="preparing-checklist-calibration-index.html#cb52-17"></a>) <span class="op">%&gt;%</span></span>
+<span id="cb52-18"><a href="preparing-checklist-calibration-index.html#cb52-18"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">score =</span> scales<span class="op">::</span><span class="kw">rescale</span>(score))</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="preparing-checklist-calibration-index.html#cb53-1"></a><span class="kw">fwrite</span>(dfPredict <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(observer, score),</span>
+<span id="cb53-2"><a href="preparing-checklist-calibration-index.html#cb53-2"></a>  <span class="dt">file =</span> <span class="st">&quot;data/03_data-obsExpertise-score.csv&quot;</span></span>
+<span id="cb53-3"><a href="preparing-checklist-calibration-index.html#cb53-3"></a>)</span></code></pre></div>
 
 </div>
 </div>

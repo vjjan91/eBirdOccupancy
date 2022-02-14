@@ -28,7 +28,7 @@
 <meta name="author" content="Ruth DeFries" />
 
 
-<meta name="date" content="2022-02-09" />
+<meta name="date" content="2022-02-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -168,9 +168,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-spatial-extent"><i class="fa fa-check"></i><b>4.2</b> Prepare spatial extent</a></li>
 <li class="chapter" data-level="4.3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-terrain-rasters"><i class="fa fa-check"></i><b>4.3</b> Prepare terrain rasters</a></li>
 <li class="chapter" data-level="4.4" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-chelsa-rasters"><i class="fa fa-check"></i><b>4.4</b> Prepare CHELSA rasters</a><ul>
-<li class="chapter" data-level="4.4.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-1-mean-temperature-for-dry-season-december-to-may"><i class="fa fa-check"></i><b>4.4.1</b> Prepare Bioclim 1 (mean temperature) for dry season (December to May)</a></li>
-<li class="chapter" data-level="4.4.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-12-total-rainfall-for-dry-season"><i class="fa fa-check"></i><b>4.4.2</b> Prepare Bioclim 12 (total rainfall) for dry season</a></li>
-<li class="chapter" data-level="4.4.3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#stack-terrain-and-climate"><i class="fa fa-check"></i><b>4.4.3</b> Stack terrain and climate</a></li>
+<li class="chapter" data-level="4.4.1" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-4a-and-15"><i class="fa fa-check"></i><b>4.4.1</b> Prepare BIOCLIM 4a and 15</a></li>
+<li class="chapter" data-level="4.4.2" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-4a"><i class="fa fa-check"></i><b>4.4.2</b> Prepare BIOCLIM 4a</a></li>
+<li class="chapter" data-level="4.4.3" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#prepare-bioclim-15"><i class="fa fa-check"></i><b>4.4.3</b> Prepare Bioclim 15</a></li>
+<li class="chapter" data-level="4.4.4" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#stack-terrain-and-climate"><i class="fa fa-check"></i><b>4.4.4</b> Stack terrain and climate</a></li>
+<li class="chapter" data-level="4.4.5" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#stack-terrain-and-climate-1"><i class="fa fa-check"></i><b>4.4.5</b> Stack terrain and climate</a></li>
 </ul></li>
 <li class="chapter" data-level="4.5" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-landcover-from-10m-to-1km"><i class="fa fa-check"></i><b>4.5</b> Resample landcover from 10m to 1km</a></li>
 <li class="chapter" data-level="4.6" data-path="preparing-environmental-predictors.html"><a href="preparing-environmental-predictors.html#resample-other-rasters-to-1km"><i class="fa fa-check"></i><b>4.6</b> Resample other rasters to 1km</a><ul>
@@ -371,170 +373,200 @@ All landscape data was derived from a high resolution land cover map (Roy et al.
 <div id="prepare-chelsa-rasters" class="section level2">
 <h2><span class="header-section-number">4.4</span> Prepare CHELSA rasters</h2>
 <p>CHELSA rasters can be downloaded using the <code>get_chelsa.sh</code> shell script, which is a <code>wget</code> command pointing to the <code>envidatS3.txt</code> file.</p>
-<div id="prepare-bioclim-1-mean-temperature-for-dry-season-december-to-may" class="section level3">
-<h3><span class="header-section-number">4.4.1</span> Prepare Bioclim 1 (mean temperature) for dry season (December to May)</h3>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="preparing-environmental-predictors.html#cb26-1"></a><span class="cf">if</span> (<span class="kw">file.exists</span>(<span class="st">&quot;data/chelsa/CHELSA_bio10_1.tif&quot;</span>)) {</span>
-<span id="cb26-2"><a href="preparing-environmental-predictors.html#cb26-2"></a>  <span class="kw">message</span>(<span class="st">&quot;Bio 1 already exists, will be overwritten&quot;</span>)</span>
-<span id="cb26-3"><a href="preparing-environmental-predictors.html#cb26-3"></a>} <span class="cf">else</span> {</span>
-<span id="cb26-4"><a href="preparing-environmental-predictors.html#cb26-4"></a>  <span class="kw">message</span>(<span class="st">&quot;Bio 1 does not exist, will be prepared&quot;</span>)</span>
-<span id="cb26-5"><a href="preparing-environmental-predictors.html#cb26-5"></a>}</span></code></pre></div>
-<p>Bioclim 1, is <span class="math inline">\(Tkavg_i = (Tkmin_i + Tkmax_i) / 2\)</span>.</p>
-<p>Here, we use only the months of December and Jan to May for dry season temperature.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="preparing-environmental-predictors.html#cb27-1"></a><span class="co"># list rasters by pattern</span></span>
-<span id="cb27-2"><a href="preparing-environmental-predictors.html#cb27-2"></a>patterns &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;tmin&quot;</span>, <span class="st">&quot;tmax&quot;</span>)</span>
-<span id="cb27-3"><a href="preparing-environmental-predictors.html#cb27-3"></a></span>
-<span id="cb27-4"><a href="preparing-environmental-predictors.html#cb27-4"></a><span class="co"># list the filepaths</span></span>
-<span id="cb27-5"><a href="preparing-environmental-predictors.html#cb27-5"></a>tkAvg &lt;-<span class="st"> </span><span class="kw">map</span>(patterns, <span class="cf">function</span>(pattern) {</span>
-<span id="cb27-6"><a href="preparing-environmental-predictors.html#cb27-6"></a>  <span class="co"># list the paths</span></span>
-<span id="cb27-7"><a href="preparing-environmental-predictors.html#cb27-7"></a>  files &lt;-<span class="st"> </span><span class="kw">list.files</span>(</span>
-<span id="cb27-8"><a href="preparing-environmental-predictors.html#cb27-8"></a>    <span class="dt">path =</span> <span class="st">&quot;data/chelsa&quot;</span>,</span>
-<span id="cb27-9"><a href="preparing-environmental-predictors.html#cb27-9"></a>    <span class="dt">full.names =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb27-10"><a href="preparing-environmental-predictors.html#cb27-10"></a>    <span class="dt">recursive =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb27-11"><a href="preparing-environmental-predictors.html#cb27-11"></a>    <span class="dt">pattern =</span> pattern</span>
-<span id="cb27-12"><a href="preparing-environmental-predictors.html#cb27-12"></a>  )</span>
-<span id="cb27-13"><a href="preparing-environmental-predictors.html#cb27-13"></a>})</span>
-<span id="cb27-14"><a href="preparing-environmental-predictors.html#cb27-14"></a></span>
-<span id="cb27-15"><a href="preparing-environmental-predictors.html#cb27-15"></a><span class="co"># print crs elev data for sanity check --- basic WGS84</span></span>
-<span id="cb27-16"><a href="preparing-environmental-predictors.html#cb27-16"></a><span class="kw">crs</span>(elevData)</span>
-<span id="cb27-17"><a href="preparing-environmental-predictors.html#cb27-17"></a></span>
-<span id="cb27-18"><a href="preparing-environmental-predictors.html#cb27-18"></a><span class="co"># now run over the paths and read as rasters and crop by buffer</span></span>
-<span id="cb27-19"><a href="preparing-environmental-predictors.html#cb27-19"></a>tkAvg &lt;-<span class="st"> </span><span class="kw">map</span>(tkAvg, <span class="cf">function</span>(paths) {</span>
-<span id="cb27-20"><a href="preparing-environmental-predictors.html#cb27-20"></a>  <span class="co"># going over the file paths, read them in as rasters, convert CRS and crop</span></span>
-<span id="cb27-21"><a href="preparing-environmental-predictors.html#cb27-21"></a>  tempData &lt;-<span class="st"> </span><span class="kw">map</span>(paths, <span class="cf">function</span>(path) {</span>
-<span id="cb27-22"><a href="preparing-environmental-predictors.html#cb27-22"></a>    <span class="co"># read in</span></span>
-<span id="cb27-23"><a href="preparing-environmental-predictors.html#cb27-23"></a>    a &lt;-<span class="st"> </span><span class="kw">raster</span>(path)</span>
-<span id="cb27-24"><a href="preparing-environmental-predictors.html#cb27-24"></a>    <span class="co"># assign crs</span></span>
-<span id="cb27-25"><a href="preparing-environmental-predictors.html#cb27-25"></a>    <span class="kw">crs</span>(a) &lt;-<span class="st"> </span><span class="kw">crs</span>(elevData)</span>
-<span id="cb27-26"><a href="preparing-environmental-predictors.html#cb27-26"></a>    <span class="co"># crop by buffer, will throw error if CRS doesn&#39;t match</span></span>
-<span id="cb27-27"><a href="preparing-environmental-predictors.html#cb27-27"></a>    a &lt;-<span class="st"> </span><span class="kw">crop</span>(a, <span class="kw">as</span>(buffer, <span class="st">&quot;Spatial&quot;</span>))</span>
-<span id="cb27-28"><a href="preparing-environmental-predictors.html#cb27-28"></a>    <span class="co"># return a</span></span>
-<span id="cb27-29"><a href="preparing-environmental-predictors.html#cb27-29"></a>    a</span>
-<span id="cb27-30"><a href="preparing-environmental-predictors.html#cb27-30"></a>  })</span>
-<span id="cb27-31"><a href="preparing-environmental-predictors.html#cb27-31"></a>  <span class="co"># convert each to kelvin, first dividing by 10 to get celsius</span></span>
-<span id="cb27-32"><a href="preparing-environmental-predictors.html#cb27-32"></a>  tempData &lt;-<span class="st"> </span><span class="kw">map</span>(tempData, <span class="cf">function</span>(tmpRaster) {</span>
-<span id="cb27-33"><a href="preparing-environmental-predictors.html#cb27-33"></a>    tmpRaster &lt;-<span class="st"> </span>(tmpRaster <span class="op">/</span><span class="st"> </span><span class="dv">10</span>) <span class="op">+</span><span class="st"> </span><span class="fl">273.15</span></span>
-<span id="cb27-34"><a href="preparing-environmental-predictors.html#cb27-34"></a>  })</span>
-<span id="cb27-35"><a href="preparing-environmental-predictors.html#cb27-35"></a>})</span>
-<span id="cb27-36"><a href="preparing-environmental-predictors.html#cb27-36"></a></span>
-<span id="cb27-37"><a href="preparing-environmental-predictors.html#cb27-37"></a><span class="co"># assign names</span></span>
-<span id="cb27-38"><a href="preparing-environmental-predictors.html#cb27-38"></a><span class="kw">names</span>(tkAvg) &lt;-<span class="st"> </span>patterns</span>
-<span id="cb27-39"><a href="preparing-environmental-predictors.html#cb27-39"></a></span>
-<span id="cb27-40"><a href="preparing-environmental-predictors.html#cb27-40"></a><span class="co"># go over the tmin and tmax and get the average monthly temp</span></span>
-<span id="cb27-41"><a href="preparing-environmental-predictors.html#cb27-41"></a>tkAvg &lt;-<span class="st"> </span><span class="kw">map2</span>(tkAvg[[<span class="st">&quot;tmin&quot;</span>]], tkAvg[[<span class="st">&quot;tmax&quot;</span>]], <span class="cf">function</span>(tmin, tmax) {</span>
-<span id="cb27-42"><a href="preparing-environmental-predictors.html#cb27-42"></a>  <span class="co"># return the mean of the corresponding tmin and tmax</span></span>
-<span id="cb27-43"><a href="preparing-environmental-predictors.html#cb27-43"></a>  <span class="co"># still in kelvin</span></span>
-<span id="cb27-44"><a href="preparing-environmental-predictors.html#cb27-44"></a>  <span class="kw">calc</span>(<span class="kw">stack</span>(tmin, tmax), <span class="dt">fun =</span> mean)</span>
-<span id="cb27-45"><a href="preparing-environmental-predictors.html#cb27-45"></a>})</span>
-<span id="cb27-46"><a href="preparing-environmental-predictors.html#cb27-46"></a></span>
-<span id="cb27-47"><a href="preparing-environmental-predictors.html#cb27-47"></a><span class="co"># calculate Bio 1 for dry season</span></span>
-<span id="cb27-48"><a href="preparing-environmental-predictors.html#cb27-48"></a>bio_<span class="dv">1</span> &lt;-<span class="st"> </span>(<span class="kw">calc</span>(<span class="kw">stack</span>(tkAvg), <span class="dt">fun =</span> mean))</span>
-<span id="cb27-49"><a href="preparing-environmental-predictors.html#cb27-49"></a><span class="kw">names</span>(bio_<span class="dv">1</span>) &lt;-<span class="st"> &quot;CHELSA_bio10_1&quot;</span></span>
-<span id="cb27-50"><a href="preparing-environmental-predictors.html#cb27-50"></a></span>
-<span id="cb27-51"><a href="preparing-environmental-predictors.html#cb27-51"></a><span class="co"># save bio_1</span></span>
-<span id="cb27-52"><a href="preparing-environmental-predictors.html#cb27-52"></a><span class="kw">writeRaster</span>(bio_<span class="dv">1</span>, <span class="dt">filename =</span> <span class="st">&quot;data/chelsa/CHELSA_bio10_1.tif&quot;</span>, <span class="dt">overwrite =</span> T)</span></code></pre></div>
+<div id="prepare-bioclim-4a-and-15" class="section level3">
+<h3><span class="header-section-number">4.4.1</span> Prepare BIOCLIM 4a and 15</h3>
+<p>We prepare the CHELSA rasters for seasonality in temperature (Bio 4a) and seasonality in precipitation (Bio 15) in the same way, reading them in, cropping them to the study site buffer extent, and handling the temperature layer values which we divide by 10. The CHELSA rasters can be downloaded from <a href="https://chelsa-climate.org/bioclim/" class="uri">https://chelsa-climate.org/bioclim/</a></p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="preparing-environmental-predictors.html#cb26-1"></a><span class="co"># list chelsa files</span></span>
+<span id="cb26-2"><a href="preparing-environmental-predictors.html#cb26-2"></a><span class="co"># the chelsa data can be downloaded from the aforementioned link. They haven&#39;t been uploaded to github as a result of its large size.</span></span>
+<span id="cb26-3"><a href="preparing-environmental-predictors.html#cb26-3"></a>chelsaFiles &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="st">&quot;data/chelsa/&quot;</span>,</span>
+<span id="cb26-4"><a href="preparing-environmental-predictors.html#cb26-4"></a>  <span class="dt">full.names =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb26-5"><a href="preparing-environmental-predictors.html#cb26-5"></a>  <span class="dt">recursive =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb26-6"><a href="preparing-environmental-predictors.html#cb26-6"></a>  <span class="dt">pattern =</span> <span class="st">&quot;bio10&quot;</span></span>
+<span id="cb26-7"><a href="preparing-environmental-predictors.html#cb26-7"></a>)</span>
+<span id="cb26-8"><a href="preparing-environmental-predictors.html#cb26-8"></a></span>
+<span id="cb26-9"><a href="preparing-environmental-predictors.html#cb26-9"></a><span class="co"># gather chelsa rasters</span></span>
+<span id="cb26-10"><a href="preparing-environmental-predictors.html#cb26-10"></a>chelsaData &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(chelsaFiles, <span class="cf">function</span>(chr) {</span>
+<span id="cb26-11"><a href="preparing-environmental-predictors.html#cb26-11"></a>  a &lt;-<span class="st"> </span><span class="kw">raster</span>(chr)</span>
+<span id="cb26-12"><a href="preparing-environmental-predictors.html#cb26-12"></a>  <span class="kw">crs</span>(a) &lt;-<span class="st"> </span><span class="kw">crs</span>(elevData)</span>
+<span id="cb26-13"><a href="preparing-environmental-predictors.html#cb26-13"></a>  a &lt;-<span class="st"> </span><span class="kw">crop</span>(a, <span class="kw">as</span>(buffer, <span class="st">&quot;Spatial&quot;</span>))</span>
+<span id="cb26-14"><a href="preparing-environmental-predictors.html#cb26-14"></a>  <span class="kw">return</span>(a)</span>
+<span id="cb26-15"><a href="preparing-environmental-predictors.html#cb26-15"></a>})</span>
+<span id="cb26-16"><a href="preparing-environmental-predictors.html#cb26-16"></a></span>
+<span id="cb26-17"><a href="preparing-environmental-predictors.html#cb26-17"></a><span class="co"># divide temperature by 10</span></span>
+<span id="cb26-18"><a href="preparing-environmental-predictors.html#cb26-18"></a>chelsaData[[<span class="dv">1</span>]] &lt;-<span class="st"> </span>chelsaData[[<span class="dv">1</span>]] <span class="op">/</span><span class="st"> </span><span class="dv">10</span></span>
+<span id="cb26-19"><a href="preparing-environmental-predictors.html#cb26-19"></a></span>
+<span id="cb26-20"><a href="preparing-environmental-predictors.html#cb26-20"></a><span class="co"># stack chelsa data</span></span>
+<span id="cb26-21"><a href="preparing-environmental-predictors.html#cb26-21"></a>chelsaData &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw">stack</span>(chelsaData)</span></code></pre></div>
 </div>
-<div id="prepare-bioclim-12-total-rainfall-for-dry-season" class="section level3">
-<h3><span class="header-section-number">4.4.2</span> Prepare Bioclim 12 (total rainfall) for dry season</h3>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="preparing-environmental-predictors.html#cb28-1"></a><span class="cf">if</span> (<span class="kw">file.exists</span>(<span class="st">&quot;data/chelsa/CHELSA_bio10_12.tif&quot;</span>)) {</span>
-<span id="cb28-2"><a href="preparing-environmental-predictors.html#cb28-2"></a>  <span class="kw">message</span>(<span class="st">&quot;Bio 12 already exists, will be overwritten&quot;</span>)</span>
-<span id="cb28-3"><a href="preparing-environmental-predictors.html#cb28-3"></a>} <span class="cf">else</span> {</span>
-<span id="cb28-4"><a href="preparing-environmental-predictors.html#cb28-4"></a>  <span class="kw">message</span>(<span class="st">&quot;Bio 12 does not exist, will be prepared&quot;</span>)</span>
-<span id="cb28-5"><a href="preparing-environmental-predictors.html#cb28-5"></a>}</span></code></pre></div>
-<p>Bioclim 12, the total precipitation (in our area, rainfall), and equals</p>
-<p>where <span class="math inline">\(\Sigma PPT_i\)</span> is the monthly precipitation for the dry season months of December and Jan to May.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="preparing-environmental-predictors.html#cb29-1"></a><span class="co"># list rasters by pattern</span></span>
-<span id="cb29-2"><a href="preparing-environmental-predictors.html#cb29-2"></a>pattern &lt;-<span class="st"> &quot;prec&quot;</span></span>
-<span id="cb29-3"><a href="preparing-environmental-predictors.html#cb29-3"></a></span>
-<span id="cb29-4"><a href="preparing-environmental-predictors.html#cb29-4"></a><span class="co"># list the filepaths</span></span>
-<span id="cb29-5"><a href="preparing-environmental-predictors.html#cb29-5"></a>pptTotal &lt;-<span class="st"> </span><span class="kw">list.files</span>(</span>
-<span id="cb29-6"><a href="preparing-environmental-predictors.html#cb29-6"></a>  <span class="dt">path =</span> <span class="st">&quot;data/chelsa&quot;</span>,</span>
-<span id="cb29-7"><a href="preparing-environmental-predictors.html#cb29-7"></a>  <span class="dt">full.names =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb29-8"><a href="preparing-environmental-predictors.html#cb29-8"></a>  <span class="dt">recursive =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb29-9"><a href="preparing-environmental-predictors.html#cb29-9"></a>  <span class="dt">pattern =</span> pattern</span>
-<span id="cb29-10"><a href="preparing-environmental-predictors.html#cb29-10"></a>)</span>
-<span id="cb29-11"><a href="preparing-environmental-predictors.html#cb29-11"></a></span>
-<span id="cb29-12"><a href="preparing-environmental-predictors.html#cb29-12"></a><span class="co"># print crs elev data for sanity check --- basic WGS84</span></span>
-<span id="cb29-13"><a href="preparing-environmental-predictors.html#cb29-13"></a><span class="kw">crs</span>(elevData)</span>
-<span id="cb29-14"><a href="preparing-environmental-predictors.html#cb29-14"></a></span>
-<span id="cb29-15"><a href="preparing-environmental-predictors.html#cb29-15"></a><span class="co"># now run over the paths and read as rasters and crop by buffer</span></span>
-<span id="cb29-16"><a href="preparing-environmental-predictors.html#cb29-16"></a>pptTotal &lt;-<span class="st"> </span><span class="kw">map</span>(pptTotal, <span class="cf">function</span>(path) {</span>
-<span id="cb29-17"><a href="preparing-environmental-predictors.html#cb29-17"></a>  a &lt;-<span class="st"> </span><span class="kw">raster</span>(path)</span>
-<span id="cb29-18"><a href="preparing-environmental-predictors.html#cb29-18"></a>  <span class="co"># assign crs</span></span>
-<span id="cb29-19"><a href="preparing-environmental-predictors.html#cb29-19"></a>  <span class="kw">crs</span>(a) &lt;-<span class="st"> </span><span class="kw">crs</span>(elevData)</span>
-<span id="cb29-20"><a href="preparing-environmental-predictors.html#cb29-20"></a>  <span class="co"># crop by buffer, will throw error if CRS doesn&#39;t match</span></span>
-<span id="cb29-21"><a href="preparing-environmental-predictors.html#cb29-21"></a>  a &lt;-<span class="st"> </span><span class="kw">crop</span>(a, <span class="kw">as</span>(buffer, <span class="st">&quot;Spatial&quot;</span>))</span>
-<span id="cb29-22"><a href="preparing-environmental-predictors.html#cb29-22"></a>  <span class="co"># return a</span></span>
-<span id="cb29-23"><a href="preparing-environmental-predictors.html#cb29-23"></a>  a</span>
-<span id="cb29-24"><a href="preparing-environmental-predictors.html#cb29-24"></a>})</span>
-<span id="cb29-25"><a href="preparing-environmental-predictors.html#cb29-25"></a></span>
-<span id="cb29-26"><a href="preparing-environmental-predictors.html#cb29-26"></a><span class="co"># calculate Bio 12</span></span>
-<span id="cb29-27"><a href="preparing-environmental-predictors.html#cb29-27"></a>bio_<span class="dv">12</span> &lt;-<span class="st"> </span>(<span class="kw">calc</span>(<span class="kw">stack</span>(pptTotal), <span class="dt">fun =</span> sum))</span>
-<span id="cb29-28"><a href="preparing-environmental-predictors.html#cb29-28"></a><span class="kw">names</span>(bio_<span class="dv">12</span>) &lt;-<span class="st"> &quot;CHELSA_bio10_12&quot;</span></span>
-<span id="cb29-29"><a href="preparing-environmental-predictors.html#cb29-29"></a></span>
-<span id="cb29-30"><a href="preparing-environmental-predictors.html#cb29-30"></a><span class="co"># save bio_12</span></span>
-<span id="cb29-31"><a href="preparing-environmental-predictors.html#cb29-31"></a><span class="kw">writeRaster</span>(bio_<span class="dv">12</span>, <span class="dt">filename =</span> <span class="st">&quot;data/chelsa/CHELSA_bio10_12.tif&quot;</span>, <span class="dt">overwrite =</span> T)</span></code></pre></div>
+<div id="prepare-bioclim-4a" class="section level3">
+<h3><span class="header-section-number">4.4.2</span> Prepare BIOCLIM 4a</h3>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="preparing-environmental-predictors.html#cb27-1"></a><span class="cf">if</span> (<span class="kw">file.exists</span>(<span class="st">&quot;data/chelsa/CHELSA_bio10_4a.tif&quot;</span>)) {</span>
+<span id="cb27-2"><a href="preparing-environmental-predictors.html#cb27-2"></a>  <span class="kw">message</span>(<span class="st">&quot;Bio 4a already exists, will be overwritten&quot;</span>)</span>
+<span id="cb27-3"><a href="preparing-environmental-predictors.html#cb27-3"></a>}</span></code></pre></div>
+<p>Bioclim 4a, the coefficient of variation temperature seasonality is calculated as</p>
+<p><span class="math display">\[Bio\ 4a = \frac{SD\{ Tkavg_1, \ldots Tkavg_{12} \}}{(Bio\ 1 + 273.15)} \times 100\]</span></p>
+<p>where <span class="math inline">\(Tkavg_i = (Tkmin_i + Tkmax_i) / 2\)</span></p>
+<p>Here, we use only the months of December and Jan – May for winter temperature variation.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="preparing-environmental-predictors.html#cb28-1"></a><span class="co"># list rasters by pattern</span></span>
+<span id="cb28-2"><a href="preparing-environmental-predictors.html#cb28-2"></a>patterns &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;tmin&quot;</span>, <span class="st">&quot;tmax&quot;</span>)</span>
+<span id="cb28-3"><a href="preparing-environmental-predictors.html#cb28-3"></a></span>
+<span id="cb28-4"><a href="preparing-environmental-predictors.html#cb28-4"></a><span class="co"># list the filepaths</span></span>
+<span id="cb28-5"><a href="preparing-environmental-predictors.html#cb28-5"></a>tkAvg &lt;-<span class="st"> </span><span class="kw">map</span>(patterns, <span class="cf">function</span>(pattern) {</span>
+<span id="cb28-6"><a href="preparing-environmental-predictors.html#cb28-6"></a>  <span class="co"># list the paths</span></span>
+<span id="cb28-7"><a href="preparing-environmental-predictors.html#cb28-7"></a>  files &lt;-<span class="st"> </span><span class="kw">list.files</span>(</span>
+<span id="cb28-8"><a href="preparing-environmental-predictors.html#cb28-8"></a>    <span class="dt">path =</span> <span class="st">&quot;data/chelsa&quot;</span>,</span>
+<span id="cb28-9"><a href="preparing-environmental-predictors.html#cb28-9"></a>    <span class="dt">full.names =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb28-10"><a href="preparing-environmental-predictors.html#cb28-10"></a>    <span class="dt">recursive =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb28-11"><a href="preparing-environmental-predictors.html#cb28-11"></a>    <span class="dt">pattern =</span> pattern</span>
+<span id="cb28-12"><a href="preparing-environmental-predictors.html#cb28-12"></a>  )</span>
+<span id="cb28-13"><a href="preparing-environmental-predictors.html#cb28-13"></a>})</span>
+<span id="cb28-14"><a href="preparing-environmental-predictors.html#cb28-14"></a></span>
+<span id="cb28-15"><a href="preparing-environmental-predictors.html#cb28-15"></a><span class="co"># print crs elev data for sanity check --- basic WGS84</span></span>
+<span id="cb28-16"><a href="preparing-environmental-predictors.html#cb28-16"></a><span class="kw">crs</span>(elevData)</span>
+<span id="cb28-17"><a href="preparing-environmental-predictors.html#cb28-17"></a></span>
+<span id="cb28-18"><a href="preparing-environmental-predictors.html#cb28-18"></a><span class="co"># now run over the paths and read as rasters and crop by buffer</span></span>
+<span id="cb28-19"><a href="preparing-environmental-predictors.html#cb28-19"></a>tkAvg &lt;-<span class="st"> </span><span class="kw">map</span>(tkAvg, <span class="cf">function</span>(paths) {</span>
+<span id="cb28-20"><a href="preparing-environmental-predictors.html#cb28-20"></a>  <span class="co"># going over the file paths, read them in as rasters, convert CRS and crop</span></span>
+<span id="cb28-21"><a href="preparing-environmental-predictors.html#cb28-21"></a>  tempData &lt;-<span class="st"> </span><span class="kw">map</span>(paths, <span class="cf">function</span>(path) {</span>
+<span id="cb28-22"><a href="preparing-environmental-predictors.html#cb28-22"></a>    <span class="co"># read in</span></span>
+<span id="cb28-23"><a href="preparing-environmental-predictors.html#cb28-23"></a>    a &lt;-<span class="st"> </span><span class="kw">raster</span>(path)</span>
+<span id="cb28-24"><a href="preparing-environmental-predictors.html#cb28-24"></a>    <span class="co"># assign crs</span></span>
+<span id="cb28-25"><a href="preparing-environmental-predictors.html#cb28-25"></a>    <span class="kw">crs</span>(a) &lt;-<span class="st"> </span><span class="kw">crs</span>(elevData)</span>
+<span id="cb28-26"><a href="preparing-environmental-predictors.html#cb28-26"></a>    <span class="co"># crop by buffer, will throw error if CRS doesn&#39;t match</span></span>
+<span id="cb28-27"><a href="preparing-environmental-predictors.html#cb28-27"></a>    a &lt;-<span class="st"> </span><span class="kw">crop</span>(a, <span class="kw">as</span>(buffer, <span class="st">&quot;Spatial&quot;</span>))</span>
+<span id="cb28-28"><a href="preparing-environmental-predictors.html#cb28-28"></a>    <span class="co"># return a</span></span>
+<span id="cb28-29"><a href="preparing-environmental-predictors.html#cb28-29"></a>    a</span>
+<span id="cb28-30"><a href="preparing-environmental-predictors.html#cb28-30"></a>  })</span>
+<span id="cb28-31"><a href="preparing-environmental-predictors.html#cb28-31"></a>  <span class="co"># convert each to kelvin, first dividing by 10 to get celsius</span></span>
+<span id="cb28-32"><a href="preparing-environmental-predictors.html#cb28-32"></a>  tempData &lt;-<span class="st"> </span><span class="kw">map</span>(tempData, <span class="cf">function</span>(tmpRaster) {</span>
+<span id="cb28-33"><a href="preparing-environmental-predictors.html#cb28-33"></a>    tmpRaster &lt;-<span class="st"> </span>(tmpRaster <span class="op">/</span><span class="st"> </span><span class="dv">10</span>) <span class="op">+</span><span class="st"> </span><span class="fl">273.15</span></span>
+<span id="cb28-34"><a href="preparing-environmental-predictors.html#cb28-34"></a>  })</span>
+<span id="cb28-35"><a href="preparing-environmental-predictors.html#cb28-35"></a>})</span>
+<span id="cb28-36"><a href="preparing-environmental-predictors.html#cb28-36"></a></span>
+<span id="cb28-37"><a href="preparing-environmental-predictors.html#cb28-37"></a><span class="co"># assign names</span></span>
+<span id="cb28-38"><a href="preparing-environmental-predictors.html#cb28-38"></a><span class="kw">names</span>(tkAvg) &lt;-<span class="st"> </span>patterns</span>
+<span id="cb28-39"><a href="preparing-environmental-predictors.html#cb28-39"></a></span>
+<span id="cb28-40"><a href="preparing-environmental-predictors.html#cb28-40"></a><span class="co"># go over the tmin and tmax and get the average monthly temp</span></span>
+<span id="cb28-41"><a href="preparing-environmental-predictors.html#cb28-41"></a>tkAvg &lt;-<span class="st"> </span><span class="kw">map2</span>(tkAvg[[<span class="st">&quot;tmin&quot;</span>]], tkAvg[[<span class="st">&quot;tmax&quot;</span>]], <span class="cf">function</span>(tmin, tmax) {</span>
+<span id="cb28-42"><a href="preparing-environmental-predictors.html#cb28-42"></a>  <span class="co"># return the mean of the corresponding tmin and tmax</span></span>
+<span id="cb28-43"><a href="preparing-environmental-predictors.html#cb28-43"></a>  <span class="co"># still in kelvin</span></span>
+<span id="cb28-44"><a href="preparing-environmental-predictors.html#cb28-44"></a>  <span class="kw">calc</span>(<span class="kw">stack</span>(tmin, tmax), <span class="dt">fun =</span> mean)</span>
+<span id="cb28-45"><a href="preparing-environmental-predictors.html#cb28-45"></a>})</span>
+<span id="cb28-46"><a href="preparing-environmental-predictors.html#cb28-46"></a></span>
+<span id="cb28-47"><a href="preparing-environmental-predictors.html#cb28-47"></a><span class="co"># calculate Bio 4a</span></span>
+<span id="cb28-48"><a href="preparing-environmental-predictors.html#cb28-48"></a>bio_4a &lt;-<span class="st"> </span>(<span class="kw">calc</span>(<span class="kw">stack</span>(tkAvg), <span class="dt">fun =</span> sd) <span class="op">/</span><span class="st"> </span>(chelsaData[[<span class="dv">1</span>]] <span class="op">+</span><span class="st"> </span><span class="fl">273.15</span>)) <span class="op">*</span><span class="st"> </span><span class="dv">100</span></span>
+<span id="cb28-49"><a href="preparing-environmental-predictors.html#cb28-49"></a><span class="kw">names</span>(bio_4a) &lt;-<span class="st"> &quot;CHELSA_bio10_4a&quot;</span></span>
+<span id="cb28-50"><a href="preparing-environmental-predictors.html#cb28-50"></a><span class="co"># save bio_4a</span></span>
+<span id="cb28-51"><a href="preparing-environmental-predictors.html#cb28-51"></a><span class="kw">writeRaster</span>(bio_4a, <span class="dt">filename =</span> <span class="st">&quot;data/chelsa/CHELSA_bio10_4a.tif&quot;</span>, <span class="dt">overwrite =</span> T)</span></code></pre></div>
+</div>
+<div id="prepare-bioclim-15" class="section level3">
+<h3><span class="header-section-number">4.4.3</span> Prepare Bioclim 15</h3>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="preparing-environmental-predictors.html#cb29-1"></a><span class="cf">if</span> (<span class="kw">file.exists</span>(<span class="st">&quot;data/chelsa/CHELSA_bio10_15.tif&quot;</span>)) {</span>
+<span id="cb29-2"><a href="preparing-environmental-predictors.html#cb29-2"></a>  <span class="kw">message</span>(<span class="st">&quot;Bio 15 already exists, will be overwritten&quot;</span>)</span>
+<span id="cb29-3"><a href="preparing-environmental-predictors.html#cb29-3"></a>}</span></code></pre></div>
+<p>Bioclim 15, the coefficient of variation precipitation (in our area, rainfall) seasonality is calculated as</p>
+<p><span class="math display">\[Bio\ 15 = \frac{SD\{ PPT_1, \ldots PPT_{12} \}}{1 + (Bio\ 12 / 12)} \times 100\]</span></p>
+<p>where <span class="math inline">\(PPT_i\)</span> is the monthly precipitation.</p>
+<p>Here, we use only the months of December and Jan – May for winter rainfall variation.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="preparing-environmental-predictors.html#cb30-1"></a><span class="co"># list rasters by pattern</span></span>
+<span id="cb30-2"><a href="preparing-environmental-predictors.html#cb30-2"></a>pattern &lt;-<span class="st"> &quot;prec&quot;</span></span>
+<span id="cb30-3"><a href="preparing-environmental-predictors.html#cb30-3"></a></span>
+<span id="cb30-4"><a href="preparing-environmental-predictors.html#cb30-4"></a><span class="co"># list the filepaths</span></span>
+<span id="cb30-5"><a href="preparing-environmental-predictors.html#cb30-5"></a>pptTotal &lt;-<span class="st"> </span><span class="kw">list.files</span>(</span>
+<span id="cb30-6"><a href="preparing-environmental-predictors.html#cb30-6"></a>  <span class="dt">path =</span> <span class="st">&quot;data/chelsa&quot;</span>,</span>
+<span id="cb30-7"><a href="preparing-environmental-predictors.html#cb30-7"></a>  <span class="dt">full.names =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb30-8"><a href="preparing-environmental-predictors.html#cb30-8"></a>  <span class="dt">recursive =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb30-9"><a href="preparing-environmental-predictors.html#cb30-9"></a>  <span class="dt">pattern =</span> pattern</span>
+<span id="cb30-10"><a href="preparing-environmental-predictors.html#cb30-10"></a>)</span>
+<span id="cb30-11"><a href="preparing-environmental-predictors.html#cb30-11"></a></span>
+<span id="cb30-12"><a href="preparing-environmental-predictors.html#cb30-12"></a><span class="co"># print crs elev data for sanity check --- basic WGS84</span></span>
+<span id="cb30-13"><a href="preparing-environmental-predictors.html#cb30-13"></a><span class="kw">crs</span>(elevData)</span>
+<span id="cb30-14"><a href="preparing-environmental-predictors.html#cb30-14"></a></span>
+<span id="cb30-15"><a href="preparing-environmental-predictors.html#cb30-15"></a><span class="co"># now run over the paths and read as rasters and crop by buffer</span></span>
+<span id="cb30-16"><a href="preparing-environmental-predictors.html#cb30-16"></a>pptTotal &lt;-<span class="st"> </span><span class="kw">map</span>(pptTotal, <span class="cf">function</span>(path) {</span>
+<span id="cb30-17"><a href="preparing-environmental-predictors.html#cb30-17"></a>  a &lt;-<span class="st"> </span><span class="kw">raster</span>(path)</span>
+<span id="cb30-18"><a href="preparing-environmental-predictors.html#cb30-18"></a>  <span class="co"># assign crs</span></span>
+<span id="cb30-19"><a href="preparing-environmental-predictors.html#cb30-19"></a>  <span class="kw">crs</span>(a) &lt;-<span class="st"> </span><span class="kw">crs</span>(elevData)</span>
+<span id="cb30-20"><a href="preparing-environmental-predictors.html#cb30-20"></a>  <span class="co"># crop by buffer, will throw error if CRS doesn&#39;t match</span></span>
+<span id="cb30-21"><a href="preparing-environmental-predictors.html#cb30-21"></a>  a &lt;-<span class="st"> </span><span class="kw">crop</span>(a, <span class="kw">as</span>(buffer, <span class="st">&quot;Spatial&quot;</span>))</span>
+<span id="cb30-22"><a href="preparing-environmental-predictors.html#cb30-22"></a>  <span class="co"># return a</span></span>
+<span id="cb30-23"><a href="preparing-environmental-predictors.html#cb30-23"></a>  a</span>
+<span id="cb30-24"><a href="preparing-environmental-predictors.html#cb30-24"></a>})</span>
+<span id="cb30-25"><a href="preparing-environmental-predictors.html#cb30-25"></a></span>
+<span id="cb30-26"><a href="preparing-environmental-predictors.html#cb30-26"></a><span class="co"># calculate Bio 4a</span></span>
+<span id="cb30-27"><a href="preparing-environmental-predictors.html#cb30-27"></a>bio_<span class="dv">15</span> &lt;-<span class="st"> </span>(<span class="kw">calc</span>(<span class="kw">stack</span>(pptTotal), <span class="dt">fun =</span> sd) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(chelsaData[[<span class="dv">2</span>]] <span class="op">/</span><span class="st"> </span><span class="dv">12</span>))) <span class="op">*</span><span class="st"> </span><span class="dv">100</span></span>
+<span id="cb30-28"><a href="preparing-environmental-predictors.html#cb30-28"></a><span class="kw">names</span>(bio_<span class="dv">15</span>) &lt;-<span class="st"> &quot;CHELSA_bio10_15&quot;</span></span>
+<span id="cb30-29"><a href="preparing-environmental-predictors.html#cb30-29"></a><span class="co"># save bio_4a</span></span>
+<span id="cb30-30"><a href="preparing-environmental-predictors.html#cb30-30"></a><span class="kw">writeRaster</span>(bio_<span class="dv">15</span>, <span class="dt">filename =</span> <span class="st">&quot;data/chelsa/CHELSA_bio10_15.tif&quot;</span>, <span class="dt">overwrite =</span> T)</span></code></pre></div>
 </div>
 <div id="stack-terrain-and-climate" class="section level3">
-<h3><span class="header-section-number">4.4.3</span> Stack terrain and climate</h3>
+<h3><span class="header-section-number">4.4.4</span> Stack terrain and climate</h3>
 <p>We stack the terrain and climatic rasters.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="preparing-environmental-predictors.html#cb30-1"></a><span class="co"># stack rasters for efficient reprojection later</span></span>
-<span id="cb30-2"><a href="preparing-environmental-predictors.html#cb30-2"></a>env_data &lt;-<span class="st"> </span><span class="kw">stack</span>(elevData, bio_<span class="dv">1</span>, bio_<span class="dv">12</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="preparing-environmental-predictors.html#cb31-1"></a><span class="co"># If bio4a and bio15 have already been prepared from previous runs/analysis - load them directly</span></span>
+<span id="cb31-2"><a href="preparing-environmental-predictors.html#cb31-2"></a>bio_4a &lt;-<span class="st"> </span><span class="kw">raster</span>(<span class="st">&quot;data/chelsa/CHELSA_bio10_4a.tif&quot;</span>)</span>
+<span id="cb31-3"><a href="preparing-environmental-predictors.html#cb31-3"></a>bio_<span class="dv">15</span> &lt;-<span class="st"> </span><span class="kw">raster</span>(<span class="st">&quot;data/chelsa/CHELSA_bio10_15.tif&quot;</span>)</span></code></pre></div>
+</div>
+<div id="stack-terrain-and-climate-1" class="section level3">
+<h3><span class="header-section-number">4.4.5</span> Stack terrain and climate</h3>
+<p>We stack the terrain and climatic rasters.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="preparing-environmental-predictors.html#cb32-1"></a><span class="co"># stack rasters for efficient reprojection later</span></span>
+<span id="cb32-2"><a href="preparing-environmental-predictors.html#cb32-2"></a>env_data &lt;-<span class="st"> </span><span class="kw">stack</span>(elevData, bio_4a, bio_<span class="dv">15</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="resample-landcover-from-10m-to-1km" class="section level2">
 <h2><span class="header-section-number">4.5</span> Resample landcover from 10m to 1km</h2>
 <p>We read in a land cover classified image and resample that using the mode function to a 1km resolution. Please note that the resampling process need not be carried out as it has been done already and the resampled raster can be loaded with the subsequent code chunk.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="preparing-environmental-predictors.html#cb31-1"></a><span class="co"># read in landcover raster location</span></span>
-<span id="cb31-2"><a href="preparing-environmental-predictors.html#cb31-2"></a><span class="co"># To access the land cover data, please visit: https://daac.ornl.gov/VEGETATION/guides/Decadal_LULC_India.html</span></span>
-<span id="cb31-3"><a href="preparing-environmental-predictors.html#cb31-3"></a></span>
-<span id="cb31-4"><a href="preparing-environmental-predictors.html#cb31-4"></a>landcover &lt;-<span class="st"> &quot;data/landUseClassification/landcover_roy_2015/&quot;</span></span>
-<span id="cb31-5"><a href="preparing-environmental-predictors.html#cb31-5"></a></span>
-<span id="cb31-6"><a href="preparing-environmental-predictors.html#cb31-6"></a><span class="co"># read in and crop</span></span>
-<span id="cb31-7"><a href="preparing-environmental-predictors.html#cb31-7"></a>landcover &lt;-<span class="st"> </span><span class="kw">raster</span>(landcover)</span>
-<span id="cb31-8"><a href="preparing-environmental-predictors.html#cb31-8"></a>buffer_utm &lt;-<span class="st"> </span><span class="kw">st_transform</span>(buffer, <span class="dv">32643</span>)</span>
-<span id="cb31-9"><a href="preparing-environmental-predictors.html#cb31-9"></a>landcover &lt;-<span class="st"> </span><span class="kw">crop</span>(</span>
-<span id="cb31-10"><a href="preparing-environmental-predictors.html#cb31-10"></a>  landcover,</span>
-<span id="cb31-11"><a href="preparing-environmental-predictors.html#cb31-11"></a>  <span class="kw">as</span>(</span>
-<span id="cb31-12"><a href="preparing-environmental-predictors.html#cb31-12"></a>    buffer_utm,</span>
-<span id="cb31-13"><a href="preparing-environmental-predictors.html#cb31-13"></a>    <span class="st">&quot;Spatial&quot;</span></span>
-<span id="cb31-14"><a href="preparing-environmental-predictors.html#cb31-14"></a>  )</span>
-<span id="cb31-15"><a href="preparing-environmental-predictors.html#cb31-15"></a>)</span>
-<span id="cb31-16"><a href="preparing-environmental-predictors.html#cb31-16"></a></span>
-<span id="cb31-17"><a href="preparing-environmental-predictors.html#cb31-17"></a><span class="co"># read reclassification matrix</span></span>
-<span id="cb31-18"><a href="preparing-environmental-predictors.html#cb31-18"></a>reclassification_matrix &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/landUseClassification/LandCover_ReclassifyMatrix_2015.csv&quot;</span>)</span>
-<span id="cb31-19"><a href="preparing-environmental-predictors.html#cb31-19"></a>reclassification_matrix &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(reclassification_matrix[, <span class="kw">c</span>(<span class="st">&quot;V1&quot;</span>, <span class="st">&quot;To&quot;</span>)])</span>
-<span id="cb31-20"><a href="preparing-environmental-predictors.html#cb31-20"></a></span>
-<span id="cb31-21"><a href="preparing-environmental-predictors.html#cb31-21"></a><span class="co"># reclassify</span></span>
-<span id="cb31-22"><a href="preparing-environmental-predictors.html#cb31-22"></a>landcover_reclassified &lt;-<span class="st"> </span><span class="kw">reclassify</span>(</span>
-<span id="cb31-23"><a href="preparing-environmental-predictors.html#cb31-23"></a>  <span class="dt">x =</span> landcover,</span>
-<span id="cb31-24"><a href="preparing-environmental-predictors.html#cb31-24"></a>  <span class="dt">rcl =</span> reclassification_matrix</span>
-<span id="cb31-25"><a href="preparing-environmental-predictors.html#cb31-25"></a>)</span>
-<span id="cb31-26"><a href="preparing-environmental-predictors.html#cb31-26"></a></span>
-<span id="cb31-27"><a href="preparing-environmental-predictors.html#cb31-27"></a><span class="co"># write to file</span></span>
-<span id="cb31-28"><a href="preparing-environmental-predictors.html#cb31-28"></a><span class="kw">writeRaster</span>(landcover_reclassified,</span>
-<span id="cb31-29"><a href="preparing-environmental-predictors.html#cb31-29"></a>  <span class="dt">filename =</span> <span class="st">&quot;data/landUseClassification/landcover_roy_2015_reclassified.tif&quot;</span>,</span>
-<span id="cb31-30"><a href="preparing-environmental-predictors.html#cb31-30"></a>  <span class="dt">overwrite =</span> <span class="ot">TRUE</span></span>
-<span id="cb31-31"><a href="preparing-environmental-predictors.html#cb31-31"></a>)</span>
-<span id="cb31-32"><a href="preparing-environmental-predictors.html#cb31-32"></a></span>
-<span id="cb31-33"><a href="preparing-environmental-predictors.html#cb31-33"></a><span class="co"># check reclassification</span></span>
-<span id="cb31-34"><a href="preparing-environmental-predictors.html#cb31-34"></a><span class="kw">plot</span>(landcover_reclassified)</span>
-<span id="cb31-35"><a href="preparing-environmental-predictors.html#cb31-35"></a></span>
-<span id="cb31-36"><a href="preparing-environmental-predictors.html#cb31-36"></a><span class="co"># get extent</span></span>
-<span id="cb31-37"><a href="preparing-environmental-predictors.html#cb31-37"></a>e &lt;-<span class="st"> </span><span class="kw">bbox</span>(<span class="kw">raster</span>(landcover))</span>
-<span id="cb31-38"><a href="preparing-environmental-predictors.html#cb31-38"></a></span>
-<span id="cb31-39"><a href="preparing-environmental-predictors.html#cb31-39"></a><span class="co"># init resolution</span></span>
-<span id="cb31-40"><a href="preparing-environmental-predictors.html#cb31-40"></a>res_init &lt;-<span class="st"> </span><span class="kw">res</span>(<span class="kw">raster</span>(landcover))</span>
-<span id="cb31-41"><a href="preparing-environmental-predictors.html#cb31-41"></a></span>
-<span id="cb31-42"><a href="preparing-environmental-predictors.html#cb31-42"></a><span class="co"># res to transform to 1000m</span></span>
-<span id="cb31-43"><a href="preparing-environmental-predictors.html#cb31-43"></a>res_final &lt;-<span class="st"> </span>res_init <span class="op">*</span><span class="st"> </span>(<span class="dv">1000</span> <span class="op">/</span><span class="st"> </span>res_init)</span>
-<span id="cb31-44"><a href="preparing-environmental-predictors.html#cb31-44"></a></span>
-<span id="cb31-45"><a href="preparing-environmental-predictors.html#cb31-45"></a><span class="co"># use gdalutils gdalwarp for resampling transform</span></span>
-<span id="cb31-46"><a href="preparing-environmental-predictors.html#cb31-46"></a><span class="co"># to 1km from 10m</span></span>
-<span id="cb31-47"><a href="preparing-environmental-predictors.html#cb31-47"></a>gdalUtils<span class="op">::</span><span class="kw">gdalwarp</span>(</span>
-<span id="cb31-48"><a href="preparing-environmental-predictors.html#cb31-48"></a>  <span class="dt">srcfile =</span> <span class="st">&quot;data/landUseClassification/landcover_roy_2015_reclassified.tif&quot;</span>,</span>
-<span id="cb31-49"><a href="preparing-environmental-predictors.html#cb31-49"></a>  <span class="dt">dstfile =</span> <span class="st">&quot;data/landUseClassification/lc_01000m.tif&quot;</span>,</span>
-<span id="cb31-50"><a href="preparing-environmental-predictors.html#cb31-50"></a>  <span class="dt">tr =</span> <span class="kw">c</span>(res_final), <span class="dt">r =</span> <span class="st">&quot;mode&quot;</span>, <span class="dt">te =</span> <span class="kw">c</span>(e)</span>
-<span id="cb31-51"><a href="preparing-environmental-predictors.html#cb31-51"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="preparing-environmental-predictors.html#cb33-1"></a><span class="co"># read in landcover raster location</span></span>
+<span id="cb33-2"><a href="preparing-environmental-predictors.html#cb33-2"></a><span class="co"># To access the land cover data, please visit: https://daac.ornl.gov/VEGETATION/guides/Decadal_LULC_India.html</span></span>
+<span id="cb33-3"><a href="preparing-environmental-predictors.html#cb33-3"></a></span>
+<span id="cb33-4"><a href="preparing-environmental-predictors.html#cb33-4"></a>landcover &lt;-<span class="st"> &quot;data/landUseClassification/landcover_roy_2015/&quot;</span></span>
+<span id="cb33-5"><a href="preparing-environmental-predictors.html#cb33-5"></a></span>
+<span id="cb33-6"><a href="preparing-environmental-predictors.html#cb33-6"></a><span class="co"># read in and crop</span></span>
+<span id="cb33-7"><a href="preparing-environmental-predictors.html#cb33-7"></a>landcover &lt;-<span class="st"> </span><span class="kw">raster</span>(landcover)</span>
+<span id="cb33-8"><a href="preparing-environmental-predictors.html#cb33-8"></a>buffer_utm &lt;-<span class="st"> </span><span class="kw">st_transform</span>(buffer, <span class="dv">32643</span>)</span>
+<span id="cb33-9"><a href="preparing-environmental-predictors.html#cb33-9"></a>landcover &lt;-<span class="st"> </span><span class="kw">crop</span>(</span>
+<span id="cb33-10"><a href="preparing-environmental-predictors.html#cb33-10"></a>  landcover,</span>
+<span id="cb33-11"><a href="preparing-environmental-predictors.html#cb33-11"></a>  <span class="kw">as</span>(</span>
+<span id="cb33-12"><a href="preparing-environmental-predictors.html#cb33-12"></a>    buffer_utm,</span>
+<span id="cb33-13"><a href="preparing-environmental-predictors.html#cb33-13"></a>    <span class="st">&quot;Spatial&quot;</span></span>
+<span id="cb33-14"><a href="preparing-environmental-predictors.html#cb33-14"></a>  )</span>
+<span id="cb33-15"><a href="preparing-environmental-predictors.html#cb33-15"></a>)</span>
+<span id="cb33-16"><a href="preparing-environmental-predictors.html#cb33-16"></a></span>
+<span id="cb33-17"><a href="preparing-environmental-predictors.html#cb33-17"></a><span class="co"># read reclassification matrix</span></span>
+<span id="cb33-18"><a href="preparing-environmental-predictors.html#cb33-18"></a>reclassification_matrix &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/landUseClassification/LandCover_ReclassifyMatrix_2015.csv&quot;</span>)</span>
+<span id="cb33-19"><a href="preparing-environmental-predictors.html#cb33-19"></a>reclassification_matrix &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(reclassification_matrix[, <span class="kw">c</span>(<span class="st">&quot;V1&quot;</span>, <span class="st">&quot;To&quot;</span>)])</span>
+<span id="cb33-20"><a href="preparing-environmental-predictors.html#cb33-20"></a></span>
+<span id="cb33-21"><a href="preparing-environmental-predictors.html#cb33-21"></a><span class="co"># reclassify</span></span>
+<span id="cb33-22"><a href="preparing-environmental-predictors.html#cb33-22"></a>landcover_reclassified &lt;-<span class="st"> </span><span class="kw">reclassify</span>(</span>
+<span id="cb33-23"><a href="preparing-environmental-predictors.html#cb33-23"></a>  <span class="dt">x =</span> landcover,</span>
+<span id="cb33-24"><a href="preparing-environmental-predictors.html#cb33-24"></a>  <span class="dt">rcl =</span> reclassification_matrix</span>
+<span id="cb33-25"><a href="preparing-environmental-predictors.html#cb33-25"></a>)</span>
+<span id="cb33-26"><a href="preparing-environmental-predictors.html#cb33-26"></a></span>
+<span id="cb33-27"><a href="preparing-environmental-predictors.html#cb33-27"></a><span class="co"># write to file</span></span>
+<span id="cb33-28"><a href="preparing-environmental-predictors.html#cb33-28"></a><span class="kw">writeRaster</span>(landcover_reclassified,</span>
+<span id="cb33-29"><a href="preparing-environmental-predictors.html#cb33-29"></a>  <span class="dt">filename =</span> <span class="st">&quot;data/landUseClassification/landcover_roy_2015_reclassified.tif&quot;</span>,</span>
+<span id="cb33-30"><a href="preparing-environmental-predictors.html#cb33-30"></a>  <span class="dt">overwrite =</span> <span class="ot">TRUE</span></span>
+<span id="cb33-31"><a href="preparing-environmental-predictors.html#cb33-31"></a>)</span>
+<span id="cb33-32"><a href="preparing-environmental-predictors.html#cb33-32"></a></span>
+<span id="cb33-33"><a href="preparing-environmental-predictors.html#cb33-33"></a><span class="co"># check reclassification</span></span>
+<span id="cb33-34"><a href="preparing-environmental-predictors.html#cb33-34"></a><span class="kw">plot</span>(landcover_reclassified)</span>
+<span id="cb33-35"><a href="preparing-environmental-predictors.html#cb33-35"></a></span>
+<span id="cb33-36"><a href="preparing-environmental-predictors.html#cb33-36"></a><span class="co"># get extent</span></span>
+<span id="cb33-37"><a href="preparing-environmental-predictors.html#cb33-37"></a>e &lt;-<span class="st"> </span><span class="kw">bbox</span>(<span class="kw">raster</span>(landcover))</span>
+<span id="cb33-38"><a href="preparing-environmental-predictors.html#cb33-38"></a></span>
+<span id="cb33-39"><a href="preparing-environmental-predictors.html#cb33-39"></a><span class="co"># init resolution</span></span>
+<span id="cb33-40"><a href="preparing-environmental-predictors.html#cb33-40"></a>res_init &lt;-<span class="st"> </span><span class="kw">res</span>(<span class="kw">raster</span>(landcover))</span>
+<span id="cb33-41"><a href="preparing-environmental-predictors.html#cb33-41"></a></span>
+<span id="cb33-42"><a href="preparing-environmental-predictors.html#cb33-42"></a><span class="co"># res to transform to 1000m</span></span>
+<span id="cb33-43"><a href="preparing-environmental-predictors.html#cb33-43"></a>res_final &lt;-<span class="st"> </span>res_init <span class="op">*</span><span class="st"> </span>(<span class="dv">1000</span> <span class="op">/</span><span class="st"> </span>res_init)</span>
+<span id="cb33-44"><a href="preparing-environmental-predictors.html#cb33-44"></a></span>
+<span id="cb33-45"><a href="preparing-environmental-predictors.html#cb33-45"></a><span class="co"># use gdalutils gdalwarp for resampling transform</span></span>
+<span id="cb33-46"><a href="preparing-environmental-predictors.html#cb33-46"></a><span class="co"># to 1km from 10m</span></span>
+<span id="cb33-47"><a href="preparing-environmental-predictors.html#cb33-47"></a>gdalUtils<span class="op">::</span><span class="kw">gdalwarp</span>(</span>
+<span id="cb33-48"><a href="preparing-environmental-predictors.html#cb33-48"></a>  <span class="dt">srcfile =</span> <span class="st">&quot;data/landUseClassification/landcover_roy_2015_reclassified.tif&quot;</span>,</span>
+<span id="cb33-49"><a href="preparing-environmental-predictors.html#cb33-49"></a>  <span class="dt">dstfile =</span> <span class="st">&quot;data/landUseClassification/lc_01000m.tif&quot;</span>,</span>
+<span id="cb33-50"><a href="preparing-environmental-predictors.html#cb33-50"></a>  <span class="dt">tr =</span> <span class="kw">c</span>(res_final), <span class="dt">r =</span> <span class="st">&quot;mode&quot;</span>, <span class="dt">te =</span> <span class="kw">c</span>(e)</span>
+<span id="cb33-51"><a href="preparing-environmental-predictors.html#cb33-51"></a>)</span></code></pre></div>
 <p>We compare the frequency of landcover classes between the original raster and the resampled 1km raster to be certain that the resampling has not resulted in drastic misrepresentation of the frequency of any landcover type. This comparison is made using the figure below.</p>
 <div class="figure">
 <img src="figs/fig_landcover_resample.png" alt="" />
@@ -547,219 +579,219 @@ All landscape data was derived from a high resolution land cover map (Roy et al.
 <div id="read-in-resampled-landcover" class="section level3">
 <h3><span class="header-section-number">4.6.1</span> Read in resampled landcover</h3>
 <p>Here, we read in the 1km landcover raster and set 0 to NA.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="preparing-environmental-predictors.html#cb32-1"></a>lc_data &lt;-<span class="st"> </span><span class="kw">raster</span>(<span class="st">&quot;data/landUseClassification/lc_01000m.tif&quot;</span>)</span>
-<span id="cb32-2"><a href="preparing-environmental-predictors.html#cb32-2"></a>lc_data[lc_data <span class="op">==</span><span class="st"> </span><span class="dv">0</span>] &lt;-<span class="st"> </span><span class="ot">NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="preparing-environmental-predictors.html#cb34-1"></a>lc_data &lt;-<span class="st"> </span><span class="kw">raster</span>(<span class="st">&quot;data/landUseClassification/lc_01000m.tif&quot;</span>)</span>
+<span id="cb34-2"><a href="preparing-environmental-predictors.html#cb34-2"></a>lc_data[lc_data <span class="op">==</span><span class="st"> </span><span class="dv">0</span>] &lt;-<span class="st"> </span><span class="ot">NA</span></span></code></pre></div>
 </div>
 <div id="reproject-environmental-data-using-landcover-as-a-template" class="section level3">
 <h3><span class="header-section-number">4.6.2</span> Reproject environmental data using landcover as a template</h3>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="preparing-environmental-predictors.html#cb33-1"></a><span class="co"># resample to the corresponding landcover data</span></span>
-<span id="cb33-2"><a href="preparing-environmental-predictors.html#cb33-2"></a>env_data_resamp &lt;-<span class="st"> </span><span class="kw">projectRaster</span>(</span>
-<span id="cb33-3"><a href="preparing-environmental-predictors.html#cb33-3"></a>  <span class="dt">from =</span> env_data, <span class="dt">to =</span> lc_data,</span>
-<span id="cb33-4"><a href="preparing-environmental-predictors.html#cb33-4"></a>  <span class="dt">crs =</span> <span class="kw">crs</span>(lc_data), <span class="dt">res =</span> <span class="kw">res</span>(lc_data)</span>
-<span id="cb33-5"><a href="preparing-environmental-predictors.html#cb33-5"></a>)</span>
-<span id="cb33-6"><a href="preparing-environmental-predictors.html#cb33-6"></a></span>
-<span id="cb33-7"><a href="preparing-environmental-predictors.html#cb33-7"></a><span class="co"># export as raster stack</span></span>
-<span id="cb33-8"><a href="preparing-environmental-predictors.html#cb33-8"></a>land_stack &lt;-<span class="st"> </span><span class="kw">stack</span>(env_data_resamp, lc_data)</span>
-<span id="cb33-9"><a href="preparing-environmental-predictors.html#cb33-9"></a></span>
-<span id="cb33-10"><a href="preparing-environmental-predictors.html#cb33-10"></a><span class="co"># get names</span></span>
-<span id="cb33-11"><a href="preparing-environmental-predictors.html#cb33-11"></a>land_names &lt;-<span class="st"> </span><span class="kw">glue</span>(<span class="st">&#39;data/spatial/landscape_resamp{c(&quot;01&quot;)}_km.tif&#39;</span>)</span>
-<span id="cb33-12"><a href="preparing-environmental-predictors.html#cb33-12"></a></span>
-<span id="cb33-13"><a href="preparing-environmental-predictors.html#cb33-13"></a><span class="co"># write to file</span></span>
-<span id="cb33-14"><a href="preparing-environmental-predictors.html#cb33-14"></a>raster<span class="op">::</span><span class="kw">writeRaster</span>(</span>
-<span id="cb33-15"><a href="preparing-environmental-predictors.html#cb33-15"></a>  land_stack, <span class="dt">filename =</span> <span class="kw">as.character</span>(land_names), </span>
-<span id="cb33-16"><a href="preparing-environmental-predictors.html#cb33-16"></a>  <span class="dt">overwrite =</span> <span class="ot">TRUE</span></span>
-<span id="cb33-17"><a href="preparing-environmental-predictors.html#cb33-17"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="preparing-environmental-predictors.html#cb35-1"></a><span class="co"># resample to the corresponding landcover data</span></span>
+<span id="cb35-2"><a href="preparing-environmental-predictors.html#cb35-2"></a>env_data_resamp &lt;-<span class="st"> </span><span class="kw">projectRaster</span>(</span>
+<span id="cb35-3"><a href="preparing-environmental-predictors.html#cb35-3"></a>  <span class="dt">from =</span> env_data, <span class="dt">to =</span> lc_data,</span>
+<span id="cb35-4"><a href="preparing-environmental-predictors.html#cb35-4"></a>  <span class="dt">crs =</span> <span class="kw">crs</span>(lc_data), <span class="dt">res =</span> <span class="kw">res</span>(lc_data)</span>
+<span id="cb35-5"><a href="preparing-environmental-predictors.html#cb35-5"></a>)</span>
+<span id="cb35-6"><a href="preparing-environmental-predictors.html#cb35-6"></a></span>
+<span id="cb35-7"><a href="preparing-environmental-predictors.html#cb35-7"></a><span class="co"># export as raster stack</span></span>
+<span id="cb35-8"><a href="preparing-environmental-predictors.html#cb35-8"></a>land_stack &lt;-<span class="st"> </span><span class="kw">stack</span>(env_data_resamp, lc_data)</span>
+<span id="cb35-9"><a href="preparing-environmental-predictors.html#cb35-9"></a></span>
+<span id="cb35-10"><a href="preparing-environmental-predictors.html#cb35-10"></a><span class="co"># get names</span></span>
+<span id="cb35-11"><a href="preparing-environmental-predictors.html#cb35-11"></a>land_names &lt;-<span class="st"> </span><span class="kw">glue</span>(<span class="st">&#39;data/spatial/landscape_resamp{c(&quot;01&quot;)}_km.tif&#39;</span>)</span>
+<span id="cb35-12"><a href="preparing-environmental-predictors.html#cb35-12"></a></span>
+<span id="cb35-13"><a href="preparing-environmental-predictors.html#cb35-13"></a><span class="co"># write to file</span></span>
+<span id="cb35-14"><a href="preparing-environmental-predictors.html#cb35-14"></a>raster<span class="op">::</span><span class="kw">writeRaster</span>(</span>
+<span id="cb35-15"><a href="preparing-environmental-predictors.html#cb35-15"></a>  land_stack, <span class="dt">filename =</span> <span class="kw">as.character</span>(land_names), </span>
+<span id="cb35-16"><a href="preparing-environmental-predictors.html#cb35-16"></a>  <span class="dt">overwrite =</span> <span class="ot">TRUE</span></span>
+<span id="cb35-17"><a href="preparing-environmental-predictors.html#cb35-17"></a>)</span></code></pre></div>
 </div>
 </div>
 <div id="climate-variables-in-relation-to-elevation" class="section level2">
 <h2><span class="header-section-number">4.7</span> Climate variables in relation to elevation</h2>
 <div id="load-resampled-environmental-rasters" class="section level3">
 <h3><span class="header-section-number">4.7.1</span> Load resampled environmental rasters</h3>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="preparing-environmental-predictors.html#cb34-1"></a><span class="co"># read landscape prepare for plotting</span></span>
-<span id="cb34-2"><a href="preparing-environmental-predictors.html#cb34-2"></a>landscape &lt;-<span class="st"> </span><span class="kw">stack</span>(<span class="st">&quot;data/spatial/landscape_resamp01_km.tif&quot;</span>)</span>
-<span id="cb34-3"><a href="preparing-environmental-predictors.html#cb34-3"></a></span>
-<span id="cb34-4"><a href="preparing-environmental-predictors.html#cb34-4"></a><span class="co"># get proper names</span></span>
-<span id="cb34-5"><a href="preparing-environmental-predictors.html#cb34-5"></a>elev_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;elev&quot;</span>, <span class="st">&quot;slope&quot;</span>, <span class="st">&quot;aspect&quot;</span>)</span>
-<span id="cb34-6"><a href="preparing-environmental-predictors.html#cb34-6"></a>chelsa_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;bio_1&quot;</span>, <span class="st">&quot;bio_12&quot;</span>)</span>
-<span id="cb34-7"><a href="preparing-environmental-predictors.html#cb34-7"></a></span>
-<span id="cb34-8"><a href="preparing-environmental-predictors.html#cb34-8"></a><span class="kw">names</span>(landscape) &lt;-<span class="st"> </span><span class="kw">glue</span>(<span class="st">&#39;{c(elev_names, chelsa_names, &quot;landcover&quot;)}&#39;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="preparing-environmental-predictors.html#cb35-1"></a><span class="co"># make duplicate stack</span></span>
-<span id="cb35-2"><a href="preparing-environmental-predictors.html#cb35-2"></a>land_data &lt;-<span class="st"> </span>landscape[[<span class="kw">c</span>(<span class="st">&quot;elev&quot;</span>, chelsa_names)]]</span>
-<span id="cb35-3"><a href="preparing-environmental-predictors.html#cb35-3"></a></span>
-<span id="cb35-4"><a href="preparing-environmental-predictors.html#cb35-4"></a><span class="co"># convert to list</span></span>
-<span id="cb35-5"><a href="preparing-environmental-predictors.html#cb35-5"></a>land_data &lt;-<span class="st"> </span><span class="kw">as.list</span>(land_data)</span>
-<span id="cb35-6"><a href="preparing-environmental-predictors.html#cb35-6"></a></span>
-<span id="cb35-7"><a href="preparing-environmental-predictors.html#cb35-7"></a><span class="co"># map get values over the stack</span></span>
-<span id="cb35-8"><a href="preparing-environmental-predictors.html#cb35-8"></a>land_data &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(land_data, getValues)</span>
-<span id="cb35-9"><a href="preparing-environmental-predictors.html#cb35-9"></a><span class="kw">names</span>(land_data) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;elev&quot;</span>, chelsa_names)</span>
-<span id="cb35-10"><a href="preparing-environmental-predictors.html#cb35-10"></a></span>
-<span id="cb35-11"><a href="preparing-environmental-predictors.html#cb35-11"></a><span class="co"># conver to dataframe and round to 200m</span></span>
-<span id="cb35-12"><a href="preparing-environmental-predictors.html#cb35-12"></a>land_data &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(land_data)</span>
-<span id="cb35-13"><a href="preparing-environmental-predictors.html#cb35-13"></a>land_data &lt;-<span class="st"> </span><span class="kw">drop_na</span>(land_data) <span class="op">%&gt;%</span></span>
-<span id="cb35-14"><a href="preparing-environmental-predictors.html#cb35-14"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">elev_round =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(elev, <span class="dv">200</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb35-15"><a href="preparing-environmental-predictors.html#cb35-15"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>elev) <span class="op">%&gt;%</span></span>
-<span id="cb35-16"><a href="preparing-environmental-predictors.html#cb35-16"></a><span class="st">  </span><span class="kw">pivot_longer</span>(</span>
-<span id="cb35-17"><a href="preparing-environmental-predictors.html#cb35-17"></a>    <span class="dt">cols =</span> <span class="kw">contains</span>(<span class="st">&quot;bio&quot;</span>),</span>
-<span id="cb35-18"><a href="preparing-environmental-predictors.html#cb35-18"></a>    <span class="dt">names_to =</span> <span class="st">&quot;clim_var&quot;</span></span>
-<span id="cb35-19"><a href="preparing-environmental-predictors.html#cb35-19"></a>  ) <span class="op">%&gt;%</span></span>
-<span id="cb35-20"><a href="preparing-environmental-predictors.html#cb35-20"></a><span class="st">  </span><span class="kw">group_by</span>(elev_round, clim_var) <span class="op">%&gt;%</span></span>
-<span id="cb35-21"><a href="preparing-environmental-predictors.html#cb35-21"></a><span class="st">  </span><span class="kw">summarise_all</span>(<span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span><span class="kw">mean</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">ci</span>(.)))</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="preparing-environmental-predictors.html#cb36-1"></a><span class="co"># read landscape prepare for plotting</span></span>
+<span id="cb36-2"><a href="preparing-environmental-predictors.html#cb36-2"></a>landscape &lt;-<span class="st"> </span><span class="kw">stack</span>(<span class="st">&quot;data/spatial/landscape_resamp01_km.tif&quot;</span>)</span>
+<span id="cb36-3"><a href="preparing-environmental-predictors.html#cb36-3"></a></span>
+<span id="cb36-4"><a href="preparing-environmental-predictors.html#cb36-4"></a><span class="co"># get proper names</span></span>
+<span id="cb36-5"><a href="preparing-environmental-predictors.html#cb36-5"></a>elev_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;elev&quot;</span>, <span class="st">&quot;slope&quot;</span>, <span class="st">&quot;aspect&quot;</span>)</span>
+<span id="cb36-6"><a href="preparing-environmental-predictors.html#cb36-6"></a>chelsa_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;bio_4a&quot;</span>, <span class="st">&quot;bio_15&quot;</span>)</span>
+<span id="cb36-7"><a href="preparing-environmental-predictors.html#cb36-7"></a></span>
+<span id="cb36-8"><a href="preparing-environmental-predictors.html#cb36-8"></a><span class="kw">names</span>(landscape) &lt;-<span class="st"> </span><span class="kw">glue</span>(<span class="st">&#39;{c(elev_names, chelsa_names, &quot;landcover&quot;)}&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="preparing-environmental-predictors.html#cb37-1"></a><span class="co"># make duplicate stack</span></span>
+<span id="cb37-2"><a href="preparing-environmental-predictors.html#cb37-2"></a>land_data &lt;-<span class="st"> </span>landscape[[<span class="kw">c</span>(<span class="st">&quot;elev&quot;</span>, chelsa_names)]]</span>
+<span id="cb37-3"><a href="preparing-environmental-predictors.html#cb37-3"></a></span>
+<span id="cb37-4"><a href="preparing-environmental-predictors.html#cb37-4"></a><span class="co"># convert to list</span></span>
+<span id="cb37-5"><a href="preparing-environmental-predictors.html#cb37-5"></a>land_data &lt;-<span class="st"> </span><span class="kw">as.list</span>(land_data)</span>
+<span id="cb37-6"><a href="preparing-environmental-predictors.html#cb37-6"></a></span>
+<span id="cb37-7"><a href="preparing-environmental-predictors.html#cb37-7"></a><span class="co"># map get values over the stack</span></span>
+<span id="cb37-8"><a href="preparing-environmental-predictors.html#cb37-8"></a>land_data &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(land_data, getValues)</span>
+<span id="cb37-9"><a href="preparing-environmental-predictors.html#cb37-9"></a><span class="kw">names</span>(land_data) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;elev&quot;</span>, chelsa_names)</span>
+<span id="cb37-10"><a href="preparing-environmental-predictors.html#cb37-10"></a></span>
+<span id="cb37-11"><a href="preparing-environmental-predictors.html#cb37-11"></a><span class="co"># conver to dataframe and round to 200m</span></span>
+<span id="cb37-12"><a href="preparing-environmental-predictors.html#cb37-12"></a>land_data &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(land_data)</span>
+<span id="cb37-13"><a href="preparing-environmental-predictors.html#cb37-13"></a>land_data &lt;-<span class="st"> </span><span class="kw">drop_na</span>(land_data) <span class="op">%&gt;%</span></span>
+<span id="cb37-14"><a href="preparing-environmental-predictors.html#cb37-14"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">elev_round =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(elev, <span class="dv">200</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb37-15"><a href="preparing-environmental-predictors.html#cb37-15"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>elev) <span class="op">%&gt;%</span></span>
+<span id="cb37-16"><a href="preparing-environmental-predictors.html#cb37-16"></a><span class="st">  </span><span class="kw">pivot_longer</span>(</span>
+<span id="cb37-17"><a href="preparing-environmental-predictors.html#cb37-17"></a>    <span class="dt">cols =</span> <span class="kw">contains</span>(<span class="st">&quot;bio&quot;</span>),</span>
+<span id="cb37-18"><a href="preparing-environmental-predictors.html#cb37-18"></a>    <span class="dt">names_to =</span> <span class="st">&quot;clim_var&quot;</span></span>
+<span id="cb37-19"><a href="preparing-environmental-predictors.html#cb37-19"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb37-20"><a href="preparing-environmental-predictors.html#cb37-20"></a><span class="st">  </span><span class="kw">group_by</span>(elev_round, clim_var) <span class="op">%&gt;%</span></span>
+<span id="cb37-21"><a href="preparing-environmental-predictors.html#cb37-21"></a><span class="st">  </span><span class="kw">summarise_all</span>(<span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span><span class="kw">mean</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">ci</span>(.)))</span></code></pre></div>
 <p>Figure code is hidden in versions rendered as HTML or PDF.</p>
 </div>
 </div>
 <div id="climate-across-land-cover-types" class="section level2">
 <h2><span class="header-section-number">4.8</span> Climate across land cover types</h2>
 <p>Get climate values per (re-classified) landcover type from the 1km resampled raster.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="preparing-environmental-predictors.html#cb36-1"></a><span class="co"># make duplicate stack again</span></span>
-<span id="cb36-2"><a href="preparing-environmental-predictors.html#cb36-2"></a>lc_clim_data &lt;-<span class="st"> </span>landscape[[<span class="kw">c</span>(<span class="st">&quot;landcover&quot;</span>, chelsa_names)]]</span>
-<span id="cb36-3"><a href="preparing-environmental-predictors.html#cb36-3"></a></span>
-<span id="cb36-4"><a href="preparing-environmental-predictors.html#cb36-4"></a><span class="co"># convert to list</span></span>
-<span id="cb36-5"><a href="preparing-environmental-predictors.html#cb36-5"></a>lc_clim_data &lt;-<span class="st"> </span><span class="kw">as.list</span>(lc_clim_data)</span>
-<span id="cb36-6"><a href="preparing-environmental-predictors.html#cb36-6"></a></span>
-<span id="cb36-7"><a href="preparing-environmental-predictors.html#cb36-7"></a><span class="co"># map get values over the stack</span></span>
-<span id="cb36-8"><a href="preparing-environmental-predictors.html#cb36-8"></a>lc_clim_data &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(lc_clim_data, getValues)</span>
-<span id="cb36-9"><a href="preparing-environmental-predictors.html#cb36-9"></a><span class="kw">names</span>(lc_clim_data) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;landcover&quot;</span>, chelsa_names)</span>
-<span id="cb36-10"><a href="preparing-environmental-predictors.html#cb36-10"></a></span>
-<span id="cb36-11"><a href="preparing-environmental-predictors.html#cb36-11"></a><span class="co"># conver to dataframe for histogram</span></span>
-<span id="cb36-12"><a href="preparing-environmental-predictors.html#cb36-12"></a>lc_clim_data &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(lc_clim_data)</span>
-<span id="cb36-13"><a href="preparing-environmental-predictors.html#cb36-13"></a></span>
-<span id="cb36-14"><a href="preparing-environmental-predictors.html#cb36-14"></a><span class="co"># pivot long</span></span>
-<span id="cb36-15"><a href="preparing-environmental-predictors.html#cb36-15"></a>lc_clim_data &lt;-<span class="st"> </span><span class="kw">pivot_longer</span>(</span>
-<span id="cb36-16"><a href="preparing-environmental-predictors.html#cb36-16"></a>  lc_clim_data,</span>
-<span id="cb36-17"><a href="preparing-environmental-predictors.html#cb36-17"></a>  <span class="dt">cols =</span> <span class="kw">contains</span>(<span class="st">&quot;bio&quot;</span>),</span>
-<span id="cb36-18"><a href="preparing-environmental-predictors.html#cb36-18"></a>  <span class="dt">names_to =</span> <span class="st">&quot;climvar&quot;</span></span>
-<span id="cb36-19"><a href="preparing-environmental-predictors.html#cb36-19"></a>)</span>
-<span id="cb36-20"><a href="preparing-environmental-predictors.html#cb36-20"></a></span>
-<span id="cb36-21"><a href="preparing-environmental-predictors.html#cb36-21"></a><span class="co"># make landcover factor</span></span>
-<span id="cb36-22"><a href="preparing-environmental-predictors.html#cb36-22"></a>lc_clim_data &lt;-<span class="st"> </span><span class="kw">mutate</span>(</span>
-<span id="cb36-23"><a href="preparing-environmental-predictors.html#cb36-23"></a>  lc_clim_data,</span>
-<span id="cb36-24"><a href="preparing-environmental-predictors.html#cb36-24"></a>  <span class="dt">landcover =</span> <span class="kw">factor</span>(landcover)</span>
-<span id="cb36-25"><a href="preparing-environmental-predictors.html#cb36-25"></a>)</span>
-<span id="cb36-26"><a href="preparing-environmental-predictors.html#cb36-26"></a></span>
-<span id="cb36-27"><a href="preparing-environmental-predictors.html#cb36-27"></a><span class="co"># filter bio </span></span>
-<span id="cb36-28"><a href="preparing-environmental-predictors.html#cb36-28"></a>lc_clim_data &lt;-<span class="st"> </span><span class="kw">filter</span>(</span>
-<span id="cb36-29"><a href="preparing-environmental-predictors.html#cb36-29"></a>  lc_clim_data,</span>
-<span id="cb36-30"><a href="preparing-environmental-predictors.html#cb36-30"></a>  <span class="op">!</span><span class="kw">is.na</span>(landcover)</span>
-<span id="cb36-31"><a href="preparing-environmental-predictors.html#cb36-31"></a>)</span>
-<span id="cb36-32"><a href="preparing-environmental-predictors.html#cb36-32"></a></span>
-<span id="cb36-33"><a href="preparing-environmental-predictors.html#cb36-33"></a><span class="co"># split by variable</span></span>
-<span id="cb36-34"><a href="preparing-environmental-predictors.html#cb36-34"></a>lc_clim_data &lt;-<span class="st"> </span><span class="kw">nest</span>(lc_clim_data, <span class="dt">data =</span> <span class="kw">c</span>(<span class="st">&quot;landcover&quot;</span>, <span class="st">&quot;value&quot;</span>))</span>
-<span id="cb36-35"><a href="preparing-environmental-predictors.html#cb36-35"></a></span>
-<span id="cb36-36"><a href="preparing-environmental-predictors.html#cb36-36"></a><span class="co"># assign names</span></span>
-<span id="cb36-37"><a href="preparing-environmental-predictors.html#cb36-37"></a>lc_clim_data<span class="op">$</span>climvar_name &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
-<span id="cb36-38"><a href="preparing-environmental-predictors.html#cb36-38"></a>  <span class="st">&quot;Mean Annual Temperature&quot;</span>,</span>
-<span id="cb36-39"><a href="preparing-environmental-predictors.html#cb36-39"></a>  <span class="st">&quot;Annual Precipitation&quot;</span></span>
-<span id="cb36-40"><a href="preparing-environmental-predictors.html#cb36-40"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="preparing-environmental-predictors.html#cb38-1"></a><span class="co"># make duplicate stack again</span></span>
+<span id="cb38-2"><a href="preparing-environmental-predictors.html#cb38-2"></a>lc_clim_data &lt;-<span class="st"> </span>landscape[[<span class="kw">c</span>(<span class="st">&quot;landcover&quot;</span>, chelsa_names)]]</span>
+<span id="cb38-3"><a href="preparing-environmental-predictors.html#cb38-3"></a></span>
+<span id="cb38-4"><a href="preparing-environmental-predictors.html#cb38-4"></a><span class="co"># convert to list</span></span>
+<span id="cb38-5"><a href="preparing-environmental-predictors.html#cb38-5"></a>lc_clim_data &lt;-<span class="st"> </span><span class="kw">as.list</span>(lc_clim_data)</span>
+<span id="cb38-6"><a href="preparing-environmental-predictors.html#cb38-6"></a></span>
+<span id="cb38-7"><a href="preparing-environmental-predictors.html#cb38-7"></a><span class="co"># map get values over the stack</span></span>
+<span id="cb38-8"><a href="preparing-environmental-predictors.html#cb38-8"></a>lc_clim_data &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(lc_clim_data, getValues)</span>
+<span id="cb38-9"><a href="preparing-environmental-predictors.html#cb38-9"></a><span class="kw">names</span>(lc_clim_data) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;landcover&quot;</span>, chelsa_names)</span>
+<span id="cb38-10"><a href="preparing-environmental-predictors.html#cb38-10"></a></span>
+<span id="cb38-11"><a href="preparing-environmental-predictors.html#cb38-11"></a><span class="co"># conver to dataframe for histogram</span></span>
+<span id="cb38-12"><a href="preparing-environmental-predictors.html#cb38-12"></a>lc_clim_data &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(lc_clim_data)</span>
+<span id="cb38-13"><a href="preparing-environmental-predictors.html#cb38-13"></a></span>
+<span id="cb38-14"><a href="preparing-environmental-predictors.html#cb38-14"></a><span class="co"># pivot long</span></span>
+<span id="cb38-15"><a href="preparing-environmental-predictors.html#cb38-15"></a>lc_clim_data &lt;-<span class="st"> </span><span class="kw">pivot_longer</span>(</span>
+<span id="cb38-16"><a href="preparing-environmental-predictors.html#cb38-16"></a>  lc_clim_data,</span>
+<span id="cb38-17"><a href="preparing-environmental-predictors.html#cb38-17"></a>  <span class="dt">cols =</span> <span class="kw">contains</span>(<span class="st">&quot;bio&quot;</span>),</span>
+<span id="cb38-18"><a href="preparing-environmental-predictors.html#cb38-18"></a>  <span class="dt">names_to =</span> <span class="st">&quot;climvar&quot;</span></span>
+<span id="cb38-19"><a href="preparing-environmental-predictors.html#cb38-19"></a>)</span>
+<span id="cb38-20"><a href="preparing-environmental-predictors.html#cb38-20"></a></span>
+<span id="cb38-21"><a href="preparing-environmental-predictors.html#cb38-21"></a><span class="co"># make landcover factor</span></span>
+<span id="cb38-22"><a href="preparing-environmental-predictors.html#cb38-22"></a>lc_clim_data &lt;-<span class="st"> </span><span class="kw">mutate</span>(</span>
+<span id="cb38-23"><a href="preparing-environmental-predictors.html#cb38-23"></a>  lc_clim_data,</span>
+<span id="cb38-24"><a href="preparing-environmental-predictors.html#cb38-24"></a>  <span class="dt">landcover =</span> <span class="kw">factor</span>(landcover)</span>
+<span id="cb38-25"><a href="preparing-environmental-predictors.html#cb38-25"></a>)</span>
+<span id="cb38-26"><a href="preparing-environmental-predictors.html#cb38-26"></a></span>
+<span id="cb38-27"><a href="preparing-environmental-predictors.html#cb38-27"></a><span class="co"># filter bio </span></span>
+<span id="cb38-28"><a href="preparing-environmental-predictors.html#cb38-28"></a>lc_clim_data &lt;-<span class="st"> </span><span class="kw">filter</span>(</span>
+<span id="cb38-29"><a href="preparing-environmental-predictors.html#cb38-29"></a>  lc_clim_data,</span>
+<span id="cb38-30"><a href="preparing-environmental-predictors.html#cb38-30"></a>  <span class="op">!</span><span class="kw">is.na</span>(landcover)</span>
+<span id="cb38-31"><a href="preparing-environmental-predictors.html#cb38-31"></a>)</span>
+<span id="cb38-32"><a href="preparing-environmental-predictors.html#cb38-32"></a></span>
+<span id="cb38-33"><a href="preparing-environmental-predictors.html#cb38-33"></a><span class="co"># split by variable</span></span>
+<span id="cb38-34"><a href="preparing-environmental-predictors.html#cb38-34"></a>lc_clim_data &lt;-<span class="st"> </span><span class="kw">nest</span>(lc_clim_data, <span class="dt">data =</span> <span class="kw">c</span>(<span class="st">&quot;landcover&quot;</span>, <span class="st">&quot;value&quot;</span>))</span>
+<span id="cb38-35"><a href="preparing-environmental-predictors.html#cb38-35"></a></span>
+<span id="cb38-36"><a href="preparing-environmental-predictors.html#cb38-36"></a><span class="co"># assign names</span></span>
+<span id="cb38-37"><a href="preparing-environmental-predictors.html#cb38-37"></a>lc_clim_data<span class="op">$</span>climvar_name &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
+<span id="cb38-38"><a href="preparing-environmental-predictors.html#cb38-38"></a>  <span class="st">&quot;Temperature seasonality&quot;</span>,</span>
+<span id="cb38-39"><a href="preparing-environmental-predictors.html#cb38-39"></a>  <span class="st">&quot;Precipitation seasonality&quot;</span></span>
+<span id="cb38-40"><a href="preparing-environmental-predictors.html#cb38-40"></a>)</span></code></pre></div>
 <p>Plot density plots of climate seasonality per LC type.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="preparing-environmental-predictors.html#cb37-1"></a><span class="co"># make labels</span></span>
-<span id="cb37-2"><a href="preparing-environmental-predictors.html#cb37-2"></a>lc_labels &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
-<span id="cb37-3"><a href="preparing-environmental-predictors.html#cb37-3"></a>  <span class="st">&quot;Evergreen&quot;</span>, <span class="st">&quot;Deciduous&quot;</span>,</span>
-<span id="cb37-4"><a href="preparing-environmental-predictors.html#cb37-4"></a>  <span class="st">&quot;Mixed./Degr.&quot;</span>, <span class="st">&quot;Agri./Settl.&quot;</span>,</span>
-<span id="cb37-5"><a href="preparing-environmental-predictors.html#cb37-5"></a>  <span class="st">&quot;Grassland&quot;</span>, <span class="st">&quot;Plantation&quot;</span>,</span>
-<span id="cb37-6"><a href="preparing-environmental-predictors.html#cb37-6"></a>  <span class="st">&quot;Waterbody&quot;</span></span>
-<span id="cb37-7"><a href="preparing-environmental-predictors.html#cb37-7"></a>)</span>
-<span id="cb37-8"><a href="preparing-environmental-predictors.html#cb37-8"></a><span class="kw">names</span>(lc_labels) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">seq</span>(<span class="dv">5</span>), <span class="dv">7</span>, <span class="dv">9</span>)</span>
-<span id="cb37-9"><a href="preparing-environmental-predictors.html#cb37-9"></a></span>
-<span id="cb37-10"><a href="preparing-environmental-predictors.html#cb37-10"></a><span class="co"># plots</span></span>
-<span id="cb37-11"><a href="preparing-environmental-predictors.html#cb37-11"></a>lc_clim_plots &lt;-<span class="st"> </span><span class="kw">pmap</span>(</span>
-<span id="cb37-12"><a href="preparing-environmental-predictors.html#cb37-12"></a>  lc_clim_data,</span>
-<span id="cb37-13"><a href="preparing-environmental-predictors.html#cb37-13"></a>  <span class="cf">function</span>(climvar_name, data, climvar) {</span>
-<span id="cb37-14"><a href="preparing-environmental-predictors.html#cb37-14"></a>    p &lt;-<span class="st"> </span>data <span class="op">%&gt;%</span></span>
-<span id="cb37-15"><a href="preparing-environmental-predictors.html#cb37-15"></a><span class="st">      </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb37-16"><a href="preparing-environmental-predictors.html#cb37-16"></a><span class="st">      </span><span class="kw">geom_histogram</span>(</span>
-<span id="cb37-17"><a href="preparing-environmental-predictors.html#cb37-17"></a>        <span class="kw">aes</span>(</span>
-<span id="cb37-18"><a href="preparing-environmental-predictors.html#cb37-18"></a>          <span class="dt">x =</span> value, <span class="dt">y =</span> ..density..,</span>
-<span id="cb37-19"><a href="preparing-environmental-predictors.html#cb37-19"></a>          <span class="dt">fill =</span> ..x..</span>
-<span id="cb37-20"><a href="preparing-environmental-predictors.html#cb37-20"></a>        ),</span>
-<span id="cb37-21"><a href="preparing-environmental-predictors.html#cb37-21"></a>        <span class="dt">show.legend =</span> F</span>
-<span id="cb37-22"><a href="preparing-environmental-predictors.html#cb37-22"></a>      ) <span class="op">+</span></span>
-<span id="cb37-23"><a href="preparing-environmental-predictors.html#cb37-23"></a><span class="st">      </span><span class="kw">theme_test</span>(<span class="dt">base_family =</span> <span class="st">&quot;Arial&quot;</span>) <span class="op">+</span></span>
-<span id="cb37-24"><a href="preparing-environmental-predictors.html#cb37-24"></a><span class="st">      </span><span class="kw">theme</span>(</span>
-<span id="cb37-25"><a href="preparing-environmental-predictors.html#cb37-25"></a>        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="dt">units =</span> <span class="st">&quot;mm&quot;</span>),</span>
-<span id="cb37-26"><a href="preparing-environmental-predictors.html#cb37-26"></a>        <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(),</span>
-<span id="cb37-27"><a href="preparing-environmental-predictors.html#cb37-27"></a>        <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">6</span>, <span class="dt">angle =</span> <span class="dv">45</span>),</span>
-<span id="cb37-28"><a href="preparing-environmental-predictors.html#cb37-28"></a>        <span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>(),</span>
-<span id="cb37-29"><a href="preparing-environmental-predictors.html#cb37-29"></a>        <span class="dt">strip.background =</span> <span class="kw">element_blank</span>(),</span>
-<span id="cb37-30"><a href="preparing-environmental-predictors.html#cb37-30"></a>        <span class="dt">strip.text =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">6</span>, <span class="dt">face =</span> <span class="st">&quot;bold&quot;</span>)</span>
-<span id="cb37-31"><a href="preparing-environmental-predictors.html#cb37-31"></a>      ) <span class="op">+</span></span>
-<span id="cb37-32"><a href="preparing-environmental-predictors.html#cb37-32"></a><span class="st">      </span><span class="kw">facet_grid</span>(</span>
-<span id="cb37-33"><a href="preparing-environmental-predictors.html#cb37-33"></a>        <span class="op">~</span>landcover,</span>
-<span id="cb37-34"><a href="preparing-environmental-predictors.html#cb37-34"></a>        <span class="dt">labeller =</span> <span class="kw">labeller</span>(</span>
-<span id="cb37-35"><a href="preparing-environmental-predictors.html#cb37-35"></a>          <span class="dt">landcover =</span> lc_labels</span>
-<span id="cb37-36"><a href="preparing-environmental-predictors.html#cb37-36"></a>        )</span>
-<span id="cb37-37"><a href="preparing-environmental-predictors.html#cb37-37"></a>      ) <span class="op">+</span></span>
-<span id="cb37-38"><a href="preparing-environmental-predictors.html#cb37-38"></a><span class="st">      </span><span class="kw">labs</span>(</span>
-<span id="cb37-39"><a href="preparing-environmental-predictors.html#cb37-39"></a>        <span class="dt">x =</span> <span class="kw">glue</span>(<span class="st">&quot;{climvar_name}&quot;</span>),</span>
-<span id="cb37-40"><a href="preparing-environmental-predictors.html#cb37-40"></a>        <span class="dt">y =</span> <span class="st">&quot;Density&quot;</span></span>
-<span id="cb37-41"><a href="preparing-environmental-predictors.html#cb37-41"></a>      )</span>
-<span id="cb37-42"><a href="preparing-environmental-predictors.html#cb37-42"></a>    <span class="cf">if</span> (climvar <span class="op">==</span><span class="st"> &quot;bio_1&quot;</span>) {</span>
-<span id="cb37-43"><a href="preparing-environmental-predictors.html#cb37-43"></a>      p &lt;-<span class="st"> </span>p <span class="op">+</span></span>
-<span id="cb37-44"><a href="preparing-environmental-predictors.html#cb37-44"></a><span class="st">        </span><span class="kw">scale_fill_continuous_diverging</span>(</span>
-<span id="cb37-45"><a href="preparing-environmental-predictors.html#cb37-45"></a>          <span class="dt">palette =</span> <span class="st">&quot;Blue-Red 2&quot;</span>,</span>
-<span id="cb37-46"><a href="preparing-environmental-predictors.html#cb37-46"></a>          <span class="dt">mid =</span> <span class="fl">29.5</span></span>
-<span id="cb37-47"><a href="preparing-environmental-predictors.html#cb37-47"></a>        )</span>
-<span id="cb37-48"><a href="preparing-environmental-predictors.html#cb37-48"></a>    } <span class="cf">else</span> {</span>
-<span id="cb37-49"><a href="preparing-environmental-predictors.html#cb37-49"></a>      p &lt;-<span class="st"> </span>p <span class="op">+</span></span>
-<span id="cb37-50"><a href="preparing-environmental-predictors.html#cb37-50"></a><span class="st">        </span><span class="kw">scale_x_continuous</span>(</span>
-<span id="cb37-51"><a href="preparing-environmental-predictors.html#cb37-51"></a>          <span class="dt">limits =</span> <span class="kw">c</span>(<span class="dv">200</span>, <span class="dv">500</span>)</span>
-<span id="cb37-52"><a href="preparing-environmental-predictors.html#cb37-52"></a>        ) <span class="op">+</span></span>
-<span id="cb37-53"><a href="preparing-environmental-predictors.html#cb37-53"></a><span class="st">        </span><span class="kw">scale_fill_continuous_diverging</span>(</span>
-<span id="cb37-54"><a href="preparing-environmental-predictors.html#cb37-54"></a>          <span class="dt">palette =</span> <span class="st">&quot;Blue-Yellow 2&quot;</span>,</span>
-<span id="cb37-55"><a href="preparing-environmental-predictors.html#cb37-55"></a>          <span class="dt">mid =</span> <span class="dv">350</span></span>
-<span id="cb37-56"><a href="preparing-environmental-predictors.html#cb37-56"></a>        )</span>
-<span id="cb37-57"><a href="preparing-environmental-predictors.html#cb37-57"></a>    }</span>
-<span id="cb37-58"><a href="preparing-environmental-predictors.html#cb37-58"></a></span>
-<span id="cb37-59"><a href="preparing-environmental-predictors.html#cb37-59"></a>    p</span>
-<span id="cb37-60"><a href="preparing-environmental-predictors.html#cb37-60"></a>  }</span>
-<span id="cb37-61"><a href="preparing-environmental-predictors.html#cb37-61"></a>)</span>
-<span id="cb37-62"><a href="preparing-environmental-predictors.html#cb37-62"></a></span>
-<span id="cb37-63"><a href="preparing-environmental-predictors.html#cb37-63"></a><span class="co"># save to file and add figure</span></span>
-<span id="cb37-64"><a href="preparing-environmental-predictors.html#cb37-64"></a>fig_lc_clim &lt;-</span>
-<span id="cb37-65"><a href="preparing-environmental-predictors.html#cb37-65"></a><span class="st">  </span><span class="kw">wrap_plots</span>(lc_clim_plots, <span class="dt">ncol =</span> <span class="dv">1</span>) <span class="op">&amp;</span></span>
-<span id="cb37-66"><a href="preparing-environmental-predictors.html#cb37-66"></a><span class="st">    </span><span class="kw">plot_annotation</span>(<span class="dt">tag_levels =</span> <span class="st">&quot;A&quot;</span>)</span>
-<span id="cb37-67"><a href="preparing-environmental-predictors.html#cb37-67"></a></span>
-<span id="cb37-68"><a href="preparing-environmental-predictors.html#cb37-68"></a><span class="co"># save as png</span></span>
-<span id="cb37-69"><a href="preparing-environmental-predictors.html#cb37-69"></a><span class="kw">ggsave</span>(fig_lc_clim,</span>
-<span id="cb37-70"><a href="preparing-environmental-predictors.html#cb37-70"></a>  <span class="dt">filename =</span> <span class="st">&quot;figs/fig_lc_climate.png&quot;</span>,</span>
-<span id="cb37-71"><a href="preparing-environmental-predictors.html#cb37-71"></a>  <span class="dt">height =</span> <span class="dv">4</span>, <span class="dt">width =</span> <span class="fl">6.5</span>, <span class="dt">device =</span> <span class="kw">png</span>(), <span class="dt">dpi =</span> <span class="dv">300</span></span>
-<span id="cb37-72"><a href="preparing-environmental-predictors.html#cb37-72"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="preparing-environmental-predictors.html#cb39-1"></a><span class="co"># make labels</span></span>
+<span id="cb39-2"><a href="preparing-environmental-predictors.html#cb39-2"></a>lc_labels &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
+<span id="cb39-3"><a href="preparing-environmental-predictors.html#cb39-3"></a>  <span class="st">&quot;Evergreen&quot;</span>, <span class="st">&quot;Deciduous&quot;</span>,</span>
+<span id="cb39-4"><a href="preparing-environmental-predictors.html#cb39-4"></a>  <span class="st">&quot;Mixed./Degr.&quot;</span>, <span class="st">&quot;Agri./Settl.&quot;</span>,</span>
+<span id="cb39-5"><a href="preparing-environmental-predictors.html#cb39-5"></a>  <span class="st">&quot;Grassland&quot;</span>, <span class="st">&quot;Plantation&quot;</span>,</span>
+<span id="cb39-6"><a href="preparing-environmental-predictors.html#cb39-6"></a>  <span class="st">&quot;Waterbody&quot;</span></span>
+<span id="cb39-7"><a href="preparing-environmental-predictors.html#cb39-7"></a>)</span>
+<span id="cb39-8"><a href="preparing-environmental-predictors.html#cb39-8"></a><span class="kw">names</span>(lc_labels) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">seq</span>(<span class="dv">5</span>), <span class="dv">7</span>, <span class="dv">9</span>)</span>
+<span id="cb39-9"><a href="preparing-environmental-predictors.html#cb39-9"></a></span>
+<span id="cb39-10"><a href="preparing-environmental-predictors.html#cb39-10"></a><span class="co"># plots</span></span>
+<span id="cb39-11"><a href="preparing-environmental-predictors.html#cb39-11"></a>lc_clim_plots &lt;-<span class="st"> </span><span class="kw">pmap</span>(</span>
+<span id="cb39-12"><a href="preparing-environmental-predictors.html#cb39-12"></a>  lc_clim_data,</span>
+<span id="cb39-13"><a href="preparing-environmental-predictors.html#cb39-13"></a>  <span class="cf">function</span>(climvar_name, data, climvar) {</span>
+<span id="cb39-14"><a href="preparing-environmental-predictors.html#cb39-14"></a>    p &lt;-<span class="st"> </span>data <span class="op">%&gt;%</span></span>
+<span id="cb39-15"><a href="preparing-environmental-predictors.html#cb39-15"></a><span class="st">      </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb39-16"><a href="preparing-environmental-predictors.html#cb39-16"></a><span class="st">      </span><span class="kw">geom_histogram</span>(</span>
+<span id="cb39-17"><a href="preparing-environmental-predictors.html#cb39-17"></a>        <span class="kw">aes</span>(</span>
+<span id="cb39-18"><a href="preparing-environmental-predictors.html#cb39-18"></a>          <span class="dt">x =</span> value, <span class="dt">y =</span> ..density..,</span>
+<span id="cb39-19"><a href="preparing-environmental-predictors.html#cb39-19"></a>          <span class="dt">fill =</span> ..x..</span>
+<span id="cb39-20"><a href="preparing-environmental-predictors.html#cb39-20"></a>        ),</span>
+<span id="cb39-21"><a href="preparing-environmental-predictors.html#cb39-21"></a>        <span class="dt">show.legend =</span> F</span>
+<span id="cb39-22"><a href="preparing-environmental-predictors.html#cb39-22"></a>      ) <span class="op">+</span></span>
+<span id="cb39-23"><a href="preparing-environmental-predictors.html#cb39-23"></a><span class="st">      </span><span class="kw">theme_test</span>(<span class="dt">base_family =</span> <span class="st">&quot;Arial&quot;</span>) <span class="op">+</span></span>
+<span id="cb39-24"><a href="preparing-environmental-predictors.html#cb39-24"></a><span class="st">      </span><span class="kw">theme</span>(</span>
+<span id="cb39-25"><a href="preparing-environmental-predictors.html#cb39-25"></a>        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="dt">units =</span> <span class="st">&quot;mm&quot;</span>),</span>
+<span id="cb39-26"><a href="preparing-environmental-predictors.html#cb39-26"></a>        <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(),</span>
+<span id="cb39-27"><a href="preparing-environmental-predictors.html#cb39-27"></a>        <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">6</span>, <span class="dt">angle =</span> <span class="dv">45</span>),</span>
+<span id="cb39-28"><a href="preparing-environmental-predictors.html#cb39-28"></a>        <span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>(),</span>
+<span id="cb39-29"><a href="preparing-environmental-predictors.html#cb39-29"></a>        <span class="dt">strip.background =</span> <span class="kw">element_blank</span>(),</span>
+<span id="cb39-30"><a href="preparing-environmental-predictors.html#cb39-30"></a>        <span class="dt">strip.text =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">6</span>, <span class="dt">face =</span> <span class="st">&quot;bold&quot;</span>)</span>
+<span id="cb39-31"><a href="preparing-environmental-predictors.html#cb39-31"></a>      ) <span class="op">+</span></span>
+<span id="cb39-32"><a href="preparing-environmental-predictors.html#cb39-32"></a><span class="st">      </span><span class="kw">facet_grid</span>(</span>
+<span id="cb39-33"><a href="preparing-environmental-predictors.html#cb39-33"></a>        <span class="op">~</span>landcover,</span>
+<span id="cb39-34"><a href="preparing-environmental-predictors.html#cb39-34"></a>        <span class="dt">labeller =</span> <span class="kw">labeller</span>(</span>
+<span id="cb39-35"><a href="preparing-environmental-predictors.html#cb39-35"></a>          <span class="dt">landcover =</span> lc_labels</span>
+<span id="cb39-36"><a href="preparing-environmental-predictors.html#cb39-36"></a>        )</span>
+<span id="cb39-37"><a href="preparing-environmental-predictors.html#cb39-37"></a>      ) <span class="op">+</span></span>
+<span id="cb39-38"><a href="preparing-environmental-predictors.html#cb39-38"></a><span class="st">      </span><span class="kw">labs</span>(</span>
+<span id="cb39-39"><a href="preparing-environmental-predictors.html#cb39-39"></a>        <span class="dt">x =</span> <span class="kw">glue</span>(<span class="st">&quot;{climvar_name}&quot;</span>),</span>
+<span id="cb39-40"><a href="preparing-environmental-predictors.html#cb39-40"></a>        <span class="dt">y =</span> <span class="st">&quot;Density&quot;</span></span>
+<span id="cb39-41"><a href="preparing-environmental-predictors.html#cb39-41"></a>      )</span>
+<span id="cb39-42"><a href="preparing-environmental-predictors.html#cb39-42"></a>    <span class="cf">if</span> (climvar <span class="op">==</span><span class="st"> &quot;bio_1&quot;</span>) {</span>
+<span id="cb39-43"><a href="preparing-environmental-predictors.html#cb39-43"></a>      p &lt;-<span class="st"> </span>p <span class="op">+</span></span>
+<span id="cb39-44"><a href="preparing-environmental-predictors.html#cb39-44"></a><span class="st">        </span><span class="kw">scale_fill_continuous_diverging</span>(</span>
+<span id="cb39-45"><a href="preparing-environmental-predictors.html#cb39-45"></a>          <span class="dt">palette =</span> <span class="st">&quot;Blue-Red 2&quot;</span>,</span>
+<span id="cb39-46"><a href="preparing-environmental-predictors.html#cb39-46"></a>          <span class="dt">mid =</span> <span class="fl">29.5</span></span>
+<span id="cb39-47"><a href="preparing-environmental-predictors.html#cb39-47"></a>        )</span>
+<span id="cb39-48"><a href="preparing-environmental-predictors.html#cb39-48"></a>    } <span class="cf">else</span> {</span>
+<span id="cb39-49"><a href="preparing-environmental-predictors.html#cb39-49"></a>      p &lt;-<span class="st"> </span>p <span class="op">+</span></span>
+<span id="cb39-50"><a href="preparing-environmental-predictors.html#cb39-50"></a><span class="st">        </span><span class="kw">scale_x_continuous</span>(</span>
+<span id="cb39-51"><a href="preparing-environmental-predictors.html#cb39-51"></a>          <span class="dt">limits =</span> <span class="kw">c</span>(<span class="dv">200</span>, <span class="dv">500</span>)</span>
+<span id="cb39-52"><a href="preparing-environmental-predictors.html#cb39-52"></a>        ) <span class="op">+</span></span>
+<span id="cb39-53"><a href="preparing-environmental-predictors.html#cb39-53"></a><span class="st">        </span><span class="kw">scale_fill_continuous_diverging</span>(</span>
+<span id="cb39-54"><a href="preparing-environmental-predictors.html#cb39-54"></a>          <span class="dt">palette =</span> <span class="st">&quot;Blue-Yellow 2&quot;</span>,</span>
+<span id="cb39-55"><a href="preparing-environmental-predictors.html#cb39-55"></a>          <span class="dt">mid =</span> <span class="dv">350</span></span>
+<span id="cb39-56"><a href="preparing-environmental-predictors.html#cb39-56"></a>        )</span>
+<span id="cb39-57"><a href="preparing-environmental-predictors.html#cb39-57"></a>    }</span>
+<span id="cb39-58"><a href="preparing-environmental-predictors.html#cb39-58"></a></span>
+<span id="cb39-59"><a href="preparing-environmental-predictors.html#cb39-59"></a>    p</span>
+<span id="cb39-60"><a href="preparing-environmental-predictors.html#cb39-60"></a>  }</span>
+<span id="cb39-61"><a href="preparing-environmental-predictors.html#cb39-61"></a>)</span>
+<span id="cb39-62"><a href="preparing-environmental-predictors.html#cb39-62"></a></span>
+<span id="cb39-63"><a href="preparing-environmental-predictors.html#cb39-63"></a><span class="co"># save to file and add figure</span></span>
+<span id="cb39-64"><a href="preparing-environmental-predictors.html#cb39-64"></a>fig_lc_clim &lt;-</span>
+<span id="cb39-65"><a href="preparing-environmental-predictors.html#cb39-65"></a><span class="st">  </span><span class="kw">wrap_plots</span>(lc_clim_plots, <span class="dt">ncol =</span> <span class="dv">1</span>) <span class="op">&amp;</span></span>
+<span id="cb39-66"><a href="preparing-environmental-predictors.html#cb39-66"></a><span class="st">    </span><span class="kw">plot_annotation</span>(<span class="dt">tag_levels =</span> <span class="st">&quot;A&quot;</span>)</span>
+<span id="cb39-67"><a href="preparing-environmental-predictors.html#cb39-67"></a></span>
+<span id="cb39-68"><a href="preparing-environmental-predictors.html#cb39-68"></a><span class="co"># save as png</span></span>
+<span id="cb39-69"><a href="preparing-environmental-predictors.html#cb39-69"></a><span class="kw">ggsave</span>(fig_lc_clim,</span>
+<span id="cb39-70"><a href="preparing-environmental-predictors.html#cb39-70"></a>  <span class="dt">filename =</span> <span class="st">&quot;figs/fig_lc_climate.png&quot;</span>,</span>
+<span id="cb39-71"><a href="preparing-environmental-predictors.html#cb39-71"></a>  <span class="dt">height =</span> <span class="dv">4</span>, <span class="dt">width =</span> <span class="fl">6.5</span>, <span class="dt">device =</span> <span class="kw">png</span>(), <span class="dt">dpi =</span> <span class="dv">300</span></span>
+<span id="cb39-72"><a href="preparing-environmental-predictors.html#cb39-72"></a>)</span></code></pre></div>
 </div>
 <div id="land-cover-type-in-relation-to-elevation" class="section level2">
 <h2><span class="header-section-number">4.9</span> Land cover type in relation to elevation</h2>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="preparing-environmental-predictors.html#cb38-1"></a><span class="co"># get data from landscape rasters</span></span>
-<span id="cb38-2"><a href="preparing-environmental-predictors.html#cb38-2"></a>lc_elev &lt;-<span class="st"> </span><span class="kw">tibble</span>(</span>
-<span id="cb38-3"><a href="preparing-environmental-predictors.html#cb38-3"></a>  <span class="dt">elev =</span> <span class="kw">getValues</span>(landscape[[<span class="st">&quot;elev&quot;</span>]]),</span>
-<span id="cb38-4"><a href="preparing-environmental-predictors.html#cb38-4"></a>  <span class="dt">landcover =</span> <span class="kw">getValues</span>(landscape[[<span class="st">&quot;landcover&quot;</span>]])</span>
-<span id="cb38-5"><a href="preparing-environmental-predictors.html#cb38-5"></a>)</span>
-<span id="cb38-6"><a href="preparing-environmental-predictors.html#cb38-6"></a></span>
-<span id="cb38-7"><a href="preparing-environmental-predictors.html#cb38-7"></a><span class="co"># process data for proportions</span></span>
-<span id="cb38-8"><a href="preparing-environmental-predictors.html#cb38-8"></a>lc_elev &lt;-<span class="st"> </span>lc_elev <span class="op">%&gt;%</span></span>
-<span id="cb38-9"><a href="preparing-environmental-predictors.html#cb38-9"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(landcover), <span class="op">!</span><span class="kw">is.na</span>(elev)) <span class="op">%&gt;%</span></span>
-<span id="cb38-10"><a href="preparing-environmental-predictors.html#cb38-10"></a><span class="st">  </span><span class="co"># round elev to 100m</span></span>
-<span id="cb38-11"><a href="preparing-environmental-predictors.html#cb38-11"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">elev =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(elev, <span class="dv">100</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb38-12"><a href="preparing-environmental-predictors.html#cb38-12"></a><span class="st">  </span><span class="kw">count</span>(elev, landcover) <span class="op">%&gt;%</span></span>
-<span id="cb38-13"><a href="preparing-environmental-predictors.html#cb38-13"></a><span class="st">  </span><span class="kw">group_by</span>(elev) <span class="op">%&gt;%</span></span>
-<span id="cb38-14"><a href="preparing-environmental-predictors.html#cb38-14"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">prop =</span> n <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(n))</span>
-<span id="cb38-15"><a href="preparing-environmental-predictors.html#cb38-15"></a></span>
-<span id="cb38-16"><a href="preparing-environmental-predictors.html#cb38-16"></a><span class="co"># fill out lc elev</span></span>
-<span id="cb38-17"><a href="preparing-environmental-predictors.html#cb38-17"></a>lc_elev_canon &lt;-<span class="st"> </span><span class="kw">crossing</span>(</span>
-<span id="cb38-18"><a href="preparing-environmental-predictors.html#cb38-18"></a>  <span class="dt">elev =</span> <span class="kw">unique</span>(lc_elev<span class="op">$</span>elev),</span>
-<span id="cb38-19"><a href="preparing-environmental-predictors.html#cb38-19"></a>  <span class="dt">landcover =</span> <span class="kw">unique</span>(lc_elev<span class="op">$</span>landcover)</span>
-<span id="cb38-20"><a href="preparing-environmental-predictors.html#cb38-20"></a>)</span>
-<span id="cb38-21"><a href="preparing-environmental-predictors.html#cb38-21"></a></span>
-<span id="cb38-22"><a href="preparing-environmental-predictors.html#cb38-22"></a><span class="co"># bind with lcelev</span></span>
-<span id="cb38-23"><a href="preparing-environmental-predictors.html#cb38-23"></a>lc_elev &lt;-<span class="st"> </span><span class="kw">full_join</span>(lc_elev, lc_elev_canon)</span>
-<span id="cb38-24"><a href="preparing-environmental-predictors.html#cb38-24"></a></span>
-<span id="cb38-25"><a href="preparing-environmental-predictors.html#cb38-25"></a><span class="co"># convert NA to zero</span></span>
-<span id="cb38-26"><a href="preparing-environmental-predictors.html#cb38-26"></a>lc_elev &lt;-<span class="st"> </span><span class="kw">replace_na</span>(lc_elev, <span class="dt">replace =</span> <span class="kw">list</span>(<span class="dt">n =</span> <span class="dv">0</span>, <span class="dt">prop =</span> <span class="dv">0</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="preparing-environmental-predictors.html#cb40-1"></a><span class="co"># get data from landscape rasters</span></span>
+<span id="cb40-2"><a href="preparing-environmental-predictors.html#cb40-2"></a>lc_elev &lt;-<span class="st"> </span><span class="kw">tibble</span>(</span>
+<span id="cb40-3"><a href="preparing-environmental-predictors.html#cb40-3"></a>  <span class="dt">elev =</span> <span class="kw">getValues</span>(landscape[[<span class="st">&quot;elev&quot;</span>]]),</span>
+<span id="cb40-4"><a href="preparing-environmental-predictors.html#cb40-4"></a>  <span class="dt">landcover =</span> <span class="kw">getValues</span>(landscape[[<span class="st">&quot;landcover&quot;</span>]])</span>
+<span id="cb40-5"><a href="preparing-environmental-predictors.html#cb40-5"></a>)</span>
+<span id="cb40-6"><a href="preparing-environmental-predictors.html#cb40-6"></a></span>
+<span id="cb40-7"><a href="preparing-environmental-predictors.html#cb40-7"></a><span class="co"># process data for proportions</span></span>
+<span id="cb40-8"><a href="preparing-environmental-predictors.html#cb40-8"></a>lc_elev &lt;-<span class="st"> </span>lc_elev <span class="op">%&gt;%</span></span>
+<span id="cb40-9"><a href="preparing-environmental-predictors.html#cb40-9"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(landcover), <span class="op">!</span><span class="kw">is.na</span>(elev)) <span class="op">%&gt;%</span></span>
+<span id="cb40-10"><a href="preparing-environmental-predictors.html#cb40-10"></a><span class="st">  </span><span class="co"># round elev to 100m</span></span>
+<span id="cb40-11"><a href="preparing-environmental-predictors.html#cb40-11"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">elev =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(elev, <span class="dv">100</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb40-12"><a href="preparing-environmental-predictors.html#cb40-12"></a><span class="st">  </span><span class="kw">count</span>(elev, landcover) <span class="op">%&gt;%</span></span>
+<span id="cb40-13"><a href="preparing-environmental-predictors.html#cb40-13"></a><span class="st">  </span><span class="kw">group_by</span>(elev) <span class="op">%&gt;%</span></span>
+<span id="cb40-14"><a href="preparing-environmental-predictors.html#cb40-14"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">prop =</span> n <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(n))</span>
+<span id="cb40-15"><a href="preparing-environmental-predictors.html#cb40-15"></a></span>
+<span id="cb40-16"><a href="preparing-environmental-predictors.html#cb40-16"></a><span class="co"># fill out lc elev</span></span>
+<span id="cb40-17"><a href="preparing-environmental-predictors.html#cb40-17"></a>lc_elev_canon &lt;-<span class="st"> </span><span class="kw">crossing</span>(</span>
+<span id="cb40-18"><a href="preparing-environmental-predictors.html#cb40-18"></a>  <span class="dt">elev =</span> <span class="kw">unique</span>(lc_elev<span class="op">$</span>elev),</span>
+<span id="cb40-19"><a href="preparing-environmental-predictors.html#cb40-19"></a>  <span class="dt">landcover =</span> <span class="kw">unique</span>(lc_elev<span class="op">$</span>landcover)</span>
+<span id="cb40-20"><a href="preparing-environmental-predictors.html#cb40-20"></a>)</span>
+<span id="cb40-21"><a href="preparing-environmental-predictors.html#cb40-21"></a></span>
+<span id="cb40-22"><a href="preparing-environmental-predictors.html#cb40-22"></a><span class="co"># bind with lcelev</span></span>
+<span id="cb40-23"><a href="preparing-environmental-predictors.html#cb40-23"></a>lc_elev &lt;-<span class="st"> </span><span class="kw">full_join</span>(lc_elev, lc_elev_canon)</span>
+<span id="cb40-24"><a href="preparing-environmental-predictors.html#cb40-24"></a></span>
+<span id="cb40-25"><a href="preparing-environmental-predictors.html#cb40-25"></a><span class="co"># convert NA to zero</span></span>
+<span id="cb40-26"><a href="preparing-environmental-predictors.html#cb40-26"></a>lc_elev &lt;-<span class="st"> </span><span class="kw">replace_na</span>(lc_elev, <span class="dt">replace =</span> <span class="kw">list</span>(<span class="dt">n =</span> <span class="dv">0</span>, <span class="dt">prop =</span> <span class="dv">0</span>))</span></code></pre></div>
 <p>Figure code is hidden in versions rendered as HTML and PDF.</p>
 </div>
 <div id="main-text-figure-2" class="section level2">
 <h2><span class="header-section-number">4.10</span> Main Text Figure 2</h2>
 <div class="figure">
 <img src="figs/fig_02.png" alt="" />
-<p class="caption"><strong>Climate and landcover vary strongly along the elevation gradient in the Nilgiri and Anamalai Hills.</strong>
-(a) Mean annual temperature and (b) annual precipitation, between the months of December and May, declines and increases with increasing elevation across the Nilgiri and Anamalai Hills, respectively. (c) Mean annual temperature (in celsius) is higher in human-modified landscapes such as agriculture/settlements when compared to evergreen forests, while (d) annual precipitation (in mm) is higher in naturally occurring land cover types when compared to human-modified land cover types. (e) Most elevations host a range of land cover types: while human-associated habitats such as agriculture are concentrated at lower elevations, and more natural types such as forests are associated with mid- and higher elevations, each of these types is also found outside their characteristic elevational bands. We calculated climate (BIOCLIM 1 and 12: mean annual temperature and annual precipitation, respectively) using CHELSA data over 1979 – 2013, from December to May (Karger et al. 2017), and present mean values (vertical bars show standard deviation) for every 200 m elevational band. Land cover types were taken from a reclassification of Roy et al. (2015; see main text) at 100 m elevational bands. Land cover types covering &lt; 1% of an elevational band are shaded grey. All landscape layers were first resampled to 1 km resolution.</p>
+<p class="caption"><strong>Climate and land cover vary strongly along the elevation gradient in the Nilgiri and Anamalai Hills.</strong>
+Both (a) temperature seasonality and (b) precipitation seasonality, between the months of December and May, declines with increasing elevation across the Nilgiri and Anamalai Hills. Climatic variation is not very strongly associated with land cover type, as both natural habitats such as forests, and human-associated habitat types such as plantations show low seasonality in (c) temperature, and (d) precipitation. (e) Most elevations host a range of land cover types: while human-associated habitats such as agriculture are concentrated at lower elevations, and more natural types such as grasslands and forests are associated with higher elevations, each of these types is also found outside their characteristic elevational bands. We calculated climate seasonalities (BIOCLIM 4a and 15: temperature and precipitation, respectively) using CHELSA data over 1979 – 2013, from December to May (Karger et al. 2017), and present mean seasonality values (vertical bars show standard deviation) for every 200 m elevational band. Land cover types were taken from a reclassification of Roy et al. (2015; see main text) at 100 m elevational bands. Land cover types covering &lt; 1% of an elevational band are shaded grey. All landscape layers were first resampled to 1 km resolution.</p>
 </div>
 
 </div>
