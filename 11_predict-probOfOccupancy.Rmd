@@ -141,7 +141,7 @@ data_resp <- ungroup(
 
 ```{r}
 # scale predictors
-scale15 <- c(30, 50) # range of precpitation
+scale15 <- c(30, 50) # range of precipitation
 scale4 <- c(0, 1) # range of temperatures
 
 # scale bio4a and bio15a by actual values
@@ -163,10 +163,8 @@ data_poccu <- dplyr::select(
 
 ```{r}
 # select species
-soi <- c(
-  "Myophonus horsfieldii", "Merops leschenaulti",
-  "Acrocephalus dumetorum", "Pycnonotus cafer"
-)
+soi <- c("Irena puella","Leptocoma minima", "Merops leschenaulti","Myophonus horsfieldii")
+
 which_predictors <- c("bio4")
 ```
 
@@ -180,7 +178,7 @@ data_fig <- data_poccu %>%
   ) %>%
   mutate(
     cat = case_when(
-      scientific_name %in% c("Myophonus horsfieldii", "Merops leschenaulti") ~ "forest",
+      scientific_name %in% c("Irena puella","Leptocoma minima") ~ "forest",
       T ~ "general"
     )
   )
@@ -236,10 +234,8 @@ fig_occu <- map2(data_fig$data, "grey", make_occu_fig)
 
 fig_occu <-
   wrap_plots(
-    fig_occu[c(2, 1)],
-    ncol = 1
-  ) & plot_annotation(
-    tag_levels = "a"
+    fig_occu[c(1, 2)],
+    ncol = 1, nrow = 2
   ) &
     theme(
       plot.tag = element_text(
@@ -256,7 +252,7 @@ ggsave(
 ```
 
 ![**Probability of occupancy as a function of temperature seasonality.**
-Predicted probability of occupancy curves as a function of temperature seasonality for two (a) generalist and (b) forest species are shown here. (a) Temperature seasonality is negatively associated with the probability of occupancy of the chestnut-headed bee-eater _Merops leschenaulti_ and the Malabar whistling-thrush _Myophonus horsfieldii_. (b) Temperature seasonality is positively associated with the probability of occupancy of the Blyth’s reed warbler _Acrocephalus dumetorum_ and the red-vented bulbul _Pycnonotus cafer_. ](figs/fig_05.png)
+Predicted probability of occupancy curves as a function of temperature seasonality for four forest species are shown here. Temperature seasonality is negatively associated with the probability of occupancy of several forest species including the asian fairy-bluebird _Irena puella_, the crimson-backed sunbird _Leptocoma minima_, the chestnut-headed bee-eater _Merops leschenaulti_ and the Malabar whistling-thrush _Myophonus horsfieldii_.](figs/fig_05.png)
 
 
 ### Figures: Occupancy ~ predictors for all species
@@ -611,7 +607,7 @@ names(soi_occu) <- soi
 
 # make single stack
 soi_occu <- reduce(soi_occu, c)
-names(soi_occu) <- c("Myophonus horsfieldii", "Merops leschenaulti","Acrocephalus dumetorum","Pycnonotus cafer")
+names(soi_occu) <- c("Irena puella","Leptocoma minima","Merops leschenaulti","Myophonus horsfieldii")
 ```
 
 ```{r}
@@ -666,6 +662,9 @@ ggsave(
   width = 6, height = 6
 )
 ```
+
+![**Predicted area of occurrence**
+Predicted area of occurrence for four forest species are shown here. The probability of occupancy of the asian fairy-bluebird _Irena puella_, the crimson-backed sunbird _Leptocoma minima_ and the chestnut-headed bee-eater _Merops leschenaulti_ is higher across the western slopes and at mid-elevations across our study area. The Malabar whistling-thrush _Myophonus horsfieldii_ has a higher probability of occupancy across mid-elevations throughout the study area examined.](figs/fig_06.png)
 
 ### Prepare species occupancy for all species
 
