@@ -428,7 +428,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="add-scaling-for-predictors" class="section level2">
 <h2><span class="header-section-number">11.6</span> Add scaling for predictors</h2>
 <div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb114-1"></a><span class="co"># scale predictors</span></span>
-<span id="cb114-2"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb114-2"></a>scale15 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">30</span>, <span class="dv">50</span>) <span class="co"># range of precpitation</span></span>
+<span id="cb114-2"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb114-2"></a>scale15 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">30</span>, <span class="dv">50</span>) <span class="co"># range of precipitation</span></span>
 <span id="cb114-3"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb114-3"></a>scale4 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>) <span class="co"># range of temperatures</span></span>
 <span id="cb114-4"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb114-4"></a></span>
 <span id="cb114-5"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb114-5"></a><span class="co"># scale bio4a and bio15a by actual values</span></span>
@@ -447,11 +447,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb114-18"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb114-18"></a>  <span class="op">-</span>response, <span class="op">-</span>resp_var</span>
 <span id="cb114-19"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb114-19"></a>)</span></code></pre></div>
 <div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb115-1"></a><span class="co"># select species</span></span>
-<span id="cb115-2"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb115-2"></a>soi &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
-<span id="cb115-3"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb115-3"></a>  <span class="st">&quot;Myophonus horsfieldii&quot;</span>, <span class="st">&quot;Merops leschenaulti&quot;</span>,</span>
-<span id="cb115-4"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb115-4"></a>  <span class="st">&quot;Acrocephalus dumetorum&quot;</span>, <span class="st">&quot;Pycnonotus cafer&quot;</span></span>
-<span id="cb115-5"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb115-5"></a>)</span>
-<span id="cb115-6"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb115-6"></a>which_predictors &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;bio4&quot;</span>)</span></code></pre></div>
+<span id="cb115-2"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb115-2"></a>soi &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Irena puella&quot;</span>,<span class="st">&quot;Leptocoma minima&quot;</span>, <span class="st">&quot;Merops leschenaulti&quot;</span>,<span class="st">&quot;Myophonus horsfieldii&quot;</span>)</span>
+<span id="cb115-3"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb115-3"></a></span>
+<span id="cb115-4"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb115-4"></a>which_predictors &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;bio4&quot;</span>)</span></code></pre></div>
 <div id="figure-occupancy-predictors" class="section level3">
 <h3><span class="header-section-number">11.6.1</span> Figure: Occupancy ~ predictors</h3>
 <div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb116-1"></a>data_fig &lt;-<span class="st"> </span>data_poccu <span class="op">%&gt;%</span></span>
@@ -461,7 +459,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb116-5"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb116-5"></a>  ) <span class="op">%&gt;%</span></span>
 <span id="cb116-6"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb116-6"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
 <span id="cb116-7"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb116-7"></a>    <span class="dt">cat =</span> <span class="kw">case_when</span>(</span>
-<span id="cb116-8"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb116-8"></a>      scientific_name <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Myophonus horsfieldii&quot;</span>, <span class="st">&quot;Merops leschenaulti&quot;</span>) <span class="op">~</span><span class="st"> &quot;forest&quot;</span>,</span>
+<span id="cb116-8"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb116-8"></a>      scientific_name <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Irena puella&quot;</span>,<span class="st">&quot;Leptocoma minima&quot;</span>) <span class="op">~</span><span class="st"> &quot;forest&quot;</span>,</span>
 <span id="cb116-9"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb116-9"></a>      T <span class="op">~</span><span class="st"> &quot;general&quot;</span></span>
 <span id="cb116-10"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb116-10"></a>    )</span>
 <span id="cb116-11"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb116-11"></a>  )</span>
@@ -513,27 +511,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb117-40"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-40"></a></span>
 <span id="cb117-41"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-41"></a>fig_occu &lt;-</span>
 <span id="cb117-42"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-42"></a><span class="st">  </span><span class="kw">wrap_plots</span>(</span>
-<span id="cb117-43"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-43"></a>    fig_occu[<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">1</span>)],</span>
-<span id="cb117-44"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-44"></a>    <span class="dt">ncol =</span> <span class="dv">1</span></span>
-<span id="cb117-45"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-45"></a>  ) <span class="op">&amp;</span><span class="st"> </span><span class="kw">plot_annotation</span>(</span>
-<span id="cb117-46"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-46"></a>    <span class="dt">tag_levels =</span> <span class="st">&quot;a&quot;</span></span>
-<span id="cb117-47"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-47"></a>  ) <span class="op">&amp;</span></span>
-<span id="cb117-48"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-48"></a><span class="st">    </span><span class="kw">theme</span>(</span>
-<span id="cb117-49"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-49"></a>      <span class="dt">plot.tag =</span> <span class="kw">element_text</span>(</span>
-<span id="cb117-50"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-50"></a>        <span class="dt">face =</span> <span class="st">&quot;bold&quot;</span></span>
-<span id="cb117-51"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-51"></a>      )</span>
-<span id="cb117-52"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-52"></a>    )</span>
-<span id="cb117-53"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-53"></a></span>
-<span id="cb117-54"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-54"></a><span class="co"># save figure</span></span>
-<span id="cb117-55"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-55"></a><span class="kw">ggsave</span>(</span>
-<span id="cb117-56"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-56"></a>  fig_occu,</span>
-<span id="cb117-57"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-57"></a>  <span class="dt">filename =</span> <span class="st">&quot;figs/fig_05.png&quot;</span>,</span>
-<span id="cb117-58"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-58"></a>  <span class="dt">width =</span> <span class="dv">5</span>, <span class="dt">height =</span> <span class="fl">5.5</span></span>
-<span id="cb117-59"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-59"></a>)</span></code></pre></div>
+<span id="cb117-43"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-43"></a>    fig_occu[<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)],</span>
+<span id="cb117-44"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-44"></a>    <span class="dt">ncol =</span> <span class="dv">1</span>, <span class="dt">nrow =</span> <span class="dv">2</span></span>
+<span id="cb117-45"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-45"></a>  ) <span class="op">&amp;</span></span>
+<span id="cb117-46"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-46"></a><span class="st">    </span><span class="kw">theme</span>(</span>
+<span id="cb117-47"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-47"></a>      <span class="dt">plot.tag =</span> <span class="kw">element_text</span>(</span>
+<span id="cb117-48"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-48"></a>        <span class="dt">face =</span> <span class="st">&quot;bold&quot;</span></span>
+<span id="cb117-49"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-49"></a>      )</span>
+<span id="cb117-50"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-50"></a>    )</span>
+<span id="cb117-51"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-51"></a></span>
+<span id="cb117-52"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-52"></a><span class="co"># save figure</span></span>
+<span id="cb117-53"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-53"></a><span class="kw">ggsave</span>(</span>
+<span id="cb117-54"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-54"></a>  fig_occu,</span>
+<span id="cb117-55"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-55"></a>  <span class="dt">filename =</span> <span class="st">&quot;figs/fig_05.png&quot;</span>,</span>
+<span id="cb117-56"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-56"></a>  <span class="dt">width =</span> <span class="dv">5</span>, <span class="dt">height =</span> <span class="fl">5.5</span></span>
+<span id="cb117-57"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb117-57"></a>)</span></code></pre></div>
 <div class="figure">
 <img src="figs/fig_05.png" alt="" />
 <p class="caption"><strong>Probability of occupancy as a function of temperature seasonality.</strong>
-Predicted probability of occupancy curves as a function of temperature seasonality for two (a) generalist and (b) forest species are shown here. (a) Temperature seasonality is negatively associated with the probability of occupancy of the chestnut-headed bee-eater <em>Merops leschenaulti</em> and the Malabar whistling-thrush <em>Myophonus horsfieldii</em>. (b) Temperature seasonality is positively associated with the probability of occupancy of the Blyth’s reed warbler <em>Acrocephalus dumetorum</em> and the red-vented bulbul <em>Pycnonotus cafer</em>.</p>
+Predicted probability of occupancy curves as a function of temperature seasonality for four forest species are shown here. Temperature seasonality is negatively associated with the probability of occupancy of several forest species including the asian fairy-bluebird <em>Irena puella</em>, the crimson-backed sunbird <em>Leptocoma minima</em>, the chestnut-headed bee-eater <em>Merops leschenaulti</em> and the Malabar whistling-thrush <em>Myophonus horsfieldii</em>.</p>
 </div>
 </div>
 <div id="figures-occupancy-predictors-for-all-species" class="section level3">
@@ -857,7 +853,7 @@ These will be multiplied with each layer to give the effect of each layer.</p>
 <span id="cb130-15"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb130-15"></a></span>
 <span id="cb130-16"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb130-16"></a><span class="co"># make single stack</span></span>
 <span id="cb130-17"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb130-17"></a>soi_occu &lt;-<span class="st"> </span><span class="kw">reduce</span>(soi_occu, c)</span>
-<span id="cb130-18"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb130-18"></a><span class="kw">names</span>(soi_occu) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Myophonus horsfieldii&quot;</span>, <span class="st">&quot;Merops leschenaulti&quot;</span>,<span class="st">&quot;Acrocephalus dumetorum&quot;</span>,<span class="st">&quot;Pycnonotus cafer&quot;</span>)</span></code></pre></div>
+<span id="cb130-18"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb130-18"></a><span class="kw">names</span>(soi_occu) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Irena puella&quot;</span>,<span class="st">&quot;Leptocoma minima&quot;</span>,<span class="st">&quot;Merops leschenaulti&quot;</span>,<span class="st">&quot;Myophonus horsfieldii&quot;</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb131-1"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb131-1"></a><span class="co"># use stars for plotting with ggplot</span></span>
 <span id="cb131-2"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb131-2"></a><span class="kw">library</span>(stars)</span>
 <span id="cb131-3"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb131-3"></a><span class="kw">library</span>(colorspace)</span>
@@ -908,6 +904,11 @@ These will be multiplied with each layer to give the effect of each layer.</p>
 <span id="cb131-48"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb131-48"></a>  <span class="dt">filename =</span> <span class="st">&quot;figs/fig_06.png&quot;</span>,</span>
 <span id="cb131-49"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb131-49"></a>  <span class="dt">width =</span> <span class="dv">6</span>, <span class="dt">height =</span> <span class="dv">6</span></span>
 <span id="cb131-50"><a href="predicting-species-specific-occupancy-as-a-function-of-significant-predictors.html#cb131-50"></a>)</span></code></pre></div>
+<div class="figure">
+<img src="figs/fig_06.png" alt="" />
+<p class="caption"><strong>Predicted area of occurrence</strong>
+Predicted area of occurrence for four forest species are shown here. The probability of occupancy of the asian fairy-bluebird <em>Irena puella</em>, the crimson-backed sunbird <em>Leptocoma minima</em> and the chestnut-headed bee-eater <em>Merops leschenaulti</em> is higher across the western slopes and at mid-elevations across our study area. The Malabar whistling-thrush <em>Myophonus horsfieldii</em> has a higher probability of occupancy across mid-elevations throughout the study area examined.</p>
+</div>
 </div>
 <div id="prepare-species-occupancy-for-all-species" class="section level3">
 <h3><span class="header-section-number">11.7.8</span> Prepare species occupancy for all species</h3>
