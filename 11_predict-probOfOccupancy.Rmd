@@ -5,7 +5,7 @@ editor_options:
 
 # Predicting species-specific occupancy as a function of significant predictors
 
-This script plots species-specific probabilities of occupancy as a function of significant environmental predictors as well as coefficient plots. 
+This script plots species-specific probabilities of occupancy as a function of significant environmental predictors and maps occupancy across the study area for a given list of species and significant predictors. 
 
 ## Prepare libraries
 
@@ -42,7 +42,7 @@ assertthat::assert_that(
 
 ```{r}
 # preparep predictors - now look only for any digits
-predictors <- c("bio_\\d+", glue("lc_0{seq(9)}"))
+predictors <- c("bio\\d+", glue("lc_0{seq(9)}"))
 
 # prepare predictor search strings and scaling power
 preds <- glue("({predictors})")
@@ -141,15 +141,15 @@ data_resp <- ungroup(
 
 ```{r}
 # scale predictors
-scale_12 <- c(200, 1000)
-scale_1 <- c(20, 40)
+scale15 <- c(30, 50) # range of precipitation
+scale4 <- c(0, 1) # range of temperatures
 
 # scale bio4a and bio15a by actual values
 data_resp <- mutate(
   data_resp,
   pred_val = case_when(
-    predictor == "bio_1" ~ scales::rescale(pred_val, to = scale_1),
-    predictor == "bio_12" ~ scales::rescale(pred_val, to = scale_12),
+    predictor == "bio4" ~ scales::rescale(pred_val, to = scale4),
+    predictor == "bio15" ~ scales::rescale(pred_val, to = scale15),
     T ~ pred_val
   )
 )
@@ -163,11 +163,9 @@ data_poccu <- dplyr::select(
 
 ```{r}
 # select species
-soi <- c(
-  "Iole indica", "Ficedula nigrorufa",
-  "Pycnonotus cafer", "Pycnonotus jocosus"
-)
-which_predictors <- c("bio_1")
+soi <- c("Irena puella","Leptocoma minima", "Merops leschenaulti","Myophonus horsfieldii")
+
+which_predictors <- c("bio4")
 ```
 
 ### Figure: Occupancy ~ predictors
@@ -180,7 +178,7 @@ data_fig <- data_poccu %>%
   ) %>%
   mutate(
     cat = case_when(
-      scientific_name %in% c("Iole indica", "Ficedula nigrorufa") ~ "forest",
+      scientific_name %in% c("Irena puella","Leptocoma minima") ~ "forest",
       T ~ "general"
     )
   )
@@ -226,7 +224,7 @@ make_occu_fig <- function(df, this_fill) {
       )
     ) +
     labs(
-      x = "Mean Annual Temperature",
+      x = "Temperature seasonality",
       y = "Probability of occupancy"
     )
 }
@@ -236,10 +234,8 @@ fig_occu <- map2(data_fig$data, "grey", make_occu_fig)
 
 fig_occu <-
   wrap_plots(
-    fig_occu[c(2, 1)],
-    ncol = 1
-  ) & plot_annotation(
-    tag_levels = "A"
+    fig_occu[c(1, 2)],
+    ncol = 1, nrow = 2
   ) &
     theme(
       plot.tag = element_text(
@@ -255,6 +251,10 @@ ggsave(
 )
 ```
 
+![**Probability of occupancy as a function of temperature seasonality.**
+Predicted probability of occupancy curves as a function of temperature seasonality for four forest species are shown here. Temperature seasonality is negatively associated with the probability of occupancy of several forest species including the asian fairy-bluebird _Irena puella_, the crimson-backed sunbird _Leptocoma minima_, the chestnut-headed bee-eater _Merops leschenaulti_ and the Malabar whistling-thrush _Myophonus horsfieldii_.](figs/fig_05.png)
+
+
 ### Figures: Occupancy ~ predictors for all species
 
 ```{r}
@@ -264,12 +264,12 @@ data_fig <- nest(
 )
 
 pred_names <- c(
-  "bio_1" = "Mean ann. temp",
-  "bio_12" = "Ann. precip",
+  "bio4" = "Temp. seasonality",
+  "bio15" = "Precip. seasonality",
   "lc_01" = "Evergreen",
   "lc_02" = "Deciduous",
   "lc_03" = "Mixed/degraded",
-  "lc_04" = "Agro./Settled",
+  "lc_04" = "Agri./Settl.",
   "lc_05" = "Grassland",
   "lc_07" = "Plantation",
   "lc_09" = "Water"
@@ -383,11 +383,11 @@ library(sf)
 lscape = rast("data/spatial/landscape_resamp01_km.tif")
 
 # isolate temperature and rainfall
-bio_1 = lscape[[4]] / 10 # temp, divide by 10
-bio_12 = lscape[[5]] # rain
+bio4 = lscape[[4]] 
+bio15 = lscape[[5]] # rain
 
 # careful while loading this raster, large size
-# landcover <- rast("data/landUseClassification/landcover_roy_2015_reclassified.tif")
+landcover <- rast("data/landUseClassification/landcover_roy_2015_reclassified.tif")
 
 lc_1km <- rast("data/landUseClassification/lc_01000m.tif")
 ```
@@ -443,34 +443,35 @@ lc_split = terra::rast("data/spatial/raster_landcover_proportion_1km.tif")
 
 ```{r}
 # mask by hills
+# run only if required (makes more sense to map to a larger area)
 hills = st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>% 
   st_transform(32643)
 
-bio_1 = terra::mask(
-  bio_1,
-  vect(hills)
-)
+#bio_1 = terra::mask(
+#  bio_1,
+#  vect(hills)
+#)
 
-bio_12 = terra::mask(
-  bio_12,
-  vect(hills)
-)
+#bio_12 = terra::mask(
+#  bio_12,
+#  vect(hills)
+#)
 ```
 
 ```{r}
 # get ranges
-range_1 <- terra::minmax(bio_1)[, 1] # divide temp by 10
-range_12 <- terra::minmax(bio_12)[, 1]
+range4 <- terra::minmax(bio4)[, 1] 
+range15 <- terra::minmax(bio15)[, 1]
 
 # rescale
-bio_1 <- (bio_1 - min(range_1)) / (diff(range_1))
-bio_12 <- (bio_12 - min(range_12)) / (diff(range_12))
+bio4 <- (bio4 - min(range4)) / (diff(range4))
+bio15 <- (bio15 - min(range15)) / (diff(range15))
 
 # project to UTM
-climate <- c(bio_1, bio_12)
+climate <- c(bio4, bio15)
 names(climate) = c(
-  "CHELSA bio_1 mean annnual temp.", 
-  "CHELSA bio_12 total ppt."
+  "Temp. seasonality", 
+  "Precip. seasonality"
 )
 
 climate <- terra::project(
@@ -509,10 +510,10 @@ landscape <- c(
   climate, climate2, lc_split
 )
 
-landscape = terra::mask(
-  landscape,
-  vect(hills)
-)
+#landscape = terra::mask(
+#  landscape,
+#  vect(hills)
+#)
 ```
 
 ### Prepare soi predictors
@@ -571,8 +572,8 @@ sp_coefs <- dplyr::select(
   sp_coefs,
   scientific_name,
   c(
-    "bio_1_1", "bio_12_1",
-    "bio_1_2", "bio_12_2"
+    "bio4_1", "bio15_1",
+    "bio4_2", "bio15_2"
   ),
   matches("lc")
 )
@@ -586,9 +587,7 @@ sp_coefs <- nest(
 
 ### Prepare species occupancy for SOI
 
-Here, we shall simply multiply each landscape layer with the corresponding predictor coefficient.
-Where these are not available, we shall simply multiply the corresponding layer with NA.
-The resulting layers will be summed together to get a single response layer, which will then be inverse logit transformed to get the probability of occupancy.
+Here, we shall simply multiply each landscape layer with the corresponding predictor coefficient.Where these are not available, we shall simply multiply the corresponding layer with NA. The resulting layers will be summed together to get a single response layer, which will then be inverse logit transformed to get the probability of occupancy.
 
 ```{r}
 # multiply coefficients with layers
@@ -608,7 +607,7 @@ names(soi_occu) <- soi
 
 # make single stack
 soi_occu <- reduce(soi_occu, c)
-names(soi_occu) <- soi
+names(soi_occu) <- c("Irena puella","Leptocoma minima","Merops leschenaulti","Myophonus horsfieldii")
 ```
 
 ```{r}
@@ -624,7 +623,7 @@ fig_occu_map <- ggplot() +
   ) +
   scale_fill_binned_sequential(
     palette = "Purple-Yellow",
-    name = "p(Occu.)",
+    name = "Probability of Occupancy",
     rev = T,
     limits = c(0, 1),
     breaks = seq(0, 1, 0.1), 
@@ -663,6 +662,9 @@ ggsave(
   width = 6, height = 6
 )
 ```
+
+![**Predicted area of occurrence**
+Predicted area of occurrence for four forest species are shown here. The probability of occupancy of the asian fairy-bluebird _Irena puella_, the crimson-backed sunbird _Leptocoma minima_ and the chestnut-headed bee-eater _Merops leschenaulti_ is higher across the western slopes and at mid-elevations across our study area. The Malabar whistling-thrush _Myophonus horsfieldii_ has a higher probability of occupancy across mid-elevations throughout the study area examined.](figs/fig_06.png)
 
 ### Prepare species occupancy for all species
 
