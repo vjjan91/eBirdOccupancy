@@ -55,6 +55,7 @@ chkCovars <- st_as_sf(chkCovars, coords = c("longitude", "latitude")) %>%
 # read wg
 wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp") %>%
   st_transform(32643)
+
 # get bounding box
 bbox <- st_bbox(wg)
 

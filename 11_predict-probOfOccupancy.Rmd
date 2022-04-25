@@ -587,7 +587,7 @@ sp_coefs <- nest(
 
 ### Prepare species occupancy for SOI
 
-Here, we shall simply multiply each landscape layer with the corresponding predictor coefficient.Where these are not available, we shall simply multiply the corresponding layer with NA. The resulting layers will be summed together to get a single response layer, which will then be inverse logit transformed to get the probability of occupancy.
+Here, we shall simply multiply each landscape layer with the corresponding predictor coefficient. Where these are not available, we shall simply multiply the corresponding layer with NA. The resulting layers will be summed together to get a single response layer, which will then be inverse logit transformed to get the probability of occupancy.
 
 ```{r}
 # multiply coefficients with layers

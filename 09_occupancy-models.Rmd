@@ -295,13 +295,13 @@ capture.output(all_null, file = "data/results/null_models.csv")
 
 ## Identifying covariates necessary to model the detection process
 
-Here, we use the `unmarked` package in R [@fiske2011] to identify detection level covariates that are important for each species. We use AIC criteria to select top models [@burnham2011].
+Here, we use the `unmarked` package in R (Fiske and Chandler 2011) to identify detection level covariates that are important for each species. We use AIC criteria to select top models (Burnham et al. 2002; 2011).
 
 ```{r prob_detection}
 # All models are stored in lists below
 det_dred <- list()
 
-# Subsetting those models whose deltaAIC<4 (Burnham et al., 2011)
+# Subsetting those models whose deltaAIC<4 (Burnham et al. 2011)
 top_det <- list()
 
 # Getting model averaged coefficients and relative importance scores
@@ -440,16 +440,16 @@ a <- purrr::map(det_imp, ~ purrr::compact(.)) %>% purrr::keep(~ length(.) != 0)
 
 ## Land Cover and Climate
 
-Occupancy models estimate the probability of occurrence of a given species while controlling for the probability of detection and allow us to model the factors affecting occurrence and detection independently [@johnston2018; @mackenzie2002]. The flexible eBird observation process contributes to the largest source of variation in the likelihood of detecting a particular species [@johnston2019a]; hence, we included seven covariates that influence the probability of detection for each checklist: ordinal day of year, duration of observation, distance travelled, protocol type, time observations started, number of observers and the checklist calibration index (CCI). 
+Occupancy models estimate the probability of occurrence of a given species while controlling for the probability of detection and allow us to model the factors affecting occurrence and detection independently. The flexible eBird observation process contributes to the largest source of variation in the likelihood of detecting a particular species; hence, we included seven covariates that influence the probability of detection for each checklist: ordinal day of year, duration of observation, distance traveled, protocol type, time observations started, number of observers and the checklist calibration index (CCI). 
 
-Using a multi-model information-theoretic approach, we tested how strongly our occurrence data fit our candidate set of environmental covariates [@burnham2002a]. We fitted single-species occupancy models for each species, to simultaneously estimate a probability of detection ($\p$) and a probability of occupancy ($\psi$) [@fiske2011; @mackenzie2002]. For each species, we fit models, each with a unique combination of the climate and land cover occupancy covariates and all seven detection covariates. 
+Using a multi-model information-theoretic approach, we tested how strongly our occurrence data fit our candidate set of environmental covariates (Burnham et al. 2002). We fitted single-species occupancy models for each species, to simultaneously estimate a probability of detection ($\p$) and a probability of occupancy ($\psi$). For each species, we fit models, each with a unique combination of the climate and land cover occupancy covariates and all seven detection covariates. 
 
-Across the models tested for each species, the model with highest support was determined using AICc scores. However, across the majority of the species, no single model had overwhelming support. Hence, for each species, we examined those models which had $\Delta$AICc < 4, as these top models were considered to explain a large proportion of the association between the species-specific probability of occupancy and environmental drivers [@burnham2011; @elsen2017]. Using these restricted model sets for each species; we created a model-averaged coefficient estimate for each predictor and assessed its direction and significance [@MuMIn]. We considered a predictor to be significantly associated with occupancy if the range of the 95% confidence interval around the model-averaged coefficient did not contain zero.   
+Across the models tested for each species, the model with highest support was determined using AICc scores. However, across the majority of the species, no single model had overwhelming support. Hence, for each species, we examined those models which had $\Delta$AICc < 4, as these top models were considered to explain a large proportion of the association between the species-specific probability of occupancy and environmental drivers (Burnham et al. 2011; Elsen et al. 2017). Using these restricted model sets for each species; we created a model-averaged coefficient estimate for each predictor and assessed its direction and significance. We considered a predictor to be significantly associated with occupancy if the range of the 95% confidence interval around the model-averaged coefficient did not contain zero.   
 ```{r lc_clim}
 # All models are stored in lists below
 lc_clim <- list()
 
-# Subsetting those models whose deltaAIC<4 (Burnham et al., 2011)
+# Subsetting those models whose deltaAIC<4 (Burnham et al. 2011)
 top_lc_clim <- list()
 
 # Getting model averaged coefficients and relative importance scores

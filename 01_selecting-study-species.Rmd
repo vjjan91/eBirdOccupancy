@@ -10,7 +10,7 @@ output:
 
 Prior to preparing eBird data for occupancy modeling, we selected a list of species using a simple and objective criteria. Our primary focus is to understand how terrestrial bird species occupancy (largely passerine species) varied as a function of climate and land cover across the Nilgiri and the Anamalai hills of the Western Ghats.
 
-We derived this list from inclusion criteria adapted from the State of India’s Birds 2020 [@viswanathan2020]. Initially, we considered all species reported on eBird that occurred within the outlines of our study area. We then added a filter to consider only terrestrial birds and removed species that are often easily confused for their congeners (eg. green/greenish warbler). In addition, we considered only those species that had a minimum of 1000 detections each between 2013 and 2021. Next, the study area was divided into 25 x 25 km cells following Viswanathan et al. (2020). We then kept only those species that occurred in at least 5% of all checklists across half of the 25 x 25 km cells from where they have been reported (there are 42 unique 25 x 25 km grid cells across our study area). We used the above criteria to ensure as much uniform sampling of a species as possible across our study area and to reduce any erroneous associations between environmental drivers and species occupancy. This resulted in a total of 79 species, prior to occupancy modeling.
+We derived this list from inclusion criteria adapted from the State of India’s Birds 2020. Initially, we considered all species reported on eBird that occurred within the outlines of our study area. We then added a filter to consider only terrestrial birds and removed species that are often easily confused for their congeners (eg. green/greenish warbler). In addition, we considered only those species that had a minimum of 1000 detections each between 2013 and 2021. Next, the study area was divided into 25 x 25 km cells following Viswanathan et al. (2020). We then kept only those species that occurred in at least 5% of all checklists across half of the 25 x 25 km cells from where they have been reported (there are 42 unique 25 x 25 km grid cells across our study area). We used the above criteria to ensure as much uniform sampling of a species as possible across our study area and to reduce any erroneous associations between environmental drivers and species occupancy. This resulted in a total of 79 species, prior to occupancy modeling.
 
 This script shows the proportion of checklists that report a particular species across every 25km by 25km grid across the Nilgiris and the Anamalais. Using this analysis, we arrived at a final list of species for occupancy modeling.
 
@@ -48,7 +48,9 @@ f_in_sampling <- file.path("data/ebd_sampling_relNov-2021.txt")
 library(sf)
 wg <- st_read("data/spatial/hillsShapefile/Nil_Ana_Pal.shp")
 box <- st_bbox(wg)
+
 # read in data and subset
+
 # To access the latest dataset, please visit: https://ebird.org/data/download and set the file path accordingly.
 ebd <- fread("data/ebd_IN_relNov-2021.txt")
 ebd <- ebd[between(LONGITUDE, box["xmin"], box["xmax"]) &
@@ -102,7 +104,8 @@ write.csv(totCount, "data/species_list.csv", row.names = F)
 
 ```{r soi_supplement,message=FALSE, warning=FALSE}
 # add species of interest
-# please note the below is obtained after manual subsetting based on natural history
+# please note the below script is obtained after manual subsetting based on natural history and hence the user is asked to examine the dataset obtained in the previous time step prior to further processing
+
 specieslist <- read.csv("data/species_list.csv")
 speciesOfInterest <- specieslist$scientific_name
 ```
@@ -114,6 +117,7 @@ Add a spatial filter and assign grids of 25km x 25km.
 ```{r strict_filter_supp02}
 # strict spatial filter and assign grid
 locs <- ebd[, .(longitude, latitude)]
+
 # transform to UTM and get 25km boxes
 coords <- setDF(locs) %>%
   st_as_sf(coords = c("longitude", "latitude")) %>%
@@ -121,6 +125,7 @@ coords <- setDF(locs) %>%
   bind_cols(as.data.table(st_coordinates(.))) %>%
   st_transform(32643) %>%
   mutate(id = 1:nrow(.))
+
 # convert wg to UTM for filter
 wg <- st_transform(wg, 32643)
 coords <- coords %>%
@@ -129,6 +134,7 @@ coords <- coords %>%
   bind_cols(as.data.table(st_coordinates(.))) %>%
   st_drop_geometry() %>%
   as.data.table()
+
 # remove unneeded objects
 rm(locs)
 gc()
@@ -143,10 +149,12 @@ ebd <- ebd[(longitude %in% coords$longitude) &
 ```{r count_obs_cell}
 # round to 25km cell in UTM coords
 ebd[, `:=`(X = round_any(X), Y = round_any(Y))]
+
 # count checklists in cell
 ebd_summary <- ebd[, nchk := length(unique(sampling_event_identifier)),
   by = .(X, Y)
 ]
+
 # count checklists reporting each species in cell and get proportion
 ebd_summary <- ebd_summary[, .(nrep = length(unique(
   sampling_event_identifier
@@ -154,8 +162,10 @@ ebd_summary <- ebd_summary[, .(nrep = length(unique(
 by = .(X, Y, nchk, scientific_name)
 ]
 ebd_summary[, p_rep := nrep / nchk]
+
 # filter for soi
 ebd_summary <- ebd_summary[scientific_name %in% speciesOfInterest, ]
+
 # complete the dataframe for no reports
 # keep no reports as NA --- allows filtering based on proportion reporting
 ebd_summary <- setDF(ebd_summary) %>%
@@ -180,12 +190,14 @@ spp_grids <- ebd_summary %>%
   count(scientific_name,
     name = "n_grids"
   )
+
 # Write the above two results
 write_csv(tot_n_chklist, "data/01_nchk_per_grid.csv")
 write_csv(spp_grids, "data/01_ngrids_per_spp.csv")
 
 # left-join the datasets
 ebd_summary <- left_join(ebd_summary, spp_grids, by = "scientific_name")
+
 # check the proportion of grids across which this cut-off is met for each species
 # Is it > 90% or 70%?
 # For example, with a 3% cut-off, ~100 species are occurring in >50%
@@ -200,6 +212,7 @@ grid_prop_cut <- filter(
   grid_proportions,
   prop_grids_cut >= p_cutoff
 )
+
 # Write the results
 write_csv(grid_prop_cut, "data/01_chk_5_percent.csv")
 
@@ -210,6 +223,7 @@ spp_sum_chk <- ebd_summary %>%
   group_by(scientific_name) %>%
   mutate(sum_chk = sum(nrep)) %>%
   distinct(scientific_name, sum_chk)
+
 # Approximately 90 to 100 species occur in >5% of all checklists
 prop_all_lists <- spp_sum_chk %>%
   mutate(prop_lists = sum_chk / total_number_lists) %>%
@@ -259,6 +273,7 @@ plotNchk <-
     panel.background = element_rect(fill = "lightblue")
   ) +
   labs(fill = "number\nof\nchecklists")
+
 # export data
 ggsave(plotNchk,
   filename = "figs/fig_number_checklists_25km.png", height = 12,
@@ -290,6 +305,7 @@ plotDistributions <-
     panel.background = element_rect(fill = "lightblue")
   ) +
   labs(fill = "prop.\nreporting\nchecklists")
+
 # export data
 ggsave(plotDistributions,
   filename = "figs/fig_species_distributions.png",

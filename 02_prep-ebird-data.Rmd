@@ -83,7 +83,7 @@ The data has been filtered above using the auk functions. We will now work with 
 ebd <- read_ebd(f_out_ebd)
 ```
 
-eBird checklists only suggest whether a species was reported at a particular location. To arrive at absence data, we use a process known as zero-filling [@johnston2019a], wherein a new dataframe is created with a 0 marked for each checklist when the bird was not observed.
+eBird checklists only suggest whether a species was reported at a particular location. To arrive at absence data, we use a process known as zero-filling (Johnston et al. 2021), wherein a new dataframe is created with a 0 marked for each checklist when the bird was not observed.
 
 ```{r fill_zeroes}
 # fill zeroes
@@ -168,7 +168,7 @@ save(data, file = "data/01_data_temp.rdata")
 
 ## Handle presence data
 
-Further pre-processing is required in the case of many checklists where species abundance is often unknown and an 'X' is denoted in such cases. Here, we convert all 'X' notations to a 1, suggesting a presence (as we are not concerned with abundance data in this analysis). We also removed those checklists where the duration in minutes is either not recorded or listed as zero. Lastly, we added an sampling effort based filter following [@johnston2019a], wherein we considered only those checklists with duration in minutes is less than 300 and distance in kilometers traveled is less than 5km. Lastly, we excluded those group checklists where the number of observers was greater than 10. For the sake of occupancy modeling of appropriate detection and occupancy covariates, we restrict all our checklists between December 1st and May 31st (non-rainy months)and checklists recorded between 5am and 7pm.
+Further pre-processing is required in the case of many checklists where species abundance is often unknown and an 'X' is denoted in such cases. Here, we convert all 'X' notations to a 1, suggesting a presence (as we are not concerned with abundance data in this analysis). We also removed those checklists where the duration in minutes is either not recorded or listed as zero. Lastly, we added an sampling effort based filter following (Johnston et al. 2021), wherein we considered only those checklists with duration in minutes is less than 300 and distance in kilometers traveled is less than 5km. Lastly, we excluded those group checklists where the number of observers was greater than 10. For the sake of occupancy modeling of appropriate detection and occupancy covariates, we restrict all our checklists between December 1st and May 31st (non-rainy months)and checklists recorded between 5am and 7pm.
 
 ```{r proc_presence_data}
 # in the first set, replace X, for presences, with 1
