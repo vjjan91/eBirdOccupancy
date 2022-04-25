@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Section 4 Preparing Environmental Predictors | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</title>
-  <meta name="description" content="Section 4 Preparing Environmental Predictors | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <title>Section 4 Preparing Environmental Predictors | Source code and supplementary material for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</title>
+  <meta name="description" content="Section 4 Preparing Environmental Predictors | Source code and supplementary material for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
   <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Section 4 Preparing Environmental Predictors | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <meta property="og:title" content="Section 4 Preparing Environmental Predictors | Source code and supplementary material for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
   <meta property="og:type" content="book" />
   
   
@@ -16,19 +16,14 @@
   <meta name="github-repo" content="vjjan91/eBirdOccupancy" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Section 4 Preparing Environmental Predictors | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <meta name="twitter:title" content="Section 4 Preparing Environmental Predictors | Source code and supplementary material for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
   
   
   
 
-<meta name="author" content="Vijay Ramesh" />
-<meta name="author" content="Pratik R. Gupte" />
-<meta name="author" content="Morgan W. Tingley" />
-<meta name="author" content="VV Robin" />
-<meta name="author" content="Ruth DeFries" />
 
 
-<meta name="date" content="2022-02-14" />
+<meta name="date" content="2022-04-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -139,10 +134,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <ul class="summary">
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#attribution"><i class="fa fa-check"></i><b>1.1</b> Attribution</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#data-access"><i class="fa fa-check"></i><b>1.2</b> Data access</a></li>
-<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#data-processing"><i class="fa fa-check"></i><b>1.3</b> Data processing</a></li>
-<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#main-text-figure-1"><i class="fa fa-check"></i><b>1.4</b> Main Text Figure 1</a></li>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#data-access"><i class="fa fa-check"></i><b>1.1</b> Data access</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#data-processing"><i class="fa fa-check"></i><b>1.2</b> Data processing</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html"><i class="fa fa-check"></i><b>2</b> Selecting species of interest</a><ul>
 <li class="chapter" data-level="2.1" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#prepare-libraries"><i class="fa fa-check"></i><b>2.1</b> Prepare libraries</a></li>
@@ -294,7 +287,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Source code for <em>Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</em></a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Source code and supplementary material for <em>Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</em></a>
           </h1>
         </div>
 
@@ -683,107 +676,35 @@ All landscape data was derived from a high resolution land cover map (Roy et al.
 <span id="cb38-39"><a href="preparing-environmental-predictors.html#cb38-39"></a>  <span class="st">&quot;Precipitation seasonality&quot;</span></span>
 <span id="cb38-40"><a href="preparing-environmental-predictors.html#cb38-40"></a>)</span></code></pre></div>
 <p>Plot density plots of climate seasonality per LC type.</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="preparing-environmental-predictors.html#cb39-1"></a><span class="co"># make labels</span></span>
-<span id="cb39-2"><a href="preparing-environmental-predictors.html#cb39-2"></a>lc_labels &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
-<span id="cb39-3"><a href="preparing-environmental-predictors.html#cb39-3"></a>  <span class="st">&quot;Evergreen&quot;</span>, <span class="st">&quot;Deciduous&quot;</span>,</span>
-<span id="cb39-4"><a href="preparing-environmental-predictors.html#cb39-4"></a>  <span class="st">&quot;Mixed./Degr.&quot;</span>, <span class="st">&quot;Agri./Settl.&quot;</span>,</span>
-<span id="cb39-5"><a href="preparing-environmental-predictors.html#cb39-5"></a>  <span class="st">&quot;Grassland&quot;</span>, <span class="st">&quot;Plantation&quot;</span>,</span>
-<span id="cb39-6"><a href="preparing-environmental-predictors.html#cb39-6"></a>  <span class="st">&quot;Waterbody&quot;</span></span>
-<span id="cb39-7"><a href="preparing-environmental-predictors.html#cb39-7"></a>)</span>
-<span id="cb39-8"><a href="preparing-environmental-predictors.html#cb39-8"></a><span class="kw">names</span>(lc_labels) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">seq</span>(<span class="dv">5</span>), <span class="dv">7</span>, <span class="dv">9</span>)</span>
-<span id="cb39-9"><a href="preparing-environmental-predictors.html#cb39-9"></a></span>
-<span id="cb39-10"><a href="preparing-environmental-predictors.html#cb39-10"></a><span class="co"># plots</span></span>
-<span id="cb39-11"><a href="preparing-environmental-predictors.html#cb39-11"></a>lc_clim_plots &lt;-<span class="st"> </span><span class="kw">pmap</span>(</span>
-<span id="cb39-12"><a href="preparing-environmental-predictors.html#cb39-12"></a>  lc_clim_data,</span>
-<span id="cb39-13"><a href="preparing-environmental-predictors.html#cb39-13"></a>  <span class="cf">function</span>(climvar_name, data, climvar) {</span>
-<span id="cb39-14"><a href="preparing-environmental-predictors.html#cb39-14"></a>    p &lt;-<span class="st"> </span>data <span class="op">%&gt;%</span></span>
-<span id="cb39-15"><a href="preparing-environmental-predictors.html#cb39-15"></a><span class="st">      </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb39-16"><a href="preparing-environmental-predictors.html#cb39-16"></a><span class="st">      </span><span class="kw">geom_histogram</span>(</span>
-<span id="cb39-17"><a href="preparing-environmental-predictors.html#cb39-17"></a>        <span class="kw">aes</span>(</span>
-<span id="cb39-18"><a href="preparing-environmental-predictors.html#cb39-18"></a>          <span class="dt">x =</span> value, <span class="dt">y =</span> ..density..,</span>
-<span id="cb39-19"><a href="preparing-environmental-predictors.html#cb39-19"></a>          <span class="dt">fill =</span> ..x..</span>
-<span id="cb39-20"><a href="preparing-environmental-predictors.html#cb39-20"></a>        ),</span>
-<span id="cb39-21"><a href="preparing-environmental-predictors.html#cb39-21"></a>        <span class="dt">show.legend =</span> F</span>
-<span id="cb39-22"><a href="preparing-environmental-predictors.html#cb39-22"></a>      ) <span class="op">+</span></span>
-<span id="cb39-23"><a href="preparing-environmental-predictors.html#cb39-23"></a><span class="st">      </span><span class="kw">theme_test</span>(<span class="dt">base_family =</span> <span class="st">&quot;Arial&quot;</span>) <span class="op">+</span></span>
-<span id="cb39-24"><a href="preparing-environmental-predictors.html#cb39-24"></a><span class="st">      </span><span class="kw">theme</span>(</span>
-<span id="cb39-25"><a href="preparing-environmental-predictors.html#cb39-25"></a>        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="dt">units =</span> <span class="st">&quot;mm&quot;</span>),</span>
-<span id="cb39-26"><a href="preparing-environmental-predictors.html#cb39-26"></a>        <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(),</span>
-<span id="cb39-27"><a href="preparing-environmental-predictors.html#cb39-27"></a>        <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">6</span>, <span class="dt">angle =</span> <span class="dv">45</span>),</span>
-<span id="cb39-28"><a href="preparing-environmental-predictors.html#cb39-28"></a>        <span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>(),</span>
-<span id="cb39-29"><a href="preparing-environmental-predictors.html#cb39-29"></a>        <span class="dt">strip.background =</span> <span class="kw">element_blank</span>(),</span>
-<span id="cb39-30"><a href="preparing-environmental-predictors.html#cb39-30"></a>        <span class="dt">strip.text =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">6</span>, <span class="dt">face =</span> <span class="st">&quot;bold&quot;</span>)</span>
-<span id="cb39-31"><a href="preparing-environmental-predictors.html#cb39-31"></a>      ) <span class="op">+</span></span>
-<span id="cb39-32"><a href="preparing-environmental-predictors.html#cb39-32"></a><span class="st">      </span><span class="kw">facet_grid</span>(</span>
-<span id="cb39-33"><a href="preparing-environmental-predictors.html#cb39-33"></a>        <span class="op">~</span>landcover,</span>
-<span id="cb39-34"><a href="preparing-environmental-predictors.html#cb39-34"></a>        <span class="dt">labeller =</span> <span class="kw">labeller</span>(</span>
-<span id="cb39-35"><a href="preparing-environmental-predictors.html#cb39-35"></a>          <span class="dt">landcover =</span> lc_labels</span>
-<span id="cb39-36"><a href="preparing-environmental-predictors.html#cb39-36"></a>        )</span>
-<span id="cb39-37"><a href="preparing-environmental-predictors.html#cb39-37"></a>      ) <span class="op">+</span></span>
-<span id="cb39-38"><a href="preparing-environmental-predictors.html#cb39-38"></a><span class="st">      </span><span class="kw">labs</span>(</span>
-<span id="cb39-39"><a href="preparing-environmental-predictors.html#cb39-39"></a>        <span class="dt">x =</span> <span class="kw">glue</span>(<span class="st">&quot;{climvar_name}&quot;</span>),</span>
-<span id="cb39-40"><a href="preparing-environmental-predictors.html#cb39-40"></a>        <span class="dt">y =</span> <span class="st">&quot;Density&quot;</span></span>
-<span id="cb39-41"><a href="preparing-environmental-predictors.html#cb39-41"></a>      )</span>
-<span id="cb39-42"><a href="preparing-environmental-predictors.html#cb39-42"></a>    <span class="cf">if</span> (climvar <span class="op">==</span><span class="st"> &quot;bio_1&quot;</span>) {</span>
-<span id="cb39-43"><a href="preparing-environmental-predictors.html#cb39-43"></a>      p &lt;-<span class="st"> </span>p <span class="op">+</span></span>
-<span id="cb39-44"><a href="preparing-environmental-predictors.html#cb39-44"></a><span class="st">        </span><span class="kw">scale_fill_continuous_diverging</span>(</span>
-<span id="cb39-45"><a href="preparing-environmental-predictors.html#cb39-45"></a>          <span class="dt">palette =</span> <span class="st">&quot;Blue-Red 2&quot;</span>,</span>
-<span id="cb39-46"><a href="preparing-environmental-predictors.html#cb39-46"></a>          <span class="dt">mid =</span> <span class="fl">29.5</span></span>
-<span id="cb39-47"><a href="preparing-environmental-predictors.html#cb39-47"></a>        )</span>
-<span id="cb39-48"><a href="preparing-environmental-predictors.html#cb39-48"></a>    } <span class="cf">else</span> {</span>
-<span id="cb39-49"><a href="preparing-environmental-predictors.html#cb39-49"></a>      p &lt;-<span class="st"> </span>p <span class="op">+</span></span>
-<span id="cb39-50"><a href="preparing-environmental-predictors.html#cb39-50"></a><span class="st">        </span><span class="kw">scale_x_continuous</span>(</span>
-<span id="cb39-51"><a href="preparing-environmental-predictors.html#cb39-51"></a>          <span class="dt">limits =</span> <span class="kw">c</span>(<span class="dv">200</span>, <span class="dv">500</span>)</span>
-<span id="cb39-52"><a href="preparing-environmental-predictors.html#cb39-52"></a>        ) <span class="op">+</span></span>
-<span id="cb39-53"><a href="preparing-environmental-predictors.html#cb39-53"></a><span class="st">        </span><span class="kw">scale_fill_continuous_diverging</span>(</span>
-<span id="cb39-54"><a href="preparing-environmental-predictors.html#cb39-54"></a>          <span class="dt">palette =</span> <span class="st">&quot;Blue-Yellow 2&quot;</span>,</span>
-<span id="cb39-55"><a href="preparing-environmental-predictors.html#cb39-55"></a>          <span class="dt">mid =</span> <span class="dv">350</span></span>
-<span id="cb39-56"><a href="preparing-environmental-predictors.html#cb39-56"></a>        )</span>
-<span id="cb39-57"><a href="preparing-environmental-predictors.html#cb39-57"></a>    }</span>
-<span id="cb39-58"><a href="preparing-environmental-predictors.html#cb39-58"></a></span>
-<span id="cb39-59"><a href="preparing-environmental-predictors.html#cb39-59"></a>    p</span>
-<span id="cb39-60"><a href="preparing-environmental-predictors.html#cb39-60"></a>  }</span>
-<span id="cb39-61"><a href="preparing-environmental-predictors.html#cb39-61"></a>)</span>
-<span id="cb39-62"><a href="preparing-environmental-predictors.html#cb39-62"></a></span>
-<span id="cb39-63"><a href="preparing-environmental-predictors.html#cb39-63"></a><span class="co"># save to file and add figure</span></span>
-<span id="cb39-64"><a href="preparing-environmental-predictors.html#cb39-64"></a>fig_lc_clim &lt;-</span>
-<span id="cb39-65"><a href="preparing-environmental-predictors.html#cb39-65"></a><span class="st">  </span><span class="kw">wrap_plots</span>(lc_clim_plots, <span class="dt">ncol =</span> <span class="dv">1</span>) <span class="op">&amp;</span></span>
-<span id="cb39-66"><a href="preparing-environmental-predictors.html#cb39-66"></a><span class="st">    </span><span class="kw">plot_annotation</span>(<span class="dt">tag_levels =</span> <span class="st">&quot;A&quot;</span>)</span>
-<span id="cb39-67"><a href="preparing-environmental-predictors.html#cb39-67"></a></span>
-<span id="cb39-68"><a href="preparing-environmental-predictors.html#cb39-68"></a><span class="co"># save as png</span></span>
-<span id="cb39-69"><a href="preparing-environmental-predictors.html#cb39-69"></a><span class="kw">ggsave</span>(fig_lc_clim,</span>
-<span id="cb39-70"><a href="preparing-environmental-predictors.html#cb39-70"></a>  <span class="dt">filename =</span> <span class="st">&quot;figs/fig_lc_climate.png&quot;</span>,</span>
-<span id="cb39-71"><a href="preparing-environmental-predictors.html#cb39-71"></a>  <span class="dt">height =</span> <span class="dv">4</span>, <span class="dt">width =</span> <span class="fl">6.5</span>, <span class="dt">device =</span> <span class="kw">png</span>(), <span class="dt">dpi =</span> <span class="dv">300</span></span>
-<span id="cb39-72"><a href="preparing-environmental-predictors.html#cb39-72"></a>)</span></code></pre></div>
 </div>
 <div id="land-cover-type-in-relation-to-elevation" class="section level2">
 <h2><span class="header-section-number">4.9</span> Land cover type in relation to elevation</h2>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="preparing-environmental-predictors.html#cb40-1"></a><span class="co"># get data from landscape rasters</span></span>
-<span id="cb40-2"><a href="preparing-environmental-predictors.html#cb40-2"></a>lc_elev &lt;-<span class="st"> </span><span class="kw">tibble</span>(</span>
-<span id="cb40-3"><a href="preparing-environmental-predictors.html#cb40-3"></a>  <span class="dt">elev =</span> <span class="kw">getValues</span>(landscape[[<span class="st">&quot;elev&quot;</span>]]),</span>
-<span id="cb40-4"><a href="preparing-environmental-predictors.html#cb40-4"></a>  <span class="dt">landcover =</span> <span class="kw">getValues</span>(landscape[[<span class="st">&quot;landcover&quot;</span>]])</span>
-<span id="cb40-5"><a href="preparing-environmental-predictors.html#cb40-5"></a>)</span>
-<span id="cb40-6"><a href="preparing-environmental-predictors.html#cb40-6"></a></span>
-<span id="cb40-7"><a href="preparing-environmental-predictors.html#cb40-7"></a><span class="co"># process data for proportions</span></span>
-<span id="cb40-8"><a href="preparing-environmental-predictors.html#cb40-8"></a>lc_elev &lt;-<span class="st"> </span>lc_elev <span class="op">%&gt;%</span></span>
-<span id="cb40-9"><a href="preparing-environmental-predictors.html#cb40-9"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(landcover), <span class="op">!</span><span class="kw">is.na</span>(elev)) <span class="op">%&gt;%</span></span>
-<span id="cb40-10"><a href="preparing-environmental-predictors.html#cb40-10"></a><span class="st">  </span><span class="co"># round elev to 100m</span></span>
-<span id="cb40-11"><a href="preparing-environmental-predictors.html#cb40-11"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">elev =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(elev, <span class="dv">100</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb40-12"><a href="preparing-environmental-predictors.html#cb40-12"></a><span class="st">  </span><span class="kw">count</span>(elev, landcover) <span class="op">%&gt;%</span></span>
-<span id="cb40-13"><a href="preparing-environmental-predictors.html#cb40-13"></a><span class="st">  </span><span class="kw">group_by</span>(elev) <span class="op">%&gt;%</span></span>
-<span id="cb40-14"><a href="preparing-environmental-predictors.html#cb40-14"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">prop =</span> n <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(n))</span>
-<span id="cb40-15"><a href="preparing-environmental-predictors.html#cb40-15"></a></span>
-<span id="cb40-16"><a href="preparing-environmental-predictors.html#cb40-16"></a><span class="co"># fill out lc elev</span></span>
-<span id="cb40-17"><a href="preparing-environmental-predictors.html#cb40-17"></a>lc_elev_canon &lt;-<span class="st"> </span><span class="kw">crossing</span>(</span>
-<span id="cb40-18"><a href="preparing-environmental-predictors.html#cb40-18"></a>  <span class="dt">elev =</span> <span class="kw">unique</span>(lc_elev<span class="op">$</span>elev),</span>
-<span id="cb40-19"><a href="preparing-environmental-predictors.html#cb40-19"></a>  <span class="dt">landcover =</span> <span class="kw">unique</span>(lc_elev<span class="op">$</span>landcover)</span>
-<span id="cb40-20"><a href="preparing-environmental-predictors.html#cb40-20"></a>)</span>
-<span id="cb40-21"><a href="preparing-environmental-predictors.html#cb40-21"></a></span>
-<span id="cb40-22"><a href="preparing-environmental-predictors.html#cb40-22"></a><span class="co"># bind with lcelev</span></span>
-<span id="cb40-23"><a href="preparing-environmental-predictors.html#cb40-23"></a>lc_elev &lt;-<span class="st"> </span><span class="kw">full_join</span>(lc_elev, lc_elev_canon)</span>
-<span id="cb40-24"><a href="preparing-environmental-predictors.html#cb40-24"></a></span>
-<span id="cb40-25"><a href="preparing-environmental-predictors.html#cb40-25"></a><span class="co"># convert NA to zero</span></span>
-<span id="cb40-26"><a href="preparing-environmental-predictors.html#cb40-26"></a>lc_elev &lt;-<span class="st"> </span><span class="kw">replace_na</span>(lc_elev, <span class="dt">replace =</span> <span class="kw">list</span>(<span class="dt">n =</span> <span class="dv">0</span>, <span class="dt">prop =</span> <span class="dv">0</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="preparing-environmental-predictors.html#cb39-1"></a><span class="co"># get data from landscape rasters</span></span>
+<span id="cb39-2"><a href="preparing-environmental-predictors.html#cb39-2"></a>lc_elev &lt;-<span class="st"> </span><span class="kw">tibble</span>(</span>
+<span id="cb39-3"><a href="preparing-environmental-predictors.html#cb39-3"></a>  <span class="dt">elev =</span> <span class="kw">getValues</span>(landscape[[<span class="st">&quot;elev&quot;</span>]]),</span>
+<span id="cb39-4"><a href="preparing-environmental-predictors.html#cb39-4"></a>  <span class="dt">landcover =</span> <span class="kw">getValues</span>(landscape[[<span class="st">&quot;landcover&quot;</span>]])</span>
+<span id="cb39-5"><a href="preparing-environmental-predictors.html#cb39-5"></a>)</span>
+<span id="cb39-6"><a href="preparing-environmental-predictors.html#cb39-6"></a></span>
+<span id="cb39-7"><a href="preparing-environmental-predictors.html#cb39-7"></a><span class="co"># process data for proportions</span></span>
+<span id="cb39-8"><a href="preparing-environmental-predictors.html#cb39-8"></a>lc_elev &lt;-<span class="st"> </span>lc_elev <span class="op">%&gt;%</span></span>
+<span id="cb39-9"><a href="preparing-environmental-predictors.html#cb39-9"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(landcover), <span class="op">!</span><span class="kw">is.na</span>(elev)) <span class="op">%&gt;%</span></span>
+<span id="cb39-10"><a href="preparing-environmental-predictors.html#cb39-10"></a><span class="st">  </span><span class="co"># round elev to 100m</span></span>
+<span id="cb39-11"><a href="preparing-environmental-predictors.html#cb39-11"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">elev =</span> plyr<span class="op">::</span><span class="kw">round_any</span>(elev, <span class="dv">100</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb39-12"><a href="preparing-environmental-predictors.html#cb39-12"></a><span class="st">  </span><span class="kw">count</span>(elev, landcover) <span class="op">%&gt;%</span></span>
+<span id="cb39-13"><a href="preparing-environmental-predictors.html#cb39-13"></a><span class="st">  </span><span class="kw">group_by</span>(elev) <span class="op">%&gt;%</span></span>
+<span id="cb39-14"><a href="preparing-environmental-predictors.html#cb39-14"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">prop =</span> n <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(n))</span>
+<span id="cb39-15"><a href="preparing-environmental-predictors.html#cb39-15"></a></span>
+<span id="cb39-16"><a href="preparing-environmental-predictors.html#cb39-16"></a><span class="co"># fill out lc elev</span></span>
+<span id="cb39-17"><a href="preparing-environmental-predictors.html#cb39-17"></a>lc_elev_canon &lt;-<span class="st"> </span><span class="kw">crossing</span>(</span>
+<span id="cb39-18"><a href="preparing-environmental-predictors.html#cb39-18"></a>  <span class="dt">elev =</span> <span class="kw">unique</span>(lc_elev<span class="op">$</span>elev),</span>
+<span id="cb39-19"><a href="preparing-environmental-predictors.html#cb39-19"></a>  <span class="dt">landcover =</span> <span class="kw">unique</span>(lc_elev<span class="op">$</span>landcover)</span>
+<span id="cb39-20"><a href="preparing-environmental-predictors.html#cb39-20"></a>)</span>
+<span id="cb39-21"><a href="preparing-environmental-predictors.html#cb39-21"></a></span>
+<span id="cb39-22"><a href="preparing-environmental-predictors.html#cb39-22"></a><span class="co"># bind with lcelev</span></span>
+<span id="cb39-23"><a href="preparing-environmental-predictors.html#cb39-23"></a>lc_elev &lt;-<span class="st"> </span><span class="kw">full_join</span>(lc_elev, lc_elev_canon)</span>
+<span id="cb39-24"><a href="preparing-environmental-predictors.html#cb39-24"></a></span>
+<span id="cb39-25"><a href="preparing-environmental-predictors.html#cb39-25"></a><span class="co"># convert NA to zero</span></span>
+<span id="cb39-26"><a href="preparing-environmental-predictors.html#cb39-26"></a>lc_elev &lt;-<span class="st"> </span><span class="kw">replace_na</span>(lc_elev, <span class="dt">replace =</span> <span class="kw">list</span>(<span class="dt">n =</span> <span class="dv">0</span>, <span class="dt">prop =</span> <span class="dv">0</span>))</span></code></pre></div>
 <p>Figure code is hidden in versions rendered as HTML and PDF.</p>
 </div>
 <div id="main-text-figure-2" class="section level2">

@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Section 2 Selecting species of interest | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</title>
-  <meta name="description" content="Section 2 Selecting species of interest | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <title>Section 2 Selecting species of interest | Source code and supplementary material for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</title>
+  <meta name="description" content="Section 2 Selecting species of interest | Source code and supplementary material for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
   <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Section 2 Selecting species of interest | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <meta property="og:title" content="Section 2 Selecting species of interest | Source code and supplementary material for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
   <meta property="og:type" content="book" />
   
   
@@ -16,19 +16,14 @@
   <meta name="github-repo" content="vjjan91/eBirdOccupancy" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Section 2 Selecting species of interest | Source code for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
+  <meta name="twitter:title" content="Section 2 Selecting species of interest | Source code and supplementary material for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot" />
   
   
   
 
-<meta name="author" content="Vijay Ramesh" />
-<meta name="author" content="Pratik R. Gupte" />
-<meta name="author" content="Morgan W. Tingley" />
-<meta name="author" content="VV Robin" />
-<meta name="author" content="Ruth DeFries" />
 
 
-<meta name="date" content="2022-02-14" />
+<meta name="date" content="2022-04-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -139,10 +134,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <ul class="summary">
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#attribution"><i class="fa fa-check"></i><b>1.1</b> Attribution</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#data-access"><i class="fa fa-check"></i><b>1.2</b> Data access</a></li>
-<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#data-processing"><i class="fa fa-check"></i><b>1.3</b> Data processing</a></li>
-<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#main-text-figure-1"><i class="fa fa-check"></i><b>1.4</b> Main Text Figure 1</a></li>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#data-access"><i class="fa fa-check"></i><b>1.1</b> Data access</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#data-processing"><i class="fa fa-check"></i><b>1.2</b> Data processing</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html"><i class="fa fa-check"></i><b>2</b> Selecting species of interest</a><ul>
 <li class="chapter" data-level="2.1" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#prepare-libraries"><i class="fa fa-check"></i><b>2.1</b> Prepare libraries</a></li>
@@ -294,7 +287,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Source code for <em>Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</em></a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Source code and supplementary material for <em>Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot</em></a>
           </h1>
         </div>
 
@@ -305,7 +298,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="selecting-species-of-interest" class="section level1">
 <h1><span class="header-section-number">Section 2</span> Selecting species of interest</h1>
 <p>Prior to preparing eBird data for occupancy modeling, we selected a list of species using a simple and objective criteria. Our primary focus is to understand how terrestrial bird species occupancy (largely passerine species) varied as a function of climate and land cover across the Nilgiri and the Anamalai hills of the Western Ghats.</p>
-<p>We derived this list from inclusion criteria adapted from the State of India’s Birds 2020 <span class="citation">(Viswanathan et al. <a href="#ref-viswanathan2020" role="doc-biblioref">2020</a>)</span>. Initially, we considered all species reported on eBird that occurred within the outlines of our study area. We then added a filter to consider only terrestrial birds and removed species that are often easily confused for their congeners (eg. green/greenish warbler). In addition, we considered only those species that had a minimum of 1000 detections each between 2013 and 2021. Next, the study area was divided into 25 x 25 km cells following Viswanathan et al. (2020). We then kept only those species that occurred in at least 5% of all checklists across half of the 25 x 25 km cells from where they have been reported (there are 42 unique 25 x 25 km grid cells across our study area). We used the above criteria to ensure as much uniform sampling of a species as possible across our study area and to reduce any erroneous associations between environmental drivers and species occupancy. This resulted in a total of 79 species, prior to occupancy modeling.</p>
+<p>We derived this list from inclusion criteria adapted from the State of India’s Birds 2020. Initially, we considered all species reported on eBird that occurred within the outlines of our study area. We then added a filter to consider only terrestrial birds and removed species that are often easily confused for their congeners (eg. green/greenish warbler). In addition, we considered only those species that had a minimum of 1000 detections each between 2013 and 2021. Next, the study area was divided into 25 x 25 km cells following Viswanathan et al. (2020). We then kept only those species that occurred in at least 5% of all checklists across half of the 25 x 25 km cells from where they have been reported (there are 42 unique 25 x 25 km grid cells across our study area). We used the above criteria to ensure as much uniform sampling of a species as possible across our study area and to reduce any erroneous associations between environmental drivers and species occupancy. This resulted in a total of 79 species, prior to occupancy modeling.</p>
 <p>This script shows the proportion of checklists that report a particular species across every 25km by 25km grid across the Nilgiris and the Anamalais. Using this analysis, we arrived at a final list of species for occupancy modeling.</p>
 <div id="prepare-libraries" class="section level2">
 <h2><span class="header-section-number">2.1</span> Prepare libraries</h2>
@@ -338,23 +331,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-2"><a href="selecting-species-of-interest.html#cb2-2"></a><span class="kw">library</span>(sf)</span>
 <span id="cb2-3"><a href="selecting-species-of-interest.html#cb2-3"></a>wg &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/spatial/hillsShapefile/Nil_Ana_Pal.shp&quot;</span>)</span>
 <span id="cb2-4"><a href="selecting-species-of-interest.html#cb2-4"></a>box &lt;-<span class="st"> </span><span class="kw">st_bbox</span>(wg)</span>
-<span id="cb2-5"><a href="selecting-species-of-interest.html#cb2-5"></a><span class="co"># read in data and subset</span></span>
-<span id="cb2-6"><a href="selecting-species-of-interest.html#cb2-6"></a><span class="co"># To access the latest dataset, please visit: https://ebird.org/data/download and set the file path accordingly.</span></span>
-<span id="cb2-7"><a href="selecting-species-of-interest.html#cb2-7"></a>ebd &lt;-<span class="st"> </span><span class="kw">fread</span>(<span class="st">&quot;data/ebd_IN_relNov-2021.txt&quot;</span>)</span>
-<span id="cb2-8"><a href="selecting-species-of-interest.html#cb2-8"></a>ebd &lt;-<span class="st"> </span>ebd[<span class="kw">between</span>(LONGITUDE, box[<span class="st">&quot;xmin&quot;</span>], box[<span class="st">&quot;xmax&quot;</span>]) <span class="op">&amp;</span></span>
-<span id="cb2-9"><a href="selecting-species-of-interest.html#cb2-9"></a><span class="st">  </span><span class="kw">between</span>(LATITUDE, box[<span class="st">&quot;ymin&quot;</span>], box[<span class="st">&quot;ymax&quot;</span>]), ]</span>
-<span id="cb2-10"><a href="selecting-species-of-interest.html#cb2-10"></a>ebd &lt;-<span class="st"> </span>ebd[<span class="kw">year</span>(<span class="st">`</span><span class="dt">OBSERVATION DATE</span><span class="st">`</span>) <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2013</span>, ]</span>
-<span id="cb2-11"><a href="selecting-species-of-interest.html#cb2-11"></a><span class="co"># make new column names</span></span>
-<span id="cb2-12"><a href="selecting-species-of-interest.html#cb2-12"></a>newNames &lt;-<span class="st"> </span><span class="kw">str_replace_all</span>(<span class="kw">colnames</span>(ebd), <span class="st">&quot; &quot;</span>, <span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb2-13"><a href="selecting-species-of-interest.html#cb2-13"></a><span class="st">  </span><span class="kw">str_to_lower</span>()</span>
-<span id="cb2-14"><a href="selecting-species-of-interest.html#cb2-14"></a><span class="kw">setnames</span>(ebd, newNames)</span>
-<span id="cb2-15"><a href="selecting-species-of-interest.html#cb2-15"></a><span class="co"># keep useful columns</span></span>
-<span id="cb2-16"><a href="selecting-species-of-interest.html#cb2-16"></a>columnsOfInterest &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
-<span id="cb2-17"><a href="selecting-species-of-interest.html#cb2-17"></a>  <span class="st">&quot;common_name&quot;</span>, <span class="st">&quot;scientific_name&quot;</span>, <span class="st">&quot;observation_count&quot;</span>, <span class="st">&quot;locality&quot;</span>,</span>
-<span id="cb2-18"><a href="selecting-species-of-interest.html#cb2-18"></a>  <span class="st">&quot;locality_id&quot;</span>, <span class="st">&quot;locality_type&quot;</span>, <span class="st">&quot;latitude&quot;</span>,</span>
-<span id="cb2-19"><a href="selecting-species-of-interest.html#cb2-19"></a>  <span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;observation_date&quot;</span>, <span class="st">&quot;sampling_event_identifier&quot;</span></span>
-<span id="cb2-20"><a href="selecting-species-of-interest.html#cb2-20"></a>)</span>
-<span id="cb2-21"><a href="selecting-species-of-interest.html#cb2-21"></a>ebd &lt;-<span class="st"> </span>ebd[, ..columnsOfInterest]</span></code></pre></div>
+<span id="cb2-5"><a href="selecting-species-of-interest.html#cb2-5"></a></span>
+<span id="cb2-6"><a href="selecting-species-of-interest.html#cb2-6"></a><span class="co"># read in data and subset</span></span>
+<span id="cb2-7"><a href="selecting-species-of-interest.html#cb2-7"></a></span>
+<span id="cb2-8"><a href="selecting-species-of-interest.html#cb2-8"></a><span class="co"># To access the latest dataset, please visit: https://ebird.org/data/download and set the file path accordingly.</span></span>
+<span id="cb2-9"><a href="selecting-species-of-interest.html#cb2-9"></a>ebd &lt;-<span class="st"> </span><span class="kw">fread</span>(<span class="st">&quot;data/ebd_IN_relNov-2021.txt&quot;</span>)</span>
+<span id="cb2-10"><a href="selecting-species-of-interest.html#cb2-10"></a>ebd &lt;-<span class="st"> </span>ebd[<span class="kw">between</span>(LONGITUDE, box[<span class="st">&quot;xmin&quot;</span>], box[<span class="st">&quot;xmax&quot;</span>]) <span class="op">&amp;</span></span>
+<span id="cb2-11"><a href="selecting-species-of-interest.html#cb2-11"></a><span class="st">  </span><span class="kw">between</span>(LATITUDE, box[<span class="st">&quot;ymin&quot;</span>], box[<span class="st">&quot;ymax&quot;</span>]), ]</span>
+<span id="cb2-12"><a href="selecting-species-of-interest.html#cb2-12"></a>ebd &lt;-<span class="st"> </span>ebd[<span class="kw">year</span>(<span class="st">`</span><span class="dt">OBSERVATION DATE</span><span class="st">`</span>) <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2013</span>, ]</span>
+<span id="cb2-13"><a href="selecting-species-of-interest.html#cb2-13"></a><span class="co"># make new column names</span></span>
+<span id="cb2-14"><a href="selecting-species-of-interest.html#cb2-14"></a>newNames &lt;-<span class="st"> </span><span class="kw">str_replace_all</span>(<span class="kw">colnames</span>(ebd), <span class="st">&quot; &quot;</span>, <span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb2-15"><a href="selecting-species-of-interest.html#cb2-15"></a><span class="st">  </span><span class="kw">str_to_lower</span>()</span>
+<span id="cb2-16"><a href="selecting-species-of-interest.html#cb2-16"></a><span class="kw">setnames</span>(ebd, newNames)</span>
+<span id="cb2-17"><a href="selecting-species-of-interest.html#cb2-17"></a><span class="co"># keep useful columns</span></span>
+<span id="cb2-18"><a href="selecting-species-of-interest.html#cb2-18"></a>columnsOfInterest &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
+<span id="cb2-19"><a href="selecting-species-of-interest.html#cb2-19"></a>  <span class="st">&quot;common_name&quot;</span>, <span class="st">&quot;scientific_name&quot;</span>, <span class="st">&quot;observation_count&quot;</span>, <span class="st">&quot;locality&quot;</span>,</span>
+<span id="cb2-20"><a href="selecting-species-of-interest.html#cb2-20"></a>  <span class="st">&quot;locality_id&quot;</span>, <span class="st">&quot;locality_type&quot;</span>, <span class="st">&quot;latitude&quot;</span>,</span>
+<span id="cb2-21"><a href="selecting-species-of-interest.html#cb2-21"></a>  <span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;observation_date&quot;</span>, <span class="st">&quot;sampling_event_identifier&quot;</span></span>
+<span id="cb2-22"><a href="selecting-species-of-interest.html#cb2-22"></a>)</span>
+<span id="cb2-23"><a href="selecting-species-of-interest.html#cb2-23"></a>ebd &lt;-<span class="st"> </span>ebd[, ..columnsOfInterest]</span></code></pre></div>
 </div>
 <div id="subset-an-initial-list-of-terrestrial-birds-based-on-a-minimum-of-1000-detections-between-2013-2021-and-b-remove-species-that-are-often-easily-confused-with-congeners" class="section level2">
 <h2><span class="header-section-number">2.3</span> Subset an initial list of terrestrial birds based on a) minimum of 1000 detections between 2013-2021 and b) remove species that are often easily confused with congeners</h2>
@@ -388,63 +383,71 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="read-subset-of-species-following-filtering-and-removal-of-waterbirds-raptors-and-other-noctural-species" class="section level2">
 <h2><span class="header-section-number">2.4</span> Read subset of species following filtering and removal of waterbirds, raptors, and other noctural species</h2>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="selecting-species-of-interest.html#cb4-1"></a><span class="co"># add species of interest</span></span>
-<span id="cb4-2"><a href="selecting-species-of-interest.html#cb4-2"></a><span class="co"># please note the below is obtained after manual subsetting based on natural history</span></span>
-<span id="cb4-3"><a href="selecting-species-of-interest.html#cb4-3"></a>specieslist &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/species_list.csv&quot;</span>)</span>
-<span id="cb4-4"><a href="selecting-species-of-interest.html#cb4-4"></a>speciesOfInterest &lt;-<span class="st"> </span>specieslist<span class="op">$</span>scientific_name</span></code></pre></div>
+<span id="cb4-2"><a href="selecting-species-of-interest.html#cb4-2"></a><span class="co"># please note the below script is obtained after manual subsetting based on natural history and hence the user is asked to examine the dataset obtained in the previous time step prior to further processing</span></span>
+<span id="cb4-3"><a href="selecting-species-of-interest.html#cb4-3"></a></span>
+<span id="cb4-4"><a href="selecting-species-of-interest.html#cb4-4"></a>specieslist &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/species_list.csv&quot;</span>)</span>
+<span id="cb4-5"><a href="selecting-species-of-interest.html#cb4-5"></a>speciesOfInterest &lt;-<span class="st"> </span>specieslist<span class="op">$</span>scientific_name</span></code></pre></div>
 </div>
 <div id="load-raw-data-for-locations" class="section level2">
 <h2><span class="header-section-number">2.5</span> Load raw data for locations</h2>
 <p>Add a spatial filter and assign grids of 25km x 25km.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="selecting-species-of-interest.html#cb5-1"></a><span class="co"># strict spatial filter and assign grid</span></span>
 <span id="cb5-2"><a href="selecting-species-of-interest.html#cb5-2"></a>locs &lt;-<span class="st"> </span>ebd[, .(longitude, latitude)]</span>
-<span id="cb5-3"><a href="selecting-species-of-interest.html#cb5-3"></a><span class="co"># transform to UTM and get 25km boxes</span></span>
-<span id="cb5-4"><a href="selecting-species-of-interest.html#cb5-4"></a>coords &lt;-<span class="st"> </span><span class="kw">setDF</span>(locs) <span class="op">%&gt;%</span></span>
-<span id="cb5-5"><a href="selecting-species-of-interest.html#cb5-5"></a><span class="st">  </span><span class="kw">st_as_sf</span>(<span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb5-6"><a href="selecting-species-of-interest.html#cb5-6"></a><span class="st">  `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span></span>
-<span id="cb5-7"><a href="selecting-species-of-interest.html#cb5-7"></a><span class="st">  </span><span class="kw">bind_cols</span>(<span class="kw">as.data.table</span>(<span class="kw">st_coordinates</span>(.))) <span class="op">%&gt;%</span></span>
-<span id="cb5-8"><a href="selecting-species-of-interest.html#cb5-8"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>) <span class="op">%&gt;%</span></span>
-<span id="cb5-9"><a href="selecting-species-of-interest.html#cb5-9"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(.))</span>
-<span id="cb5-10"><a href="selecting-species-of-interest.html#cb5-10"></a><span class="co"># convert wg to UTM for filter</span></span>
-<span id="cb5-11"><a href="selecting-species-of-interest.html#cb5-11"></a>wg &lt;-<span class="st"> </span><span class="kw">st_transform</span>(wg, <span class="dv">32643</span>)</span>
-<span id="cb5-12"><a href="selecting-species-of-interest.html#cb5-12"></a>coords &lt;-<span class="st"> </span>coords <span class="op">%&gt;%</span></span>
-<span id="cb5-13"><a href="selecting-species-of-interest.html#cb5-13"></a><span class="st">  </span><span class="kw">filter</span>(id <span class="op">%in%</span><span class="st"> </span><span class="kw">unlist</span>(<span class="kw">st_contains</span>(wg, coords))) <span class="op">%&gt;%</span></span>
-<span id="cb5-14"><a href="selecting-species-of-interest.html#cb5-14"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">longitude =</span> X, <span class="dt">latitude =</span> Y) <span class="op">%&gt;%</span></span>
-<span id="cb5-15"><a href="selecting-species-of-interest.html#cb5-15"></a><span class="st">  </span><span class="kw">bind_cols</span>(<span class="kw">as.data.table</span>(<span class="kw">st_coordinates</span>(.))) <span class="op">%&gt;%</span></span>
-<span id="cb5-16"><a href="selecting-species-of-interest.html#cb5-16"></a><span class="st">  </span><span class="kw">st_drop_geometry</span>() <span class="op">%&gt;%</span></span>
-<span id="cb5-17"><a href="selecting-species-of-interest.html#cb5-17"></a><span class="st">  </span><span class="kw">as.data.table</span>()</span>
-<span id="cb5-18"><a href="selecting-species-of-interest.html#cb5-18"></a><span class="co"># remove unneeded objects</span></span>
-<span id="cb5-19"><a href="selecting-species-of-interest.html#cb5-19"></a><span class="kw">rm</span>(locs)</span>
-<span id="cb5-20"><a href="selecting-species-of-interest.html#cb5-20"></a><span class="kw">gc</span>()</span>
-<span id="cb5-21"><a href="selecting-species-of-interest.html#cb5-21"></a>coords &lt;-<span class="st"> </span>coords[, .N, by =<span class="st"> </span>.(longitude, latitude, X, Y)]</span>
-<span id="cb5-22"><a href="selecting-species-of-interest.html#cb5-22"></a>ebd &lt;-<span class="st"> </span><span class="kw">merge</span>(ebd, coords, <span class="dt">all =</span> <span class="ot">FALSE</span>, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>))</span>
-<span id="cb5-23"><a href="selecting-species-of-interest.html#cb5-23"></a>ebd &lt;-<span class="st"> </span>ebd[(longitude <span class="op">%in%</span><span class="st"> </span>coords<span class="op">$</span>longitude) <span class="op">&amp;</span></span>
-<span id="cb5-24"><a href="selecting-species-of-interest.html#cb5-24"></a><span class="st">  </span>(latitude <span class="op">%in%</span><span class="st"> </span>coords<span class="op">$</span>latitude), ]</span></code></pre></div>
+<span id="cb5-3"><a href="selecting-species-of-interest.html#cb5-3"></a></span>
+<span id="cb5-4"><a href="selecting-species-of-interest.html#cb5-4"></a><span class="co"># transform to UTM and get 25km boxes</span></span>
+<span id="cb5-5"><a href="selecting-species-of-interest.html#cb5-5"></a>coords &lt;-<span class="st"> </span><span class="kw">setDF</span>(locs) <span class="op">%&gt;%</span></span>
+<span id="cb5-6"><a href="selecting-species-of-interest.html#cb5-6"></a><span class="st">  </span><span class="kw">st_as_sf</span>(<span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb5-7"><a href="selecting-species-of-interest.html#cb5-7"></a><span class="st">  `</span><span class="dt">st_crs&lt;-</span><span class="st">`</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span></span>
+<span id="cb5-8"><a href="selecting-species-of-interest.html#cb5-8"></a><span class="st">  </span><span class="kw">bind_cols</span>(<span class="kw">as.data.table</span>(<span class="kw">st_coordinates</span>(.))) <span class="op">%&gt;%</span></span>
+<span id="cb5-9"><a href="selecting-species-of-interest.html#cb5-9"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dv">32643</span>) <span class="op">%&gt;%</span></span>
+<span id="cb5-10"><a href="selecting-species-of-interest.html#cb5-10"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(.))</span>
+<span id="cb5-11"><a href="selecting-species-of-interest.html#cb5-11"></a></span>
+<span id="cb5-12"><a href="selecting-species-of-interest.html#cb5-12"></a><span class="co"># convert wg to UTM for filter</span></span>
+<span id="cb5-13"><a href="selecting-species-of-interest.html#cb5-13"></a>wg &lt;-<span class="st"> </span><span class="kw">st_transform</span>(wg, <span class="dv">32643</span>)</span>
+<span id="cb5-14"><a href="selecting-species-of-interest.html#cb5-14"></a>coords &lt;-<span class="st"> </span>coords <span class="op">%&gt;%</span></span>
+<span id="cb5-15"><a href="selecting-species-of-interest.html#cb5-15"></a><span class="st">  </span><span class="kw">filter</span>(id <span class="op">%in%</span><span class="st"> </span><span class="kw">unlist</span>(<span class="kw">st_contains</span>(wg, coords))) <span class="op">%&gt;%</span></span>
+<span id="cb5-16"><a href="selecting-species-of-interest.html#cb5-16"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">longitude =</span> X, <span class="dt">latitude =</span> Y) <span class="op">%&gt;%</span></span>
+<span id="cb5-17"><a href="selecting-species-of-interest.html#cb5-17"></a><span class="st">  </span><span class="kw">bind_cols</span>(<span class="kw">as.data.table</span>(<span class="kw">st_coordinates</span>(.))) <span class="op">%&gt;%</span></span>
+<span id="cb5-18"><a href="selecting-species-of-interest.html#cb5-18"></a><span class="st">  </span><span class="kw">st_drop_geometry</span>() <span class="op">%&gt;%</span></span>
+<span id="cb5-19"><a href="selecting-species-of-interest.html#cb5-19"></a><span class="st">  </span><span class="kw">as.data.table</span>()</span>
+<span id="cb5-20"><a href="selecting-species-of-interest.html#cb5-20"></a></span>
+<span id="cb5-21"><a href="selecting-species-of-interest.html#cb5-21"></a><span class="co"># remove unneeded objects</span></span>
+<span id="cb5-22"><a href="selecting-species-of-interest.html#cb5-22"></a><span class="kw">rm</span>(locs)</span>
+<span id="cb5-23"><a href="selecting-species-of-interest.html#cb5-23"></a><span class="kw">gc</span>()</span>
+<span id="cb5-24"><a href="selecting-species-of-interest.html#cb5-24"></a>coords &lt;-<span class="st"> </span>coords[, .N, by =<span class="st"> </span>.(longitude, latitude, X, Y)]</span>
+<span id="cb5-25"><a href="selecting-species-of-interest.html#cb5-25"></a>ebd &lt;-<span class="st"> </span><span class="kw">merge</span>(ebd, coords, <span class="dt">all =</span> <span class="ot">FALSE</span>, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>))</span>
+<span id="cb5-26"><a href="selecting-species-of-interest.html#cb5-26"></a>ebd &lt;-<span class="st"> </span>ebd[(longitude <span class="op">%in%</span><span class="st"> </span>coords<span class="op">$</span>longitude) <span class="op">&amp;</span></span>
+<span id="cb5-27"><a href="selecting-species-of-interest.html#cb5-27"></a><span class="st">  </span>(latitude <span class="op">%in%</span><span class="st"> </span>coords<span class="op">$</span>latitude), ]</span></code></pre></div>
 </div>
 <div id="get-proportional-obs-counts-in-25km-cells" class="section level2">
 <h2><span class="header-section-number">2.6</span> Get proportional obs counts in 25km cells</h2>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="selecting-species-of-interest.html#cb6-1"></a><span class="co"># round to 25km cell in UTM coords</span></span>
 <span id="cb6-2"><a href="selecting-species-of-interest.html#cb6-2"></a>ebd[, <span class="st">`</span><span class="dt">:=</span><span class="st">`</span>(<span class="dt">X =</span> <span class="kw">round_any</span>(X), <span class="dt">Y =</span> <span class="kw">round_any</span>(Y))]</span>
-<span id="cb6-3"><a href="selecting-species-of-interest.html#cb6-3"></a><span class="co"># count checklists in cell</span></span>
-<span id="cb6-4"><a href="selecting-species-of-interest.html#cb6-4"></a>ebd_summary &lt;-<span class="st"> </span>ebd[, nchk <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">length</span>(<span class="kw">unique</span>(sampling_event_identifier)),</span>
-<span id="cb6-5"><a href="selecting-species-of-interest.html#cb6-5"></a>  by =<span class="st"> </span>.(X, Y)</span>
-<span id="cb6-6"><a href="selecting-species-of-interest.html#cb6-6"></a>]</span>
-<span id="cb6-7"><a href="selecting-species-of-interest.html#cb6-7"></a><span class="co"># count checklists reporting each species in cell and get proportion</span></span>
-<span id="cb6-8"><a href="selecting-species-of-interest.html#cb6-8"></a>ebd_summary &lt;-<span class="st"> </span>ebd_summary[, .(<span class="dt">nrep =</span> <span class="kw">length</span>(<span class="kw">unique</span>(</span>
-<span id="cb6-9"><a href="selecting-species-of-interest.html#cb6-9"></a>  sampling_event_identifier</span>
-<span id="cb6-10"><a href="selecting-species-of-interest.html#cb6-10"></a>))),</span>
-<span id="cb6-11"><a href="selecting-species-of-interest.html#cb6-11"></a>by =<span class="st"> </span>.(X, Y, nchk, scientific_name)</span>
-<span id="cb6-12"><a href="selecting-species-of-interest.html#cb6-12"></a>]</span>
-<span id="cb6-13"><a href="selecting-species-of-interest.html#cb6-13"></a>ebd_summary[, p_rep <span class="op">:</span><span class="er">=</span><span class="st"> </span>nrep <span class="op">/</span><span class="st"> </span>nchk]</span>
-<span id="cb6-14"><a href="selecting-species-of-interest.html#cb6-14"></a><span class="co"># filter for soi</span></span>
-<span id="cb6-15"><a href="selecting-species-of-interest.html#cb6-15"></a>ebd_summary &lt;-<span class="st"> </span>ebd_summary[scientific_name <span class="op">%in%</span><span class="st"> </span>speciesOfInterest, ]</span>
-<span id="cb6-16"><a href="selecting-species-of-interest.html#cb6-16"></a><span class="co"># complete the dataframe for no reports</span></span>
-<span id="cb6-17"><a href="selecting-species-of-interest.html#cb6-17"></a><span class="co"># keep no reports as NA --- allows filtering based on proportion reporting</span></span>
-<span id="cb6-18"><a href="selecting-species-of-interest.html#cb6-18"></a>ebd_summary &lt;-<span class="st"> </span><span class="kw">setDF</span>(ebd_summary) <span class="op">%&gt;%</span></span>
-<span id="cb6-19"><a href="selecting-species-of-interest.html#cb6-19"></a><span class="st">  </span><span class="kw">complete</span>(</span>
-<span id="cb6-20"><a href="selecting-species-of-interest.html#cb6-20"></a>    <span class="kw">nesting</span>(X, Y), scientific_name <span class="co"># ,</span></span>
-<span id="cb6-21"><a href="selecting-species-of-interest.html#cb6-21"></a>    <span class="co"># fill = list(p_rep = 0)</span></span>
-<span id="cb6-22"><a href="selecting-species-of-interest.html#cb6-22"></a>  ) <span class="op">%&gt;%</span></span>
-<span id="cb6-23"><a href="selecting-species-of-interest.html#cb6-23"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(p_rep))</span></code></pre></div>
+<span id="cb6-3"><a href="selecting-species-of-interest.html#cb6-3"></a></span>
+<span id="cb6-4"><a href="selecting-species-of-interest.html#cb6-4"></a><span class="co"># count checklists in cell</span></span>
+<span id="cb6-5"><a href="selecting-species-of-interest.html#cb6-5"></a>ebd_summary &lt;-<span class="st"> </span>ebd[, nchk <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">length</span>(<span class="kw">unique</span>(sampling_event_identifier)),</span>
+<span id="cb6-6"><a href="selecting-species-of-interest.html#cb6-6"></a>  by =<span class="st"> </span>.(X, Y)</span>
+<span id="cb6-7"><a href="selecting-species-of-interest.html#cb6-7"></a>]</span>
+<span id="cb6-8"><a href="selecting-species-of-interest.html#cb6-8"></a></span>
+<span id="cb6-9"><a href="selecting-species-of-interest.html#cb6-9"></a><span class="co"># count checklists reporting each species in cell and get proportion</span></span>
+<span id="cb6-10"><a href="selecting-species-of-interest.html#cb6-10"></a>ebd_summary &lt;-<span class="st"> </span>ebd_summary[, .(<span class="dt">nrep =</span> <span class="kw">length</span>(<span class="kw">unique</span>(</span>
+<span id="cb6-11"><a href="selecting-species-of-interest.html#cb6-11"></a>  sampling_event_identifier</span>
+<span id="cb6-12"><a href="selecting-species-of-interest.html#cb6-12"></a>))),</span>
+<span id="cb6-13"><a href="selecting-species-of-interest.html#cb6-13"></a>by =<span class="st"> </span>.(X, Y, nchk, scientific_name)</span>
+<span id="cb6-14"><a href="selecting-species-of-interest.html#cb6-14"></a>]</span>
+<span id="cb6-15"><a href="selecting-species-of-interest.html#cb6-15"></a>ebd_summary[, p_rep <span class="op">:</span><span class="er">=</span><span class="st"> </span>nrep <span class="op">/</span><span class="st"> </span>nchk]</span>
+<span id="cb6-16"><a href="selecting-species-of-interest.html#cb6-16"></a></span>
+<span id="cb6-17"><a href="selecting-species-of-interest.html#cb6-17"></a><span class="co"># filter for soi</span></span>
+<span id="cb6-18"><a href="selecting-species-of-interest.html#cb6-18"></a>ebd_summary &lt;-<span class="st"> </span>ebd_summary[scientific_name <span class="op">%in%</span><span class="st"> </span>speciesOfInterest, ]</span>
+<span id="cb6-19"><a href="selecting-species-of-interest.html#cb6-19"></a></span>
+<span id="cb6-20"><a href="selecting-species-of-interest.html#cb6-20"></a><span class="co"># complete the dataframe for no reports</span></span>
+<span id="cb6-21"><a href="selecting-species-of-interest.html#cb6-21"></a><span class="co"># keep no reports as NA --- allows filtering based on proportion reporting</span></span>
+<span id="cb6-22"><a href="selecting-species-of-interest.html#cb6-22"></a>ebd_summary &lt;-<span class="st"> </span><span class="kw">setDF</span>(ebd_summary) <span class="op">%&gt;%</span></span>
+<span id="cb6-23"><a href="selecting-species-of-interest.html#cb6-23"></a><span class="st">  </span><span class="kw">complete</span>(</span>
+<span id="cb6-24"><a href="selecting-species-of-interest.html#cb6-24"></a>    <span class="kw">nesting</span>(X, Y), scientific_name <span class="co"># ,</span></span>
+<span id="cb6-25"><a href="selecting-species-of-interest.html#cb6-25"></a>    <span class="co"># fill = list(p_rep = 0)</span></span>
+<span id="cb6-26"><a href="selecting-species-of-interest.html#cb6-26"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb6-27"><a href="selecting-species-of-interest.html#cb6-27"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(p_rep))</span></code></pre></div>
 </div>
 <div id="which-species-are-reported-sufficiently-in-checklists" class="section level2">
 <h2><span class="header-section-number">2.7</span> Which species are reported sufficiently in checklists?</h2>
@@ -459,40 +462,44 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-9"><a href="selecting-species-of-interest.html#cb7-9"></a><span class="st">  </span><span class="kw">count</span>(scientific_name,</span>
 <span id="cb7-10"><a href="selecting-species-of-interest.html#cb7-10"></a>    <span class="dt">name =</span> <span class="st">&quot;n_grids&quot;</span></span>
 <span id="cb7-11"><a href="selecting-species-of-interest.html#cb7-11"></a>  )</span>
-<span id="cb7-12"><a href="selecting-species-of-interest.html#cb7-12"></a><span class="co"># Write the above two results</span></span>
-<span id="cb7-13"><a href="selecting-species-of-interest.html#cb7-13"></a><span class="kw">write_csv</span>(tot_n_chklist, <span class="st">&quot;data/01_nchk_per_grid.csv&quot;</span>)</span>
-<span id="cb7-14"><a href="selecting-species-of-interest.html#cb7-14"></a><span class="kw">write_csv</span>(spp_grids, <span class="st">&quot;data/01_ngrids_per_spp.csv&quot;</span>)</span>
-<span id="cb7-15"><a href="selecting-species-of-interest.html#cb7-15"></a></span>
-<span id="cb7-16"><a href="selecting-species-of-interest.html#cb7-16"></a><span class="co"># left-join the datasets</span></span>
-<span id="cb7-17"><a href="selecting-species-of-interest.html#cb7-17"></a>ebd_summary &lt;-<span class="st"> </span><span class="kw">left_join</span>(ebd_summary, spp_grids, <span class="dt">by =</span> <span class="st">&quot;scientific_name&quot;</span>)</span>
-<span id="cb7-18"><a href="selecting-species-of-interest.html#cb7-18"></a><span class="co"># check the proportion of grids across which this cut-off is met for each species</span></span>
-<span id="cb7-19"><a href="selecting-species-of-interest.html#cb7-19"></a><span class="co"># Is it &gt; 90% or 70%?</span></span>
-<span id="cb7-20"><a href="selecting-species-of-interest.html#cb7-20"></a><span class="co"># For example, with a 3% cut-off, ~100 species are occurring in &gt;50%</span></span>
-<span id="cb7-21"><a href="selecting-species-of-interest.html#cb7-21"></a><span class="co"># of the grids they have been reported in</span></span>
-<span id="cb7-22"><a href="selecting-species-of-interest.html#cb7-22"></a>p_cutoff &lt;-<span class="st"> </span><span class="fl">0.05</span> <span class="co"># Proportion of checklists a species has been reported in</span></span>
-<span id="cb7-23"><a href="selecting-species-of-interest.html#cb7-23"></a>grid_proportions &lt;-<span class="st"> </span>ebd_summary <span class="op">%&gt;%</span></span>
-<span id="cb7-24"><a href="selecting-species-of-interest.html#cb7-24"></a><span class="st">  </span><span class="kw">group_by</span>(scientific_name) <span class="op">%&gt;%</span></span>
-<span id="cb7-25"><a href="selecting-species-of-interest.html#cb7-25"></a><span class="st">  </span><span class="kw">tally</span>(p_rep <span class="op">&gt;=</span><span class="st"> </span>p_cutoff) <span class="op">%&gt;%</span></span>
-<span id="cb7-26"><a href="selecting-species-of-interest.html#cb7-26"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">prop_grids_cut =</span> n <span class="op">/</span><span class="st"> </span>(spp_grids<span class="op">$</span>n_grids)) <span class="op">%&gt;%</span></span>
-<span id="cb7-27"><a href="selecting-species-of-interest.html#cb7-27"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(prop_grids_cut))</span>
-<span id="cb7-28"><a href="selecting-species-of-interest.html#cb7-28"></a>grid_prop_cut &lt;-<span class="st"> </span><span class="kw">filter</span>(</span>
-<span id="cb7-29"><a href="selecting-species-of-interest.html#cb7-29"></a>  grid_proportions,</span>
-<span id="cb7-30"><a href="selecting-species-of-interest.html#cb7-30"></a>  prop_grids_cut <span class="op">&gt;=</span><span class="st"> </span>p_cutoff</span>
-<span id="cb7-31"><a href="selecting-species-of-interest.html#cb7-31"></a>)</span>
-<span id="cb7-32"><a href="selecting-species-of-interest.html#cb7-32"></a><span class="co"># Write the results</span></span>
-<span id="cb7-33"><a href="selecting-species-of-interest.html#cb7-33"></a><span class="kw">write_csv</span>(grid_prop_cut, <span class="st">&quot;data/01_chk_5_percent.csv&quot;</span>)</span>
+<span id="cb7-12"><a href="selecting-species-of-interest.html#cb7-12"></a></span>
+<span id="cb7-13"><a href="selecting-species-of-interest.html#cb7-13"></a><span class="co"># Write the above two results</span></span>
+<span id="cb7-14"><a href="selecting-species-of-interest.html#cb7-14"></a><span class="kw">write_csv</span>(tot_n_chklist, <span class="st">&quot;data/01_nchk_per_grid.csv&quot;</span>)</span>
+<span id="cb7-15"><a href="selecting-species-of-interest.html#cb7-15"></a><span class="kw">write_csv</span>(spp_grids, <span class="st">&quot;data/01_ngrids_per_spp.csv&quot;</span>)</span>
+<span id="cb7-16"><a href="selecting-species-of-interest.html#cb7-16"></a></span>
+<span id="cb7-17"><a href="selecting-species-of-interest.html#cb7-17"></a><span class="co"># left-join the datasets</span></span>
+<span id="cb7-18"><a href="selecting-species-of-interest.html#cb7-18"></a>ebd_summary &lt;-<span class="st"> </span><span class="kw">left_join</span>(ebd_summary, spp_grids, <span class="dt">by =</span> <span class="st">&quot;scientific_name&quot;</span>)</span>
+<span id="cb7-19"><a href="selecting-species-of-interest.html#cb7-19"></a></span>
+<span id="cb7-20"><a href="selecting-species-of-interest.html#cb7-20"></a><span class="co"># check the proportion of grids across which this cut-off is met for each species</span></span>
+<span id="cb7-21"><a href="selecting-species-of-interest.html#cb7-21"></a><span class="co"># Is it &gt; 90% or 70%?</span></span>
+<span id="cb7-22"><a href="selecting-species-of-interest.html#cb7-22"></a><span class="co"># For example, with a 3% cut-off, ~100 species are occurring in &gt;50%</span></span>
+<span id="cb7-23"><a href="selecting-species-of-interest.html#cb7-23"></a><span class="co"># of the grids they have been reported in</span></span>
+<span id="cb7-24"><a href="selecting-species-of-interest.html#cb7-24"></a>p_cutoff &lt;-<span class="st"> </span><span class="fl">0.05</span> <span class="co"># Proportion of checklists a species has been reported in</span></span>
+<span id="cb7-25"><a href="selecting-species-of-interest.html#cb7-25"></a>grid_proportions &lt;-<span class="st"> </span>ebd_summary <span class="op">%&gt;%</span></span>
+<span id="cb7-26"><a href="selecting-species-of-interest.html#cb7-26"></a><span class="st">  </span><span class="kw">group_by</span>(scientific_name) <span class="op">%&gt;%</span></span>
+<span id="cb7-27"><a href="selecting-species-of-interest.html#cb7-27"></a><span class="st">  </span><span class="kw">tally</span>(p_rep <span class="op">&gt;=</span><span class="st"> </span>p_cutoff) <span class="op">%&gt;%</span></span>
+<span id="cb7-28"><a href="selecting-species-of-interest.html#cb7-28"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">prop_grids_cut =</span> n <span class="op">/</span><span class="st"> </span>(spp_grids<span class="op">$</span>n_grids)) <span class="op">%&gt;%</span></span>
+<span id="cb7-29"><a href="selecting-species-of-interest.html#cb7-29"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(prop_grids_cut))</span>
+<span id="cb7-30"><a href="selecting-species-of-interest.html#cb7-30"></a>grid_prop_cut &lt;-<span class="st"> </span><span class="kw">filter</span>(</span>
+<span id="cb7-31"><a href="selecting-species-of-interest.html#cb7-31"></a>  grid_proportions,</span>
+<span id="cb7-32"><a href="selecting-species-of-interest.html#cb7-32"></a>  prop_grids_cut <span class="op">&gt;=</span><span class="st"> </span>p_cutoff</span>
+<span id="cb7-33"><a href="selecting-species-of-interest.html#cb7-33"></a>)</span>
 <span id="cb7-34"><a href="selecting-species-of-interest.html#cb7-34"></a></span>
-<span id="cb7-35"><a href="selecting-species-of-interest.html#cb7-35"></a><span class="co"># Identifying the number of species that occur in potentially &lt;5% of all lists</span></span>
-<span id="cb7-36"><a href="selecting-species-of-interest.html#cb7-36"></a>total_number_lists &lt;-<span class="st"> </span><span class="kw">sum</span>(tot_n_chklist<span class="op">$</span>nchk)</span>
-<span id="cb7-37"><a href="selecting-species-of-interest.html#cb7-37"></a>spp_sum_chk &lt;-<span class="st"> </span>ebd_summary <span class="op">%&gt;%</span></span>
-<span id="cb7-38"><a href="selecting-species-of-interest.html#cb7-38"></a><span class="st">  </span><span class="kw">distinct</span>(X, Y, scientific_name, nrep) <span class="op">%&gt;%</span></span>
-<span id="cb7-39"><a href="selecting-species-of-interest.html#cb7-39"></a><span class="st">  </span><span class="kw">group_by</span>(scientific_name) <span class="op">%&gt;%</span></span>
-<span id="cb7-40"><a href="selecting-species-of-interest.html#cb7-40"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sum_chk =</span> <span class="kw">sum</span>(nrep)) <span class="op">%&gt;%</span></span>
-<span id="cb7-41"><a href="selecting-species-of-interest.html#cb7-41"></a><span class="st">  </span><span class="kw">distinct</span>(scientific_name, sum_chk)</span>
-<span id="cb7-42"><a href="selecting-species-of-interest.html#cb7-42"></a><span class="co"># Approximately 90 to 100 species occur in &gt;5% of all checklists</span></span>
-<span id="cb7-43"><a href="selecting-species-of-interest.html#cb7-43"></a>prop_all_lists &lt;-<span class="st"> </span>spp_sum_chk <span class="op">%&gt;%</span></span>
-<span id="cb7-44"><a href="selecting-species-of-interest.html#cb7-44"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">prop_lists =</span> sum_chk <span class="op">/</span><span class="st"> </span>total_number_lists) <span class="op">%&gt;%</span></span>
-<span id="cb7-45"><a href="selecting-species-of-interest.html#cb7-45"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(prop_lists))</span></code></pre></div>
+<span id="cb7-35"><a href="selecting-species-of-interest.html#cb7-35"></a><span class="co"># Write the results</span></span>
+<span id="cb7-36"><a href="selecting-species-of-interest.html#cb7-36"></a><span class="kw">write_csv</span>(grid_prop_cut, <span class="st">&quot;data/01_chk_5_percent.csv&quot;</span>)</span>
+<span id="cb7-37"><a href="selecting-species-of-interest.html#cb7-37"></a></span>
+<span id="cb7-38"><a href="selecting-species-of-interest.html#cb7-38"></a><span class="co"># Identifying the number of species that occur in potentially &lt;5% of all lists</span></span>
+<span id="cb7-39"><a href="selecting-species-of-interest.html#cb7-39"></a>total_number_lists &lt;-<span class="st"> </span><span class="kw">sum</span>(tot_n_chklist<span class="op">$</span>nchk)</span>
+<span id="cb7-40"><a href="selecting-species-of-interest.html#cb7-40"></a>spp_sum_chk &lt;-<span class="st"> </span>ebd_summary <span class="op">%&gt;%</span></span>
+<span id="cb7-41"><a href="selecting-species-of-interest.html#cb7-41"></a><span class="st">  </span><span class="kw">distinct</span>(X, Y, scientific_name, nrep) <span class="op">%&gt;%</span></span>
+<span id="cb7-42"><a href="selecting-species-of-interest.html#cb7-42"></a><span class="st">  </span><span class="kw">group_by</span>(scientific_name) <span class="op">%&gt;%</span></span>
+<span id="cb7-43"><a href="selecting-species-of-interest.html#cb7-43"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sum_chk =</span> <span class="kw">sum</span>(nrep)) <span class="op">%&gt;%</span></span>
+<span id="cb7-44"><a href="selecting-species-of-interest.html#cb7-44"></a><span class="st">  </span><span class="kw">distinct</span>(scientific_name, sum_chk)</span>
+<span id="cb7-45"><a href="selecting-species-of-interest.html#cb7-45"></a></span>
+<span id="cb7-46"><a href="selecting-species-of-interest.html#cb7-46"></a><span class="co"># Approximately 90 to 100 species occur in &gt;5% of all checklists</span></span>
+<span id="cb7-47"><a href="selecting-species-of-interest.html#cb7-47"></a>prop_all_lists &lt;-<span class="st"> </span>spp_sum_chk <span class="op">%&gt;%</span></span>
+<span id="cb7-48"><a href="selecting-species-of-interest.html#cb7-48"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">prop_lists =</span> sum_chk <span class="op">/</span><span class="st"> </span>total_number_lists) <span class="op">%&gt;%</span></span>
+<span id="cb7-49"><a href="selecting-species-of-interest.html#cb7-49"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(prop_lists))</span></code></pre></div>
 </div>
 <div id="figure-checklist-distribution" class="section level2">
 <h2><span class="header-section-number">2.8</span> Figure: Checklist distribution</h2>
@@ -516,12 +523,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb9-2"><a href="selecting-species-of-interest.html#cb9-2"></a>new_sp_list &lt;-<span class="st"> </span><span class="kw">semi_join</span>(specieslist, grid_prop_cut, <span class="dt">by =</span> <span class="st">&quot;scientific_name&quot;</span>)</span>
 <span id="cb9-3"><a href="selecting-species-of-interest.html#cb9-3"></a><span class="kw">write_csv</span>(new_sp_list, <span class="st">&quot;data/01_list-of-species-cutoff.csv&quot;</span>)</span></code></pre></div>
 
-</div>
-</div>
-<h3> References</h3>
-<div id="refs" class="references">
-<div id="ref-viswanathan2020">
-<p>Viswanathan, A., A. Reddy, A. Deomurari, K. Suryawanshi, M. D. Madhusudan, M. Kaushik, P. J, R. Jayapal, and S. &amp; Quader. 2020. <em>State of India’s Birds 2020: Background and Methodology.</em> Manual.</p>
 </div>
 </div>
             </section>

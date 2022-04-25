@@ -1,8 +1,6 @@
 introduction
-attribution
 data-access
 data-processing
-main-text-figure-1
 selecting-species-of-interest
 prepare-libraries
 subset-species-by-geographical-confines-of-the-study-area
