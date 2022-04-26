@@ -2,3 +2,182 @@
 \clearpage
 
 # References
+
+Aiello-Lammens, M. E. et al. 2015. spThin: an R package for spatial thinning of species occurrence records for use in ecological niche models. - Ecography 38: 541–545.  
+
+Ali, S. and Ripley, S. D. 1983. Handbook of the birds of India and Pakistan. - Oxford University Press.  
+
+Anand, M. O. et al. 2010. Sustaining biodiversity conservation in human-modified landscapes in the Western Ghats: Remnant forests matter. - Biological Conservation 143: 2363–2374.  
+
+Arasumani, M. et al. 2018. Not seeing the grass for the trees: plantations and agriculture shrink tropical montane grassland by two-thirds over four decades in the Palani Hills, a Western Ghats Sky Island. - PloS ONE 13: 1–18.  
+
+Bartoń, K. 2009. MuMIn: multi-model inference.  
+
+Barve, S. et al. 2021. Elevation and body size drive convergent variation in thermo‐insulative feather structure of Himalayan birds. - Ecography 44: 680–689.  
+
+Boyle, W. A. et al. 2020. Hygric Niches for Tropical Endotherms. - Trends in Ecology and Evolution xx: 1–15.  
+
+Burnham, K. P. and Anderson, D. R. 2002. Model selection and multimodel inference: a practical information-theoretic approach. - Springer.  
+
+Burnham, K. P. et al. 2011. AIC model selection and multimodel inference in behavioral ecology: Some background, observations, and comparisons. - Behavioral Ecology and Sociobiology 65: 23–35.  
+
+Butt, N. et al. 2015. Cascading effects of climate extremes on vertebrate fauna through changes to low-latitude tree flowering and fruiting phenology. - Global Change Biology 21: 3267–3277.  
+
+Chan, W.-P. et al. 2016. Seasonal and daily climate variation have opposite effects on species elevational range size. - Science 351: 1437–1439.  
+
+Das, A. et al. 2006. Prioritisation of conservation areas in the Western Ghats, India. - Biological Conservation 133: 16–31.  
+
+Davies, R. G. et al. 2007. Topography, energy and the global distribution of bird species richness. - Proceedings of the Royal Society B: Biological Sciences 274: 1189–1197.  
+
+Deutsch, C. A. et al. 2008. Impacts of climate warming on terrestrial ectotherms across latitude. - Proceedings of the National Academy of Sciences of the United States of America 105: 6668–6672.  
+
+Devictor, V. et al. 2010. Beyond scarcity: citizen science programmes as useful tools for conservation biogeography: Citizen science and conservation biogeography. - Diversity and Distributions 16: 354–362.  
+
+Ellwood, E. R. et al. 2017. Citizen science and conservation: Recommendations for a rapidly moving field. - Biological Conservation 208: 1–4.  
+
+Elsen, P. R. et al. 2017. The role of competition, ecotones, and temperature in the elevational distribution of Himalayan birds. - Ecology 98: 337–348.  
+
+Elsen, P. R. et al. 2018. Conserving Himalayan birds in highly seasonal forested and agricultural landscapes. - Conservation Biology 32: 1313–1324.  
+
+Elsen, P. R. et al. 2020. Topography and human pressure in mountain ranges alter expected species responses to climate change. - Nature Communications 11: 1–10.  
+
+Fink, D. et al. 2014. Crowdsourcing Meets Ecology: Distribution Models. - Association for the Advancement of Artificial Intelligence: 19–30.  
+
+Fiske, I. J. and Chandler, R. B. 2011. Unmarked: An R package for fitting hierarchical models of wildlife occurrence and abundance. - Journal of Statistical Software 43: 1–23.  
+
+Freeman, B. G. et al. 2018. Climate change causes upslope shifts and mountaintop extirpations in a tropical bird community. - Proceedings of the National Academy of Sciences 115: 11982–11987.  
+
+Frishkoff, L. O. et al. 2016. Climate change and habitat conversion favour the same species. - Ecology letters 19: 1081–1090.  
+
+Gadgil, M. and Meher-Homji, V. 1986. Localities of great significance to conservation of India’s biological diversity. - Proceedings of the Indian Academy of Sciences: 165–180.  
+
+Guo, F. et al. 2018. Land-use change interacts with climate to determine elevational species redistribution. - Nature Communications 2018 9:1 9: 1315–1315.  
+
+Jankowski, J. E. et al. 2013. Exploring the role of physiology and biotic interactions in determining elevational ranges of tropical animals. - Ecography 36: 1–12.  
+
+Janzen, D. H. 1967. Why Mountain Passes are Higher in the Tropics. - The American naturalist 101: 233–249.  
+
+Johnston, A. et al. 2015. Abundance models improve spatial and temporal prioritization of conservation resources. - Ecological Applications 25: 1749–1756.  
+
+Johnston, A. et al. 2018. Estimates of observer expertise improve species distributions from citizen science data. - Methods in Ecology and Evolution 9: 88–97.  
+
+Johnston, A. et al. 2021. Analytical guidelines to increase the value of community science data: An example using eBird data to estimate species distributions (Y Fourcade, Ed.). - Divers Distrib 27: 1265–1277.  
+
+Karanth, K. K. et al. 2016. Producing Diversity: Agroforests Sustain Avian Richness and Abundance in India’s Western Ghats. - Frontiers in Ecology and Evolution 4: 1–10.  
+
+Karger, D. N. et al. 2017. Climatologies at high resolution for the earth’s land surface areas. - Scientific Data 4: 1–20.  
+
+Kelling, S. et al. 2015. Can observation skills of citizen scientists be estimated using species accumulation curves? - PLoS ONE 10: 1–20.  
+
+Kelling, S. et al. 2019. Using Semistructured Surveys to Improve Citizen Science Data for Monitoring Biodiversity. - BioScience 69: 170–179.  
+
+Kennedy, C. M. et al. 2011. Landscape matrix mediates occupancy dynamics of Neotropical avian insectivores. - Ecological Applications 21: 1837–1850.  
+
+La Sorte, F. A. and Jetz, W. 2010. Projected range contractions of montane biodiversity under global warming. - Proceedings of the Royal Society B: Biological Sciences 277: 3401–3410.  
+
+Loiselle, B. A. and Blake, J. G. 1991. Temporal Variation in Birds and Fruits Along an Elevational Gradient in Costa Rica. - Ecology 72: 180–193.  
+
+MacKenzie, D. I. and Bailey, L. L. 2004. Assessing the fit of site-occupancy models. - Journal of Agricultural, Biological, and Environmental Statistics 9: 300–318.  
+
+Mackenzie, D. I. et al. 2002. Estimating Site Occupancy Rates When Detection Probabilities Are Less Than One. - Ecology 83: 1–19.  
+
+MacKenzie, D. et al. 2017. Occupancy estimation and modeling: inferring patterns and dynamics of species occurrence. - Academic Press.  
+
+Mani, M. S. 1974. Ecology and Biogeography in India. - Springer Netherlands.  
+
+McGill, B. J. et al. 2006. Rebuilding community ecology from functional traits. - Trends in Ecology and Evolution 21: 178–185.  
+
+Myers, N. et al. 2000. Biodiversity hotspots for conservation priorities. - Nature 403: 853–858.  
+
+Newbold, T. et al. 2015. Global effects of land use on local terrestrial biodiversity. - Nature 520: 45–50.  
+
+Nogués-Bravo, D. et al. 2007. Exposure of global mountain systems to climate warming during the 21st Century. - Global Environmental Change 17: 420–428.  
+
+Nowakowski, A. J. et al. 2018. Changing Thermal Landscapes: Merging Climate Science and Landscape Ecology through Thermal Biology. - Current Landscape Ecology Reports 3: 57–72.  
+
+O’Donnell, M. S. and Ignizio, D. A. 2012. Bioclimatic predictors for supporting ecological applications in the conterminous United States.  
+
+OpenStreetMap contributors 2017. Planet dump retrieved from https://planet.osm.org. in press.  
+
+Pascal, J. 1988. Wet evergreen forests of the Western Ghats of India: Ecology, structure, floristic composition and succession (Travaux de la Section scientifique et technique). - Institut Francais de Pondicherry.  
+
+Payne, D. et al. 2017. Opportunities for research on mountain biodiversity under global change. - Current Opinion in Environmental Sustainability 29: 40–47.  
+
+Perez, T. M. et al. 2016. Thermal trouble in the tropics. - Science 351: 1392–1393.  
+Peters, M. K. et al. 2019. Climate–land-use interactions shape tropical mountain biodiversity and ecosystem functions. - Nature 568: 88–92.  
+
+Pigot, A. L. et al. 2020. Macroevolutionary convergence connects morphological form to ecological function in birds. - Nature Ecology and Evolution 4: 230–239.  
+
+Praveen J 2017. On the geo-precision of data for modelling home range of a species–A commentary on Ramesh et al. (2017). - Biological Conservation.  
+
+Praveen J 2021. Kerala Bird Atlas 2015-2020: features, outcomes and implications of a citizen-science project. - Current Science 122: 298–309.  
+
+Quintero, I. and Jetz, W. 2018. Global elevational diversity and diversification of birds. - Nature 555: 246–250.  
+
+R Core Team 2020. R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria.  
+
+Rahbek, C. et al. 2019. Humboldt’s enigma: What causes global patterns of mountain biodiversity? - Science 365: 1108–1113.  
+
+Rajendran, K. et al. 2012. Monsoon circulation interaction with Western Ghats orography under changing climate: Projection by a 20-km mesh AGCM. - Theor Appl Climatol 110: 555–571.  
+
+Raman, T. R. S. 2006. Effects of habitat structure and adjacent habitats on birds in tropical rainforest fragments and shaded plantations in the Western Ghats, India. - Biodiversity and Conservation 15: 1577–1607.  
+
+Raman, T. R. S. et al. 2021. Native shade trees aid bird conservation in tea plantations in southern India. - CURRENT SCIENCE 121: 12.  
+
+Ranganathan, J. et al. 2010. Landscape-level effects on avifauna within tropical agriculture in the Western Ghats: Insights for management and conservation. - Biological Conservation 143: 2909–2917.  
+
+Robin, V. V. et al. 2015. Islands within islands: two montane palaeo-endemic birds impacted by recent anthropogenic fragmentation. - Molecular ecology 24: 3572–3584.  
+
+Robinson, O. J. et al. 2020. Integrating citizen science data with expert surveys increases accuracy and spatial extent of species distribution models (L Maiorano, Ed.). - Divers Distrib 26: 976–986.  
+
+Roy, P. S. et al. 2015. Development of decadal (1985-1995-2005) land use and land cover database for India. - Remote Sensing 7: 2401–2430.  
+
+Şekercioĝlu,  çaĝan H. et al. 2012. The effects of climate change on tropical birds. - Biological Conservation 148: 1–18.  
+
+Senior, R. A. et al. 2017. A pantropical analysis of the impacts of forest degradation and conversion on local temperature. - Ecology and Evolution 7: 7897–7908.  
+
+Sidhu, S. et al. 2010. Effects of plantations and home-gardens on tropical forest bird communities and mixed-species bird flocks in the southern Western Ghats. - Journal of the Bombay Natural History Society 107: 91–91.  
+
+Sirami, C. et al. 2017. Impacts of global change on species distributions: obstacles and solutions to integrate climate and land use. - Global Ecology and Biogeography 26: 385–394.  
+
+SoIB 2020. State of India’s Birds, 2020: Range, trends and conservation status.  
+
+Sreekar, R. et al. 2013. Natural Windbreaks Sustain Bird Diversity in a Tea-Dominated Landscape. - PLoS ONE 8: 4–11.  
+
+Srinivasan, U. and Wilcove, D. S. 2020. Interactive impacts of climate change and land‐use change on the demography of montane birds. - Ecology.  
+
+Srinivasan, U. et al. 2018. Temperature and competition interact to structure himalayan bird communities. - Proceedings of the Royal Society B: Biological Sciences.  
+
+Srinivasan, U. et al. 2019. Annual temperature variation influences the vulnerability of montane bird communities to land-use change. - Ecography 42: 2084–2094.  
+
+Steen, V. A. et al. 2021. Spatial thinning and class balancing: Key choices lead to variation in the performance of species distribution models with citizen science data (J McPherson, Ed.). - Methods Ecol Evol 12: 216–226.  
+
+Stevens, G. C. 1989. The Latitudinal Gradient in Geographical Range: How so Many Species Coexist in the Tropics. - The American Naturalist 133: 240–256.  
+
+Sullivan, B. L. et al. 2009. eBird: A citizen-based bird observation network in the biological sciences. - Biological Conservation 142: 2282–2292.  
+
+Sullivan, B. L. et al. 2014. The eBird enterprise: An integrated approach to development and application of citizen science. - Biological Conservation 169: 31–40.  
+
+Sunarto, S. et al. 2012. Tigers need cover: Multi-scale occupancy study of the big cat in Sumatran forest and plantation landscapes. - PLoS ONE.  
+
+Tewksbury, J. J. et al. 2008. Putting the Heat on Tropical Animals. - Science (New York, N.Y.) 320: 1296–1297.  
+
+Tingley, M. W. et al. 2009. Birds track their Grinnellian niche through a century of climate change. - Proceedings of the National Academy of Sciences 106: 19637–19643.  
+
+Tsai, P. Y. et al. 2020. New insights into the patterns and drivers of avian altitudinal migration from a growing crowdsourcing data source. - Ecography: 1–12.  
+
+Urban, M. C. 2018. Escalator to extinction. - Proc Natl Acad Sci USA 115: 11871–11873.  
+
+van Strien, A. J. et al. 2013. Opportunistic citizen science data of animal species produce reliable estimates of distribution trends if analysed with occupancy models. - Journal of Applied Ecology 50: 1450–1458.  
+
+Vijayakumar, S. P. et al. 2016. Glaciations, gradients, and geography: multiple drivers of diversification of bush frogs in the Western Ghats Escarpment. - Proceedings of the Royal Society B: Biological Sciences 283: 20161011–20161011.  
+
+Viswanathan, A. et al. 2020. State of India’s Birds 2020: Background and Methodology.: 1–36.  
+
+Williams, S. E. and Middleton, J. 2008. Climatic seasonality, resource bottlenecks, and abundance of rainforest birds: implications for global climate change: Birds, seasonality and climate change. - Diversity and Distributions 14: 69–77.  
+
+Wood, C. et al. 2011. eBird: Engaging Birders in Science and Conservation. - PLoS Biol 9: e1001220.  
+
+Yalcin, S. and Leroux, S. J. 2018. An empirical test of the relative and combined effects of land-cover and climate change on local colonization and extinction. - Global Change Biology 24: 3849–3861.  
+
+
