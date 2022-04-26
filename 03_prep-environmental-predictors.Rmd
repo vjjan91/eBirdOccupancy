@@ -7,7 +7,7 @@ editor_options:
 
 In this script, we processed climatic and landscape predictors for occupancy modeling.
 
-All climatic data was obtained from https://chelsa-climate.org/bioclim/
+All climatic data was obtained from https://chelsa-climate.org/bioclim/  
 All landscape data was derived from a high resolution land cover map (Roy et al. 2015). This map provides sufficient classes to achieve a high land cover resolution and can be accessed here (https://daac.ornl.gov/VEGETATION/guides/Decadal_LULC_India.html)
 
 The goal here is to resample all rasters so that they have the same resolution of 1km cells.
