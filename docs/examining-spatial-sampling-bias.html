@@ -23,7 +23,7 @@
 
 
 
-<meta name="date" content="2022-04-26" />
+<meta name="date" content="2022-04-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -134,8 +134,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <ul class="summary">
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#data-access"><i class="fa fa-check"></i><b>1.1</b> Data access</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#data-processing"><i class="fa fa-check"></i><b>1.2</b> Data processing</a></li>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#data-processing"><i class="fa fa-check"></i><b>1.1</b> Data processing</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html"><i class="fa fa-check"></i><b>2</b> Selecting species of interest</a><ul>
 <li class="chapter" data-level="2.1" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#prepare-libraries"><i class="fa fa-check"></i><b>2.1</b> Prepare libraries</a></li>
@@ -327,7 +326,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">6.2</span> Read checklist data</h2>
 <p>Read in checklist data with distance to nearest neighbouring site, and the distance to the nearest road.</p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="examining-spatial-sampling-bias.html#cb54-1"></a><span class="co"># read from local file</span></span>
-<span id="cb54-2"><a href="examining-spatial-sampling-bias.html#cb54-2"></a>chkCovars &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/03_data-covars-perChklist.csv&quot;</span>)</span></code></pre></div>
+<span id="cb54-2"><a href="examining-spatial-sampling-bias.html#cb54-2"></a>chkCovars &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;results/04_data-covars-perChklist.csv&quot;</span>)</span></code></pre></div>
 <div id="spatially-explicit-filter-on-checklists-1" class="section level3">
 <h3><span class="header-section-number">6.2.1</span> Spatially explicit filter on checklists</h3>
 <p>We filter the checklists by the boundary of the study area. This is <em>not</em> the extent.</p>
@@ -383,7 +382,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb57-11"><a href="examining-spatial-sampling-bias.html#cb57-11"></a>    <span class="kw">vars</span>(value),</span>
 <span id="cb57-12"><a href="examining-spatial-sampling-bias.html#cb57-12"></a>    <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span><span class="kw">mean</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">sd</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">min</span>(.), <span class="op">~</span><span class="st"> </span><span class="kw">max</span>(.))</span>
 <span id="cb57-13"><a href="examining-spatial-sampling-bias.html#cb57-13"></a>  ) <span class="op">%&gt;%</span></span>
-<span id="cb57-14"><a href="examining-spatial-sampling-bias.html#cb57-14"></a><span class="st">  </span><span class="kw">write_csv</span>(<span class="st">&quot;data/results/distance_roads_sites.csv&quot;</span>)</span></code></pre></div>
+<span id="cb57-14"><a href="examining-spatial-sampling-bias.html#cb57-14"></a><span class="st">  </span><span class="kw">write_csv</span>(<span class="st">&quot;results/06_distance-roads-sites.csv&quot;</span>)</span></code></pre></div>
 </div>
 <div id="distance-to-nearest-neighbouring-site" class="section level3">
 <h3><span class="header-section-number">6.3.3</span> Distance to nearest neighbouring site</h3>

@@ -23,7 +23,7 @@
 
 
 
-<meta name="date" content="2022-04-26" />
+<meta name="date" content="2022-04-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -134,8 +134,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <ul class="summary">
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#data-access"><i class="fa fa-check"></i><b>1.1</b> Data access</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#data-processing"><i class="fa fa-check"></i><b>1.2</b> Data processing</a></li>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#data-processing"><i class="fa fa-check"></i><b>1.1</b> Data processing</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html"><i class="fa fa-check"></i><b>2</b> Selecting species of interest</a><ul>
 <li class="chapter" data-level="2.1" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#prepare-libraries"><i class="fa fa-check"></i><b>2.1</b> Prepare libraries</a></li>
@@ -299,7 +298,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Section 4</span> Preparing Environmental Predictors</h1>
 <p>In this script, we processed climatic and landscape predictors for occupancy modeling.</p>
 <p>All climatic data was obtained from <a href="https://chelsa-climate.org/bioclim/" class="uri">https://chelsa-climate.org/bioclim/</a><br />
-All landscape data was derived from a high resolution land cover map (Roy et al. 2015). This map provides sufficient classes to achieve a high land cover resolution and can be accessed here (<a href="https://daac.ornl.gov/VEGETATION/guides/Decadal_LULC_India.html" class="uri">https://daac.ornl.gov/VEGETATION/guides/Decadal_LULC_India.html</a>)</p>
+All landscape data was derived from a high resolution land cover map (Roy et al. 2015). This map provides sufficient classes to achieve a high land cover resolution and can be accessed here (<a href="https://daac.ornl.gov/VEGETATION/guides/Decadal_LULC_India.html" class="uri">https://daac.ornl.gov/VEGETATION/guides/Decadal_LULC_India.html</a>).</p>
 <p>The goal here is to resample all rasters so that they have the same resolution of 1km cells.</p>
 <div id="prepare-libraries-1" class="section level2">
 <h2><span class="header-section-number">4.1</span> Prepare libraries</h2>
@@ -526,7 +525,7 @@ All landscape data was derived from a high resolution land cover map (Roy et al.
 <span id="cb33-15"><a href="preparing-environmental-predictors.html#cb33-15"></a>)</span>
 <span id="cb33-16"><a href="preparing-environmental-predictors.html#cb33-16"></a></span>
 <span id="cb33-17"><a href="preparing-environmental-predictors.html#cb33-17"></a><span class="co"># read reclassification matrix</span></span>
-<span id="cb33-18"><a href="preparing-environmental-predictors.html#cb33-18"></a>reclassification_matrix &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/landUseClassification/LandCover_ReclassifyMatrix_2015.csv&quot;</span>)</span>
+<span id="cb33-18"><a href="preparing-environmental-predictors.html#cb33-18"></a>reclassification_matrix &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/landUseClassification/reclassification-matrix-landCover-2015.csv&quot;</span>)</span>
 <span id="cb33-19"><a href="preparing-environmental-predictors.html#cb33-19"></a>reclassification_matrix &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(reclassification_matrix[, <span class="kw">c</span>(<span class="st">&quot;V1&quot;</span>, <span class="st">&quot;To&quot;</span>)])</span>
 <span id="cb33-20"><a href="preparing-environmental-predictors.html#cb33-20"></a></span>
 <span id="cb33-21"><a href="preparing-environmental-predictors.html#cb33-21"></a><span class="co"># reclassify</span></span>

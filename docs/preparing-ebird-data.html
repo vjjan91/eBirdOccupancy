@@ -23,7 +23,7 @@
 
 
 
-<meta name="date" content="2022-04-26" />
+<meta name="date" content="2022-04-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -134,8 +134,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <ul class="summary">
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#data-access"><i class="fa fa-check"></i><b>1.1</b> Data access</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#data-processing"><i class="fa fa-check"></i><b>1.2</b> Data processing</a></li>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#data-processing"><i class="fa fa-check"></i><b>1.1</b> Data processing</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html"><i class="fa fa-check"></i><b>2</b> Selecting species of interest</a><ul>
 <li class="chapter" data-level="2.1" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#prepare-libraries"><i class="fa fa-check"></i><b>2.1</b> Prepare libraries</a></li>
@@ -325,7 +324,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Insert the list of species that we will be analyzing in this study. We initially chose those species that occurred in at least 5% of all checklists across 50% of the 25 x 25 km cells from where they have been reported, resulting in a total of 79 species. To arrive at this final list of species, we carried out further pre-processing which can be found in the previous script.</p>
 <p>For further details regarding the list of species, please refer to the main text of the manuscript.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="preparing-ebird-data.html#cb11-1"></a><span class="co"># add species of interest</span></span>
-<span id="cb11-2"><a href="preparing-ebird-data.html#cb11-2"></a>specieslist &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/species_list.csv&quot;</span>)</span>
+<span id="cb11-2"><a href="preparing-ebird-data.html#cb11-2"></a>specieslist &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/species-list.csv&quot;</span>)</span>
 <span id="cb11-3"><a href="preparing-ebird-data.html#cb11-3"></a>speciesOfInterest &lt;-<span class="st"> </span><span class="kw">as.character</span>(specieslist<span class="op">$</span>scientific_name)</span></code></pre></div>
 <p>Here, we set broad spatial filters for the states of Kerala, Tamil Nadu and Karnataka and keep only those checklists for our list of species that were reported between 1st Jan 2013 and 31st May 2021.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="preparing-ebird-data.html#cb12-1"></a><span class="co"># run filters using auk packages</span></span>
@@ -421,7 +420,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb18-32"><a href="preparing-ebird-data.html#cb18-32"></a>  })</span></code></pre></div>
 <p>Save temporary data created so far.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="preparing-ebird-data.html#cb19-1"></a><span class="co"># save a temp data file</span></span>
-<span id="cb19-2"><a href="preparing-ebird-data.html#cb19-2"></a><span class="kw">save</span>(data, <span class="dt">file =</span> <span class="st">&quot;data/01_data_temp.rdata&quot;</span>)</span></code></pre></div>
+<span id="cb19-2"><a href="preparing-ebird-data.html#cb19-2"></a><span class="kw">save</span>(data, <span class="dt">file =</span> <span class="st">&quot;results/02_data_temp.rdata&quot;</span>)</span></code></pre></div>
 </div>
 <div id="handle-presence-data" class="section level2">
 <h2><span class="header-section-number">3.5</span> Handle presence data</h2>
@@ -504,7 +503,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb21-15"><a href="preparing-ebird-data.html#cb21-15"></a>assertthat<span class="op">::</span><span class="kw">assert_that</span>(<span class="op">!</span><span class="st">&quot;sf&quot;</span> <span class="op">%in%</span><span class="st"> </span><span class="kw">class</span>(dataGrouped))</span></code></pre></div>
 <p>The above data is saved to a file.</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="preparing-ebird-data.html#cb22-1"></a><span class="co"># save a temp data file</span></span>
-<span id="cb22-2"><a href="preparing-ebird-data.html#cb22-2"></a><span class="kw">save</span>(dataGrouped, <span class="dt">file =</span> <span class="st">&quot;data/01_data_prelim_processing.Rdata&quot;</span>)</span></code></pre></div>
+<span id="cb22-2"><a href="preparing-ebird-data.html#cb22-2"></a><span class="kw">save</span>(dataGrouped, <span class="dt">file =</span> <span class="st">&quot;results/02_data_prelim_processing.Rdata&quot;</span>)</span></code></pre></div>
 
 </div>
 </div>

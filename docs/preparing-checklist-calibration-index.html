@@ -23,7 +23,7 @@
 
 
 
-<meta name="date" content="2022-04-26" />
+<meta name="date" content="2022-04-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -134,8 +134,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <ul class="summary">
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#data-access"><i class="fa fa-check"></i><b>1.1</b> Data access</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#data-processing"><i class="fa fa-check"></i><b>1.2</b> Data processing</a></li>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#data-processing"><i class="fa fa-check"></i><b>1.1</b> Data processing</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html"><i class="fa fa-check"></i><b>2</b> Selecting species of interest</a><ul>
 <li class="chapter" data-level="2.1" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#prepare-libraries"><i class="fa fa-check"></i><b>2.1</b> Prepare libraries</a></li>
@@ -409,7 +408,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="prepare-species-of-interest" class="section level2">
 <h2><span class="header-section-number">5.4</span> Prepare species of interest</h2>
 <div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="preparing-checklist-calibration-index.html#cb45-1"></a><span class="co"># read in species list</span></span>
-<span id="cb45-2"><a href="preparing-checklist-calibration-index.html#cb45-2"></a>specieslist &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/species_list.csv&quot;</span>)</span>
+<span id="cb45-2"><a href="preparing-checklist-calibration-index.html#cb45-2"></a>specieslist &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/species-list.csv&quot;</span>)</span>
 <span id="cb45-3"><a href="preparing-checklist-calibration-index.html#cb45-3"></a></span>
 <span id="cb45-4"><a href="preparing-checklist-calibration-index.html#cb45-4"></a><span class="co"># set species of interest</span></span>
 <span id="cb45-5"><a href="preparing-checklist-calibration-index.html#cb45-5"></a>soi &lt;-<span class="st"> </span>specieslist<span class="op">$</span>scientific_name</span>
@@ -422,7 +421,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb45-12"><a href="preparing-checklist-calibration-index.html#cb45-12"></a>]</span>
 <span id="cb45-13"><a href="preparing-checklist-calibration-index.html#cb45-13"></a></span>
 <span id="cb45-14"><a href="preparing-checklist-calibration-index.html#cb45-14"></a><span class="co"># write to file and link with checklist id later</span></span>
-<span id="cb45-15"><a href="preparing-checklist-calibration-index.html#cb45-15"></a><span class="kw">fwrite</span>(ebdSpSum, <span class="dt">file =</span> <span class="st">&quot;data/03_data-nspp-per-chk.csv&quot;</span>)</span></code></pre></div>
+<span id="cb45-15"><a href="preparing-checklist-calibration-index.html#cb45-15"></a><span class="kw">fwrite</span>(ebdSpSum, <span class="dt">file =</span> <span class="st">&quot;results/04_data-nspp-per-chk.csv&quot;</span>)</span></code></pre></div>
 </div>
 <div id="prepare-checklists-for-observer-score" class="section level2">
 <h2><span class="header-section-number">5.5</span> Prepare checklists for observer score</h2>
@@ -533,7 +532,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb48-45"><a href="preparing-checklist-calibration-index.html#cb48-45"></a><span class="st">  </span><span class="kw">drop_na</span>(newjulianDate)</span>
 <span id="cb48-46"><a href="preparing-checklist-calibration-index.html#cb48-46"></a></span>
 <span id="cb48-47"><a href="preparing-checklist-calibration-index.html#cb48-47"></a><span class="co"># save to file for later reuse</span></span>
-<span id="cb48-48"><a href="preparing-checklist-calibration-index.html#cb48-48"></a><span class="kw">fwrite</span>(ebdChkSummary, <span class="dt">file =</span> <span class="st">&quot;data/03_data-covars-perChklist.csv&quot;</span>)</span></code></pre></div>
+<span id="cb48-48"><a href="preparing-checklist-calibration-index.html#cb48-48"></a><span class="kw">fwrite</span>(ebdChkSummary, <span class="dt">file =</span> <span class="st">&quot;results/04_data-covars-perChklist.csv&quot;</span>)</span></code></pre></div>
 </div>
 <div id="model-observer-expertise" class="section level2">
 <h2><span class="header-section-number">5.8</span> Model observer expertise</h2>
@@ -553,14 +552,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb49-13"><a href="preparing-checklist-calibration-index.html#cb49-13"></a><span class="dt">data =</span> ebdChkSummary, <span class="dt">family =</span> <span class="st">&quot;poisson&quot;</span></span>
 <span id="cb49-14"><a href="preparing-checklist-calibration-index.html#cb49-14"></a>)</span></code></pre></div>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="preparing-checklist-calibration-index.html#cb50-1"></a><span class="co"># make dir if absent</span></span>
-<span id="cb50-2"><a href="preparing-checklist-calibration-index.html#cb50-2"></a><span class="cf">if</span> (<span class="op">!</span><span class="kw">dir.exists</span>(<span class="st">&quot;data/modOutput&quot;</span>)) {</span>
-<span id="cb50-3"><a href="preparing-checklist-calibration-index.html#cb50-3"></a>  <span class="kw">dir.create</span>(<span class="st">&quot;data/modOutput&quot;</span>)</span>
+<span id="cb50-2"><a href="preparing-checklist-calibration-index.html#cb50-2"></a><span class="cf">if</span> (<span class="op">!</span><span class="kw">dir.exists</span>(<span class="st">&quot;results/modOutput&quot;</span>)) {</span>
+<span id="cb50-3"><a href="preparing-checklist-calibration-index.html#cb50-3"></a>  <span class="kw">dir.create</span>(<span class="st">&quot;results/modOutput&quot;</span>)</span>
 <span id="cb50-4"><a href="preparing-checklist-calibration-index.html#cb50-4"></a>}</span>
 <span id="cb50-5"><a href="preparing-checklist-calibration-index.html#cb50-5"></a></span>
 <span id="cb50-6"><a href="preparing-checklist-calibration-index.html#cb50-6"></a><span class="co"># write model output to text file</span></span>
 <span id="cb50-7"><a href="preparing-checklist-calibration-index.html#cb50-7"></a>{</span>
 <span id="cb50-8"><a href="preparing-checklist-calibration-index.html#cb50-8"></a>  <span class="kw">writeLines</span>(R.utils<span class="op">::</span><span class="kw">captureOutput</span>(<span class="kw">list</span>(<span class="kw">Sys.time</span>(), <span class="kw">summary</span>(modObsExp))),</span>
-<span id="cb50-9"><a href="preparing-checklist-calibration-index.html#cb50-9"></a>    <span class="dt">con =</span> <span class="st">&quot;data/modOutput/03_model-output-expertise.txt&quot;</span></span>
+<span id="cb50-9"><a href="preparing-checklist-calibration-index.html#cb50-9"></a>    <span class="dt">con =</span> <span class="st">&quot;results/modOutput/04_model-output-expertise.txt&quot;</span></span>
 <span id="cb50-10"><a href="preparing-checklist-calibration-index.html#cb50-10"></a>  )</span>
 <span id="cb50-11"><a href="preparing-checklist-calibration-index.html#cb50-11"></a>}</span></code></pre></div>
 <div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="preparing-checklist-calibration-index.html#cb51-1"></a><span class="co"># make df with means</span></span>
@@ -582,7 +581,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb51-17"><a href="preparing-checklist-calibration-index.html#cb51-17"></a>) <span class="op">%&gt;%</span></span>
 <span id="cb51-18"><a href="preparing-checklist-calibration-index.html#cb51-18"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">score =</span> scales<span class="op">::</span><span class="kw">rescale</span>(score))</span></code></pre></div>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="preparing-checklist-calibration-index.html#cb52-1"></a><span class="kw">fwrite</span>(dfPredict <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(observer, score),</span>
-<span id="cb52-2"><a href="preparing-checklist-calibration-index.html#cb52-2"></a>  <span class="dt">file =</span> <span class="st">&quot;data/03_data-obsExpertise-score.csv&quot;</span></span>
+<span id="cb52-2"><a href="preparing-checklist-calibration-index.html#cb52-2"></a>  <span class="dt">file =</span> <span class="st">&quot;results/04_data-obsExpertise-score.csv&quot;</span></span>
 <span id="cb52-3"><a href="preparing-checklist-calibration-index.html#cb52-3"></a>)</span></code></pre></div>
 
 </div>

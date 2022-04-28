@@ -23,7 +23,7 @@
 
 
 
-<meta name="date" content="2022-04-26" />
+<meta name="date" content="2022-04-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -134,8 +134,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <ul class="summary">
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#data-access"><i class="fa fa-check"></i><b>1.1</b> Data access</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#data-processing"><i class="fa fa-check"></i><b>1.2</b> Data processing</a></li>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#data-processing"><i class="fa fa-check"></i><b>1.1</b> Data processing</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html"><i class="fa fa-check"></i><b>2</b> Selecting species of interest</a><ul>
 <li class="chapter" data-level="2.1" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#prepare-libraries"><i class="fa fa-check"></i><b>2.1</b> Prepare libraries</a></li>
@@ -378,14 +377,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb3-23"><a href="selecting-species-of-interest.html#cb3-23"></a><span class="co"># Beginning with 3.37 million observations of 684 species in eBird that occurred within the outlines of our study area (Fig. 1), over the years 2013–2021, we retained only those species that had a minimum of 1,000 detections each between 2013 and 2021 (347 species remaining; 3.33 million observations). Next, we divided the study area into 25x25 km cells following State of India’s Birds 2020 methodology. We kept only those species that occurred in at least 5% of all checklists across half of the grids (42 unique grid cells) from which they had been reported. </span></span>
 <span id="cb3-24"><a href="selecting-species-of-interest.html#cb3-24"></a></span>
 <span id="cb3-25"><a href="selecting-species-of-interest.html#cb3-25"></a><span class="co"># export the above list as .csv to carry out initial filtering based on natural history</span></span>
-<span id="cb3-26"><a href="selecting-species-of-interest.html#cb3-26"></a><span class="kw">write.csv</span>(totCount, <span class="st">&quot;data/species_list.csv&quot;</span>, <span class="dt">row.names =</span> F)</span></code></pre></div>
+<span id="cb3-26"><a href="selecting-species-of-interest.html#cb3-26"></a><span class="kw">write.csv</span>(totCount, <span class="st">&quot;data/species-list.csv&quot;</span>, <span class="dt">row.names =</span> F)</span></code></pre></div>
 </div>
 <div id="read-subset-of-species-following-filtering-and-removal-of-waterbirds-raptors-and-other-noctural-species" class="section level2">
 <h2><span class="header-section-number">2.4</span> Read subset of species following filtering and removal of waterbirds, raptors, and other noctural species</h2>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="selecting-species-of-interest.html#cb4-1"></a><span class="co"># add species of interest</span></span>
 <span id="cb4-2"><a href="selecting-species-of-interest.html#cb4-2"></a><span class="co"># please note the below script is obtained after manual subsetting based on natural history and hence the user is asked to examine the dataset obtained in the previous time step prior to further processing</span></span>
 <span id="cb4-3"><a href="selecting-species-of-interest.html#cb4-3"></a></span>
-<span id="cb4-4"><a href="selecting-species-of-interest.html#cb4-4"></a>specieslist &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/species_list.csv&quot;</span>)</span>
+<span id="cb4-4"><a href="selecting-species-of-interest.html#cb4-4"></a>specieslist &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/species-list.csv&quot;</span>)</span>
 <span id="cb4-5"><a href="selecting-species-of-interest.html#cb4-5"></a>speciesOfInterest &lt;-<span class="st"> </span>specieslist<span class="op">$</span>scientific_name</span></code></pre></div>
 </div>
 <div id="load-raw-data-for-locations" class="section level2">
@@ -464,8 +463,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-11"><a href="selecting-species-of-interest.html#cb7-11"></a>  )</span>
 <span id="cb7-12"><a href="selecting-species-of-interest.html#cb7-12"></a></span>
 <span id="cb7-13"><a href="selecting-species-of-interest.html#cb7-13"></a><span class="co"># Write the above two results</span></span>
-<span id="cb7-14"><a href="selecting-species-of-interest.html#cb7-14"></a><span class="kw">write_csv</span>(tot_n_chklist, <span class="st">&quot;data/01_nchk_per_grid.csv&quot;</span>)</span>
-<span id="cb7-15"><a href="selecting-species-of-interest.html#cb7-15"></a><span class="kw">write_csv</span>(spp_grids, <span class="st">&quot;data/01_ngrids_per_spp.csv&quot;</span>)</span>
+<span id="cb7-14"><a href="selecting-species-of-interest.html#cb7-14"></a><span class="kw">write_csv</span>(tot_n_chklist, <span class="st">&quot;data/01_nchk-per-grid.csv&quot;</span>)</span>
+<span id="cb7-15"><a href="selecting-species-of-interest.html#cb7-15"></a><span class="kw">write_csv</span>(spp_grids, <span class="st">&quot;data/01_ngrids-per-spp.csv&quot;</span>)</span>
 <span id="cb7-16"><a href="selecting-species-of-interest.html#cb7-16"></a></span>
 <span id="cb7-17"><a href="selecting-species-of-interest.html#cb7-17"></a><span class="co"># left-join the datasets</span></span>
 <span id="cb7-18"><a href="selecting-species-of-interest.html#cb7-18"></a>ebd_summary &lt;-<span class="st"> </span><span class="kw">left_join</span>(ebd_summary, spp_grids, <span class="dt">by =</span> <span class="st">&quot;scientific_name&quot;</span>)</span>
@@ -486,7 +485,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-33"><a href="selecting-species-of-interest.html#cb7-33"></a>)</span>
 <span id="cb7-34"><a href="selecting-species-of-interest.html#cb7-34"></a></span>
 <span id="cb7-35"><a href="selecting-species-of-interest.html#cb7-35"></a><span class="co"># Write the results</span></span>
-<span id="cb7-36"><a href="selecting-species-of-interest.html#cb7-36"></a><span class="kw">write_csv</span>(grid_prop_cut, <span class="st">&quot;data/01_chk_5_percent.csv&quot;</span>)</span>
+<span id="cb7-36"><a href="selecting-species-of-interest.html#cb7-36"></a><span class="kw">write_csv</span>(grid_prop_cut, <span class="st">&quot;data/01_prop-grids-per-spp.csv&quot;</span>)</span>
 <span id="cb7-37"><a href="selecting-species-of-interest.html#cb7-37"></a></span>
 <span id="cb7-38"><a href="selecting-species-of-interest.html#cb7-38"></a><span class="co"># Identifying the number of species that occur in potentially &lt;5% of all lists</span></span>
 <span id="cb7-39"><a href="selecting-species-of-interest.html#cb7-39"></a>total_number_lists &lt;-<span class="st"> </span><span class="kw">sum</span>(tot_n_chklist<span class="op">$</span>nchk)</span>
@@ -521,7 +520,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">2.9</span> Prepare the species list</h2>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="selecting-species-of-interest.html#cb9-1"></a><span class="co"># write the new list of species that occur in at least 5% of checklists across a minimum of 50% of the grids they have been reported in</span></span>
 <span id="cb9-2"><a href="selecting-species-of-interest.html#cb9-2"></a>new_sp_list &lt;-<span class="st"> </span><span class="kw">semi_join</span>(specieslist, grid_prop_cut, <span class="dt">by =</span> <span class="st">&quot;scientific_name&quot;</span>)</span>
-<span id="cb9-3"><a href="selecting-species-of-interest.html#cb9-3"></a><span class="kw">write_csv</span>(new_sp_list, <span class="st">&quot;data/01_list-of-species-cutoff.csv&quot;</span>)</span></code></pre></div>
+<span id="cb9-3"><a href="selecting-species-of-interest.html#cb9-3"></a><span class="kw">write_csv</span>(new_sp_list, <span class="st">&quot;results/01_list-of-species-cutoff.csv&quot;</span>)</span></code></pre></div>
 
 </div>
 </div>

@@ -23,7 +23,7 @@
 
 
 
-<meta name="date" content="2022-04-26" />
+<meta name="date" content="2022-04-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -134,8 +134,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <ul class="summary">
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#data-access"><i class="fa fa-check"></i><b>1.1</b> Data access</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#data-processing"><i class="fa fa-check"></i><b>1.2</b> Data processing</a></li>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#data-processing"><i class="fa fa-check"></i><b>1.1</b> Data processing</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html"><i class="fa fa-check"></i><b>2</b> Selecting species of interest</a><ul>
 <li class="chapter" data-level="2.1" data-path="selecting-species-of-interest.html"><a href="selecting-species-of-interest.html#prepare-libraries"><i class="fa fa-check"></i><b>2.1</b> Prepare libraries</a></li>
@@ -321,7 +320,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb69-19"><a href="adding-covariates-to-checklist-data.html#cb69-19"></a><span class="kw">library</span>(sf)</span>
 <span id="cb69-20"><a href="adding-covariates-to-checklist-data.html#cb69-20"></a></span>
 <span id="cb69-21"><a href="adding-covariates-to-checklist-data.html#cb69-21"></a><span class="co"># load saved data object</span></span>
-<span id="cb69-22"><a href="adding-covariates-to-checklist-data.html#cb69-22"></a><span class="kw">load</span>(<span class="st">&quot;data/01_data_prelim_processing.rdata&quot;</span>)</span></code></pre></div>
+<span id="cb69-22"><a href="adding-covariates-to-checklist-data.html#cb69-22"></a><span class="kw">load</span>(<span class="st">&quot;results/02_data_prelim_processing.rdata&quot;</span>)</span></code></pre></div>
 </div>
 <div id="spatial-subsampling" class="section level2">
 <h2><span class="header-section-number">8.2</span> Spatial subsampling</h2>
@@ -465,7 +464,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb75-5"><a href="adding-covariates-to-checklist-data.html#cb75-5"></a>  )</span>
 <span id="cb75-6"><a href="adding-covariates-to-checklist-data.html#cb75-6"></a></span>
 <span id="cb75-7"><a href="adding-covariates-to-checklist-data.html#cb75-7"></a><span class="co"># save data</span></span>
-<span id="cb75-8"><a href="adding-covariates-to-checklist-data.html#cb75-8"></a><span class="kw">write_csv</span>(data_presence_prop, <span class="st">&quot;data/results/data_class_balance.csv&quot;</span>)</span></code></pre></div>
+<span id="cb75-8"><a href="adding-covariates-to-checklist-data.html#cb75-8"></a><span class="kw">write_csv</span>(data_presence_prop, <span class="st">&quot;results/08_data-class-balance.csv&quot;</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="adding-covariates-to-checklist-data.html#cb76-1"></a><span class="co"># bind all spatially and temporally thinned absences rows for data frame</span></span>
 <span id="cb76-2"><a href="adding-covariates-to-checklist-data.html#cb76-2"></a>dataSubsample &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(dataSubsample)</span>
 <span id="cb76-3"><a href="adding-covariates-to-checklist-data.html#cb76-3"></a></span>
@@ -503,7 +502,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">8.4</span> Add checklist calibration index</h2>
 <p>Load the CCI computed in the previous section. The CCI was the lone observer’s expertise score for single-observer checklists, and the highest expertise score among observers for group checklists.</p>
 <div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="adding-covariates-to-checklist-data.html#cb77-1"></a><span class="co"># read in obs score and extract numbers</span></span>
-<span id="cb77-2"><a href="adding-covariates-to-checklist-data.html#cb77-2"></a>expertiseScore &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/03_data-obsExpertise-score.csv&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb77-2"><a href="adding-covariates-to-checklist-data.html#cb77-2"></a>expertiseScore &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;results/04_data-obsExpertise-score.csv&quot;</span>) <span class="op">%&gt;%</span></span>
 <span id="cb77-3"><a href="adding-covariates-to-checklist-data.html#cb77-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">numObserver =</span> <span class="kw">str_extract</span>(observer, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">d+&quot;</span>)) <span class="op">%&gt;%</span></span>
 <span id="cb77-4"><a href="adding-covariates-to-checklist-data.html#cb77-4"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>observer)</span>
 <span id="cb77-5"><a href="adding-covariates-to-checklist-data.html#cb77-5"></a></span>
@@ -641,7 +640,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb82-7"><a href="adding-covariates-to-checklist-data.html#cb82-7"></a>)</span></code></pre></div>
 <p>Save data to file.</p>
 <div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="adding-covariates-to-checklist-data.html#cb83-1"></a><span class="co"># write to file</span></span>
-<span id="cb83-2"><a href="adding-covariates-to-checklist-data.html#cb83-2"></a><span class="kw">write_csv</span>(dataSubsample, <span class="dt">path =</span> <span class="kw">glue</span>(<span class="st">&quot;data/04_data-covars-2.5km.csv&quot;</span>))</span></code></pre></div>
+<span id="cb83-2"><a href="adding-covariates-to-checklist-data.html#cb83-2"></a><span class="kw">write_csv</span>(dataSubsample, <span class="dt">path =</span> <span class="kw">glue</span>(<span class="st">&quot;results/08_data-covars-2.5km.csv&quot;</span>))</span></code></pre></div>
 
 </div>
 </div>
