@@ -38,7 +38,7 @@ For further details regarding the list of species, please refer to the main text
 
 ```{r soi,  message=FALSE, warning=FALSE}
 # add species of interest
-specieslist <- read.csv("data/species_list.csv")
+specieslist <- read.csv("data/species-list.csv")
 speciesOfInterest <- as.character(specieslist$scientific_name)
 ```
 
@@ -163,7 +163,7 @@ data <- data %>%
 Save temporary data created so far.
 ```{r save_temp_data}
 # save a temp data file
-save(data, file = "data/01_data_temp.rdata")
+save(data, file = "results/02_data_temp.rdata")
 ```
 
 ## Handle presence data
@@ -256,5 +256,5 @@ The above data is saved to a file.
 
 ```{r write_clean_data}
 # save a temp data file
-save(dataGrouped, file = "data/01_data_prelim_processing.Rdata")
+save(dataGrouped, file = "results/02_data_prelim_processing.Rdata")
 ```
