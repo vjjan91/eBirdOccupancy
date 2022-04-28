@@ -133,7 +133,7 @@ ebd <- ebd[longitude %in% ebd_locs$longitudeWGS & latitude %in% ebd_locs$latitud
 
 ```{r soi_score}
 # read in species list
-specieslist <- read.csv("data/species_list.csv")
+specieslist <- read.csv("data/species-list.csv")
 
 # set species of interest
 soi <- specieslist$scientific_name
@@ -146,7 +146,7 @@ by = list(sampling_event_identifier)
 ]
 
 # write to file and link with checklist id later
-fwrite(ebdSpSum, file = "data/03_data-nspp-per-chk.csv")
+fwrite(ebdSpSum, file = "results/04_data-nspp-per-chk.csv")
 ```
 
 ## Prepare checklists for observer score
@@ -263,7 +263,7 @@ ebdChkSummary <- ebdChkSummary %>%
   drop_na(newjulianDate)
 
 # save to file for later reuse
-fwrite(ebdChkSummary, file = "data/03_data-covars-perChklist.csv")
+fwrite(ebdChkSummary, file = "results/04_data-covars-perChklist.csv")
 ```
 
 ## Model observer expertise
@@ -288,14 +288,14 @@ data = ebdChkSummary, family = "poisson"
 
 ```{r write_obsexp_model}
 # make dir if absent
-if (!dir.exists("data/modOutput")) {
-  dir.create("data/modOutput")
+if (!dir.exists("results/modOutput")) {
+  dir.create("results/modOutput")
 }
 
 # write model output to text file
 {
   writeLines(R.utils::captureOutput(list(Sys.time(), summary(modObsExp))),
-    con = "data/modOutput/03_model-output-expertise.txt"
+    con = "results/modOutput/04_model-output-expertise.txt"
   )
 }
 ```
@@ -323,6 +323,6 @@ dfPredict <- mutate(dfPredict,
 
 ```{r write_obsexp}
 fwrite(dfPredict %>% dplyr::select(observer, score),
-  file = "data/03_data-obsExpertise-score.csv"
+  file = "results/04_data-obsExpertise-score.csv"
 )
 ```
