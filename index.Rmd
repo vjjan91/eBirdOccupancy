@@ -25,13 +25,9 @@ github-repo: vjjan91/eBirdOccupancy
 
 # Introduction
 
-This is the readable version containing analysis that models associations between environmental predictors (climate and landcover) and citizen science observations of birds across the Nilgiri and Anamalai Hills of the Western Ghats Biodiversity Hotspot. 
+This is the readable version containing analysis that models associations between environmental predictors (climate and landcover) and citizen science observations of birds across the Nilgiri and Anamalai Hills of the Western Ghats Biodiversity hotspot.   
 
 Methods and format are derived from https://cornelllabofornithology.github.io/ebird-best-practices/.
-
-## Data access
-
-The data used in this work are available from [eBird](http://ebird.org/data/download).
 
 ## Data processing
 
