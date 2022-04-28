@@ -28,7 +28,7 @@ library(patchwork)
 
 ```{r}
 # read coefficient effect data
-data <- read_csv("data/results/data_predictor_effect.csv")
+data <- read_csv("results/10_data-predictor-effect.csv")
 
 # check for a predictor column
 assertthat::assert_that(
