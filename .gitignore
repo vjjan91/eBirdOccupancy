@@ -84,8 +84,8 @@ rsconnect/
 *.Rdata
 *.rdata
 
-data/04_data-covars-2.5km.csv
-data/05_scaled-covars-2.5km.csv
+results/08_data-covars-2.5km.csv
+results/09_scaled-covars-2.5km.csv
 
 # ignore bird images
 figs/birds
