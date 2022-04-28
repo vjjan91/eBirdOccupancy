@@ -97,7 +97,7 @@ ebd1000 <- ebd[scientific_name %in% species1000, ]
 # Beginning with 3.37 million observations of 684 species in eBird that occurred within the outlines of our study area (Fig. 1), over the years 2013–2021, we retained only those species that had a minimum of 1,000 detections each between 2013 and 2021 (347 species remaining; 3.33 million observations). Next, we divided the study area into 25x25 km cells following State of India’s Birds 2020 methodology. We kept only those species that occurred in at least 5% of all checklists across half of the grids (42 unique grid cells) from which they had been reported. 
 
 # export the above list as .csv to carry out initial filtering based on natural history
-write.csv(totCount, "data/species_list.csv", row.names = F)
+write.csv(totCount, "data/species-list.csv", row.names = F)
 ```
 
 ## Read subset of species following filtering and removal of waterbirds, raptors, and other noctural species
@@ -106,7 +106,7 @@ write.csv(totCount, "data/species_list.csv", row.names = F)
 # add species of interest
 # please note the below script is obtained after manual subsetting based on natural history and hence the user is asked to examine the dataset obtained in the previous time step prior to further processing
 
-specieslist <- read.csv("data/species_list.csv")
+specieslist <- read.csv("data/species-list.csv")
 speciesOfInterest <- specieslist$scientific_name
 ```
 
@@ -192,8 +192,8 @@ spp_grids <- ebd_summary %>%
   )
 
 # Write the above two results
-write_csv(tot_n_chklist, "data/01_nchk_per_grid.csv")
-write_csv(spp_grids, "data/01_ngrids_per_spp.csv")
+write_csv(tot_n_chklist, "data/01_nchk-per-grid.csv")
+write_csv(spp_grids, "data/01_ngrids-per-spp.csv")
 
 # left-join the datasets
 ebd_summary <- left_join(ebd_summary, spp_grids, by = "scientific_name")
@@ -214,7 +214,7 @@ grid_prop_cut <- filter(
 )
 
 # Write the results
-write_csv(grid_prop_cut, "data/01_chk_5_percent.csv")
+write_csv(grid_prop_cut, "data/01_prop-grids-per-spp.csv")
 
 # Identifying the number of species that occur in potentially <5% of all lists
 total_number_lists <- sum(tot_n_chklist$nchk)
@@ -321,5 +321,5 @@ dev.off()
 ```{r}
 # write the new list of species that occur in at least 5% of checklists across a minimum of 50% of the grids they have been reported in
 new_sp_list <- semi_join(specieslist, grid_prop_cut, by = "scientific_name")
-write_csv(new_sp_list, "data/01_list-of-species-cutoff.csv")
+write_csv(new_sp_list, "results/01_list-of-species-cutoff.csv")
 ```
