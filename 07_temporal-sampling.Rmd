@@ -30,7 +30,7 @@ Here we load filtered checklist data and convert to UTM 43N coordinates.
 
 ```{r}
 # load checklist data
-load("data/01_data_prelim_processing.rdata")
+load("results/02_data_prelim_processing.rdata")
 
 # get checklists
 data <- distinct(
