@@ -63,7 +63,7 @@ To get cumulative AIC weights, we first obtained a measure of relative importanc
 
 ```{r}
 # which files to read
-file_names <- c("data/results/lc-clim-imp.xlsx")
+file_names <- c("results/09_lc-clim-imp.xlsx")
 
 # read in sheets by species
 model_imp <- map(file_names, function(f) {
@@ -116,14 +116,14 @@ model_imp <- group_by(model_imp, predictor) %>%
   )
 
 # write to file
-write_csv(model_imp, "data/results/cumulative_AIC_weights.csv")
+write_csv(model_imp, "results/10_cumulative-AIC-weights.csv")
 ```
 
 Read data back in.
 
 ```{r}
 # read data and make factor
-model_imp <- read_csv("data/results/cumulative_AIC_weights.csv")
+model_imp <- read_csv("results/10_cumulative-AIC-weights.csv")
 model_imp$predictor <- as_factor(model_imp$predictor)
 ```
 
@@ -194,7 +194,7 @@ ggsave(fig_aic,
 For each species, we examined those models which had ΔAICc < 4, as these top models were considered to explain a large proportion of the association between the species-specific probability of occupancy and environmental drivers. Using these restricted model sets for each species; we created a model-averaged coefficient estimate for each predictor and assessed its direction and significance. We considered a predictor to be significantly associated with occupancy if the range of the 95% confidence interval around the model-averaged coefficient did not contain zero.  
 
 ```{r read_model_estimates}
-file_read <- c("data/results/lc-clim-modelEst.xlsx")
+file_read <- c("results/09_lc-clim-modelEst.xlsx")
 
 # read data as list column
 model_est <- map(list_of_species, function(sn) {
@@ -271,7 +271,7 @@ data_predictor_effect <- distinct(
 )
 
 # write to file
-write_csv(data_predictor_effect, "data/results/data_predictor_effect.csv")
+write_csv(data_predictor_effect, "results/10_data-predictor-effect.csv")
 ```
 
 Export model data.
@@ -289,7 +289,7 @@ model_data_to_file <- model_data_to_file %>%
 
 write_csv(
   model_data_to_file,
-  "data/results/data_occupancy_predictors.csv"
+  "results/10_data-occupancy-predictors.csv"
 )
 ```
 
@@ -297,17 +297,17 @@ Read in data after clearing R session.
 ```{r}
 # first merge species trait data with significant predictor
 species_trait <- read.csv("data/species-trait-dat.csv")
-sig_predictor <- read.csv("data/results/data_predictor_effect.csv")
+sig_predictor <- read.csv("results/10_data-predictor-effect.csv")
 merged_species_traits <- inner_join(sig_predictor, species_trait,
   by = c("scientific_name" = "scientific_name")
 )
 write_csv(
   merged_species_traits,
-  "data/results/results-predictors-species-traits.csv"
+  "results/10_results-predictors-species-traits.csv"
 )
 
 # read from file
-model_data <- read_csv("data/results/results-predictors-species-traits.csv")
+model_data <- read_csv("results/10_results-predictors-species-traits.csv")
 ```
 
 Fix predictor name.
@@ -358,7 +358,7 @@ data_predictor_long <- data_predictor %>%
 # write
 write_csv(
   data_predictor_long,
-  "data/results/data_predictor_direction_nSpecies.csv"
+  "results/10_data-predictor-direction-nSpecies.csv"
 )
 ```
 
