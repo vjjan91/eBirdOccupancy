@@ -40,7 +40,7 @@ Read in checklist data with distance to nearest neighbouring site, and the dista
 
 ```{r read_chk_dists}
 # read from local file
-chkCovars <- read_csv("data/03_data-covars-perChklist.csv")
+chkCovars <- read_csv("results/04_data-covars-perChklist.csv")
 ```
 
 ### Spatially explicit filter on checklists
@@ -141,13 +141,13 @@ chkCovars %>%
     vars(value),
     list(~ mean(.), ~ sd(.), ~ min(.), ~ max(.))
   ) %>%
-  write_csv("data/results/distance_roads_sites.csv")
+  write_csv("results/06_distance-roads-sites.csv")
 ```
 
 ```{r show_dist_roads_nnb, , message=FALSE, echo=FALSE}
 # read in and show
 library(magrittr)
-readr::read_csv("data/results/distance_roads_sites.csv") %>%
+readr::read_csv("results/06_distance-roads-sites.csv") %>%
   kableExtra::kbl(
     booktabs = TRUE
   ) %>%
