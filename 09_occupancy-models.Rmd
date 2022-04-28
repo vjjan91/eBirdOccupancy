@@ -42,7 +42,7 @@ Here, we load the required dataframe that contains 10 random visits to a site an
 
 ```{r load_dataframe}
 # Load in the prepared dataframe
-dat <- fread("data/04_data-covars-2.5km.csv", header = T)
+dat <- fread("results/08_data-covars-2.5km.csv", header = T)
 dat <- as_tibble(dat)
 head(dat)
 ```
@@ -173,14 +173,14 @@ dat.scaled <- mutate(
 )
 
 # save data to file
-fwrite(dat.scaled, "data/05_scaled-covars-2.5km.csv")
+fwrite(dat.scaled, "results/09_scaled-covars-2.5km.csv")
 ```
 
 ### Correct date format
 
 ```{r read_scaled_data}
 # Reload the scaled covariate data
-dat.scaled <- fread("data/05_scaled-covars-2.5km.csv", header = T)
+dat.scaled <- fread("results/09_scaled-covars-2.5km.csv", header = T)
 dat.scaled <- as_tibble(dat.scaled)
 head(dat.scaled)
 
@@ -290,7 +290,7 @@ for (i in species) {
 close(pb)
 
 # Store all the  model outputs for each species
-capture.output(all_null, file = "data/results/null_models.csv")
+capture.output(all_null, file = "results/09_null_models.csv")
 ```
 
 ## Identifying covariates necessary to model the detection process
@@ -426,13 +426,13 @@ close(pb)
 ## Storing output from the above models in excel sheets
 
 # 1. Store all the model outputs for each species (variable: det_dred() - see above)
-write.xlsx(det_dred, file = "data/results/det-dred.xlsx")
+write.xlsx(det_dred, file = "results/09_det-dred.xlsx")
 
 # 2. Store all the model averaged outputs for each species and the relative importance score
-write.xlsx(det_avg, file = "data/results/det-avg.xlsx", rowNames = T, colNames = T)
-write.xlsx(det_imp, file = "data/results/det-imp.xlsx", rowNames = T, colNames = T)
+write.xlsx(det_avg, file = "results/09_det-avg.xlsx", rowNames = T, colNames = T)
+write.xlsx(det_imp, file = "results/09_det-imp.xlsx", rowNames = T, colNames = T)
 
-write.xlsx(det_modelEst, file = "data/results/det-modelEst.xlsx", rowNames = T, colNames = T)
+write.xlsx(det_modelEst, file = "results/09_det-modelEst.xlsx", rowNames = T, colNames = T)
 
 # Note if you are unable to write to a file, use (for example)
 a <- purrr::map(det_imp, ~ purrr::compact(.)) %>% purrr::keep(~ length(.) != 0)
@@ -577,14 +577,14 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
 close(pb)
 
 # 1. Store all the model outputs for each species (for both landcover and climate)
-write.xlsx(lc_clim, file = "data/results/lc-clim.xlsx")
+write.xlsx(lc_clim, file = "results/09_lc-clim.xlsx")
 
 # 2. Store all the model averaged outputs for each species and relative importance scores
-write.xlsx(lc_clim_avg, file = "data/results/lc-clim-avg.xlsx", rowNames = T, colNames = T)
-write.xlsx(lc_clim_imp, file = "data/results/lc-clim-imp.xlsx", rowNames = T, colNames = T)
+write.xlsx(lc_clim_avg, file = "results/09_lc-clim-avg.xlsx", rowNames = T, colNames = T)
+write.xlsx(lc_clim_imp, file = "results/09_lc-clim-imp.xlsx", rowNames = T, colNames = T)
 
 # 3. Store all model estimates
-write.xlsx(lc_clim_modelEst, file = "data/results/lc-clim-modelEst.xlsx", rowNames = T, colNames = T)
+write.xlsx(lc_clim_modelEst, file = "results/09_lc-clim-modelEst.xlsx", rowNames = T, colNames = T)
 
 # Note if you are unable to write to a file, use (for example)
 a <- purrr::map(lc_clim_modelEst, ~ purrr::compact(.)) %>% purrr::keep(~ length(.) != 0)
@@ -662,5 +662,5 @@ for (i in 1:length(unique(dat.scaled$scientific_name))) {
 }
 close(pb)
 
-write.csv(goodness_of_fit, "data/results/goodness-of-fit-2.5km.csv", row.names = F)
+write.csv(goodness_of_fit, "results/09_goodness-of-fit-2.5km.csv", row.names = F)
 ```
