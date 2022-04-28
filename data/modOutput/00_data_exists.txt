@@ -1,3 +1,0 @@
-some data lives here
-
-it's model output data
