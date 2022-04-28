@@ -31,7 +31,7 @@ library(velox)
 library(sf)
 
 # load saved data object
-load("data/01_data_prelim_processing.rdata")
+load("results/02_data_prelim_processing.rdata")
 ```
 
 ## Spatial subsampling
@@ -192,7 +192,7 @@ data_presence_prop <- data_presence_prop %>%
   )
 
 # save data
-write_csv(data_presence_prop, "data/results/data_class_balance.csv")
+write_csv(data_presence_prop, "results/08_data-class-balance.csv")
 ```
 
 ```{r join_pres_abs}
@@ -235,7 +235,7 @@ Load the CCI computed in the previous section. The CCI was the lone observer’s
 
 ```{r add_expertise}
 # read in obs score and extract numbers
-expertiseScore <- read_csv("data/03_data-obsExpertise-score.csv") %>%
+expertiseScore <- read_csv("results/04_data-obsExpertise-score.csv") %>%
   mutate(numObserver = str_extract(observer, "\\d+")) %>%
   dplyr::select(-observer)
 
@@ -390,5 +390,5 @@ dataSubsample <- inner_join(dataSubsample, ebird_buff,
 Save data to file.
 ```{r spit_scale}
 # write to file
-write_csv(dataSubsample, path = glue("data/04_data-covars-2.5km.csv"))
+write_csv(dataSubsample, path = glue("results/08_data-covars-2.5km.csv"))
 ```
