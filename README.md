@@ -125,7 +125,7 @@ The `appendix\` folder contains supplementary files that are provided with the p
 
 To cite this repository:     
 
-Gupte, Pratik Rajan and Ramesh, Vijay. 2022. _Source code and supplementary material for Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot_. https://zenodo.org/record/6501805.      
+Pratik Rajan Gupte, Vijay Ramesh, Morgan W Tingley, VV Robin, & Ruth S DeFries. (2022). _Source code and Supplementary material for "Using citizen science to parse climatic and landcover influences on bird occupancy within a tropical biodiversity hotspot"_ (v3.3). Zenodo. https://doi.org/10.5281/zenodo.6501805.    
 
 To cite the publication:    
 
